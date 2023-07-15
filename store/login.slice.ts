@@ -36,4 +36,8 @@ export const loginSlice = createSlice({
 
 export const {toggleModal,updateName,updateUserName,updateEmail,updatePassword}  = loginSlice.actions;
 export const showModal = (state:RootState) => state.login.showModal;
+export const name = (state:RootState) => state.login.name;
+export const username = (state:RootState) => state.login.username;
+export const email = (state:RootState) => state.login.email;
+export const password = (state:RootState) => state.login.password;
 export default loginSlice.reducer;

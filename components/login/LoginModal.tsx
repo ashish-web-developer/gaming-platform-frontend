@@ -19,6 +19,10 @@ import {
 
 import { 
     showModal,
+    name,
+    username,
+    email,
+    password,
     toggleModal,
     updateName,
     updateUserName,
@@ -30,10 +34,16 @@ import {
 // Styles
 import useLoginStyles from "@/styles/login.style";
 
+
+// Axios
+import { Axios } from "@/helpers/axios";
+
 const LoginModal:FC = ()=>{
     const dispatch = useAppDispatch();
-    const _showModal:boolean  = useAppSelector(showModal);
+    const _showModal  = useAppSelector(showModal);
     const classes = useLoginStyles();
+
+
     return(
         <Modal
             open = {_showModal}
@@ -93,11 +103,10 @@ const LoginModal:FC = ()=>{
                             />
 
                         </Grid>
-
-
                     </Grid>
                     <Button 
                         className = {classes.loginCta}
+                        onClick={()=>submitHandler()}
                         variant="contained"
                         fullWidth
                     >

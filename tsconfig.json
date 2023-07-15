@@ -22,6 +22,7 @@
       "@/styles/*":["styles/*"],
       "@/types/*":["types/*"],
       "@/helpers/*":["helpers/*"],
+      "@/providers/*":["providers/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

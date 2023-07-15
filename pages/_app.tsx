@@ -11,6 +11,10 @@ import { Provider } from 'react-redux'
 import store from '@/store/rootReducer'
 
 
+// Provider
+import CsrfTokenProvider from '@/providers/CsrfTokenProvider'
+
+
 const theme = createTheme({
 })
 
@@ -18,7 +22,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store = {store}>
       <ThemeProvider theme = {theme}>
-        <Component {...pageProps} />
+        <CsrfTokenProvider>
+          <Component {...pageProps} />
+        </CsrfTokenProvider>
       </ThemeProvider>
     </Provider>
   )
