@@ -15,9 +15,15 @@ import {
     useAppDispatch, 
     useAppSelector 
 } from "@/hooks/redux";
+
+
 import { 
     showModal,
-    toggleModal 
+    toggleModal,
+    updateName,
+    updateUserName,
+    updateEmail,
+    updatePassword,
 } from "@/store/login.slice";
 
 
@@ -46,6 +52,7 @@ const LoginModal:FC = ()=>{
                             name = "name"
                             placeholder = "Name"
                             type = "text"
+                            onChange = {(event)=>{dispatch(updateName(event.target.value))}}
                             />
 
 
@@ -58,6 +65,7 @@ const LoginModal:FC = ()=>{
                             name = "username"
                             placeholder = "Gamer Tag (Username)"
                             type = "text"
+                            onChange = {(event)=>{dispatch(updateUserName(event.target.value))}}
                             />
 
                         </Grid>
@@ -68,7 +76,20 @@ const LoginModal:FC = ()=>{
                             disableUnderline
                             name = "email"
                             placeholder = "Email"
-                            type = "text"
+                            type = "email"
+                            onChange = {(event)=>(dispatch(updateEmail(event.target.value)))}
+                            />
+
+                        </Grid>
+                        <Grid item >
+                            <Input
+                            className = {classes.loginInputField}
+                            fullWidth
+                            disableUnderline
+                            name = "password"
+                            placeholder = "Password"
+                            type = "password"
+                            onChange = {(event)=>(dispatch(updatePassword(event.target.value)))}
                             />
 
                         </Grid>

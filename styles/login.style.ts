@@ -1,4 +1,5 @@
 import { makeStyles } from "@mui/styles";
+import { Theme } from "@mui/material";
 
 const color = {
     primary:"rgb(3 13 9)",
@@ -7,7 +8,7 @@ const color = {
     button:"#8102f7"
 }
 
-const useLoginStyles = makeStyles({
+const useLoginStyles = makeStyles((theme:Theme)=>({
     root:{
         backgroundColor:color.primary,
         width:"100%",
@@ -29,7 +30,10 @@ const useLoginStyles = makeStyles({
         padding:"20px 0px 30px 0px",
         "&:focus-visible":{
             outline:"none"
-        }
+        },
+        [theme.breakpoints.down('sm')]: {
+            width:"90%"
+        },
     },
     modalTitle:{
         color:color.text,
@@ -62,6 +66,7 @@ const useLoginStyles = makeStyles({
             }
         }
     }
-})
+}))
+
 
 export default useLoginStyles;
