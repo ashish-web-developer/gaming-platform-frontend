@@ -63,7 +63,18 @@ const LoginModal:FC<Props> = ({keepShowingModal})=>{
                     username:"",
                     password:""
                 }}
-                onSubmit={(values,{setSubmitting})=>_showLogin?dispatch(loginHandler({email:values.email,password:values.password})):dispatch(signUpHandler(values))}
+                onSubmit={(values,{setSubmitting})=>{
+                    if(_showLogin){
+                        const emailPattern = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+                        if(emailPattern.test(values.username)){
+                            dispatch(loginHandler({email:values.username,password:values.password}));
+                            return;
+                        }
+                        dispatch(loginHandler({username:values.username,password:values.password}));
+                    }else{
+                        dispatch(signUpHandler(values));
+                    }
+                }}
                 >
                     {({
                         values,
@@ -89,34 +100,34 @@ const LoginModal:FC<Props> = ({keepShowingModal})=>{
                                             />
                                         </Grid>
                                     }
+                                    <Grid item >
+                                        <Input
+                                        value = {values.username}
+                                        className = {classes.loginInputField}
+                                        fullWidth
+                                        disableUnderline
+                                        name = "username"
+                                        placeholder = {_showLogin?"Email Or Gamer Tag (Username)":"Gamer Tag (Username)"}
+                                        type = "text"
+                                        onChange = {handleChange}
+                                        />
+                                    </Grid>
                                     {
                                         !_showLogin &&
                                         <Grid item >
                                             <Input
-                                            value = {values.username}
+                                            value = {values.email}
                                             className = {classes.loginInputField}
                                             fullWidth
                                             disableUnderline
-                                            name = "username"
-                                            placeholder = "Gamer Tag (Username)"
-                                            type = "text"
+                                            name = "email"
+                                            placeholder = "Email"
+                                            type = "email"
                                             onChange = {handleChange}
                                             />
+
                                         </Grid>
                                     }
-                                    <Grid item >
-                                        <Input
-                                        value = {values.email}
-                                        className = {classes.loginInputField}
-                                        fullWidth
-                                        disableUnderline
-                                        name = "email"
-                                        placeholder = "Email"
-                                        type = "email"
-                                        onChange = {handleChange}
-                                        />
-
-                                    </Grid>
                                     <Grid item >
                                         <Input
                                         value = {values.password}
