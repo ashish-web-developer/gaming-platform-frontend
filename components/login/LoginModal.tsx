@@ -19,24 +19,18 @@ import {
 
 import { 
     showModal,
-    name,
-    username,
-    email,
-    password,
     toggleModal,
-    updateName,
-    updateUserName,
-    updateEmail,
-    updatePassword,
+    signUpHandler
 } from "@/store/login.slice";
 
+
+// Formik
+
+import { Formik } from "formik";
 
 // Styles
 import useLoginStyles from "@/styles/login.style";
 
-
-// Axios
-import { Axios } from "@/helpers/axios";
 
 const LoginModal:FC = ()=>{
     const dispatch = useAppDispatch();
@@ -52,67 +46,86 @@ const LoginModal:FC = ()=>{
             <Box className = {classes.modalContainer}>
                 <h1 className = {classes.modalTitle}>Playground</h1>
                 <Image alt = "logo" width = "200" height = "200" src = "/logo_1.png"/>
-                <div className = {classes.loginInputContainer}>
-                    <Grid direction = "column" spacing = {2} container>
-                        <Grid item>
-                            <Input
-                            className = {classes.loginInputField}
-                            fullWidth
-                            disableUnderline
-                            name = "name"
-                            placeholder = "Name"
-                            type = "text"
-                            onChange = {(event)=>{dispatch(updateName(event.target.value))}}
-                            />
+                <Formik 
+                initialValues={{
+                    name:"",
+                    email:"",
+                    username:"",
+                    password:""
+                }}
+                onSubmit={(values,{setSubmitting})=>dispatch(signUpHandler(values))}
+                >
+                    {({
+                        values,
+                        errors,
+                        handleChange,
+                        handleSubmit,
+                        isSubmitting
+                    })=>(
+                            <div className = {classes.loginInputContainer}>
+                                <Grid direction = "column" spacing = {2} container>
+                                    <Grid item>
+                                        <Input
+                                        value = {values.name}
+                                        className = {classes.loginInputField}
+                                        fullWidth
+                                        disableUnderline
+                                        name = "name"
+                                        placeholder = "Name"
+                                        type = "text"
+                                        onChange = {handleChange}
+                                        />
+                                    </Grid>
+                                    <Grid item >
+                                        <Input
+                                        value = {values.username}
+                                        className = {classes.loginInputField}
+                                        fullWidth
+                                        disableUnderline
+                                        name = "username"
+                                        placeholder = "Gamer Tag (Username)"
+                                        type = "text"
+                                        onChange = {handleChange}
+                                        />
+                                    </Grid>
+                                    <Grid item >
+                                        <Input
+                                        value = {values.email}
+                                        className = {classes.loginInputField}
+                                        fullWidth
+                                        disableUnderline
+                                        name = "email"
+                                        placeholder = "Email"
+                                        type = "email"
+                                        onChange = {handleChange}
+                                        />
 
+                                    </Grid>
+                                    <Grid item >
+                                        <Input
+                                        value = {values.password}
+                                        className = {classes.loginInputField}
+                                        fullWidth
+                                        disableUnderline
+                                        name = "password"
+                                        placeholder = "Password"
+                                        type = "password"
+                                        onChange = {handleChange} 
+                                        />
 
-                        </Grid>
-                        <Grid item >
-                            <Input
-                            className = {classes.loginInputField}
-                            fullWidth
-                            disableUnderline
-                            name = "username"
-                            placeholder = "Gamer Tag (Username)"
-                            type = "text"
-                            onChange = {(event)=>{dispatch(updateUserName(event.target.value))}}
-                            />
-
-                        </Grid>
-                        <Grid item >
-                            <Input
-                            className = {classes.loginInputField}
-                            fullWidth
-                            disableUnderline
-                            name = "email"
-                            placeholder = "Email"
-                            type = "email"
-                            onChange = {(event)=>(dispatch(updateEmail(event.target.value)))}
-                            />
-
-                        </Grid>
-                        <Grid item >
-                            <Input
-                            className = {classes.loginInputField}
-                            fullWidth
-                            disableUnderline
-                            name = "password"
-                            placeholder = "Password"
-                            type = "password"
-                            onChange = {(event)=>(dispatch(updatePassword(event.target.value)))}
-                            />
-
-                        </Grid>
-                    </Grid>
-                    <Button 
-                        className = {classes.loginCta}
-                        onClick={()=>submitHandler()}
-                        variant="contained"
-                        fullWidth
-                    >
-                        Continue
-                    </Button>
-                </div>
+                                    </Grid>
+                                </Grid>
+                                <Button 
+                                    className = {classes.loginCta}
+                                    onClick={()=>handleSubmit()}
+                                    variant="contained"
+                                    fullWidth
+                                >
+                                    Continue
+                                </Button>
+                            </div>
+                    )}
+                </Formik>
             </Box>
         </Modal>
     )
