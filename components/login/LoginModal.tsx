@@ -20,7 +20,10 @@ import {
 import { 
     showModal,
     toggleModal,
-    signUpHandler
+    updateShowLogin,
+    signUpHandler,
+    loginHandler,
+    showLogin
 } from "@/store/login.slice";
 
 
@@ -32,16 +35,23 @@ import { Formik } from "formik";
 import useLoginStyles from "@/styles/login.style";
 
 
-const LoginModal:FC = ()=>{
+interface Props {
+    keepShowingModal:boolean;
+}
+const LoginModal:FC<Props> = ({keepShowingModal})=>{
     const dispatch = useAppDispatch();
     const _showModal  = useAppSelector(showModal);
+    const _showLogin = useAppSelector(showLogin)
     const classes = useLoginStyles();
 
 
     return(
         <Modal
             open = {_showModal}
-            onClose = {()=>dispatch(toggleModal(false))}
+            onClose = {()=>{
+                if(keepShowingModal) return;
+                dispatch(toggleModal(false));
+            }}
         >
             <Box className = {classes.modalContainer}>
                 <h1 className = {classes.modalTitle}>Playground</h1>
@@ -53,7 +63,7 @@ const LoginModal:FC = ()=>{
                     username:"",
                     password:""
                 }}
-                onSubmit={(values,{setSubmitting})=>dispatch(signUpHandler(values))}
+                onSubmit={(values,{setSubmitting})=>_showLogin?dispatch(loginHandler({email:values.email,password:values.password})):dispatch(signUpHandler(values))}
                 >
                     {({
                         values,
@@ -64,30 +74,36 @@ const LoginModal:FC = ()=>{
                     })=>(
                             <div className = {classes.loginInputContainer}>
                                 <Grid direction = "column" spacing = {2} container>
-                                    <Grid item>
-                                        <Input
-                                        value = {values.name}
-                                        className = {classes.loginInputField}
-                                        fullWidth
-                                        disableUnderline
-                                        name = "name"
-                                        placeholder = "Name"
-                                        type = "text"
-                                        onChange = {handleChange}
-                                        />
-                                    </Grid>
-                                    <Grid item >
-                                        <Input
-                                        value = {values.username}
-                                        className = {classes.loginInputField}
-                                        fullWidth
-                                        disableUnderline
-                                        name = "username"
-                                        placeholder = "Gamer Tag (Username)"
-                                        type = "text"
-                                        onChange = {handleChange}
-                                        />
-                                    </Grid>
+                                    {
+                                        !_showLogin && 
+                                        <Grid item>
+                                            <Input
+                                            value = {values.name}
+                                            className = {classes.loginInputField}
+                                            fullWidth
+                                            disableUnderline
+                                            name = "name"
+                                            placeholder = "Name"
+                                            type = "text"
+                                            onChange = {handleChange}
+                                            />
+                                        </Grid>
+                                    }
+                                    {
+                                        !_showLogin &&
+                                        <Grid item >
+                                            <Input
+                                            value = {values.username}
+                                            className = {classes.loginInputField}
+                                            fullWidth
+                                            disableUnderline
+                                            name = "username"
+                                            placeholder = "Gamer Tag (Username)"
+                                            type = "text"
+                                            onChange = {handleChange}
+                                            />
+                                        </Grid>
+                                    }
                                     <Grid item >
                                         <Input
                                         value = {values.email}
@@ -126,6 +142,14 @@ const LoginModal:FC = ()=>{
                             </div>
                     )}
                 </Formik>
+                {
+                    !_showLogin &&
+                    <p className = {classes.switchModal}>Already a member?<Button className = {classes.switchModalSpan} onClick = {()=>dispatch(updateShowLogin(true))} variant="text">Login</Button></p>
+                }
+                {
+                    _showLogin &&
+                    <p className = {classes.switchModal}>Not a member?<Button className = {classes.switchModalSpan} onClick = {()=>dispatch(updateShowLogin(false))} variant="text">Sign Up</Button></p>
+                }
             </Box>
         </Modal>
     )

@@ -65,6 +65,19 @@ const useLoginStyles = makeStyles((theme:Theme)=>({
                 backgroundColor:color.button,
             }
         }
+    },
+    switchModal:{
+        color:color.text,
+        fontFamily: "'Poppins', sans-serif",
+        marginTop:"10px",
+        fontSize:"14px"
+    },
+    switchModalSpan:{
+        "&.MuiButton-root":{
+            color:color.button,
+            textTransform:"capitalize",
+            textDecoration:"underline"
+        }
     }
 }))
 

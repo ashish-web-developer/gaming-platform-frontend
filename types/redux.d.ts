@@ -1,6 +1,7 @@
-type loginInitialState = {
+type LoginInitialState = {
     showModal:boolean,
+    showLogin:boolean,
 }
 
 
-export {loginInitialState};
+export {LoginInitialState};
