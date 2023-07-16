@@ -13,6 +13,7 @@ import store from '@/store/rootReducer'
 
 // Provider
 import CsrfTokenProvider from '@/providers/CsrfTokenProvider'
+import UserProvider from '@/providers/UserProvider'
 
 
 const theme = createTheme({
@@ -23,7 +24,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store = {store}>
       <ThemeProvider theme = {theme}>
         <CsrfTokenProvider>
-          <Component {...pageProps} />
+          <UserProvider>
+            <Component {...pageProps} />
+          </UserProvider>
         </CsrfTokenProvider>
       </ThemeProvider>
     </Provider>

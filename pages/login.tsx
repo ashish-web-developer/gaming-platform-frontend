@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect ,useState} from "react";
 
 
@@ -11,14 +12,27 @@ import LoginModal from "../components/login/LoginModal";
 import useLoginStyles from "@/styles/login.style";
 
 
+// Redux
+import { user } from "@/store/user.slice";
+import { useAppSelector } from "@/hooks/redux";
+
 
 const Login:NextPage = ()=>{
+    const _user = useAppSelector(user);
     const [isLoading,setIsLoading] = useState(false);
     const classes = useLoginStyles();
+    const router = useRouter();
 
     useEffect(()=>{
         setIsLoading(true);
     },[])
+
+
+    /*useEffect(()=>{
+        if(_user.username){
+            router.push("/");
+        }
+    },[_user])*/
     return (
         <>
             <Head>
@@ -29,7 +43,7 @@ const Login:NextPage = ()=>{
             {
                 isLoading &&
                 <div className = {classes.root}>
-                    <LoginModal/>
+                    <LoginModal keepShowingModal = {true}/>
                 </div>
             }
         </>
