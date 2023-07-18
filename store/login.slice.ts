@@ -80,6 +80,7 @@ export const loginHandler = createAsyncThunk<LoginResponse,LoginArgs>(
 const initialState:LoginInitialState = {
     showModal:true,
     showLogin:false,
+    showPassword:false,
 }
 
 export const loginSlice = createSlice({
@@ -91,12 +92,16 @@ export const loginSlice = createSlice({
         },
         updateShowLogin:(state,action:PayloadAction<boolean>)=>{
             state.showLogin = action.payload
+        },
+        updateShowPassword:(state,action:PayloadAction<boolean>)=>{
+            state.showPassword = action.payload;
         }
     }
 })
 
 
-export const {toggleModal,updateShowLogin}  = loginSlice.actions;
+export const {toggleModal,updateShowLogin,updateShowPassword}  = loginSlice.actions;
 export const showModal = (state:RootState) => state.login.showModal;
 export const showLogin = (state:RootState) => state.login.showLogin;
+export const showPassword = (state:RootState) => state.login.showPassword
 export default loginSlice.reducer;

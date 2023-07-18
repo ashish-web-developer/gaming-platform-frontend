@@ -1,4 +1,5 @@
 import type { FC } from "react"
+import { useState } from "react";
 import Image from "next/image";
 
 // Mui Components
@@ -7,8 +8,14 @@ import {
     Button,
     Box,
     Input,
-    Grid
+    Grid,
+    Tooltip,
+    IconButton
 } from "@mui/material";
+
+// Icons
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 // Redux
 import { 
@@ -21,9 +28,11 @@ import {
     showModal,
     toggleModal,
     updateShowLogin,
+    updateShowPassword,
     signUpHandler,
     loginHandler,
-    showLogin
+    showLogin,
+    showPassword,
 } from "@/store/login.slice";
 
 
@@ -33,7 +42,16 @@ import { Formik } from "formik";
 
 // Styles
 import useLoginStyles from "@/styles/login.style";
+import { error } from "console";
 
+
+
+type Errors = {
+    name?:string|null,
+    username:string|null,
+    email?:string|null,
+    password:string|null,
+}
 
 interface Props {
     keepShowingModal:boolean;
@@ -41,7 +59,8 @@ interface Props {
 const LoginModal:FC<Props> = ({keepShowingModal})=>{
     const dispatch = useAppDispatch();
     const _showModal  = useAppSelector(showModal);
-    const _showLogin = useAppSelector(showLogin)
+    const _showLogin = useAppSelector(showLogin);
+    const _showPassword = useAppSelector(showPassword);
     const classes = useLoginStyles();
 
 
@@ -63,6 +82,37 @@ const LoginModal:FC<Props> = ({keepShowingModal})=>{
                     username:"",
                     password:""
                 }}
+                validate={values =>{
+                    const errors:Errors = {
+                        name:null,
+                        username:null,
+                        email:null,
+                        password:null
+                    };
+                    if(_showLogin){
+                        if(!values.username){
+                            errors.username = "Please enter Username or Email";
+                        }
+                        if(!values.password){
+                            errors.password = "Please enter your Password";
+                        }
+                    }else{
+                        if(!values.name){
+                            errors.name = "Please enter your Name";
+                        }
+                        if(!values.username){
+                            errors.username = "Please enter your Username";
+                        }
+                        if(!values.email){
+                            errors.email = "Please enter your Email";
+                        }
+                        if(!values.password){
+                            errors.password = "Please enter your Password";
+                        }
+                    }
+                    return errors;
+                }}
+
                 onSubmit={(values,{setSubmitting})=>{
                     if(_showLogin){
                         const emailPattern = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
@@ -136,8 +186,13 @@ const LoginModal:FC<Props> = ({keepShowingModal})=>{
                                         disableUnderline
                                         name = "password"
                                         placeholder = "Password"
-                                        type = "password"
+                                        type = {_showPassword?"text":"password"} 
                                         onChange = {handleChange} 
+                                        endAdornment = {
+                                            <IconButton className = {classes.passwordEndAdorment} onClick = {()=>dispatch(updateShowPassword(!_showPassword))}>
+                                                {_showPassword?<VisibilityOffOutlinedIcon/>:<VisibilityOutlinedIcon/>}
+                                            </IconButton>
+                                        }
                                         />
 
                                     </Grid>
