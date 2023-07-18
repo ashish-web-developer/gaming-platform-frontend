@@ -78,6 +78,11 @@ const useLoginStyles = makeStyles((theme:Theme)=>({
             textTransform:"capitalize",
             textDecoration:"underline"
         }
+    },
+    passwordEndAdorment:{
+        "&.MuiIconButton-root":{
+            color:"#fff !important"
+        }
     }
 }))
 
