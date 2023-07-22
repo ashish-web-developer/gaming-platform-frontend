@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 
 // Mui
-import { ThemeProvider } from '@mui/styles'
+import { ThemeProvider ,createGenerateClassName,StylesProvider} from '@mui/styles'
 import { createTheme } from '@mui/material'
 
 
@@ -19,17 +19,24 @@ import UserProvider from '@/providers/UserProvider'
 const theme = createTheme({
 })
 
+
+const generateClassName = createGenerateClassName({
+  productionPrefix:"p"
+})
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <Provider store = {store}>
-      <ThemeProvider theme = {theme}>
-        <CsrfTokenProvider>
-          <UserProvider>
-            <Component {...pageProps} />
-          </UserProvider>
-        </CsrfTokenProvider>
-      </ThemeProvider>
-    </Provider>
+    <StylesProvider generateClassName={generateClassName}>
+      <Provider store = {store}>
+        <ThemeProvider theme = {theme}>
+          <CsrfTokenProvider>
+            <UserProvider>
+              <Component {...pageProps} />
+            </UserProvider>
+          </CsrfTokenProvider>
+        </ThemeProvider>
+      </Provider>
+    </StylesProvider>
   )
   //return <Component {...pageProps} />
 }
