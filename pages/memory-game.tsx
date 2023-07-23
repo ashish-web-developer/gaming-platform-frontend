@@ -1,6 +1,6 @@
 import { GetStaticProps, NextPage } from "next";
 // Mui
-import { Grid,Box } from "@mui/material"
+import { Grid,Box ,useMediaQuery,useTheme} from "@mui/material"
 import styled  from "styled-components";
 
 // Local components
@@ -11,9 +11,9 @@ import Card from "@/components/game/card/Card"
 import { getRandomCard,getRandomImage} from "@/helpers/memory-game/game";
 import { insertSameElementsRandomly } from "@/helpers/common";
 
+// files readers
 import fs from "fs";
 import path from "path";
-import { useEffect } from "react";
 
 
 const color = {
@@ -30,6 +30,9 @@ const StyledContainer = styled(Box)`
     padding:60px 100px;
     min-height:100vh;
     background-color:${color.primary};
+    @media (max-width: 600px) {
+        padding:30px 20px;
+    }
 `
 
 const gameComplexity = 14;
@@ -49,8 +52,8 @@ interface Props {
     files:string[]
 }
 const MemoryGame:NextPage<Props> = ({files})=>{
-    console.log("value of files",files);
-
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
     return (
         <StyledContainer>
@@ -58,8 +61,8 @@ const MemoryGame:NextPage<Props> = ({files})=>{
                 {
                     cardArray.map((element,i)=>{
                         return(
-                            <Grid key = {i} xs = {2} item>
-                                <Card backgroundImage= {getRandomImage(files)} width = {200} {...element} />
+                            <Grid key = {i} xs = {6} sm = {2} item>
+                                <Card backgroundImage= {getRandomImage(files)} width = {isMobile?150:200} {...element} />
                             </Grid>
                         )
                     })

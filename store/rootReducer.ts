@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from "@/store/login.slice";
 import userReducer from "@/store/user.slice";
+import memoryGameReducer from "@/store/memory-game.slice";
 
 
 const store = configureStore({
     reducer:{
         login:loginReducer,
-        user:userReducer
+        user:userReducer,
+        memoryGame:memoryGameReducer
     }
 })
 

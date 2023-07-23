@@ -23,8 +23,8 @@ const StyledContainer = styled.div<StyledContainerProps>`
     justify-content:center;
     align-items:center;
     background-color:rgb(231,233,237) !important;
-    box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.1); /* Box shadow on all sides */
     transition: box-shadow 0.2s ease-in-out; /* Optional: Add smooth transition */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 `
 
@@ -40,6 +40,9 @@ const StyledTopCardText = styled.h1<StyledTextProps>`
     top:15px;
     left:15px;
     color:${(props)=>props.color};
+    @media (max-width: 600px) {
+        font-size:25px;
+    }
 `
 
 
@@ -50,6 +53,9 @@ const StyledBottomCardText = styled.h1<StyledTextProps>`
     bottom:15px;
     right:15px;
     color:${(props)=>props.color};
+    @media (max-width: 600px) {
+        font-size:25px;
+    }
 `
 
 
@@ -59,6 +65,10 @@ const StyledTopCardSuit = styled.span<StyledTextProps>`
     color:${(props)=>props.color};
     top:50px;
     left:15px;
+    @media (max-width: 600px) {
+        font-size:30px;
+        top:40px;
+    }
 }
 `
 
@@ -69,6 +79,10 @@ const StyledBottomCardSuit = styled.span<StyledTextProps>`
     bottom:50px;
     transform:rotate(180deg);
     right:15px;
+    @media (max-width: 600px) {
+        font-size:30px;
+        bottom:40px;
+    }
 }
 `
 
@@ -82,6 +96,9 @@ const ChildContainer = styled.div<StyledTextProps>`
     align-items:center;
     font-size:80px;
     color:${(props)=>props.color};
+    @media (max-width: 600px) {
+        font-size:50px;
+    }
 `
 
 
