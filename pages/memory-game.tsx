@@ -1,4 +1,4 @@
-
+import { GetStaticProps, NextPage } from "next";
 // Mui
 import { Grid,Box } from "@mui/material"
 import styled  from "styled-components";
@@ -8,8 +8,12 @@ import Card from "@/components/game/card/Card"
 
 
 // helpers 
-import { getRandomCard} from "@/helpers/memory-game/game";
+import { getRandomCard,getRandomImage} from "@/helpers/memory-game/game";
 import { insertSameElementsRandomly } from "@/helpers/common";
+
+import fs from "fs";
+import path from "path";
+import { useEffect } from "react";
 
 
 const color = {
@@ -32,7 +36,6 @@ const gameComplexity = 14;
 
 const cardArray:Array<{
     suit:string,
-    backgroundImage:string,
     card:string|number,
     cardColor:"red"|"black"
 }> = new Array(gameComplexity);
@@ -41,16 +44,22 @@ for(let i = 0;i< gameComplexity/2;i++){
     insertSameElementsRandomly(cardArray,getRandomCard());
 }
 
-const MemoryGame = ()=>{
-    console.log(cardArray);
+
+interface Props {
+    files:string[]
+}
+const MemoryGame:NextPage<Props> = ({files})=>{
+    console.log("value of files",files);
+
+
     return (
         <StyledContainer>
             <Grid container spacing = {2} >
                 {
                     cardArray.map((element,i)=>{
                         return(
-                            <Grid xs = {2} item>
-                                <Card width = {200} {...element} />
+                            <Grid key = {i} xs = {2} item>
+                                <Card backgroundImage= {getRandomImage(files)} width = {200} {...element} />
                             </Grid>
                         )
                     })
@@ -62,5 +71,22 @@ const MemoryGame = ()=>{
     )
 }
 
+export async function getStaticProps() {
+  const publicFolderPath = './public/memory-game'; // Path to the 'public' folder
+  let files:string[] = [];
 
+  try {
+    // Read files from the 'public' folder using fs.readdirSync
+    files = fs.readdirSync(path.join(process.cwd(), publicFolderPath));
+    files = files.filter((file) => file !== '.DS_Store');
+  } catch (err) {
+    console.error('Error reading folder:', err);
+  }
+
+  return {
+    props: {
+      files,
+    },
+  };
+}
 export default MemoryGame;

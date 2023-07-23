@@ -22,7 +22,7 @@ const StyledContainer = styled.div<StyledContainerProps>`
     display:flex;
     justify-content:center;
     align-items:center;
-    background-color:rgb(231,233,237);
+    background-color:rgb(231,233,237) !important;
     box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.1); /* Box shadow on all sides */
     transition: box-shadow 0.2s ease-in-out; /* Optional: Add smooth transition */
 }

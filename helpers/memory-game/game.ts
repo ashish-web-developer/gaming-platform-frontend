@@ -6,11 +6,9 @@ const getRandomSuit = ()=>{
     return cardSuits[randomIndex]
 }
 
-const getRandomImage = ()=>{
-    const backgroundImages = ['image-1.jpeg','image-2.jpeg','image-3.jpeg','image-4.png'];
-    const backgroundImagesLength = backgroundImages.length;
-    const randomIndex = Math.floor(Math.random()*backgroundImagesLength);
-    return backgroundImages[randomIndex];
+const getRandomImage = (files:string[])=>{
+    const randomIndex = Math.floor(Math.random()*files.length);
+    return files[randomIndex];
 
 }
 
@@ -23,11 +21,9 @@ const getRandomCardNumber = ()=>{
 
 const getRandomCard = ()=>{
     const suit = getRandomSuit();
-    const backgroundImage= getRandomImage();
     const cardNumber = getRandomCardNumber();
     return {
         suit,
-        backgroundImage,
         card:cardNumber,
         cardColor:['♦', '♥'].includes(suit)?"red":"black"
     }
