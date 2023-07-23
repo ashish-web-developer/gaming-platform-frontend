@@ -5,7 +5,8 @@ const color = {
     primary:"rgb(3 13 9)",
     secondary:"rgb(16 9 22)",
     text:"#fffdff",
-    button:"#8102f7"
+    button:"#8102f7",
+    errors :"#d11534"
 }
 
 const useLoginStyles = makeStyles((theme:Theme)=>({
@@ -83,6 +84,12 @@ const useLoginStyles = makeStyles((theme:Theme)=>({
         "&.MuiIconButton-root":{
             color:"#fff !important"
         }
+    },
+    validation:{
+        color:color.errors,
+        fontFamily: "'Poppins', sans-serif",
+        fontSize:"12px",
+        margin:"8px 8px 0px 0px",
     }
 }))
 
