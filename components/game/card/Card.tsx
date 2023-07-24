@@ -109,9 +109,10 @@ interface Props {
     card:string|number;
     cardColor:"red"|"black";
     backgroundImage:string;
+    isPlay:boolean;
 }
 
-const Card:FC<Props> = ({width,suit,card,cardColor,backgroundImage})=>{
+const Card:FC<Props> = ({width,suit,card,cardColor,backgroundImage,isPlay})=>{
     const [ isFlipped,setIsFlipped] = useState(false);
     return (
         <>
@@ -124,7 +125,7 @@ const Card:FC<Props> = ({width,suit,card,cardColor,backgroundImage})=>{
                 <StyledBottomCardText color ={cardColor}>{card}</StyledBottomCardText>
                 <ChildContainer color = {cardColor}>{suit}</ChildContainer>
             </StyledContainer>:
-            <StyledContainerWithBackground onClick={()=>setIsFlipped(true)} width={width} backgroundImage={backgroundImage}>
+            <StyledContainerWithBackground onClick={()=>setIsFlipped(isPlay?true:false)} width={width} backgroundImage={backgroundImage}>
             </StyledContainerWithBackground>
         }
         </>

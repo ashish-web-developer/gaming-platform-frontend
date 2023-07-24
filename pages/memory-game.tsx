@@ -1,7 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
 import { useState } from "react";
 // Mui
-import { Grid, Box, useMediaQuery, useTheme } from "@mui/material";
+import { Grid, Box, useMediaQuery, useTheme ,Button} from "@mui/material";
 import styled from "styled-components";
 
 // Local components
@@ -37,6 +37,28 @@ const StyledContainer = styled(Box)`
     padding: 30px 20px;
   }
 `;
+const WelcomeScreenContainer = styled.div`
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:30px;
+  min-height: 100vh;
+  background-color: ${color.primary};
+  @media (max-width: 600px) {
+    padding: 30px 20px;
+  }
+`
+
+
+const PlayButton = styled(Button)`
+    padding:16px 50px;
+    color:${color.text};
+    background-color:${color.button};
+    font-size:18px;
+    font-family:'Rubik Moonrocks', cursive;
+    border-radius:8px;
+`
 
 const gameComplexity = 14;
 
@@ -56,12 +78,30 @@ interface Props {
 const MemoryGame: NextPage<Props> = ({ files }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [isPlayed, setPlayed] = useState(true);
+  const [isPlay, setPlay] = useState(false);
 
   return (
     <>
-      {isPlayed ? (
+      {isPlay ? 
+        (
         <StyledContainer>
+          <Grid container spacing={2}>
+            {cardArray.map((element, i) => {
+              return (
+                <Grid key={i} xs={6} sm={2} item>
+                  <Card
+                    backgroundImage={getRandomImage(files)}
+                    width={isMobile ? 150 : 200}
+                    {...element}
+                    isPlay = {isPlay}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </StyledContainer>
+      ):(
+        <WelcomeScreenContainer>
           <SwiperCard>
             {cardArray.map((element, i) => {
               return (
@@ -75,24 +115,15 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
               );
             })}
           </SwiperCard>
-        </StyledContainer>
-      ) : (
-        <StyledContainer>
-          <Grid container spacing={2}>
-            {cardArray.map((element, i) => {
-              return (
-                <Grid key={i} xs={6} sm={2} item>
-                  <Card
-                    backgroundImage={getRandomImage(files)}
-                    width={isMobile ? 150 : 200}
-                    {...element}
-                  />
-                </Grid>
-              );
-            })}
-          </Grid>
-        </StyledContainer>
-      )}
+          <PlayButton 
+            variant="contained"
+            onClick={()=>setPlay(true)}
+          >
+            Lets Play
+        </PlayButton>
+        </WelcomeScreenContainer>
+      )
+      }
     </>
   );
 };
