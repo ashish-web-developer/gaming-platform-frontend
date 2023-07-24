@@ -3,3 +3,22 @@
     margin:0px;
     box-sizing: border-box;
 }
+
+body {
+    background-color: #000;
+}
+.swiper {
+  width: 200px;
+  height: 200*1.4px;
+}
+
+.swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+}
+

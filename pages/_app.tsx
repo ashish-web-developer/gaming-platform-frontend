@@ -2,7 +2,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 
 // Mui
-import { ThemeProvider ,createGenerateClassName,StylesProvider} from '@mui/styles'
+import { ThemeProvider } from '@mui/styles'
 import { createTheme } from '@mui/material'
 
 
@@ -15,18 +15,16 @@ import store from '@/store/rootReducer'
 import CsrfTokenProvider from '@/providers/CsrfTokenProvider'
 import UserProvider from '@/providers/UserProvider'
 
+// Styled components
+
 
 const theme = createTheme({
 })
 
 
-const generateClassName = createGenerateClassName({
-  productionPrefix:"p"
-})
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <StylesProvider generateClassName={generateClassName}>
       <Provider store = {store}>
         <ThemeProvider theme = {theme}>
           <CsrfTokenProvider>
@@ -36,7 +34,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           </CsrfTokenProvider>
         </ThemeProvider>
       </Provider>
-    </StylesProvider>
   )
   //return <Component {...pageProps} />
 }
