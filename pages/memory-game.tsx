@@ -1,4 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
+import { useState } from "react";
 // Mui
 import { Grid,Box ,useMediaQuery,useTheme} from "@mui/material"
 import styled  from "styled-components";
@@ -14,6 +15,12 @@ import { insertSameElementsRandomly } from "@/helpers/common";
 // files readers
 import fs from "fs";
 import path from "path";
+
+
+// Swiper
+import SwiperCard from "@/components/common/swiper";
+import { SwiperSlide } from "swiper/react";
+
 
 
 const color = {
@@ -54,23 +61,43 @@ interface Props {
 const MemoryGame:NextPage<Props> = ({files})=>{
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+    const [isPlayed,setPlayed] = useState(true);
 
     return (
-        <StyledContainer>
-            <Grid container spacing = {2} >
-                {
-                    cardArray.map((element,i)=>{
-                        return(
-                            <Grid key = {i} xs = {6} sm = {2} item>
-                                <Card backgroundImage= {getRandomImage(files)} width = {isMobile?150:200} {...element} />
-                            </Grid>
-                        )
-                    })
-                }
+        <>
+        {
+            isPlayed?
+            <StyledContainer>
+                <SwiperCard>
+                    {
+                        cardArray.map((element,i)=>{
+                            return(
+                                <SwiperSlide>
+                                    <Card backgroundImage= {getRandomImage(files)} width = {isMobile?150:200} {...element} />
+                                </SwiperSlide>
+                            )
+                        })
+                    }
+                </SwiperCard>
+            </StyledContainer>:
+            <StyledContainer>
+                <Grid container spacing = {2} >
+                    {
+                        cardArray.map((element,i)=>{
+                            return(
+                                <Grid key = {i} xs = {6} sm = {2} item>
+                                    <Card backgroundImage= {getRandomImage(files)} width = {isMobile?150:200} {...element} />
+                                </Grid>
+                            )
+                        })
+                    }
 
-            </Grid>
+                </Grid>
 
-        </StyledContainer>
+            </StyledContainer>
+
+        }
+        </>
     )
 }
 
