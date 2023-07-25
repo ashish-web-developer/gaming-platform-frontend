@@ -19,6 +19,18 @@ import path from "path";
 import SwiperCard from "@/components/common/swiper";
 import { SwiperSlide } from "swiper/react";
 
+
+// Redux
+import { useAppDispatch } from "@/hooks/redux";
+import { updateCard } from "@/store/memory-game.slice";
+
+// types
+import type { GetRandomCard } from "@/types/helpers/memory-game/game";
+
+
+// uuidv4 
+import {v4 as uuidv4} from "uuid";
+
 const color = {
   primary: "rgb(3 13 9)",
   secondary: "rgb(16 9 22)",
@@ -58,16 +70,14 @@ const PlayButton = styled(Button)`
     font-size:18px;
     font-family:'Rubik Moonrocks', cursive;
     border-radius:8px;
+    &:hover {
+      background-color:${color.button};
+    }
 `
 
 const gameComplexity = 14;
 
-const cardArray: Array<{
-  suit: string;
-  card: string | number;
-  cardColor: "red" | "black";
-}> = new Array(gameComplexity);
-
+const cardArray:GetRandomCard[] = new Array(gameComplexity)
 for (let i = 0; i < gameComplexity / 2; i++) {
   insertSameElementsRandomly(cardArray, getRandomCard());
 }
@@ -77,6 +87,7 @@ interface Props {
 }
 const MemoryGame: NextPage<Props> = ({ files }) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isPlay, setPlay] = useState(false);
 
@@ -88,8 +99,9 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
           <Grid container spacing={2}>
             {cardArray.map((element, i) => {
               return (
-                <Grid key={i} xs={6} sm={2} item>
+                <Grid key={uuidv4()} xs={6} sm={2} item>
                   <Card
+                    cardId={element.id}
                     backgroundImage={getRandomImage(files)}
                     width={isMobile ? 150 : 200}
                     {...element}
@@ -105,10 +117,12 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
           <SwiperCard>
             {cardArray.map((element, i) => {
               return (
-                <SwiperSlide>
+                <SwiperSlide key = {uuidv4()}>
                   <Card
+                    cardId = {element.id}
                     backgroundImage={getRandomImage(files)}
                     width={isMobile ? 150 : 200}
+                    isPlay = {isPlay}
                     {...element}
                   />
                 </SwiperSlide>

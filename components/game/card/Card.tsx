@@ -1,5 +1,16 @@
-import { FC ,useState} from "react";
+import { useState,useEffect} from "react";
 import styled from "styled-components";
+
+
+// Types
+
+import type {FC} from "react"
+
+// Redux
+import { useAppDispatch } from "@/hooks/redux";
+import { updateCard } from "@/store/memory-game.slice";
+
+
 
 
 interface StyledContainerProps {
@@ -81,8 +92,7 @@ const StyledBottomCardSuit = styled.span<StyledTextProps>`
     right:15px;
     @media (max-width: 600px) {
         font-size:30px;
-        bottom:40px;
-    }
+        bottom:40px; }
 }
 `
 
@@ -110,10 +120,22 @@ interface Props {
     cardColor:"red"|"black";
     backgroundImage:string;
     isPlay:boolean;
+    cardId:string;
 }
 
-const Card:FC<Props> = ({width,suit,card,cardColor,backgroundImage,isPlay})=>{
+const Card:FC<Props> = ({width,suit,card,cardColor,backgroundImage,isPlay,cardId})=>{
+    const dispatch = useAppDispatch();
     const [ isFlipped,setIsFlipped] = useState(false);
+
+
+
+    useEffect(()=>{
+        console.log("inside it")
+        dispatch(updateCard({
+            [cardId]:false
+        }))
+    },[])
+
     return (
         <>
         {

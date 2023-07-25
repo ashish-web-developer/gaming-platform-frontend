@@ -1,21 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./rootReducer";
 
+// types
+import type { PayloadAction } from "@reduxjs/toolkit";
+
+
+
+
 
 const initialState = {
-    cards :[]
+    cardList:{
+    }
 }
 export const memoryGameSlice = createSlice({
     name:"memory-game-slice",
     initialState,
     reducers:{
-        updateCard:(state,action)=>{
-            state.cards.push(action.payload);
+        updateCard:(state,action:PayloadAction<Object>)=>{
+            state.cardList = {...state.cardList,...action.payload}
         },
         removeCard:(state,action) =>{
-            state.cards.filter((element)=>{
-                return element == action.payload;
-            })
         }
     }
 })
