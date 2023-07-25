@@ -1,14 +1,14 @@
 import { GetStaticProps, NextPage } from "next";
 import { useState } from "react";
 // Mui
-import { Grid, Box, useMediaQuery, useTheme ,Button} from "@mui/material";
+import { Grid, Box, useMediaQuery, useTheme, Button } from "@mui/material";
 import styled from "styled-components";
 
 // Local components
 import Card from "@/components/game/card/Card";
 
 // helpers
-import { getRandomCard, getRandomImage } from "@/helpers/memory-game/game";
+import { getRandomCard } from "@/helpers/memory-game/game";
 import { insertSameElementsRandomly } from "@/helpers/common";
 
 // files readers
@@ -18,6 +18,12 @@ import path from "path";
 // Swiper
 import SwiperCard from "@/components/common/swiper";
 import { SwiperSlide } from "swiper/react";
+
+// types
+import type { GetRandomCard } from "@/types/helpers/memory-game/game";
+
+// uuidv4
+import { v4 as uuidv4 } from "uuid";
 
 const color = {
   primary: "rgb(3 13 9)",
@@ -38,36 +44,33 @@ const StyledContainer = styled(Box)`
   }
 `;
 const WelcomeScreenContainer = styled.div`
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
   min-height: 100vh;
   background-color: ${color.primary};
   @media (max-width: 600px) {
     padding: 30px 20px;
   }
-`
-
+`;
 
 const PlayButton = styled(Button)`
-    padding:16px 50px;
-    color:${color.text};
-    background-color:${color.button};
-    font-size:18px;
-    font-family:'Rubik Moonrocks', cursive;
-    border-radius:8px;
-`
+  padding: 16px 50px;
+  color: ${color.text};
+  background-color: ${color.button};
+  font-size: 18px;
+  font-family: "Rubik Moonrocks", cursive;
+  border-radius: 8px;
+  &:hover {
+    background-color: ${color.button};
+  }
+`;
 
 const gameComplexity = 14;
 
-const cardArray: Array<{
-  suit: string;
-  card: string | number;
-  cardColor: "red" | "black";
-}> = new Array(gameComplexity);
-
+const cardArray: GetRandomCard[] = new Array(gameComplexity);
 for (let i = 0; i < gameComplexity / 2; i++) {
   insertSameElementsRandomly(cardArray, getRandomCard());
 }
@@ -82,48 +85,46 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
 
   return (
     <>
-      {isPlay ? 
-        (
+      {isPlay ? (
         <StyledContainer>
           <Grid container spacing={2}>
             {cardArray.map((element, i) => {
               return (
-                <Grid key={i} xs={6} sm={2} item>
+                <Grid key={uuidv4()} xs={6} sm={2} item>
                   <Card
-                    backgroundImage={getRandomImage(files)}
+                    cardId={uuidv4()}
+                    files={files}
                     width={isMobile ? 150 : 200}
                     {...element}
-                    isPlay = {isPlay}
+                    isPlay={isPlay}
                   />
                 </Grid>
               );
             })}
           </Grid>
         </StyledContainer>
-      ):(
+      ) : (
         <WelcomeScreenContainer>
           <SwiperCard>
             {cardArray.map((element, i) => {
               return (
-                <SwiperSlide>
+                <SwiperSlide key={uuidv4()}>
                   <Card
-                    backgroundImage={getRandomImage(files)}
+                    cardId={uuidv4()}
+                    files={files}
                     width={isMobile ? 150 : 200}
+                    isPlay={isPlay}
                     {...element}
                   />
                 </SwiperSlide>
               );
             })}
           </SwiperCard>
-          <PlayButton 
-            variant="contained"
-            onClick={()=>setPlay(true)}
-          >
+          <PlayButton variant="contained" onClick={() => setPlay(true)}>
             Lets Play
-        </PlayButton>
+          </PlayButton>
         </WelcomeScreenContainer>
-      )
-      }
+      )}
     </>
   );
 };

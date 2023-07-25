@@ -1,8 +1,8 @@
-function insertSameElementsRandomly(arr:Array<any>, element:any) {
+function insertSameElementsRandomly(arr: Array<any>, element: any) {
   // Step 1: Generate two random positions within the array length.
   const position1 = Math.floor(Math.random() * (arr.length + 1));
   let position2 = Math.floor(Math.random() * (arr.length + 1));
-  
+
   // Ensure that position2 is different from position1
   while (position2 === position1) {
     position2 = Math.floor(Math.random() * (arr.length + 1));
@@ -17,8 +17,4 @@ function insertSameElementsRandomly(arr:Array<any>, element:any) {
   arr.splice(position2, 0, element);
 }
 
-
-
-export {
-    insertSameElementsRandomly
-}
+export { insertSameElementsRandomly };
