@@ -1,12 +1,7 @@
-
-
 type InitialState = {
-    cardList:{
-        [key:string]:boolean
-    }
-}
+  cardList: {
+    [key: string]: boolean;
+  };
+};
 
-
-export {
-    InitialState
-}
+export { InitialState };
