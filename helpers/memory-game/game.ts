@@ -2,9 +2,6 @@
 import { GetRandomCard } from "@/types/helpers/memory-game/game";
 
 
-
-
-import { v4 as uuidv4 } from "uuid";
 const getRandomSuit = ():string=>{
     const cardSuits = ['♠', '♣', '♦', '♥'];
     const cardSuitsLength = cardSuits.length;
@@ -34,7 +31,6 @@ const getRandomCard = ():GetRandomCard=>{
         suit,
         card:cardNumber,
         cardColor:['♦', '♥'].includes(suit)?"red":"black",
-        id:uuidv4()
     }
 }
 

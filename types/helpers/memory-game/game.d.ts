@@ -5,7 +5,6 @@ type GetRandomCard = {
     suit:string,
     card:string|number,
     cardColor:"red"|"black",
-    id:string
 }
 
 

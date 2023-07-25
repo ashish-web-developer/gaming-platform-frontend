@@ -8,7 +8,10 @@ import type {FC} from "react"
 
 // Redux
 import { useAppDispatch } from "@/hooks/redux";
-import { updateCard } from "@/store/memory-game.slice";
+import { updateCard ,removeCard} from "@/store/memory-game.slice";
+
+// helpers
+import { getRandomImage } from "@/helpers/memory-game/game";
 
 
 
@@ -22,7 +25,7 @@ interface StyledTextProps {
 }
 
 interface StyledBackgroundProps {
-    backgroundImage:string;
+    $image:string;
 }
 
 const StyledContainer = styled.div<StyledContainerProps>`
@@ -40,7 +43,7 @@ const StyledContainer = styled.div<StyledContainerProps>`
 `
 
 const StyledContainerWithBackground = styled(StyledContainer)<StyledBackgroundProps>`
-    background-image:url(/memory-game/${(props)=>props.backgroundImage});
+    background-image:url(/memory-game/${(props)=>props.$image});
     background-size:cover;
     background-repeat:no-repeat;
 `
@@ -118,22 +121,26 @@ interface Props {
     suit:string;
     card:string|number;
     cardColor:"red"|"black";
-    backgroundImage:string;
     isPlay:boolean;
     cardId:string;
+    files:string[];
 }
 
-const Card:FC<Props> = ({width,suit,card,cardColor,backgroundImage,isPlay,cardId})=>{
+const Card:FC<Props> = ({width,suit,card,cardColor,isPlay,cardId,files})=>{
     const dispatch = useAppDispatch();
     const [ isFlipped,setIsFlipped] = useState(false);
+    const image = useRandomImage(files);
 
 
 
     useEffect(()=>{
-        console.log("inside it")
         dispatch(updateCard({
-            [cardId]:false
+            key:cardId,
+            value:false
         }))
+        return (()=>{
+                dispatch(removeCard(cardId));
+        })
     },[])
 
     return (
@@ -147,10 +154,19 @@ const Card:FC<Props> = ({width,suit,card,cardColor,backgroundImage,isPlay,cardId
                 <StyledBottomCardText color ={cardColor}>{card}</StyledBottomCardText>
                 <ChildContainer color = {cardColor}>{suit}</ChildContainer>
             </StyledContainer>:
-            <StyledContainerWithBackground onClick={()=>setIsFlipped(isPlay?true:false)} width={width} backgroundImage={backgroundImage}>
+            <StyledContainerWithBackground onClick={()=>setIsFlipped(isPlay?true:false)} width={width} $image={image}>
             </StyledContainerWithBackground>
         }
         </>
     )
+}
+
+
+function useRandomImage(files:string[]){
+    const [backgroundImage,setBackgroundImage] = useState<string>("");
+    useEffect(()=>{
+        setBackgroundImage(getRandomImage(files));
+    },[])
+    return backgroundImage;
 }
 export default Card;

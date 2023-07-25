@@ -8,7 +8,7 @@ import styled from "styled-components";
 import Card from "@/components/game/card/Card";
 
 // helpers
-import { getRandomCard, getRandomImage } from "@/helpers/memory-game/game";
+import { getRandomCard} from "@/helpers/memory-game/game";
 import { insertSameElementsRandomly } from "@/helpers/common";
 
 // files readers
@@ -101,8 +101,8 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
               return (
                 <Grid key={uuidv4()} xs={6} sm={2} item>
                   <Card
-                    cardId={element.id}
-                    backgroundImage={getRandomImage(files)}
+                    cardId={uuidv4()}
+                    files = {files}
                     width={isMobile ? 150 : 200}
                     {...element}
                     isPlay = {isPlay}
@@ -119,8 +119,8 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
               return (
                 <SwiperSlide key = {uuidv4()}>
                   <Card
-                    cardId = {element.id}
-                    backgroundImage={getRandomImage(files)}
+                    cardId = {uuidv4()}
+                    files = {files}
                     width={isMobile ? 150 : 200}
                     isPlay = {isPlay}
                     {...element}
