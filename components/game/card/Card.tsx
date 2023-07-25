@@ -6,8 +6,14 @@ import styled from "styled-components";
 import type { FC } from "react";
 
 // Redux
-import { useAppDispatch } from "@/hooks/redux";
-import { updateCard, removeCard } from "@/store/memory-game.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {
+  updateCard,
+  removeCard,
+  updateLastFlippedCard,
+  cardList,
+  lastFlippedCard,
+} from "@/store/memory-game.slice";
 
 // helpers
 import { getRandomImage } from "@/helpers/memory-game/game";
@@ -91,7 +97,8 @@ const StyledBottomCardSuit = styled.span<StyledTextProps>`
     right:15px;
     @media (max-width: 600px) {
         font-size:30px;
-        bottom:40px; }
+        bottom:40px; 
+    }
 }
 `;
 
@@ -129,24 +136,92 @@ const Card: FC<Props> = ({
   files,
 }) => {
   const dispatch = useAppDispatch();
+  const _cardList = useAppSelector(cardList);
+  const _lastFlippedCard = useAppSelector(lastFlippedCard);
   const [isFlipped, setIsFlipped] = useState(false);
   const image = useRandomImage(files);
+  useSetCardId(cardId);
 
-  useEffect(() => {
-    dispatch(
-      updateCard({
-        key: cardId,
-        value: false,
-      })
-    );
-    return () => {
-      dispatch(removeCard(cardId));
-    };
-  }, []);
+  /**
+   * whenever player click on a card then we are
+   * showing that card, storing it in lastFlipped
+   * card variable then when we click on next card
+   * then verifying the last clicked card with
+   * current card if value matched hten then showing
+   * the both card, else if value doesn't matches then
+   * showing the card for 1 sec and then flipping it down
+   */
+  const handleFlipping = () => {
+    // user is in play mode
+    if (isPlay) {
+      /**
+       * check if last flipped card is same is current
+       * flippped card or if last flipped card is null
+       */
+      if (
+        (_lastFlippedCard?.card == card &&
+          _lastFlippedCard.cardColor == cardColor &&
+          _lastFlippedCard?.suit == suit) ||
+        _lastFlippedCard == null
+      ) {
+        /**
+         * Either current card matched with last flipped
+         * card or current flipped card is null in both cases
+         * shows the current card
+         */
+        dispatch(
+          updateCard({
+            key: cardId,
+            value: true,
+          })
+        );
+        if (_lastFlippedCard == null) {
+          dispatch(
+            updateLastFlippedCard({
+              id: cardId,
+              suit,
+              card,
+              cardColor,
+            })
+          );
+        } else {
+          dispatch(updateLastFlippedCard(null));
+        }
+      } else {
+        /**
+         * if card doesn't match then shows card for a second
+         * then flip it down and set the last flipped card value
+         * to null
+         */
+        dispatch(
+          updateCard({
+            key: cardId,
+            value: true,
+          })
+        );
+        setTimeout(() => {
+          dispatch(
+            updateCard({
+              key: cardId,
+              value: false,
+            })
+          );
+          dispatch(
+            updateCard({
+              key: _lastFlippedCard.id,
+              value: false,
+            })
+          );
+        }, 1000);
+        dispatch(updateLastFlippedCard(null));
+      }
+    }
+    return null;
+  };
 
   return (
     <>
-      {isFlipped ? (
+      {_cardList[cardId] ? (
         <StyledContainer width={width}>
           <StyledTopCardText color={cardColor}>{card}</StyledTopCardText>
           <StyledTopCardSuit color={cardColor}>{suit}</StyledTopCardSuit>
@@ -156,7 +231,7 @@ const Card: FC<Props> = ({
         </StyledContainer>
       ) : (
         <StyledContainerWithBackground
-          onClick={() => setIsFlipped(isPlay ? true : false)}
+          onClick={handleFlipping}
           width={width}
           $image={image}
         ></StyledContainerWithBackground>
@@ -171,5 +246,20 @@ function useRandomImage(files: string[]) {
     setBackgroundImage(getRandomImage(files));
   }, []);
   return backgroundImage;
+}
+
+function useSetCardId(id: string) {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(
+      updateCard({
+        key: id,
+        value: false,
+      })
+    );
+    return () => {
+      dispatch(removeCard(id));
+    };
+  }, []);
 }
 export default Card;
