@@ -20,9 +20,6 @@ import SwiperCard from "@/components/common/swiper";
 import { SwiperSlide } from "swiper/react";
 
 
-// Redux
-import { useAppDispatch } from "@/hooks/redux";
-import { updateCard } from "@/store/memory-game.slice";
 
 // types
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
@@ -87,7 +84,6 @@ interface Props {
 }
 const MemoryGame: NextPage<Props> = ({ files }) => {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isPlay, setPlay] = useState(false);
 
