@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import Card from '@/components/game/card/Card'
+import Card from '@/components/memory-game/Card'
 
 const Home: NextPage = () => {
   return (
