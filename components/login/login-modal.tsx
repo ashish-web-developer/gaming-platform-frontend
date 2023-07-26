@@ -20,7 +20,7 @@ import {
   loginHandler,
   showLogin,
   showPassword,
-} from "@/store/login.slice";
+} from "@/store/slice/login.slice";
 
 // Formik
 

@@ -12,7 +12,7 @@ import {
   updateLastFlippedCard,
   cardList,
   lastFlippedCard,
-} from "@/store/memory-game.slice";
+} from "@/store/slice/memory-game.slice";
 
 // helpers
 import { getRandomImage } from "@/helpers/memory-game/game";
