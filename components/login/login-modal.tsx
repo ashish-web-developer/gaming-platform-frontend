@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { useEffect, type FC } from "react";
 import Image from "next/image";
 
 // Mui Components
@@ -36,7 +36,69 @@ import {
   SwitchModal,
   SwitchModalSpan,
   PasswordEndAdorment,
+  Validation,
 } from "@/styles/components/login/login-modal.style";
+
+// helpers
+import { Axios } from "@/helpers/axios";
+
+// Helpers Package
+import * as Yup from "yup";
+
+const UsernameValidator = async (username: string): Promise<boolean> => {
+  try {
+    const { data } = await Axios.post("/verify-username", {
+      username,
+    });
+    if (data.success) {
+      return true;
+    } else {
+      false;
+    }
+  } catch ($error) {
+    return false;
+  }
+  return false;
+};
+
+// Schemas
+const SignupSchema = Yup.object().shape({
+  name: Yup.string().required("Please enter your name!"),
+  email: Yup.string()
+    .email("Invalid email")
+    .required("Please enter the email!"),
+  password: Yup.string()
+    .required("Please enter the password!")
+    .min(8, "Minimum 8 characters required!"),
+  username: Yup.string()
+    .required("Please enter the username")
+    .min(3, "Minimum characters required!")
+    .max(50, "Maximum 50 characters required!")
+    .matches(
+      /^[a-zA-Z0-9_]+$/,
+      "Username can only contain alphanumeric characters along with underscores!"
+    )
+    .test(
+      "username-verification",
+      "Username already been taken",
+      async function (value) {
+        const isValid = await UsernameValidator(value);
+        return isValid;
+      }
+    ),
+});
+
+const LoginSchema = Yup.object().shape({
+  username: Yup.string()
+    .required("Please Enter Username or Email")
+    .matches(
+      /^[a-zA-Z0-9_@.]+$/,
+      "Username or Email can contain alphanumeric characters along with underscores,dot, @"
+    ),
+  password: Yup.string().min(8, "Minimum 8 characters required!"),
+});
+
+// types
 
 type Errors = {
   name?: string | null;
@@ -72,37 +134,9 @@ const LoginModal: FC<Props> = ({ keepShowingModal }) => {
             username: "",
             password: "",
           }}
-          validate={(values) => {
-            const errors: Errors = {
-              name: null,
-              username: null,
-              email: null,
-              password: null,
-            };
-            if (_showLogin) {
-              if (!values.username) {
-                errors.username = "Please enter Username or Email";
-              }
-              if (!values.password) {
-                errors.password = "Please enter your Password";
-              }
-            } else {
-              if (!values.name) {
-                errors.name = "Please enter your Name";
-              }
-              if (!values.username) {
-                errors.username = "Please enter your Username";
-              }
-              if (!values.email) {
-                errors.email = "Please enter your Email";
-              }
-              if (!values.password) {
-                errors.password = "Please enter your Password";
-              }
-            }
-            return errors;
-          }}
+          validationSchema={_showLogin ? LoginSchema : SignupSchema}
           onSubmit={(values, { setSubmitting }) => {
+            console.log("inside handler");
             if (_showLogin) {
               const emailPattern =
                 /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
@@ -126,7 +160,14 @@ const LoginModal: FC<Props> = ({ keepShowingModal }) => {
             }
           }}
         >
-          {({ values, errors, handleChange, handleSubmit, isSubmitting }) => (
+          {({
+            values,
+            errors,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+          }) => (
             <LoginInputContainer>
               <Grid direction="column" spacing={2} container>
                 {!_showLogin && (
@@ -140,6 +181,9 @@ const LoginModal: FC<Props> = ({ keepShowingModal }) => {
                       type="text"
                       onChange={handleChange}
                     />
+                    {touched.name && errors.name && (
+                      <Validation>{errors.name}</Validation>
+                    )}
                   </Grid>
                 )}
                 <Grid item>
@@ -156,6 +200,9 @@ const LoginModal: FC<Props> = ({ keepShowingModal }) => {
                     type="text"
                     onChange={handleChange}
                   />
+                  {touched.username && errors.username && (
+                    <Validation>{errors.username}</Validation>
+                  )}
                 </Grid>
                 {!_showLogin && (
                   <Grid item>
@@ -168,6 +215,9 @@ const LoginModal: FC<Props> = ({ keepShowingModal }) => {
                       type="email"
                       onChange={handleChange}
                     />
+                    {touched.email && errors.email && (
+                      <Validation>{errors.email}</Validation>
+                    )}
                   </Grid>
                 )}
                 <Grid item>
@@ -193,6 +243,9 @@ const LoginModal: FC<Props> = ({ keepShowingModal }) => {
                       </PasswordEndAdorment>
                     }
                   />
+                  {touched.password && errors.password && (
+                    <Validation>{errors.password}</Validation>
+                  )}
                 </Grid>
               </Grid>
               <LoginCta
