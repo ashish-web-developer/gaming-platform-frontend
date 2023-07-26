@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loginReducer from "@/store/login.slice";
-import userReducer from "@/store/user.slice";
-import memoryGameReducer from "@/store/memory-game.slice";
+import loginReducer from "@/store/slice/login.slice";
+import userReducer from "@/store/slice/user.slice";
+import memoryGameReducer from "@/store/slice/memory-game.slice";
 
 
 const store = configureStore({

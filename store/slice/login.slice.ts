@@ -4,13 +4,13 @@ import {
     createAsyncThunk
 } from "@reduxjs/toolkit";
 
-import { updateUser } from "@/store/user.slice";
+import { updateUser } from "@/store/slice/user.slice";
 
 // Types
 import { LoginInitialState ,} from "@/types/redux";
 import { User } from "@/types/user";
 
-import type { RootState } from "./rootReducer";
+import type { RootState } from "../rootReducer";
 
 // Axios
 import { Axios } from "@/helpers/axios";

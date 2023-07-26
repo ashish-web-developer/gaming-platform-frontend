@@ -10,7 +10,7 @@ import LoginModal from "../components/login/login-modal";
 import { RootContainer } from "@/styles/pages/login.style";
 
 // Redux
-import { user } from "@/store/user.slice";
+import { user } from "@/store/slice/user.slice";
 import { useAppSelector } from "@/hooks/redux";
 
 const Login: NextPage = () => {

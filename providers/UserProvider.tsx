@@ -5,9 +5,9 @@ import { Axios } from "@/helpers/axios";
 
 
 // Redux
-import { updateUser } from "@/store/user.slice";
+import { updateUser } from "@/store/slice/user.slice";
 import { useAppDispatch } from "@/hooks/redux";
-import { getUser } from "@/store/user.slice";
+import { getUser } from "@/store/slice/user.slice";
 
 
 

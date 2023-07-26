@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice ,PayloadAction} from "@reduxjs/toolkit";
 
 // Types
 import type { User } from "@/types/user";
-import { RootState } from "./rootReducer";
+import { RootState } from "../rootReducer";
 import { Axios } from "@/helpers/axios";
 
 
