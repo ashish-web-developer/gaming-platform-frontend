@@ -2,14 +2,16 @@ import { GetStaticProps, NextPage } from "next";
 import { useState } from "react";
 // Mui
 import { Grid, Box, useMediaQuery, useTheme, Button } from "@mui/material";
-import styled from "styled-components";
 
 // Local components
-import Card from "@/components/game/card/Card";
+import Card from "@/components/memory-game/card";
 
 // helpers
 import { getRandomCard } from "@/helpers/memory-game/game";
 import { insertSameElementsRandomly } from "@/helpers/common";
+
+// Styles
+import { StyledContainer,WelcomeScreenContainer,PlayButton } from "@/styles/pages/memory-game.style";
 
 // files readers
 import fs from "fs";
@@ -22,51 +24,10 @@ import { SwiperSlide } from "swiper/react";
 // types
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 
+
 // uuidv4
 import { v4 as uuidv4 } from "uuid";
 
-const color = {
-  primary: "rgb(3 13 9)",
-  secondary: "rgb(16 9 22)",
-  text: "#fffdff",
-  button: "#8102f7",
-  errors: "#d11534",
-};
-const StyledContainer = styled(Box)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 60px 100px;
-  min-height: 100vh;
-  background-color: ${color.primary};
-  @media (max-width: 600px) {
-    padding: 30px 20px;
-  }
-`;
-const WelcomeScreenContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  min-height: 100vh;
-  background-color: ${color.primary};
-  @media (max-width: 600px) {
-    padding: 30px 20px;
-  }
-`;
-
-const PlayButton = styled(Button)`
-  padding: 16px 50px;
-  color: ${color.text};
-  background-color: ${color.button};
-  font-size: 18px;
-  font-family: "Rubik Moonrocks", cursive;
-  border-radius: 8px;
-  &:hover {
-    background-color: ${color.button};
-  }
-`;
 
 const gameComplexity = 14;
 
