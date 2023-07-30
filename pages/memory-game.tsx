@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // Mui
 import { Grid, Box, useMediaQuery, useTheme, Button } from "@mui/material";
 
@@ -29,6 +29,11 @@ import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 import { v4 as uuidv4 } from "uuid";
 
 
+// Broadcasting
+import useEcho from "@/helpers/pusher";
+
+
+
 const gameComplexity = 14;
 
 const cardArray: GetRandomCard[] = new Array(gameComplexity);
@@ -43,7 +48,10 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isPlay, setPlay] = useState(false);
+  useChannel(`memory-game.${20}`,"MemoryGameEvent")
 
+
+  
   return (
     <>
       {isPlay ? (
@@ -107,5 +115,21 @@ export async function getStaticProps() {
       files,
     },
   };
+}
+
+function useChannel(channel:string, event:string){
+  const echo = useEcho();
+  useEffect(()=>{
+    if(echo.current){
+      echo.current.private(channel).listen(event,(data:any)=>{
+        console.log(data);
+        alert("hello");
+      })
+    }
+    return(()=>{
+      echo.current?.leaveChannel(channel);
+    })
+  },[])
+
 }
 export default MemoryGame;

@@ -12,6 +12,7 @@ import {
   updateLastFlippedCard,
   cardList,
   lastFlippedCard,
+  memoryGameCardEvent
 } from "@/store/slice/memory-game.slice";
 
 // helpers
@@ -127,6 +128,7 @@ const Card: FC<Props> = ({
         }, 1000);
         dispatch(updateLastFlippedCard(null));
       }
+      dispatch(memoryGameCardEvent({card_id:cardId,player_id:20}));
     }
     return null;
   };
