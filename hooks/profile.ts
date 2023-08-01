@@ -1,10 +1,10 @@
 import { createAvatar } from "@dicebear/core";
-import { notionists } from "@dicebear/collection";
+import { adventurer } from "@dicebear/collection";
 
 
 
 const useAvatar = (username:string)=>{
-    const avatar = createAvatar(notionists,{
+    const avatar = createAvatar(adventurer,{
         seed:username,
     })
     return avatar.toString();

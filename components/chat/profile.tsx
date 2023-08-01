@@ -6,25 +6,46 @@ import type Colors from "@/types/data/colors";
 import useAvatar from "@/hooks/profile";
 
 // styles
-import { StyledProfileContainer , StyledProfileAvatar, StyledAvatarContainer} from "@/styles/components/chat/profile.style";
+import { StyledProfileContainer , StyledProfileAvatar, StyledAvatarContainer, StyledAvatarName} from "@/styles/components/chat/profile.style";
+
+// mui
+import { Grid } from "@mui/material";
 
 
 
 
+interface Props {
+    colors:Colors;
+    width:number;
+    height:number;
+    username:string;
+}
 
-
-const Profile:FC<{color:Colors["colors"][number]}> = ({color})=>{
-    const avatar = useAvatar("ashish_classic");
-    console.log(color);
+const Profile:FC<Props> = ({colors,width,height,username})=>{
+    const avatar = useAvatar(username);
+    const color = useColor(colors);
     return (
-        <StyledProfileContainer>
-            <StyledAvatarContainer $color = {color}>
-                <StyledProfileAvatar dangerouslySetInnerHTML={{__html:avatar}}></StyledProfileAvatar>
-            </StyledAvatarContainer>
+        <StyledProfileContainer $width = {width} $height = {height}>
+            <Grid container>
+                <Grid item  xs = {3}>
+                    <StyledAvatarContainer  $color = {color} $width = {width} $height = {height}>
+                        <StyledProfileAvatar $width = {width} $height = {height} dangerouslySetInnerHTML={{__html:avatar}}></StyledProfileAvatar>
+                    </StyledAvatarContainer>
+                </Grid>
+                <Grid item  xs = {9}>
+                    <StyledAvatarName>
+                        Ashish Prajapati
+                    </StyledAvatarName>
+                </Grid>
+            </Grid>
         </StyledProfileContainer>
     )
 }
 
 
+const useColor = (colors:Colors)=>{
+    const colorsLength = colors.colors.length;
+    return colors.colors[Math.floor(Math.random()*colorsLength)];
+}
 
 export default Profile;

@@ -15,8 +15,6 @@ import path from "path";
 
 
 
-// Local Components
-import Profile from "@/components/chat/profile";
 
 
 

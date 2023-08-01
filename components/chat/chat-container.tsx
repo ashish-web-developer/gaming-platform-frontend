@@ -20,7 +20,7 @@ const ChatContainer:FC<{colors:Colors}> = (colors)=>{
     return(
         <StyledContainer>
             <Grid container >
-                <Grid item xs = {4}>
+                <Grid item xs = {3.5}>
                     <ChatSidebar colors = {colors}/>
                 </Grid>
             </Grid>
