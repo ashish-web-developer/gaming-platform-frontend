@@ -49,8 +49,8 @@ const Profile: FC<Props> = ({ colors, width, height, username, name }) => {
 };
 
 const useColor = (colors: Colors) => {
-  const colorsLength = colors.colors.length;
-  return colors.colors[Math.floor(Math.random() * colorsLength)];
+  const colorsLength = colors.length;
+  return colors[Math.floor(Math.random() * colorsLength)];
 };
 
 export default Profile;
