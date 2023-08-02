@@ -1,6 +1,7 @@
 // types
 import type { FC } from "react";
 import type Colors from "@/types/data/colors";
+import type { User } from "@/types/user";
 
 // hooks
 import useAvatar from "@/hooks/profile";
@@ -16,19 +17,29 @@ import {
 // mui
 import { Grid } from "@mui/material";
 
+
+// Redux
+import { useAppDispatch } from "@/hooks/redux";
+import { updateUsersList } from "@/store/slice/chat.slice";
+
 interface Props {
   colors: Colors;
   width: number;
   height: number;
-  username: string;
-  name: string;
+  user:User,
+  isClickEvent?:boolean
 }
 
-const Profile: FC<Props> = ({ colors, width, height, username, name }) => {
-  const avatar = useAvatar(username);
+const Profile: FC<Props> = ({ colors, width, height, user,isClickEvent=false}) => {
+  const dispatch = useAppDispatch();
+  const avatar = useAvatar(user.username??"");
   const color = useColor(colors);
+
+  const handleOnClick = ()=>{
+    dispatch(updateUsersList(user));
+  }
   return (
-    <StyledProfileContainer $width={width} $height={height}>
+    <StyledProfileContainer onClick = {()=>isClickEvent && handleOnClick()} $width={width} $height={height}>
       <Grid container>
         <Grid item xs={3}>
           <StyledAvatarContainer $color={color} $width={width} $height={height}>
@@ -40,8 +51,8 @@ const Profile: FC<Props> = ({ colors, width, height, username, name }) => {
           </StyledAvatarContainer>
         </Grid>
         <Grid item xs={9}>
-          <StyledAvatarName>{name}</StyledAvatarName>
-          <StyledAvatarName>@{username}</StyledAvatarName>
+          <StyledAvatarName>{user.name}</StyledAvatarName>
+          <StyledAvatarName>@{user.username}</StyledAvatarName>
         </Grid>
       </Grid>
     </StyledProfileContainer>

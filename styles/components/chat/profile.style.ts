@@ -8,7 +8,7 @@ interface StyledProfileContainerProps {
 }
 
 interface StyledAvatarContainerProps {
-  $color: Colors["colors"][number];
+  $color: Colors[number];
   $width: number;
   $height: number;
 }

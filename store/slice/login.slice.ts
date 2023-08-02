@@ -7,9 +7,8 @@ import {
 import { updateUser } from "@/store/slice/user.slice";
 
 // Types
-import { LoginInitialState ,} from "@/types/redux";
-import { User } from "@/types/user";
-
+import type { LoginInitialState ,} from "@/types/redux";
+import type { User } from "@/types/user";
 import type { RootState } from "../rootReducer";
 
 // Axios

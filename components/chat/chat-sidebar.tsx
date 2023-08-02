@@ -15,16 +15,24 @@ import {
   StyledPaperComponent,
   StyledLabel,
 } from "@/styles/components/chat/chat-sidebar.style";
+// mui
 import { InputAdornment } from "@mui/material";
 
 // helpers
 import { Axios } from "@/helpers/axios";
+
+import { v4 as uuidv4 } from "uuid";
+
+// Redux
+import { useAppSelector } from "@/hooks/redux";
+import { users } from "@/store/slice/chat.slice";
 
 const CustomPaperComponent = (props: any) => {
   return <StyledPaperComponent {...props} elevation={8} />;
 };
 
 const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
+  const _users = useAppSelector(users);
   const [searchedInputValue, setSearchedInputValue] = useState<string | null>(
     null
   );
@@ -60,11 +68,12 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
         renderOption={(props, option: any) => {
           return (
             <Profile
-              name={option.name}
-              username={option.username}
+              key={uuidv4()}
+              user={option}
               width={50}
               height={50}
               colors={colors}
+              isClickEvent={true}
             />
           );
         }}
@@ -88,15 +97,17 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
           );
         }}
       />
-      {new Array(10).fill(0).map((data) => (
-        <Profile
-          name="Ashish Prajapti"
-          username={"ashish_classic"}
-          width={60}
-          height={60}
-          colors={colors}
-        />
-      ))}
+      {_users.map((user) => {
+        return (
+          <Profile
+            key={uuidv4()}
+            user={user}
+            width={60}
+            height={60}
+            colors={colors}
+          />
+        );
+      })}
     </>
   );
 };

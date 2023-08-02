@@ -14,12 +14,6 @@ import store from '@/store/rootReducer'
 import CsrfTokenProvider from '@/providers/CsrfTokenProvider'
 import UserProvider from '@/providers/UserProvider'
 
-// Styled components
-
-
-const theme = createTheme({
-})
-
 
 
 function MyApp({ Component, pageProps }: AppProps) {
