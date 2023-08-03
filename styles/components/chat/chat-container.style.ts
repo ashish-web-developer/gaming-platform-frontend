@@ -21,6 +21,10 @@ const StyledChatContainer = styled(Box)`
   position: relative;
 `;
 
+const StyledChatContainerName = styled.h6`
+  font-family: "Poppins", sans-serif;
+`;
+
 const StyledChatWrapper = styled(Box)`
   width: 100%;
   height: 100%;
@@ -37,6 +41,7 @@ const StyledSendIcon = styled(SendIcon)``;
 export {
   StyledContainer,
   StyledChatContainer,
+  StyledChatContainerName,
   StyledChatWrapper,
   StyledChatInput,
   StyledSendIcon,

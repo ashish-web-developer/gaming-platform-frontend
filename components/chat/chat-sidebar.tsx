@@ -58,7 +58,7 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
                 width={50}
                 height={50}
                 colors={colors}
-                isClickEvent={true}
+                isSearch={true}
               />
             );
           }}

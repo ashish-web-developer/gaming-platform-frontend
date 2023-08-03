@@ -1,5 +1,5 @@
 // types
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import type Colors from "@/types/data/colors";
 
 // Local components

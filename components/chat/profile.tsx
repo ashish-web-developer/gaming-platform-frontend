@@ -21,14 +21,14 @@ import { Grid } from "@mui/material";
 
 // Redux
 import { useAppDispatch } from "@/hooks/redux";
-import { updateUsersList } from "@/store/slice/chat.slice";
+import { updateUsersList, updateActiveUser } from "@/store/slice/chat.slice";
 
 interface Props {
   colors: Colors;
   width: number;
   height: number;
   user: User;
-  isClickEvent?: boolean;
+  isSearch?: boolean;
 }
 
 const Profile: FC<Props> = ({
@@ -36,7 +36,7 @@ const Profile: FC<Props> = ({
   width,
   height,
   user,
-  isClickEvent = false,
+  isSearch = false,
 }) => {
   const [elevation, setElevation] = useState<number>(0);
   const dispatch = useAppDispatch();
@@ -44,14 +44,18 @@ const Profile: FC<Props> = ({
   const color = useColor(colors);
 
   const handleOnClick = () => {
-    dispatch(updateUsersList(user));
+    if (isSearch) {
+      dispatch(updateUsersList(user));
+      return;
+    }
+    dispatch(updateActiveUser(user));
   };
   return (
     <StyledProfileContainer
       onMouseEnter={() => setElevation(8)}
       onMouseLeave={() => setElevation(0)}
       elevation={elevation}
-      onClick={() => isClickEvent && handleOnClick()}
+      onClick={() => handleOnClick()}
       $width={width}
       $height={height}
     >

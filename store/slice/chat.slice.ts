@@ -10,6 +10,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState: InitialState = {
   users: [],
   mobile_navigation: 0,
+  active_user: null,
 };
 
 const chatSlice = createSlice({
@@ -22,6 +23,9 @@ const chatSlice = createSlice({
     updateMobileNavigation: (state, action: PayloadAction<number>) => {
       state.mobile_navigation = action.payload;
     },
+    updateActiveUser: (state, action: PayloadAction<User>) => {
+      state.active_user = action.payload;
+    },
   },
 });
 
@@ -29,4 +33,6 @@ export default chatSlice.reducer;
 export const users = (state: RootState) => state.chat.users;
 export const mobile_navigation = (state: RootState) =>
   state.chat.mobile_navigation;
-export const { updateUsersList, updateMobileNavigation } = chatSlice.actions;
+export const active_user = (state: RootState) => state.chat.active_user;
+export const { updateUsersList, updateMobileNavigation, updateActiveUser } =
+  chatSlice.actions;
