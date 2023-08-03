@@ -9,11 +9,14 @@ import Profile from "@/components/chat/profile";
 
 // styled components
 import {
+  StyledSidebarContainer,
   StyledSearchbarContainer,
+  StyledSearchbar,
   StyledTextField,
   StyledSearchIcon,
   StyledPaperComponent,
   StyledLabel,
+  StyledProfileContainer,
 } from "@/styles/components/chat/chat-sidebar.style";
 // mui
 import { InputAdornment } from "@mui/material";
@@ -36,8 +39,70 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
   const [searchedInputValue, setSearchedInputValue] = useState<string | null>(
     null
   );
-  const [options, setOptions] = useState<User[]>([]);
+  const options = useOptions(searchedInputValue);
 
+  return (
+    <StyledSidebarContainer>
+      <StyledSearchbarContainer>
+        <StyledSearchbar
+          disablePortal
+          id="combo-box-demo"
+          options={options}
+          getOptionLabel={(option: any) => option.name}
+          PaperComponent={CustomPaperComponent}
+          renderOption={(props, option: any) => {
+            return (
+              <Profile
+                key={uuidv4()}
+                user={option}
+                width={50}
+                height={50}
+                colors={colors}
+                isClickEvent={true}
+              />
+            );
+          }}
+          renderInput={(params) => {
+            return (
+              <StyledTextField
+                label={<StyledLabel>Users</StyledLabel>}
+                onInput={(event: any) =>
+                  setSearchedInputValue(event.target.value)
+                }
+                {...params}
+                InputProps={{
+                  ...params.InputProps,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <StyledSearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            );
+          }}
+        />
+      </StyledSearchbarContainer>
+      <StyledProfileContainer>
+        {_users.map((user) => {
+          return (
+            <Profile
+              key={uuidv4()}
+              user={user}
+              width={60}
+              height={60}
+              colors={colors}
+            />
+          );
+        })}
+      </StyledProfileContainer>
+    </StyledSidebarContainer>
+  );
+};
+
+// Returns the List of Users
+const useOptions = (value: string | null) => {
+  const [options, setOptions] = useState<User[]>([]);
   const handleInput = async (query: string) => {
     const res = await Axios.post("/chat/get-user", null, {
       params: {
@@ -48,68 +113,16 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
   };
   useEffect(() => {
     let timer: NodeJS.Timeout;
-    if (searchedInputValue) {
+    if (value) {
       timer = setTimeout(() => {
-        handleInput(searchedInputValue);
+        handleInput(value);
       }, 300);
     }
     return () => {
       clearTimeout(timer);
     };
-  }, [searchedInputValue]);
-  return (
-    <>
-      <StyledSearchbarContainer
-        disablePortal
-        id="combo-box-demo"
-        options={options}
-        getOptionLabel={(option: any) => option.name}
-        PaperComponent={CustomPaperComponent}
-        renderOption={(props, option: any) => {
-          return (
-            <Profile
-              key={uuidv4()}
-              user={option}
-              width={50}
-              height={50}
-              colors={colors}
-              isClickEvent={true}
-            />
-          );
-        }}
-        renderInput={(params) => {
-          return (
-            <StyledTextField
-              label={<StyledLabel>Users</StyledLabel>}
-              onInput={(event: any) =>
-                setSearchedInputValue(event.target.value)
-              }
-              {...params}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <StyledSearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          );
-        }}
-      />
-      {_users.map((user) => {
-        return (
-          <Profile
-            key={uuidv4()}
-            user={user}
-            width={60}
-            height={60}
-            colors={colors}
-          />
-        );
-      })}
-    </>
-  );
+  }, [value]);
+  return options;
 };
 
 export default ChatSidebar;

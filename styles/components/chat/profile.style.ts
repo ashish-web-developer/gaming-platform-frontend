@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Box } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import Colors from "@/types/data/colors";
 
 interface StyledProfileContainerProps {
@@ -18,7 +18,7 @@ interface StyledProfileAvatarProps {
   $height: number;
 }
 
-const StyledProfileContainer = styled(Box)<StyledProfileContainerProps>`
+const StyledProfileContainer = styled(Paper)<StyledProfileContainerProps>`
   width: 100%;
   background-color: #131821;
   border-radius: 10px;

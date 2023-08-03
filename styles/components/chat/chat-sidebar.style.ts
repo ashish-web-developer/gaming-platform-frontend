@@ -1,9 +1,15 @@
 import styled from "styled-components";
 // mui
-import { Autocomplete, Paper, TextField } from "@mui/material";
+import { Autocomplete, Paper, TextField, Box } from "@mui/material";
 
 // icon
 import SearchIcon from "@mui/icons-material/Search";
+
+const StyledSidebarContainer = styled(Box)`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 
 const StyledPaperComponent = styled(Paper)`
   background-color: #1e232c;
@@ -11,7 +17,11 @@ const StyledPaperComponent = styled(Paper)`
   border-radius: 16px;
 `;
 
-const StyledSearchbarContainer = styled(Autocomplete)`
+const StyledSearchbarContainer = styled(Box)`
+  flex-grow: 1;
+  flex-basis: 8%;
+`;
+const StyledSearchbar = styled(Autocomplete)`
   background-color: #2e333d;
   border-radius: 16px;
   margin-bottom: 20px;
@@ -35,10 +45,19 @@ const StyledSearchIcon = styled(SearchIcon)`
   font-size: 30px;
 `;
 
+const StyledProfileContainer = styled(Box)`
+  flex-grow: 1;
+  flex-basis: 92%;
+  overflow: scroll;
+`;
+
 export {
+  StyledSidebarContainer,
   StyledPaperComponent,
   StyledSearchbarContainer,
+  StyledSearchbar,
   StyledTextField,
   StyledSearchIcon,
   StyledLabel,
+  StyledProfileContainer,
 };

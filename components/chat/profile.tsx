@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // types
 import type { FC } from "react";
 import type Colors from "@/types/data/colors";
@@ -6,7 +8,7 @@ import type { User } from "@/types/user";
 // hooks
 import useAvatar from "@/hooks/profile";
 
-// styles
+// styled component
 import {
   StyledProfileContainer,
   StyledProfileAvatar,
@@ -17,7 +19,6 @@ import {
 // mui
 import { Grid } from "@mui/material";
 
-
 // Redux
 import { useAppDispatch } from "@/hooks/redux";
 import { updateUsersList } from "@/store/slice/chat.slice";
@@ -26,20 +27,34 @@ interface Props {
   colors: Colors;
   width: number;
   height: number;
-  user:User,
-  isClickEvent?:boolean
+  user: User;
+  isClickEvent?: boolean;
 }
 
-const Profile: FC<Props> = ({ colors, width, height, user,isClickEvent=false}) => {
+const Profile: FC<Props> = ({
+  colors,
+  width,
+  height,
+  user,
+  isClickEvent = false,
+}) => {
+  const [elevation, setElevation] = useState<number>(0);
   const dispatch = useAppDispatch();
-  const avatar = useAvatar(user.username??"");
+  const avatar = useAvatar(user.username ?? "");
   const color = useColor(colors);
 
-  const handleOnClick = ()=>{
+  const handleOnClick = () => {
     dispatch(updateUsersList(user));
-  }
+  };
   return (
-    <StyledProfileContainer onClick = {()=>isClickEvent && handleOnClick()} $width={width} $height={height}>
+    <StyledProfileContainer
+      onMouseEnter={() => setElevation(8)}
+      onMouseLeave={() => setElevation(0)}
+      elevation={elevation}
+      onClick={() => isClickEvent && handleOnClick()}
+      $width={width}
+      $height={height}
+    >
       <Grid container>
         <Grid item xs={3}>
           <StyledAvatarContainer $color={color} $width={width} $height={height}>
