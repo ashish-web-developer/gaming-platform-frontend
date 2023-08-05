@@ -11,7 +11,11 @@ import { getRandomCard } from "@/helpers/memory-game/game";
 import { insertSameElementsRandomly } from "@/helpers/common";
 
 // Styles
-import { StyledContainer,WelcomeScreenContainer,PlayButton } from "@/styles/pages/memory-game.style";
+import {
+  StyledContainer,
+  WelcomeScreenContainer,
+  PlayButton,
+} from "@/styles/pages/memory-game.style";
 
 // files readers
 import fs from "fs";
@@ -24,15 +28,8 @@ import { SwiperSlide } from "swiper/react";
 // types
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 
-
 // uuidv4
 import { v4 as uuidv4 } from "uuid";
-
-
-// Broadcasting
-import useEcho from "@/helpers/pusher";
-
-
 
 const gameComplexity = 14;
 
@@ -48,10 +45,7 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isPlay, setPlay] = useState(false);
-  useChannel(`memory-game.${20}`,"MemoryGameEvent")
 
-
-  
   return (
     <>
       {isPlay ? (
@@ -115,21 +109,5 @@ export async function getStaticProps() {
       files,
     },
   };
-}
-
-function useChannel(channel:string, event:string){
-  const echo = useEcho();
-  useEffect(()=>{
-    if(echo.current){
-      echo.current.private(channel).listen(event,(data:any)=>{
-        console.log(data);
-        alert("hello");
-      })
-    }
-    return(()=>{
-      echo.current?.leaveChannel(channel);
-    })
-  },[])
-
 }
 export default MemoryGame;

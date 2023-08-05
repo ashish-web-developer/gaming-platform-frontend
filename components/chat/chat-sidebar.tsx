@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 // types
 import type { FC } from "react";
 import type Colors from "@/types/data/colors";
-import type { User } from "@/types/user";
 
 // Local components
 import Profile from "@/components/chat/profile";
@@ -30,6 +29,9 @@ import { v4 as uuidv4 } from "uuid";
 import { useAppSelector } from "@/hooks/redux";
 import { users } from "@/store/slice/chat.slice";
 
+// hooks
+import { useSearchedUserOptions } from "@/hooks/chat";
+
 const CustomPaperComponent = (props: any) => {
   return <StyledPaperComponent {...props} elevation={8} />;
 };
@@ -39,7 +41,7 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
   const [searchedInputValue, setSearchedInputValue] = useState<string | null>(
     null
   );
-  const options = useOptions(searchedInputValue);
+  const options = useSearchedUserOptions(searchedInputValue);
 
   return (
     <StyledSidebarContainer>
@@ -98,31 +100,6 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
       </StyledProfileContainer>
     </StyledSidebarContainer>
   );
-};
-
-// Returns the List of Users
-const useOptions = (value: string | null) => {
-  const [options, setOptions] = useState<User[]>([]);
-  const handleInput = async (query: string) => {
-    const res = await Axios.post("/chat/get-user", null, {
-      params: {
-        query,
-      },
-    });
-    setOptions(res.data.user);
-  };
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (value) {
-      timer = setTimeout(() => {
-        handleInput(value);
-      }, 300);
-    }
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value]);
-  return options;
 };
 
 export default ChatSidebar;
