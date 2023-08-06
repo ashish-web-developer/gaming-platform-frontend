@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { useRef } from "react";
 
 // types
 import type { FC } from "react";
@@ -9,7 +8,8 @@ import type Colors from "@/types/data/colors";
 import { Grid, IconButton } from "@mui/material";
 
 // local components
-import ChatSidebar from "./chat-sidebar";
+import ChatSidebar from "@/components/chat/chat-sidebar";
+import ChatWrapper from "@/components/chat/chat-wrapper";
 const MobileBottomNav = dynamic(
   () => import("@/components/chat/mobile-navigation")
 );
@@ -28,33 +28,33 @@ import {
 import { isMobile } from "react-device-detect";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
-import { active_user } from "@/store/slice/chat.slice";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import {
+  // state
+  active_user,
+  is_submitting,
+  chat_input_value,
+  // actions
+  sendMessage,
+  updateChatInputValue,
+} from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 
 // hooks
 import { usePrivateChannel } from "@/hooks/pusher";
 import { useConversation, useGetDefaultUser } from "@/hooks/chat";
 
-// helpers
-import { Axios } from "@/helpers/axios";
 
 const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
-  const message = useRef<string | null>(null);
+  const dispatch = useAppDispatch();
   const _active_user = useAppSelector(active_user);
-  const _user = useAppSelector(user);
+  const _is_submitting = useAppSelector(is_submitting);
+  const _chat_input_value = useAppSelector(chat_input_value);
   usePrivateChannel(`chat`, `MemoryGameEvent`, function (data) {
     console.log("value of data", data);
   });
   useGetDefaultUser();
   useConversation();
-  const handleSubmit = () => {
-    Axios.post("/chat/send-message", {
-      message: message.current,
-      sender_id: _user.id,
-      receiver_id: _active_user?.id,
-    });
-  };
   return (
     <>
       <StyledContainer>
@@ -68,16 +68,32 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
                 <StyledChatContainerName>
                   {_active_user.name}
                 </StyledChatContainerName>
-                <StyledChatWrapper></StyledChatWrapper>
+                <StyledChatWrapper>
+                  <ChatWrapper />
+                </StyledChatWrapper>
                 <StyledChatInput
+                  value={_chat_input_value}
                   onChange={(event) => {
-                    message.current = event.target.value;
+                    dispatch(updateChatInputValue(event.target.value));
+                  }}
+                  onKeyDown={(event) => {
+                    if (
+                      (event.ctrlKey || event.metaKey) &&
+                      event.key == "Enter"
+                    ) {
+                      dispatch(sendMessage());
+                    }
                   }}
                   disableUnderline
                   placeholder="Your Message"
                   fullWidth
                   endAdornment={
-                    <IconButton onClick={handleSubmit}>
+                    <IconButton
+                      disabled={_is_submitting}
+                      onClick={() => {
+                        dispatch(sendMessage());
+                      }}
+                    >
                       <StyledSendIcon />
                     </IconButton>
                   }

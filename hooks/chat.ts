@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 // types
-import { User } from "@/types/user";
+import type { User } from "@/types/user";
+import type { Conversation } from "@/types/store/slice/chat";
+import type { AxiosResponse } from "axios";
 // redux
 import { useAppSelector, useAppDispatch } from "./redux";
 import {
@@ -22,9 +24,12 @@ function useConversation() {
   const _active_user = useAppSelector(active_user);
   const _user = useAppSelector(user);
   useEffect(() => {
-    if (_user?.id) {
+    if (_user?.id && _active_user?.id) {
       (async function () {
-        const res = await Axios.post("/chat/get-messages", {
+        const res: AxiosResponse<{
+          success: boolean;
+          conversation: Conversation[];
+        }> = await Axios.post("/chat/get-messages", {
           sender_id: _user.id,
           receiver_id: _active_user?.id,
         });

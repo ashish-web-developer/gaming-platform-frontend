@@ -36,7 +36,9 @@ const StyledChatInput = styled(Input)`
   bottom: 10px;
 `;
 
-const StyledSendIcon = styled(SendIcon)``;
+const StyledSendIcon = styled(SendIcon)`
+  color: #fff;
+`;
 
 export {
   StyledContainer,
