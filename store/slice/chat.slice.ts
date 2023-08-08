@@ -4,6 +4,8 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types/user";
 import type { RootState } from "@/store/rootReducer";
 import type { Conversation } from "@/types/store/slice/chat";
+import type { AxiosResponse } from "axios";
+import type { SendMessgeResponseType } from "@/types/store/slice/chat";
 
 // Redux
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -11,23 +13,22 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // helpers
 import { Axios } from "@/helpers/axios";
 
-type ResponseType = {
-  success: boolean;
-  conversation: Conversation;
-};
-
 export const sendMessage = createAsyncThunk<
-  ResponseType,
+  SendMessgeResponseType,
   undefined,
   { state: RootState }
->("api/send-message", async (_, { rejectWithValue, getState }) => {
+>("api/send-message", async (_, { rejectWithValue, getState, dispatch }) => {
   try {
     const state = getState();
-    const res = await Axios.post("/chat/send-message", {
+    const res: AxiosResponse<{
+      success: boolean;
+      conversation: Conversation;
+    }> = await Axios.post("/chat/send-message", {
       sender_id: state.user.user.id,
       receiver_id: state.chat.active_user?.id,
       message: state.chat.chat_input_value,
     });
+    dispatch(updateActiveUserConversation(res.data.conversation));
     return res.data;
   } catch (error) {
     return rejectWithValue(error?.response.error);
@@ -40,7 +41,7 @@ const initialState: InitialState = {
   active_user: null,
   active_user_conversation: [],
   is_submitting: false,
-  chat_input_value: null,
+  chat_input_value: "",
 };
 const chatSlice = createSlice({
   name: "chat",
@@ -70,9 +71,13 @@ const chatSlice = createSlice({
     },
     updateActiveUserConversation: (
       state,
-      action: PayloadAction<Conversation[]>
+      action: PayloadAction<Conversation[] | Conversation>
     ) => {
-      state.active_user_conversation = action.payload;
+      if (Array.isArray(action.payload)) {
+        state.active_user_conversation = action.payload;
+      } else {
+        state.active_user_conversation.push(action.payload);
+      }
     },
     updateChatInputValue: (state, action: PayloadAction<string | null>) => {
       state.chat_input_value = action.payload;

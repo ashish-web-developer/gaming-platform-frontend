@@ -10,23 +10,20 @@ import {
   StyledChatTime,
 } from "@/styles/components/chat/chat-message.style";
 
-// redux
-import { useAppSelector } from "@/hooks/redux";
-import { user } from "@/store/slice/user.slice";
-import { active_user } from "@/store/slice/chat.slice";
 
 interface Props {
   message: string;
+  date:string;
+  username:string
+  align:string
 }
-const ChatMessage: FC<Props> = ({ message }) => {
-  const _user = useAppSelector(user);
-  const _active_user = useAppSelector(active_user);
+const ChatMessage: FC<Props> = ({ message , date, username,align}) => {
   return (
-    <StyledChatMessageContainer>
-      <StyledChatMessageUserName>{_user.name}</StyledChatMessageUserName>
+    <StyledChatMessageContainer $align = {align}>
+      <StyledChatMessageUserName>{username}</StyledChatMessageUserName>
       <StyledChatMessage>{message}</StyledChatMessage>
       <StyledChatBottom>
-        <StyledChatTime>08:50</StyledChatTime>
+        <StyledChatTime>{date}</StyledChatTime>
       </StyledChatBottom>
     </StyledChatMessageContainer>
   );

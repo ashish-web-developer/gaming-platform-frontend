@@ -38,7 +38,6 @@ import {
   sendMessage,
   updateChatInputValue,
 } from "@/store/slice/chat.slice";
-import { user } from "@/store/slice/user.slice";
 
 // hooks
 import { usePrivateChannel } from "@/hooks/pusher";

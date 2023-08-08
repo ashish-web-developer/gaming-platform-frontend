@@ -17,4 +17,18 @@ function insertSameElementsRandomly(arr: Array<any>, element: any) {
   arr.splice(position2, 0, element);
 }
 
-export { insertSameElementsRandomly };
+function readableFormatDate(dateString: string) {
+  const date = new Date(dateString);
+
+  const options = {
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone: "Asia/Kolkata",
+  };
+
+  const formattedDate = date.toLocaleString("en-US", options);
+  return formattedDate;
+}
+export { insertSameElementsRandomly, readableFormatDate };

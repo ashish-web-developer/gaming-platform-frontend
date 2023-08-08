@@ -1,5 +1,10 @@
 import type { User } from "@/types/user";
 
+type SendMessgeResponseType = {
+  success: boolean;
+  conversation: Conversation;
+};
+
 type Conversation = {
   id: number;
   message: string;
@@ -15,7 +20,7 @@ type InitialState = {
   active_user: User | null;
   active_user_conversation: Conversation[];
   is_submitting: boolean;
-  chat_input_value: string | null;
+  chat_input_value: string;
 };
 
-export { InitialState, Conversation };
+export { InitialState, Conversation, SendMessgeResponseType };
