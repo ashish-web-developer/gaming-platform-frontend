@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useRouter } from "next/router";
 // types
 import type { NextPage } from "next";
 import type Colors from "@/types/data/colors";
@@ -11,8 +9,16 @@ import ChatContainer from "@/components/chat/chat-container";
 import fs from "fs";
 import path from "path";
 
+// styled component
+import { GlobalStyles } from "@/styles/pages/chat.style";
+
 const Chat: NextPage<{ colors: Colors }> = ({ colors }) => {
-  return <ChatContainer colors={colors} />;
+  return (
+    <>
+      <GlobalStyles />
+      <ChatContainer colors={colors} />
+    </>
+  );
 };
 
 export const getStaticProps = async () => {
