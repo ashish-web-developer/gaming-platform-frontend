@@ -17,11 +17,11 @@ const Login: NextPage = () => {
   const _user = useAppSelector(user);
   const router = useRouter();
 
-  /*useEffect(()=>{
-        if(_user.username){
-            router.push("/");
-        }
-    },[_user])*/
+  useEffect(() => {
+    if (_user.username) {
+      router.push("/chat");
+    }
+  }, [_user]);
   return (
     <>
       <Head>

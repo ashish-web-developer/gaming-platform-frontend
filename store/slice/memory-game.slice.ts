@@ -1,10 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../rootReducer";
 
 // types
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { InitialState } from "@/types/store/slice/memory-game";
+import type { InitialState ,MemoryGameCardEventArgs,MemoryGameCardEventRespose} from "@/types/store/slice/memory-game";
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
+
+// helpers
+import { Axios } from "@/helpers/axios";
+
+
+export const memoryGameCardEvent = createAsyncThunk<MemoryGameCardEventRespose,MemoryGameCardEventArgs>(
+  'memory-game/event',
+  async ({card_id,player_id},{rejectWithValue})=>{
+    try{
+      const res = await Axios.post('/memory-game-event',{
+        card_id,
+        player_id
+      })
+      return res.data;
+    }catch(error:any){
+      return rejectWithValue(error?.response?.data);
+      }
+  }
+)
 
 const initialState: InitialState = {
   cardList: {},

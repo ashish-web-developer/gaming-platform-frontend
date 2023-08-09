@@ -1,5 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // Mui
 import { Grid, Box, useMediaQuery, useTheme, Button } from "@mui/material";
 
@@ -11,7 +11,11 @@ import { getRandomCard } from "@/helpers/memory-game/game";
 import { insertSameElementsRandomly } from "@/helpers/common";
 
 // Styles
-import { StyledContainer,WelcomeScreenContainer,PlayButton } from "@/styles/pages/memory-game.style";
+import {
+  StyledContainer,
+  WelcomeScreenContainer,
+  PlayButton,
+} from "@/styles/pages/memory-game.style";
 
 // files readers
 import fs from "fs";
@@ -24,10 +28,8 @@ import { SwiperSlide } from "swiper/react";
 // types
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 
-
 // uuidv4
 import { v4 as uuidv4 } from "uuid";
-
 
 const gameComplexity = 14;
 
