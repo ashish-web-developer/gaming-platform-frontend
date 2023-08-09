@@ -7,8 +7,8 @@ import { PusherAxios } from "@/helpers/axios";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 //redux
-import { active_user } from "@/store/slice/chat.slice";
 import { useAppSelector } from "./redux";
+import { user } from "@/store/slice/user.slice";
 
 function useEcho(): Echo | null {
   const echoRef = useRef<null | Echo>(null);
@@ -51,12 +51,12 @@ function useEcho(): Echo | null {
  * @param callback function with all the operation which you want to perform
  */
 
-function usePrivateChannel(
+function usePrivateChannel<ICallBackArgsType>(
   channel: string, // channel to which you want to connect
   event: string,
-  callback: (data: any) => void
+  callback: (data: ICallBackArgsType) => void
 ) {
-  const _active_user = useAppSelector(active_user);
+  const _user = useAppSelector(user);
   const echo = useEcho();
   useEffect(() => {
     echo
@@ -67,11 +67,11 @@ function usePrivateChannel(
       .error((error: any) => {
         console.log("error", error);
       })
-      .listen(event, (data: any) => callback(data));
+      .listen(event, (data: ICallBackArgsType) => callback(data));
     return () => {
       echo?.leaveChannel(channel);
     };
-  }, [echo]);
+  }, [echo,_user]);
 }
 
 export { useEcho, usePrivateChannel };

@@ -3,6 +3,8 @@ import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
 import type Colors from "@/types/data/colors";
+import type { User } from "@/types/user";
+import type { Conversation } from "@/types/store/slice/chat";
 
 // mui
 import { Grid, IconButton } from "@mui/material";
@@ -37,7 +39,11 @@ import {
   // actions
   sendMessage,
   updateChatInputValue,
+  updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
+
+
+import { user } from "@/store/slice/user.slice";
 
 // hooks
 import { usePrivateChannel } from "@/hooks/pusher";
@@ -46,11 +52,17 @@ import { useConversation, useGetDefaultUser } from "@/hooks/chat";
 
 const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
-  usePrivateChannel(`chat`, `MemoryGameEvent`, function (data) {
-    console.log("value of data", data);
+  usePrivateChannel<{
+    user:User;
+    conversation:Conversation
+  }>(`chat.${_user.id}`, `ChatEvent`, function (data) {
+    if(data.user.id == _active_user?.id){
+      dispatch(updateActiveUserConversation(data.conversation));
+    }
   });
   useGetDefaultUser();
   useConversation();

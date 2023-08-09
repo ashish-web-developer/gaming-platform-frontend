@@ -25,7 +25,6 @@ const ChatWrapper = () => {
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _active_user_conversation = useAppSelector(active_user_conversation);
-  console.log(_active_user_conversation);
   return (
     <StyledChatWrapper>
       {_active_user_conversation.map((conversation) => {
