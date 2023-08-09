@@ -7,13 +7,25 @@ import styled from "styled-components";
 // icons
 import SendIcon from "@mui/icons-material/Send";
 
+interface IStyledContainerItem {
+  $flexBasis: string | number;
+}
+
 const StyledContainer = styled(Box)`
   width: 100%;
   height: 100vh;
   background-color: #212328;
   padding: 20px 20px 0px 20px;
+  display: flex;
+  gap: 60px;
+  @media (max-width: 600px) {
+    padding: 15;
+  }
 `;
 
+const StyledContainerItem = styled(Box)<IStyledContainerItem>`
+  flex-basis: ${(props) => props.$flexBasis};
+`;
 const StyledChatContainer = styled(Box)`
   font-size: 24px;
   color: #fff;
@@ -42,6 +54,7 @@ const StyledSendIcon = styled(SendIcon)`
 
 export {
   StyledContainer,
+  StyledContainerItem,
   StyledChatContainer,
   StyledChatContainerName,
   StyledChatWrapper,
