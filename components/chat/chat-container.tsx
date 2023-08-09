@@ -7,7 +7,7 @@ import type { User } from "@/types/user";
 import type { Conversation } from "@/types/store/slice/chat";
 
 // mui
-import { Grid, IconButton } from "@mui/material";
+import { IconButton, useMediaQuery, useTheme } from "@mui/material";
 
 // local components
 import ChatSidebar from "@/components/chat/chat-sidebar";
@@ -20,14 +20,12 @@ const MobileBottomNav = dynamic(
 import {
   StyledContainer,
   StyledChatContainer,
+  StyledContainerItem,
   StyledChatWrapper,
   StyledChatInput,
   StyledSendIcon,
   StyledChatContainerName,
 } from "@/styles/components/chat/chat-container.style";
-
-// react device detect
-import { isMobile } from "react-device-detect";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
@@ -36,12 +34,12 @@ import {
   active_user,
   is_submitting,
   chat_input_value,
+  mobile_navigation,
   // actions
   sendMessage,
   updateChatInputValue,
   updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
-
 
 import { user } from "@/store/slice/user.slice";
 
@@ -49,72 +47,86 @@ import { user } from "@/store/slice/user.slice";
 import { usePrivateChannel } from "@/hooks/pusher";
 import { useConversation, useGetDefaultUser } from "@/hooks/chat";
 
-
 const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
+  const _mobile_navigation = useAppSelector(mobile_navigation);
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
   usePrivateChannel<{
-    user:User;
-    conversation:Conversation
+    user: User;
+    conversation: Conversation;
   }>(`chat.${_user.id}`, `ChatEvent`, function (data) {
-    if(data.user.id == _active_user?.id){
+    if (data.user.id == _active_user?.id) {
       dispatch(updateActiveUserConversation(data.conversation));
     }
   });
   useGetDefaultUser();
   useConversation();
+  if (isMobile) {
+    return (
+      <>
+        <StyledContainer>
+          {_mobile_navigation == 1 && <ChatSidebar colors={colors} />}
+          {_mobile_navigation == 0 && (
+            <StyledChatWrapper>
+              <ChatWrapper />
+            </StyledChatWrapper>
+          )}
+        </StyledContainer>
+        <MobileBottomNav />
+      </>
+    );
+  }
   return (
     <>
       <StyledContainer>
-        <Grid sx={{ height: "100%" }} container spacing={2}>
-          <Grid sx={{ height: "100%" }} item xs={12} sm={3.5}>
-            <ChatSidebar colors={colors} />
-          </Grid>
-          <Grid item xs={12} sm={6.5}>
-            {_active_user && (
-              <StyledChatContainer>
-                <StyledChatContainerName>
-                  {_active_user.name}
-                </StyledChatContainerName>
-                <StyledChatWrapper>
-                  <ChatWrapper />
-                </StyledChatWrapper>
-                <StyledChatInput
-                  value={_chat_input_value}
-                  onChange={(event) => {
-                    dispatch(updateChatInputValue(event.target.value));
-                  }}
-                  onKeyDown={(event) => {
-                    if (
-                      (event.ctrlKey || event.metaKey) &&
-                      event.key == "Enter"
-                    ) {
-                      dispatch(sendMessage());
-                    }
-                  }}
-                  disableUnderline
-                  placeholder="Your Message"
-                  fullWidth
-                  endAdornment={
-                    <IconButton
-                      disabled={_is_submitting}
-                      onClick={() => {
-                        dispatch(sendMessage());
-                      }}
-                    >
-                      <StyledSendIcon />
-                    </IconButton>
+        <StyledContainerItem $flexBasis={"350px"}>
+          <ChatSidebar colors={colors} />
+        </StyledContainerItem>
+        <StyledContainerItem $flexBasis={1}>
+          {_active_user && (
+            <StyledChatContainer>
+              <StyledChatContainerName>
+                {_active_user.name}
+              </StyledChatContainerName>
+              <StyledChatWrapper>
+                <ChatWrapper />
+              </StyledChatWrapper>
+              <StyledChatInput
+                value={_chat_input_value}
+                onChange={(event) => {
+                  dispatch(updateChatInputValue(event.target.value));
+                }}
+                onKeyDown={(event) => {
+                  if (
+                    (event.ctrlKey || event.metaKey) &&
+                    event.key == "Enter"
+                  ) {
+                    dispatch(sendMessage());
                   }
-                />
-              </StyledChatContainer>
-            )}
-          </Grid>
-        </Grid>
+                }}
+                disableUnderline
+                placeholder="Your Message"
+                fullWidth
+                endAdornment={
+                  <IconButton
+                    disabled={_is_submitting}
+                    onClick={() => {
+                      dispatch(sendMessage());
+                    }}
+                  >
+                    <StyledSendIcon />
+                  </IconButton>
+                }
+              />
+            </StyledChatContainer>
+          )}
+        </StyledContainerItem>
       </StyledContainer>
-      {isMobile && <MobileBottomNav />}
     </>
   );
 };

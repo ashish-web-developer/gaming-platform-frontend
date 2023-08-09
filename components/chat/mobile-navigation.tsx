@@ -5,6 +5,7 @@ import { BottomNavigationAction } from "@mui/material";
 import {
   StyledPaper,
   StyledBottomNavigation,
+  StyledBottomNavigationAction,
   StyledHomeIcon,
   StyledSearchIcon,
 } from "@/styles/components/chat/mobile-navigation.style";
@@ -27,8 +28,11 @@ const MobileBottomNav = () => {
           dispatch(updateMobileNavigation(newValue));
         }}
       >
-        <BottomNavigationAction label="Home" icon={<StyledHomeIcon />} />
-        <BottomNavigationAction label="Search" icon={<StyledSearchIcon />} />
+        <StyledBottomNavigationAction label="Home" icon={<StyledHomeIcon />} />
+        <StyledBottomNavigationAction
+          label="Search"
+          icon={<StyledSearchIcon />}
+        />
       </StyledBottomNavigation>
     </StyledPaper>
   );

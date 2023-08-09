@@ -16,6 +16,9 @@ const StyledChatMessageContainer = styled(
   color: #dcdcdf;
   padding: 8px;
   align-self: ${(props) => props.$align};
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
 
 const StyledChatMessageUserName = styled.div`

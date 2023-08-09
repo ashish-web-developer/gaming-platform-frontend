@@ -21,7 +21,6 @@ import {
 import { InputAdornment } from "@mui/material";
 
 // helpers
-import { Axios } from "@/helpers/axios";
 
 import { v4 as uuidv4 } from "uuid";
 

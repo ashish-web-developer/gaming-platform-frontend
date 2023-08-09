@@ -17,11 +17,15 @@ import {
 } from "@/styles/components/chat/profile.style";
 
 // mui
-import { Grid } from "@mui/material";
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 // Redux
 import { useAppDispatch } from "@/hooks/redux";
-import { updateUsersList, updateActiveUser } from "@/store/slice/chat.slice";
+import {
+  updateUsersList,
+  updateActiveUser,
+  updateMobileNavigation,
+} from "@/store/slice/chat.slice";
 
 interface Props {
   colors: Colors;
@@ -38,6 +42,8 @@ const Profile: FC<Props> = ({
   user,
   isSearch = false,
 }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [elevation, setElevation] = useState<number>(0);
   const dispatch = useAppDispatch();
   const avatar = useAvatar(user.username ?? "");
@@ -49,6 +55,9 @@ const Profile: FC<Props> = ({
       return;
     }
     dispatch(updateActiveUser(user));
+    if (isMobile) {
+      dispatch(updateMobileNavigation(0));
+    }
   };
   return (
     <StyledProfileContainer
