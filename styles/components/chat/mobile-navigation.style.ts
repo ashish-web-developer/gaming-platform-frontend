@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 // Mui
-import { BottomNavigation, Paper } from "@mui/material";
+import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 
 // icons
 import HomeIcon from "@mui/icons-material/Home";
@@ -14,6 +14,15 @@ const StyledPaper = styled(Paper)`
 `;
 const StyledBottomNavigation = styled(BottomNavigation)`
   background-color: #2e333d;
+`;
+
+const StyledBottomNavigationAction = styled(BottomNavigationAction)`
+  .MuiBottomNavigationAction-label {
+    color: #fff;
+  }
+  .Mui-selected {
+    font-weight: 600;
+  }
 `;
 const StyledHomeIcon = styled(HomeIcon)`
   font-size: 24px;
@@ -28,6 +37,7 @@ const StyledSearchIcon = styled(SearchIcon)`
 export {
   StyledPaper,
   StyledBottomNavigation,
+  StyledBottomNavigationAction,
   StyledHomeIcon,
   StyledSearchIcon,
 };

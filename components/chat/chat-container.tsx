@@ -42,13 +42,11 @@ import {
   updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
 
-
 import { user } from "@/store/slice/user.slice";
 
 // hooks
 import { usePrivateChannel } from "@/hooks/pusher";
 import { useConversation, useGetDefaultUser } from "@/hooks/chat";
-
 
 const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   const dispatch = useAppDispatch();
@@ -57,10 +55,10 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
   usePrivateChannel<{
-    user:User;
-    conversation:Conversation
+    user: User;
+    conversation: Conversation;
   }>(`chat.${_user.id}`, `ChatEvent`, function (data) {
-    if(data.user.id == _active_user?.id){
+    if (data.user.id == _active_user?.id) {
       dispatch(updateActiveUserConversation(data.conversation));
     }
   });
@@ -68,53 +66,58 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   useConversation();
   return (
     <>
-      <StyledContainer>
-        <Grid sx={{ height: "100%" }} container spacing={2}>
-          <Grid sx={{ height: "100%" }} item xs={12} sm={3.5}>
-            <ChatSidebar colors={colors} />
-          </Grid>
-          <Grid item xs={12} sm={6.5}>
-            {_active_user && (
-              <StyledChatContainer>
-                <StyledChatContainerName>
-                  {_active_user.name}
-                </StyledChatContainerName>
-                <StyledChatWrapper>
-                  <ChatWrapper />
-                </StyledChatWrapper>
-                <StyledChatInput
-                  value={_chat_input_value}
-                  onChange={(event) => {
-                    dispatch(updateChatInputValue(event.target.value));
-                  }}
-                  onKeyDown={(event) => {
-                    if (
-                      (event.ctrlKey || event.metaKey) &&
-                      event.key == "Enter"
-                    ) {
-                      dispatch(sendMessage());
-                    }
-                  }}
-                  disableUnderline
-                  placeholder="Your Message"
-                  fullWidth
-                  endAdornment={
-                    <IconButton
-                      disabled={_is_submitting}
-                      onClick={() => {
+      {isMobile ? (
+        <>
+          <MobileBottomNav />
+        </>
+      ) : (
+        <StyledContainer>
+          <Grid sx={{ height: "100%" }} container spacing={2}>
+            <Grid sx={{ height: "100%" }} item xs={12} sm={3.5}>
+              <ChatSidebar colors={colors} />
+            </Grid>
+            <Grid item xs={12} sm={6.5}>
+              {_active_user && (
+                <StyledChatContainer>
+                  <StyledChatContainerName>
+                    {_active_user.name}
+                  </StyledChatContainerName>
+                  <StyledChatWrapper>
+                    <ChatWrapper />
+                  </StyledChatWrapper>
+                  <StyledChatInput
+                    value={_chat_input_value}
+                    onChange={(event) => {
+                      dispatch(updateChatInputValue(event.target.value));
+                    }}
+                    onKeyDown={(event) => {
+                      if (
+                        (event.ctrlKey || event.metaKey) &&
+                        event.key == "Enter"
+                      ) {
                         dispatch(sendMessage());
-                      }}
-                    >
-                      <StyledSendIcon />
-                    </IconButton>
-                  }
-                />
-              </StyledChatContainer>
-            )}
+                      }
+                    }}
+                    disableUnderline
+                    placeholder="Your Message"
+                    fullWidth
+                    endAdornment={
+                      <IconButton
+                        disabled={_is_submitting}
+                        onClick={() => {
+                          dispatch(sendMessage());
+                        }}
+                      >
+                        <StyledSendIcon />
+                      </IconButton>
+                    }
+                  />
+                </StyledChatContainer>
+              )}
+            </Grid>
           </Grid>
-        </Grid>
-      </StyledContainer>
-      {isMobile && <MobileBottomNav />}
+        </StyledContainer>
+      )}
     </>
   );
 };
