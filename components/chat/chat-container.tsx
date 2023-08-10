@@ -73,7 +73,7 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
           {_mobile_navigation == 1 && <ChatSidebar colors={colors} />}
           {_mobile_navigation == 0 && (
             <StyledChatWrapper>
-              <ChatWrapper />
+              <ChatWrapper colors={colors} />
             </StyledChatWrapper>
           )}
         </StyledContainer>
@@ -94,7 +94,7 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
                 {_active_user.name}
               </StyledChatContainerName>
               <StyledChatWrapper>
-                <ChatWrapper />
+                <ChatWrapper colors={colors} />
               </StyledChatWrapper>
               <StyledChatInput
                 value={_chat_input_value}

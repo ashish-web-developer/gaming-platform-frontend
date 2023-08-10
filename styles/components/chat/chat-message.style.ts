@@ -3,19 +3,26 @@ import styled from "styled-components";
 // Mui
 import { Paper } from "@mui/material";
 
-type StyledChatMessageContainerProps = {
+type IStyledChatParentContainer = {
   $align: string;
+  $flexDirection: "row" | "row-reverse";
 };
 
-const StyledChatMessageContainer = styled(
-  Paper
-)<StyledChatMessageContainerProps>`
+const StyledChatParentContainer = styled.div<IStyledChatParentContainer>`
+  align-self: ${(props) => props.$align};
+  width: 500px;
+  display: flex;
+  flex-direction: ${(props) => props.$flexDirection};
+  align-items: flex-end;
+  gap: 20px;
+`;
+
+const StyledChatMessageContainer = styled(Paper)`
   background-color: #2e333d;
   border-radius: 10px 10px 10px 0px;
-  width: 400px;
+  flex-grow: 1;
   color: #dcdcdf;
   padding: 8px;
-  align-self: ${(props) => props.$align};
   @media (max-width: 600px) {
     width: 100%;
   }
@@ -43,6 +50,7 @@ const StyledChatTime = styled.span`
 `;
 
 export {
+  StyledChatParentContainer,
   StyledChatMessageContainer,
   StyledChatMessageUserName,
   StyledChatMessage,

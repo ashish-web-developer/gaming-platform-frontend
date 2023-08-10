@@ -11,10 +11,10 @@ import useAvatar from "@/hooks/profile";
 // styled component
 import {
   StyledProfileContainer,
-  StyledProfileAvatar,
-  StyledAvatarContainer,
   StyledAvatarName,
 } from "@/styles/components/chat/profile.style";
+// local components
+import ChatAvatar from "@/components/chat/chat-avatar";
 
 // mui
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
@@ -89,13 +89,12 @@ const Profile: FC<Props> = ({
     >
       <Grid container>
         <Grid item xs={3}>
-          <StyledAvatarContainer $color={color} $width={width} $height={height}>
-            <StyledProfileAvatar
-              $width={width}
-              $height={height}
-              dangerouslySetInnerHTML={{ __html: avatar }}
-            ></StyledProfileAvatar>
-          </StyledAvatarContainer>
+          <ChatAvatar
+            color={color}
+            width={width}
+            height={height}
+            avatar={avatar}
+          />
         </Grid>
         <Grid item xs={9}>
           <StyledAvatarName>{user.name}</StyledAvatarName>

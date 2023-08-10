@@ -76,10 +76,17 @@ const chatSlice = createSlice({
       if (Array.isArray(action.payload)) {
         state.active_user_conversation = action.payload;
       } else {
-        state.active_user_conversation.push(action.payload);
+        const newConversation = action.payload as Conversation;
+        if (
+          !state.active_user_conversation.some(
+            (conversation) => conversation.id == newConversation.id
+          )
+        ) {
+          state.active_user_conversation.push(action.payload);
+        }
       }
     },
-    updateChatInputValue: (state, action: PayloadAction<string | null>) => {
+    updateChatInputValue: (state, action: PayloadAction<string>) => {
       state.chat_input_value = action.payload;
     },
   },
