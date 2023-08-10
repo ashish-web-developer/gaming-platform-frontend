@@ -58,8 +58,10 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
                 user={option}
                 width={50}
                 height={50}
+                backgroundColor="#131821"
                 colors={colors}
                 isSearch={true}
+                disableElevation={false}
               />
             );
           }}
@@ -93,6 +95,8 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
               width={60}
               height={60}
               colors={colors}
+              backgroundColor="#212328"
+              disableElevation={true}
             />
           );
         })}

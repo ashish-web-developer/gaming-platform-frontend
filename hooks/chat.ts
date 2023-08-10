@@ -6,10 +6,10 @@ import type { AxiosResponse } from "axios";
 // redux
 import { useAppSelector, useAppDispatch } from "./redux";
 import {
-  users,
   active_user,
   updateActiveUserConversation,
   updateUsersList,
+  updateActiveUser,
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 // helpers
@@ -71,12 +71,17 @@ const useSearchedUserOptions = (value: string | null) => {
  * chat slice
  */
 const useGetDefaultUser = () => {
-  const _users = useAppSelector(users);
   const dispatch = useAppDispatch();
   useEffect(() => {
     (async function () {
-      const res = await Axios.get("/chat/get-user");
+      const res: AxiosResponse<{
+        success: boolean;
+        users: User[];
+      }> = await Axios.get("/chat/get-user");
       dispatch(updateUsersList(res.data.users));
+      if (res.data.users.length) {
+        dispatch(updateActiveUser(res.data.users[0]));
+      }
     })();
   }, []);
 };

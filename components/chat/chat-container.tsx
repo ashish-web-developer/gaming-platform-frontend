@@ -84,10 +84,10 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   return (
     <>
       <StyledContainer>
-        <StyledContainerItem $flexBasis={"350px"}>
+        <StyledContainerItem $flexGrow={0} $flexBasis={"350px"}>
           <ChatSidebar colors={colors} />
         </StyledContainerItem>
-        <StyledContainerItem $flexBasis={1}>
+        <StyledContainerItem $flexGrow={1} $flexBasis={"auto"}>
           {_active_user && (
             <StyledChatContainer>
               <StyledChatContainerName>
