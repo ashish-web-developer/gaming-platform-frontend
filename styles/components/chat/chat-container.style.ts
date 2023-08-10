@@ -9,6 +9,7 @@ import SendIcon from "@mui/icons-material/Send";
 
 interface IStyledContainerItem {
   $flexBasis: string | number;
+  $flexGrow: number;
 }
 
 const StyledContainer = styled(Box)`
@@ -25,8 +26,10 @@ const StyledContainer = styled(Box)`
 
 const StyledContainerItem = styled(Box)<IStyledContainerItem>`
   flex-basis: ${(props) => props.$flexBasis};
+  flex-grow: ${(props) => props.$flexGrow};
 `;
 const StyledChatContainer = styled(Box)`
+  width: 100%;
   font-size: 24px;
   color: #fff;
   height: 100%;

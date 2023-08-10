@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // types
 import type { FC } from "react";
@@ -20,8 +20,11 @@ import {
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 // Redux
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
+  //state
+  active_user,
+  //actions
   updateUsersList,
   updateActiveUser,
   updateMobileNavigation,
@@ -31,16 +34,20 @@ interface Props {
   colors: Colors;
   width: number;
   height: number;
+  backgroundColor: string;
   user: User;
   isSearch?: boolean;
+  disableElevation?: boolean;
 }
 
 const Profile: FC<Props> = ({
   colors,
   width,
   height,
+  backgroundColor,
   user,
   isSearch = false,
+  disableElevation = false,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -48,6 +55,7 @@ const Profile: FC<Props> = ({
   const dispatch = useAppDispatch();
   const avatar = useAvatar(user.username ?? "");
   const color = useColor(colors);
+  const background = useBackground(backgroundColor, user);
 
   const handleOnClick = () => {
     if (isSearch) {
@@ -61,12 +69,23 @@ const Profile: FC<Props> = ({
   };
   return (
     <StyledProfileContainer
-      onMouseEnter={() => setElevation(8)}
-      onMouseLeave={() => setElevation(0)}
+      onMouseEnter={() => {
+        if (disableElevation) {
+          return;
+        }
+        setElevation(8);
+      }}
+      onMouseLeave={() => {
+        if (disableElevation) {
+          return;
+        }
+        setElevation(0);
+      }}
       elevation={elevation}
       onClick={() => handleOnClick()}
       $width={width}
       $height={height}
+      $backgroundColor={background}
     >
       <Grid container>
         <Grid item xs={3}>
@@ -90,6 +109,19 @@ const Profile: FC<Props> = ({
 const useColor = (colors: Colors) => {
   const colorsLength = colors.length;
   return colors[Math.floor(Math.random() * colorsLength)];
+};
+
+const useBackground = (backgroundColor: string, user: User) => {
+  const [background, setBackground] = useState(backgroundColor);
+  const _active_user = useAppSelector(active_user);
+  useEffect(() => {
+    if (user.id == _active_user?.id) {
+      setBackground("#131821");
+    } else {
+      setBackground(backgroundColor);
+    }
+  }, [_active_user]);
+  return background;
 };
 
 export default Profile;
