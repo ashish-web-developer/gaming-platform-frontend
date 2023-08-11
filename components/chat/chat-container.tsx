@@ -18,13 +18,17 @@ const MobileBottomNav = dynamic(
 
 // styled components
 import {
+  // components
   StyledContainer,
   StyledChatContainer,
   StyledContainerItem,
   StyledChatWrapper,
   StyledChatInput,
-  StyledSendIcon,
   StyledChatContainerName,
+  StyledEmojiPicker,
+  // icons
+  StyledEmojiIcon,
+  StyledSendIcon,
 } from "@/styles/components/chat/chat-container.style";
 
 // redux
@@ -42,10 +46,12 @@ import {
 } from "@/store/slice/chat.slice";
 
 import { user } from "@/store/slice/user.slice";
+import { showEmoji,updateShowEmoji } from "@/store/slice/common.slice";
 
 // hooks
 import { usePrivateChannel } from "@/hooks/pusher";
 import { useConversation, useGetDefaultUser } from "@/hooks/chat";
+
 
 const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   const theme = useTheme();
@@ -56,6 +62,7 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   const _mobile_navigation = useAppSelector(mobile_navigation);
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
+  const _showEmoji = useAppSelector(showEmoji);
   usePrivateChannel<{
     user: User;
     conversation: Conversation;
@@ -88,6 +95,11 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
           <ChatSidebar colors={colors} />
         </StyledContainerItem>
         <StyledContainerItem $flexGrow={1} $flexBasis={"auto"}>
+          <StyledEmojiPicker
+          callback={(data)=>{
+            dispatch(updateChatInputValue(`${_chat_input_value} ${data.native}`))
+          }}
+          />
           {_active_user && (
             <StyledChatContainer>
               <StyledChatContainerName>
@@ -120,6 +132,16 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
                     }}
                   >
                     <StyledSendIcon />
+                  </IconButton>
+                }
+
+                startAdornment={
+                  <IconButton
+                    onClick={() => {
+                      dispatch(updateShowEmoji(!_showEmoji));
+                    }}
+                  >
+                    <StyledEmojiIcon />
                   </IconButton>
                 }
               />

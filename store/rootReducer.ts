@@ -3,14 +3,16 @@ import loginReducer from "@/store/slice/login.slice";
 import userReducer from "@/store/slice/user.slice";
 import memoryGameReducer from "@/store/slice/memory-game.slice";
 import chatReducer from "@/store/slice/chat.slice";
+import commonReducer from "@/store/slice/common.slice";
 
 
 const store = configureStore({
     reducer:{
+        common:commonReducer,
         login:loginReducer,
         user:userReducer,
         memoryGame:memoryGameReducer,
-        chat:chatReducer
+        chat:chatReducer,
     }
 })
 

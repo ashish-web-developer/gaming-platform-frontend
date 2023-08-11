@@ -1,11 +1,15 @@
 // mui
 import { Box, Input } from "@mui/material";
 
+// local components
+import EmojiPicker from "@/components/common/emoji-picker";
+
 // styled
 import styled from "styled-components";
 
 // icons
 import SendIcon from "@mui/icons-material/Send";
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 
 interface IStyledContainerItem {
   $flexBasis: string | number;
@@ -27,6 +31,7 @@ const StyledContainer = styled(Box)`
 const StyledContainerItem = styled(Box)<IStyledContainerItem>`
   flex-basis: ${(props) => props.$flexBasis};
   flex-grow: ${(props) => props.$flexGrow};
+  position:relative;
 `;
 const StyledChatContainer = styled(Box)`
   width: 100%;
@@ -51,9 +56,19 @@ const StyledChatInput = styled(Input)`
   bottom: 10px;
 `;
 
+const StyledEmojiIcon = styled(EmojiEmotionsIcon)`
+  color:#fff;
+`
+
 const StyledSendIcon = styled(SendIcon)`
   color: #fff;
 `;
+
+const StyledEmojiPicker = styled(EmojiPicker)`
+  position:absolute;
+  z-index:10;
+  bottom:60px;
+`
 
 export {
   StyledContainer,
@@ -63,4 +78,6 @@ export {
   StyledChatWrapper,
   StyledChatInput,
   StyledSendIcon,
+  StyledEmojiIcon,
+  StyledEmojiPicker
 };

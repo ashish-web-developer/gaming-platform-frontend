@@ -26,6 +26,8 @@ interface Props {
   align: string;
   colors: Colors;
   flexDirection: "row" | "row-reverse";
+  backgroundColor:string;
+  chatTimeColor:string;
 }
 const ChatMessage: FC<Props> = ({
   message,
@@ -35,17 +37,19 @@ const ChatMessage: FC<Props> = ({
   align,
   colors,
   flexDirection,
+  backgroundColor,
+  chatTimeColor
 }) => {
   const avatar = useAvatar(username ?? "");
   const color = useColor(colors);
   return (
     <StyledChatParentContainer $flexDirection={flexDirection} $align={align}>
       <ChatAvatar color={color} width={60} height={60} avatar={avatar} />
-      <StyledChatMessageContainer>
+      <StyledChatMessageContainer $backgroundColor={backgroundColor}>
         <StyledChatMessageUserName>{name}</StyledChatMessageUserName>
         <StyledChatMessage>{message}</StyledChatMessage>
         <StyledChatBottom>
-          <StyledChatTime>{date}</StyledChatTime>
+          <StyledChatTime $color={chatTimeColor}>{date}</StyledChatTime>
         </StyledChatBottom>
       </StyledChatMessageContainer>
     </StyledChatParentContainer>
