@@ -9,6 +9,7 @@ import Pusher from "pusher-js";
 //redux
 import { useAppSelector } from "./redux";
 import { user } from "@/store/slice/user.slice";
+import { active_user } from "@/store/slice/chat.slice";
 
 function useEcho(): Echo | null {
   const echoRef = useRef<null | Echo>(null);
@@ -57,6 +58,7 @@ function usePrivateChannel<ICallBackArgsType>(
   callback: (data: ICallBackArgsType) => void
 ) {
   const _user = useAppSelector(user);
+  const _active_user = useAppSelector(active_user);
   const echo = useEcho();
   useEffect(() => {
     echo
@@ -70,8 +72,9 @@ function usePrivateChannel<ICallBackArgsType>(
       .listen(event, (data: ICallBackArgsType) => callback(data));
     return () => {
       echo?.leaveChannel(channel);
+      console.log("disconnected");
     };
-  }, [echo,_user]);
+  }, [echo, _user, _active_user]);
 }
 
 export { useEcho, usePrivateChannel };
