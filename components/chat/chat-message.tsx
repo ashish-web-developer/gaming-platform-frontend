@@ -26,8 +26,8 @@ interface Props {
   align: string;
   colors: Colors;
   flexDirection: "row" | "row-reverse";
-  backgroundColor:string;
-  chatTimeColor:string;
+  backgroundColor: string;
+  chatTimeColor: string;
 }
 const ChatMessage: FC<Props> = ({
   message,
@@ -38,7 +38,7 @@ const ChatMessage: FC<Props> = ({
   colors,
   flexDirection,
   backgroundColor,
-  chatTimeColor
+  chatTimeColor,
 }) => {
   const avatar = useAvatar(username ?? "");
   const color = useColor(colors);

@@ -51,16 +51,11 @@ const ChatWrapper: FC<Props> = ({ colors }) => {
                   ? (_user.name as string)
                   : (_active_user?.name as string)
               }
-              backgroundColor = {
-                conversation.sender_id == _user.id
-                  ? "#6b8afd"
-                  : "#2e333d"
+              backgroundColor={
+                conversation.sender_id == _user.id ? "#6b8afd" : "#2e333d"
               }
               chatTimeColor={
-                conversation.sender_id == _user.id
-                  ? "#ffffff"
-                  : "#959495"
-
+                conversation.sender_id == _user.id ? "#ffffff" : "#959495"
               }
               key={uuidv4()}
               message={conversation.message}

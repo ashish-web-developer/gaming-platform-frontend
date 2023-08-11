@@ -9,11 +9,11 @@ type IStyledChatParentContainer = {
 };
 
 type IStyledChatMessageContainer = {
-  $backgroundColor:string;
-}
+  $backgroundColor: string;
+};
 type IStyledChatTime = {
-  $color:string;
-}
+  $color: string;
+};
 const StyledChatParentContainer = styled.div<IStyledChatParentContainer>`
   align-self: ${(props) => props.$align};
   width: 500px;
@@ -24,7 +24,7 @@ const StyledChatParentContainer = styled.div<IStyledChatParentContainer>`
 `;
 
 const StyledChatMessageContainer = styled(Paper)<IStyledChatMessageContainer>`
-  background-color:${(props)=>props.$backgroundColor};
+  background-color: ${(props) => props.$backgroundColor};
   border-radius: 10px 10px 10px 0px;
   flex-grow: 1;
   color: #dcdcdf;
@@ -53,7 +53,7 @@ const StyledChatTime = styled.span<IStyledChatTime>`
   font-family: "Poppins", sans-serif;
   font-size: 14px;
   color: #959495;
-  color:${(props)=>props.$color};
+  color: ${(props) => props.$color};
 `;
 
 export {

@@ -1,8 +1,5 @@
 type InitialState = {
-    showEmoji:boolean;
-}
+  showEmoji: boolean;
+};
 
-
-export {
-    InitialState
-}
+export { InitialState };

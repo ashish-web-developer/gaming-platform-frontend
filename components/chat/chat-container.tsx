@@ -46,12 +46,11 @@ import {
 } from "@/store/slice/chat.slice";
 
 import { user } from "@/store/slice/user.slice";
-import { showEmoji,updateShowEmoji } from "@/store/slice/common.slice";
+import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 
 // hooks
 import { usePrivateChannel } from "@/hooks/pusher";
 import { useConversation, useGetDefaultUser } from "@/hooks/chat";
-
 
 const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   const theme = useTheme();
@@ -96,9 +95,11 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
         </StyledContainerItem>
         <StyledContainerItem $flexGrow={1} $flexBasis={"auto"}>
           <StyledEmojiPicker
-          callback={(data)=>{
-            dispatch(updateChatInputValue(`${_chat_input_value} ${data.native}`))
-          }}
+            callback={(data) => {
+              dispatch(
+                updateChatInputValue(`${_chat_input_value} ${data.native}`)
+              );
+            }}
           />
           {_active_user && (
             <StyledChatContainer>
@@ -134,7 +135,6 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
                     <StyledSendIcon />
                   </IconButton>
                 }
-
                 startAdornment={
                   <IconButton
                     onClick={() => {
