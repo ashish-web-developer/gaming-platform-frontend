@@ -39,7 +39,10 @@ function useConversation() {
     }
   }, [_active_user]);
 }
-
+/**
+ * 
+ * @param value // query with which you want to search user
+ */
 const useSearchedUserOptions = (value: string | null) => {
   const [options, setOptions] = useState<User[]>([]);
   const handleInput = async (query: string) => {

@@ -19,12 +19,13 @@ interface IStyledContainerItem {
 const StyledContainer = styled(Box)`
   width: 100%;
   height: 100vh;
-  background-color: #212328;
+  background-color: ${({theme})=>theme.palette.primary.main};
   padding: 20px 20px 0px 20px;
   display: flex;
   gap: 60px;
   @media (max-width: 600px) {
-    padding: 15;
+    padding: 0;
+    display:block;
   }
 `;
 
