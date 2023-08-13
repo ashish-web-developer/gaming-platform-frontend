@@ -13,6 +13,7 @@ import { IconButton, useMediaQuery, useTheme } from "@mui/material";
 import ChatSidebar from "@/components/chat/chat-sidebar";
 import ChatWrapper from "@/components/chat/chat-wrapper";
 import MobileHeader from "@/components/chat/mobile/mobile-header";
+import MobileUsersContainer from "@/components/chat/mobile/mobile-users-container";
 const MobileBottomNav = dynamic(
   () => import("@/components/chat/mobile-navigation")
 );
@@ -77,7 +78,8 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
     return (
       <>
         <StyledContainer>
-          <MobileHeader colors = {colors}/>
+          <MobileHeader colors={colors} />
+          <MobileUsersContainer colors={colors} />
         </StyledContainer>
       </>
     );
