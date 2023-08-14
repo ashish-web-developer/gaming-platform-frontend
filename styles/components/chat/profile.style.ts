@@ -13,7 +13,7 @@ type IStyledAvatarName = {
 
 const StyledProfileContainer = styled(Paper)<IStyledProfileContainer>`
   width: 100%;
-  background-color: ${( props) => props.$backgroundColor};
+  background-color: ${( props) => props.$backgroundColor} !important;
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;

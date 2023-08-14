@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 // types
 import type { User } from "@/types/user";
 import type { Conversation } from "@/types/store/slice/chat";
@@ -43,7 +43,10 @@ function useConversation() {
  * 
  * @param value // query with which you want to search user
  */
-const useSearchedUserOptions = (value: string | null) => {
+const useSearchedUserOptions = (value: string | null):[
+  options:User[],
+  setOptions:Dispatch<SetStateAction<User[]>>
+] => {
   const [options, setOptions] = useState<User[]>([]);
   const handleInput = async (query: string) => {
     const res = await Axios.post("/chat/search-user", null, {
@@ -64,7 +67,7 @@ const useSearchedUserOptions = (value: string | null) => {
       clearTimeout(timer);
     };
   }, [value]);
-  return options;
+  return [options,setOptions];
 };
 
 /**

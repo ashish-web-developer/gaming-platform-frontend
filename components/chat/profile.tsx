@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
 // types
-import type { FC } from "react";
+import type { FC ,Dispatch,SetStateAction} from "react";
 import type Colors from "@/types/data/colors";
 import type { User } from "@/types/user";
+import type { ChatUser } from "@/types/store/slice/chat";
 
 // hooks
 import useAvatar from "@/hooks/profile";
-// styled 
+// styled
 import { useTheme } from "styled-components";
 // styled component
 import {
@@ -32,11 +33,6 @@ import {
   updateMobileNavigation,
 } from "@/store/slice/chat.slice";
 import type { Conversation } from "@/types/store/slice/chat";
-
-interface ChatUser extends User {
-  received_messages: Conversation[];
-  sent_messages: Conversation[];
-}
 
 interface Props {
   colors: Colors;
@@ -66,7 +62,10 @@ const Profile: FC<Props> = ({
   const background = useBackground(backgroundColor, user);
 
   const getLastConversation = () => {
-    let conversation = [...user.received_messages, ...user.sent_messages];
+    let conversation = [
+      ...(user.received_messages ? user.received_messages : []),
+      ...(user.sent_messages ? user.sent_messages : []),
+    ];
     conversation.sort((conversation1, conversation2) => {
       const date1 = new Date(conversation1.created_at);
       const date2 = new Date(conversation2.created_at);
@@ -118,9 +117,7 @@ const Profile: FC<Props> = ({
           <StyledAvatarName $fontSize="14px">{user.name}</StyledAvatarName>
           <StyledAvatarName $fontSize="12px">@{user.username}</StyledAvatarName>
           <StyledLastConversation>
-            {user.received_messages
-              ? getLastConversation().message
-              : "Say Hello"}
+            {getLastConversation()?.message??"Say Hello"}
           </StyledLastConversation>
         </Grid>
       </Grid>

@@ -20,7 +20,7 @@ function insertSameElementsRandomly(arr: Array<any>, element: any) {
 function readableFormatDate(dateString: string) {
   const date = new Date(dateString);
 
-  const options = {
+  const options:Intl.DateTimeFormatOptions = {
     month: "long",
     day: "numeric",
     hour: "2-digit",

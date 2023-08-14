@@ -31,7 +31,7 @@ export const sendMessage = createAsyncThunk<
     dispatch(updateActiveUserConversation(res.data.conversation));
     return res.data;
   } catch (error) {
-    return rejectWithValue(error?.response.error);
+    return rejectWithValue(error);
   }
 });
 

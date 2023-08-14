@@ -3,8 +3,8 @@ import type { User } from "@/types/user";
 
 
 interface ChatUser extends User{
-  received_messages: Conversation[];
-  sent_messages: Conversation[];
+  received_messages?: Conversation[];
+  sent_messages?: Conversation[];
 }
 
 type SendMessgeResponseType = {
@@ -30,4 +30,4 @@ type InitialState = {
   chat_input_value: string;
 };
 
-export { InitialState, Conversation, SendMessgeResponseType };
+export { InitialState, Conversation, SendMessgeResponseType ,ChatUser};

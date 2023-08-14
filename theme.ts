@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 
-const lightPalette = {
+const lightPalette:any = {
   primary: {
     main: "#FFFFFF",
     light:"#f4f6f8"
@@ -17,9 +17,20 @@ const lightPalette = {
   },
 };
 
-const darkPalette = {
+const darkPalette:any = {
   primary: {
-    main: "#000",
+    main: "#202634",
+    light:"#131821"
+  },
+  secondary: {
+    main: "#15171f",
+  },
+  text: {
+    main: "#FFFFFF",
+    light: "#989A9F",
+  },
+  border: {
+    searchbar: "#202634",
   },
 };
 

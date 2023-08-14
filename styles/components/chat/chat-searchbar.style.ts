@@ -33,7 +33,7 @@ const StyledSearchIcon = styled(SearchIcon)`
 `;
 
 const StyledPaperComponent = styled(Paper)`
-  background-color: ${({theme})=>theme.palette.primary.main};
+  background-color: ${({theme})=>theme.palette.primary.main} !important;
   padding: 12px;
   border-radius: 16px;
 `;
