@@ -11,6 +11,8 @@ import { InputAdornment } from "@mui/material";
 // local components
 import Profile from "@/components/chat/profile";
 
+// styled
+import { useTheme } from "styled-components";
 // styled components
 import {
   StyledSearchbarContainer,
@@ -39,6 +41,7 @@ interface Props {
     colors:Colors
 }
 const ChatSearchbar:FC<Props> = ({colors})=>{
+    const theme = useTheme();
     const [searchedInputValue, setSearchedInputValue] = useState<string | null>(
         null
     );
@@ -58,7 +61,7 @@ const ChatSearchbar:FC<Props> = ({colors})=>{
                 user={option}
                 width={50}
                 height={50}
-                backgroundColor="#131821"
+                backgroundColor={theme.palette.primary.light}
                 colors={colors}
                 isSearch={true}
                 disableElevation={false}

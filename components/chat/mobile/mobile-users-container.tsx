@@ -6,7 +6,8 @@ import Profile from "@/components/chat/profile";
 
 // styled components
 import { StyledUsersContainer } from "@/styles/components/chat/mobile/mobile-users-container.style";
-
+// styled 
+import { useTheme } from "styled-components";
 // redux
 import { useAppSelector } from "@/hooks/redux";
 import { users } from "@/store/slice/chat.slice";
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const MobileUsersContainer: FC<Props> = ({ colors }) => {
+  const theme = useTheme();
   const _users = useAppSelector(users);
   return (
     <StyledUsersContainer>
@@ -30,7 +32,7 @@ const MobileUsersContainer: FC<Props> = ({ colors }) => {
             width={60}
             height={60}
             colors={colors}
-            backgroundColor="#212328"
+            backgroundColor={theme.palette.primary.main}
             disableElevation={true}
           />
         );

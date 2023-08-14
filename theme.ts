@@ -3,6 +3,7 @@ import { createTheme } from "@mui/material";
 const lightPalette = {
   primary: {
     main: "#FFFFFF",
+    light:"#f4f6f8"
   },
   secondary: {
     main: "#f5f6f8",

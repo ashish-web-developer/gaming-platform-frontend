@@ -7,7 +7,8 @@ import type { User } from "@/types/user";
 
 // hooks
 import useAvatar from "@/hooks/profile";
-
+// styled 
+import { useTheme } from "styled-components";
 // styled component
 import {
   StyledProfileContainer,
@@ -18,7 +19,7 @@ import {
 import ChatAvatar from "@/components/chat/chat-avatar";
 
 // mui
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
+import { Grid, useMediaQuery, useTheme as useMuiTheme } from "@mui/material";
 
 // Redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -56,7 +57,7 @@ const Profile: FC<Props> = ({
   isSearch = false,
   disableElevation = false,
 }) => {
-  const theme = useTheme();
+  const theme = useMuiTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [elevation, setElevation] = useState<number>(0);
   const dispatch = useAppDispatch();
@@ -133,11 +134,12 @@ const useColor = (colors: Colors) => {
 };
 
 const useBackground = (backgroundColor: string, user: User) => {
+  const theme = useTheme();
   const [background, setBackground] = useState(backgroundColor);
   const _active_user = useAppSelector(active_user);
   useEffect(() => {
     if (user.id == _active_user?.id) {
-      setBackground("#131821");
+      setBackground(theme.palette.primary.light);
     } else {
       setBackground(backgroundColor);
     }
