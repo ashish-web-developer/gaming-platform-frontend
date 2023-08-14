@@ -28,6 +28,7 @@ type InitialState = {
   active_user_conversation: Conversation[];
   is_submitting: boolean;
   chat_input_value: string;
+  show_chat:boolean;
 };
 
 export { InitialState, Conversation, SendMessgeResponseType ,ChatUser};

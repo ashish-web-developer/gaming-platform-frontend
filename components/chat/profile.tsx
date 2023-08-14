@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // types
-import type { FC ,Dispatch,SetStateAction} from "react";
+import type { FC } from "react";
 import type Colors from "@/types/data/colors";
 import type { User } from "@/types/user";
 import type { ChatUser } from "@/types/store/slice/chat";
@@ -31,8 +31,8 @@ import {
   updateUsersList,
   updateActiveUser,
   updateMobileNavigation,
+  updateShowChat
 } from "@/store/slice/chat.slice";
-import type { Conversation } from "@/types/store/slice/chat";
 
 interface Props {
   colors: Colors;
@@ -82,6 +82,7 @@ const Profile: FC<Props> = ({
     dispatch(updateActiveUser(user));
     if (isMobile) {
       dispatch(updateMobileNavigation(0));
+      dispatch(updateShowChat(true));
     }
   };
   return (

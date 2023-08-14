@@ -14,6 +14,7 @@ import ChatSidebar from "@/components/chat/chat-sidebar";
 import ChatWrapper from "@/components/chat/chat-wrapper";
 import MobileHeader from "@/components/chat/mobile/mobile-header";
 import MobileUsersContainer from "@/components/chat/mobile/mobile-users-container";
+import MobileChatContainer from "@/components/chat/mobile/mobile-chat-container";
 const MobileBottomNav = dynamic(
   () => import("@/components/chat/mobile-navigation")
 );
@@ -41,8 +42,10 @@ import {
   is_submitting,
   chat_input_value,
   mobile_navigation,
+  show_chat,
   // actions
   sendMessage,
+  updateShowChat,
   updateChatInputValue,
   updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
@@ -64,6 +67,7 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
   const _showEmoji = useAppSelector(showEmoji);
+  const _show_chat = useAppSelector(show_chat);
   usePrivateChannel<{
     user: User;
     conversation: Conversation;
@@ -79,7 +83,11 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
       <>
         <StyledContainer>
           <MobileHeader colors={colors} />
-          <MobileUsersContainer colors={colors} />
+          {
+            _show_chat?
+            <MobileChatContainer/>:
+            <MobileUsersContainer colors={colors} />
+          }
         </StyledContainer>
       </>
     );

@@ -22,7 +22,7 @@ const EmojiPicker: FC<Props> = ({ className, callback }) => {
     <>
       {_showEmoji && (
         <Box className={className}>
-          <Picker data={data} onEmojiSelect={(data: any) => callback(data)} />
+          <Picker data={data} onEmojiSelect={(data: any) => callback(data)} theme="light" />
         </Box>
       )}
     </>

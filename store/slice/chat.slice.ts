@@ -42,6 +42,7 @@ const initialState: InitialState = {
   active_user_conversation: [],
   is_submitting: false,
   chat_input_value: "",
+  show_chat:false
 };
 const chatSlice = createSlice({
   name: "chat",
@@ -89,6 +90,9 @@ const chatSlice = createSlice({
     updateChatInputValue: (state, action: PayloadAction<string>) => {
       state.chat_input_value = action.payload;
     },
+    updateShowChat:(state,action:PayloadAction<boolean>)=>{
+      state.show_chat = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(sendMessage.pending, (state, action) => {
@@ -114,10 +118,13 @@ export const active_user_conversation = (state: RootState) =>
 export const is_submitting = (state: RootState) => state.chat.is_submitting;
 export const chat_input_value = (state: RootState) =>
   state.chat.chat_input_value;
+
+export const show_chat = (state:RootState) => state.chat.show_chat;
 export const {
   updateUsersList,
   updateMobileNavigation,
   updateActiveUser,
   updateActiveUserConversation,
   updateChatInputValue,
+  updateShowChat
 } = chatSlice.actions;

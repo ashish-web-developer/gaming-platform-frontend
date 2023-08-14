@@ -10,6 +10,12 @@ type IStyledItem = {
   $marginRight?: number | string;
 };
 
+
+type IStyledAvatarName = {
+  $fontSize: string;
+  $color:string;
+};
+
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -27,6 +33,21 @@ const StyledItem = styled.div<IStyledItem>`
   align-items: center;
   margin-right: ${(props) => props.$marginRight ?? 0};
 `;
+
+const StyledHeaderProfile = styled.div`
+  width:100%;
+  display:flex;
+  gap:20px;
+  align-items:center;
+`
+
+const StyledAvatarName = styled.h3<IStyledAvatarName>`
+  color: ${(props) => props.$color};
+  font-family: "Poppins", sans-serif;
+  font-size: ${(props) => props.$fontSize};
+  font-weight: 800;
+`;
+
 
 const StyledChevronLeftIcon = styled(ChevronLeftIcon)`
   color: ${({ theme }) => theme.palette.text.main};
@@ -106,4 +127,4 @@ const StyledDivider = styled.hr`
   }
 `;
 
-export { StyledContainer, StyledItem, StyledChevronLeftIcon, StyledDivider };
+export { StyledContainer, StyledItem ,StyledAvatarName, StyledHeaderProfile, StyledChevronLeftIcon, StyledDivider };
