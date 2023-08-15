@@ -42,7 +42,8 @@ const initialState: InitialState = {
   active_user_conversation: [],
   is_submitting: false,
   chat_input_value: "",
-  show_chat:false
+  show_chat:false,
+  is_audio_playing:false,
 };
 const chatSlice = createSlice({
   name: "chat",
@@ -92,6 +93,9 @@ const chatSlice = createSlice({
     },
     updateShowChat:(state,action:PayloadAction<boolean>)=>{
       state.show_chat = action.payload;
+    },
+    updateIsAudioPlaying:(state,action:PayloadAction<boolean>)=>{
+      state.is_audio_playing = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -120,11 +124,13 @@ export const chat_input_value = (state: RootState) =>
   state.chat.chat_input_value;
 
 export const show_chat = (state:RootState) => state.chat.show_chat;
+export const is_audio_playing = (state:RootState) => state.chat.is_audio_playing;
 export const {
   updateUsersList,
   updateMobileNavigation,
   updateActiveUser,
   updateActiveUserConversation,
   updateChatInputValue,
-  updateShowChat
+  updateShowChat,
+  updateIsAudioPlaying
 } = chatSlice.actions;

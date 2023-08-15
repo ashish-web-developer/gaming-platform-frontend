@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 // icons
 import KeyboardVoiceOutlinedIcon from "@mui/icons-material/KeyboardVoiceOutlined";
+import SettingsVoiceOutlinedIcon from '@mui/icons-material/SettingsVoiceOutlined';
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import SendIcon from "@mui/icons-material/Send";
 // mui
@@ -19,19 +20,25 @@ const StyledChatInputContainer = styled.div`
   display: flex;
   align-items: center;
   padding: 0px 10px;
-  gap: 20px;
+  gap: 10px;
 `;
 
 const StyledAudioIcon = styled(KeyboardVoiceOutlinedIcon)`
     color:${({ theme }) => theme.palette.text.light};
     font-size:24px;
-    flex-basis:30px;
+    flex-basis:20px;
+`;
+
+const StyledAudioPlayingIcon = styled(SettingsVoiceOutlinedIcon)`
+    color:${({ theme }) => theme.palette.text.light};
+    font-size:24px;
+    flex-basis:20px;
 `;
 
 const StyledEmojiIcon = styled(EmojiEmotionsOutlinedIcon)`
     color:${({ theme }) => theme.palette.text.light};
     font-size:24px;
-    flex-basis:30px;
+    flex-basis:20px;
 `;
 
 const StyledSendIcon = styled(SendIcon)`
@@ -57,6 +64,7 @@ export {
   StyledAudioIcon,
   StyledEmojiIcon,
   StyledSendIcon,
+  StyledAudioPlayingIcon,
   StyledInput,
   StyledEmojiPicker
 };

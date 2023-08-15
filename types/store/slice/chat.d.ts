@@ -29,6 +29,7 @@ type InitialState = {
   is_submitting: boolean;
   chat_input_value: string;
   show_chat:boolean;
+  is_audio_playing:boolean;
 };
 
 export { InitialState, Conversation, SendMessgeResponseType ,ChatUser};
