@@ -4,20 +4,23 @@ import { useEffect, useState } from "react";
 import type { FC } from "react";
 import type Colors from "@/types/data/colors";
 import type { User } from "@/types/user";
+import type { ChatUser } from "@/types/store/slice/chat";
 
 // hooks
 import useAvatar from "@/hooks/profile";
-
+// styled
+import { useTheme } from "styled-components";
 // styled component
 import {
   StyledProfileContainer,
   StyledAvatarName,
+  StyledLastConversation,
 } from "@/styles/components/chat/profile.style";
 // local components
 import ChatAvatar from "@/components/chat/chat-avatar";
 
 // mui
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
+import { Grid, useMediaQuery, useTheme as useMuiTheme } from "@mui/material";
 
 // Redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
@@ -28,6 +31,7 @@ import {
   updateUsersList,
   updateActiveUser,
   updateMobileNavigation,
+  updateShowChat
 } from "@/store/slice/chat.slice";
 
 interface Props {
@@ -35,7 +39,7 @@ interface Props {
   width: number;
   height: number;
   backgroundColor: string;
-  user: User;
+  user: ChatUser;
   isSearch?: boolean;
   disableElevation?: boolean;
 }
@@ -49,13 +53,26 @@ const Profile: FC<Props> = ({
   isSearch = false,
   disableElevation = false,
 }) => {
-  const theme = useTheme();
+  const theme = useMuiTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [elevation, setElevation] = useState<number>(0);
   const dispatch = useAppDispatch();
   const avatar = useAvatar(user.username ?? "");
   const color = useColor(colors);
   const background = useBackground(backgroundColor, user);
+
+  const getLastConversation = () => {
+    let conversation = [
+      ...(user.received_messages ? user.received_messages : []),
+      ...(user.sent_messages ? user.sent_messages : []),
+    ];
+    conversation.sort((conversation1, conversation2) => {
+      const date1 = new Date(conversation1.created_at);
+      const date2 = new Date(conversation2.created_at);
+      return date2.getTime() - date1.getTime();
+    });
+    return conversation[0];
+  };
 
   const handleOnClick = () => {
     if (isSearch) {
@@ -65,6 +82,7 @@ const Profile: FC<Props> = ({
     dispatch(updateActiveUser(user));
     if (isMobile) {
       dispatch(updateMobileNavigation(0));
+      dispatch(updateShowChat(true));
     }
   };
   return (
@@ -97,8 +115,11 @@ const Profile: FC<Props> = ({
           />
         </Grid>
         <Grid item xs={9}>
-          <StyledAvatarName>{user.name}</StyledAvatarName>
-          <StyledAvatarName>@{user.username}</StyledAvatarName>
+          <StyledAvatarName $fontSize="14px">{user.name}</StyledAvatarName>
+          <StyledAvatarName $fontSize="12px">@{user.username}</StyledAvatarName>
+          <StyledLastConversation>
+            {getLastConversation()?.message??"Say Hello"}
+          </StyledLastConversation>
         </Grid>
       </Grid>
     </StyledProfileContainer>
@@ -111,11 +132,12 @@ const useColor = (colors: Colors) => {
 };
 
 const useBackground = (backgroundColor: string, user: User) => {
+  const theme = useTheme();
   const [background, setBackground] = useState(backgroundColor);
   const _active_user = useAppSelector(active_user);
   useEffect(() => {
     if (user.id == _active_user?.id) {
-      setBackground("#131821");
+      setBackground(theme.palette.primary.light);
     } else {
       setBackground(backgroundColor);
     }

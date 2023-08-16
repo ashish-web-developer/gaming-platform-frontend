@@ -1,9 +1,9 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 
-// Mui
-import { createTheme } from '@mui/material'
 
+// mui
+import { ThemeProvider } from 'styled-components'
 
 // Redux
 import { Provider } from 'react-redux'
@@ -13,11 +13,13 @@ import store from '@/store/rootReducer'
 // Provider
 import CsrfTokenProvider from '@/providers/CsrfTokenProvider'
 import UserProvider from '@/providers/UserProvider'
-
+import getTheme from 'theme'
 
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const theme = getTheme("light");
   return (
+    <ThemeProvider theme = {theme}>
       <Provider store = {store}>
           <CsrfTokenProvider>
             <UserProvider>
@@ -25,6 +27,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             </UserProvider>
           </CsrfTokenProvider>
       </Provider>
+    </ThemeProvider>
   )
   //return <Component {...pageProps} />
 }

@@ -1,5 +1,12 @@
 import type { User } from "@/types/user";
 
+
+
+interface ChatUser extends User{
+  received_messages?: Conversation[];
+  sent_messages?: Conversation[];
+}
+
 type SendMessgeResponseType = {
   success: boolean;
   conversation: Conversation;
@@ -15,12 +22,13 @@ type Conversation = {
 };
 
 type InitialState = {
-  users: User[];
+  users: ChatUser[];
   mobile_navigation: number;
   active_user: User | null;
   active_user_conversation: Conversation[];
   is_submitting: boolean;
   chat_input_value: string;
+  show_chat:boolean;
 };
 
-export { InitialState, Conversation, SendMessgeResponseType };
+export { InitialState, Conversation, SendMessgeResponseType ,ChatUser};
