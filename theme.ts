@@ -15,6 +15,10 @@ const lightPalette:any = {
   border: {
     searchbar: "#f1f1f2",
   },
+  chat:{
+    main:"#ffd140",
+    light:"#f4f6f8"
+  }
 };
 
 const darkPalette:any = {
