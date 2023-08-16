@@ -23,7 +23,6 @@ type Conversation = {
 
 type InitialState = {
   users: ChatUser[];
-  mobile_navigation: number;
   active_user: User | null;
   active_user_conversation: Conversation[];
   is_submitting: boolean;

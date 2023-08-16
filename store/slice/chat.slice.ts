@@ -37,7 +37,6 @@ export const sendMessage = createAsyncThunk<
 
 const initialState: InitialState = {
   users: [],
-  mobile_navigation: 0,
   active_user: null,
   active_user_conversation: [],
   is_submitting: false,
@@ -64,9 +63,6 @@ const chatSlice = createSlice({
           state.users.push(action.payload);
         }
       }
-    },
-    updateMobileNavigation: (state, action: PayloadAction<number>) => {
-      state.mobile_navigation = action.payload;
     },
     updateActiveUser: (state, action: PayloadAction<User>) => {
       state.active_user = action.payload;
@@ -114,8 +110,6 @@ const chatSlice = createSlice({
 
 export default chatSlice.reducer;
 export const users = (state: RootState) => state.chat.users;
-export const mobile_navigation = (state: RootState) =>
-  state.chat.mobile_navigation;
 export const active_user = (state: RootState) => state.chat.active_user;
 export const active_user_conversation = (state: RootState) =>
   state.chat.active_user_conversation;
@@ -127,7 +121,6 @@ export const show_chat = (state:RootState) => state.chat.show_chat;
 export const is_audio_playing = (state:RootState) => state.chat.is_audio_playing;
 export const {
   updateUsersList,
-  updateMobileNavigation,
   updateActiveUser,
   updateActiveUserConversation,
   updateChatInputValue,

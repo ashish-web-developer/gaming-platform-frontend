@@ -36,6 +36,9 @@ import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 import useSpeechRecognition from "@/hooks/speech-recognition";
 import { user } from "@/store/slice/user.slice";
 
+// helpers package
+import { v4 as uuidv4 } from "uuid";
+
 const MobileChatContainer = () => {
   const recognition = useSpeechRecognition((event) => {
     console.log("value of event", event.results[0]);
@@ -65,6 +68,7 @@ const MobileChatContainer = () => {
         {_active_user_conversation.map((conversation) => {
           return (
             <StyledChat
+              key={uuidv4()}
               $backgroundColor={
                 _user.id == conversation.sender_id
                   ? theme.palette.chat.main

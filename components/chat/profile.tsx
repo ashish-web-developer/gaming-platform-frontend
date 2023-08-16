@@ -30,7 +30,6 @@ import {
   //actions
   updateUsersList,
   updateActiveUser,
-  updateMobileNavigation,
   updateShowChat
 } from "@/store/slice/chat.slice";
 
@@ -81,7 +80,6 @@ const Profile: FC<Props> = ({
     }
     dispatch(updateActiveUser(user));
     if (isMobile) {
-      dispatch(updateMobileNavigation(0));
       dispatch(updateShowChat(true));
     }
   };
