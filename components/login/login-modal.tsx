@@ -136,7 +136,6 @@ const LoginModal: FC<Props> = ({ keepShowingModal }) => {
           }}
           validationSchema={_showLogin ? LoginSchema : SignupSchema}
           onSubmit={(values, { setSubmitting }) => {
-            console.log("inside handler");
             if (_showLogin) {
               const emailPattern =
                 /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;

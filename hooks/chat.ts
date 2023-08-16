@@ -8,8 +8,6 @@ import { useAppSelector, useAppDispatch } from "./redux";
 import {
   active_user,
   updateActiveUserConversation,
-  updateUsersList,
-  updateActiveUser,
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 // helpers
@@ -40,13 +38,12 @@ function useConversation() {
   }, [_active_user]);
 }
 /**
- * 
+ *
  * @param value // query with which you want to search user
  */
-const useSearchedUserOptions = (value: string | null):[
-  options:User[],
-  setOptions:Dispatch<SetStateAction<User[]>>
-] => {
+const useSearchedUserOptions = (
+  value: string | null
+): [options: User[], setOptions: Dispatch<SetStateAction<User[]>>] => {
   const [options, setOptions] = useState<User[]>([]);
   const handleInput = async (query: string) => {
     const res = await Axios.post("/chat/search-user", null, {
@@ -67,29 +64,7 @@ const useSearchedUserOptions = (value: string | null):[
       clearTimeout(timer);
     };
   }, [value]);
-  return [options,setOptions];
+  return [options, setOptions];
 };
 
-/**
- * fetch the list of user to whom
- * message have been sent last time
- * and update the users list in
- * chat slice
- */
-const useGetDefaultUser = () => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    (async function () {
-      const res: AxiosResponse<{
-        success: boolean;
-        users: User[];
-      }> = await Axios.get("/chat/get-user");
-      dispatch(updateUsersList(res.data.users));
-      if (res.data.users.length) {
-        dispatch(updateActiveUser(res.data.users[0]));
-      }
-    })();
-  }, []);
-};
-
-export { useConversation, useSearchedUserOptions, useGetDefaultUser };
+export { useConversation, useSearchedUserOptions };

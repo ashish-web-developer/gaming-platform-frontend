@@ -7,7 +7,7 @@ import type { User } from "@/types/user";
 import type { Conversation } from "@/types/store/slice/chat";
 
 // mui
-import { IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { IconButton } from "@mui/material";
 
 // local components
 import ChatSidebar from "@/components/chat/chat-sidebar";
@@ -15,9 +15,6 @@ import ChatWrapper from "@/components/chat/chat-wrapper";
 import MobileHeader from "@/components/chat/mobile/mobile-header";
 import MobileUsersContainer from "@/components/chat/mobile/mobile-users-container";
 import MobileChatContainer from "@/components/chat/mobile/mobile-chat-container";
-const MobileBottomNav = dynamic(
-  () => import("@/components/chat/mobile-navigation")
-);
 
 // styled components
 import {
@@ -41,7 +38,6 @@ import {
   active_user,
   is_submitting,
   chat_input_value,
-  mobile_navigation,
   show_chat,
   // actions
   sendMessage,
@@ -55,15 +51,18 @@ import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 
 // hooks
 import { usePrivateChannel } from "@/hooks/pusher";
-import { useConversation, useGetDefaultUser } from "@/hooks/chat";
+import { useConversation } from "@/hooks/chat";
 
-const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+// helpers package
+
+const ChatContainer: FC<{
+  colors: Colors;
+  users: User[];
+  isMobile: boolean;
+}> = ({ colors, users, isMobile }) => {
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
-  const _mobile_navigation = useAppSelector(mobile_navigation);
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
   const _showEmoji = useAppSelector(showEmoji);
@@ -76,18 +75,17 @@ const ChatContainer: FC<{ colors: Colors }> = ({ colors }) => {
       dispatch(updateActiveUserConversation(data.conversation));
     }
   });
-  useGetDefaultUser();
   useConversation();
   if (isMobile) {
     return (
       <>
         <StyledContainer>
           <MobileHeader colors={colors} />
-          {
-            _show_chat?
-            <MobileChatContainer/>:
-            <MobileUsersContainer colors={colors} />
-          }
+          {_show_chat ? (
+            <MobileChatContainer />
+          ) : (
+            <MobileUsersContainer users={users} colors={colors} />
+          )}
         </StyledContainer>
       </>
     );
