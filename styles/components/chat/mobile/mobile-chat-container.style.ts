@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 // icons
 import KeyboardVoiceOutlinedIcon from "@mui/icons-material/KeyboardVoiceOutlined";
-import SettingsVoiceOutlinedIcon from '@mui/icons-material/SettingsVoiceOutlined';
+import SettingsVoiceOutlinedIcon from "@mui/icons-material/SettingsVoiceOutlined";
 import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
 import SendIcon from "@mui/icons-material/Send";
 // mui
@@ -11,12 +11,35 @@ import { Input } from "@mui/material";
 // local components
 import EmojiPicker from "@/components/common/emoji-picker";
 
+type IStyledChat = {
+  $backgroundColor:string;
+  $alignSelf: string;
+  $borderRadius:string;
+};
+
+const StyledChatContainer = styled.div`
+  width: 100%;
+  height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  overflow: scroll;
+  padding: 16px;
+`;
+
+const StyledChat = styled.div<IStyledChat>`
+  max-width: 200px;
+  background-color: ${( props ) => props.$backgroundColor};
+  align-self: ${(props) => props.$alignSelf};
+  padding:10px;
+  border-radius:${(props)=>props.$borderRadius};
+  font-family: "Poppins", sans-serif;
+  font-size:12px;
+`;
 
 const StyledChatInputContainer = styled.div`
   width: 100%;
   height: 100px;
-  position: absolute;
-  bottom: 0px;
   display: flex;
   align-items: center;
   padding: 0px 10px;
@@ -24,26 +47,26 @@ const StyledChatInputContainer = styled.div`
 `;
 
 const StyledAudioIcon = styled(KeyboardVoiceOutlinedIcon)`
-    color:${({ theme }) => theme.palette.text.light};
-    font-size:24px;
-    flex-basis:20px;
+  color: ${({ theme }) => theme.palette.text.light};
+  font-size: 24px;
+  flex-basis: 20px;
 `;
 
 const StyledAudioPlayingIcon = styled(SettingsVoiceOutlinedIcon)`
-    color:${({ theme }) => theme.palette.text.light};
-    font-size:24px;
-    flex-basis:20px;
+  color: ${({ theme }) => theme.palette.text.light};
+  font-size: 24px;
+  flex-basis: 20px;
 `;
 
 const StyledEmojiIcon = styled(EmojiEmotionsOutlinedIcon)`
-    color:${({ theme }) => theme.palette.text.light};
-    font-size:24px;
-    flex-basis:20px;
+  color: ${({ theme }) => theme.palette.text.light};
+  font-size: 24px;
+  flex-basis: 20px;
 `;
 
 const StyledSendIcon = styled(SendIcon)`
-    color:${({ theme }) => theme.palette.text.main};
-    font-size:24px;
+  color: ${({ theme }) => theme.palette.text.main};
+  font-size: 24px;
 `;
 
 const StyledInput = styled(Input)`
@@ -55,16 +78,18 @@ const StyledInput = styled(Input)`
 `;
 
 const StyledEmojiPicker = styled(EmojiPicker)`
-    position:absolute;
-    bottom:100px;
-`
+  position: absolute;
+  bottom: 100px;
+`;
 
 export {
+  StyledChatContainer,
+  StyledChat,
   StyledChatInputContainer,
   StyledAudioIcon,
   StyledEmojiIcon,
   StyledSendIcon,
   StyledAudioPlayingIcon,
   StyledInput,
-  StyledEmojiPicker
+  StyledEmojiPicker,
 };
