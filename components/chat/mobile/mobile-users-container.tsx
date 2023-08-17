@@ -1,6 +1,5 @@
 // types
 import type { FC } from "react";
-import type Colors from "@/types/data/colors";
 import type { User } from "@/types/user";
 // local components
 import Profile from "@/components/chat/profile";
@@ -17,11 +16,10 @@ import { useAppSelector } from "@/hooks/redux";
 import { users as default_users } from "@/store/slice/chat.slice";
 
 interface Props {
-  colors: Colors;
   users: User[];
 }
 
-const MobileUsersContainer: FC<Props> = ({ colors, users }) => {
+const MobileUsersContainer: FC<Props> = ({ users }) => {
   const _default_users = useAppSelector(default_users);
   const theme = useTheme();
   return (
@@ -34,7 +32,6 @@ const MobileUsersContainer: FC<Props> = ({ colors, users }) => {
               user={user}
               width={60}
               height={60}
-              colors={colors}
               backgroundColor={theme.palette.primary.main}
               disableElevation={true}
             />

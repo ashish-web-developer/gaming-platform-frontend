@@ -11,12 +11,19 @@ import { Input } from "@mui/material";
 // local components
 import EmojiPicker from "@/components/common/emoji-picker";
 
-type IStyledChat = {
-  $backgroundColor:string;
+type IStyledChatWrapper = {
   $alignSelf: string;
-  $borderRadius:string;
+  $flexDirection: string;
 };
 
+type IStyledChatWrapperItem = {
+  $flexBasis: string;
+};
+
+interface IStyledChat extends IStyledChatWrapperItem {
+  $backgroundColor: string;
+  $borderRadius: string;
+}
 const StyledChatContainer = styled.div`
   width: 100%;
   height: calc(100vh - 200px);
@@ -27,14 +34,26 @@ const StyledChatContainer = styled.div`
   padding: 16px;
 `;
 
+const StyledChatWrapper = styled.div<IStyledChatWrapper>`
+  display: flex;
+  gap: 10px;
+  align-self: ${(props) => props.$alignSelf};
+  flex-direction: ${(props) => props.$flexDirection};
+  align-items: flex-end;
+`;
+
+const StyledAvatar = styled.div<IStyledChatWrapperItem>`
+  flex-basis: ${(props) => props.$flexBasis};
+`;
+
 const StyledChat = styled.div<IStyledChat>`
   max-width: 200px;
-  background-color: ${( props ) => props.$backgroundColor};
-  align-self: ${(props) => props.$alignSelf};
-  padding:10px;
-  border-radius:${(props)=>props.$borderRadius};
+  background-color: ${(props) => props.$backgroundColor};
+  padding: 10px;
+  border-radius: ${(props) => props.$borderRadius};
   font-family: "Poppins", sans-serif;
-  font-size:12px;
+  font-size: 12px;
+  flex-basis: ${(props) => props.$flexBasis};
 `;
 
 const StyledChatInputContainer = styled.div`
@@ -84,6 +103,8 @@ const StyledEmojiPicker = styled(EmojiPicker)`
 
 export {
   StyledChatContainer,
+  StyledChatWrapper,
+  StyledAvatar,
   StyledChat,
   StyledChatInputContainer,
   StyledAudioIcon,

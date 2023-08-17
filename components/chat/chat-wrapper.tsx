@@ -1,5 +1,4 @@
 // type
-import type Colors from "@/types/data/colors";
 import type { FC } from "react";
 // local components
 import ChatMessage from "./chat-message";
@@ -21,10 +20,7 @@ import { readableFormatDate } from "@/helpers/common";
 // helpers package
 import { v4 as uuidv4 } from "uuid";
 
-interface Props {
-  colors: Colors;
-}
-const ChatWrapper: FC<Props> = ({ colors }) => {
+const ChatWrapper: FC = () => {
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _active_user_conversation = useAppSelector(active_user_conversation);
@@ -34,7 +30,6 @@ const ChatWrapper: FC<Props> = ({ colors }) => {
         {_active_user_conversation.map((conversation) => {
           return (
             <ChatMessage
-              colors={colors}
               flexDirection={
                 conversation.sender_id == _user.id ? "row-reverse" : "row"
               }

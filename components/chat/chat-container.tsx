@@ -2,7 +2,6 @@ import dynamic from "next/dynamic";
 
 // types
 import type { FC } from "react";
-import type Colors from "@/types/data/colors";
 import type { User } from "@/types/user";
 import type { Conversation } from "@/types/store/slice/chat";
 
@@ -56,10 +55,9 @@ import { useConversation } from "@/hooks/chat";
 // helpers package
 
 const ChatContainer: FC<{
-  colors: Colors;
   users: User[];
   isMobile: boolean;
-}> = ({ colors, users, isMobile }) => {
+}> = ({ users, isMobile }) => {
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
@@ -80,11 +78,11 @@ const ChatContainer: FC<{
     return (
       <>
         <StyledContainer>
-          <MobileHeader colors={colors} />
+          <MobileHeader />
           {_show_chat ? (
             <MobileChatContainer />
           ) : (
-            <MobileUsersContainer users={users} colors={colors} />
+            <MobileUsersContainer users={users} />
           )}
         </StyledContainer>
       </>
@@ -94,7 +92,7 @@ const ChatContainer: FC<{
     <>
       <StyledContainer>
         <StyledContainerItem $flexGrow={0} $flexBasis={"350px"}>
-          <ChatSidebar colors={colors} />
+          <ChatSidebar />
         </StyledContainerItem>
         <StyledContainerItem $flexGrow={1} $flexBasis={"auto"}>
           <StyledEmojiPicker
@@ -110,7 +108,7 @@ const ChatContainer: FC<{
                 {_active_user.name}
               </StyledChatContainerName>
               <StyledChatWrapper>
-                <ChatWrapper colors={colors} />
+                <ChatWrapper />
               </StyledChatWrapper>
               <StyledChatInput
                 value={_chat_input_value}

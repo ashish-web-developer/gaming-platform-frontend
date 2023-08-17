@@ -1,19 +1,28 @@
+import { useContext } from "react";
 // styled components
 import {
   StyledAvatarContainer,
   StyledProfileAvatar,
 } from "@/styles/components/chat/chat-avatar.style";
+
+// context
+import { ColorContext } from "pages/chat";
 // types
 import type { FC } from "react";
-import type Colors from "@/types/data/colors";
+
+// hook
+import useRandomColor from "@/hooks/colors";
+import useAvatar from "@/hooks/profile";
 
 interface Props {
-  color: Colors[number];
   width: number;
   height: number;
-  avatar: string;
+  username: string;
 }
-const ChatAvatar: FC<Props> = ({ color, width, height, avatar }) => {
+const ChatAvatar: FC<Props> = ({ width, height, username }) => {
+  const colors = useContext(ColorContext);
+  const color = useRandomColor(colors);
+  const avatar = useAvatar(username ?? "");
   return (
     <StyledAvatarContainer $color={color} $width={width} $height={height}>
       <StyledProfileAvatar

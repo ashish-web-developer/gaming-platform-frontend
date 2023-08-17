@@ -3,6 +3,8 @@ import { useRef, useEffect } from "react";
 import {
   // components
   StyledChatContainer,
+  StyledChatWrapper,
+  StyledAvatar,
   StyledChat,
   StyledChatInputContainer,
   StyledInput,
@@ -14,6 +16,8 @@ import {
   StyledSendIcon,
 } from "@/styles/components/chat/mobile/mobile-chat-container.style";
 
+// local components
+import ChatAvatar from "@/components/chat/chat-avatar";
 // mui
 import { IconButton } from "@mui/material";
 
@@ -27,6 +31,7 @@ import {
   is_submitting,
   is_audio_playing,
   active_user_conversation,
+  active_user,
   // actions
   updateChatInputValue,
   sendMessage,
@@ -49,6 +54,7 @@ const MobileChatContainer = () => {
   const _showEmoji = useAppSelector(showEmoji);
   const _chat_input_value = useAppSelector(chat_input_value);
   const _user = useAppSelector(user);
+  const _active_user = useAppSelector(active_user);
   const _active_user_conversation = useAppSelector(active_user_conversation);
   const _is_submitting = useAppSelector(is_submitting);
   const _is_audio_playing = useAppSelector(is_audio_playing);
@@ -67,24 +73,42 @@ const MobileChatContainer = () => {
       <StyledChatContainer ref={chatContainerRef}>
         {_active_user_conversation.map((conversation) => {
           return (
-            <StyledChat
+            <StyledChatWrapper
               key={uuidv4()}
-              $backgroundColor={
-                _user.id == conversation.sender_id
-                  ? theme.palette.chat.main
-                  : theme.palette.chat.light
-              }
               $alignSelf={
                 _user.id == conversation.sender_id ? "flex-end" : "flex-start"
               }
-              $borderRadius={
-                _user.id == conversation.sender_id
-                  ? "10px 10px 0px 10px"
-                  : "10px  10px 10px 0px"
+              $flexDirection={
+                _user.id == conversation.sender_id ? "row" : "row-reverse"
               }
             >
-              {conversation.message}
-            </StyledChat>
+              <StyledChat
+                $backgroundColor={
+                  _user.id == conversation.sender_id
+                    ? theme.palette.chat.main
+                    : theme.palette.chat.light
+                }
+                $borderRadius={
+                  _user.id == conversation.sender_id
+                    ? "10px 10px 0px 10px"
+                    : "10px  10px 10px 0px"
+                }
+                $flexBasis="1"
+              >
+                {conversation.message}
+              </StyledChat>
+              <StyledAvatar $flexBasis="50">
+                <ChatAvatar
+                  width={30}
+                  height={30}
+                  username={
+                    _user.id == conversation.sender_id
+                      ? (_user.username as string)
+                      : (_active_user?.username as string)
+                  }
+                />
+              </StyledAvatar>
+            </StyledChatWrapper>
           );
         })}
       </StyledChatContainer>
