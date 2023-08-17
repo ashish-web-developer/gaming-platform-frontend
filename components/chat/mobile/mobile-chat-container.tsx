@@ -55,7 +55,7 @@ const MobileChatContainer = () => {
 
   useEffect(() => {
     chatContainerRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [_active_user_conversation]);
+  }, [_active_user_conversation.length]);
 
   return (
     <>
