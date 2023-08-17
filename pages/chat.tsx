@@ -1,3 +1,4 @@
+import { useEffect, createContext } from "react";
 // types
 import type { NextPage, GetServerSideProps } from "next";
 import type Colors from "@/types/data/colors";
@@ -19,7 +20,8 @@ import { GlobalStyles } from "@/styles/pages/chat.style";
 // redux
 import { useAppDispatch } from "@/hooks/redux";
 import { updateUsersList } from "@/store/slice/chat.slice";
-import { useEffect } from "react";
+
+export const ColorContext = createContext<Colors>([]);
 
 const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   colors,
@@ -33,7 +35,9 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   return (
     <>
       <GlobalStyles />
-      <ChatContainer colors={colors} users={users} isMobile={isMobile} />
+      <ColorContext.Provider value={colors}>
+        <ChatContainer users={users} isMobile={isMobile} />
+      </ColorContext.Provider>
     </>
   );
 };
@@ -50,7 +54,7 @@ export const getServerSideProps: GetServerSideProps<{
   // getting all the colors
   try {
     const dataFolderPath = path.join(process.cwd(), "./data/colors.json");
-    let colors:Colors|string = fs.readFileSync(dataFolderPath, "utf-8");
+    let colors: Colors | string = fs.readFileSync(dataFolderPath, "utf-8");
     colors = JSON.parse(colors) as Colors;
 
     // Getting the list of default user;

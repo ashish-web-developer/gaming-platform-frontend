@@ -1,6 +1,5 @@
 // types
 import type { FC } from "react";
-import type Colors from "@/types/data/colors";
 
 // Local components
 import Profile from "@/components/chat/profile";
@@ -20,13 +19,11 @@ import { v4 as uuidv4 } from "uuid";
 import { useAppSelector } from "@/hooks/redux";
 import { users } from "@/store/slice/chat.slice";
 
-
-
-const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
+const ChatSidebar: FC = () => {
   const _users = useAppSelector(users);
   return (
     <StyledSidebarContainer>
-      <ChatSearchbar colors = {colors}/>
+      <ChatSearchbar />
       <StyledProfileContainer>
         {_users.map((user) => {
           return (
@@ -35,7 +32,6 @@ const ChatSidebar: FC<{ colors: Colors }> = ({ colors }) => {
               user={user}
               width={60}
               height={60}
-              colors={colors}
               backgroundColor="#212328"
               disableElevation={true}
             />

@@ -2,12 +2,9 @@ import { useEffect, useState } from "react";
 
 // types
 import type { FC } from "react";
-import type Colors from "@/types/data/colors";
 import type { User } from "@/types/user";
 import type { ChatUser } from "@/types/store/slice/chat";
 
-// hooks
-import useAvatar from "@/hooks/profile";
 // styled
 import { useTheme } from "styled-components";
 // styled component
@@ -30,11 +27,10 @@ import {
   //actions
   updateUsersList,
   updateActiveUser,
-  updateShowChat
+  updateShowChat,
 } from "@/store/slice/chat.slice";
 
 interface Props {
-  colors: Colors;
   width: number;
   height: number;
   backgroundColor: string;
@@ -44,7 +40,6 @@ interface Props {
 }
 
 const Profile: FC<Props> = ({
-  colors,
   width,
   height,
   backgroundColor,
@@ -56,8 +51,6 @@ const Profile: FC<Props> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [elevation, setElevation] = useState<number>(0);
   const dispatch = useAppDispatch();
-  const avatar = useAvatar(user.username ?? "");
-  const color = useColor(colors);
   const background = useBackground(backgroundColor, user);
 
   const getLastConversation = () => {
@@ -106,27 +99,21 @@ const Profile: FC<Props> = ({
       <Grid container>
         <Grid item xs={3}>
           <ChatAvatar
-            color={color}
             width={width}
             height={height}
-            avatar={avatar}
+            username={user.username as string}
           />
         </Grid>
         <Grid item xs={9}>
           <StyledAvatarName $fontSize="14px">{user.name}</StyledAvatarName>
           <StyledAvatarName $fontSize="12px">@{user.username}</StyledAvatarName>
           <StyledLastConversation>
-            {getLastConversation()?.message??"Say Hello"}
+            {getLastConversation()?.message ?? "Say Hello"}
           </StyledLastConversation>
         </Grid>
       </Grid>
     </StyledProfileContainer>
   );
-};
-
-const useColor = (colors: Colors) => {
-  const colorsLength = colors.length;
-  return colors[Math.floor(Math.random() * colorsLength)];
 };
 
 const useBackground = (backgroundColor: string, user: User) => {

@@ -2,7 +2,6 @@ import { useState } from "react";
 
 // types
 import type { FC } from "react";
-import type Colors from "@/types/data/colors";
 // mui
 import { InputAdornment } from "@mui/material";
 
@@ -31,10 +30,7 @@ const CustomPaperComponent = (props: any) => {
   return <StyledPaperComponent {...props} elevation={8} />;
 };
 
-interface Props {
-  colors: Colors;
-}
-const ChatSearchbar: FC<Props> = ({ colors }) => {
+const ChatSearchbar: FC = () => {
   const theme = useTheme();
   const [searchedInputValue, setSearchedInputValue] = useState<string | null>(
     null
@@ -59,7 +55,6 @@ const ChatSearchbar: FC<Props> = ({ colors }) => {
               width={50}
               height={50}
               backgroundColor={theme.palette.primary.light}
-              colors={colors}
               isSearch={true}
               disableElevation={false}
             />
