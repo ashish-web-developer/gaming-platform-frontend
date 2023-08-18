@@ -1,5 +1,3 @@
-import dynamic from "next/dynamic";
-
 // types
 import type { FC } from "react";
 import type { User } from "@/types/user";
@@ -11,9 +9,6 @@ import { IconButton } from "@mui/material";
 // local components
 import ChatSidebar from "@/components/chat/chat-sidebar";
 import ChatWrapper from "@/components/chat/chat-wrapper";
-const MobileChat = dynamic(()=>import("@/components/chat/mobile/mobile-chat"),{
-  ssr:true
-})
 
 // styled components
 import {
@@ -55,8 +50,7 @@ import { useConversation } from "@/hooks/chat";
 
 const ChatContainer: FC<{
   users: User[];
-  isMobile: boolean;
-}> = ({ users, isMobile }) => {
+}> = ({ users }) => {
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
@@ -72,14 +66,6 @@ const ChatContainer: FC<{
       dispatch(updateActiveUserConversation(data.conversation));
     }
   });
-  useConversation();
-  if (isMobile) {
-    return (
-      <>
-      <MobileChat users = {users}/>
-      </>
-    );
-  }
   return (
     <>
       <StyledContainer>

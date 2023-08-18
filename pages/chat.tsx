@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useEffect, createContext } from "react";
 // types
 import type { NextPage, GetServerSideProps } from "next";
@@ -7,6 +8,12 @@ import type { User } from "@/types/user";
 
 // Local components
 import ChatContainer from "@/components/chat/chat-container";
+const MobileChat = dynamic(
+  () => import("@/components/chat/mobile/mobile-chat"),
+  {
+    ssr: true,
+  }
+);
 
 // helpers package
 import fs from "fs";
@@ -21,6 +28,9 @@ import { GlobalStyles } from "@/styles/pages/chat.style";
 import { useAppDispatch } from "@/hooks/redux";
 import { updateUsersList } from "@/store/slice/chat.slice";
 
+// hooks
+import { useConversation } from "@/hooks/chat";
+
 export const ColorContext = createContext<Colors>([]);
 
 const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
@@ -29,6 +39,7 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   isMobile,
 }) => {
   const dispatch = useAppDispatch();
+  useConversation();
   useEffect(() => {
     dispatch(updateUsersList(users));
   }, []);
@@ -36,7 +47,11 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
     <>
       <GlobalStyles />
       <ColorContext.Provider value={colors}>
-        <ChatContainer users={users} isMobile={isMobile} />
+        {isMobile ? (
+          <MobileChat users={users} />
+        ) : (
+          <ChatContainer users={users} />
+        )}
       </ColorContext.Provider>
     </>
   );

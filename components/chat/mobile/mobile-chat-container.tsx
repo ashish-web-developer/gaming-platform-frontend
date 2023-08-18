@@ -41,9 +41,6 @@ import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 import useSpeechRecognition from "@/hooks/speech-recognition";
 import { user } from "@/store/slice/user.slice";
 
-// helpers package
-import { v4 as uuidv4 } from "uuid";
-
 const MobileChatContainer = () => {
   const recognition = useSpeechRecognition((event) => {
     console.log("value of event", event.results[0]);
@@ -71,10 +68,10 @@ const MobileChatContainer = () => {
         }}
       />
       <StyledChatContainer ref={chatContainerRef}>
-        {_active_user_conversation.map((conversation) => {
+        {_active_user_conversation.map((conversation, index) => {
           return (
             <StyledChatWrapper
-              key={uuidv4()}
+              key={index}
               $alignSelf={
                 _user.id == conversation.sender_id ? "flex-end" : "flex-start"
               }
