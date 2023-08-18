@@ -36,6 +36,10 @@ const darkPalette:any = {
   border: {
     searchbar: "#202634",
   },
+  chat:{
+    main:"#ffd140",
+    light:"#f4f6f8"
+  }
 };
 
 const getTheme = (mode: "dark" | "light") => {

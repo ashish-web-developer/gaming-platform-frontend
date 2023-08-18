@@ -94,6 +94,7 @@ const StyledInput = styled(Input)`
   padding: 10px;
   border-radius: 10px;
   border: 3px solid ${({ theme }) => theme.palette.border.searchbar};
+  color:${({theme})=>theme.palette.text.main};
 `;
 
 const StyledEmojiPicker = styled(EmojiPicker)`
