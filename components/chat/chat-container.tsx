@@ -11,9 +11,9 @@ import { IconButton } from "@mui/material";
 // local components
 import ChatSidebar from "@/components/chat/chat-sidebar";
 import ChatWrapper from "@/components/chat/chat-wrapper";
-import MobileHeader from "@/components/chat/mobile/mobile-header";
-import MobileUsersContainer from "@/components/chat/mobile/mobile-users-container";
-import MobileChatContainer from "@/components/chat/mobile/mobile-chat-container";
+const MobileChat = dynamic(()=>import("@/components/chat/mobile/mobile-chat"),{
+  ssr:true
+})
 
 // styled components
 import {
@@ -40,7 +40,6 @@ import {
   show_chat,
   // actions
   sendMessage,
-  updateShowChat,
   updateChatInputValue,
   updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
@@ -77,14 +76,7 @@ const ChatContainer: FC<{
   if (isMobile) {
     return (
       <>
-        <StyledContainer>
-          <MobileHeader />
-          {_show_chat ? (
-            <MobileChatContainer />
-          ) : (
-            <MobileUsersContainer users={users} />
-          )}
-        </StyledContainer>
+      <MobileChat users = {users}/>
       </>
     );
   }

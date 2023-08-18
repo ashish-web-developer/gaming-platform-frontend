@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useRef ,useEffect} from "react";
 // types
 import type { FC } from "react";
 
@@ -17,13 +18,28 @@ interface Props {
   callback: (data: any) => void;
 }
 const EmojiPicker: FC<Props> = ({ className, callback }) => {
+  const ref = useRef<HTMLDivElement>();
   const _showEmoji = useAppSelector(showEmoji);
+  const handleClickOutSide = (event)=>{
+    if(!ref.current?.contains(event.target)){
+      console.log("clicked outside");
+    }
+  }
+
+  useEffect(()=>{
+    document.addEventListener("mousedown",handleClickOutSide);
+    return ()=>{
+      document.removeEventListener("mousedown",handleClickOutSide);
+    }
+  },[])
   return (
     <>
       {_showEmoji && (
-        <Box className={className}>
+        <Box
+         ref = {ref}
+         className={className}
+         >
           <Picker
-            onClickOutside={() => console.log("clicked outside")}
             data={()=>{
               import("@emoji-mart/data").then(({default:data})=>{
                 return data;
