@@ -77,4 +77,23 @@ function usePrivateChannel<ICallBackArgsType>(
   }, [echo, _user, _active_user]);
 }
 
-export { useEcho, usePrivateChannel };
+
+function usePresenceChannel(
+  channel:string
+){
+  const echo = useEcho();
+  useEffect(()=>{
+    echo?.join(channel)
+      .here((user:any)=>{
+        console.log("connected users",user);
+      })
+      .joining((user:any)=>{
+        console.log("joining users",user);
+      })
+    return (()=>{
+      echo?.leaveChannel(channel);
+    })
+  },[echo])
+}
+
+export { useEcho, usePrivateChannel, usePresenceChannel };
