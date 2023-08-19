@@ -12,7 +12,6 @@ import Profile from "@/components/chat/profile";
 import { useTheme } from "styled-components";
 // styled components
 import {
-  StyledSearchbarContainer,
   StyledSearchbar,
   StyledTextField,
   StyledSearchIcon,
@@ -37,12 +36,12 @@ const ChatSearchbar: FC = () => {
   );
   const [options, setOptions] = useSearchedUserOptions(searchedInputValue);
   return (
-    <StyledSearchbarContainer>
       <StyledSearchbar
         disablePortal
         id="combo-box-demo"
         options={options}
         getOptionLabel={(option: any) => option.name}
+        fullWidth
         PaperComponent={CustomPaperComponent}
         onBlur={() => {
           setOptions([]);
@@ -83,7 +82,6 @@ const ChatSearchbar: FC = () => {
           );
         }}
       />
-    </StyledSearchbarContainer>
   );
 };
 

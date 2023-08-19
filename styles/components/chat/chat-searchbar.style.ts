@@ -4,10 +4,6 @@ import { Autocomplete, Paper, TextField, Box } from "@mui/material";
 
 // icon
 import SearchIcon from "@mui/icons-material/Search";
-const StyledSearchbarContainer = styled(Box)`
-  flex-grow: 1;
-  flex-basis: 8%;
-`;
 const StyledSearchbar = styled(Autocomplete)`
   background-color: ${({ theme }) => theme.palette.secondary.main};
   border-radius: 16px;
@@ -39,7 +35,6 @@ const StyledPaperComponent = styled(Paper)`
 `;
 
 export {
-  StyledSearchbarContainer,
   StyledSearchbar,
   StyledTextField,
   StyledSearchIcon,

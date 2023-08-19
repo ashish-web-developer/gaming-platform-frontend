@@ -5,6 +5,7 @@ import type { NextPage, GetServerSideProps } from "next";
 import type Colors from "@/types/data/colors";
 import type { AxiosResponse } from "axios";
 import type { User } from "@/types/user";
+import type { Conversation } from "@/types/store/slice/chat";
 
 // Local components
 import ChatContainer from "@/components/chat/chat-container";
@@ -25,11 +26,14 @@ import axios from "axios";
 import { GlobalStyles } from "@/styles/pages/chat.style";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
-import { updateUsersList } from "@/store/slice/chat.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { updateUsersList, updateActiveUserConversation } from "@/store/slice/chat.slice";
+import { user } from "@/store/slice/user.slice";
+import { active_user } from "@/store/slice/chat.slice";
 
 // hooks
 import { useConversation } from "@/hooks/chat";
+import { usePrivateChannel } from "@/hooks/pusher";
 
 export const ColorContext = createContext<Colors>([]);
 
@@ -39,6 +43,16 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   isMobile,
 }) => {
   const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
+  const _active_user = useAppSelector(active_user);
+  usePrivateChannel<{
+    user: User;
+    conversation: Conversation;
+  }>(`chat.${_user.id}`, `ChatEvent`, function (data) {
+    if (data.user.id == _active_user?.id) {
+      dispatch(updateActiveUserConversation(data.conversation));
+    }
+  });
   useConversation();
   useEffect(() => {
     dispatch(updateUsersList(users));

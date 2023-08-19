@@ -33,6 +33,7 @@ const StyledLastConversation = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width:200px;
 `;
 
 export { StyledProfileContainer, StyledAvatarName, StyledLastConversation };

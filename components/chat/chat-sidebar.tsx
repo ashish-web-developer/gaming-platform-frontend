@@ -1,5 +1,6 @@
 // types
 import type { FC } from "react";
+import type { User } from "@/types/user";
 
 // Local components
 import Profile from "@/components/chat/profile";
@@ -8,35 +9,40 @@ import ChatSearchbar from "@/components/chat/chat-searchbar";
 // styled components
 import {
   StyledSidebarContainer,
+  StyledSideBarSearchContainer,
   StyledProfileContainer,
 } from "@/styles/components/chat/chat-sidebar.style";
 
-// helpers
-
-import { v4 as uuidv4 } from "uuid";
+// styled theme
+import { useTheme } from "styled-components";
 
 // Redux
 import { useAppSelector } from "@/hooks/redux";
-import { users } from "@/store/slice/chat.slice";
+import { users as default_users } from "@/store/slice/chat.slice";
 
-const ChatSidebar: FC = () => {
-  const _users = useAppSelector(users);
+const ChatSidebar: FC<{ users: User[] }> = ({ users }) => {
+  const theme = useTheme();
+  const _default_users = useAppSelector(default_users);
   return (
     <StyledSidebarContainer>
-      <ChatSearchbar />
+      <StyledSideBarSearchContainer>
+        <ChatSearchbar />
+      </StyledSideBarSearchContainer>
       <StyledProfileContainer>
-        {_users.map((user) => {
-          return (
-            <Profile
-              key={uuidv4()}
-              user={user}
-              width={60}
-              height={60}
-              backgroundColor="#212328"
-              disableElevation={true}
-            />
-          );
-        })}
+        {(users.length < _default_users.length ? _default_users : users).map(
+          (user, index) => {
+            return (
+              <Profile
+                key={index}
+                user={user}
+                width={60}
+                height={60}
+                backgroundColor={theme.palette.primary.main}
+                disableElevation={true}
+              />
+            );
+          }
+        )}
       </StyledProfileContainer>
     </StyledSidebarContainer>
   );
