@@ -27,7 +27,7 @@ import { GlobalStyles } from "@/styles/pages/chat.style";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { updateUsersList, updateActiveUserConversation } from "@/store/slice/chat.slice";
+import { updateUsersList, updateActiveUserConversation, updateActiveUser } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
 
@@ -56,6 +56,9 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   useConversation();
   useEffect(() => {
     dispatch(updateUsersList(users));
+    if(users.length){
+      dispatch(updateActiveUser(users[0]));
+    }
   }, []);
   return (
     <>
