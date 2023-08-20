@@ -13,7 +13,7 @@ type IStyledAvatarName = {
 
 const StyledProfileContainer = styled(Paper)<IStyledProfileContainer>`
   width: 100%;
-  background-color: ${( props) => props.$backgroundColor} !important;
+  background-color: ${(props) => props.$backgroundColor} !important;
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
@@ -33,7 +33,7 @@ const StyledLastConversation = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width:200px;
+  width: 200px;
 `;
 
 export { StyledProfileContainer, StyledAvatarName, StyledLastConversation };

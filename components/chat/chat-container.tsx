@@ -52,7 +52,6 @@ import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 // helpers
 import { Axios } from "@/helpers/axios";
 
-
 const ChatContainer: FC<{
   users: User[];
 }> = ({ users }) => {
@@ -65,25 +64,27 @@ const ChatContainer: FC<{
   const _chat_input_value = useAppSelector(chat_input_value);
   const _showEmoji = useAppSelector(showEmoji);
 
-
-  const handlePlay = ()=>{
-    Axios.post('/play-game-event',{
-        receiver_id:_active_user?.id,
-        game:"memory_game"
-    })
-  }
+  const handlePlay = () => {
+    Axios.post("/play-game-event", {
+      receiver_id: _active_user?.id,
+      game: "memory_game",
+    });
+  };
   return (
     <>
-      <Snackbar
-      vertical="top"
-      horizontal="right"
-      />
+      <Snackbar vertical="top" horizontal="right" />
       <StyledContainer>
         <StyledContainerItem $flexBasis={"400px"}>
           <ChatSidebar users={users} />
         </StyledContainerItem>
         <StyledContainerItem $flexGrow={1}>
-          <StyledEmojiPicker callback={(data)=>{dispatch(updateChatInputValue(`${_chat_input_value} ${data.native}`))}}/>
+          <StyledEmojiPicker
+            callback={(data) => {
+              dispatch(
+                updateChatInputValue(`${_chat_input_value} ${data.native}`)
+              );
+            }}
+          />
           {_active_user && (
             <>
               <StyledChatItem
@@ -163,26 +164,40 @@ const ChatContainer: FC<{
                   );
                 })}
               </StyledChatItem>
-              <StyledChatItem $flexBasis={"100px"} $flexShrink={0} $isFlex={true} $alignItems="center">
-                <div style = {{
-                  height:"60px",
-                  display:"flex",
-                  width:"100%",
-                  gap:"20px"
-                }}>
+              <StyledChatItem
+                $flexBasis={"100px"}
+                $flexShrink={0}
+                $isFlex={true}
+                $alignItems="center"
+              >
+                <div
+                  style={{
+                    height: "60px",
+                    display: "flex",
+                    width: "100%",
+                    gap: "20px",
+                  }}
+                >
                   <IconButton>
-                    <StyledAudioIcon/>
+                    <StyledAudioIcon />
                   </IconButton>
-                  <IconButton onClick = {()=>{
-                    dispatch(updateShowEmoji(!_showEmoji))
-                  }}>
-                    <StyledEmojiIcon/>
+                  <IconButton
+                    onClick={() => {
+                      dispatch(updateShowEmoji(!_showEmoji));
+                    }}
+                  >
+                    <StyledEmojiIcon />
                   </IconButton>
                   <StyledChatInput
-                    value = {_chat_input_value}
-                    onChange = {(event)=>dispatch(updateChatInputValue(event.target.value))}
+                    value={_chat_input_value}
+                    onChange={(event) =>
+                      dispatch(updateChatInputValue(event.target.value))
+                    }
                     onKeyDown={(event) => {
-                      if ((event.ctrlKey || event.metaKey) && event.key == "Enter") {
+                      if (
+                        (event.ctrlKey || event.metaKey) &&
+                        event.key == "Enter"
+                      ) {
                         dispatch(sendMessage());
                       }
                     }}
@@ -191,7 +206,10 @@ const ChatContainer: FC<{
                     placeholder="Write Here"
                     endAdornment={
                       <>
-                        <IconButton disabled = {_is_submitting} onClick={()=>dispatch(sendMessage())}>
+                        <IconButton
+                          disabled={_is_submitting}
+                          onClick={() => dispatch(sendMessage())}
+                        >
                           <StyledSendIcon />
                         </IconButton>
                       </>
@@ -200,7 +218,6 @@ const ChatContainer: FC<{
                   <StyledPlayButton onClick={handlePlay}>
                     Let's Play
                   </StyledPlayButton>
-
                 </div>
               </StyledChatItem>
             </>

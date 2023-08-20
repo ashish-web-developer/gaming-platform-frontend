@@ -9,7 +9,7 @@ const StyledSearchbar = styled(Autocomplete)`
   border-radius: 16px;
   border: 3px solid ${({ theme }) => theme.palette.border.searchbar};
   & .MuiAutocomplete-inputRoot {
-    color: ${({theme})=>theme.palette.text.main} !important;
+    color: ${({ theme }) => theme.palette.text.main} !important;
   }
 `;
 
@@ -29,7 +29,7 @@ const StyledSearchIcon = styled(SearchIcon)`
 `;
 
 const StyledPaperComponent = styled(Paper)`
-  background-color: ${({theme})=>theme.palette.primary.main} !important;
+  background-color: ${({ theme }) => theme.palette.primary.main} !important;
   padding: 12px;
   border-radius: 16px;
 `;
