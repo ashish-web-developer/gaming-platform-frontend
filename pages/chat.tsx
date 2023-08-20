@@ -27,9 +27,14 @@ import { GlobalStyles } from "@/styles/pages/chat.style";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { updateUsersList, updateActiveUserConversation, updateActiveUser } from "@/store/slice/chat.slice";
+import {
+  updateUsersList,
+  updateActiveUserConversation,
+  updateActiveUser,
+} from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
+import { updateGamingUser } from "@/store/slice/memory-game.slice";
 
 // hooks
 import { useConversation } from "@/hooks/chat";
@@ -45,18 +50,27 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
-  usePrivateChannel<{
-    user: User;
-    conversation: Conversation;
-  }>(`chat.${_user.id}`, `ChatEvent`, function (data) {
-    if (data.user.id == _active_user?.id) {
-      dispatch(updateActiveUserConversation(data.conversation));
-    }
-  });
+  usePrivateChannel(`chat.${_user.id}`, [
+    {
+      event: "ChatEvent",
+      callback: (data: { user: User; conversation: Conversation }) => {
+        if (data.user.id == _active_user?.id) {
+          dispatch(updateActiveUserConversation(data.conversation));
+        }
+      },
+    },
+    {
+      event: "PlayGameEvent",
+      callback: (data: { game: string; user: User }) => {
+        dispatch(updateGamingUser(data.user));
+      },
+    },
+  ]);
+
   useConversation();
   useEffect(() => {
     dispatch(updateUsersList(users));
-    if(users.length){
+    if (users.length) {
       dispatch(updateActiveUser(users[0]));
     }
   }, []);

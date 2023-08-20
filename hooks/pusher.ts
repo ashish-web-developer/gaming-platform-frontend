@@ -52,24 +52,29 @@ function useEcho(): Echo | null {
  * @param callback function with all the operation which you want to perform
  */
 
-function usePrivateChannel<ICallBackArgsType>(
+function usePrivateChannel(
   channel: string, // channel to which you want to connect
-  event: string,
-  callback: (data: ICallBackArgsType) => void
+  events: {
+    event: string;
+    callback: (data: any) => void;
+  }[]
 ) {
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const echo = useEcho();
   useEffect(() => {
-    echo
+    const subscription = echo
       ?.private(channel)
       .subscribed(() => {
         console.log("connected to channel");
       })
       .error((error: any) => {
         console.log("error", error);
-      })
-      .listen(event, (data: ICallBackArgsType) => callback(data));
+      });
+
+    events.forEach(({ event, callback }) => {
+      subscription?.listen(event, (data: any) => callback(data));
+    });
     return () => {
       echo?.leaveChannel(channel);
       console.log("disconnected");
@@ -77,23 +82,21 @@ function usePrivateChannel<ICallBackArgsType>(
   }, [echo, _user, _active_user]);
 }
 
-
-function usePresenceChannel(
-  channel:string
-){
+function usePresenceChannel(channel: string) {
   const echo = useEcho();
-  useEffect(()=>{
-    echo?.join(channel)
-      .here((user:any)=>{
-        console.log("connected users",user);
+  useEffect(() => {
+    echo
+      ?.join(channel)
+      .here((user: any) => {
+        console.log("connected users", user);
       })
-      .joining((user:any)=>{
-        console.log("joining users",user);
-      })
-    return (()=>{
+      .joining((user: any) => {
+        console.log("joining users", user);
+      });
+    return () => {
       echo?.leaveChannel(channel);
-    })
-  },[echo])
+    };
+  }, [echo]);
 }
 
 export { useEcho, usePrivateChannel, usePresenceChannel };

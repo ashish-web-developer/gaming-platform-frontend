@@ -3,7 +3,7 @@ import type { FC } from "react";
 import type { User } from "@/types/user";
 
 // mui
-import { IconButton } from "@mui/material";
+import { IconButton, Button } from "@mui/material";
 
 // local components
 import ChatSidebar from "@/components/chat/chat-sidebar";
@@ -21,6 +21,7 @@ import {
   StyledChatInput,
   StyledChatContainerName,
   StyledEmojiPicker,
+  StyledPlayButton,
   // icons
   StyledEmojiIcon,
   StyledSendIcon,
@@ -47,6 +48,9 @@ import {
 import { user } from "@/store/slice/user.slice";
 import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 
+// helpers
+import { Axios } from "@/helpers/axios";
+
 
 const ChatContainer: FC<{
   users: User[];
@@ -59,6 +63,14 @@ const ChatContainer: FC<{
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
   const _showEmoji = useAppSelector(showEmoji);
+
+
+  const handlePlay = ()=>{
+    Axios.post('/play-game-event',{
+        receiver_id:_active_user?.id,
+        game:"memory_game"
+    })
+  }
   return (
     <>
       <StyledContainer>
@@ -147,29 +159,44 @@ const ChatContainer: FC<{
                 })}
               </StyledChatItem>
               <StyledChatItem $flexBasis={"100px"} $flexShrink={0} $isFlex={true} $alignItems="center">
-                <StyledAudioIcon/>
-                <IconButton onClick = {()=>{
-                  dispatch(updateShowEmoji(!_showEmoji))
+                <div style = {{
+                  height:"60px",
+                  display:"flex",
+                  width:"100%",
+                  gap:"20px"
                 }}>
-                  <StyledEmojiIcon/>
-                </IconButton>
-                <StyledChatInput
-                  value = {_chat_input_value}
-                  onChange = {(event)=>dispatch(updateChatInputValue(event.target.value))}
-                  onKeyDown={(event) => {
-                    if ((event.ctrlKey || event.metaKey) && event.key == "Enter") {
-                      dispatch(sendMessage());
+                  <IconButton>
+                    <StyledAudioIcon/>
+                  </IconButton>
+                  <IconButton onClick = {()=>{
+                    dispatch(updateShowEmoji(!_showEmoji))
+                  }}>
+                    <StyledEmojiIcon/>
+                  </IconButton>
+                  <StyledChatInput
+                    value = {_chat_input_value}
+                    onChange = {(event)=>dispatch(updateChatInputValue(event.target.value))}
+                    onKeyDown={(event) => {
+                      if ((event.ctrlKey || event.metaKey) && event.key == "Enter") {
+                        dispatch(sendMessage());
+                      }
+                    }}
+                    fullWidth={true}
+                    disableUnderline={true}
+                    placeholder="Write Here"
+                    endAdornment={
+                      <>
+                        <IconButton disabled = {_is_submitting} onClick={()=>dispatch(sendMessage())}>
+                          <StyledSendIcon />
+                        </IconButton>
+                      </>
                     }
-                  }}
-                  fullWidth={true}
-                  disableUnderline={true}
-                  placeholder="Write Here"
-                  endAdornment={
-                    <IconButton disabled = {_is_submitting} onClick={()=>dispatch(sendMessage())}>
-                      <StyledSendIcon />
-                    </IconButton>
-                  }
-                />
+                  />
+                  <StyledPlayButton onClick={handlePlay}>
+                    Let's Play
+                  </StyledPlayButton>
+
+                </div>
               </StyledChatItem>
             </>
           )}
