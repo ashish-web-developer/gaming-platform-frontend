@@ -4,16 +4,12 @@ import { Autocomplete, Paper, TextField, Box } from "@mui/material";
 
 // icon
 import SearchIcon from "@mui/icons-material/Search";
-const StyledSearchbarContainer = styled(Box)`
-  flex-grow: 1;
-  flex-basis: 8%;
-`;
 const StyledSearchbar = styled(Autocomplete)`
   background-color: ${({ theme }) => theme.palette.secondary.main};
   border-radius: 16px;
   border: 3px solid ${({ theme }) => theme.palette.border.searchbar};
   & .MuiAutocomplete-inputRoot {
-    color: ${({theme})=>theme.palette.text.main} !important;
+    color: ${({ theme }) => theme.palette.text.main} !important;
   }
 `;
 
@@ -33,13 +29,12 @@ const StyledSearchIcon = styled(SearchIcon)`
 `;
 
 const StyledPaperComponent = styled(Paper)`
-  background-color: ${({theme})=>theme.palette.primary.main} !important;
+  background-color: ${({ theme }) => theme.palette.primary.main} !important;
   padding: 12px;
   border-radius: 16px;
 `;
 
 export {
-  StyledSearchbarContainer,
   StyledSearchbar,
   StyledTextField,
   StyledSearchIcon,

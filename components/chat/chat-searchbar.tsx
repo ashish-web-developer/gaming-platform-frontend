@@ -12,7 +12,6 @@ import Profile from "@/components/chat/profile";
 import { useTheme } from "styled-components";
 // styled components
 import {
-  StyledSearchbarContainer,
   StyledSearchbar,
   StyledTextField,
   StyledSearchIcon,
@@ -37,53 +36,50 @@ const ChatSearchbar: FC = () => {
   );
   const [options, setOptions] = useSearchedUserOptions(searchedInputValue);
   return (
-    <StyledSearchbarContainer>
-      <StyledSearchbar
-        disablePortal
-        id="combo-box-demo"
-        options={options}
-        getOptionLabel={(option: any) => option.name}
-        PaperComponent={CustomPaperComponent}
-        onBlur={() => {
-          setOptions([]);
-        }}
-        renderOption={(props, option: any) => {
-          return (
-            <Profile
-              key={uuidv4()}
-              user={option}
-              width={50}
-              height={50}
-              backgroundColor={theme.palette.primary.light}
-              isSearch={true}
-              disableElevation={false}
-            />
-          );
-        }}
-        renderInput={(params) => {
-          return (
-            <StyledTextField
-              sx={{
-                "& fieldset": { border: "none" },
-              }}
-              placeholder="Search"
-              onInput={(event: any) =>
-                setSearchedInputValue(event.target.value)
-              }
-              {...params}
-              InputProps={{
-                ...params.InputProps,
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <StyledSearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          );
-        }}
-      />
-    </StyledSearchbarContainer>
+    <StyledSearchbar
+      disablePortal
+      id="combo-box-demo"
+      options={options}
+      getOptionLabel={(option: any) => option.name}
+      fullWidth
+      PaperComponent={CustomPaperComponent}
+      onBlur={() => {
+        setOptions([]);
+      }}
+      renderOption={(props, option: any) => {
+        return (
+          <Profile
+            key={uuidv4()}
+            user={option}
+            width={50}
+            height={50}
+            backgroundColor={theme.palette.primary.light}
+            isSearch={true}
+            disableElevation={false}
+          />
+        );
+      }}
+      renderInput={(params) => {
+        return (
+          <StyledTextField
+            sx={{
+              "& fieldset": { border: "none" },
+            }}
+            placeholder="Search"
+            onInput={(event: any) => setSearchedInputValue(event.target.value)}
+            {...params}
+            InputProps={{
+              ...params.InputProps,
+              endAdornment: (
+                <InputAdornment position="end">
+                  <StyledSearchIcon />
+                </InputAdornment>
+              ),
+            }}
+          />
+        );
+      }}
+    />
   );
 };
 
