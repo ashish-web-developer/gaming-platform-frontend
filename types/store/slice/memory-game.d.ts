@@ -20,6 +20,7 @@ type InitialState = {
       })
     | null;
   gaming_user: User;
+  show_snackbar:boolean;
 };
 
 export { InitialState, MemoryGameCardEventArgs, MemoryGameCardEventRespose };
