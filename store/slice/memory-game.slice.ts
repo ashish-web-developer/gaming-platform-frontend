@@ -34,6 +34,7 @@ const initialState: InitialState = {
   lastFlippedCard: null,
   gaming_user: null,
   show_snackbar: false,
+  room_id: null,
 };
 export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
@@ -55,12 +56,13 @@ export const memoryGameSlice = createSlice({
       state.lastFlippedCard = action.payload;
     },
     updateGamingUser: (state, action: PayloadAction<User | null>) => {
-      if (action.payload) {
-        state.show_snackbar = true;
-      } else {
-        state.show_snackbar = false;
-      }
       state.gaming_user = action.payload;
+    },
+    updateShowSnackbar: (state, action: PayloadAction<boolean>) => {
+      state.show_snackbar = action.payload;
+    },
+    updateRoomId: (state, action: PayloadAction<string | null>) => {
+      state.room_id = action.payload;
     },
   },
 });
@@ -70,6 +72,8 @@ export const {
   removeCard,
   updateLastFlippedCard,
   updateGamingUser,
+  updateShowSnackbar,
+  updateRoomId,
 } = memoryGameSlice.actions;
 export const cardList = (state: RootState) => state.memoryGame.cardList;
 export const lastFlippedCard = (state: RootState) =>
@@ -77,4 +81,5 @@ export const lastFlippedCard = (state: RootState) =>
 export const gaming_user = (state: RootState) => state.memoryGame.gaming_user;
 export const show_snackbar = (state: RootState) =>
   state.memoryGame.show_snackbar;
+export const room_id = (state: RootState) => state.memoryGame.room_id;
 export default memoryGameSlice.reducer;

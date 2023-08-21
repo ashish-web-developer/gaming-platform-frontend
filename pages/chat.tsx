@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useEffect, createContext } from "react";
 // types
 import type { NextPage, GetServerSideProps } from "next";
@@ -34,7 +35,11 @@ import {
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
-import { updateGamingUser } from "@/store/slice/memory-game.slice";
+import {
+  updateGamingUser,
+  updateShowSnackbar,
+  updateRoomId,
+} from "@/store/slice/memory-game.slice";
 
 // hooks
 import { useConversation } from "@/hooks/chat";
@@ -48,6 +53,7 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   isMobile,
 }) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   usePrivateChannel(`chat.${_user.id}`, [
@@ -60,9 +66,23 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
       },
     },
     {
-      event: "PlayGameEvent",
-      callback: (data: { game: string; user: User }) => {
+      event: "PlayGameInvitationEvent",
+      callback: (data: { game: string; user: User; room_id: string }) => {
+        dispatch(updateShowSnackbar(true));
         dispatch(updateGamingUser(data.user));
+        dispatch(updateRoomId(data.room_id));
+      },
+    },
+    {
+      event: "AcceptGameInvitationEvent",
+      callback: (data: { user: User; is_accepted: boolean }) => {
+        if (data.is_accepted) {
+          dispatch(updateGamingUser(data.user));
+          router.push("/memory-game");
+        } else {
+          dispatch(updateGamingUser(null));
+          dispatch(updateRoomId(null));
+        }
       },
     },
   ]);
