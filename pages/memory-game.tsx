@@ -31,6 +31,12 @@ import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 // uuidv4
 import { v4 as uuidv4 } from "uuid";
 
+import { useAppSelector } from "@/hooks/redux";
+import { room_id } from "@/store/slice/memory-game.slice";
+
+// hooks
+import { usePresenceChannel } from "@/hooks/pusher";
+
 const gameComplexity = 14;
 
 const cardArray: GetRandomCard[] = new Array(gameComplexity);
@@ -45,6 +51,8 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [isPlay, setPlay] = useState(false);
+  const _room_id = useAppSelector(room_id);
+  usePresenceChannel(`game.${_room_id}`);
 
   return (
     <>
@@ -55,7 +63,7 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
               return (
                 <Grid key={uuidv4()} xs={6} sm={2} item>
                   <Card
-                    cardId={uuidv4()}
+                    cardId={`deck-${i}`}
                     files={files}
                     width={isMobile ? 150 : 200}
                     {...element}
@@ -73,7 +81,7 @@ const MemoryGame: NextPage<Props> = ({ files }) => {
               return (
                 <SwiperSlide key={uuidv4()}>
                   <Card
-                    cardId={uuidv4()}
+                    cardId={`card-${i}`}
                     files={files}
                     width={isMobile ? 150 : 200}
                     isPlay={isPlay}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // helpers
 import { PusherAxios } from "@/helpers/axios";
@@ -12,7 +12,7 @@ import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
 
 function useEcho(): Echo | null {
-  const echoRef = useRef<null | Echo>(null);
+  const [echo, setEcho] = useState<null | Echo>(null);
   useEffect(() => {
     window.pusher = Pusher;
     const echo = new Echo({
@@ -40,9 +40,9 @@ function useEcho(): Echo | null {
         };
       },
     });
-    echoRef.current = echo;
+    setEcho(echo);
   }, []);
-  return echoRef.current;
+  return echo;
 }
 
 /**

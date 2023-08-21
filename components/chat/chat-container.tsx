@@ -3,7 +3,7 @@ import type { FC } from "react";
 import type { User } from "@/types/user";
 
 // mui
-import { IconButton, Button } from "@mui/material";
+import { IconButton } from "@mui/material";
 
 // local components
 import ChatSidebar from "@/components/chat/chat-sidebar";
@@ -46,11 +46,15 @@ import {
   updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
 
+import { updateRoomId } from "@/store/slice/memory-game.slice";
 import { user } from "@/store/slice/user.slice";
 import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 
 // helpers
 import { Axios } from "@/helpers/axios";
+
+// helper package
+import { v4 as uuidv4 } from "uuid";
 
 const ChatContainer: FC<{
   users: User[];
@@ -65,10 +69,13 @@ const ChatContainer: FC<{
   const _showEmoji = useAppSelector(showEmoji);
 
   const handlePlay = () => {
-    Axios.post("/play-game-event", {
+    const room_id = uuidv4();
+    Axios.post("/game/game-invitation", {
       receiver_id: _active_user?.id,
       game: "memory_game",
+      room_id,
     });
+    dispatch(updateRoomId(room_id));
   };
   return (
     <>
