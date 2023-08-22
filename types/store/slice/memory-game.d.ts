@@ -19,9 +19,6 @@ type InitialState = {
         id: string;
       })
     | null;
-  gaming_user: User;
-  show_snackbar: boolean;
-  room_id: string | null;
 };
 
 export { InitialState, MemoryGameCardEventArgs, MemoryGameCardEventRespose };

@@ -18,12 +18,11 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
-  updateGamingUser,
   gaming_user,
   show_snackbar,
-  updateShowSnackbar,
-  updateRoomId,
-} from "@/store/slice/memory-game.slice";
+  updateGamingUser,
+  acceptInvitation,
+} from "@/store/slice/game.slice";
 
 // package
 import { Axios } from "@/helpers/axios";
@@ -38,17 +37,6 @@ const Snackbar: FC<{
   const _gaming_user = useAppSelector(gaming_user);
   const _show_snackbar = useAppSelector(show_snackbar);
 
-  const handleAccept = async (is_accepted: boolean) => {
-    await Axios.post("/game/accept-invitation", {
-      receiver_id: _gaming_user?.id,
-      is_accepted,
-    });
-    if (is_accepted) {
-      router.push("/memory-game");
-    } else {
-      dispatch(updateRoomId(null));
-    }
-  };
   return (
     <MuiSnackbar open={_show_snackbar} anchorOrigin={{ vertical, horizontal }}>
       <StyledSnackbarContainer elevation={2}>
@@ -63,18 +51,14 @@ const Snackbar: FC<{
           <StyledButtonContainer>
             <StyledButton
               onClick={() => {
-                handleAccept(true);
-                dispatch(updateShowSnackbar(false));
+                dispatch(acceptInvitation({ is_accepted: true }));
+                router.push("/memory-game");
               }}
             >
               Accept
             </StyledButton>
             <StyledButton
-              onClick={() => {
-                handleAccept(false);
-                dispatch(updateGamingUser(null));
-                dispatch(updateShowSnackbar(false));
-              }}
+              onClick={() => dispatch(acceptInvitation({ is_accepted: false }))}
             >
               Deny
             </StyledButton>

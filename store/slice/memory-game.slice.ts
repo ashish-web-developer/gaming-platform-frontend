@@ -9,7 +9,6 @@ import type {
   MemoryGameCardEventRespose,
 } from "@/types/store/slice/memory-game";
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
-import type { User } from "@/types/user";
 
 // helpers
 import { Axios } from "@/helpers/axios";
@@ -32,9 +31,6 @@ export const memoryGameCardEvent = createAsyncThunk<
 const initialState: InitialState = {
   cardList: {},
   lastFlippedCard: null,
-  gaming_user: null,
-  show_snackbar: false,
-  room_id: null,
 };
 export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
@@ -55,31 +51,12 @@ export const memoryGameSlice = createSlice({
     ) => {
       state.lastFlippedCard = action.payload;
     },
-    updateGamingUser: (state, action: PayloadAction<User | null>) => {
-      state.gaming_user = action.payload;
-    },
-    updateShowSnackbar: (state, action: PayloadAction<boolean>) => {
-      state.show_snackbar = action.payload;
-    },
-    updateRoomId: (state, action: PayloadAction<string | null>) => {
-      state.room_id = action.payload;
-    },
   },
 });
 
-export const {
-  updateCard,
-  removeCard,
-  updateLastFlippedCard,
-  updateGamingUser,
-  updateShowSnackbar,
-  updateRoomId,
-} = memoryGameSlice.actions;
+export const { updateCard, removeCard, updateLastFlippedCard } =
+  memoryGameSlice.actions;
 export const cardList = (state: RootState) => state.memoryGame.cardList;
 export const lastFlippedCard = (state: RootState) =>
   state.memoryGame.lastFlippedCard;
-export const gaming_user = (state: RootState) => state.memoryGame.gaming_user;
-export const show_snackbar = (state: RootState) =>
-  state.memoryGame.show_snackbar;
-export const room_id = (state: RootState) => state.memoryGame.room_id;
 export default memoryGameSlice.reducer;
