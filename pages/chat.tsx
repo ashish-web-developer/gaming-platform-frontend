@@ -38,7 +38,8 @@ import { active_user } from "@/store/slice/chat.slice";
 import {
   updateGamingUser,
   updateRoomId,
-  updateShowSnackbar,
+  updateShowDeniedSnackbar,
+  updateShowInvitationSnackbar,
 } from "@/store/slice/game.slice";
 
 // hooks
@@ -68,7 +69,7 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
     {
       event: "PlayGameInvitationEvent",
       callback: (data: { game: string; user: User; room_id: string }) => {
-        dispatch(updateShowSnackbar(true));
+        dispatch(updateShowInvitationSnackbar(true));
         dispatch(updateGamingUser(data.user));
         dispatch(updateRoomId(data.room_id));
       },
@@ -82,6 +83,7 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
         } else {
           dispatch(updateGamingUser(null));
           dispatch(updateRoomId(null));
+          dispatch(updateShowDeniedSnackbar(true));
         }
       },
     },

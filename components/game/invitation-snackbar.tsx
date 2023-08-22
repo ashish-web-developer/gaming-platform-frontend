@@ -13,21 +13,19 @@ import {
   SnackbarText,
   StyledButtonContainer,
   StyledButton,
-} from "@/styles/components/common/snackbar.style";
+} from "@/styles/components/game/invitation-snackbar.style";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
   gaming_user,
-  show_snackbar,
-  updateGamingUser,
+  show_invitation_snackbar,
   acceptInvitation,
 } from "@/store/slice/game.slice";
 
 // package
-import { Axios } from "@/helpers/axios";
 
-const Snackbar: FC<{
+const InvitationSnackbar: FC<{
   vertical: "top" | "bottom";
   horizontal: "left" | "center" | "right";
 }> = ({ vertical, horizontal }) => {
@@ -35,10 +33,13 @@ const Snackbar: FC<{
   const router = useRouter();
   const dispatch = useAppDispatch();
   const _gaming_user = useAppSelector(gaming_user);
-  const _show_snackbar = useAppSelector(show_snackbar);
+  const _show_invitation_snackbar = useAppSelector(show_invitation_snackbar);
 
   return (
-    <MuiSnackbar open={_show_snackbar} anchorOrigin={{ vertical, horizontal }}>
+    <MuiSnackbar
+      open={_show_invitation_snackbar}
+      anchorOrigin={{ vertical, horizontal }}
+    >
       <StyledSnackbarContainer elevation={2}>
         <StyledSnackbarContainerItem $flexBasis="100px">
           <Image alt="gaming" width={70} height={70} src="/gaming.png" />
@@ -69,4 +70,4 @@ const Snackbar: FC<{
   );
 };
 
-export default Snackbar;
+export default InvitationSnackbar;
