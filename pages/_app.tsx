@@ -17,7 +17,7 @@ import getTheme from 'theme'
 
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const theme = getTheme("light");
+  const theme = getTheme("dark");
   return (
     <ThemeProvider theme = {theme}>
       <Provider store = {store}>

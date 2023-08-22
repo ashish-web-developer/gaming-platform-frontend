@@ -1,7 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
 import { useState, useEffect } from "react";
 // Mui
-import { Grid, Box, useMediaQuery, useTheme, Button } from "@mui/material";
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 // Local components
 import Card from "@/components/memory-game/card";
@@ -32,7 +32,7 @@ import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 import { v4 as uuidv4 } from "uuid";
 
 import { useAppSelector } from "@/hooks/redux";
-import { room_id } from "@/store/slice/memory-game.slice";
+import { room_id } from "@/store/slice/game.slice";
 
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher";

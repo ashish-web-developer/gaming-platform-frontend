@@ -43,18 +43,11 @@ import {
   // actions
   sendMessage,
   updateChatInputValue,
-  updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
 
-import { updateRoomId } from "@/store/slice/memory-game.slice";
 import { user } from "@/store/slice/user.slice";
 import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
-
-// helpers
-import { Axios } from "@/helpers/axios";
-
-// helper package
-import { v4 as uuidv4 } from "uuid";
+import { sending_invitation, sendInvitation } from "@/store/slice/game.slice";
 
 const ChatContainer: FC<{
   users: User[];
@@ -64,19 +57,11 @@ const ChatContainer: FC<{
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _active_user_conversation = useAppSelector(active_user_conversation);
+  const _sending_invitation = useAppSelector(sending_invitation);
   const _is_submitting = useAppSelector(is_submitting);
   const _chat_input_value = useAppSelector(chat_input_value);
   const _showEmoji = useAppSelector(showEmoji);
 
-  const handlePlay = () => {
-    const room_id = uuidv4();
-    Axios.post("/game/game-invitation", {
-      receiver_id: _active_user?.id,
-      game: "memory_game",
-      room_id,
-    });
-    dispatch(updateRoomId(room_id));
-  };
   return (
     <>
       <Snackbar vertical="top" horizontal="right" />
@@ -222,8 +207,12 @@ const ChatContainer: FC<{
                       </>
                     }
                   />
-                  <StyledPlayButton onClick={handlePlay}>
-                    Let's Play
+                  <StyledPlayButton
+                    onClick={() =>
+                      dispatch(sendInvitation({ game: "memory-game" }))
+                    }
+                  >
+                    {_sending_invitation ? "Sending" : "Let's Play"}
                   </StyledPlayButton>
                 </div>
               </StyledChatItem>

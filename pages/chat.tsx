@@ -37,9 +37,9 @@ import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
 import {
   updateGamingUser,
-  updateShowSnackbar,
   updateRoomId,
-} from "@/store/slice/memory-game.slice";
+  updateShowSnackbar,
+} from "@/store/slice/game.slice";
 
 // hooks
 import { useConversation } from "@/hooks/chat";
