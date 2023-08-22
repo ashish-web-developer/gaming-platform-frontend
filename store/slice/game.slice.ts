@@ -59,7 +59,7 @@ export const acceptInvitation = createAsyncThunk<
         receiver_id: state.game.gaming_user?.id,
         is_accepted,
       });
-      dispatch(updateShowSnackbar(false));
+      dispatch(updateShowInvitationSnackbar(false));
       if (!is_accepted) updateGamingUser(null);
       return response.data;
     } catch (error) {
@@ -71,7 +71,8 @@ export const acceptInvitation = createAsyncThunk<
 const initialState: InitialState = {
   gaming_user: null,
   room_id: null,
-  show_snackbar: false,
+  show_invitation_snackbar: false,
+  show_denied_snackbar: false,
   sending_invitation: false,
 };
 const gameSlice = createSlice({
@@ -84,8 +85,11 @@ const gameSlice = createSlice({
     updateRoomId: (state, action: PayloadAction<string | null>) => {
       state.room_id = action.payload;
     },
-    updateShowSnackbar: (state, action: PayloadAction<boolean>) => {
-      state.show_snackbar = action.payload;
+    updateShowInvitationSnackbar: (state, action: PayloadAction<boolean>) => {
+      state.show_invitation_snackbar = action.payload;
+    },
+    updateShowDeniedSnackbar: (state, action: PayloadAction<boolean>) => {
+      state.show_denied_snackbar = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -104,8 +108,15 @@ const gameSlice = createSlice({
 export default gameSlice.reducer;
 export const gaming_user = (state: RootState) => state.game.gaming_user;
 export const room_id = (state: RootState) => state.game.room_id;
-export const show_snackbar = (state: RootState) => state.game.show_snackbar;
+export const show_invitation_snackbar = (state: RootState) =>
+  state.game.show_invitation_snackbar;
+export const show_denied_snackbar = (state: RootState) =>
+  state.game.show_denied_snackbar;
 export const sending_invitation = (state: RootState) =>
   state.game.sending_invitation;
-export const { updateGamingUser, updateRoomId, updateShowSnackbar } =
-  gameSlice.actions;
+export const {
+  updateGamingUser,
+  updateRoomId,
+  updateShowInvitationSnackbar,
+  updateShowDeniedSnackbar,
+} = gameSlice.actions;

@@ -3,7 +3,8 @@ import type { User } from "@/types/user";
 type InitialState = {
   gaming_user: User | null;
   room_id: string | null;
-  show_snackbar: boolean;
+  show_invitation_snackbar: boolean;
+  show_denied_snackbar: boolean;
   sending_invitation: boolean;
 };
 

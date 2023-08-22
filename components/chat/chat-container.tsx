@@ -8,7 +8,8 @@ import { IconButton } from "@mui/material";
 // local components
 import ChatSidebar from "@/components/chat/chat-sidebar";
 import ChatAvatar from "@/components/chat/chat-avatar";
-import Snackbar from "@/components/common/snackbar";
+import InvitationSnackbar from "@/components/game/invitation-snackbar";
+import DeniedSnackbar from "@/components/game/denied-snackbar";
 
 // styled components
 import {
@@ -64,7 +65,8 @@ const ChatContainer: FC<{
 
   return (
     <>
-      <Snackbar vertical="top" horizontal="right" />
+      <InvitationSnackbar vertical="top" horizontal="right" />
+      <DeniedSnackbar vertical="top" horizontal="right" />
       <StyledContainer>
         <StyledContainerItem $flexBasis={"400px"}>
           <ChatSidebar users={users} />
