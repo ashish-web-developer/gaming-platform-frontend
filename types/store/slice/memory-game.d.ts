@@ -10,6 +10,16 @@ type MemoryGameCardEventRespose = {
   message: string;
 };
 
+
+type IGetCardsResponse = {
+  deck:GetRandomCard[]
+}
+
+type IGetCardRequest = {
+  game_complexity:number;
+}
+
+
 type InitialState = {
   cardList: {
     [key: string]: boolean;
@@ -19,6 +29,12 @@ type InitialState = {
         id: string;
       })
     | null;
+  is_gaming_user_in:boolean;
+  show_rules_tooltip:boolean;
+  rules_tooltip_text:[string,string]|null;
+  current_rule_index:number;
+  game_rules_list:[string,string][];
+  show_audio_play_modal:boolean;
 };
 
-export { InitialState, MemoryGameCardEventArgs, MemoryGameCardEventRespose };
+export { InitialState, MemoryGameCardEventArgs, MemoryGameCardEventRespose , IGetCardRequest, IGetCardsResponse};

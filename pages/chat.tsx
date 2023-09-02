@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, createContext } from "react";
+import { useEffect, createContext ,useContext} from "react";
 // types
 import type { NextPage, GetServerSideProps } from "next";
 import type Colors from "@/types/data/colors";
@@ -46,13 +46,25 @@ import {
 import { useConversation } from "@/hooks/chat";
 import { usePrivateChannel } from "@/hooks/pusher";
 
-export const ColorContext = createContext<Colors>([]);
+// theme provider
+import { ThemeProvider } from "styled-components";
+
+// theme
+import getTheme from "theme/chat.theme";
+
+// context
+import { ThemeMode } from "context";
+import { ColorsContext } from "context";
+
+
 
 const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   colors,
   users,
   isMobile,
 }) => {
+  const mode = useContext(ThemeMode);
+  const theme = getTheme(mode);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const _user = useAppSelector(user);
@@ -98,14 +110,16 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   }, []);
   return (
     <>
+    <ThemeProvider theme = {theme}>
       <GlobalStyles />
-      <ColorContext.Provider value={colors}>
+      <ColorsContext.Provider value={colors}>
         {isMobile ? (
           <MobileChat users={users} />
         ) : (
           <ChatContainer users={users} />
         )}
-      </ColorContext.Provider>
+      </ColorsContext.Provider>
+    </ThemeProvider>
     </>
   );
 };

@@ -48,7 +48,12 @@ import {
 
 import { user } from "@/store/slice/user.slice";
 import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
-import { sending_invitation, sendInvitation } from "@/store/slice/game.slice";
+import {
+  // states
+  sending_invitation,
+  sendInvitation,
+  // actions
+} from "@/store/slice/game.slice";
 
 const ChatContainer: FC<{
   users: User[];

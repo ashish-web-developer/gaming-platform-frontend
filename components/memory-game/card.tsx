@@ -158,6 +158,7 @@ function useRandomImage(files: string[]) {
   const [backgroundImage, setBackgroundImage] = useState<string>("");
   useEffect(() => {
     setBackgroundImage(getRandomImage(files));
+    console.log("got rerendered");
   }, []);
   return backgroundImage;
 }

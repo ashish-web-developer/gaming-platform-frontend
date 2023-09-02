@@ -33,10 +33,9 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head >
-
           <link rel="preconnect" href="https://fonts.googleapis.com"/>
-          <link rel="preconnect" href="https://fonts.gstatic.com" />
-          <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Poppins:wght@400;500;600;700;800&family=Rubik+Distressed&family=Rubik+Moonrocks&display=swap" rel="stylesheet"></link>
+          <link rel="preconnect" href="https://fonts.gstatic.com"/>
+          <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Monofett&family=Monoton&family=Poppins:wght@400;500;600;700;800&family=Rubik+Distressed&family=Rubik+Moonrocks&family=Russo+One&display=swap" rel="stylesheet"></link>
         </Head>
         <body>
           <Main />

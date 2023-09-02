@@ -6,6 +6,7 @@ type InitialState = {
   show_invitation_snackbar: boolean;
   show_denied_snackbar: boolean;
   sending_invitation: boolean;
+  is_proposal_sender:boolean;
 };
 
 type ISendInvitationResponse = {
