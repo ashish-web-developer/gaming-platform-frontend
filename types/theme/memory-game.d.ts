@@ -8,11 +8,15 @@ type CustomMemoryGameThemePalette = {
       light:string;
     }
     fontFamily:{
-      primary:{
-        monofett:string;
-        russo:string;
-        bangers:string;
-      }
+      poppins:string;
+      monofett:string;
+      russo:string;
+      bangers:string;
+      bungee:string;
+      blackOpsOne:string;
+    },
+    background:{
+      main:string;
     }
   },
 }

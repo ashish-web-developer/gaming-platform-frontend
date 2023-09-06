@@ -1,8 +1,15 @@
 
-import styled from "styled-components";
+import styled, {createGlobalStyle} from "styled-components";
 
 // Mui
 import { Box ,Button} from "@mui/material";
+
+
+const GlobalStyles = createGlobalStyle`
+    body {
+        background-color: ${({theme})=>theme.palette.background.main};
+    }
+`;
 
 const color = {
   primary: "rgb(3 13 9)",
@@ -54,4 +61,5 @@ export {
     StyledContainer,
     WelcomeScreenContainer,
     PlayButton,
+    GlobalStyles
 }

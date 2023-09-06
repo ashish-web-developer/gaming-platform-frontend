@@ -5,7 +5,7 @@ import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 // Local components
 import Card from "@/components/memory-game/card";
-import MemoryGame from "@/components/memory-game";
+import MemoryGameContainer from "@/components/memory-game/memory-game";
 
 // helpers
 import { getRandomCard } from "@/helpers/memory-game/game";
@@ -15,6 +15,7 @@ import {
   StyledContainer,
   WelcomeScreenContainer,
   PlayButton,
+  GlobalStyles
 } from "@/styles/pages/memory-game.style";
 
 // files readers
@@ -112,7 +113,8 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors ,rules}) => {
     <UttranceContext.Provider value = {speechUttranceRef.current} >
       <ColorsContext.Provider value={colors}>
         <ThemeProvider theme={theme}>
-          <MemoryGame />
+          <GlobalStyles/>
+          <MemoryGameContainer/>
         </ThemeProvider>
       </ColorsContext.Provider>
     </UttranceContext.Provider>

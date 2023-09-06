@@ -14,11 +14,15 @@ const lightTheme:CustomThemePalette= {
 
     },
     fontFamily:{
-      primary:{
-        monofett:"'Monofett', monospace",
-        russo:"'Russo One', sans-serif",
-        bangers:"'Bangers', cursive"
-      }
+      poppins: "'Poppins', sans-serif",
+      monofett:"'Monofett', monospace",
+      russo:"'Russo One', sans-serif",
+      bangers:"'Bangers', cursive",
+      bungee: "'Bungee', cursive",
+      blackOpsOne:"'Black Ops One', cursive"
+    },
+    background:{
+      main:"#FFFFFF"
     }
   }
 };
