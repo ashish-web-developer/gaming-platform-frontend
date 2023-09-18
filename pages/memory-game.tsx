@@ -4,8 +4,7 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 // Local components
-import Card from "@/components/memory-game/card";
-import MemoryGame from "@/components/memory-game";
+import MemoryGame from "@/components/memory-game/memory-game";
 
 // helpers
 import { getRandomCard } from "@/helpers/memory-game/game";
@@ -77,6 +76,7 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors ,rules}) => {
   const dispatch = useAppDispatch();
   const mode = useContext(ThemeMode);
   const theme = getTheme(mode);
+  const speechUttranceRef = useRef<MutableSpeechUtterance|null>(null);
   const cardArray = useRef<GetRandomCard[] | null>(null);
   const [isPlay, setPlay] = useState(false);
   const _room_id = useAppSelector(room_id);
@@ -85,7 +85,6 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors ,rules}) => {
   const counterIntervalRef = useRef<NodeJS.Timer | null>(null);
   usePresenceChannel(`game.${_room_id}`);
   const _is_proposal_sender = useAppSelector(is_proposal_sender);
-  const speechUttranceRef = useRef<MutableSpeechUtterance|null>(null);
   if (cardArray.current == null) {
     cardArray.current = cardArrayInitializaer(14);
   }

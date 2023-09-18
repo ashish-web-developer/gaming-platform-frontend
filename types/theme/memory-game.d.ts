@@ -1,18 +1,23 @@
 type CustomMemoryGameThemePalette = {
   palette: {
     primary:{
-      main:string
+      main:string;
+      info:string;
+      background:string;
+      start_banner_background:string
+      mobile_start_banner_background:string
     },
     secondary:{
       main:string;
-      light:string;
-    }
+      info:string;
+      red:string;
+      green:string;
+    },
     fontFamily:{
-      primary:{
-        monofett:string;
-        russo:string;
-        bangers:string;
-      }
+      poppins:string;
+    },
+    breakpoints:{
+      mobile:string;
     }
   },
 }

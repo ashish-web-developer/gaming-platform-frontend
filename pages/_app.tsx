@@ -15,7 +15,7 @@ import { ThemeMode } from "context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeMode.Provider value="light">
+    <ThemeMode.Provider value="dark">
       <Provider store={store}>
         <CsrfTokenProvider>
           <UserProvider>

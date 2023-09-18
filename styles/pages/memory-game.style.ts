@@ -1,5 +1,5 @@
 
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 // Mui
 import { Box ,Button} from "@mui/material";
@@ -48,6 +48,7 @@ const PlayButton = styled(Button)`
     background-color: ${color.button};
   }
 `;
+
 
 
 export {
