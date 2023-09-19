@@ -126,6 +126,19 @@ const StyledChatContentContainer = styled.div`
     display:flex;
     flex-direction:column;
     gap:20px;
+    &::-webkit-scrollbar {
+      width: 8px; /* Adjust the width of the scrollbar as needed */
+    }
+    
+    &::-webkit-scrollbar-track {
+      background-color: ${({theme})=>theme.palette.primary.main}; /* Change this to the desired background color */
+    }
+    /* Change the color of the scrollbar thumb (draggable part) */
+    &::-webkit-scrollbar-thumb:vertical {
+      background-color: ${({theme})=>theme.palette.secondary.info}; /* Change this to the desired thumb color */
+      border-radius: 6px; /* Round the corners of the thumb */
+    }
+    padding-top:100px;
 `
 
 const StyledChatsContainer = styled.div<IStyledChatsContainer>`
