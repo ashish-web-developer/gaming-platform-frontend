@@ -17,8 +17,9 @@ const StyledSnackbarContainer = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
+  z-index: 1052;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 100%;
+    width: 90%;
   }
 `;
 const StyledUserAvatar = styled.div`

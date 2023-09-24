@@ -22,13 +22,16 @@ const StyledContainer = styled.div`
 `;
 
 const StyledChatContainer = styled.div`
-  width: 100%;
-  height: 80%;
-  position: absolute;
-  bottom: 80px;
-  z-index: 4;
-  display: flex;
-  justify-content: center;
+  display: none;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    width: 100%;
+    height: 80%;
+    position: absolute;
+    bottom: 80px;
+    z-index: 4;
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const StyledContentContainer = styled.div`
@@ -134,6 +137,18 @@ const StyledFabCta = styled(Fab)`
   }
 `;
 
+const StyledInfoSnackbarContainer = styled.div`
+  display: none;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    position: absolute;
+    bottom: 60px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
+
 export default GlobalStyles;
 export {
   StyledContainer,
@@ -146,4 +161,5 @@ export {
   StyledBackgroundCircleTwo,
   StyledMainText,
   StyledFabCta,
+  StyledInfoSnackbarContainer,
 };

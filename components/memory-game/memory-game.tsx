@@ -20,6 +20,7 @@ import GlobalStyles, {
   StyledChatContainer,
   StyledContentContainer,
   StyledFabCta,
+  StyledInfoSnackbarContainer
 } from "@/styles/components/memory-game/memory-game.style";
 
 // styled theme
@@ -49,11 +50,14 @@ const MemoryGame: FC = () => {
       <StyledContainer>
         <StyledBackgroundCircleOne />
         <StyledBackgroundCircleTwo />
-        {isMobile && _show_mobile_chat && (
+        { _show_mobile_chat && (
           <StyledChatContainer>
             <Chat />
           </StyledChatContainer>
         )}
+        <StyledInfoSnackbarContainer>
+            <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
+        </StyledInfoSnackbarContainer>
         <StyledContentContainer>
           <StyledFabCta
             onClick={() => dispatch(updateShowMobileChat(!_show_mobile_chat))}
@@ -76,7 +80,6 @@ const MemoryGame: FC = () => {
             <StyledLeftContainer>
               <WelcomeBanner />
               <StartBanner />
-              <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
             </StyledLeftContainer>
             <StyledRightContainer>
               <Chat />

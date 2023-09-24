@@ -42,7 +42,7 @@ const StyledBannerBackgroundTwo = styled.div`
   top: 0;
   left: 0;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 129px;
+    width: 128px;
     height: 100%;
     background: ${({ theme }) =>
       theme.palette.primary.mobile_start_banner_background};
