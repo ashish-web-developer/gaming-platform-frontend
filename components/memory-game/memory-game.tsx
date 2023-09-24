@@ -17,6 +17,7 @@ import GlobalStyles, {
   StyledBackgroundCircleOne,
   StyledBackgroundCircleTwo,
   StyledMainText,
+  StyledChatContainer,
   StyledContentContainer,
   StyledFabCta,
 } from "@/styles/components/memory-game/memory-game.style";
@@ -27,10 +28,17 @@ import { useTheme } from "styled-components";
 import { useMediaQuery } from "@mui/material";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
+import {
+  show_mobile_chat,
+  updateShowMobileChat,
+} from "@/store/slice/memory-game.slice";
+
 const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
+  const dispatch = useAppDispatch();
+  const _show_mobile_chat = useAppSelector(show_mobile_chat);
   const isMobile = useMediaQuery(
     `(max-width:${theme.palette.breakpoints.mobile})`
   );
@@ -41,8 +49,15 @@ const MemoryGame: FC = () => {
       <StyledContainer>
         <StyledBackgroundCircleOne />
         <StyledBackgroundCircleTwo />
+        {isMobile && _show_mobile_chat && (
+          <StyledChatContainer>
+            <Chat />
+          </StyledChatContainer>
+        )}
         <StyledContentContainer>
-          <StyledFabCta>
+          <StyledFabCta
+            onClick={() => dispatch(updateShowMobileChat(!_show_mobile_chat))}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="28"

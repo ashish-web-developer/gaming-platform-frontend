@@ -21,6 +21,16 @@ const StyledContainer = styled.div`
   position: relative;
 `;
 
+const StyledChatContainer = styled.div`
+  width: 100%;
+  height: 80%;
+  position: absolute;
+  bottom: 80px;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+`;
+
 const StyledContentContainer = styled.div`
   width: 80rem;
   height: 100%;
@@ -118,6 +128,9 @@ const StyledFabCta = styled(Fab)`
     position: absolute;
     right: 20px;
     bottom: 20px;
+    &:hover {
+      background-color: ${({ theme }) => theme.palette.secondary.red};
+    }
   }
 `;
 
@@ -127,6 +140,7 @@ export {
   StyledGrid,
   StyledLeftContainer,
   StyledRightContainer,
+  StyledChatContainer,
   StyledContentContainer,
   StyledBackgroundCircleOne,
   StyledBackgroundCircleTwo,

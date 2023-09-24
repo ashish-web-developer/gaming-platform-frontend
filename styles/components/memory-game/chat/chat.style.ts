@@ -33,6 +33,9 @@ const StyledChatContainer = styled.div`
   background: ${({ theme }) => theme.palette.primary.main};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   z-index: 3;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    width: 90%;
+  }
 `;
 
 const StyledTopBackground = styled.div`
@@ -42,6 +45,7 @@ const StyledTopBackground = styled.div`
   top: 0px;
   z-index: 3;
   background: url("/memory-game/chat/background.svg");
+  background-repeat: no-repeat;
   background-size: 100%;
   display: flex;
   flex-direction: row;
@@ -70,7 +74,6 @@ const StyledChatAvatar = styled.div<IStyledChatAvatar>`
 `;
 
 const StyledVersusContainer = styled.div`
-  min-width: 200px;
   height: 38px;
   background-color: ${({ theme }) => theme.palette.primary.main};
   border-radius: 8px;
@@ -79,13 +82,11 @@ const StyledVersusContainer = styled.div`
   align-items: center;
   padding: 0 10px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    min-width: 126px;
     height: 23px;
   }
 `;
 
 const StyledVersusImage = styled(Image)`
-  flex-basis: 40px;
   flex-shrink: 0;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 25px;

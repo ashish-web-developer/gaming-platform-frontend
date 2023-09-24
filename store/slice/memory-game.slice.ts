@@ -53,6 +53,7 @@ const initialState: InitialState = {
   show_audio_play_modal: true,
   show_info_snackbar: false,
   is_gaming_user_leaving: false,
+  show_mobile_chat: false,
 };
 export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
@@ -97,6 +98,9 @@ export const memoryGameSlice = createSlice({
       state.is_gaming_user_leaving = action.payload;
       state.show_info_snackbar = action.payload;
     },
+    updateShowMobileChat: (state, action: PayloadAction<boolean>) => {
+      state.show_mobile_chat = action.payload;
+    },
   },
 });
 
@@ -111,6 +115,7 @@ export const {
   updateCurrentRuleIndex,
   updateShowInfoSnackbar,
   updateIsGamingUserLeaving,
+  updateShowMobileChat,
 } = memoryGameSlice.actions;
 export const cardList = (state: RootState) => state.memoryGame.cardList;
 export const lastFlippedCard = (state: RootState) =>
@@ -132,5 +137,7 @@ export const show_info_snackbar = (state: RootState) =>
 
 export const is_gaming_user_leaving = (state: RootState) =>
   state.memoryGame.is_gaming_user_leaving;
+export const show_mobile_chat = (state: RootState) =>
+  state.memoryGame.show_mobile_chat;
 
 export default memoryGameSlice.reducer;

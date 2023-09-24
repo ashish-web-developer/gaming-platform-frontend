@@ -35,6 +35,7 @@ type InitialState = {
   show_audio_play_modal: boolean;
   show_info_snackbar: boolean;
   is_gaming_user_leaving: boolean;
+  show_mobile_chat: boolean;
 };
 
 export {
