@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-//types 
+//types
 import type { User } from "@/types/user";
 
 // helpers
@@ -9,17 +9,22 @@ import { PusherAxios } from "@/helpers/axios";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 //redux
-import { useAppSelector , useAppDispatch} from "./redux";
+import { useAppSelector, useAppDispatch } from "./redux";
 import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
-import { gaming_user } from "@/store/slice/game.slice";
-import { is_gaming_user_in, updateIsGamingUserIn } from "@/store/slice/memory-game.slice";
+import { gaming_user, updateGamingUser } from "@/store/slice/game.slice";
+import {
+  updateIsGamingUserIn,
+  updateIsGamingUserLeaving,
+} from "@/store/slice/memory-game.slice";
 
-type User_ids = {
-  id:number;
-}[] | {
-  id:number;
-}
+type User_ids =
+  | {
+      id: number;
+    }[]
+  | {
+      id: number;
+    };
 
 function useEcho(): Echo | null {
   const [echo, setEcho] = useState<null | Echo>(null);
@@ -100,29 +105,51 @@ function usePresenceChannel(channel: string) {
     echo
       ?.join(channel)
       .here((user_ids: User_ids) => {
-        console.log(user_ids,_gaming_user);
-        if(Array.isArray(user_ids) && user_ids.some((user_id)=>user_id.id == _gaming_user?.id)){
+        if (
+          Array.isArray(user_ids) &&
+          user_ids.some((user_id) => user_id.id == _gaming_user?.id)
+        ) {
           dispatch(updateIsGamingUserIn(true));
-        }else if(!Array.isArray(user_ids) && user_ids.id == _gaming_user?.id){
+        } else if (
+          !Array.isArray(user_ids) &&
+          user_ids.id == _gaming_user?.id
+        ) {
           dispatch(updateIsGamingUserIn(true));
         }
       })
       .joining((user_ids: User_ids) => {
-        if(Array.isArray(user_ids) && user_ids.some((user_id)=>user_id.id == _gaming_user?.id)){
+        if (
+          Array.isArray(user_ids) &&
+          user_ids.some((user_id) => user_id.id == _gaming_user?.id)
+        ) {
           dispatch(updateIsGamingUserIn(true));
-        }else if(!Array.isArray(user_ids) && user_ids.id == _gaming_user?.id){
+        } else if (
+          !Array.isArray(user_ids) &&
+          user_ids.id == _gaming_user?.id
+        ) {
           dispatch(updateIsGamingUserIn(true));
         }
-        console.log(user_ids,_gaming_user);
-      }).leaving((user_ids:{id:number}[])=>{
-        if(Array.isArray(user_ids) && user_ids.some((user_id)=>user_id.id == _gaming_user?.id)){
-          dispatch(updateIsGamingUserIn(false));
-        }
+        console.log(user_ids, _gaming_user);
       })
+      .leaving((user_ids: User_ids) => {
+        if (
+          Array.isArray(user_ids) &&
+          user_ids.some((user_id) => user_id.id == _gaming_user?.id)
+        ) {
+          dispatch(updateIsGamingUserIn(false));
+          dispatch(updateIsGamingUserLeaving(true));
+        } else if (
+          !Array.isArray(user_ids) &&
+          user_ids.id == _gaming_user?.id
+        ) {
+          dispatch(updateIsGamingUserIn(false));
+          dispatch(updateIsGamingUserLeaving(true));
+        }
+      });
     return () => {
       echo?.leaveChannel(channel);
     };
-  }, [echo,_gaming_user]);
+  }, [echo, _gaming_user]);
 }
 
 export { useEcho, usePrivateChannel, usePresenceChannel };

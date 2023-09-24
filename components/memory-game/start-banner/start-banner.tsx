@@ -21,6 +21,8 @@ import {
 // local components
 import CountDown from "@/components/memory-game/start-banner/count-down";
 
+// mui
+import { useMediaQuery } from "@mui/material";
 
 // icons
 import Play from "@/components/memory-game/start-banner/icons/play";
@@ -33,14 +35,14 @@ import { useAppSelector } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 
-// mobile
-import { isMobile } from "react-device-detect";
-
-
 const StartBanner: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
+  const isMobile = useMediaQuery(
+    `(max-width:${theme.palette.breakpoints.mobile})`
+  );
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
+  console.log("isMobile", isMobile);
   return (
     <StyledContainer>
       <StyledBannerBackgroundOne />
@@ -57,21 +59,33 @@ const StartBanner: FC = () => {
       <StyledContentContainer>
         <StyledContentTop>
           <StyledLogo>
-              Cogni<span style = {{
-                  color:"#080f0f"
-              }}>Match</span>
+            Cogni
+            <span
+              style={{
+                color: "#080f0f",
+              }}
+            >
+              Match
+            </span>
           </StyledLogo>
           <StyledVersusContainer>
             <StyledVersusText>
-              {_user.name?.split(" ")[0]} <span style = {{color:theme.palette.secondary.red}}>v/s</span>  {_gaming_user?.name?.split(" ")[0]}
+              {_user.name?.split(" ")[0]}{" "}
+              <span style={{ color: theme.palette.secondary.red }}>v/s</span>{" "}
+              {_gaming_user?.name?.split(" ")[0]}
             </StyledVersusText>
-            <StyledVersusImage width = {40} height = {40} alt = "chips" src = "/memory-game/start-banner/versus-container/chips.png"/>
+            <StyledVersusImage
+              width={40}
+              height={40}
+              alt="chips"
+              src="/memory-game/start-banner/versus-container/chips.png"
+            />
           </StyledVersusContainer>
         </StyledContentTop>
         <StyledPlayButton>
-          <Play size = {isMobile?30:68}/>
+          <Play size={isMobile ? 40 : 68} />
         </StyledPlayButton>
-        <CountDown/>
+        <CountDown />
       </StyledContentContainer>
     </StyledContainer>
   );

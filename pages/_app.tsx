@@ -10,12 +10,12 @@ import store from "@/store/rootReducer";
 import CsrfTokenProvider from "@/providers/CsrfTokenProvider";
 import UserProvider from "@/providers/UserProvider";
 
-// context 
+// context
 import { ThemeMode } from "context";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeMode.Provider value="dark">
+    <ThemeMode.Provider value="light">
       <Provider store={store}>
         <CsrfTokenProvider>
           <UserProvider>

@@ -10,15 +10,13 @@ type MemoryGameCardEventRespose = {
   message: string;
 };
 
-
 type IGetCardsResponse = {
-  deck:GetRandomCard[]
-}
+  deck: GetRandomCard[];
+};
 
 type IGetCardRequest = {
-  game_complexity:number;
-}
-
+  game_complexity: number;
+};
 
 type InitialState = {
   cardList: {
@@ -29,12 +27,20 @@ type InitialState = {
         id: string;
       })
     | null;
-  is_gaming_user_in:boolean;
-  show_rules_tooltip:boolean;
-  rules_tooltip_text:[string,string]|null;
-  current_rule_index:number;
-  game_rules_list:[string,string][];
-  show_audio_play_modal:boolean;
+  is_gaming_user_in: boolean;
+  show_rules_tooltip: boolean;
+  rules_tooltip_text: [string, string] | null;
+  current_rule_index: number;
+  game_rules_list: [string, string][];
+  show_audio_play_modal: boolean;
+  show_info_snackbar: boolean;
+  is_gaming_user_leaving: boolean;
 };
 
-export { InitialState, MemoryGameCardEventArgs, MemoryGameCardEventRespose , IGetCardRequest, IGetCardsResponse};
+export {
+  InitialState,
+  MemoryGameCardEventArgs,
+  MemoryGameCardEventRespose,
+  IGetCardRequest,
+  IGetCardsResponse,
+};

@@ -48,9 +48,11 @@ const initialState: InitialState = {
   is_gaming_user_in: false,
   show_rules_tooltip: true,
   rules_tooltip_text: null,
-  current_rule_index:-1,
+  current_rule_index: -1,
   game_rules_list: [],
-  show_audio_play_modal:true,
+  show_audio_play_modal: true,
+  show_info_snackbar: false,
+  is_gaming_user_leaving: false,
 };
 export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
@@ -79,15 +81,22 @@ export const memoryGameSlice = createSlice({
     },
     updateGameRules: (state, action: PayloadAction<[string, string][]>) => {
       state.game_rules_list = action.payload;
-      state.rules_tooltip_text = action.payload[0]
+      state.rules_tooltip_text = action.payload[0];
     },
-    updateShowAudioPlayModal:(state,action:PayloadAction<boolean>)=>{
+    updateShowAudioPlayModal: (state, action: PayloadAction<boolean>) => {
       state.show_audio_play_modal = action.payload;
     },
-    updateCurrentRuleIndex:(state,action:PayloadAction<number>)=>{
+    updateCurrentRuleIndex: (state, action: PayloadAction<number>) => {
       state.current_rule_index = action.payload;
       state.rules_tooltip_text = state.game_rules_list[action.payload];
-    }
+    },
+    updateShowInfoSnackbar: (state, action: PayloadAction<boolean>) => {
+      state.show_info_snackbar = action.payload;
+    },
+    updateIsGamingUserLeaving: (state, action: PayloadAction<boolean>) => {
+      state.is_gaming_user_leaving = action.payload;
+      state.show_info_snackbar = action.payload;
+    },
   },
 });
 
@@ -99,7 +108,9 @@ export const {
   updateShowRulesTip,
   updateGameRules,
   updateShowAudioPlayModal,
-  updateCurrentRuleIndex
+  updateCurrentRuleIndex,
+  updateShowInfoSnackbar,
+  updateIsGamingUserLeaving,
 } = memoryGameSlice.actions;
 export const cardList = (state: RootState) => state.memoryGame.cardList;
 export const lastFlippedCard = (state: RootState) =>
@@ -112,6 +123,14 @@ export const game_rules_list = (state: RootState) =>
   state.memoryGame.game_rules_list;
 export const rules_tooltip_text = (state: RootState) =>
   state.memoryGame.rules_tooltip_text;
-export const show_audio_play_modal = (state:RootState) => state.memoryGame.show_audio_play_modal;
-export const current_rule_index = (state:RootState) => state.memoryGame.current_rule_index;
+export const show_audio_play_modal = (state: RootState) =>
+  state.memoryGame.show_audio_play_modal;
+export const current_rule_index = (state: RootState) =>
+  state.memoryGame.current_rule_index;
+export const show_info_snackbar = (state: RootState) =>
+  state.memoryGame.show_info_snackbar;
+
+export const is_gaming_user_leaving = (state: RootState) =>
+  state.memoryGame.is_gaming_user_leaving;
+
 export default memoryGameSlice.reducer;

@@ -28,13 +28,18 @@ import { SwiperSlide } from "swiper/react";
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 import type Colors from "@/types/data/colors";
 
-// uuidv4
-import { v4 as uuidv4 } from "uuid";
-
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
-import { is_gaming_user_in , updateGameRules} from "@/store/slice/memory-game.slice";
+import {
+  // state
+  is_gaming_user_in,
+  updateGameRules,
+  // actions
+  updateIsGamingUserLeaving,
+  updateShowInfoSnackbar,
+} from "@/store/slice/memory-game.slice";
+import { updateGamingUser } from "@/store/slice/game.slice";
 
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher";
@@ -51,7 +56,7 @@ import { ThemeMode } from "context";
 import { ColorsContext } from "context";
 import { UttranceContext } from "context";
 
-// helpers 
+// helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 
 const cardArrayInitializaer = (gameComplexity: number) => {
@@ -70,13 +75,13 @@ const cardArrayInitializaer = (gameComplexity: number) => {
 interface Props {
   files: string[];
   colors: Colors;
-  rules:[string,string][];
+  rules: [string, string][];
 }
-const MemoryGamePage: NextPage<Props> = ({ files, colors ,rules}) => {
+const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
   const dispatch = useAppDispatch();
   const mode = useContext(ThemeMode);
   const theme = getTheme(mode);
-  const speechUttranceRef = useRef<MutableSpeechUtterance|null>(null);
+  const speechUttranceRef = useRef<MutableSpeechUtterance | null>(null);
   const cardArray = useRef<GetRandomCard[] | null>(null);
   const [isPlay, setPlay] = useState(false);
   const _room_id = useAppSelector(room_id);
@@ -97,6 +102,7 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors ,rules}) => {
     speechUttranceRef.current = new MutableSpeechUtterance();
     return () => {
       counterIntervalRef.current && clearInterval(counterIntervalRef.current);
+      dispatch(updateIsGamingUserLeaving(false));
     };
   }, []);
 
@@ -108,13 +114,13 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors ,rules}) => {
 
   return (
     <>
-    <UttranceContext.Provider value = {speechUttranceRef.current} >
-      <ColorsContext.Provider value={colors}>
-        <ThemeProvider theme={theme}>
-          <MemoryGame />
-        </ThemeProvider>
-      </ColorsContext.Provider>
-    </UttranceContext.Provider>
+      <UttranceContext.Provider value={speechUttranceRef.current}>
+        <ColorsContext.Provider value={colors}>
+          <ThemeProvider theme={theme}>
+            <MemoryGame />
+          </ThemeProvider>
+        </ColorsContext.Provider>
+      </UttranceContext.Provider>
     </>
   );
 };
@@ -127,10 +133,13 @@ export async function getStaticProps() {
     colors = JSON.parse(colors) as Colors;
 
     // getting all the rules to play memory game
-    const rulesFolderPath = path.join(process.cwd(), "./data/memory-game/rules.json")
-    let rules  = fs.readFileSync(rulesFolderPath, "utf-8");
+    const rulesFolderPath = path.join(
+      process.cwd(),
+      "./data/memory-game/rules.json"
+    );
+    let rules = fs.readFileSync(rulesFolderPath, "utf-8");
     rules = JSON.parse(rules);
-    console.log("value or rules",rules);
+    console.log("value or rules", rules);
     // Read files from the 'public' folder using fs.readdirSync
     const publicFolderPath = "./public/memory-game"; // Path to the 'public' folder
     let files: string[] = fs.readdirSync(
@@ -141,7 +150,7 @@ export async function getStaticProps() {
       props: {
         files,
         colors,
-        rules
+        rules,
       },
     };
   } catch (err) {
@@ -149,7 +158,7 @@ export async function getStaticProps() {
       props: {
         files: [],
         colors: [],
-        rules:[]
+        rules: [],
       },
     };
   }

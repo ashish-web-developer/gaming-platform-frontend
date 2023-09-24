@@ -1,8 +1,7 @@
-
 import styled, { createGlobalStyle } from "styled-components";
 
 // Mui
-import { Box ,Button} from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 const color = {
   primary: "rgb(3 13 9)",
@@ -12,7 +11,6 @@ const color = {
   errors: "#d11534",
 };
 
-
 const StyledContainer = styled(Box)`
   display: flex;
   justify-content: center;
@@ -20,7 +18,7 @@ const StyledContainer = styled(Box)`
   padding: 60px 100px;
   min-height: 100vh;
   background-color: ${color.primary};
-  @media (max-width: 600px) {
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     padding: 30px 20px;
   }
 `;
@@ -32,7 +30,7 @@ const WelcomeScreenContainer = styled.div`
   gap: 30px;
   min-height: 100vh;
   background-color: ${color.primary};
-  @media (max-width: 600px) {
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     padding: 30px 20px;
   }
 `;
@@ -49,10 +47,4 @@ const PlayButton = styled(Button)`
   }
 `;
 
-
-
-export {
-    StyledContainer,
-    WelcomeScreenContainer,
-    PlayButton,
-}
+export { StyledContainer, WelcomeScreenContainer, PlayButton };
