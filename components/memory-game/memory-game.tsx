@@ -1,3 +1,4 @@
+import { useContext } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -20,7 +21,7 @@ import GlobalStyles, {
   StyledChatContainer,
   StyledContentContainer,
   StyledFabCta,
-  StyledInfoSnackbarContainer
+  StyledInfoSnackbarContainer,
 } from "@/styles/components/memory-game/memory-game.style";
 
 // styled theme
@@ -36,7 +37,11 @@ import {
   updateShowMobileChat,
 } from "@/store/slice/memory-game.slice";
 
+// context
+import { ThemeMode } from "context";
+
 const MemoryGame: FC = () => {
+  const themeMode = useContext(ThemeMode);
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
   const _show_mobile_chat = useAppSelector(show_mobile_chat);
@@ -48,15 +53,15 @@ const MemoryGame: FC = () => {
     <>
       <GlobalStyles />
       <StyledContainer>
-        <StyledBackgroundCircleOne />
-        <StyledBackgroundCircleTwo />
-        { _show_mobile_chat && (
+        <StyledBackgroundCircleOne $mode={themeMode} />
+        <StyledBackgroundCircleTwo $mode={themeMode} />
+        {_show_mobile_chat && (
           <StyledChatContainer>
             <Chat />
           </StyledChatContainer>
         )}
         <StyledInfoSnackbarContainer>
-            <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
+          <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
         </StyledInfoSnackbarContainer>
         <StyledContentContainer>
           <StyledFabCta

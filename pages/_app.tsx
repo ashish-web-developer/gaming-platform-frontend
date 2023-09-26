@@ -1,6 +1,5 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { createContext } from "react";
 
 // Redux
 import { Provider } from "react-redux";

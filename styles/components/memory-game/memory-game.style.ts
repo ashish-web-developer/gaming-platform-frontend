@@ -4,9 +4,13 @@ import styled from "styled-components";
 // mui
 import { Fab } from "@mui/material";
 
+type IStyledBackgroundCircle = {
+  $mode: "dark" | "light";
+};
+
 const GlobalStyles = createGlobalStyle`
     body {
-        background: ${({ theme }) => theme.palette.primary.main};
+        background: ${({ theme }) => theme.palette.primary.main} !important;
         background-repeat:no-repeat;
         background-size:cover;
     }
@@ -25,7 +29,7 @@ const StyledChatContainer = styled.div`
   display: none;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 100%;
-    height: 80%;
+    height: 60%;
     position: absolute;
     bottom: 80px;
     z-index: 4;
@@ -74,7 +78,8 @@ const StyledRightContainer = styled.div`
   }
 `;
 
-const StyledBackgroundCircleOne = styled.div`
+const StyledBackgroundCircleOne = styled.div<IStyledBackgroundCircle>`
+  display: ${(props) => (props.$mode == "light" ? "none" : "block")};
   width: 698px;
   height: 698px;
   border-radius: 50%;
@@ -91,7 +96,8 @@ const StyledBackgroundCircleOne = styled.div`
   }
 `;
 
-const StyledBackgroundCircleTwo = styled.div`
+const StyledBackgroundCircleTwo = styled.div<IStyledBackgroundCircle>`
+  display: ${(props) => (props.$mode == "light" ? "none" : "block")};
   width: 698px;
   height: 698px;
   border-radius: 50%;

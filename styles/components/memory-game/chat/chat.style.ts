@@ -16,7 +16,7 @@ type IStyledChatsContainer = {
 };
 
 type IStyledChat = {
-  $backgroundColor: "#329F5B" | "#FF934F";
+  $backgroundColor: string;
   $borderRadius: "0px 10px 10px 10px" | "10px 0px 10px 10px;";
   $order: 1 | 2;
 };
@@ -25,12 +25,16 @@ type IStyledChatAvatar = {
   $order?: 1 | 2;
 };
 
+type IStyledCenteredBackground = {
+  $mode: "light" | "dark";
+};
+
 const StyledChatContainer = styled.div`
   position: relative;
   width: 412px;
   height: 100%;
   border-radius: 25px;
-  background: ${({ theme }) => theme.palette.primary.main};
+  background: ${({ theme }) => theme.palette.chat.main};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   z-index: 3;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
@@ -44,16 +48,17 @@ const StyledTopBackground = styled.div`
   position: absolute;
   top: 0px;
   z-index: 3;
-  background: url("/memory-game/chat/background.svg");
+  background: ${({ theme }) => theme.palette.chat.top_background};
   background-repeat: no-repeat;
   background-size: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 16px;
+  padding: 12px;
 `;
 
-const StyledCenteredBackground = styled.div`
+const StyledCenteredBackground = styled.div<IStyledCenteredBackground>`
+  display: ${(props) => (props.$mode == "light" ? "none" : "block")};
   width: 112px;
   height: 112px;
   background: #f65be3;
@@ -75,7 +80,7 @@ const StyledChatAvatar = styled.div<IStyledChatAvatar>`
 
 const StyledVersusContainer = styled.div`
   height: 38px;
-  background-color: ${({ theme }) => theme.palette.primary.main};
+  background-color: ${({ theme }) => theme.palette.chat.vs_container.main};
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
@@ -95,7 +100,7 @@ const StyledVersusImage = styled(Image)`
 `;
 
 const StyledVersusText = styled.span`
-  color: ${({ theme }) => theme.palette.primary.info};
+  color: ${({ theme }) => theme.palette.chat.vs_container.text};
   text-align: center;
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 14px;
@@ -134,14 +139,14 @@ const StyledChatContentContainer = styled.div`
 
   &::-webkit-scrollbar-track {
     background-color: ${({ theme }) =>
-      theme.palette.primary
+      theme.palette.chat
         .main}; /* Change this to the desired background color */
   }
   /* Change the color of the scrollbar thumb (draggable part) */
   &::-webkit-scrollbar-thumb:vertical {
     background-color: ${({ theme }) =>
-      theme.palette.secondary
-        .info}; /* Change this to the desired thumb color */
+      theme.palette.chat
+        .scrollbar_color}; /* Change this to the desired thumb color */
     border-radius: 6px; /* Round the corners of the thumb */
   }
   padding-top: 100px;
@@ -178,17 +183,17 @@ const StyledChatInputContainer = styled.div`
 const StyledChatInput = styled(Input)`
   border: 2px solid #8d8181;
   border-radius: 10px;
-  color: ${({ theme }) => theme.palette.primary.info};
+  color: ${({ theme }) => theme.palette.chat.input.text_color};
   padding: 4px 10px;
 `;
 
 const StyledSendIcon = styled(SendIcon)`
-  color: ${({ theme }) => theme.palette.secondary.info};
+  color: ${({ theme }) => theme.palette.chat.icon_color};
   font-size: 30px;
 `;
 
 const StyledEmojiIcon = styled(EmojiEmotionsOutlinedIcon)`
-  color: ${({ theme }) => theme.palette.secondary.info};
+  color: ${({ theme }) => theme.palette.chat.icon_color};
   font-size: 30px;
   flex-basis: 40px;
   flex-shrink: 0;

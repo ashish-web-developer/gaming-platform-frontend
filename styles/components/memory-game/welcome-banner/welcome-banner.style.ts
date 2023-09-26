@@ -11,7 +11,7 @@ const StyledBanner = styled.div`
   position: relative;
   width: 600px;
   height: 300px;
-  background: ${({ theme }) => theme.palette.primary.main};
+  background: ${({ theme }) => theme.palette.welcome_banner.main};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
   z-index: 2;
@@ -36,14 +36,16 @@ const StyledBannerCircle = styled.div`
 `;
 
 const StyledBannerContent = styled.div`
-  background: url("/memory-game/welcome-banner/background.svg");
+  background: ${({ theme }) =>
+    theme.palette.welcome_banner.side_container.background};
   width: 321px;
   height: 300.5px;
   background-repeat: no-repeat;
   padding: 18px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 100%;
-    background: url("/memory-game/welcome-banner/mobile/background.svg");
+    background: ${({ theme }) =>
+      theme.palette.welcome_banner.side_container.mobile.background};
     background-size: 100%;
     background-repeat: no-repeat;
   }
@@ -64,7 +66,7 @@ const StyledBannerImage = styled.div`
 const StyledPopularTag = styled.div`
   width: 80px;
   height: 20px;
-  background: ${({ theme }) => theme.palette.secondary.info};
+  background: ${({ theme }) => theme.palette.welcome_banner.tag.main};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 16px;
   display: flex;
@@ -82,7 +84,7 @@ const StyledPopularText = styled.span`
   line-height: normal;
 `;
 const StyledMainBannerHeader = styled.h3`
-  color: #080f0f;
+  color: ${({ theme }) => theme.palette.welcome_banner.main};
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 24px;
   font-style: normal;
@@ -96,7 +98,7 @@ const StyledMainBannerHeader = styled.h3`
 `;
 
 const StyledBannerPara = styled.p`
-  color: ${({ theme }) => theme.palette.primary.info};
+  color: ${({ theme }) => theme.palette.welcome_banner.side_container.text};
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 16px;
   font-style: normal;

@@ -53,7 +53,7 @@ const StartBanner: FC = () => {
           width={200}
           height={150}
           alt="girl"
-          src="/memory-game/start-banner/start-banner-girl.png"
+          src={theme.palette.start_banner.start_banner_girl_src}
         />
       </StyledImageContainer>
       <StyledContentContainer>

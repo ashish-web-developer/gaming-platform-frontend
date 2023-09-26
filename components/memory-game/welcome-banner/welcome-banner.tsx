@@ -65,7 +65,7 @@ const WelcomeBanner: FC = () => {
           <StyledMainBannerHeader>
             <span
               style={{
-                color: "#f9f8f8",
+                color: theme.palette.welcome_banner.side_container.text,
               }}
             >
               Cogni

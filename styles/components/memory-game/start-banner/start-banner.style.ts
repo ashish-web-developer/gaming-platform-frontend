@@ -7,7 +7,7 @@ import { IconButton } from "@mui/material";
 const StyledContainer = styled.div`
   width: 600px;
   height: 153px;
-  background: ${({ theme }) => theme.palette.secondary.info};
+  background: ${({ theme }) => theme.palette.start_banner.main};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
   margin-top: 80px;
@@ -22,20 +22,21 @@ const StyledContainer = styled.div`
 const StyledBannerBackgroundOne = styled.div`
   width: 229px;
   height: 100%;
-  background: url("/memory-game/start-banner/background-one.svg");
+  background: ${({ theme }) => theme.palette.start_banner.background_one};
   position: absolute;
   top: 0;
   left: 0;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 137px;
-    background: url("/memory-game/start-banner/mobile/background-one.svg");
+    background: ${({ theme }) =>
+      theme.palette.start_banner.mobile.background_one};
   }
 `;
 
 const StyledBannerBackgroundTwo = styled.div`
   width: 207px;
   height: 100%;
-  background: ${({ theme }) => theme.palette.primary.start_banner_background};
+  background: ${({ theme }) => theme.palette.start_banner.background_two};
   background-size: 100%;
   background-repeat: no-repeat;
   position: absolute;
@@ -45,7 +46,7 @@ const StyledBannerBackgroundTwo = styled.div`
     width: 128px;
     height: 100%;
     background: ${({ theme }) =>
-      theme.palette.primary.mobile_start_banner_background};
+      theme.palette.start_banner.mobile.background_two};
     background-size: 100%;
     background-repeat: no-repeat;
   }
@@ -54,8 +55,11 @@ const StyledBannerBackgroundTwo = styled.div`
 const StyledImageContainer = styled.div`
   position: absolute;
   bottom: 0px;
-  width: 120px;
+  width: 180px;
   height: 241px;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    width: 120px;
+  }
 `;
 
 const StyledImage = styled(Image)`
@@ -95,7 +99,8 @@ const StyledLogo = styled.div`
 
 const StyledVersusContainer = styled.div`
   height: 38px;
-  background-color: ${({ theme }) => theme.palette.primary.main};
+  background-color: ${({ theme }) =>
+    theme.palette.start_banner.vs_container.main};
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
@@ -115,7 +120,7 @@ const StyledVersusImage = styled(Image)`
 `;
 
 const StyledVersusText = styled.span`
-  color: ${({ theme }) => theme.palette.primary.info};
+  color: ${({ theme }) => theme.palette.start_banner.vs_container.text};
   text-align: center;
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 14px;

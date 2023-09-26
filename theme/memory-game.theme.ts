@@ -1,60 +1,152 @@
 import type CustomThemePalette from "@/types/theme/memory-game";
 
-
-
-
-const lightTheme:CustomThemePalette= {
-  palette:{
-    primary:{
-      main:"#F9F8F8",
-      info:"#080F0F",
-      background:"url('/memory-game/background/light-background.png')",
-      start_banner_background:"url('/memory-game/start-banner/light-background-two.svg')",
-      mobile_start_banner_background:"url('/memory-game/start-banner/mobile/light-background-two.svg')"
+const lightTheme: CustomThemePalette = {
+  palette: {
+    primary: {
+      main: "#F7FFF6",
+      info: "#080F0F",
+      background: "url('/memory-game/background/light-background.png')",
+      mobile_start_banner_background:
+        "url('/memory-game/start-banner/mobile/light-background-two.svg')",
     },
-    secondary:{
-      main:"#F65BE3",
-      info:"#ff934f",
-      red:"#FF2400",
-      green:"#329f5b"
+    welcome_banner: {
+      main: "#F42C04",
+      side_container: {
+        background: `url("/memory-game/welcome-banner/light-background.svg")`,
+        text: "#2B061E",
+        mobile: {
+          background: `url("/memory-game/welcome-banner/mobile/light-background.svg")`,
+        },
+      },
+      tag: {
+        main: "#1E96FC",
+      },
     },
-    fontFamily:{
-      poppins:"'Poppins', sans-serif;"
-
+    start_banner: {
+      main: "#1E96FC",
+      start_banner_girl_src:
+        "/memory-game/start-banner/light-start-banner-girl.png",
+      background_one: `url("/memory-game/start-banner/light-background-one.svg")`,
+      background_two:
+        "url('/memory-game/start-banner/light-background-two.svg')",
+      mobile: {
+        background_one: `url("/memory-game/start-banner/mobile/light-background-one.svg")`,
+        background_two:
+          "url('/memory-game/start-banner/mobile/light-background-two.svg')",
+      },
+      timer: {
+        text_left: "#F7FFF6",
+        text_right: "#2B061E",
+      },
+      vs_container: {
+        main: "#2B061E",
+        text: "#F7FFF6",
+      },
     },
-    breakpoints:{
-      mobile:"600px"
-    }
-  }
+    chat: {
+      main: "#2B061E",
+      top_background: `url("/memory-game/chat/light-background.svg")`,
+      icon_color: "#1E96FC",
+      vs_container: {
+        main: "#2B061E",
+        text: "#F7FFF6",
+      },
+      messages_background: "#3C91E6",
+      scrollbar_color: "#3C91E6",
+      input: {
+        text_color: "#F7FFF6",
+        placeholder_color: "",
+      },
+    },
+    secondary: {
+      main: "#F65BE3",
+      info: "#ff934f",
+      red: "#FF2400",
+      green: "#329f5b",
+    },
+    fontFamily: {
+      poppins: "'Poppins', sans-serif;",
+    },
+    breakpoints: {
+      mobile: "600px",
+    },
+  },
 };
 
-const darkTheme:CustomThemePalette = {
-  palette:{
-    primary:{
-      main:"#080F0F",
-      info:"#F9F8F8",
-      background:"url('/memory-game/background/dark-background.png')",
-      start_banner_background:"url('/memory-game/start-banner/dark-background-two.svg')",
-      mobile_start_banner_background:"url('/memory-game/start-banner/mobile/dark-background-two.svg')"
+const darkTheme: CustomThemePalette = {
+  palette: {
+    primary: {
+      main: "#080F0F",
+      info: "#F9F8F8",
+      background: "url('/memory-game/background/dark-background.png')",
+      mobile_start_banner_background:
+        "url('/memory-game/start-banner/mobile/dark-background-two.svg')",
     },
-    secondary:{
-      main:"#F65BE3",
-      info:"#FF934F",
-      red:"#FF2400",
-      green:"#329f5b"
+    welcome_banner: {
+      main: "#080F0F",
+      side_container: {
+        background: `url("/memory-game/welcome-banner/dark-background.svg")`,
+        text: "#f9f8f8",
+        mobile: {
+          background: `url("/memory-game/welcome-banner/mobile/dark-background.svg")`,
+        },
+      },
+      tag: {
+        main: "#FF934F",
+      },
     },
-    fontFamily:{
-      poppins:"'Poppins', sans-serif;"
-
+    start_banner: {
+      main: "#FF934F",
+      background_one: `url("/memory-game/start-banner/dark-background-one.svg")`,
+      background_two:
+        "url('/memory-game/start-banner/light-background-two.svg')",
+      start_banner_girl_src:
+        "/memory-game/start-banner/dark-start-banner-girl.png",
+      mobile: {
+        background_one: `url("/memory-game/start-banner/mobile/dark-background-one.svg")`,
+        background_two: `url("/memory-game/start-banner/mobile/dark-background-two.svg")`,
+      },
+      timer: {
+        text_left: "#f9f8f8",
+        text_right: "#329F5B",
+      },
+      vs_container: {
+        main: "#080f0f",
+        text: "#f9f8f8",
+      },
     },
-    breakpoints:{
-      mobile:"600px"
-    }
-  }
+    chat: {
+      main: "#080F0F",
+      top_background: `url("/memory-game/chat/dark-background.svg")`,
+      icon_color: "#FF934F",
+      vs_container: {
+        main: "#2B061E",
+        text: "#F7FFF6",
+      },
+      messages_background: "#3C91E6",
+      scrollbar_color: "#3C91E6",
+      input: {
+        text_color: "#f9f8f8",
+        placeholder_color: "",
+      },
+    },
+    secondary: {
+      main: "#F65BE3",
+      info: "#FF934F",
+      red: "#FF2400",
+      green: "#329f5b",
+    },
+    fontFamily: {
+      poppins: "'Poppins', sans-serif;",
+    },
+    breakpoints: {
+      mobile: "600px",
+    },
+  },
 };
 
-const getTheme = (mode: "dark" | "light"):CustomThemePalette => {
-  return mode=="light"?lightTheme:darkTheme;
+const getTheme = (mode: "dark" | "light"): CustomThemePalette => {
+  return mode == "light" ? lightTheme : darkTheme;
 };
 
 export default getTheme;

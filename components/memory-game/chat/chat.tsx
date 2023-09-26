@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -52,7 +52,11 @@ import useAvatar from "@/hooks/profile";
 import { useConversation } from "@/hooks/chat";
 import { usePrivateChannel } from "@/hooks/pusher";
 
+// context
+import { ThemeMode } from "context";
+
 const Chat: FC = () => {
+  const themeMode = useContext(ThemeMode);
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
@@ -103,7 +107,7 @@ const Chat: FC = () => {
           />
         </StyledVersusContainer>
       </StyledTopBackground>
-      <StyledCenteredBackground />
+      <StyledCenteredBackground $mode={themeMode} />
       <StyledChatContent>
         <StyledChatContentContainer>
           {_active_user_conversation.map(({ sender_id, message }) => {
@@ -122,7 +126,9 @@ const Chat: FC = () => {
                 />
                 <StyledChat
                   $backgroundColor={
-                    _user.id == sender_id ? "#329F5B" : "#FF934F"
+                    _user.id == sender_id
+                      ? "#329F5B"
+                      : theme.palette.chat.messages_background
                   }
                   $borderRadius={
                     _user.id == sender_id
