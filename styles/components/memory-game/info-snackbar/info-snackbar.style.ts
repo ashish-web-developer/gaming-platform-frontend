@@ -12,8 +12,8 @@ const StyledSnackbarContainer = styled.div`
   border-radius: 80px;
   margin-top: 30px;
   border-radius: 80px;
-  border: 3px solid #ff2400;
-  background: #080f0f;
+  border: 3px solid ${({ theme }) => theme.palette.info_snackbar.border_color};
+  background: ${({ theme }) => theme.palette.info_snackbar.background};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
@@ -26,7 +26,8 @@ const StyledUserAvatar = styled.div`
   position: absolute;
   width: 75px;
   height: 75px;
-  background-color: ${({ theme }) => theme.palette.secondary.red};
+  background-color: ${({ theme }) =>
+    theme.palette.info_snackbar.profile_background};
   border-radius: 50%;
   border: 3px solid ${({ theme }) => theme.palette.main};
   left: 3px;
@@ -41,7 +42,7 @@ const StyledContent = styled.div`
 
 const StyledText = styled.p<IStyledText>`
   font-size: ${(props) => props.$fontSize};
-  color: ${({ theme }) => theme.palette.primary.info};
+  color: ${({ theme }) => theme.palette.info_snackbar.text_color};
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
 `;
 

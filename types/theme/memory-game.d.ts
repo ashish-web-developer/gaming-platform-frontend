@@ -64,6 +64,12 @@ type CustomMemoryGameThemePalette = {
     breakpoints: {
       mobile: string;
     };
+    info_snackbar: {
+      background: string;
+      border_color: string;
+      text_color: string;
+      profile_background: string;
+    };
   };
 };
 

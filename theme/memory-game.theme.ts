@@ -58,6 +58,12 @@ const lightTheme: CustomThemePalette = {
         placeholder_color: "",
       },
     },
+    info_snackbar: {
+      background: "#2B061E",
+      border_color: "#F5E960",
+      text_color: "#F7FFF6",
+      profile_background: "#F5E960",
+    },
     secondary: {
       main: "#F65BE3",
       info: "#ff934f",
@@ -129,6 +135,12 @@ const darkTheme: CustomThemePalette = {
         text_color: "#f9f8f8",
         placeholder_color: "",
       },
+    },
+    info_snackbar: {
+      background: "#080F0F",
+      border_color: "#FF2400",
+      text_color: "#f9f8f8",
+      profile_background: "#FF2400",
     },
     secondary: {
       main: "#F65BE3",
