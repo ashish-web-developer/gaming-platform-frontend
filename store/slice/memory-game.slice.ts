@@ -46,7 +46,6 @@ const initialState: InitialState = {
   cardList: {},
   lastFlippedCard: null,
   is_gaming_user_in: false,
-  show_rules_tooltip: true,
   rules_tooltip_text: null,
   current_rule_index: -1,
   game_rules_list: [],
@@ -54,6 +53,7 @@ const initialState: InitialState = {
   show_info_snackbar: false,
   is_gaming_user_leaving: false,
   show_mobile_chat: false,
+  show_help_tooltip: false,
 };
 export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
@@ -77,9 +77,6 @@ export const memoryGameSlice = createSlice({
     updateIsGamingUserIn: (state, action: PayloadAction<boolean>) => {
       state.is_gaming_user_in = action.payload;
     },
-    updateShowRulesTip: (state, action: PayloadAction<boolean>) => {
-      state.show_rules_tooltip = action.payload;
-    },
     updateGameRules: (state, action: PayloadAction<[string, string][]>) => {
       state.game_rules_list = action.payload;
       state.rules_tooltip_text = action.payload[0];
@@ -101,6 +98,9 @@ export const memoryGameSlice = createSlice({
     updateShowMobileChat: (state, action: PayloadAction<boolean>) => {
       state.show_mobile_chat = action.payload;
     },
+    updateShowHelpTooltip: (state, action: PayloadAction<boolean>) => {
+      state.show_help_tooltip = action.payload;
+    },
   },
 });
 
@@ -109,21 +109,19 @@ export const {
   removeCard,
   updateLastFlippedCard,
   updateIsGamingUserIn,
-  updateShowRulesTip,
   updateGameRules,
   updateShowAudioPlayModal,
   updateCurrentRuleIndex,
   updateShowInfoSnackbar,
   updateIsGamingUserLeaving,
   updateShowMobileChat,
+  updateShowHelpTooltip,
 } = memoryGameSlice.actions;
 export const cardList = (state: RootState) => state.memoryGame.cardList;
 export const lastFlippedCard = (state: RootState) =>
   state.memoryGame.lastFlippedCard;
 export const is_gaming_user_in = (state: RootState) =>
   state.memoryGame.is_gaming_user_in;
-export const show_rules_tooltip = (state: RootState) =>
-  state.memoryGame.show_rules_tooltip;
 export const game_rules_list = (state: RootState) =>
   state.memoryGame.game_rules_list;
 export const rules_tooltip_text = (state: RootState) =>
@@ -139,5 +137,7 @@ export const is_gaming_user_leaving = (state: RootState) =>
   state.memoryGame.is_gaming_user_leaving;
 export const show_mobile_chat = (state: RootState) =>
   state.memoryGame.show_mobile_chat;
+export const show_help_tooltip = (state: RootState) =>
+  state.memoryGame.show_help_tooltip;
 
 export default memoryGameSlice.reducer;

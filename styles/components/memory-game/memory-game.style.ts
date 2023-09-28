@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
 
 // mui
-import { Fab } from "@mui/material";
+import { Fab, IconButton } from "@mui/material";
 
 type IStyledBackgroundCircle = {
   $mode: "dark" | "light";
@@ -155,6 +155,25 @@ const StyledInfoSnackbarContainer = styled.div`
   }
 `;
 
+const StyledHelpCtaContainer = styled.div`
+  width: 285px;
+  height: 285px;
+  border-radius: 50%;
+  background: #f5e960;
+  position: absolute;
+  left: -130px;
+  bottom: -130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledHelpCta = styled(IconButton)`
+  position: absolute;
+  right: 60px;
+  top: 60px;
+`;
+
 export default GlobalStyles;
 export {
   StyledContainer,
@@ -168,4 +187,6 @@ export {
   StyledMainText,
   StyledFabCta,
   StyledInfoSnackbarContainer,
+  StyledHelpCtaContainer,
+  StyledHelpCta,
 };

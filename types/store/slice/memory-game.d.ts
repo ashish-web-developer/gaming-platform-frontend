@@ -28,7 +28,6 @@ type InitialState = {
       })
     | null;
   is_gaming_user_in: boolean;
-  show_rules_tooltip: boolean;
   rules_tooltip_text: [string, string] | null;
   current_rule_index: number;
   game_rules_list: [string, string][];
@@ -36,6 +35,7 @@ type InitialState = {
   show_info_snackbar: boolean;
   is_gaming_user_leaving: boolean;
   show_mobile_chat: boolean;
+  show_help_tooltip: boolean;
 };
 
 export {
