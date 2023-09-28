@@ -52,6 +52,16 @@ type CustomMemoryGameThemePalette = {
         placeholder_color: string;
       };
     };
+    info_snackbar: {
+      background: string;
+      border_color: string;
+      text_color: string;
+      profile_background: string;
+    };
+    nav: {
+      background: string;
+      color: string;
+    };
     secondary: {
       main: string;
       info: string;
@@ -63,12 +73,6 @@ type CustomMemoryGameThemePalette = {
     };
     breakpoints: {
       mobile: string;
-    };
-    info_snackbar: {
-      background: string;
-      border_color: string;
-      text_color: string;
-      profile_background: string;
     };
   };
 };

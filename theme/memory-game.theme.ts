@@ -64,6 +64,10 @@ const lightTheme: CustomThemePalette = {
       text_color: "#F7FFF6",
       profile_background: "#F5E960",
     },
+    nav: {
+      background: "#F5E960",
+      color: "#2B061E",
+    },
     secondary: {
       main: "#F65BE3",
       info: "#ff934f",
@@ -129,7 +133,7 @@ const darkTheme: CustomThemePalette = {
         main: "#2B061E",
         text: "#F7FFF6",
       },
-      messages_background: "#3C91E6",
+      messages_background: "#FF934F",
       scrollbar_color: "#3C91E6",
       input: {
         text_color: "#f9f8f8",
@@ -141,6 +145,10 @@ const darkTheme: CustomThemePalette = {
       border_color: "#FF2400",
       text_color: "#f9f8f8",
       profile_background: "#FF2400",
+    },
+    nav: {
+      background: "#FF2400",
+      color: "#f9f8f8",
     },
     secondary: {
       main: "#F65BE3",

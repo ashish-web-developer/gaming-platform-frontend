@@ -8,6 +8,7 @@ import WelcomeBanner from "@/components/memory-game/welcome-banner/welcome-banne
 import StartBanner from "@/components/memory-game/start-banner/start-banner";
 import Chat from "@/components/memory-game/chat/chat";
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
+import Nav from "@/components/memory-game/nav/nav";
 
 // styled components
 import GlobalStyles, {
@@ -64,6 +65,7 @@ const MemoryGame: FC = () => {
           <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
         </StyledInfoSnackbarContainer>
         <StyledContentContainer>
+          <Nav />
           <StyledFabCta
             onClick={() => dispatch(updateShowMobileChat(!_show_mobile_chat))}
           >

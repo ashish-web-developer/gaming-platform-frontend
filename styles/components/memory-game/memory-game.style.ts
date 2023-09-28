@@ -39,7 +39,7 @@ const StyledChatContainer = styled.div`
 `;
 
 const StyledContentContainer = styled.div`
-  width: 80rem;
+  width: 70rem;
   height: 100%;
   margin: auto;
   padding: 34px 0px;
