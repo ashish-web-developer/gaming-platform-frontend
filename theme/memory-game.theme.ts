@@ -68,6 +68,19 @@ const lightTheme: CustomThemePalette = {
       background: "#F5E960",
       color: "#2B061E",
     },
+    help_tooltip:{
+      help_tooltip_cta:{
+        cta_container_background:"#F5E960",
+        cta_color:"#F42C04"
+      },
+      tooltip:{
+        background:"#F5E960",
+        tooltip_heading:"#F42C04",
+        tooltip_para:"#2B061E",
+        icons:"#2B061E",
+        pattern:"#1E96FC"
+      }
+    },
     secondary: {
       main: "#F65BE3",
       info: "#ff934f",
@@ -149,6 +162,19 @@ const darkTheme: CustomThemePalette = {
     nav: {
       background: "#FF2400",
       color: "#f9f8f8",
+    },
+    help_tooltip:{
+      help_tooltip_cta:{
+        cta_container_background:"#FF2400",
+        cta_color:"#F9F8F8"
+      },
+      tooltip:{
+        background:"#D62839",
+        tooltip_heading:"#080F0F",
+        tooltip_para:"#F9F8F8",
+        icons:"#F9F8F8",
+        pattern:"#FF934F"
+      }
     },
     secondary: {
       main: "#F65BE3",

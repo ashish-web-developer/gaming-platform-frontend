@@ -62,6 +62,19 @@ type CustomMemoryGameThemePalette = {
       background: string;
       color: string;
     };
+    help_tooltip: {
+      help_tooltip_cta: {
+        cta_container_background: string;
+        cta_color: string;
+      };
+      tooltip: {
+        background: string;
+        tooltip_heading: string;
+        tooltip_para: string;
+        icons: string;
+        pattern: string;
+      };
+    };
     secondary: {
       main: string;
       info: string;

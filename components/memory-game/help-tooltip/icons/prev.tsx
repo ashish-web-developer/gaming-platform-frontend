@@ -1,7 +1,7 @@
 // types
 import type { FC } from "react";
 
-const PrevIcon: FC<{ size: number }> = ({ size }) => {
+const PrevIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -12,7 +12,7 @@ const PrevIcon: FC<{ size: number }> = ({ size }) => {
     >
       <g filter="url(#filter0_d_325_96)">
         <path
-          fill="#000"
+          fill={color}
           d="M26.321 25H6.68C5.199 25 4 23.8 4 22.321V2.68C4 1.199 5.2 0 6.679 0H26.32C27.801 0 29 1.2 29 2.679V22.32C29 23.801 27.8 25 26.321 25zm-7.84-19.839l-6.865 6.866a.67.67 0 000 .947l6.866 6.865a.67.67 0 001.143-.473V5.635a.67.67 0 00-1.143-.474z"
         ></path>
       </g>

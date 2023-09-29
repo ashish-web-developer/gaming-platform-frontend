@@ -20,7 +20,7 @@ const StyledTooltip = styled.div`
   position: absolute;
   width: 366px;
   height: auto;
-  background: #f5e960;
+  background: ${({ theme }) => theme.palette.help_tooltip.tooltip.background};
   bottom: 56px;
   right: 350px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -32,14 +32,15 @@ const StyledTooltip = styled.div`
     content: "";
     border-width: 20px;
     border-style: solid;
-    border-color: transparent transparent transparent #f5e960;
+    border-color: transparent transparent transparent
+      ${({ theme }) => theme.palette.help_tooltip.tooltip.background};
     right: -40px;
     top: 15px;
   }
 `;
 
 const StyledTooltipHeader = styled.h6`
-  color: #f42c04;
+  color: ${({ theme }) => theme.palette.help_tooltip.tooltip.tooltip_heading};
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 14px;
   font-style: normal;
@@ -50,7 +51,7 @@ const StyledTooltipHeader = styled.h6`
 
 const StyledTooltipPara = styled.p`
   position: relative;
-  color: #2b061e;
+  color: ${({ theme }) => theme.palette.help_tooltip.tooltip.tooltip_para};
   font-family: Poppins;
   font-size: 12px;
   font-style: normal;

@@ -47,7 +47,7 @@ const initialState: InitialState = {
   lastFlippedCard: null,
   is_gaming_user_in: false,
   help_tooltip_text: null,
-  current_rule_index: -1,
+  current_rule_index: 0,
   game_rules_list: [],
   show_audio_play_modal: true,
   show_info_snackbar: false,

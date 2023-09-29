@@ -159,7 +159,8 @@ const StyledHelpCtaContainer = styled.div`
   width: 285px;
   height: 285px;
   border-radius: 50%;
-  background: #f5e960;
+  background: ${({ theme }) =>
+    theme.palette.help_tooltip.help_tooltip_cta.cta_container_background};
   position: absolute;
   left: -130px;
   bottom: -130px;

@@ -77,7 +77,11 @@ const MemoryGame: FC = () => {
             <StyledHelpCta
               onClick={() => dispatch(updateShowHelpTooltip(true))}
             >
-              <HelpIcon width={60} height={60} />
+              <HelpIcon
+                width={60}
+                height={60}
+                color={theme.palette.help_tooltip.help_tooltip_cta.cta_color}
+              />
             </StyledHelpCta>
           </Tooltip>
         </StyledHelpCtaContainer>

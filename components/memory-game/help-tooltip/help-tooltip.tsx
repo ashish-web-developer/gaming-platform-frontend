@@ -1,6 +1,7 @@
 import { useContext, useEffect, useCallback } from "react";
 // types
 import type { FC } from "react";
+import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 
 // styled components
 import {
@@ -13,6 +14,9 @@ import {
   StyledIconButton,
   StyledNavContainer,
 } from "@/styles/components/memory-game/help-tooltip/help-tooltip.style";
+
+// styled theme
+import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
@@ -38,6 +42,7 @@ import { IconButton } from "@mui/material";
 
 const HelpTooltip: FC = () => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as CustomMemoryGameThemePalette;
   const SpeechUttrance = useContext(UttranceContext);
   const _help_tooltip_text = useAppSelector(help_tooltip_text);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
@@ -55,6 +60,9 @@ const HelpTooltip: FC = () => {
   useEffect(() => {
     if (_show_help_tooltip && _help_tooltip_text && SpeechUttrance) {
       SpeechUttrance.text = _help_tooltip_text[1];
+      SpeechUttrance.uttrance.voice = speechSynthesis
+        .getVoices()
+        .filter((voice) => voice.voiceURI.includes("Female"))[0];
       speechSynthesis.speak(SpeechUttrance.uttrance);
       SpeechUttrance.uttrance.addEventListener("end", handleEnd);
     }
@@ -63,6 +71,7 @@ const HelpTooltip: FC = () => {
       speechSynthesis.cancel();
     };
   }, [_show_help_tooltip, _current_rule_index]);
+
   return (
     <AnimatePresence>
       {_show_help_tooltip && (
@@ -90,22 +99,33 @@ const HelpTooltip: FC = () => {
                 dispatch(updateCurrentRuleIndex(0));
               }}
             >
-              <CloseIcon size={33} />
+              <CloseIcon
+                color={theme.palette.help_tooltip.tooltip.icons}
+                size={33}
+              />
             </StyledIconButton>
             <StyledNavContainer>
               <IconButton
+                disabled={_current_rule_index == 0}
                 onClick={() => {
                   dispatch(updateCurrentRuleIndex(_current_rule_index - 1));
                 }}
               >
-                <PrevIcon size={33} />
+                <PrevIcon
+                  color={theme.palette.help_tooltip.tooltip.icons}
+                  size={33}
+                />
               </IconButton>
               <IconButton
+                disabled={_current_rule_index == 7}
                 onClick={() => {
                   dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
                 }}
               >
-                <NextIcon size={33} />
+                <NextIcon
+                  color={theme.palette.help_tooltip.tooltip.icons}
+                  size={33}
+                />
               </IconButton>
             </StyledNavContainer>
             <StyledTooltipHeader>
@@ -115,7 +135,7 @@ const HelpTooltip: FC = () => {
               {_help_tooltip_text && _help_tooltip_text[1]}
             </StyledTooltipPara>
             <StyledPattern>
-              <Pattern />
+              <Pattern color={theme.palette.help_tooltip.tooltip.pattern} />
             </StyledPattern>
           </StyledTooltip>
         </StyledHelpTooltipContainer>
@@ -125,7 +145,7 @@ const HelpTooltip: FC = () => {
 };
 export default HelpTooltip;
 
-const Pattern = () => {
+const Pattern: FC<{ color: string }> = ({ color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +155,7 @@ const Pattern = () => {
       viewBox="0 0 105 64"
     >
       <path
-        fill="#1E96FC"
+        fill={color}
         d="M0 64s13.247-24.392 36.742-31.744c11.764-3.681 21.69-1.648 33.402-5.376C90.548 20.386 104.5 0 104.5 0v54c0 5.523-4.477 10-10 10H0z"
       ></path>
     </svg>
