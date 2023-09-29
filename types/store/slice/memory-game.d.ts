@@ -28,7 +28,7 @@ type InitialState = {
       })
     | null;
   is_gaming_user_in: boolean;
-  rules_tooltip_text: [string, string] | null;
+  help_tooltip_text: [string, string] | null;
   current_rule_index: number;
   game_rules_list: [string, string][];
   show_audio_play_modal: boolean;

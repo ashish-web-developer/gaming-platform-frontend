@@ -1,8 +1,9 @@
 import { IconButton } from "@mui/material";
 import Image from "next/image";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-const StyledHelpTooltipContainer = styled.div`
+const StyledHelpTooltipContainer = styled(motion.div)`
   position: absolute;
   right: 0px;
   bottom: 0px;
@@ -18,13 +19,14 @@ const StyledImage = styled(Image)`
 const StyledTooltip = styled.div`
   position: absolute;
   width: 366px;
-  height: 130px;
+  height: auto;
   background: #f5e960;
   bottom: 56px;
   right: 350px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   padding: 16px;
+  padding-bottom: 40px;
   &::after {
     position: absolute;
     content: "";
@@ -47,6 +49,7 @@ const StyledTooltipHeader = styled.h6`
 `;
 
 const StyledTooltipPara = styled.p`
+  position: relative;
   color: #2b061e;
   font-family: Poppins;
   font-size: 12px;
@@ -54,18 +57,29 @@ const StyledTooltipPara = styled.p`
   font-weight: 600;
   line-height: normal;
   text-transform: capitalize;
+  padding-top: 6px;
+  z-index: 2;
 `;
 
 const StyledPattern = styled.span`
   position: absolute;
   right: -1px;
   bottom: -5px;
+  z-index: 0;
 `;
 
 const StyledIconButton = styled(IconButton)`
   position: absolute;
   top: 6px;
   right: 4px;
+`;
+
+const StyledNavContainer = styled.div`
+  position: absolute;
+  display: flex;
+  bottom: -2px;
+  right: 4px;
+  z-index: 1;
 `;
 
 export {
@@ -76,4 +90,5 @@ export {
   StyledTooltipPara,
   StyledPattern,
   StyledIconButton,
+  StyledNavContainer,
 };

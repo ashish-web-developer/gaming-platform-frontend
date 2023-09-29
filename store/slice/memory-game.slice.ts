@@ -46,7 +46,7 @@ const initialState: InitialState = {
   cardList: {},
   lastFlippedCard: null,
   is_gaming_user_in: false,
-  rules_tooltip_text: null,
+  help_tooltip_text: null,
   current_rule_index: -1,
   game_rules_list: [],
   show_audio_play_modal: true,
@@ -79,14 +79,14 @@ export const memoryGameSlice = createSlice({
     },
     updateGameRules: (state, action: PayloadAction<[string, string][]>) => {
       state.game_rules_list = action.payload;
-      state.rules_tooltip_text = action.payload[0];
+      state.help_tooltip_text = action.payload[0];
     },
     updateShowAudioPlayModal: (state, action: PayloadAction<boolean>) => {
       state.show_audio_play_modal = action.payload;
     },
     updateCurrentRuleIndex: (state, action: PayloadAction<number>) => {
       state.current_rule_index = action.payload;
-      state.rules_tooltip_text = state.game_rules_list[action.payload];
+      state.help_tooltip_text = state.game_rules_list[action.payload];
     },
     updateShowInfoSnackbar: (state, action: PayloadAction<boolean>) => {
       state.show_info_snackbar = action.payload;
@@ -124,8 +124,8 @@ export const is_gaming_user_in = (state: RootState) =>
   state.memoryGame.is_gaming_user_in;
 export const game_rules_list = (state: RootState) =>
   state.memoryGame.game_rules_list;
-export const rules_tooltip_text = (state: RootState) =>
-  state.memoryGame.rules_tooltip_text;
+export const help_tooltip_text = (state: RootState) =>
+  state.memoryGame.help_tooltip_text;
 export const show_audio_play_modal = (state: RootState) =>
   state.memoryGame.show_audio_play_modal;
 export const current_rule_index = (state: RootState) =>

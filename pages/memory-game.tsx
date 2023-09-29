@@ -86,8 +86,6 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
   const [isPlay, setPlay] = useState(false);
   const _room_id = useAppSelector(room_id);
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
-  const [counter, setCounter] = useState(20);
-  const counterIntervalRef = useRef<NodeJS.Timer | null>(null);
   usePresenceChannel(`game.${_room_id}`);
   const _is_proposal_sender = useAppSelector(is_proposal_sender);
   if (cardArray.current == null) {
@@ -96,21 +94,11 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
 
   useEffect(() => {
     dispatch(updateGameRules(rules));
-    counterIntervalRef.current = setInterval(() => {
-      setCounter((prev) => prev - 1);
-    }, 1000);
     speechUttranceRef.current = new MutableSpeechUtterance();
     return () => {
-      counterIntervalRef.current && clearInterval(counterIntervalRef.current);
       dispatch(updateIsGamingUserLeaving(false));
     };
   }, []);
-
-  useEffect(() => {
-    if (counter <= 0 || _is_gaming_user_in) {
-      counterIntervalRef.current && clearInterval(counterIntervalRef.current);
-    }
-  }, [counter, _is_gaming_user_in]);
 
   return (
     <>

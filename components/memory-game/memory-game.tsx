@@ -71,7 +71,7 @@ const MemoryGame: FC = () => {
     <>
       <GlobalStyles />
       <StyledContainer>
-        {_show_help_tooltip && <HelpTooltip />}
+        <HelpTooltip />
         <StyledHelpCtaContainer>
           <Tooltip title="Need Help?" placement="right-start">
             <StyledHelpCta
