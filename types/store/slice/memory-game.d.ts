@@ -36,6 +36,7 @@ type InitialState = {
   is_gaming_user_leaving: boolean;
   show_mobile_chat: boolean;
   show_help_tooltip: boolean;
+  play_audio: boolean;
 };
 
 export {

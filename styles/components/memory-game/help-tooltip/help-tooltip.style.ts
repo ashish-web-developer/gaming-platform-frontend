@@ -16,15 +16,55 @@ const StyledImage = styled(Image)`
   bottom: 0px;
 `;
 
-const StyledTooltip = styled.div`
+const StyledToolTipContainer = styled.div`
   position: absolute;
+  bottom: 56px;
+  right: 350px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledVolumeContainer = styled.div`
+  width: 78px;
+  height: 45px;
+  background: ${({ theme }) => theme.palette.help_tooltip.tooltip.background};
+  border-radius: 20px 20px 0px 0px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  &::after {
+    position: absolute;
+    content: "";
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: transparent;
+    bottom: 0px;
+    right: -20px;
+    box-shadow: -10px 10px 0
+      ${({ theme }) => theme.palette.help_tooltip.tooltip.background};
+  }
+`;
+
+const StyledVolumeCta = styled(IconButton)`
+  margin: 0px;
+  padding: 0px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: black;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  top: 10px;
+`;
+
+const StyledTooltip = styled.div`
   width: 366px;
   height: auto;
   background: ${({ theme }) => theme.palette.help_tooltip.tooltip.background};
-  bottom: 56px;
-  right: 350px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 10px;
+  border-radius: 0px 20px 20px 20px;
   padding: 16px;
   padding-bottom: 40px;
   &::after {
@@ -35,7 +75,7 @@ const StyledTooltip = styled.div`
     border-color: transparent transparent transparent
       ${({ theme }) => theme.palette.help_tooltip.tooltip.background};
     right: -40px;
-    top: 15px;
+    top: 70px;
   }
 `;
 
@@ -71,7 +111,7 @@ const StyledPattern = styled.span`
 
 const StyledIconButton = styled(IconButton)`
   position: absolute;
-  top: 6px;
+  top: 50px;
   right: 4px;
 `;
 
@@ -86,7 +126,10 @@ const StyledNavContainer = styled.div`
 export {
   StyledHelpTooltipContainer,
   StyledImage,
+  StyledToolTipContainer,
   StyledTooltip,
+  StyledVolumeContainer,
+  StyledVolumeCta,
   StyledTooltipHeader,
   StyledTooltipPara,
   StyledPattern,

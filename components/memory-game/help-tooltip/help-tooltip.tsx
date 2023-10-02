@@ -1,4 +1,4 @@
-import { useContext, useEffect, useCallback } from "react";
+import { useContext, useEffect } from "react";
 // types
 import type { FC } from "react";
 import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -7,6 +7,9 @@ import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 import {
   StyledHelpTooltipContainer,
   StyledImage,
+  StyledToolTipContainer,
+  StyledVolumeContainer,
+  StyledVolumeCta,
   StyledTooltip,
   StyledTooltipHeader,
   StyledTooltipPara,
@@ -18,27 +21,34 @@ import {
 // styled theme
 import { useTheme } from "styled-components";
 
+// mui
+import { IconButton } from "@mui/material";
+
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
+  // state
   show_help_tooltip,
   help_tooltip_text,
   current_rule_index,
+  play_audio,
+  // actions
   updateShowHelpTooltip,
   updateCurrentRuleIndex,
+  updatePlayAudio,
 } from "@/store/slice/memory-game.slice";
 
 // icons
 import CloseIcon from "@/components/memory-game/help-tooltip/icons/close";
 import PrevIcon from "@/components/memory-game/help-tooltip/icons/prev";
 import NextIcon from "@/components/memory-game/help-tooltip/icons/next";
+import VolumeIcon from "@/components/memory-game/help-tooltip/icons/volume";
 
 // framer motion
 import { AnimatePresence } from "framer-motion";
 
 // context
 import { UttranceContext } from "context";
-import { IconButton } from "@mui/material";
 
 const HelpTooltip: FC = () => {
   const dispatch = useAppDispatch();
@@ -47,18 +57,23 @@ const HelpTooltip: FC = () => {
   const _help_tooltip_text = useAppSelector(help_tooltip_text);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _current_rule_index = useAppSelector(current_rule_index);
-
-  const handleEnd = () => {
-    if (_current_rule_index < 7) {
-      dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
-      return;
-    }
-    dispatch(updateShowHelpTooltip(false));
-    dispatch(updateCurrentRuleIndex(0));
-  };
+  const _play_audio = useAppSelector(play_audio);
 
   useEffect(() => {
-    if (_show_help_tooltip && _help_tooltip_text && SpeechUttrance) {
+    const handleEnd = () => {
+      if (_current_rule_index < 7) {
+        dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
+        return;
+      }
+      dispatch(updateShowHelpTooltip(false));
+      dispatch(updateCurrentRuleIndex(0));
+    };
+    if (
+      _show_help_tooltip &&
+      _help_tooltip_text &&
+      SpeechUttrance &&
+      _play_audio
+    ) {
       SpeechUttrance.text = _help_tooltip_text[1];
       SpeechUttrance.uttrance.voice = speechSynthesis
         .getVoices()
@@ -70,7 +85,7 @@ const HelpTooltip: FC = () => {
       SpeechUttrance?.uttrance.removeEventListener("end", handleEnd);
       speechSynthesis.cancel();
     };
-  }, [_show_help_tooltip, _current_rule_index]);
+  }, [_show_help_tooltip, _current_rule_index, _play_audio]);
 
   return (
     <AnimatePresence>
@@ -92,52 +107,61 @@ const HelpTooltip: FC = () => {
             height={365}
             src="/memory-game/help-tooltip/help-tooltip-girl.png"
           />
-          <StyledTooltip>
-            <StyledIconButton
-              onClick={() => {
-                dispatch(updateShowHelpTooltip(false));
-                dispatch(updateCurrentRuleIndex(0));
-              }}
-            >
-              <CloseIcon
-                color={theme.palette.help_tooltip.tooltip.icons}
-                size={33}
-              />
-            </StyledIconButton>
-            <StyledNavContainer>
-              <IconButton
-                disabled={_current_rule_index == 0}
+          <StyledToolTipContainer>
+            <StyledVolumeContainer>
+              <StyledVolumeCta
+                onClick={() => dispatch(updatePlayAudio(!_play_audio))}
+              >
+                <VolumeIcon size={20} color={"#fff"} />
+              </StyledVolumeCta>
+            </StyledVolumeContainer>
+            <StyledTooltip>
+              <StyledIconButton
                 onClick={() => {
-                  dispatch(updateCurrentRuleIndex(_current_rule_index - 1));
+                  dispatch(updateShowHelpTooltip(false));
+                  dispatch(updateCurrentRuleIndex(0));
                 }}
               >
-                <PrevIcon
+                <CloseIcon
                   color={theme.palette.help_tooltip.tooltip.icons}
                   size={33}
                 />
-              </IconButton>
-              <IconButton
-                disabled={_current_rule_index == 7}
-                onClick={() => {
-                  dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
-                }}
-              >
-                <NextIcon
-                  color={theme.palette.help_tooltip.tooltip.icons}
-                  size={33}
-                />
-              </IconButton>
-            </StyledNavContainer>
-            <StyledTooltipHeader>
-              {_help_tooltip_text && _help_tooltip_text[0]}
-            </StyledTooltipHeader>
-            <StyledTooltipPara>
-              {_help_tooltip_text && _help_tooltip_text[1]}
-            </StyledTooltipPara>
-            <StyledPattern>
-              <Pattern color={theme.palette.help_tooltip.tooltip.pattern} />
-            </StyledPattern>
-          </StyledTooltip>
+              </StyledIconButton>
+              <StyledNavContainer>
+                <IconButton
+                  disabled={_current_rule_index == 0}
+                  onClick={() => {
+                    dispatch(updateCurrentRuleIndex(_current_rule_index - 1));
+                  }}
+                >
+                  <PrevIcon
+                    color={theme.palette.help_tooltip.tooltip.icons}
+                    size={33}
+                  />
+                </IconButton>
+                <IconButton
+                  disabled={_current_rule_index == 7}
+                  onClick={() => {
+                    dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
+                  }}
+                >
+                  <NextIcon
+                    color={theme.palette.help_tooltip.tooltip.icons}
+                    size={33}
+                  />
+                </IconButton>
+              </StyledNavContainer>
+              <StyledTooltipHeader>
+                {_help_tooltip_text && _help_tooltip_text[0]}
+              </StyledTooltipHeader>
+              <StyledTooltipPara>
+                {_help_tooltip_text && _help_tooltip_text[1]}
+              </StyledTooltipPara>
+              <StyledPattern>
+                <Pattern color={theme.palette.help_tooltip.tooltip.pattern} />
+              </StyledPattern>
+            </StyledTooltip>
+          </StyledToolTipContainer>
         </StyledHelpTooltipContainer>
       )}
     </AnimatePresence>
