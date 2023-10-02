@@ -85,6 +85,10 @@ const lightTheme: CustomThemePalette = {
         icons: "#2B061E",
         pattern: "#1E96FC",
       },
+      volume: {
+        background: "#2B061E",
+        color: "#F7FFF6",
+      },
     },
     secondary: {
       main: "#F65BE3",
@@ -184,6 +188,10 @@ const darkTheme: CustomThemePalette = {
         tooltip_para: "#F9F8F8",
         icons: "#F9F8F8",
         pattern: "#FF934F",
+      },
+      volume: {
+        background: "#080f0f",
+        color: "#f9f8f8",
       },
     },
     secondary: {

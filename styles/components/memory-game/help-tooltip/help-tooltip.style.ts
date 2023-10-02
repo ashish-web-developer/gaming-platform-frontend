@@ -53,7 +53,7 @@ const StyledVolumeCta = styled(IconButton)`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: black;
+  background: ${({ theme }) => theme.palette.help_tooltip.volume.background};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   position: absolute;
   top: 10px;

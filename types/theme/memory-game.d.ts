@@ -79,6 +79,10 @@ type CustomMemoryGameThemePalette = {
         icons: string;
         pattern: string;
       };
+      volume: {
+        background: string;
+        color: string;
+      };
     };
     secondary: {
       main: string;

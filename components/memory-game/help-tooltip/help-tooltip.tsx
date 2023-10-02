@@ -42,7 +42,8 @@ import {
 import CloseIcon from "@/components/memory-game/help-tooltip/icons/close";
 import PrevIcon from "@/components/memory-game/help-tooltip/icons/prev";
 import NextIcon from "@/components/memory-game/help-tooltip/icons/next";
-import VolumeIcon from "@/components/memory-game/help-tooltip/icons/volume";
+import VolumeOffIcon from "@/components/memory-game/help-tooltip/icons/volume-off";
+import VolumeOnIcon from "@/components/memory-game/help-tooltip/icons/volume-on";
 
 // framer motion
 import { AnimatePresence } from "framer-motion";
@@ -112,7 +113,17 @@ const HelpTooltip: FC = () => {
               <StyledVolumeCta
                 onClick={() => dispatch(updatePlayAudio(!_play_audio))}
               >
-                <VolumeIcon size={20} color={"#fff"} />
+                {_play_audio ? (
+                  <VolumeOffIcon
+                    size={20}
+                    color={theme.palette.help_tooltip.volume.color}
+                  />
+                ) : (
+                  <VolumeOnIcon
+                    size={20}
+                    color={theme.palette.help_tooltip.volume.color}
+                  />
+                )}
               </StyledVolumeCta>
             </StyledVolumeContainer>
             <StyledTooltip>
