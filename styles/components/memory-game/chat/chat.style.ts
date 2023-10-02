@@ -39,6 +39,17 @@ const StyledChatContainer = styled.div`
   z-index: 3;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 90%;
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 7;
+      bottom: -50px;
+      right: 60px;
+      border: 25px;
+      border-style: solid;
+      border-color: ${({ theme }) => theme.palette.chat.main} transparent
+        transparent transparent;
+    }
   }
 `;
 

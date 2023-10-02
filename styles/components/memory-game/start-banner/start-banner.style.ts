@@ -10,7 +10,7 @@ const StyledContainer = styled.div`
   background: ${({ theme }) => theme.palette.start_banner.main};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
-  margin-top: 80px;
+  margin-top: 40px;
   position: relative;
   z-index: 3;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {

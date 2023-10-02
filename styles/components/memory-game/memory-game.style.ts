@@ -31,8 +31,8 @@ const StyledChatContainer = styled.div`
     width: 100%;
     height: 60%;
     position: absolute;
-    bottom: 80px;
-    z-index: 4;
+    bottom: 150px;
+    z-index: 6;
     display: flex;
     justify-content: center;
   }
@@ -167,6 +167,9 @@ const StyledHelpCtaContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    display: none;
+  }
 `;
 
 const StyledHelpCta = styled(IconButton)`

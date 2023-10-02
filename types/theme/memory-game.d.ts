@@ -61,6 +61,11 @@ type CustomMemoryGameThemePalette = {
     nav: {
       background: string;
       color: string;
+      mobile: {
+        background: string;
+        icons: string;
+        help_icon: string;
+      };
     };
     help_tooltip: {
       help_tooltip_cta: {

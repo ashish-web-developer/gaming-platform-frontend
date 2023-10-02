@@ -10,6 +10,7 @@ import StartBanner from "@/components/memory-game/start-banner/start-banner";
 import Chat from "@/components/memory-game/chat/chat";
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
 import Nav from "@/components/memory-game/nav/nav";
+import MobileNav from "@/components/memory-game/nav/mobile-nav";
 const HelpTooltip = dynamic(
   () => import("@/components/memory-game/help-tooltip/help-tooltip"),
   {
@@ -97,7 +98,8 @@ const MemoryGame: FC = () => {
         </StyledInfoSnackbarContainer>
         <StyledContentContainer>
           <Nav />
-          <StyledFabCta
+          <MobileNav />
+          {/* <StyledFabCta
             onClick={() => dispatch(updateShowMobileChat(!_show_mobile_chat))}
           >
             <svg
@@ -112,7 +114,7 @@ const MemoryGame: FC = () => {
                 fill="#F9F8F8"
               />
             </svg>
-          </StyledFabCta>
+          </StyledFabCta> */}
           <StyledMainText>Good Morning, {_user.name}</StyledMainText>
           <StyledGrid>
             <StyledLeftContainer>
