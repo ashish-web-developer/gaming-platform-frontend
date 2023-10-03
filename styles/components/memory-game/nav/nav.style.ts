@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+// mui
+import { IconButton } from "@mui/material";
+
 const StyledNav = styled.div`
   position: absolute;
   top: 0px;
@@ -17,4 +20,9 @@ const StyledNav = styled.div`
   z-index: 4;
 `;
 
-export { StyledNav };
+const StyledChatCta = styled(IconButton)`
+  margin: 0px;
+  padding: 0px;
+`;
+
+export { StyledNav, StyledChatCta };

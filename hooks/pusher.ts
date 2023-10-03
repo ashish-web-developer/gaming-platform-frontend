@@ -92,7 +92,6 @@ function usePrivateChannel(
     });
     return () => {
       echo?.leaveChannel(channel);
-      console.log("disconnected");
     };
   }, [echo, _user, _active_user]);
 }
@@ -147,7 +146,7 @@ function usePresenceChannel(channel: string) {
         }
       });
     return () => {
-      echo?.leaveChannel(channel);
+      echo?.leave(channel);
     };
   }, [echo, _gaming_user]);
 }
