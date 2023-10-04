@@ -83,6 +83,9 @@ type CustomMemoryGameThemePalette = {
         background: string;
         color: string;
       };
+      mobile: {
+        background: string;
+      };
     };
     secondary: {
       main: string;

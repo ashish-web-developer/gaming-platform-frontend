@@ -28,6 +28,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   show_mobile_chat,
   updateShowMobileChat,
+  updateShowHelpDrawer,
 } from "@/store/slice/memory-game.slice";
 
 const MobileNav: FC = () => {
@@ -58,7 +59,11 @@ const MobileNav: FC = () => {
         </StyledNavCta>
       </StyledIconContainer>
       <Tooltip title="Need Help?" placement="top">
-        <StyledHelpCta>
+        <StyledHelpCta
+          onClick={() => {
+            dispatch(updateShowHelpDrawer(true));
+          }}
+        >
           <HelpIcon size={68} color={theme.palette.nav.mobile.help_icon} />
         </StyledHelpCta>
       </Tooltip>

@@ -89,6 +89,9 @@ const lightTheme: CustomThemePalette = {
         background: "#2B061E",
         color: "#F7FFF6",
       },
+      mobile: {
+        background: "#F5E960",
+      },
     },
     secondary: {
       main: "#F65BE3",
@@ -192,6 +195,9 @@ const darkTheme: CustomThemePalette = {
       volume: {
         background: "#080f0f",
         color: "#f9f8f8",
+      },
+      mobile: {
+        background: "#D62839",
       },
     },
     secondary: {

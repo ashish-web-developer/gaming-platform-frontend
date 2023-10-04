@@ -18,6 +18,14 @@ const HelpTooltip = dynamic(
   }
 );
 
+const MobileHelpTooltip = dynamic(
+  () =>
+    import("@/components/memory-game/help-tooltip/mobile/mobile-help-tooltip"),
+  {
+    ssr: false,
+  }
+);
+
 // styled components
 import GlobalStyles, {
   StyledContainer,
@@ -47,6 +55,7 @@ import {
   // state
   show_mobile_chat,
   show_help_tooltip,
+  show_help_drawer,
   // action
   updateShowMobileChat,
   updateShowHelpTooltip,
@@ -64,6 +73,7 @@ const MemoryGame: FC = () => {
   const dispatch = useAppDispatch();
   const _show_mobile_chat = useAppSelector(show_mobile_chat);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
+  const _show_help_drawer = useAppSelector(show_help_drawer);
   const isMobile = useMediaQuery(
     `(max-width:${theme.palette.breakpoints.mobile})`
   );
@@ -71,6 +81,7 @@ const MemoryGame: FC = () => {
   return (
     <>
       <GlobalStyles />
+      {isMobile && _show_help_drawer && <MobileHelpTooltip />}
       <StyledContainer>
         <HelpTooltip />
         <StyledHelpCtaContainer>
