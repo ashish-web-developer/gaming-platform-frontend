@@ -2,7 +2,7 @@ import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
 
 // mui
-import { Fab, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 
 type IStyledBackgroundCircle = {
   $mode: "dark" | "light";
@@ -129,20 +129,6 @@ const StyledMainText = styled.div`
   }
 `;
 
-const StyledFabCta = styled(Fab)`
-  display: none;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    display: inline-flex;
-    background-color: ${({ theme }) => theme.palette.secondary.red};
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
-    &:hover {
-      background-color: ${({ theme }) => theme.palette.secondary.red};
-    }
-  }
-`;
-
 const StyledInfoSnackbarContainer = styled.div`
   display: none;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
@@ -167,6 +153,7 @@ const StyledHelpCtaContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 2;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     display: none;
   }
@@ -189,7 +176,6 @@ export {
   StyledBackgroundCircleOne,
   StyledBackgroundCircleTwo,
   StyledMainText,
-  StyledFabCta,
   StyledInfoSnackbarContainer,
   StyledHelpCtaContainer,
   StyledHelpCta,

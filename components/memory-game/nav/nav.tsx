@@ -24,6 +24,8 @@ import {
   updateRoomId,
 } from "@/store/slice/game.slice";
 
+import { updateShowHelpTooltip } from "@/store/slice/memory-game.slice";
+
 const Nav: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
@@ -36,6 +38,7 @@ const Nav: FC = () => {
           dispatch(updateGamingUser(null));
           dispatch(udpateIsProposalSender(false));
           dispatch(updateRoomId(null));
+          dispatch(updateShowHelpTooltip(false));
         }}
       >
         <ChatIcon color={theme.palette.nav.color} width={40} height={30} />
