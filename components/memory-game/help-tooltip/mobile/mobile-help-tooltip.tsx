@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useContext, useEffect } from "react";
 // types
 import { type FC } from "react";
 // mui
@@ -24,8 +24,15 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
+  // state
+  play_audio,
   show_help_drawer,
+  help_tooltip_text,
+  current_rule_index,
+  // actions
   updateShowHelpDrawer,
+  updatePlayAudio,
+  updateCurrentRuleIndex,
 } from "@/store/slice/memory-game.slice";
 
 // icons
@@ -35,9 +42,44 @@ import PrevIcon from "../icons/prev";
 import NextIcon from "../icons/next";
 import BackIcon from "../icons/back";
 
+// context
+import { UttranceContext } from "context";
+
 const MobileHelpTooltip: FC = () => {
   const dispatch = useAppDispatch();
+  const SpeechUttrance = useContext(UttranceContext);
+  const _play_audio = useAppSelector(play_audio);
   const _show_help_drawer = useAppSelector(show_help_drawer);
+  const _help_tooltip_text = useAppSelector(help_tooltip_text);
+  const _current_rule_index = useAppSelector(current_rule_index);
+
+  useEffect(() => {
+    const handleEnd = () => {
+      if (_current_rule_index < 7) {
+        dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
+        return;
+      }
+      dispatch(updateShowHelpDrawer(false));
+      dispatch(updateCurrentRuleIndex(0));
+    };
+    if (
+      _show_help_drawer &&
+      _help_tooltip_text &&
+      SpeechUttrance &&
+      _play_audio
+    ) {
+      SpeechUttrance.text = _help_tooltip_text[1];
+      SpeechUttrance.uttrance.voice = speechSynthesis
+        .getVoices()
+        .filter((voice) => voice.voiceURI.includes("Female"))[0];
+      speechSynthesis.speak(SpeechUttrance.uttrance);
+      SpeechUttrance.uttrance.addEventListener("end", handleEnd);
+    }
+    return () => {
+      SpeechUttrance?.uttrance.removeEventListener("end", handleEnd);
+      speechSynthesis.cancel();
+    };
+  }, [_show_help_drawer, _current_rule_index, _play_audio]);
 
   return (
     <Drawer
@@ -57,15 +99,23 @@ const MobileHelpTooltip: FC = () => {
             height={350}
           />
         </StyledTopBackground>
-        <StyledVolumeCta>
-          <VolumeOffIcon size={30} color="#fff" />
+        <StyledVolumeCta
+          onClick={() => {
+            dispatch(updatePlayAudio(!_play_audio));
+          }}
+        >
+          {_play_audio ? (
+            <VolumeOffIcon size={30} color={"#fff"} />
+          ) : (
+            <VolumeOnIcon size={30} color={"#fff"} />
+          )}
         </StyledVolumeCta>
         <StyledContent>
-          <StyledHeader>Cognimatch: Rules and How to Play</StyledHeader>
+          <StyledHeader>
+            {_help_tooltip_text ? _help_tooltip_text[0] : ""}
+          </StyledHeader>
           <StyledPara>
-            Memory, also known as Concentration, is a classic card-matching game
-            that tests your memory skills and attention to detail. Here's how to
-            play this engaging game:
+            {_help_tooltip_text ? _help_tooltip_text[1] : ""}
           </StyledPara>
           <StyledTrofyImage>
             <Image
@@ -79,6 +129,11 @@ const MobileHelpTooltip: FC = () => {
         </StyledContent>
         <StyledBottomCta>
           <StyledBackButton
+            onClick={() => {
+              dispatch(updatePlayAudio(true));
+              dispatch(updateShowHelpDrawer(false));
+              dispatch(updateCurrentRuleIndex(0));
+            }}
             startIcon={
               <StyledBackIconContainer>
                 <BackIcon width={12} height={22} color={"#000"} />
@@ -89,10 +144,22 @@ const MobileHelpTooltip: FC = () => {
             Go Back
           </StyledBackButton>
           <StyledNavIconContainer>
-            <StyledNavCta>
+            <StyledNavCta
+              onClick={() => {
+                if (_current_rule_index >= 1) {
+                  dispatch(updateCurrentRuleIndex(_current_rule_index - 1));
+                }
+              }}
+            >
               <PrevIcon size={50} color={"#000"} />
             </StyledNavCta>
-            <StyledNavCta>
+            <StyledNavCta
+              onClick={() => {
+                if (_current_rule_index <= 6) {
+                  dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
+                }
+              }}
+            >
               <NextIcon size={50} color={"#000"} />
             </StyledNavCta>
           </StyledNavIconContainer>
