@@ -85,6 +85,15 @@ type CustomMemoryGameThemePalette = {
       };
       mobile: {
         background: string;
+        heading: string;
+        para: string;
+        icons: string;
+        back_cta: {
+          background: string;
+          text_color: string;
+          start_icon_background: string;
+          start_icon: string;
+        };
       };
     };
     secondary: {

@@ -91,6 +91,15 @@ const lightTheme: CustomThemePalette = {
       },
       mobile: {
         background: "#F5E960",
+        heading: "#F42C04",
+        para: "#2B061E",
+        icons: "#2B061E",
+        back_cta: {
+          background: "#2B061E",
+          text_color: "#F7FFF6",
+          start_icon_background: "#F7FFF6",
+          start_icon: "#2B061E",
+        },
       },
     },
     secondary: {
@@ -198,6 +207,15 @@ const darkTheme: CustomThemePalette = {
       },
       mobile: {
         background: "#D62839",
+        heading: "#1E1E1E",
+        para: "#f9f8f8",
+        icons: "#f9f8f8",
+        back_cta: {
+          background: "#f9f8f8",
+          text_color: "#080f0f",
+          start_icon_background: "#080f0f",
+          start_icon: "#f9f8f8",
+        },
       },
     },
     secondary: {

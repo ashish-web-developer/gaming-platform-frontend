@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { useContext, useEffect } from "react";
 // types
-import { type FC } from "react";
+import type { FC } from "react";
+import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 // mui
 import { Drawer } from "@mui/material";
 
@@ -21,6 +22,9 @@ import {
   StyledBackIconContainer,
 } from "@/styles/components/memory-game/help-tooltip/mobile/mobile-help-tooltip.style";
 
+// theme
+import { useTheme } from "styled-components";
+
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
@@ -36,17 +40,19 @@ import {
 } from "@/store/slice/memory-game.slice";
 
 // icons
-import VolumeOffIcon from "../icons/volume-off";
-import VolumeOnIcon from "../icons/volume-on";
-import PrevIcon from "../icons/prev";
-import NextIcon from "../icons/next";
-import BackIcon from "../icons/back";
+import VolumeOffIcon from "@/components/memory-game/help-tooltip/icons/volume-off";
+import VolumeOnIcon from "@/components/memory-game/help-tooltip/icons/volume-on";
+import PrevIcon from "@/components/memory-game/help-tooltip/icons/prev";
+import NextIcon from "@/components/memory-game/help-tooltip/icons/next";
+import BackIcon from "@/components/memory-game/help-tooltip/icons/back";
 
 // context
-import { UttranceContext } from "context";
+import { UttranceContext, ThemeMode } from "context";
 
 const MobileHelpTooltip: FC = () => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const themeMode = useContext(ThemeMode);
   const SpeechUttrance = useContext(UttranceContext);
   const _play_audio = useAppSelector(play_audio);
   const _show_help_drawer = useAppSelector(show_help_drawer);
@@ -117,7 +123,7 @@ const MobileHelpTooltip: FC = () => {
           <StyledPara>
             {_help_tooltip_text ? _help_tooltip_text[1] : ""}
           </StyledPara>
-          <StyledTrofyImage>
+          <StyledTrofyImage $showBackground={themeMode == "light"}>
             <Image
               alt="banner"
               layout="responsive"
@@ -136,7 +142,11 @@ const MobileHelpTooltip: FC = () => {
             }}
             startIcon={
               <StyledBackIconContainer>
-                <BackIcon width={12} height={22} color={"#000"} />
+                <BackIcon
+                  width={12}
+                  height={22}
+                  color={theme.palette.help_tooltip.mobile.back_cta.start_icon}
+                />
               </StyledBackIconContainer>
             }
             variant="contained"
@@ -151,7 +161,10 @@ const MobileHelpTooltip: FC = () => {
                 }
               }}
             >
-              <PrevIcon size={50} color={"#000"} />
+              <PrevIcon
+                size={50}
+                color={theme.palette.help_tooltip.mobile.icons}
+              />
             </StyledNavCta>
             <StyledNavCta
               onClick={() => {
@@ -160,7 +173,10 @@ const MobileHelpTooltip: FC = () => {
                 }
               }}
             >
-              <NextIcon size={50} color={"#000"} />
+              <NextIcon
+                size={50}
+                color={theme.palette.help_tooltip.mobile.icons}
+              />
             </StyledNavCta>
           </StyledNavIconContainer>
         </StyledBottomCta>

@@ -4,8 +4,8 @@ import { Box, IconButton, Button } from "@mui/material";
 // styled
 import styled from "styled-components";
 
-type IStyledVolumeCta = {
-  $top: number | undefined;
+type IStyledTrofyImage = {
+  $showBackground: boolean;
 };
 
 const StyledTooltipContainer = styled(Box)`
@@ -55,7 +55,7 @@ const StyledContent = styled.div`
 `;
 
 const StyledHeader = styled.h6`
-  color: #f42c04;
+  color: ${({ theme }) => theme.palette.help_tooltip.mobile.heading};
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 18px;
   font-style: normal;
@@ -65,7 +65,7 @@ const StyledHeader = styled.h6`
 `;
 
 const StyledPara = styled.p`
-  color: #2b061e;
+  color: ${({ theme }) => theme.palette.help_tooltip.mobile.para};
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 16px;
   font-style: normal;
@@ -74,12 +74,13 @@ const StyledPara = styled.p`
   text-transform: capitalize;
 `;
 
-const StyledTrofyImage = styled.div`
+const StyledTrofyImage = styled.div<IStyledTrofyImage>`
   width: 200px;
   height: 283px;
   align-self: center;
   position: relative;
   &::before {
+    display: ${(props) => (props.$showBackground ? "block" : "none")};
     content: "";
     position: absolute;
     width: 100%;
@@ -115,14 +116,20 @@ const StyledNavCta = styled(IconButton)`
 `;
 
 const StyledBackButton = styled(Button)`
-  background-color: #2b061e;
+  background-color: ${({ theme }) =>
+    theme.palette.help_tooltip.mobile.back_cta.background};
   border-radius: 25px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: ${({ theme }) =>
+    theme.palette.help_tooltip.mobile.back_cta.text_color};
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-weight: 600;
 `;
 const StyledBackIconContainer = styled.span`
   width: 30px;
   height: 30px;
-  background: #fff;
+  background: ${({ theme }) =>
+    theme.palette.help_tooltip.mobile.back_cta.start_icon_background};
   border-radius: 50%;
   display: flex;
   align-items: center;
