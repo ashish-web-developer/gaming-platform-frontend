@@ -25,6 +25,13 @@ const MobileHelpTooltip = dynamic(
     ssr: false,
   }
 );
+
+const GameBoard = dynamic(
+  () => import("@/components/memory-game/game-board/game-board"),
+  {
+    ssr: false,
+  }
+);
 // styled components
 import GlobalStyles, {
   StyledContainer,
@@ -54,6 +61,7 @@ import {
   show_mobile_chat,
   show_help_tooltip,
   show_help_drawer,
+  show_game_board,
   // action
   updateShowHelpTooltip,
 } from "@/store/slice/memory-game.slice";
@@ -71,6 +79,7 @@ const MemoryGame: FC = () => {
   const _show_mobile_chat = useAppSelector(show_mobile_chat);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _show_help_drawer = useAppSelector(show_help_drawer);
+  const _show_game_board = useAppSelector(show_game_board);
   const isMobile = useMediaQuery(
     `(max-width:${theme.palette.breakpoints.mobile})`
   );
@@ -107,11 +116,18 @@ const MemoryGame: FC = () => {
         <StyledContentContainer>
           <Nav />
           <MobileNav />
-          <StyledMainText>Good Morning, {_user.name}</StyledMainText>
+          {!_show_game_board && (
+            <StyledMainText>Good Morning, {_user.name}</StyledMainText>
+          )}
           <StyledGrid>
             <StyledLeftContainer>
-              <WelcomeBanner />
-              <StartBanner />
+              {!_show_game_board && (
+                <>
+                  <WelcomeBanner />
+                  <StartBanner />
+                </>
+              )}
+              {_show_game_board && <GameBoard />}
             </StyledLeftContainer>
             <StyledRightContainer>
               <Chat />

@@ -37,6 +37,7 @@ type InitialState = {
   show_mobile_chat: boolean;
   show_help_tooltip: boolean;
   play_audio: boolean;
+  show_game_board: boolean;
   mobile: {
     show_help_drawer: boolean;
   };

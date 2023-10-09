@@ -9,9 +9,18 @@ import { StyledCountDown } from "@/styles/components/memory-game/start-banner/co
 // theme
 import { useTheme } from "styled-components";
 
+// redux
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import {
+  show_game_board,
+  updateShowGameBoard,
+} from "@/store/slice/memory-game.slice";
+
 const CountDown: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
+  const dispatch = useAppDispatch();
   const [count, setCount] = useState(60);
+  const _show_game_board = useAppSelector(show_game_board);
   const timerRef = useRef<NodeJS.Timer | null>(null);
 
   useEffect(() => {
@@ -25,8 +34,12 @@ const CountDown: FC = () => {
   useEffect(() => {
     if (count <= 0 && timerRef.current) {
       clearInterval(timerRef.current);
+      dispatch(updateShowGameBoard(true));
     }
-  }, [count]);
+    if (_show_game_board && timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+  }, [count, _show_game_board]);
 
   return (
     <StyledCountDown>

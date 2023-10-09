@@ -57,6 +57,7 @@ const StyledGrid = styled.div`
   flex-direction: row;
   width: 100%;
   gap: 20px;
+  padding-top: 60px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 90%;
   }

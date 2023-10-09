@@ -31,18 +31,19 @@ import Play from "@/components/memory-game/start-banner/icons/play";
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
+import { updateShowGameBoard } from "@/store/slice/memory-game.slice";
 
 const StartBanner: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
+  const dispatch = useAppDispatch();
   const isMobile = useMediaQuery(
     `(max-width:${theme.palette.breakpoints.mobile})`
   );
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  console.log("isMobile", isMobile);
   return (
     <StyledContainer>
       <StyledBannerBackgroundOne />
@@ -82,7 +83,11 @@ const StartBanner: FC = () => {
             />
           </StyledVersusContainer>
         </StyledContentTop>
-        <StyledPlayButton>
+        <StyledPlayButton
+          onClick={() => {
+            dispatch(updateShowGameBoard(true));
+          }}
+        >
           <Play size={isMobile ? 40 : 68} />
         </StyledPlayButton>
         <CountDown />

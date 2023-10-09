@@ -55,6 +55,7 @@ const initialState: InitialState = {
   show_mobile_chat: false,
   show_help_tooltip: false,
   play_audio: true,
+  show_game_board: false,
   mobile: {
     show_help_drawer: false,
   },
@@ -111,6 +112,9 @@ export const memoryGameSlice = createSlice({
     updateShowHelpDrawer: (state, action: PayloadAction<boolean>) => {
       state.mobile.show_help_drawer = action.payload;
     },
+    updateShowGameBoard: (state, action: PayloadAction<boolean>) => {
+      state.show_game_board = action.payload;
+    },
   },
 });
 
@@ -128,6 +132,7 @@ export const {
   updateShowHelpTooltip,
   updatePlayAudio,
   updateShowHelpDrawer,
+  updateShowGameBoard,
 } = memoryGameSlice.actions;
 export const cardList = (state: RootState) => state.memoryGame.cardList;
 export const lastFlippedCard = (state: RootState) =>
@@ -154,5 +159,7 @@ export const show_help_tooltip = (state: RootState) =>
 export const play_audio = (state: RootState) => state.memoryGame.play_audio;
 export const show_help_drawer = (state: RootState) =>
   state.memoryGame.mobile.show_help_drawer;
+export const show_game_board = (state: RootState) =>
+  state.memoryGame.show_game_board;
 
 export default memoryGameSlice.reducer;
