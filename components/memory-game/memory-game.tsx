@@ -119,7 +119,7 @@ const MemoryGame: FC = () => {
           {!_show_game_board && (
             <StyledMainText>Good Morning, {_user.name}</StyledMainText>
           )}
-          <StyledGrid>
+          <StyledGrid $paddingTop={_show_game_board ? "70px" : null}>
             <StyledLeftContainer>
               {!_show_game_board && (
                 <>

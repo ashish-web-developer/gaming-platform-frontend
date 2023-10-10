@@ -1,3 +1,5 @@
+import dynamic from "next/dynamic";
+
 // styled components
 import {
   StyledGameBoardContainer,
@@ -9,6 +11,11 @@ import {
 
 // local components
 import ScoreBoard from "@/components/memory-game/game-board/score-board";
+import Card from "@/components/memory-game/game-board/card";
+
+const Timer = dynamic(import("@/components/memory-game/game-board/timer"), {
+  ssr: false,
+});
 
 const GameBoard = () => {
   return (
@@ -17,9 +24,15 @@ const GameBoard = () => {
         <StyledScoreBoardContainer>
           <ScoreBoard />
         </StyledScoreBoardContainer>
-        <StyledTimeBoardContainer></StyledTimeBoardContainer>
+        <StyledTimeBoardContainer>
+          <Timer />
+        </StyledTimeBoardContainer>
       </StyledTopBoardContainer>
-      <StyledBottomGameBoardContainer></StyledBottomGameBoardContainer>
+      <StyledBottomGameBoardContainer>
+        {new Array(18).fill(0).map(() => {
+          return <Card />;
+        })}
+      </StyledBottomGameBoardContainer>
     </StyledGameBoardContainer>
   );
 };

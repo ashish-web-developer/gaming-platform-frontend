@@ -8,6 +8,10 @@ type IStyledBackgroundCircle = {
   $mode: "dark" | "light";
 };
 
+type IStyledGrid = {
+  $paddingTop: string | null;
+};
+
 const GlobalStyles = createGlobalStyle`
     body {
         background: ${({ theme }) => theme.palette.primary.main} !important;
@@ -52,12 +56,12 @@ const StyledContentContainer = styled.div`
   }
 `;
 
-const StyledGrid = styled.div`
+const StyledGrid = styled.div<IStyledGrid>`
   display: flex;
   flex-direction: row;
   width: 100%;
   gap: 20px;
-  padding-top: 60px;
+  padding-top: ${(props) => props.$paddingTop ?? 0};
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 90%;
   }

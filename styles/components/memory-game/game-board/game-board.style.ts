@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const StyledGameBoardContainer = styled.div`
   width: 100%;
-  height: 523px;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -21,6 +21,9 @@ const StyledTimeBoardContainer = styled.div`
   background: #090302;
   border-radius: 25px 25px 0 0;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   &::after {
     position: absolute;
     content: "";
@@ -36,9 +39,14 @@ const StyledTimeBoardContainer = styled.div`
 
 const StyledBottomGameBoardContainer = styled.div`
   width: 100%;
-  height: calc(523px - 90px);
+  height: auto;
   background: #090302;
   border-radius: 25px 0 25px 25px;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  padding: 16px;
 `;
 
 const StyledScoreBoardContainer = styled.div`
