@@ -17,7 +17,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Axios } from "@/helpers/axios";
 // helpers package
 import { v4 as uuidv4 } from "uuid";
-import { getCards } from "./memory-game.slice";
 
 export const sendInvitation = createAsyncThunk<
   ISendInvitationResponse,
@@ -61,10 +60,9 @@ export const acceptInvitation = createAsyncThunk<
         is_accepted,
       });
       dispatch(updateShowInvitationSnackbar(false));
-      if(is_accepted){
-        dispatch(getCards({game_complexity:14}));
-      }else{
-        updateGamingUser(null)
+      if (is_accepted) {
+      } else {
+        updateGamingUser(null);
       }
       return response.data;
     } catch (error) {
@@ -79,7 +77,7 @@ const initialState: InitialState = {
   show_invitation_snackbar: false,
   show_denied_snackbar: false,
   sending_invitation: false,
-  is_proposal_sender:false
+  is_proposal_sender: false,
 };
 const gameSlice = createSlice({
   name: "game",
@@ -97,9 +95,9 @@ const gameSlice = createSlice({
     updateShowDeniedSnackbar: (state, action: PayloadAction<boolean>) => {
       state.show_denied_snackbar = action.payload;
     },
-    udpateIsProposalSender:(state,action:PayloadAction<boolean>)=>{
+    udpateIsProposalSender: (state, action: PayloadAction<boolean>) => {
       state.is_proposal_sender = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(sendInvitation.pending, (state) => {
@@ -123,11 +121,12 @@ export const show_denied_snackbar = (state: RootState) =>
   state.game.show_denied_snackbar;
 export const sending_invitation = (state: RootState) =>
   state.game.sending_invitation;
-export const is_proposal_sender = (state:RootState) => state.game.is_proposal_sender;
+export const is_proposal_sender = (state: RootState) =>
+  state.game.is_proposal_sender;
 export const {
   updateGamingUser,
   updateRoomId,
   updateShowInvitationSnackbar,
   updateShowDeniedSnackbar,
-  udpateIsProposalSender
+  udpateIsProposalSender,
 } = gameSlice.actions;

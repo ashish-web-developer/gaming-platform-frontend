@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -62,15 +62,23 @@ import {
   show_help_tooltip,
   show_help_drawer,
   show_game_board,
+  is_gaming_user_in,
+  // api call
+  getCards,
   // action
   updateShowHelpTooltip,
+  updateCardList,
 } from "@/store/slice/memory-game.slice";
+import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
 
 // context
 import { ThemeMode } from "context";
 
 // icons
 import HelpIcon from "@/components/memory-game/icons/help";
+
+// hooks
+import { usePresenceChannel } from "@/hooks/pusher";
 
 const MemoryGame: FC = () => {
   const themeMode = useContext(ThemeMode);
@@ -80,10 +88,28 @@ const MemoryGame: FC = () => {
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _show_help_drawer = useAppSelector(show_help_drawer);
   const _show_game_board = useAppSelector(show_game_board);
+  const _room_id = useAppSelector(room_id);
+  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
+  const _is_proposal_sender = useAppSelector(is_proposal_sender);
   const isMobile = useMediaQuery(
     `(max-width:${theme.palette.breakpoints.mobile})`
   );
   const _user = useAppSelector(user);
+
+  usePresenceChannel(`game.${_room_id}`, [
+    {
+      event: "CardListDataEvent",
+      callback: (data) => {
+        dispatch(updateCardList(data.card_list));
+      },
+    },
+  ]);
+
+  useEffect(() => {
+    if (_is_gaming_user_in && _is_proposal_sender) {
+      dispatch(getCards({ game_complexity: 14 }));
+    }
+  }, [_is_gaming_user_in, _is_proposal_sender]);
   return (
     <>
       <GlobalStyles />

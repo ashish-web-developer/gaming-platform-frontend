@@ -9,6 +9,7 @@ import type {
   MemoryGameCardEventRespose,
   IGetCardRequest,
   IGetCardsResponse,
+  ICard,
 } from "@/types/store/slice/memory-game";
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 
@@ -34,16 +35,17 @@ export const getCards = createAsyncThunk<
   IGetCardsResponse,
   IGetCardRequest,
   { state: RootState }
->("api/memory-game", async ({ game_complexity }, { getState }) => {
+>("api/memory-game", async ({ game_complexity }, { getState, dispatch }) => {
+  const state = getState();
   const res = await Axios.post("/memory-game/get-card", {
     game_complexity,
+    room_id: state.game.room_id,
   });
-  console.log(res);
   return res.data;
 });
 
 const initialState: InitialState = {
-  cardList: {},
+  card_list: [],
   lastFlippedCard: null,
   is_gaming_user_in: false,
   help_tooltip_text: null,
@@ -64,11 +66,8 @@ export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
   initialState,
   reducers: {
-    updateCard: (
-      state,
-      action: PayloadAction<{ key: string; value: boolean }>
-    ) => {
-      state.cardList[action.payload.key] = action.payload.value;
+    updateCardList: (state, action: PayloadAction<ICard[]>) => {
+      state.card_list = action.payload;
     },
     removeCard: (state, action: PayloadAction<string>) => {
       delete state.cardList[action.payload];
@@ -119,7 +118,7 @@ export const memoryGameSlice = createSlice({
 });
 
 export const {
-  updateCard,
+  updateCardList,
   removeCard,
   updateLastFlippedCard,
   updateIsGamingUserIn,
@@ -134,7 +133,7 @@ export const {
   updateShowHelpDrawer,
   updateShowGameBoard,
 } = memoryGameSlice.actions;
-export const cardList = (state: RootState) => state.memoryGame.cardList;
+export const card_list = (state: RootState) => state.memoryGame.card_list;
 export const lastFlippedCard = (state: RootState) =>
   state.memoryGame.lastFlippedCard;
 export const is_gaming_user_in = (state: RootState) =>

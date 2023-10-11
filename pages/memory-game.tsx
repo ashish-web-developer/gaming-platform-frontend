@@ -59,19 +59,6 @@ import { UttranceContext } from "context";
 // helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 
-const cardArrayInitializaer = (gameComplexity: number) => {
-  let index = 0;
-  const cardArray: GetRandomCard[] = new Array(gameComplexity);
-  while (index < gameComplexity) {
-    const card = getRandomCard();
-    cardArray[index] = card;
-    cardArray[index + 1] = card;
-    index += 2;
-  }
-  shuffleArray(cardArray);
-  return cardArray;
-};
-
 interface Props {
   files: string[];
   colors: Colors;
@@ -82,15 +69,6 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
   const mode = useContext(ThemeMode);
   const theme = getTheme(mode);
   const speechUttranceRef = useRef<MutableSpeechUtterance | null>(null);
-  const cardArray = useRef<GetRandomCard[] | null>(null);
-  const [isPlay, setPlay] = useState(false);
-  const _room_id = useAppSelector(room_id);
-  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
-  usePresenceChannel(`game.${_room_id}`);
-  const _is_proposal_sender = useAppSelector(is_proposal_sender);
-  if (cardArray.current == null) {
-    cardArray.current = cardArrayInitializaer(14);
-  }
 
   useEffect(() => {
     dispatch(updateGameRules(rules));

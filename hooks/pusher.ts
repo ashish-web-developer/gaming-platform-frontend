@@ -96,12 +96,18 @@ function usePrivateChannel(
   }, [echo, _user, _active_user]);
 }
 
-function usePresenceChannel(channel: string) {
+function usePresenceChannel(
+  channel: string, // channel to which you want to connect
+  events: {
+    event: string;
+    callback: (data: any) => void;
+  }[]
+) {
   const echo = useEcho();
   const dispatch = useAppDispatch();
   const _gaming_user = useAppSelector(gaming_user);
   useEffect(() => {
-    echo
+    const subscription = echo
       ?.join(channel)
       .here((user_ids: User_ids) => {
         if (
@@ -145,6 +151,9 @@ function usePresenceChannel(channel: string) {
           dispatch(updateIsGamingUserLeaving(true));
         }
       });
+    events.forEach(({ event, callback }) => {
+      subscription?.listen(event, (data: any) => callback(data));
+    });
     return () => {
       echo?.leave(channel);
     };

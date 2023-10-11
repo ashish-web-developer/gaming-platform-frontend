@@ -18,10 +18,14 @@ type IGetCardRequest = {
   game_complexity: number;
 };
 
+type ICard = {
+  suit: string;
+  card: string;
+  cardColor: string;
+};
+
 type InitialState = {
-  cardList: {
-    [key: string]: boolean;
-  };
+  card_list: ICard[];
   lastFlippedCard:
     | (GetRandomCard & {
         id: string;
@@ -49,4 +53,5 @@ export {
   MemoryGameCardEventRespose,
   IGetCardRequest,
   IGetCardsResponse,
+  ICard,
 };
