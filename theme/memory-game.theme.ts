@@ -110,6 +110,8 @@ const lightTheme: CustomThemePalette = {
     },
     fontFamily: {
       poppins: "'Poppins', sans-serif;",
+      jim: "Jim Nightshade",
+      oleo_script_swash_caps: "Oleo Script Swash Caps",
     },
     breakpoints: {
       mobile: "600px",
@@ -225,7 +227,9 @@ const darkTheme: CustomThemePalette = {
       green: "#329f5b",
     },
     fontFamily: {
-      poppins: "'Poppins', sans-serif;",
+      poppins: "'Poppins', sans-serif",
+      jim: "Jim Nightshade",
+      oleo_script_swash_caps: "Oleo Script Swash Caps",
     },
     breakpoints: {
       mobile: "600px",

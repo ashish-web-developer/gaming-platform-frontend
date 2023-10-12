@@ -2,7 +2,7 @@ import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 
 type MemoryGameCardEventArgs = {
   card_id: string;
-  player_id: number;
+  flipped: boolean;
 };
 
 type MemoryGameCardEventRespose = {
@@ -19,9 +19,11 @@ type IGetCardRequest = {
 };
 
 type ICard = {
-  suit: string;
-  card: string;
-  cardColor: string;
+  id: string;
+  suit: "♠" | "♣" | "♦" | "♥";
+  card: "♚" | "♛" | "♞" | "A" | number;
+  cardColor: "red" | "black";
+  flipped: boolean;
 };
 
 type InitialState = {

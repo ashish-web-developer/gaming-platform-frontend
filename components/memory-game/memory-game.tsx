@@ -68,6 +68,7 @@ import {
   // action
   updateShowHelpTooltip,
   updateCardList,
+  updateCardState,
 } from "@/store/slice/memory-game.slice";
 import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
 
@@ -103,11 +104,17 @@ const MemoryGame: FC = () => {
         dispatch(updateCardList(data.card_list));
       },
     },
+    {
+      event: "MemoryGameEvent",
+      callback: (data) => {
+        dispatch(updateCardState({ id: data.card_id, flipped: data.flipped }));
+      },
+    },
   ]);
 
   useEffect(() => {
     if (_is_gaming_user_in && _is_proposal_sender) {
-      dispatch(getCards({ game_complexity: 14 }));
+      dispatch(getCards({ game_complexity: 18 }));
     }
   }, [_is_gaming_user_in, _is_proposal_sender]);
   return (

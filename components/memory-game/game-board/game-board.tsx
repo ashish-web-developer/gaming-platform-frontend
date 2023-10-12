@@ -12,12 +12,16 @@ import {
 // local components
 import ScoreBoard from "@/components/memory-game/game-board/score-board";
 import Card from "@/components/memory-game/game-board/card";
-
 const Timer = dynamic(import("@/components/memory-game/game-board/timer"), {
   ssr: false,
 });
 
+// redux
+import { useAppSelector } from "@/hooks/redux";
+import { card_list } from "@/store/slice/memory-game.slice";
+
 const GameBoard = () => {
+  const _card_list = useAppSelector(card_list);
   return (
     <StyledGameBoardContainer>
       <StyledTopBoardContainer>
@@ -29,8 +33,17 @@ const GameBoard = () => {
         </StyledTimeBoardContainer>
       </StyledTopBoardContainer>
       <StyledBottomGameBoardContainer>
-        {new Array(18).fill(0).map(() => {
-          return <Card />;
+        {_card_list.map((card, index) => {
+          return (
+            <Card
+              suit={card.suit}
+              cardColor={card.cardColor}
+              card={card.card}
+              flipped={card.flipped}
+              id={card.id}
+              key={index}
+            />
+          );
         })}
       </StyledBottomGameBoardContainer>
     </StyledGameBoardContainer>

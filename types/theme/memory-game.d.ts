@@ -104,6 +104,8 @@ type CustomMemoryGameThemePalette = {
     };
     fontFamily: {
       poppins: string;
+      jim: string;
+      oleo_script_swash_caps: string;
     };
     breakpoints: {
       mobile: string;

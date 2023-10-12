@@ -19,7 +19,7 @@ import {
 const CountDown: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
-  const [count, setCount] = useState(60);
+  const [count, setCount] = useState(5);
   const _show_game_board = useAppSelector(show_game_board);
   const timerRef = useRef<NodeJS.Timer | null>(null);
 

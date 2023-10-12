@@ -18,18 +18,24 @@ import { Axios } from "@/helpers/axios";
 
 export const memoryGameCardEvent = createAsyncThunk<
   MemoryGameCardEventRespose,
-  MemoryGameCardEventArgs
->("memory-game/event", async ({ card_id, player_id }, { rejectWithValue }) => {
-  try {
-    const res = await Axios.post("/memory-game-event", {
-      card_id,
-      player_id,
-    });
-    return res.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
+  MemoryGameCardEventArgs,
+  { state: RootState }
+>(
+  "memory-game/event",
+  async ({ card_id, flipped }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const res = await Axios.post("/memory-game-event", {
+        room_id: state.game.room_id,
+        card_id,
+        flipped,
+      });
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
   }
-});
+);
 
 export const getCards = createAsyncThunk<
   IGetCardsResponse,
@@ -68,6 +74,18 @@ export const memoryGameSlice = createSlice({
   reducers: {
     updateCardList: (state, action: PayloadAction<ICard[]>) => {
       state.card_list = action.payload;
+    },
+    updateCardState: (
+      state,
+      action: PayloadAction<{ id: string; flipped: boolean }>
+    ) => {
+      const id = state.card_list.findIndex(
+        (card) => card.id == action.payload.id
+      );
+      state.card_list[id] = {
+        ...state.card_list[id],
+        flipped: action.payload.flipped,
+      };
     },
     removeCard: (state, action: PayloadAction<string>) => {
       delete state.cardList[action.payload];
@@ -132,6 +150,7 @@ export const {
   updatePlayAudio,
   updateShowHelpDrawer,
   updateShowGameBoard,
+  updateCardState,
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;
 export const lastFlippedCard = (state: RootState) =>

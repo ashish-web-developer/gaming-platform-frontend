@@ -29,4 +29,51 @@ const getRandomCard = (): GetRandomCard => {
   };
 };
 
-export { getRandomCard, getRandomImage, getRandomSuit, getRandomCardNumber };
+const getCardName = ({
+  suit,
+  card,
+}: {
+  suit: "♠" | "♣" | "♦" | "♥";
+  card: "♚" | "♛" | "♞" | "A" | number;
+}): string => {
+  const numbers = [
+    "Zero",
+    "One",
+    "Two",
+    "Three",
+    "Four",
+    "Five",
+    "Six",
+    "Seven",
+    "Eight",
+    "Nine",
+    "Ten",
+  ];
+  const card_name_dict = {
+    "♚": "king",
+    "♛": "queen",
+    "♞": "jack",
+    A: "Ace",
+  };
+  const suit_name_dict = {
+    "♠": "spade",
+    "♣": "club",
+    "♦": "diamond",
+    "♥": "heart",
+  };
+  let card_name;
+  if (typeof card == "number") {
+    card_name = numbers[card];
+  } else {
+    card_name = card_name_dict[card];
+  }
+  return `${card_name} of ${suit_name_dict[suit]}`;
+};
+
+export {
+  getRandomCard,
+  getRandomImage,
+  getRandomSuit,
+  getRandomCardNumber,
+  getCardName,
+};
