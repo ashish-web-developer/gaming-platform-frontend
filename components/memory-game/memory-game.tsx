@@ -69,6 +69,7 @@ import {
   updateShowHelpTooltip,
   updateCardList,
   updateCardState,
+  updatePlayerTurnId,
 } from "@/store/slice/memory-game.slice";
 import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
 
@@ -110,13 +111,23 @@ const MemoryGame: FC = () => {
         dispatch(updateCardState({ id: data.card_id, flipped: data.flipped }));
       },
     },
+    {
+      event: "UpdatePlayerTurnEvent",
+      callback: (data) => {
+        dispatch(updatePlayerTurnId(data.player_turn_id));
+      },
+    },
   ]);
 
   useEffect(() => {
     if (_is_gaming_user_in && _is_proposal_sender) {
       dispatch(getCards({ game_complexity: 18 }));
     }
-  }, [_is_gaming_user_in, _is_proposal_sender]);
+    return () => {
+      dispatch(updateCardList([]));
+    };
+  }, [_is_proposal_sender, _is_gaming_user_in]);
+
   return (
     <>
       <GlobalStyles />

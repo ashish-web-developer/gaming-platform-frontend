@@ -51,6 +51,7 @@ export const getCards = createAsyncThunk<
 });
 
 const initialState: InitialState = {
+  player_turn_id: null,
   card_list: [],
   lastFlippedCard: null,
   is_gaming_user_in: false,
@@ -64,6 +65,7 @@ const initialState: InitialState = {
   show_help_tooltip: false,
   play_audio: true,
   show_game_board: false,
+  card_turn_count: 0,
   mobile: {
     show_help_drawer: false,
   },
@@ -132,6 +134,12 @@ export const memoryGameSlice = createSlice({
     updateShowGameBoard: (state, action: PayloadAction<boolean>) => {
       state.show_game_board = action.payload;
     },
+    updatePlayerTurnId: (state, action: PayloadAction<number | null>) => {
+      state.player_turn_id = action.payload;
+    },
+    updateCardTurnCount: (state, action: PayloadAction<0 | 1>) => {
+      state.card_turn_count = action.payload;
+    },
   },
 });
 
@@ -151,6 +159,8 @@ export const {
   updateShowHelpDrawer,
   updateShowGameBoard,
   updateCardState,
+  updatePlayerTurnId,
+  updateCardTurnCount,
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;
 export const lastFlippedCard = (state: RootState) =>
@@ -179,5 +189,10 @@ export const show_help_drawer = (state: RootState) =>
   state.memoryGame.mobile.show_help_drawer;
 export const show_game_board = (state: RootState) =>
   state.memoryGame.show_game_board;
+export const player_turn_id = (state: RootState) =>
+  state.memoryGame.player_turn_id;
+
+export const card_turn_count = (state: RootState) =>
+  state.memoryGame.card_turn_count;
 
 export default memoryGameSlice.reducer;

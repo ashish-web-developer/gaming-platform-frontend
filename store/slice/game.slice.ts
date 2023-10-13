@@ -5,6 +5,7 @@ import type {
   ISendInvitationRequest,
   IAcceptInvitationRequest,
   IAcceptInvitationResponse,
+  IUpdatePlayerTurnResponse,
 } from "@/types/store/slice/game";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types/user";
@@ -70,6 +71,23 @@ export const acceptInvitation = createAsyncThunk<
     }
   }
 );
+
+export const updatePlayerTurn = createAsyncThunk<
+  IUpdatePlayerTurnResponse,
+  undefined,
+  { state: RootState }
+>("game/update-player-turn", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response = await Axios.post("/game/update-player-turn", {
+      room_id: state.game.room_id,
+      player_turn_id: state.game.gaming_user?.id,
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
 
 const initialState: InitialState = {
   gaming_user: null,

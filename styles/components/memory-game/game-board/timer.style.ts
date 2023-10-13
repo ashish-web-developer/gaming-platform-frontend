@@ -6,6 +6,7 @@ const StyledTimer = styled.div`
   border: 2px solid #a39f9f;
   border-radius: 25px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
@@ -21,4 +22,20 @@ const StyledSpan = styled.span`
   text-transform: capitalize;
 `;
 
-export { StyledTimer, StyledSpan };
+const StyledTimeContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+`;
+const StyledTime = styled.span`
+  color: #fff;
+  text-align: center;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: capitalize;
+`;
+
+export { StyledTimer, StyledSpan, StyledTimeContainer, StyledTime };

@@ -27,6 +27,7 @@ type ICard = {
 };
 
 type InitialState = {
+  player_turn_id: number | null;
   card_list: ICard[];
   lastFlippedCard:
     | (GetRandomCard & {
@@ -44,6 +45,7 @@ type InitialState = {
   show_help_tooltip: boolean;
   play_audio: boolean;
   show_game_board: boolean;
+  card_turn_count: 0 | 1;
   mobile: {
     show_help_drawer: boolean;
   };

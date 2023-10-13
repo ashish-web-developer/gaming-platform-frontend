@@ -17,14 +17,31 @@ import {
 import { getCardName } from "@/helpers/memory-game/game";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   updateCardState,
   memoryGameCardEvent,
 } from "@/store/slice/memory-game.slice";
+import {
+  card_turn_count,
+  updateCardTurnCount,
+} from "@/store/slice/memory-game.slice";
+import { updatePlayerTurn } from "@/store/slice/game.slice";
 
-const Card: FC<any> = ({ suit, card, cardColor, flipped, id }) => {
+interface IProps extends ICard {
+  is_clickable: boolean;
+}
+
+const Card: FC<IProps> = ({
+  suit,
+  card,
+  cardColor,
+  flipped,
+  id,
+  is_clickable,
+}) => {
   const dispatch = useAppDispatch();
+  const _card_turn_count = useAppSelector(card_turn_count);
 
   const getCardColor: any = () => {
     if (flipped) {
@@ -35,7 +52,14 @@ const Card: FC<any> = ({ suit, card, cardColor, flipped, id }) => {
   return (
     <StyledCard
       onClick={() => {
-        dispatch(memoryGameCardEvent({ card_id: id, flipped: true }));
+        if (is_clickable) {
+          dispatch(memoryGameCardEvent({ card_id: id, flipped: true }));
+          dispatch(updateCardTurnCount((_card_turn_count + 1) as 0 | 1));
+          if (_card_turn_count == 1) {
+            dispatch(updateCardTurnCount(0));
+            dispatch(updatePlayerTurn());
+          }
+        }
       }}
       $showBackground={!flipped}
     >

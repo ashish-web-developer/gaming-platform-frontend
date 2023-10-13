@@ -18,10 +18,13 @@ const Timer = dynamic(import("@/components/memory-game/game-board/timer"), {
 
 // redux
 import { useAppSelector } from "@/hooks/redux";
-import { card_list } from "@/store/slice/memory-game.slice";
+import { card_list, player_turn_id } from "@/store/slice/memory-game.slice";
+import { user } from "@/store/slice/user.slice";
 
 const GameBoard = () => {
   const _card_list = useAppSelector(card_list);
+  const _user = useAppSelector(user);
+  const _player_turn_id = useAppSelector(player_turn_id);
   return (
     <StyledGameBoardContainer>
       <StyledTopBoardContainer>
@@ -42,6 +45,7 @@ const GameBoard = () => {
               flipped={card.flipped}
               id={card.id}
               key={index}
+              is_clickable={_player_turn_id == _user.id}
             />
           );
         })}
