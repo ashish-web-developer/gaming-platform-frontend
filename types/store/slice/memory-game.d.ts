@@ -14,10 +14,6 @@ type IGetCardsResponse = {
   deck: GetRandomCard[];
 };
 
-type IGetCardRequest = {
-  game_complexity: number;
-};
-
 type ICard = {
   id: string;
   suit: "♠" | "♣" | "♦" | "♥";
@@ -27,6 +23,7 @@ type ICard = {
 };
 
 type InitialState = {
+  game_complexity: number;
   player_turn_id: number | null;
   card_list: ICard[];
   lastFlippedCard:
@@ -55,7 +52,6 @@ export {
   InitialState,
   MemoryGameCardEventArgs,
   MemoryGameCardEventRespose,
-  IGetCardRequest,
   IGetCardsResponse,
   ICard,
 };

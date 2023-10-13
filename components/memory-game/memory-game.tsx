@@ -121,7 +121,7 @@ const MemoryGame: FC = () => {
 
   useEffect(() => {
     if (_is_gaming_user_in && _is_proposal_sender) {
-      dispatch(getCards({ game_complexity: 18 }));
+      dispatch(getCards());
     }
     return () => {
       dispatch(updateCardList([]));

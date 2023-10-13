@@ -1,4 +1,6 @@
 import styled from "styled-components";
+// mui
+import { Skeleton } from "@mui/material";
 
 const StyledGameBoardContainer = styled.div`
   width: 100%;
@@ -54,10 +56,15 @@ const StyledScoreBoardContainer = styled.div`
   height: 100%;
 `;
 
+const StyledSkeleton = styled(Skeleton)`
+  background: #0d1b1e;
+`;
+
 export {
   StyledGameBoardContainer,
   StyledTopBoardContainer,
   StyledScoreBoardContainer,
   StyledTimeBoardContainer,
   StyledBottomGameBoardContainer,
+  StyledSkeleton,
 };

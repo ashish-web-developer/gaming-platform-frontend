@@ -7,7 +7,6 @@ import type {
   InitialState,
   MemoryGameCardEventArgs,
   MemoryGameCardEventRespose,
-  IGetCardRequest,
   IGetCardsResponse,
   ICard,
 } from "@/types/store/slice/memory-game";
@@ -39,18 +38,19 @@ export const memoryGameCardEvent = createAsyncThunk<
 
 export const getCards = createAsyncThunk<
   IGetCardsResponse,
-  IGetCardRequest,
+  undefined,
   { state: RootState }
->("api/memory-game", async ({ game_complexity }, { getState, dispatch }) => {
+>("api/memory-game", async (_, { getState, dispatch }) => {
   const state = getState();
   const res = await Axios.post("/memory-game/get-card", {
-    game_complexity,
+    game_complexity: state.memoryGame.game_complexity,
     room_id: state.game.room_id,
   });
   return res.data;
 });
 
 const initialState: InitialState = {
+  game_complexity: 18,
   player_turn_id: null,
   card_list: [],
   lastFlippedCard: null,
@@ -194,5 +194,7 @@ export const player_turn_id = (state: RootState) =>
 
 export const card_turn_count = (state: RootState) =>
   state.memoryGame.card_turn_count;
+export const game_complexity = (state: RootState) =>
+  state.memoryGame.game_complexity;
 
 export default memoryGameSlice.reducer;
