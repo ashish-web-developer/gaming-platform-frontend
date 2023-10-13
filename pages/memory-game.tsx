@@ -1,49 +1,23 @@
-import { GetStaticProps, NextPage } from "next";
-import { useState, useEffect, useRef, useContext } from "react";
+import { NextPage } from "next";
+import { useEffect, useRef, useContext } from "react";
 // Mui
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 // Local components
 import MemoryGame from "@/components/memory-game/memory-game";
-
-// helpers
-import { getRandomCard } from "@/helpers/memory-game/game";
-
-// Styles
-import {
-  StyledContainer,
-  WelcomeScreenContainer,
-  PlayButton,
-} from "@/styles/pages/memory-game.style";
 
 // files readers
 import fs from "fs";
 import path from "path";
 
-// Swiper
-import SwiperCard from "@/components/common/swiper";
-import { SwiperSlide } from "swiper/react";
-
 // types
-import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 import type Colors from "@/types/data/colors";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
-import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
+import { useAppDispatch } from "@/hooks/redux";
 import {
-  // state
-  is_gaming_user_in,
   updateGameRules,
-  // actions
   updateIsGamingUserLeaving,
-  updateShowInfoSnackbar,
 } from "@/store/slice/memory-game.slice";
-import { updateGamingUser } from "@/store/slice/game.slice";
-
-// hooks
-import { usePresenceChannel } from "@/hooks/pusher";
-import { shuffleArray } from "@/helpers/common";
 
 // theme provider
 import { ThemeProvider } from "styled-components";
