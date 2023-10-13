@@ -13,7 +13,7 @@ import TimerIcon from "@/components/memory-game/game-board/icons/timer";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
-import { player_turn_id } from "@/store/slice/memory-game.slice";
+import { player_turn_id , updateCardTurnCount} from "@/store/slice/memory-game.slice";
 import { gaming_user, updatePlayerTurn } from "@/store/slice/game.slice";
 
 const Timer = () => {
@@ -25,7 +25,14 @@ const Timer = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimerCount((prev) => prev - 1);
+      setTimerCount((prev)=>{
+        if(prev == 0){
+          dispatch(updatePlayerTurn());
+          dispatch(updateCardTurnCount(0));
+          return 30;
+        }
+        return prev-1;
+      })
     }, 1000);
     return () => {
       clearInterval(timer);
