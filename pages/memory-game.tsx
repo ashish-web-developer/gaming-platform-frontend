@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 // Mui
 
 // Local components
@@ -46,11 +46,12 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
   const dispatch = useAppDispatch();
   const mode = useContext(ThemeMode);
   const theme = getTheme(mode);
-  const speechUttranceRef = useRef<MutableSpeechUtterance | null>(null);
+  const [speechUttrance, setSpeechUttrance] =
+    useState<MutableSpeechUtterance | null>(null);
 
   useEffect(() => {
     dispatch(updateGameRules(rules));
-    speechUttranceRef.current = new MutableSpeechUtterance();
+    setSpeechUttrance(new MutableSpeechUtterance());
     return () => {
       dispatch(updateIsGamingUserLeaving(false));
       dispatch(updateShowGameBoard(false));
@@ -62,7 +63,7 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
 
   return (
     <>
-      <UttranceContext.Provider value={speechUttranceRef.current}>
+      <UttranceContext.Provider value={speechUttrance}>
         <ColorsContext.Provider value={colors}>
           <ThemeProvider theme={theme}>
             <MemoryGame />

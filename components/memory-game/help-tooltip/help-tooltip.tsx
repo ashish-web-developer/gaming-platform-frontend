@@ -86,7 +86,7 @@ const HelpTooltip: FC = () => {
       SpeechUttrance?.uttrance.removeEventListener("end", handleEnd);
       speechSynthesis.cancel();
     };
-  }, [_show_help_tooltip, _current_rule_index, _play_audio]);
+  }, [_show_help_tooltip, _current_rule_index, _play_audio, SpeechUttrance]);
 
   return (
     <AnimatePresence>
