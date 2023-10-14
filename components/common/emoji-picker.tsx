@@ -20,18 +20,6 @@ interface Props {
 const EmojiPicker: FC<Props> = ({ className, callback }) => {
   const ref = useRef<HTMLDivElement>();
   const _showEmoji = useAppSelector(showEmoji);
-  const handleClickOutSide = (event)=>{
-    if(!ref.current?.contains(event.target)){
-      console.log("clicked outside");
-    }
-  }
-
-  useEffect(()=>{
-    document.addEventListener("mousedown",handleClickOutSide);
-    return ()=>{
-      document.removeEventListener("mousedown",handleClickOutSide);
-    }
-  },[])
   return (
     <>
       {_showEmoji && (

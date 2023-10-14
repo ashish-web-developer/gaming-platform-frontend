@@ -6,7 +6,7 @@ import {
 } from "@/styles/components/chat/chat-avatar.style";
 
 // context
-import { ColorContext } from "pages/chat";
+import { ColorsContext } from "context";
 // types
 import type { FC } from "react";
 
@@ -20,7 +20,7 @@ interface Props {
   username: string;
 }
 const ChatAvatar: FC<Props> = ({ width, height, username }) => {
-  const colors = useContext(ColorContext);
+  const colors = useContext(ColorsContext);
   const color = useRandomColor(colors);
   const avatar = useAvatar(username ?? "");
   return (

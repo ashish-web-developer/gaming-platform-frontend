@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { useEffect, createContext } from "react";
+import { useEffect, createContext, useContext } from "react";
 // types
 import type { NextPage, GetServerSideProps } from "next";
 import type Colors from "@/types/data/colors";
@@ -41,18 +41,29 @@ import {
   updateShowDeniedSnackbar,
   updateShowInvitationSnackbar,
 } from "@/store/slice/game.slice";
+import { updatePlayerTurnId } from "@/store/slice/memory-game.slice";
 
 // hooks
 import { useConversation } from "@/hooks/chat";
 import { usePrivateChannel } from "@/hooks/pusher";
 
-export const ColorContext = createContext<Colors>([]);
+// theme provider
+import { ThemeProvider } from "styled-components";
+
+// theme
+import getTheme from "theme/chat.theme";
+
+// context
+import { ThemeMode } from "context";
+import { ColorsContext } from "context";
 
 const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   colors,
   users,
   isMobile,
 }) => {
+  const mode = useContext(ThemeMode);
+  const theme = getTheme(mode);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const _user = useAppSelector(user);
@@ -72,6 +83,7 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
         dispatch(updateShowInvitationSnackbar(true));
         dispatch(updateGamingUser(data.user));
         dispatch(updateRoomId(data.room_id));
+        dispatch(updatePlayerTurnId(data.user.id as number));
       },
     },
     {
@@ -79,6 +91,7 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
       callback: (data: { user: User; is_accepted: boolean }) => {
         if (data.is_accepted) {
           dispatch(updateGamingUser(data.user));
+          dispatch(updatePlayerTurnId(_user?.id as number));
           router.push("/memory-game");
         } else {
           dispatch(updateGamingUser(null));
@@ -98,14 +111,16 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   }, []);
   return (
     <>
-      <GlobalStyles />
-      <ColorContext.Provider value={colors}>
-        {isMobile ? (
-          <MobileChat users={users} />
-        ) : (
-          <ChatContainer users={users} />
-        )}
-      </ColorContext.Provider>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <ColorsContext.Provider value={colors}>
+          {isMobile ? (
+            <MobileChat users={users} />
+          ) : (
+            <ChatContainer users={users} />
+          )}
+        </ColorsContext.Provider>
+      </ThemeProvider>
     </>
   );
 };

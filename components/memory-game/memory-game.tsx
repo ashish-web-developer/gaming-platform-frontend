@@ -1,0 +1,194 @@
+import dynamic from "next/dynamic";
+import { useContext, useEffect } from "react";
+// types
+import type { FC } from "react";
+import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+
+// local components
+import WelcomeBanner from "@/components/memory-game/welcome-banner/welcome-banner";
+import StartBanner from "@/components/memory-game/start-banner/start-banner";
+import Chat from "@/components/memory-game/chat/chat";
+import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
+import Nav from "@/components/memory-game/nav/nav";
+import MobileNav from "@/components/memory-game/nav/mobile-nav";
+const HelpTooltip = dynamic(
+  () => import("@/components/memory-game/help-tooltip/help-tooltip"),
+  {
+    ssr: false,
+  }
+);
+
+const MobileHelpTooltip = dynamic(
+  () =>
+    import("@/components/memory-game/help-tooltip/mobile/mobile-help-tooltip"),
+  {
+    ssr: false,
+  }
+);
+
+const GameBoard = dynamic(
+  () => import("@/components/memory-game/game-board/game-board"),
+  {
+    ssr: false,
+  }
+);
+// styled components
+import GlobalStyles, {
+  StyledContainer,
+  StyledGrid,
+  StyledLeftContainer,
+  StyledRightContainer,
+  StyledBackgroundCircleOne,
+  StyledBackgroundCircleTwo,
+  StyledMainText,
+  StyledChatContainer,
+  StyledContentContainer,
+  StyledInfoSnackbarContainer,
+  StyledHelpCtaContainer,
+  StyledHelpCta,
+} from "@/styles/components/memory-game/memory-game.style";
+
+// styled theme
+import { useTheme } from "styled-components";
+// mui
+import { useMediaQuery, Tooltip } from "@mui/material";
+
+// redux
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { user } from "@/store/slice/user.slice";
+import {
+  // state
+  show_mobile_chat,
+  show_help_tooltip,
+  show_help_drawer,
+  show_game_board,
+  is_gaming_user_in,
+  // api call
+  getCards,
+  // action
+  updateShowHelpTooltip,
+  updateCardList,
+  updateCardState,
+  updatePlayerTurnId,
+  updateLastFlippedCard,
+} from "@/store/slice/memory-game.slice";
+import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
+
+// context
+import { ThemeMode } from "context";
+
+// icons
+import HelpIcon from "@/components/memory-game/icons/help";
+
+// hooks
+import { usePresenceChannel } from "@/hooks/pusher";
+
+const MemoryGame: FC = () => {
+  const themeMode = useContext(ThemeMode);
+  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const dispatch = useAppDispatch();
+  const _show_mobile_chat = useAppSelector(show_mobile_chat);
+  const _show_help_tooltip = useAppSelector(show_help_tooltip);
+  const _show_help_drawer = useAppSelector(show_help_drawer);
+  const _show_game_board = useAppSelector(show_game_board);
+  const _room_id = useAppSelector(room_id);
+  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
+  const _is_proposal_sender = useAppSelector(is_proposal_sender);
+  const isMobile = useMediaQuery(
+    `(max-width:${theme.palette.breakpoints.mobile})`
+  );
+  const _user = useAppSelector(user);
+
+  usePresenceChannel(`game.${_room_id}`, [
+    {
+      event: "CardListDataEvent",
+      callback: (data) => {
+        dispatch(updateCardList(data.card_list));
+      },
+    },
+    {
+      event: "MemoryGameEvent",
+      callback: (data) => {
+        dispatch(updateCardState({ id: data.card_id, flipped: data.flipped }));
+      },
+    },
+    {
+      event: "UpdatePlayerTurnEvent",
+      callback: (data) => {
+        dispatch(updatePlayerTurnId(data.player_turn_id));
+      },
+    },
+    {
+      event:"UpdateLastFlippedCard",
+      callback: (data)=>{
+        dispatch(updateLastFlippedCard(data.card_id));
+      }
+    }
+  ]);
+
+  useEffect(() => {
+    if (_is_gaming_user_in && _is_proposal_sender) {
+      dispatch(getCards());
+    }
+    return () => {
+      dispatch(updateCardList([]));
+    };
+  }, [_is_proposal_sender, _is_gaming_user_in]);
+
+  return (
+    <>
+      <GlobalStyles />
+      {isMobile && _show_help_drawer && <MobileHelpTooltip />}
+      <StyledContainer>
+        {_show_help_tooltip && <HelpTooltip />}
+        <StyledHelpCtaContainer>
+          <Tooltip title="Need Help?" placement="right-start">
+            <StyledHelpCta
+              onClick={() => dispatch(updateShowHelpTooltip(true))}
+            >
+              <HelpIcon
+                width={60}
+                height={60}
+                color={theme.palette.help_tooltip.help_tooltip_cta.cta_color}
+              />
+            </StyledHelpCta>
+          </Tooltip>
+        </StyledHelpCtaContainer>
+        <StyledBackgroundCircleOne $mode={themeMode} />
+        <StyledBackgroundCircleTwo $mode={themeMode} />
+        {_show_mobile_chat && (
+          <StyledChatContainer>
+            <Chat />
+          </StyledChatContainer>
+        )}
+        <StyledInfoSnackbarContainer>
+          <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
+        </StyledInfoSnackbarContainer>
+        <StyledContentContainer>
+          <Nav />
+          <MobileNav />
+          {!_show_game_board && (
+            <StyledMainText>Good Morning, {_user.name}</StyledMainText>
+          )}
+          <StyledGrid $paddingTop={_show_game_board ? "70px" : null}>
+            <StyledLeftContainer>
+              {!_show_game_board && (
+                <>
+                  <WelcomeBanner />
+                  <StartBanner />
+                </>
+              )}
+              {_show_game_board && <GameBoard />}
+            </StyledLeftContainer>
+            <StyledRightContainer>
+              <Chat />
+              <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
+            </StyledRightContainer>
+          </StyledGrid>
+        </StyledContentContainer>
+      </StyledContainer>
+    </>
+  );
+};
+
+export default MemoryGame;

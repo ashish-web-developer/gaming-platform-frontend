@@ -1,20 +1,8 @@
-function insertSameElementsRandomly(arr: Array<any>, element: any) {
-  // Step 1: Generate two random positions within the array length.
-  const position1 = Math.floor(Math.random() * (arr.length + 1));
-  let position2 = Math.floor(Math.random() * (arr.length + 1));
-
-  // Ensure that position2 is different from position1
-  while (position2 === position1) {
-    position2 = Math.floor(Math.random() * (arr.length + 1));
+function shuffleArray(array:any[]) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1)); // Generate a random index between 0 and i
+    [array[i], array[j]] = [array[j], array[i]]; // Swap elements at i and j
   }
-
-  // Step 2: Insert the same element at the random positions.
-  arr.splice(position1, 0, element);
-  // If position2 comes after position1, we need to account for the shift due to the first insertion.
-  if (position2 > position1) {
-    position2++; // Increment position2 to adjust for the previous insertion.
-  }
-  arr.splice(position2, 0, element);
 }
 
 function readableFormatDate(dateString: string) {
@@ -31,4 +19,4 @@ function readableFormatDate(dateString: string) {
   const formattedDate = date.toLocaleString("en-US", options);
   return formattedDate;
 }
-export { insertSameElementsRandomly, readableFormatDate };
+export {  readableFormatDate ,shuffleArray};

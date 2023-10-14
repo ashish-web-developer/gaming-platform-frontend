@@ -22,6 +22,7 @@ import {
   show_invitation_snackbar,
   acceptInvitation,
 } from "@/store/slice/game.slice";
+import { updatePlayerTurnId } from "@/store/slice/memory-game.slice";
 
 // package
 
@@ -59,7 +60,10 @@ const InvitationSnackbar: FC<{
               Accept
             </StyledButton>
             <StyledButton
-              onClick={() => dispatch(acceptInvitation({ is_accepted: false }))}
+              onClick={() => {
+                dispatch(acceptInvitation({ is_accepted: false }));
+                dispatch(updatePlayerTurnId(null));
+              }}
             >
               Deny
             </StyledButton>

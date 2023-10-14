@@ -1,121 +1,117 @@
-import { GetStaticProps, NextPage } from "next";
-import { useState, useEffect } from "react";
+import { NextPage } from "next";
+import { useState, useEffect, useRef, useContext } from "react";
 // Mui
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
 
 // Local components
-import Card from "@/components/memory-game/card";
-
-// helpers
-import { getRandomCard } from "@/helpers/memory-game/game";
-import { insertSameElementsRandomly } from "@/helpers/common";
-
-// Styles
-import {
-  StyledContainer,
-  WelcomeScreenContainer,
-  PlayButton,
-} from "@/styles/pages/memory-game.style";
+import MemoryGame from "@/components/memory-game/memory-game";
 
 // files readers
 import fs from "fs";
 import path from "path";
 
-// Swiper
-import SwiperCard from "@/components/common/swiper";
-import { SwiperSlide } from "swiper/react";
-
 // types
-import type { GetRandomCard } from "@/types/helpers/memory-game/game";
+import type Colors from "@/types/data/colors";
 
-// uuidv4
-import { v4 as uuidv4 } from "uuid";
+// redux
+import { useAppDispatch } from "@/hooks/redux";
+import {
+  updateCardList,
+  updateCardTurnCount,
+  updateGameRules,
+  updateIsGamingUserIn,
+  updateIsGamingUserLeaving,
+  updatePlayAudio,
+  updateShowGameBoard,
+} from "@/store/slice/memory-game.slice";
 
-import { useAppSelector } from "@/hooks/redux";
-import { room_id } from "@/store/slice/game.slice";
+// theme provider
+import { ThemeProvider } from "styled-components";
 
-// hooks
-import { usePresenceChannel } from "@/hooks/pusher";
+// theme
+import getTheme from "@/theme/memory-game.theme";
 
-const gameComplexity = 14;
+// context
+import { ThemeMode } from "context";
+import { ColorsContext } from "context";
+import { UttranceContext } from "context";
 
-const cardArray: GetRandomCard[] = new Array(gameComplexity);
-for (let i = 0; i < gameComplexity / 2; i++) {
-  insertSameElementsRandomly(cardArray, getRandomCard());
-}
+// helpers
+import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 
 interface Props {
   files: string[];
+  colors: Colors;
+  rules: [string, string][];
 }
-const MemoryGame: NextPage<Props> = ({ files }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [isPlay, setPlay] = useState(false);
-  const _room_id = useAppSelector(room_id);
-  usePresenceChannel(`game.${_room_id}`);
+const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
+  const dispatch = useAppDispatch();
+  const mode = useContext(ThemeMode);
+  const theme = getTheme(mode);
+  const [speechUttrance, setSpeechUttrance] =
+    useState<MutableSpeechUtterance | null>(null);
+
+  useEffect(() => {
+    dispatch(updateGameRules(rules));
+    setSpeechUttrance(new MutableSpeechUtterance());
+    return () => {
+      dispatch(updateIsGamingUserLeaving(false));
+      dispatch(updateShowGameBoard(false));
+      dispatch(updateCardList([]));
+      dispatch(updateCardTurnCount(0));
+      dispatch(updateIsGamingUserIn(false));
+      dispatch(updatePlayAudio(true));
+    };
+  }, []);
 
   return (
     <>
-      {isPlay ? (
-        <StyledContainer>
-          <Grid container spacing={2}>
-            {cardArray.map((element, i) => {
-              return (
-                <Grid key={uuidv4()} xs={6} sm={2} item>
-                  <Card
-                    cardId={`deck-${i}`}
-                    files={files}
-                    width={isMobile ? 150 : 200}
-                    {...element}
-                    isPlay={isPlay}
-                  />
-                </Grid>
-              );
-            })}
-          </Grid>
-        </StyledContainer>
-      ) : (
-        <WelcomeScreenContainer>
-          <SwiperCard>
-            {cardArray.map((element, i) => {
-              return (
-                <SwiperSlide key={uuidv4()}>
-                  <Card
-                    cardId={`card-${i}`}
-                    files={files}
-                    width={isMobile ? 150 : 200}
-                    isPlay={isPlay}
-                    {...element}
-                  />
-                </SwiperSlide>
-              );
-            })}
-          </SwiperCard>
-          <PlayButton variant="contained" onClick={() => setPlay(true)}>
-            Lets Play
-          </PlayButton>
-        </WelcomeScreenContainer>
-      )}
+      <UttranceContext.Provider value={speechUttrance}>
+        <ColorsContext.Provider value={colors}>
+          <ThemeProvider theme={theme}>
+            <MemoryGame />
+          </ThemeProvider>
+        </ColorsContext.Provider>
+      </UttranceContext.Provider>
     </>
   );
 };
 
 export async function getStaticProps() {
-  const publicFolderPath = "./public/memory-game"; // Path to the 'public' folder
-  let files: string[] = [];
-
   try {
-    // Read files from the 'public' folder using fs.readdirSync
-    files = fs.readdirSync(path.join(process.cwd(), publicFolderPath));
-    files = files.filter((file) => file !== ".DS_Store");
-  } catch (err) {
-    console.error("Error reading folder:", err);
-  }
+    // Getting the colors
+    const colorsFolderPath = path.join(process.cwd(), "./data/colors.json");
+    let colors: Colors | string = fs.readFileSync(colorsFolderPath, "utf-8");
+    colors = JSON.parse(colors) as Colors;
 
-  return {
-    props: {
-      files,
-    },
-  };
+    // getting all the rules to play memory game
+    const rulesFolderPath = path.join(
+      process.cwd(),
+      "./data/memory-game/rules.json"
+    );
+    let rules = fs.readFileSync(rulesFolderPath, "utf-8");
+    rules = JSON.parse(rules);
+    console.log("value or rules", rules);
+    // Read files from the 'public' folder using fs.readdirSync
+    const publicFolderPath = "./public/memory-game"; // Path to the 'public' folder
+    let files: string[] = fs.readdirSync(
+      path.join(process.cwd(), publicFolderPath)
+    );
+    files = files.filter((file) => file !== ".DS_Store");
+    return {
+      props: {
+        files,
+        colors,
+        rules,
+      },
+    };
+  } catch (err) {
+    return {
+      props: {
+        files: [],
+        colors: [],
+        rules: [],
+      },
+    };
+  }
 }
-export default MemoryGame;
+export default MemoryGamePage;

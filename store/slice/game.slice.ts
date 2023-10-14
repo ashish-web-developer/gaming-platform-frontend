@@ -5,6 +5,7 @@ import type {
   ISendInvitationRequest,
   IAcceptInvitationRequest,
   IAcceptInvitationResponse,
+  IUpdatePlayerTurnResponse,
 } from "@/types/store/slice/game";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types/user";
@@ -36,7 +37,7 @@ export const sendInvitation = createAsyncThunk<
           receiver_id: state.chat.active_user?.id,
         }
       );
-      console.log(response);
+      dispatch(udpateIsProposalSender(true));
       dispatch(updateRoomId(room_id));
       dispatch(updateGamingUser(state.chat.active_user));
       return response.data;
@@ -60,7 +61,10 @@ export const acceptInvitation = createAsyncThunk<
         is_accepted,
       });
       dispatch(updateShowInvitationSnackbar(false));
-      if (!is_accepted) updateGamingUser(null);
+      if (is_accepted) {
+      } else {
+        updateGamingUser(null);
+      }
       return response.data;
     } catch (error) {
       return rejectWithValue(error);
@@ -68,12 +72,30 @@ export const acceptInvitation = createAsyncThunk<
   }
 );
 
+export const updatePlayerTurn = createAsyncThunk<
+  IUpdatePlayerTurnResponse,
+  undefined,
+  { state: RootState }
+>("game/update-player-turn", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response = await Axios.post("/game/update-player-turn", {
+      room_id: state.game.room_id,
+      player_turn_id: state.game.gaming_user?.id,
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error);
+  }
+});
+
 const initialState: InitialState = {
   gaming_user: null,
   room_id: null,
   show_invitation_snackbar: false,
   show_denied_snackbar: false,
   sending_invitation: false,
+  is_proposal_sender: false,
 };
 const gameSlice = createSlice({
   name: "game",
@@ -90,6 +112,9 @@ const gameSlice = createSlice({
     },
     updateShowDeniedSnackbar: (state, action: PayloadAction<boolean>) => {
       state.show_denied_snackbar = action.payload;
+    },
+    udpateIsProposalSender: (state, action: PayloadAction<boolean>) => {
+      state.is_proposal_sender = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -114,9 +139,12 @@ export const show_denied_snackbar = (state: RootState) =>
   state.game.show_denied_snackbar;
 export const sending_invitation = (state: RootState) =>
   state.game.sending_invitation;
+export const is_proposal_sender = (state: RootState) =>
+  state.game.is_proposal_sender;
 export const {
   updateGamingUser,
   updateRoomId,
   updateShowInvitationSnackbar,
   updateShowDeniedSnackbar,
+  udpateIsProposalSender,
 } = gameSlice.actions;
