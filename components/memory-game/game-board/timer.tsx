@@ -23,24 +23,24 @@ const Timer = () => {
   const _player_turn_id = useAppSelector(player_turn_id);
   const _gaming_user = useAppSelector(gaming_user);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimerCount((prev)=>{
-        if(prev == 0){
-          dispatch(updatePlayerTurn());
-          dispatch(updateCardTurnCount(0));
-          return 30;
-        }
-        return prev-1;
-      })
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  useEffect(() => {
-    setTimerCount(30);
-  }, [_player_turn_id]);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setTimerCount((prev)=>{
+  //       if(prev == 0){
+  //         dispatch(updatePlayerTurn());
+  //         dispatch(updateCardTurnCount(0));
+  //         return 30;
+  //       }
+  //       return prev-1;
+  //     })
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, []);
+  // useEffect(() => {
+  //   setTimerCount(30);
+  // }, [_player_turn_id]);
   return (
     <StyledTimer>
       {_player_turn_id == _user.id ? (

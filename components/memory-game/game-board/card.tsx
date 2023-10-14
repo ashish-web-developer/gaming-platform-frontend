@@ -21,9 +21,12 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   updateCardState,
   memoryGameCardEvent,
+  updateLastFlippedCardEvent,
+  card_list,
 } from "@/store/slice/memory-game.slice";
 import {
   card_turn_count,
+  last_flipped_card_id,
   updateCardTurnCount,
 } from "@/store/slice/memory-game.slice";
 import { updatePlayerTurn } from "@/store/slice/game.slice";
@@ -40,8 +43,13 @@ const Card: FC<IProps> = ({
   id,
   is_clickable,
 }) => {
+  const _card_list = useAppSelector(card_list);
   const dispatch = useAppDispatch();
   const _card_turn_count = useAppSelector(card_turn_count);
+  const _last_flipped_card_id = useAppSelector(last_flipped_card_id);
+  const _last_flipped_card = _card_list.filter(
+    (card) => card.id == _last_flipped_card_id
+  )[0];
 
   const getCardColor: any = () => {
     if (flipped) {
@@ -55,9 +63,29 @@ const Card: FC<IProps> = ({
         if (is_clickable) {
           dispatch(memoryGameCardEvent({ card_id: id, flipped: true }));
           dispatch(updateCardTurnCount((_card_turn_count + 1) as 0 | 1));
+          if (_card_turn_count == 0) {
+            dispatch(updateLastFlippedCardEvent({ card_id: id }));
+          }
           if (_card_turn_count == 1) {
+            if (
+              _last_flipped_card &&
+              (_last_flipped_card.card !== card ||
+                _last_flipped_card.cardColor !== cardColor ||
+                _last_flipped_card.suit !== suit)
+            ) {
+              setTimeout(() => {
+                dispatch(
+                  memoryGameCardEvent({
+                    card_id: _last_flipped_card.id,
+                    flipped: false,
+                  })
+                );
+                dispatch(memoryGameCardEvent({ card_id: id, flipped: false }));
+              }, 2000);
+            }
             dispatch(updateCardTurnCount(0));
             dispatch(updatePlayerTurn());
+            dispatch(updateLastFlippedCardEvent({ card_id: null }));
           }
         }
       }}

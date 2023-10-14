@@ -9,6 +9,8 @@ import type {
   MemoryGameCardEventRespose,
   IGetCardsResponse,
   ICard,
+  IUpdateLastFlippedCardArgs,
+  IUpdateLastFlippedCardResponse,
 } from "@/types/store/slice/memory-game";
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 
@@ -36,6 +38,26 @@ export const memoryGameCardEvent = createAsyncThunk<
   }
 );
 
+export const updateLastFlippedCardEvent = createAsyncThunk<
+  IUpdateLastFlippedCardResponse,
+  IUpdateLastFlippedCardArgs,
+  { state: RootState }
+>(
+  "memory-game/update-last-flipped-card",
+  async ({ card_id }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const res = await Axios.post("/memory-game/update-last-flipped-card", {
+        room_id: state.game.room_id,
+        card_id,
+      });
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const getCards = createAsyncThunk<
   IGetCardsResponse,
   undefined,
@@ -53,7 +75,7 @@ const initialState: InitialState = {
   game_complexity: 18,
   player_turn_id: null,
   card_list: [],
-  lastFlippedCard: null,
+  last_flipped_card_id: null,
   is_gaming_user_in: false,
   help_tooltip_text: null,
   current_rule_index: 0,
@@ -92,11 +114,8 @@ export const memoryGameSlice = createSlice({
     removeCard: (state, action: PayloadAction<string>) => {
       delete state.cardList[action.payload];
     },
-    updateLastFlippedCard: (
-      state,
-      action: PayloadAction<(GetRandomCard & { id: string }) | null>
-    ) => {
-      state.lastFlippedCard = action.payload;
+    updateLastFlippedCard: (state, action: PayloadAction<string | null>) => {
+      state.last_flipped_card_id = action.payload;
     },
     updateIsGamingUserIn: (state, action: PayloadAction<boolean>) => {
       state.is_gaming_user_in = action.payload;
@@ -163,8 +182,8 @@ export const {
   updateCardTurnCount,
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;
-export const lastFlippedCard = (state: RootState) =>
-  state.memoryGame.lastFlippedCard;
+export const last_flipped_card_id = (state: RootState) =>
+  state.memoryGame.last_flipped_card_id;
 export const is_gaming_user_in = (state: RootState) =>
   state.memoryGame.is_gaming_user_in;
 export const game_rules_list = (state: RootState) =>

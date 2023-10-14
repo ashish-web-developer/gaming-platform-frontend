@@ -10,6 +10,15 @@ type MemoryGameCardEventRespose = {
   message: string;
 };
 
+type IUpdateLastFlippedCardArgs = {
+  card_id: string | null;
+};
+
+type IUpdateLastFlippedCardResponse = {
+  success: boolean;
+  message: string;
+};
+
 type IGetCardsResponse = {
   deck: GetRandomCard[];
 };
@@ -26,11 +35,7 @@ type InitialState = {
   game_complexity: number;
   player_turn_id: number | null;
   card_list: ICard[];
-  lastFlippedCard:
-    | (GetRandomCard & {
-        id: string;
-      })
-    | null;
+  last_flipped_card_id: null | string;
   is_gaming_user_in: boolean;
   help_tooltip_text: [string, string] | null;
   current_rule_index: number;
@@ -54,4 +59,6 @@ export {
   MemoryGameCardEventRespose,
   IGetCardsResponse,
   ICard,
+  IUpdateLastFlippedCardArgs,
+  IUpdateLastFlippedCardResponse,
 };

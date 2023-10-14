@@ -70,6 +70,7 @@ import {
   updateCardList,
   updateCardState,
   updatePlayerTurnId,
+  updateLastFlippedCard,
 } from "@/store/slice/memory-game.slice";
 import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
 
@@ -117,6 +118,12 @@ const MemoryGame: FC = () => {
         dispatch(updatePlayerTurnId(data.player_turn_id));
       },
     },
+    {
+      event:"UpdateLastFlippedCard",
+      callback: (data)=>{
+        dispatch(updateLastFlippedCard(data.card_id));
+      }
+    }
   ]);
 
   useEffect(() => {
