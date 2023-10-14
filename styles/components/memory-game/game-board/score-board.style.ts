@@ -1,6 +1,10 @@
 import Image from "next/image";
 import styled from "styled-components";
 
+type IStyledBadgeContent = {
+  $backgroundColor: string;
+};
+
 const StyledScoreBoard = styled.div`
   width: 97.5%;
   height: 90%;
@@ -86,6 +90,12 @@ const StyledScore = styled.div`
   text-transform: capitalize;
 `;
 
+const StyledBadgeContent = styled.div<IStyledBadgeContent>`
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: ${(prop) => prop.$backgroundColor};
+`;
 export {
   StyledScoreBoard,
   StyledContentContainer,
@@ -95,4 +105,5 @@ export {
   StyledScoreContainer,
   StyledBannerImage,
   StyledScore,
+  StyledBadgeContent,
 };

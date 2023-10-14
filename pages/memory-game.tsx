@@ -20,6 +20,7 @@ import {
   updateGameRules,
   updateIsGamingUserIn,
   updateIsGamingUserLeaving,
+  updatePlayAudio,
   updateShowGameBoard,
 } from "@/store/slice/memory-game.slice";
 
@@ -58,6 +59,7 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
       dispatch(updateCardList([]));
       dispatch(updateCardTurnCount(0));
       dispatch(updateIsGamingUserIn(false));
+      dispatch(updatePlayAudio(true));
     };
   }, []);
 
