@@ -72,7 +72,12 @@ import {
   updatePlayerTurnId,
   updateLastFlippedCard,
 } from "@/store/slice/memory-game.slice";
-import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
+import {
+  room_id,
+  is_proposal_sender,
+  updateTimerStartCountEvent,
+  updateTimerStartCount,
+} from "@/store/slice/game.slice";
 
 // context
 import { ThemeMode } from "context";
@@ -119,20 +124,26 @@ const MemoryGame: FC = () => {
       },
     },
     {
-      event:"UpdateLastFlippedCard",
-      callback: (data)=>{
+      event: "UpdateLastFlippedCard",
+      callback: (data) => {
         dispatch(updateLastFlippedCard(data.card_id));
-      }
-    }
+      },
+    },
+    {
+      event: "UpdateTimerStartCountEvent",
+      callback: (data) => {
+        dispatch(updateTimerStartCount(data.start_timer_count));
+      },
+    },
   ]);
 
   useEffect(() => {
     if (_is_gaming_user_in && _is_proposal_sender) {
       dispatch(getCards());
+      dispatch(
+        updateTimerStartCountEvent({ timer_count: new Date().getTime() })
+      );
     }
-    return () => {
-      dispatch(updateCardList([]));
-    };
   }, [_is_proposal_sender, _is_gaming_user_in]);
 
   return (

@@ -80,8 +80,8 @@ const Pattern: FC<{ color: string }> = ({ color }) => {
     >
       <g filter="url(#filter0_d_364_21)">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M238 40C221.431 40 208.565 24.8562 197.269 12.7353C189.966 4.8999 179.555 0 168 0C156.445 0 146.034 4.8999 138.731 12.7353C127.435 24.8562 114.569 40 98 40H34C17.4315 40 4 53.4315 4 70V73C4 89.5685 17.4314 103 34 103H302C318.569 103 332 89.5685 332 73V70C332 53.4315 318.569 40 302 40H238Z"
           fill={color}
         />
@@ -94,9 +94,9 @@ const Pattern: FC<{ color: string }> = ({ color }) => {
           width="336"
           height="111"
           filterUnits="userSpaceOnUse"
-          color-interpolation-filters="sRGB"
+          colorInterpolationFilters="sRGB"
         >
-          <feFlood flood-opacity="0" result="BackgroundImageFix" />
+          <feFlood floodOpacity="0" result="BackgroundImageFix" />
           <feColorMatrix
             in="SourceAlpha"
             type="matrix"

@@ -15,11 +15,8 @@ import type Colors from "@/types/data/colors";
 // redux
 import { useAppDispatch } from "@/hooks/redux";
 import {
-  updateCardList,
   updateCardTurnCount,
   updateGameRules,
-  updateIsGamingUserIn,
-  updateIsGamingUserLeaving,
   updatePlayAudio,
   updateShowGameBoard,
 } from "@/store/slice/memory-game.slice";
@@ -54,11 +51,8 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
     dispatch(updateGameRules(rules));
     setSpeechUttrance(new MutableSpeechUtterance());
     return () => {
-      dispatch(updateIsGamingUserLeaving(false));
       dispatch(updateShowGameBoard(false));
-      dispatch(updateCardList([]));
       dispatch(updateCardTurnCount(0));
-      dispatch(updateIsGamingUserIn(false));
       dispatch(updatePlayAudio(true));
     };
   }, []);

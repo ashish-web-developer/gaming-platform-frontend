@@ -26,7 +26,7 @@ export const memoryGameCardEvent = createAsyncThunk<
   async ({ card_id, flipped }, { getState, rejectWithValue }) => {
     try {
       const state = getState();
-      const res = await Axios.post("/memory-game-event", {
+      const res = await Axios.post("/memory-game/event", {
         room_id: state.game.room_id,
         card_id,
         flipped,

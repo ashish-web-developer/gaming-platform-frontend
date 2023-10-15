@@ -29,7 +29,7 @@ import {
   last_flipped_card_id,
   updateCardTurnCount,
 } from "@/store/slice/memory-game.slice";
-import { updatePlayerTurn } from "@/store/slice/game.slice";
+import { updatePlayerTurnEvent } from "@/store/slice/game.slice";
 
 interface IProps extends ICard {
   is_clickable: boolean;
@@ -84,7 +84,7 @@ const Card: FC<IProps> = ({
               }, 2000);
             }
             dispatch(updateCardTurnCount(0));
-            dispatch(updatePlayerTurn());
+            dispatch(updatePlayerTurnEvent());
             dispatch(updateLastFlippedCardEvent({ card_id: null }));
           }
         }

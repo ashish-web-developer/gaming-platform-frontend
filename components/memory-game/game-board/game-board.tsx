@@ -43,13 +43,14 @@ const GameBoard = () => {
       </StyledTopBoardContainer>
       <StyledBottomGameBoardContainer>
         {!_card_list.length
-          ? new Array(_game_comlexity).fill(0).map(() => {
+          ? new Array(_game_comlexity).fill(0).map((_, index) => {
               return (
                 <StyledSkeleton
                   animation="wave"
                   variant="rounded"
                   width={80}
                   height={120}
+                  key={index}
                 />
               );
             })
