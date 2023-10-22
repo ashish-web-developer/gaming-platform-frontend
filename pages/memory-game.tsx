@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 // Mui
 
 // Local components
@@ -84,7 +84,6 @@ export async function getStaticProps() {
     );
     let rules = fs.readFileSync(rulesFolderPath, "utf-8");
     rules = JSON.parse(rules);
-    console.log("value or rules", rules);
     // Read files from the 'public' folder using fs.readdirSync
     const publicFolderPath = "./public/memory-game"; // Path to the 'public' folder
     let files: string[] = fs.readdirSync(

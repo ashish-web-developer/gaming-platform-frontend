@@ -8,6 +8,8 @@ const StyledGameBoardContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  position: relative;
+  z-index: 3;
 `;
 
 const StyledTopBoardContainer = styled.div`
@@ -20,7 +22,7 @@ const StyledTopBoardContainer = styled.div`
 const StyledTimeBoardContainer = styled.div`
   width: 38%;
   height: 100%;
-  background: #090302;
+  background: ${({ theme }) => theme.palette.game_board.background};
   border-radius: 25px 25px 0 0;
   position: relative;
   display: flex;
@@ -35,14 +37,15 @@ const StyledTimeBoardContainer = styled.div`
     background: transparent;
     bottom: 0px;
     left: -30px;
-    box-shadow: 12px 12px 0 #090302;
+    box-shadow: 12px 12px 0
+      ${({ theme }) => theme.palette.game_board.background};
   }
 `;
 
 const StyledBottomGameBoardContainer = styled.div`
   width: 100%;
   height: auto;
-  background: #090302;
+  background: ${({ theme }) => theme.palette.game_board.background};
   border-radius: 25px 0 25px 25px;
   display: grid;
   grid-template-rows: repeat(3, 1fr);

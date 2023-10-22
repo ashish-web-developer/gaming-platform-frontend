@@ -1,5 +1,7 @@
 // types
-import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { Score } from "@/types/store/slice/memory-game";
+import type { User } from "@/types/user";
 // styled components
 import {
   StyledScoreBoard,
@@ -26,7 +28,7 @@ import useAvatar from "@/hooks/profile";
 import { useAppSelector } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
-import { is_gaming_user_in } from "@/store/slice/memory-game.slice";
+import { is_gaming_user_in, score } from "@/store/slice/memory-game.slice";
 
 const ScoreBoard = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
@@ -35,6 +37,7 @@ const ScoreBoard = () => {
   const user_avatar = useAvatar(_user.name ?? "");
   const gaming_user_avatar = useAvatar(_gaming_user?.name ?? "");
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
+  const _score = useAppSelector(score) as Score;
   return (
     <StyledScoreBoard>
       <StyledBannerImage
@@ -63,8 +66,10 @@ const ScoreBoard = () => {
           <StyledUserName>{_user.name?.split(" ")[0]}</StyledUserName>
         </StyledProfileContainer>
         <StyledScoreContainer>
-          <StyledScore>00</StyledScore>
-          <StyledScore>00</StyledScore>
+          <StyledScore>{_score[_user.id as number]}</StyledScore>
+          <StyledScore>
+            {_gaming_user ? _score[_gaming_user.id as number] : 0}
+          </StyledScore>
         </StyledScoreContainer>
         <StyledProfileContainer>
           <Badge

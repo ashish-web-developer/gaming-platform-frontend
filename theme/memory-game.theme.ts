@@ -102,6 +102,9 @@ const lightTheme: CustomThemePalette = {
         },
       },
     },
+    game_board: {
+      background: "#2B061E",
+    },
     secondary: {
       main: "#F65BE3",
       info: "#ff934f",
@@ -219,6 +222,9 @@ const darkTheme: CustomThemePalette = {
           start_icon: "#f9f8f8",
         },
       },
+    },
+    game_board: {
+      background: "#080F0F",
     },
     secondary: {
       main: "#F65BE3",

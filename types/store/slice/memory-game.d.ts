@@ -19,6 +19,19 @@ type IUpdateLastFlippedCardResponse = {
   message: string;
 };
 
+type Score = {
+  [index: number]: number;
+};
+
+type IUpdateScoreArgs = {
+  score: Score | null;
+};
+
+type IUpdateScoreResponse = {
+  success: boolean;
+  message: string;
+};
+
 type IGetCardsResponse = {
   deck: GetRandomCard[];
 };
@@ -32,6 +45,7 @@ type ICard = {
 };
 
 type InitialState = {
+  score: null | Score;
   game_complexity: number;
   player_turn_id: number | null;
   card_list: ICard[];
@@ -61,4 +75,7 @@ export {
   ICard,
   IUpdateLastFlippedCardArgs,
   IUpdateLastFlippedCardResponse,
+  IUpdateScoreArgs,
+  IUpdateScoreResponse,
+  Score,
 };

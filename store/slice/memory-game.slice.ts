@@ -11,8 +11,10 @@ import type {
   ICard,
   IUpdateLastFlippedCardArgs,
   IUpdateLastFlippedCardResponse,
+  IUpdateScoreArgs,
+  IUpdateScoreResponse,
+  Score,
 } from "@/types/store/slice/memory-game";
-import type { GetRandomCard } from "@/types/helpers/memory-game/game";
 
 // helpers
 import { Axios } from "@/helpers/axios";
@@ -58,6 +60,26 @@ export const updateLastFlippedCardEvent = createAsyncThunk<
   }
 );
 
+export const updateScoreEvent = createAsyncThunk<
+  IUpdateScoreResponse,
+  IUpdateScoreArgs,
+  { state: RootState }
+>(
+  "memory-game/update-score",
+  async ({ score }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const res = await Axios.post("/memory-game/update-score", {
+        room_id: state.game.room_id,
+        score,
+      });
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const getCards = createAsyncThunk<
   IGetCardsResponse,
   undefined,
@@ -88,6 +110,7 @@ const initialState: InitialState = {
   play_audio: true,
   show_game_board: false,
   card_turn_count: 0,
+  score: null,
   mobile: {
     show_help_drawer: false,
   },
@@ -110,9 +133,6 @@ export const memoryGameSlice = createSlice({
         ...state.card_list[id],
         flipped: action.payload.flipped,
       };
-    },
-    removeCard: (state, action: PayloadAction<string>) => {
-      delete state.cardList[action.payload];
     },
     updateLastFlippedCard: (state, action: PayloadAction<string | null>) => {
       state.last_flipped_card_id = action.payload;
@@ -159,12 +179,14 @@ export const memoryGameSlice = createSlice({
     updateCardTurnCount: (state, action: PayloadAction<0 | 1>) => {
       state.card_turn_count = action.payload;
     },
+    updateScore: (state, action: PayloadAction<Score | null>) => {
+      state.score = action.payload;
+    },
   },
 });
 
 export const {
   updateCardList,
-  removeCard,
   updateLastFlippedCard,
   updateIsGamingUserIn,
   updateGameRules,
@@ -180,6 +202,7 @@ export const {
   updateCardState,
   updatePlayerTurnId,
   updateCardTurnCount,
+  updateScore,
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;
 export const last_flipped_card_id = (state: RootState) =>
@@ -216,4 +239,5 @@ export const card_turn_count = (state: RootState) =>
 export const game_complexity = (state: RootState) =>
   state.memoryGame.game_complexity;
 
+export const score = (state: RootState) => state.memoryGame.score;
 export default memoryGameSlice.reducer;

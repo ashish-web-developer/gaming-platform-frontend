@@ -44,6 +44,7 @@ const Timer = () => {
       clearInterval(timer);
     };
   }, [_timer_start_count]);
+
   return (
     <StyledTimer>
       {_player_turn_id == _user.id ? (
@@ -53,7 +54,7 @@ const Timer = () => {
       )}
       <StyledTimeContainer>
         <TimerIcon size={18} />
-        <StyledTime>00 : {timerCount}</StyledTime>
+        <StyledTime>00 : {String(timerCount).padStart(2, "0")}</StyledTime>
       </StyledTimeContainer>
     </StyledTimer>
   );
