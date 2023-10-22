@@ -12,10 +12,15 @@ import Pusher from "pusher-js";
 import { useAppSelector, useAppDispatch } from "./redux";
 import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
-import { gaming_user, updateGamingUser } from "@/store/slice/game.slice";
+import {
+  gaming_user,
+  updateGamingUser,
+  updateTimerStartCount,
+} from "@/store/slice/game.slice";
 import {
   updateIsGamingUserIn,
   updateIsGamingUserLeaving,
+  updateCardList,
 } from "@/store/slice/memory-game.slice";
 
 type User_ids =
@@ -156,6 +161,10 @@ function usePresenceChannel(
     });
     return () => {
       echo?.leave(channel);
+      dispatch(updateIsGamingUserLeaving(false));
+      dispatch(updateCardList([]));
+      dispatch(updateIsGamingUserIn(false));
+      dispatch(updateTimerStartCount(null));
     };
   }, [echo, _gaming_user]);
 }

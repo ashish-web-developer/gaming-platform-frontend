@@ -6,6 +6,8 @@ import type {
   IAcceptInvitationRequest,
   IAcceptInvitationResponse,
   IUpdatePlayerTurnResponse,
+  IUpdateTimerStartCountEventResponse,
+  IUpdateTimerStartCountEventRequest,
 } from "@/types/store/slice/game";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types/user";
@@ -72,22 +74,47 @@ export const acceptInvitation = createAsyncThunk<
   }
 );
 
-export const updatePlayerTurn = createAsyncThunk<
+export const updatePlayerTurnEvent = createAsyncThunk<
   IUpdatePlayerTurnResponse,
   undefined,
   { state: RootState }
->("game/update-player-turn", async (_, { getState, rejectWithValue }) => {
-  try {
-    const state = getState();
-    const response = await Axios.post("/game/update-player-turn", {
-      room_id: state.game.room_id,
-      player_turn_id: state.game.gaming_user?.id,
-    });
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error);
+>(
+  "game/update-player-turn-event",
+  async (_, { getState, rejectWithValue, dispatch }) => {
+    try {
+      const state = getState();
+      const response = await Axios.post("/game/update-player-turn", {
+        room_id: state.game.room_id,
+        player_turn_id: state.game.gaming_user?.id,
+      });
+      dispatch(
+        updateTimerStartCountEvent({ timer_count: new Date().getTime() })
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
   }
-});
+);
+export const updateTimerStartCountEvent = createAsyncThunk<
+  IUpdateTimerStartCountEventResponse,
+  IUpdateTimerStartCountEventRequest,
+  { state: RootState }
+>(
+  "game/update-timer-start-count",
+  async ({ timer_count }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response = await Axios.post("/game/update-timer-start-count", {
+        room_id: state.game.room_id,
+        timer_start_count: timer_count,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 
 const initialState: InitialState = {
   gaming_user: null,
@@ -96,6 +123,7 @@ const initialState: InitialState = {
   show_denied_snackbar: false,
   sending_invitation: false,
   is_proposal_sender: false,
+  timer_start_count: null,
 };
 const gameSlice = createSlice({
   name: "game",
@@ -115,6 +143,9 @@ const gameSlice = createSlice({
     },
     udpateIsProposalSender: (state, action: PayloadAction<boolean>) => {
       state.is_proposal_sender = action.payload;
+    },
+    updateTimerStartCount: (state, action: PayloadAction<number | null>) => {
+      state.timer_start_count = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -141,10 +172,13 @@ export const sending_invitation = (state: RootState) =>
   state.game.sending_invitation;
 export const is_proposal_sender = (state: RootState) =>
   state.game.is_proposal_sender;
+export const timer_start_count = (state: RootState) =>
+  state.game.timer_start_count;
 export const {
   updateGamingUser,
   updateRoomId,
   updateShowInvitationSnackbar,
   updateShowDeniedSnackbar,
   udpateIsProposalSender,
+  updateTimerStartCount,
 } = gameSlice.actions;

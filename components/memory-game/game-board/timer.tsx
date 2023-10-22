@@ -13,34 +13,38 @@ import TimerIcon from "@/components/memory-game/game-board/icons/timer";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
-import { player_turn_id , updateCardTurnCount} from "@/store/slice/memory-game.slice";
-import { gaming_user, updatePlayerTurn } from "@/store/slice/game.slice";
+import { player_turn_id } from "@/store/slice/memory-game.slice";
+import {
+  timer_start_count,
+  updatePlayerTurnEvent,
+} from "@/store/slice/game.slice";
 
 const Timer = () => {
   const dispatch = useAppDispatch();
-  const [timerCount, setTimerCount] = useState(30);
+  const [timerCount, setTimerCount] = useState(0);
   const _user = useAppSelector(user);
   const _player_turn_id = useAppSelector(player_turn_id);
-  const _gaming_user = useAppSelector(gaming_user);
+  const _timer_start_count = useAppSelector(timer_start_count);
 
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setTimerCount((prev)=>{
-  //       if(prev == 0){
-  //         dispatch(updatePlayerTurn());
-  //         dispatch(updateCardTurnCount(0));
-  //         return 30;
-  //       }
-  //       return prev-1;
-  //     })
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, []);
-  // useEffect(() => {
-  //   setTimerCount(30);
-  // }, [_player_turn_id]);
+  useEffect(() => {
+    const updateCountDown = () => {
+      const target_time = (_timer_start_count as number) + 30000;
+      const time_remaining = target_time - new Date().getTime();
+      if (time_remaining <= 0) {
+        if (_player_turn_id == _user.id) {
+          dispatch(updatePlayerTurnEvent());
+        }
+      } else {
+        const seconds = Math.floor((time_remaining / 1000) % 60);
+        setTimerCount(seconds);
+      }
+    };
+    const timer = setInterval(updateCountDown, 1000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, [_timer_start_count]);
+
   return (
     <StyledTimer>
       {_player_turn_id == _user.id ? (
@@ -50,7 +54,7 @@ const Timer = () => {
       )}
       <StyledTimeContainer>
         <TimerIcon size={18} />
-        <StyledTime>00 : {timerCount}</StyledTime>
+        <StyledTime>00 : {String(timerCount).padStart(2, "0")}</StyledTime>
       </StyledTimeContainer>
     </StyledTimer>
   );

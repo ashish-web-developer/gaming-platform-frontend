@@ -96,6 +96,9 @@ type CustomMemoryGameThemePalette = {
         };
       };
     };
+    game_board: {
+      background: string;
+    };
     secondary: {
       main: string;
       info: string;

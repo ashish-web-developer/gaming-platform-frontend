@@ -65,14 +65,22 @@ import {
   is_gaming_user_in,
   // api call
   getCards,
+  updateScoreEvent,
   // action
   updateShowHelpTooltip,
   updateCardList,
   updateCardState,
   updatePlayerTurnId,
   updateLastFlippedCard,
+  updateScore,
 } from "@/store/slice/memory-game.slice";
-import { room_id, is_proposal_sender } from "@/store/slice/game.slice";
+import {
+  room_id,
+  is_proposal_sender,
+  gaming_user,
+  updateTimerStartCountEvent,
+  updateTimerStartCount,
+} from "@/store/slice/game.slice";
 
 // context
 import { ThemeMode } from "context";
@@ -94,6 +102,7 @@ const MemoryGame: FC = () => {
   const _room_id = useAppSelector(room_id);
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const _is_proposal_sender = useAppSelector(is_proposal_sender);
+  const _gaming_user = useAppSelector(gaming_user);
   const isMobile = useMediaQuery(
     `(max-width:${theme.palette.breakpoints.mobile})`
   );
@@ -119,20 +128,41 @@ const MemoryGame: FC = () => {
       },
     },
     {
-      event:"UpdateLastFlippedCard",
-      callback: (data)=>{
+      event: "UpdateLastFlippedCard",
+      callback: (data) => {
         dispatch(updateLastFlippedCard(data.card_id));
-      }
-    }
+      },
+    },
+    {
+      event: "UpdateTimerStartCountEvent",
+      callback: (data) => {
+        dispatch(updateTimerStartCount(data.start_timer_count));
+      },
+    },
+    {
+      event: "UpdateMemoryGameScore",
+      callback: (data) => {
+        console.log(data.score, data);
+        dispatch(updateScore(data.score));
+      },
+    },
   ]);
 
   useEffect(() => {
     if (_is_gaming_user_in && _is_proposal_sender) {
       dispatch(getCards());
+      dispatch(
+        updateTimerStartCountEvent({ timer_count: new Date().getTime() })
+      );
+      dispatch(
+        updateScoreEvent({
+          score: {
+            [_gaming_user?.id as number]: 0,
+            [_user.id as number]: 0,
+          },
+        })
+      );
     }
-    return () => {
-      dispatch(updateCardList([]));
-    };
   }, [_is_proposal_sender, _is_gaming_user_in]);
 
   return (

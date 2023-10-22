@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 // Mui
 
 // Local components
@@ -15,11 +15,8 @@ import type Colors from "@/types/data/colors";
 // redux
 import { useAppDispatch } from "@/hooks/redux";
 import {
-  updateCardList,
   updateCardTurnCount,
   updateGameRules,
-  updateIsGamingUserIn,
-  updateIsGamingUserLeaving,
   updatePlayAudio,
   updateShowGameBoard,
 } from "@/store/slice/memory-game.slice";
@@ -54,11 +51,8 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
     dispatch(updateGameRules(rules));
     setSpeechUttrance(new MutableSpeechUtterance());
     return () => {
-      dispatch(updateIsGamingUserLeaving(false));
       dispatch(updateShowGameBoard(false));
-      dispatch(updateCardList([]));
       dispatch(updateCardTurnCount(0));
-      dispatch(updateIsGamingUserIn(false));
       dispatch(updatePlayAudio(true));
     };
   }, []);
@@ -90,7 +84,6 @@ export async function getStaticProps() {
     );
     let rules = fs.readFileSync(rulesFolderPath, "utf-8");
     rules = JSON.parse(rules);
-    console.log("value or rules", rules);
     // Read files from the 'public' folder using fs.readdirSync
     const publicFolderPath = "./public/memory-game"; // Path to the 'public' folder
     let files: string[] = fs.readdirSync(

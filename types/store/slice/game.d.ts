@@ -7,6 +7,7 @@ type InitialState = {
   show_denied_snackbar: boolean;
   sending_invitation: boolean;
   is_proposal_sender: boolean;
+  timer_start_count: null | number;
 };
 
 type ISendInvitationResponse = {
@@ -31,6 +32,11 @@ type IUpdatePlayerTurnResponse = {
   message: string;
 };
 
+type IUpdateTimerStartCountEventRequest = {
+  timer_count: number;
+};
+type IUpdateTimerStartCountEventResponse = IUpdatePlayerTurnResponse;
+
 export {
   InitialState,
   ISendInvitationResponse,
@@ -38,4 +44,6 @@ export {
   IAcceptInvitationRequest,
   IAcceptInvitationResponse,
   IUpdatePlayerTurnResponse,
+  IUpdateTimerStartCountEventRequest,
+  IUpdateTimerStartCountEventResponse,
 };

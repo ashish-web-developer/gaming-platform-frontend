@@ -110,9 +110,10 @@ const Chat: FC = () => {
       <StyledCenteredBackground $mode={themeMode} />
       <StyledChatContent>
         <StyledChatContentContainer>
-          {_active_user_conversation.map(({ sender_id, message }) => {
+          {_active_user_conversation.map(({ sender_id, message }, index) => {
             return (
               <StyledChatsContainer
+                key={index}
                 $justifyContent={
                   _user.id == sender_id ? "flex-end" : "flex-start"
                 }

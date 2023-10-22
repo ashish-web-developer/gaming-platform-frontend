@@ -24,14 +24,6 @@ const CountDown: FC = () => {
   const timerRef = useRef<NodeJS.Timer | null>(null);
 
   useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setCount((prev) => prev - 1);
-    }, 1000);
-    return () => {
-      timerRef.current && clearInterval(timerRef.current);
-    };
-  }, []);
-  useEffect(() => {
     if (count <= 0 && timerRef.current) {
       clearInterval(timerRef.current);
       dispatch(updateShowGameBoard(true));
@@ -40,6 +32,15 @@ const CountDown: FC = () => {
       clearInterval(timerRef.current);
     }
   }, [count, _show_game_board]);
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setCount((prev) => prev - 1);
+    }, 1000);
+    return () => {
+      timerRef.current && clearInterval(timerRef.current);
+    };
+  }, []);
 
   return (
     <StyledCountDown>
