@@ -98,6 +98,9 @@ type CustomMemoryGameThemePalette = {
     };
     game_board: {
       background: string;
+      card: {
+        background: string;
+      };
     };
     secondary: {
       main: string;
