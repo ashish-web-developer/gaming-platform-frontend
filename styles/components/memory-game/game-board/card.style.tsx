@@ -14,37 +14,33 @@ type IStyledCardNumber = {
   $position: "top" | "bottom";
 };
 
-type IStyledCardSuit = {
-  $color: string;
-  $position: "top" | "bottom";
-};
 
 type IStyledCardName = {
   $color: string;
 };
 
+type IStyledText = {
+  $top?:string;
+  $left?:string;
+  $right?:string;
+  $bottom?:string;
+  $rotate:string;
+}
+
+type IStyledPatternContainer = {
+  $top?:string;
+  $left?:string;
+  $right?:string;
+  $bottom?:string;
+}
+
+
 const StyledCard = styled.div<IStyledCard>`
   width: 80px;
   height: 120px;
-  background: #fff;
-  border-radius: 6px;
+  background: ${({theme})=>theme.palette.game_board.card.background};
   border-radius: 6px;
   position: relative;
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    border-radius: 6px;
-    border-radius: 6px;
-    background: url("/memory-game/game-board/card/background-1.jpg"),
-      url("/memory-game/game-board/card/background-2.jpg");
-    background-size: cover;
-    opacity: 0.2;
-    display: ${(props) => (props.$showBackground ? "block" : "none")};
-  }
 `;
 
 const StyledBorder = styled.div<IStyledBorder>`
@@ -59,18 +55,19 @@ const StyledBorder = styled.div<IStyledBorder>`
   background-color: ${(props) => props.$backgroundColor};
 `;
 
-const StyledText = styled.div`
+const StyledText = styled.div<IStyledText>`
   color: #000;
-  font-family: Poppins;
-  font-size: 10px;
+  font-family:${({theme})=>theme.palette.fontFamily.poppins};
+  font-size: 6px;
   font-style: normal;
   font-weight: 800;
   line-height: normal;
-  text-decoration-line: underline;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-37deg);
+  position:absolute;
+  top: ${(props)=>props.$top??'auto'};
+  left: ${(props)=>props.$left??'auto'};
+  right:${(props)=>props.$right??'auto'};
+  bottom:${(props)=>props.$bottom??'auto'};
+  transform:rotate(${(props)=>props.$rotate});
 `;
 
 const StyledTextSpan = styled.span`
@@ -103,6 +100,21 @@ const StyledCardName = styled.span<IStyledCardName>`
   font-size: 12px;
 `;
 
+const StyledPatternContainer = styled.span<IStyledPatternContainer>`
+  position:absolute;
+  top:${(props)=>props.$top??'auto'};
+  left:${(props)=>props.$left??'auto'};
+  bottom:${(props)=>props.$bottom??'auto'};
+  right:${(props)=>props.$right??'auto'};
+`
+
+const StyledCardPattern = styled.span`
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+`
+
 export {
   StyledCard,
   StyledBorder,
@@ -110,4 +122,6 @@ export {
   StyledTextSpan,
   StyledCardNumber,
   StyledCardName,
+  StyledPatternContainer,
+  StyledCardPattern
 };

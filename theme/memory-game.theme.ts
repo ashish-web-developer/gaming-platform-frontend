@@ -104,6 +104,9 @@ const lightTheme: CustomThemePalette = {
     },
     game_board: {
       background: "#2B061E",
+      card: {
+        background: "#F7FFF6",
+      },
     },
     secondary: {
       main: "#F65BE3",
@@ -225,6 +228,9 @@ const darkTheme: CustomThemePalette = {
     },
     game_board: {
       background: "#080F0F",
+      card: {
+        background: "#F7FFF6",
+      },
     },
     secondary: {
       main: "#F65BE3",

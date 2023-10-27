@@ -65,6 +65,7 @@ const GameBoard = () => {
                   key={index}
                   is_clickable={_player_turn_id == _user.id}
                   user={_user}
+                  card_image={card.card_image}
                 />
               );
             })}

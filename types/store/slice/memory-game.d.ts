@@ -42,6 +42,7 @@ type ICard = {
   card: "♚" | "♛" | "♞" | "A" | number;
   cardColor: "red" | "black";
   flipped: boolean;
+  card_image: string;
 };
 
 type InitialState = {
