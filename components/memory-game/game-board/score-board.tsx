@@ -40,12 +40,6 @@ const ScoreBoard = () => {
   const _score = useAppSelector(score) as Score;
   return (
     <StyledScoreBoard>
-      <StyledBannerImage
-        alt="banner-image"
-        src="/memory-game/game-board/banner-image.png"
-        width={60}
-        height={50}
-      />
       <StyledContentContainer>
         <StyledProfileContainer>
           <Badge
@@ -67,6 +61,12 @@ const ScoreBoard = () => {
         </StyledProfileContainer>
         <StyledScoreContainer>
           <StyledScore>{_score[_user.id as number]}</StyledScore>
+          <StyledBannerImage
+            alt="banner-image"
+            src="/memory-game/game-board/banner-image.png"
+            width={60}
+            height={50}
+          />
           <StyledScore>
             {_gaming_user ? _score[_gaming_user.id as number] : 0}
           </StyledScore>

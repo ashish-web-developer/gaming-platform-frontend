@@ -60,7 +60,7 @@ const StyledScoreBoardContainer = styled.div`
 `;
 
 const StyledSkeleton = styled(Skeleton)`
-  background: #0d1b1e;
+  background: #392030;
 `;
 
 export {

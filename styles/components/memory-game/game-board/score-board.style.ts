@@ -69,15 +69,10 @@ const StyledUserName = styled.span`
 
 const StyledScoreContainer = styled.div`
   display: flex;
-  gap: 40px;
+  gap: 4px;
   align-items: center;
 `;
-const StyledBannerImage = styled(Image)`
-  position: absolute;
-  top: 50%;
-  left: 51%;
-  transform: translate(-50%, -50%);
-`;
+const StyledBannerImage = styled(Image)``;
 
 const StyledScore = styled.div`
   color: #fff;
