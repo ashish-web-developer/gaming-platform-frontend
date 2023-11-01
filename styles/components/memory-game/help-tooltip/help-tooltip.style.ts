@@ -48,15 +48,17 @@ const StyledVolumeContainer = styled.div`
 `;
 
 const StyledVolumeCta = styled(IconButton)`
-  margin: 0px;
-  padding: 0px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: ${({ theme }) => theme.palette.help_tooltip.volume.background};
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  position: absolute;
-  top: 10px;
+  &.MuiIconButton-root{
+    margin: 0px;
+    padding: 0px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: ${({ theme }) => theme.palette.help_tooltip.volume.background};
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    top: 10px;
+  }
 `;
 
 const StyledTooltip = styled.div`
@@ -110,9 +112,11 @@ const StyledPattern = styled.span`
 `;
 
 const StyledIconButton = styled(IconButton)`
-  position: absolute;
-  top: 50px;
-  right: 4px;
+  &.MuiIconButton-root{
+    position: absolute;
+    top: 50px;
+    right: 4px;
+  }
 `;
 
 const StyledNavContainer = styled.div`

@@ -135,17 +135,19 @@ const StyledSendIcon = styled(SendIcon)`
   font-size: 30px;
 `;
 const StyledPlayButton = styled(Button)`
-  color: ${({ theme }) => theme.palette.text.main};
-  background-color: ${({ theme }) => theme.palette.primary.light};
-  font-size: 14px;
-  font-family: "Rubik Moonrocks", cursive;
-  border-radius: 8px;
-  flex-basis: 145px;
-  flex-shrink: 0;
-  height: 100%;
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.primary.light};
-  }
+    &.MuiButton-root {
+      color: ${({ theme }) => theme.palette.text.main};
+      background-color: ${({ theme }) => theme.palette.primary.light};
+      font-size: 14px;
+      font-family: "Rubik Moonrocks", cursive;
+      border-radius: 8px;
+      flex-basis: 145px;
+      flex-shrink: 0;
+      height: 100%;
+      &:hover {
+        background-color: ${({ theme }) => theme.palette.primary.light};
+      }
+    }
 `;
 
 const StyledEmojiPicker = styled(EmojiPicker)`

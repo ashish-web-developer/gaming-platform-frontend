@@ -73,7 +73,7 @@ const WelcomeBanner: FC = () => {
             Match
           </StyledMainBannerHeader>
           <StyledBannerPara>
-            "CogniMatch" is a captivating memory game designed to boost your
+            &ldquo;CogniMatch&rdquo; is a captivating memory game designed to boost your
             cognitive skills. Flip cards, match pairs, and enhance your memory
             in a fun and challenging way. Perfect for all ages!
           </StyledBannerPara>

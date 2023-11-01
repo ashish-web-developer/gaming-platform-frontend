@@ -32,16 +32,18 @@ const StyledTopBackground = styled.div`
 `;
 
 const StyledVolumeCta = styled(IconButton)`
-  position: absolute;
-  padding: 0px;
-  margin: 0px;
-  width: 60px;
-  height: 60px;
-  background: #2b061e;
-  top: calc(100vw / 1.14 - 70px);
-  left: 14px;
-  z-index: 2;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  &.MuiIconButton-root{
+    position: absolute;
+    padding: 0px;
+    margin: 0px;
+    width: 60px;
+    height: 60px;
+    background: #2b061e;
+    top: calc(100vw / 1.14 - 70px);
+    left: 14px;
+    z-index: 2;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
 `;
 
 const StyledContent = styled.div`
@@ -116,14 +118,16 @@ const StyledNavCta = styled(IconButton)`
 `;
 
 const StyledBackButton = styled(Button)`
-  background-color: ${({ theme }) =>
-    theme.palette.help_tooltip.mobile.back_cta.background};
-  border-radius: 25px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  color: ${({ theme }) =>
-    theme.palette.help_tooltip.mobile.back_cta.text_color};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-  font-weight: 600;
+  &.MuiButton-root{
+    background-color: ${({ theme }) =>
+      theme.palette.help_tooltip.mobile.back_cta.background};
+    border-radius: 25px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    color: ${({ theme }) =>
+      theme.palette.help_tooltip.mobile.back_cta.text_color};
+    font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+    font-weight: 600;
+  }
 `;
 const StyledBackIconContainer = styled.span`
   width: 30px;

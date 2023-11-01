@@ -14,13 +14,15 @@ type ISnackbarText = {
 };
 
 const StyledSnackbarContainer = styled(Paper)`
-  background-color: ${({ theme }) => theme.palette.primary.light};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 10px;
-  padding: 10px 10px;
-  width: 400px;
+  &.MuiPaper-root{
+    background-color: ${({ theme }) => theme.palette.primary.light};
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 10px;
+    width: 400px;
+  }
 `;
 
 const StyledSnackbarContainerItem = styled.div<IStyledSnackbarContainerItem>`
@@ -42,15 +44,17 @@ const StyledButtonContainer = styled.div`
 `;
 
 const StyledButton = styled(Button)`
-  color: ${({ theme }) => theme.palette.primary.light};
-  background-color: ${({ theme }) => theme.palette.chat.main};
-  font-size: 12px;
-  font-family: "Rubik Moonrocks", cursive;
-  padding: 6px 10px;
-  border-radius: 8px;
-  height: 100%;
-  &:hover {
+  &.MuiButton-root{
+    color: ${({ theme }) => theme.palette.primary.light};
     background-color: ${({ theme }) => theme.palette.chat.main};
+    font-size: 12px;
+    font-family: "Rubik Moonrocks", cursive;
+    padding: 6px 10px;
+    border-radius: 8px;
+    height: 100%;
+    &:hover {
+      background-color: ${({ theme }) => theme.palette.chat.main};
+    }
   }
 `;
 

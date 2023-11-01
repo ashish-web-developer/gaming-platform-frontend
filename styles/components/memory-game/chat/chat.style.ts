@@ -44,7 +44,7 @@ const StyledChatContainer = styled.div`
       position: absolute;
       z-index: 7;
       bottom: -50px;
-      right: 60px;
+      right: 150px;
       border: 25px;
       border-style: solid;
       border-color: ${({ theme }) => theme.palette.chat.main} transparent

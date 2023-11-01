@@ -27,6 +27,9 @@ const StyledContainer = styled.div`
   background-size: cover;
   overflow: hidden;
   position: relative;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    overflow:auto;
+  }
 `;
 
 const StyledChatContainer = styled.div`
@@ -35,7 +38,7 @@ const StyledChatContainer = styled.div`
     width: 100%;
     height: 60%;
     position: absolute;
-    bottom: 150px;
+    bottom: 100px;
     z-index: 6;
     display: flex;
     justify-content: center;
@@ -98,6 +101,7 @@ const StyledBackgroundCircleOne = styled.div<IStyledBackgroundCircle>`
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 615px;
     height: 615px;
+    position:fixed;
   }
 `;
 
@@ -165,9 +169,11 @@ const StyledHelpCtaContainer = styled.div`
 `;
 
 const StyledHelpCta = styled(IconButton)`
-  position: absolute;
-  right: 60px;
-  top: 60px;
+  &.MuiIconButton-root{
+    position: absolute;
+    right: 60px;
+    top: 60px;
+  }
 `;
 
 export default GlobalStyles;
