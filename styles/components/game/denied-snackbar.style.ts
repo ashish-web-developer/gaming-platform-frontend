@@ -15,13 +15,15 @@ type ISnackbarText = {
 };
 
 const StyledSnackbarContainer = styled(Paper)`
-  background-color: ${({ theme }) => theme.palette.primary.light};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  border-radius: 10px;
-  padding: 10px 10px;
-  width: 400px;
+  &.MuiPaper-root{
+    background-color: ${({ theme }) => theme.palette.primary.light};
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+    padding: 10px 10px;
+    width: 400px;
+  }
 `;
 
 const StyledSnackbarContainerItem = styled.div<IStyledSnackbarContainerItem>`

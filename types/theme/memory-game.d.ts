@@ -18,6 +18,28 @@ type CustomMemoryGameThemePalette = {
       tag: {
         main: string;
       };
+      mobile:{
+        container:{
+          border:string;
+          background:string;
+          trophy_container:{
+            border:string;
+          },
+          logo_text:{
+            cogni_text_color:string;
+            match_text_color:string;
+          },
+          content_text_color:string;
+          stars:{
+            stars_first_color:string;
+            stars_second_color:string;
+            stars_third_color:string;
+          }
+        }
+        dotted_container:{
+          border:string,
+        }
+      }
     };
     start_banner: {
       main: string;
@@ -63,8 +85,10 @@ type CustomMemoryGameThemePalette = {
       color: string;
       mobile: {
         background: string;
+        border:string;
         icons: string;
         help_icon: string;
+        help_tooltip_border:string;
       };
     };
     help_tooltip: {
@@ -85,6 +109,7 @@ type CustomMemoryGameThemePalette = {
       };
       mobile: {
         background: string;
+        mobile_top_background:string;
         heading: string;
         para: string;
         icons: string;

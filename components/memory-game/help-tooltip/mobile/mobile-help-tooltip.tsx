@@ -100,7 +100,7 @@ const MobileHelpTooltip: FC = () => {
           <Image
             layout="responsive"
             alt="girl"
-            src="/memory-game/help-tooltip/mobile/top-background.svg"
+            src={theme.palette.help_tooltip.mobile.mobile_top_background}
             width={390}
             height={350}
           />

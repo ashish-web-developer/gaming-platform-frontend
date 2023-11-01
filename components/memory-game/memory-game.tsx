@@ -5,12 +5,52 @@ import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 
 // local components
-import WelcomeBanner from "@/components/memory-game/welcome-banner/welcome-banner";
-import StartBanner from "@/components/memory-game/start-banner/start-banner";
 import Chat from "@/components/memory-game/chat/chat";
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
-import Nav from "@/components/memory-game/nav/nav";
-import MobileNav from "@/components/memory-game/nav/mobile-nav";
+
+const WelcomeBanner = dynamic(
+  () => import("@/components/memory-game/welcome-banner/welcome-banner"),
+  {
+    ssr: false,
+  }
+);
+
+const MobileWelcomeBanner = dynamic(
+  () =>
+    import(
+      "@/components/memory-game/welcome-banner/mobile/mobile-welcome-banner"
+    ),
+  {
+    ssr: false,
+  }
+);
+
+const StartBanner = dynamic(
+  () => import("@/components/memory-game/start-banner/start-banner"),
+  {
+    ssr: false,
+  }
+);
+
+const MobileStartBanner = dynamic(
+  () =>
+    import("@/components/memory-game/start-banner/mobile/mobile-start-banner"),
+  {
+    ssr: false,
+  }
+);
+
+const Nav = dynamic(() => import("@/components/memory-game/nav/nav"), {
+  ssr: true,
+});
+
+const MobileNav = dynamic(
+  () => import("@/components/memory-game/nav/mobile/mobile-nav"),
+  {
+    ssr: false,
+  }
+);
+
 const HelpTooltip = dynamic(
   () => import("@/components/memory-game/help-tooltip/help-tooltip"),
   {
@@ -195,8 +235,7 @@ const MemoryGame: FC = () => {
           <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
         </StyledInfoSnackbarContainer>
         <StyledContentContainer>
-          <Nav />
-          <MobileNav />
+          {isMobile ? <MobileNav /> : <Nav />}
           {!_show_game_board && (
             <StyledMainText>Good Morning, {_user.name}</StyledMainText>
           )}
@@ -204,8 +243,17 @@ const MemoryGame: FC = () => {
             <StyledLeftContainer>
               {!_show_game_board && (
                 <>
-                  <WelcomeBanner />
-                  <StartBanner />
+                  {isMobile ? (
+                    <>
+                      <MobileWelcomeBanner />
+                      <MobileStartBanner />
+                    </>
+                  ) : (
+                    <>
+                      <WelcomeBanner />
+                      <StartBanner />
+                    </>
+                  )}
                 </>
               )}
               {_show_game_board && <GameBoard />}
