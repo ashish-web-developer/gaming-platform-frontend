@@ -72,6 +72,16 @@ const GameBoard = dynamic(
     ssr: false,
   }
 );
+
+const MobileGameBoard = dynamic(
+  () =>
+    import(
+      "@/components/memory-game/game-board/mobile/game-board/mobile-game-board"
+    ),
+  {
+    ssr: false,
+  }
+);
 // styled components
 import GlobalStyles, {
   StyledContainer,
@@ -237,9 +247,21 @@ const MemoryGame: FC = () => {
         <StyledContentContainer>
           {isMobile ? <MobileNav /> : <Nav />}
           {!_show_game_board && (
-            <StyledMainText>Good Morning, {_user.name}</StyledMainText>
+            <>
+              {isMobile ? (
+                <StyledMainText>
+                  Good Morning,
+                  <br />
+                  {_user.name}
+                </StyledMainText>
+              ) : (
+                <StyledMainText>Good Morning, {_user.name}</StyledMainText>
+              )}
+            </>
           )}
-          <StyledGrid $paddingTop={_show_game_board ? "70px" : null}>
+          <StyledGrid
+            $paddingTop={_show_game_board && !isMobile ? "70px" : null}
+          >
             <StyledLeftContainer>
               {!_show_game_board && (
                 <>
@@ -256,7 +278,9 @@ const MemoryGame: FC = () => {
                   )}
                 </>
               )}
-              {_show_game_board && <GameBoard />}
+              {_show_game_board && (
+                <>{isMobile ? <MobileGameBoard /> : <GameBoard />}</>
+              )}
             </StyledLeftContainer>
             <StyledRightContainer>
               <Chat />

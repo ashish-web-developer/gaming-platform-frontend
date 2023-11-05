@@ -28,7 +28,7 @@ const StyledContainer = styled.div`
   overflow: hidden;
   position: relative;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    overflow:auto;
+    overflow: auto;
   }
 `;
 
@@ -74,7 +74,9 @@ const StyledLeftContainer = styled.div`
   width: 60%;
   flex-grow: 1;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    position: relative;
     height: 100%;
+    z-index: 5;
   }
 `;
 
@@ -101,7 +103,7 @@ const StyledBackgroundCircleOne = styled.div<IStyledBackgroundCircle>`
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 615px;
     height: 615px;
-    position:fixed;
+    position: fixed;
   }
 `;
 
@@ -134,7 +136,7 @@ const StyledMainText = styled.div`
   z-index: 2;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 90%;
-    font-size: 16px;
+    font-size: 20px;
   }
 `;
 
@@ -169,7 +171,7 @@ const StyledHelpCtaContainer = styled.div`
 `;
 
 const StyledHelpCta = styled(IconButton)`
-  &.MuiIconButton-root{
+  &.MuiIconButton-root {
     position: absolute;
     right: 60px;
     top: 60px;
