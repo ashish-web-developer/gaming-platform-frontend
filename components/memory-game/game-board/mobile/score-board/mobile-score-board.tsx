@@ -31,12 +31,16 @@ const MobileScoreBoard: FC = forwardRef<HTMLDivElement>((props, ref) => {
       <StyledScoreBoardContent>
         <StyledScoreContainer $alignItems={"flex-start"}>
           <StyledUserName>{_user.name?.split(" ")[0]}</StyledUserName>
-          <StyledScore>{_score[_user.id as number]}</StyledScore>
+          <StyledScore>
+            {String(_score[_user.id as number]).padStart(2, "0")}
+          </StyledScore>
         </StyledScoreContainer>
         <StyledScoreContainer $alignItems={"flex-end"}>
           <StyledUserName>{_gaming_user?.name?.split(" ")[0]}</StyledUserName>
           <StyledScore>
-            {_gaming_user ? _score[_gaming_user.id as number] : 0}
+            {String(
+              _gaming_user ? _score[_gaming_user.id as number] : 0
+            ).padStart(2, "0")}
           </StyledScore>
         </StyledScoreContainer>
       </StyledScoreBoardContent>

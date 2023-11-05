@@ -18,13 +18,14 @@ const StyledScoreBoardContent = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 1.5rem;
+  padding: 30px 1.5rem 0px 1.5rem;
 `;
 
 const StyledScoreContainer = styled.div<IStyledScoreContainer>`
   display: flex;
   flex-direction: column;
   align-items: ${(props) => props.$alignItems};
+  gap:12px;
 `;
 
 const StyledUserName = styled.span`
