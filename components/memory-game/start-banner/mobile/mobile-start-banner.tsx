@@ -9,7 +9,7 @@ import {
   StyledMainText,
   StyledTextSpan,
   StyledVsContainer,
-  StyledStartButton
+  StyledStartButton,
 } from "@/styles/components/memory-game/start-banner/mobile/mobile-start-banner.style";
 
 // local components
@@ -20,9 +20,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 
-
-
-const StartIcon:FC = ()=>{
+const StartIcon: FC = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -37,10 +35,7 @@ const StartIcon:FC = ()=>{
       ></path>
     </svg>
   );
-}
-
-
-
+};
 
 const MobileStartBanner: FC = () => {
   const _user = useAppSelector(user);
@@ -52,13 +47,16 @@ const MobileStartBanner: FC = () => {
           <StyledMainText>
             Cogni<StyledTextSpan $color="#F42C04">Match</StyledTextSpan> <br />
             Starting in <br />
-            <StyledTextSpan $color="#16C172"><MobileCountDown/> sec</StyledTextSpan>
+            <StyledTextSpan $color="#16C172">
+              <MobileCountDown /> sec
+            </StyledTextSpan>
           </StyledMainText>
           <StyledVsContainer>
-            {_user.name} <StyledTextSpan $color = "#FF2400">V/s</StyledTextSpan> {_gaming_user?.name}
+            {_user.name} <StyledTextSpan $color="#FF2400">V/s</StyledTextSpan>{" "}
+            {_gaming_user?.name}
           </StyledVsContainer>
           <StyledStartButton>
-            <StartIcon/>
+            <StartIcon />
           </StyledStartButton>
         </StyledStartBannerContent>
       </StyledStartBanner>

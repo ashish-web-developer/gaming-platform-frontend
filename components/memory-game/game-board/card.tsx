@@ -15,6 +15,9 @@ import {
   StyledCardPattern,
 } from "@/styles/components/memory-game/game-board/card.style";
 
+// mui theme
+import { useTheme as useMuiTheme, useMediaQuery } from "@mui/material";
+
 // helpers
 import { getCardName } from "@/helpers/memory-game/game";
 
@@ -36,7 +39,7 @@ import {
 } from "@/store/slice/memory-game.slice";
 import { updatePlayerTurnEvent } from "@/store/slice/game.slice";
 
-const PatternBottom: FC<{ size: number }> = ({ size }) => {
+const PatternBottom: FC<{ size: number | string }> = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +53,7 @@ const PatternBottom: FC<{ size: number }> = ({ size }) => {
   );
 };
 
-const PatternTop: FC<{ size: number }> = ({ size }) => {
+const PatternTop: FC<{ size: number | string }> = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -64,9 +67,10 @@ const PatternTop: FC<{ size: number }> = ({ size }) => {
   );
 };
 
-import React, { useEffect } from "react";
-
-const CardPattern: FC<{ size: number; image: string }> = ({ size, image }) => {
+const CardPattern: FC<{ size: number | string; image: string }> = ({
+  size,
+  image,
+}) => {
   const image_id = useId();
   const image_path = `/memory-game/game-board/card/${image}.png`;
 
@@ -124,6 +128,8 @@ const Card: FC<IProps> = ({
   user,
   card_image,
 }) => {
+  const theme = useMuiTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const _card_list = useAppSelector(card_list);
   const dispatch = useAppDispatch();
   const _card_turn_count = useAppSelector(card_turn_count);
@@ -216,7 +222,7 @@ const Card: FC<IProps> = ({
             <PatternBottom size={20} />
           </StyledPatternContainer>
           <StyledCardPattern>
-            <CardPattern size={52} image={card_image} />
+            <CardPattern size={isMobile ? "100%" : 52} image={card_image} />
           </StyledCardPattern>
         </>
       )}

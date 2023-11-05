@@ -21,28 +21,29 @@ const lightTheme: CustomThemePalette = {
       tag: {
         main: "#1E96FC",
       },
-      mobile:{
-        container:{
-          border:"4px solid #2B061E",
-          background:"url('/memory-game/welcome-banner/mobile/background-pattern.png'), #F5E960",
-          trophy_container:{
-            border:"2px solid #F42C04"
+      mobile: {
+        container: {
+          border: "4px solid #2B061E",
+          background:
+            "url('/memory-game/welcome-banner/mobile/background-pattern.png'), #F5E960",
+          trophy_container: {
+            border: "2px solid #F42C04",
           },
-          content_text_color:"#2B061E",
-          logo_text:{
-            cogni_text_color:"#2B061E",
-            match_text_color:"#F42C04"
+          content_text_color: "#2B061E",
+          logo_text: {
+            cogni_text_color: "#2B061E",
+            match_text_color: "#F42C04",
           },
-          stars:{
-            stars_first_color:"#2B061E",
-            stars_second_color:"#F42C04",
-            stars_third_color:"#16C172"
-          }
+          stars: {
+            stars_first_color: "#2B061E",
+            stars_second_color: "#F42C04",
+            stars_third_color: "#16C172",
+          },
         },
-        dotted_container:{
-          border:"2px dashed #2B061E;"
-        }
-      }
+        dotted_container: {
+          border: "2px dashed #2B061E;",
+        },
+      },
     },
     start_banner: {
       main: "#1E96FC",
@@ -91,10 +92,10 @@ const lightTheme: CustomThemePalette = {
       color: "#2B061E",
       mobile: {
         background: "#080F0F",
-        border:" 2px solid #F5E960",
+        border: " 2px solid #F5E960",
         icons: "#2B061E",
         help_icon: "#D62839",
-        help_tooltip_border:"2px solid #2B061E"
+        help_tooltip_border: "2px solid #2B061E",
       },
     },
     help_tooltip: {
@@ -115,7 +116,8 @@ const lightTheme: CustomThemePalette = {
       },
       mobile: {
         background: "#F5E960",
-        mobile_top_background:"/memory-game/help-tooltip/mobile/light-top-background.svg",
+        mobile_top_background:
+          "/memory-game/help-tooltip/mobile/light-top-background.svg",
         heading: "#F42C04",
         para: "#2B061E",
         icons: "#2B061E",
@@ -131,6 +133,12 @@ const lightTheme: CustomThemePalette = {
       background: "#2B061E",
       card: {
         background: "#F7FFF6",
+      },
+      score_board: {
+        mobile: {
+          background_color: "#F5E960",
+          user_name_color: "#2B061E",
+        },
       },
     },
     secondary: {
@@ -171,28 +179,29 @@ const darkTheme: CustomThemePalette = {
       tag: {
         main: "#FF934F",
       },
-      mobile:{
-        container:{
-          border:"4px solid #FFF",
-          background:"url('/memory-game/welcome-banner/mobile/background-pattern.png'), #F42C04",
-          trophy_container:{
-            border:"2px solid #16C172;"
+      mobile: {
+        container: {
+          border: "4px solid #FFF",
+          background:
+            "url('/memory-game/welcome-banner/mobile/background-pattern.png'), #F42C04",
+          trophy_container: {
+            border: "2px solid #16C172;",
           },
-          content_text_color:"#FFFFFF",
-          logo_text:{
-            cogni_text_color:"#080F0F",
-            match_text_color:"#FFFFFF"
+          content_text_color: "#FFFFFF",
+          logo_text: {
+            cogni_text_color: "#080F0F",
+            match_text_color: "#FFFFFF",
           },
-          stars:{
-            stars_first_color:"#080F0F",
-            stars_second_color:"#FFFFFF",
-            stars_third_color:"#16C172"
-          }
+          stars: {
+            stars_first_color: "#080F0F",
+            stars_second_color: "#FFFFFF",
+            stars_third_color: "#16C172",
+          },
         },
-        dotted_container:{
-          border:"2px dashed #FFF"
-        }
-      }
+        dotted_container: {
+          border: "2px dashed #FFF",
+        },
+      },
     },
     start_banner: {
       main: "#FF934F",
@@ -240,10 +249,10 @@ const darkTheme: CustomThemePalette = {
       color: "#f9f8f8",
       mobile: {
         background: "#2B061E",
-        border:"2px solid #FFF",
+        border: "2px solid #FFF",
         icons: "#f9f8f8",
         help_icon: "#080f0f",
-        help_tooltip_border:"2px solid #FFF"
+        help_tooltip_border: "2px solid #FFF",
       },
     },
     help_tooltip: {
@@ -264,7 +273,8 @@ const darkTheme: CustomThemePalette = {
       },
       mobile: {
         background: "#D62839",
-        mobile_top_background:"/memory-game/help-tooltip/mobile/dark-top-background.svg",
+        mobile_top_background:
+          "/memory-game/help-tooltip/mobile/dark-top-background.svg",
         heading: "#1E1E1E",
         para: "#f9f8f8",
         icons: "#f9f8f8",
@@ -280,6 +290,12 @@ const darkTheme: CustomThemePalette = {
       background: "#080F0F",
       card: {
         background: "#F7FFF6",
+      },
+      score_board: {
+        mobile: {
+          background_color: "#FF2400",
+          user_name_color: "#FFFFFF",
+        },
       },
     },
     secondary: {

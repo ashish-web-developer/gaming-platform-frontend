@@ -14,33 +14,36 @@ type IStyledCardNumber = {
   $position: "top" | "bottom";
 };
 
-
 type IStyledCardName = {
   $color: string;
 };
 
 type IStyledText = {
-  $top?:string;
-  $left?:string;
-  $right?:string;
-  $bottom?:string;
-  $rotate:string;
-}
+  $top?: string;
+  $left?: string;
+  $right?: string;
+  $bottom?: string;
+  $rotate: string;
+};
 
 type IStyledPatternContainer = {
-  $top?:string;
-  $left?:string;
-  $right?:string;
-  $bottom?:string;
-}
-
+  $top?: string;
+  $left?: string;
+  $right?: string;
+  $bottom?: string;
+};
 
 const StyledCard = styled.div<IStyledCard>`
   width: 80px;
   height: 120px;
-  background: ${({theme})=>theme.palette.game_board.card.background};
+  background: ${({ theme }) => theme.palette.game_board.card.background};
   border-radius: 6px;
   position: relative;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    width: 100%;
+    aspect-ratio: 1/1.5;
+    height: auto;
+  }
 `;
 
 const StyledBorder = styled.div<IStyledBorder>`
@@ -57,17 +60,20 @@ const StyledBorder = styled.div<IStyledBorder>`
 
 const StyledText = styled.div<IStyledText>`
   color: #000;
-  font-family:${({theme})=>theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 6px;
   font-style: normal;
   font-weight: 800;
   line-height: normal;
-  position:absolute;
-  top: ${(props)=>props.$top??'auto'};
-  left: ${(props)=>props.$left??'auto'};
-  right:${(props)=>props.$right??'auto'};
-  bottom:${(props)=>props.$bottom??'auto'};
-  transform:rotate(${(props)=>props.$rotate});
+  position: absolute;
+  top: ${(props) => props.$top ?? "auto"};
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
+  transform: rotate(${(props) => props.$rotate});
+  @media (max-width: 375px) {
+    font-size: 6px;
+  }
 `;
 
 const StyledTextSpan = styled.span`
@@ -101,19 +107,19 @@ const StyledCardName = styled.span<IStyledCardName>`
 `;
 
 const StyledPatternContainer = styled.span<IStyledPatternContainer>`
-  position:absolute;
-  top:${(props)=>props.$top??'auto'};
-  left:${(props)=>props.$left??'auto'};
-  bottom:${(props)=>props.$bottom??'auto'};
-  right:${(props)=>props.$right??'auto'};
-`
+  position: absolute;
+  top: ${(props) => props.$top ?? "auto"};
+  left: ${(props) => props.$left ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+`;
 
 const StyledCardPattern = styled.span`
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
 
 export {
   StyledCard,
@@ -123,5 +129,5 @@ export {
   StyledCardNumber,
   StyledCardName,
   StyledPatternContainer,
-  StyledCardPattern
+  StyledCardPattern,
 };
