@@ -1,7 +1,7 @@
 // types
 import type { FC } from "react";
 
-const Moon: FC<{ width: number; height: number; color: string }> = ({
+const MoonIcon: FC<{ width: number; height: number; color: string }> = ({
   width,
   height,
   color,
@@ -10,7 +10,7 @@ const Moon: FC<{ width: number; height: number; color: string }> = ({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={width}
-      height={width}
+      height={height}
       fill="none"
       viewBox="0 0 27 30"
     >
@@ -55,4 +55,4 @@ const Moon: FC<{ width: number; height: number; color: string }> = ({
   );
 };
 
-export default Moon;
+export default MoonIcon;
