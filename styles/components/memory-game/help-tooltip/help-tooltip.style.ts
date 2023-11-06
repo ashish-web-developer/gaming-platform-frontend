@@ -3,6 +3,12 @@ import Image from "next/image";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
+
+type IStyledToolTipContainer = {
+  $bottom:string;
+  $right:string;
+}
+
 const StyledHelpTooltipContainer = styled(motion.div)`
   position: absolute;
   right: 0px;
@@ -10,16 +16,22 @@ const StyledHelpTooltipContainer = styled(motion.div)`
   z-index: 4;
 `;
 
-const StyledImage = styled(Image)`
+const StyledLightImage = styled(Image)`
   position: absolute;
   right: 0px;
   bottom: 0px;
 `;
 
-const StyledToolTipContainer = styled.div`
+const StyledDarkImage = styled(Image)`
+  position:absolute;
+  right:0px;
+  bottom:0px;
+`
+
+const StyledToolTipContainer = styled.div<IStyledToolTipContainer>`
   position: absolute;
-  bottom: 56px;
-  right: 350px;
+  bottom: ${(props)=>props.$bottom};
+  right: ${(props)=>props.$right};
   display: flex;
   flex-direction: column;
 `;
@@ -129,7 +141,8 @@ const StyledNavContainer = styled.div`
 
 export {
   StyledHelpTooltipContainer,
-  StyledImage,
+  StyledLightImage,
+  StyledDarkImage,
   StyledToolTipContainer,
   StyledTooltip,
   StyledVolumeContainer,
