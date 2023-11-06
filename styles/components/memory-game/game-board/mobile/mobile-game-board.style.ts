@@ -107,7 +107,7 @@ const StyledBadgeContent = styled.div<IStyledBadgeContent>`
 `;
 
 const StyledTimer = styled.div`
-  width: 22%;
+  width: 20%;
   aspect-ratio: 1/1;
   border: 5px dashed #fff;
   border-radius: 50%;
