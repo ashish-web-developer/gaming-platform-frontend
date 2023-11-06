@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 // Mui
 
 // Local components
@@ -13,13 +13,14 @@ import path from "path";
 import type Colors from "@/types/data/colors";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
   updateCardTurnCount,
   updateGameRules,
   updatePlayAudio,
   updateShowGameBoard,
 } from "@/store/slice/memory-game.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // theme provider
 import { ThemeProvider } from "styled-components";
@@ -28,7 +29,6 @@ import { ThemeProvider } from "styled-components";
 import getTheme from "@/theme/memory-game.theme";
 
 // context
-import { ThemeMode } from "context";
 import { ColorsContext } from "context";
 import { UttranceContext } from "context";
 
@@ -42,8 +42,8 @@ interface Props {
 }
 const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
   const dispatch = useAppDispatch();
-  const mode = useContext(ThemeMode);
-  const theme = getTheme(mode);
+  const _mode = useAppSelector(mode);
+  const theme = getTheme(_mode);
   const [speechUttrance, setSpeechUttrance] =
     useState<MutableSpeechUtterance | null>(null);
 

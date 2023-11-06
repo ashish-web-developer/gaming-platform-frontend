@@ -35,6 +35,7 @@ import {
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 import { active_user } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
 import {
   updateGamingUser,
   updateRoomId,
@@ -54,7 +55,6 @@ import { ThemeProvider } from "styled-components";
 import getTheme from "theme/chat.theme";
 
 // context
-import { ThemeMode } from "context";
 import { ColorsContext } from "context";
 
 const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
@@ -62,8 +62,8 @@ const Chat: NextPage<{ colors: Colors; users: User[]; isMobile: boolean }> = ({
   users,
   isMobile,
 }) => {
-  const mode = useContext(ThemeMode);
-  const theme = getTheme(mode);
+  const _mode = useAppSelector(mode);
+  const theme = getTheme(_mode);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const _user = useAppSelector(user);
