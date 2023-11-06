@@ -6,7 +6,8 @@ import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 // styled components
 import {
   StyledHelpTooltipContainer,
-  StyledImage,
+  StyledLightImage,
+  StyledDarkImage,
   StyledToolTipContainer,
   StyledVolumeContainer,
   StyledVolumeCta,
@@ -37,6 +38,7 @@ import {
   updateCurrentRuleIndex,
   updatePlayAudio,
 } from "@/store/slice/memory-game.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // icons
 import CloseIcon from "@/components/memory-game/help-tooltip/icons/close";
@@ -55,6 +57,7 @@ const HelpTooltip: FC = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const SpeechUttrance = useContext(UttranceContext);
+  const _mode = useAppSelector(mode);
   const _help_tooltip_text = useAppSelector(help_tooltip_text);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _current_rule_index = useAppSelector(current_rule_index);
@@ -102,13 +105,25 @@ const HelpTooltip: FC = () => {
             x: 750,
           }}
         >
-          <StyledImage
-            alt="help-tooltip-girl"
-            width={350}
-            height={365}
-            src="/memory-game/help-tooltip/help-tooltip-girl.png"
-          />
-          <StyledToolTipContainer>
+          {_mode == "light" ? (
+            <StyledLightImage
+              alt="help-tooltip-girl"
+              width={350}
+              height={365}
+              src="/memory-game/help-tooltip/light-help-tooltip-girl.png"
+            />
+          ) : (
+            <StyledDarkImage
+              alt="help-tooltip-girl"
+              width={340}
+              height={509}
+              src="/memory-game/help-tooltip/dark-help-tooltip-girl.png"
+            />
+          )}
+          <StyledToolTipContainer
+            $bottom={_mode == "light" ? "56px" : "270px"}
+            $right={_mode == "light" ? "350px" : "240px"}
+          >
             <StyledVolumeContainer>
               <StyledVolumeCta
                 onClick={() => dispatch(updatePlayAudio(!_play_audio))}

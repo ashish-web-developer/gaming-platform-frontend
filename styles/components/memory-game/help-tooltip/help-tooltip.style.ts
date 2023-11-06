@@ -3,6 +3,11 @@ import Image from "next/image";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
+type IStyledToolTipContainer = {
+  $bottom: string;
+  $right: string;
+};
+
 const StyledHelpTooltipContainer = styled(motion.div)`
   position: absolute;
   right: 0px;
@@ -10,16 +15,22 @@ const StyledHelpTooltipContainer = styled(motion.div)`
   z-index: 4;
 `;
 
-const StyledImage = styled(Image)`
+const StyledLightImage = styled(Image)`
   position: absolute;
   right: 0px;
   bottom: 0px;
 `;
 
-const StyledToolTipContainer = styled.div`
+const StyledDarkImage = styled(Image)`
   position: absolute;
-  bottom: 56px;
-  right: 350px;
+  right: 0px;
+  bottom: 0px;
+`;
+
+const StyledToolTipContainer = styled.div<IStyledToolTipContainer>`
+  position: absolute;
+  bottom: ${(props) => props.$bottom};
+  right: ${(props) => props.$right};
   display: flex;
   flex-direction: column;
 `;
@@ -48,7 +59,7 @@ const StyledVolumeContainer = styled.div`
 `;
 
 const StyledVolumeCta = styled(IconButton)`
-  &.MuiIconButton-root{
+  &.MuiIconButton-root {
     margin: 0px;
     padding: 0px;
     width: 40px;
@@ -112,7 +123,7 @@ const StyledPattern = styled.span`
 `;
 
 const StyledIconButton = styled(IconButton)`
-  &.MuiIconButton-root{
+  &.MuiIconButton-root {
     position: absolute;
     top: 50px;
     right: 4px;
@@ -129,7 +140,8 @@ const StyledNavContainer = styled.div`
 
 export {
   StyledHelpTooltipContainer,
-  StyledImage,
+  StyledLightImage,
+  StyledDarkImage,
   StyledToolTipContainer,
   StyledTooltip,
   StyledVolumeContainer,
