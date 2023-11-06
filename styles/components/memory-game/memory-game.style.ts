@@ -37,7 +37,7 @@ const StyledChatContainer = styled.div`
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 100%;
     height: 60%;
-    position: absolute;
+    position: fixed;
     bottom: 100px;
     z-index: 6;
     display: flex;

@@ -4,7 +4,14 @@ import type { FC } from "react";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
-import { player_turn_id } from "@/store/slice/memory-game.slice";
+import {
+  player_turn_id,
+  card_turn_count,
+  last_flipped_card_id,
+  memoryGameCardEvent,
+  updateCardTurnCount,
+  updateLastFlippedCardEvent,
+} from "@/store/slice/memory-game.slice";
 import {
   timer_start_count,
   updatePlayerTurnEvent,
@@ -16,6 +23,8 @@ const MobileGameBoardTimer: FC = () => {
   const _user = useAppSelector(user);
   const _player_turn_id = useAppSelector(player_turn_id);
   const _timer_start_count = useAppSelector(timer_start_count);
+  const _card_turn_count = useAppSelector(card_turn_count);
+  const _last_flipped_card_id = useAppSelector(last_flipped_card_id);
 
   useEffect(() => {
     const updateCountDown = () => {
@@ -24,6 +33,16 @@ const MobileGameBoardTimer: FC = () => {
       if (time_remaining <= 0) {
         if (_player_turn_id == _user.id) {
           dispatch(updatePlayerTurnEvent());
+          if (_card_turn_count == 1) {
+            dispatch(
+              memoryGameCardEvent({
+                card_id: _last_flipped_card_id as string,
+                flipped: false,
+              })
+            );
+            dispatch(updateCardTurnCount(0));
+            dispatch(updateLastFlippedCardEvent({ card_id: null }));
+          }
         }
       } else {
         const seconds = Math.floor((time_remaining / 1000) % 60);
@@ -34,7 +53,7 @@ const MobileGameBoardTimer: FC = () => {
     return () => {
       clearInterval(timer);
     };
-  }, [_timer_start_count]);
+  }, [_timer_start_count, _card_turn_count, _last_flipped_card_id]);
 
   return <>{String(timerCount).padStart(2, "0")}</>;
 };
