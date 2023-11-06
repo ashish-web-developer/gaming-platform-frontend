@@ -1,19 +1,15 @@
-import {createContext} from "react";
+import { createContext } from "react";
 import Colors from "./types/data/colors";
 
 // helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 
-
 // theme mode context
-
-const ThemeMode = createContext<"dark"|"light">("dark");
 
 // colors context
 const ColorsContext = createContext<Colors>([]);
 
 // speech uttrance
-const UttranceContext = createContext<MutableSpeechUtterance|null>(null);
+const UttranceContext = createContext<MutableSpeechUtterance | null>(null);
 
-
-export {ThemeMode,ColorsContext, UttranceContext}
+export { ColorsContext, UttranceContext };

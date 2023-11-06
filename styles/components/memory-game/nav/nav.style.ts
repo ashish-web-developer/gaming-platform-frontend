@@ -8,7 +8,7 @@ const StyledNav = styled.div`
   top: 0px;
   left: -5rem;
   width: 60px;
-  height: 135px;
+  height: 180px;
   border-radius: 0px 0px 30px 30px;
   background: ${({ theme }) => theme.palette.nav.background};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -16,13 +16,13 @@ const StyledNav = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 16px;
   z-index: 4;
 `;
 
-const StyledChatCta = styled(IconButton)`
+const StyledIconButton = styled(IconButton)`
   margin: 0px;
   padding: 0px;
 `;
 
-export { StyledNav, StyledChatCta };
+export { StyledNav, StyledIconButton };

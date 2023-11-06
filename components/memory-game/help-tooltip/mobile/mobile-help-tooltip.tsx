@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useContext, useEffect } from "react";
+import { useEffect, useContext } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -38,6 +38,7 @@ import {
   updatePlayAudio,
   updateCurrentRuleIndex,
 } from "@/store/slice/memory-game.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // icons
 import VolumeOffIcon from "@/components/memory-game/help-tooltip/icons/volume-off";
@@ -47,13 +48,13 @@ import NextIcon from "@/components/memory-game/help-tooltip/icons/next";
 import BackIcon from "@/components/memory-game/help-tooltip/icons/back";
 
 // context
-import { UttranceContext, ThemeMode } from "context";
+import { UttranceContext } from "context";
 
 const MobileHelpTooltip: FC = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as CustomMemoryGameThemePalette;
-  const themeMode = useContext(ThemeMode);
   const SpeechUttrance = useContext(UttranceContext);
+  const _mode = useAppSelector(mode);
   const _play_audio = useAppSelector(play_audio);
   const _show_help_drawer = useAppSelector(show_help_drawer);
   const _help_tooltip_text = useAppSelector(help_tooltip_text);
@@ -123,7 +124,7 @@ const MobileHelpTooltip: FC = () => {
           <StyledPara>
             {_help_tooltip_text ? _help_tooltip_text[1] : ""}
           </StyledPara>
-          <StyledTrofyImage $showBackground={themeMode == "light"}>
+          <StyledTrofyImage $showBackground={_mode == "light"}>
             <Image
               alt="banner"
               layout="responsive"

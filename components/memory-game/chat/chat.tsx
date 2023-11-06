@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -46,19 +46,16 @@ import {
   updateActiveUser,
   updateActiveUserConversation,
 } from "@/store/slice/chat.slice";
-import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
+import { mode, showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 // hooks
 import useAvatar from "@/hooks/profile";
 import { useConversation } from "@/hooks/chat";
 import { usePrivateChannel } from "@/hooks/pusher";
 
-// context
-import { ThemeMode } from "context";
-
 const Chat: FC = () => {
-  const themeMode = useContext(ThemeMode);
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _gaming_user = useAppSelector(gaming_user);
@@ -107,7 +104,7 @@ const Chat: FC = () => {
           />
         </StyledVersusContainer>
       </StyledTopBackground>
-      <StyledCenteredBackground $mode={themeMode} />
+      <StyledCenteredBackground $mode={_mode} />
       <StyledChatContent>
         <StyledChatContentContainer>
           {_active_user_conversation.map(({ sender_id, message }, index) => {

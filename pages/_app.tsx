@@ -9,22 +9,16 @@ import store from "@/store/rootReducer";
 import CsrfTokenProvider from "@/providers/CsrfTokenProvider";
 import UserProvider from "@/providers/UserProvider";
 
-// context
-import { ThemeMode } from "context";
-
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeMode.Provider value="light">
-      <Provider store={store}>
-        <CsrfTokenProvider>
-          <UserProvider>
-            <Component {...pageProps} />
-          </UserProvider>
-        </CsrfTokenProvider>
-      </Provider>
-    </ThemeMode.Provider>
+    <Provider store={store}>
+      <CsrfTokenProvider>
+        <UserProvider>
+          <Component {...pageProps} />
+        </UserProvider>
+      </CsrfTokenProvider>
+    </Provider>
   );
-  //return <Component {...pageProps} />
 }
 
 export default MyApp;

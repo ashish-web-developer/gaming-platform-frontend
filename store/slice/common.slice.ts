@@ -7,6 +7,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: InitialState = {
   showEmoji: false,
+  mode: "dark",
 };
 export const commonSlice = createSlice({
   name: "common",
@@ -15,9 +16,13 @@ export const commonSlice = createSlice({
     updateShowEmoji: (state, action: PayloadAction<boolean>) => {
       state.showEmoji = action.payload;
     },
+    updateMode: (state, action: PayloadAction<"dark" | "light">) => {
+      state.mode = action.payload;
+    },
   },
 });
 
 export default commonSlice.reducer;
 export const showEmoji = (state: RootState) => state.common.showEmoji;
-export const { updateShowEmoji } = commonSlice.actions;
+export const mode = (state: RootState) => state.common.mode;
+export const { updateShowEmoji, updateMode } = commonSlice.actions;

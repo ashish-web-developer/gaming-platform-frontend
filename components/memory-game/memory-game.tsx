@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -131,9 +131,7 @@ import {
   updateTimerStartCountEvent,
   updateTimerStartCount,
 } from "@/store/slice/game.slice";
-
-// context
-import { ThemeMode } from "context";
+import { mode } from "@/store/slice/common.slice";
 
 // icons
 import HelpIcon from "@/components/memory-game/icons/help";
@@ -142,9 +140,9 @@ import HelpIcon from "@/components/memory-game/icons/help";
 import { usePresenceChannel } from "@/hooks/pusher";
 
 const MemoryGame: FC = () => {
-  const themeMode = useContext(ThemeMode);
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
   const _show_mobile_chat = useAppSelector(show_mobile_chat);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _show_help_drawer = useAppSelector(show_help_drawer);
@@ -234,8 +232,8 @@ const MemoryGame: FC = () => {
             </StyledHelpCta>
           </Tooltip>
         </StyledHelpCtaContainer>
-        <StyledBackgroundCircleOne $mode={themeMode} />
-        <StyledBackgroundCircleTwo $mode={themeMode} />
+        <StyledBackgroundCircleOne $mode={_mode} />
+        <StyledBackgroundCircleTwo $mode={_mode} />
         {_show_mobile_chat && (
           <StyledChatContainer>
             <Chat />
