@@ -50,11 +50,10 @@ const StartBanner: FC = () => {
       <StyledBannerBackgroundTwo />
       <StyledImageContainer>
         <StyledImage
-          layout="responsive"
-          width={200}
-          height={150}
           alt="girl"
           src={theme.palette.start_banner.start_banner_girl_src}
+          fill={true}
+          sizes="(max-width: 1400px) 20vw"
         />
       </StyledImageContainer>
       <StyledContentContainer>

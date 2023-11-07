@@ -11,7 +11,7 @@ import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
 const WelcomeBanner = dynamic(
   () => import("@/components/memory-game/welcome-banner/welcome-banner"),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 
@@ -190,7 +190,6 @@ const MemoryGame: FC = () => {
     {
       event: "UpdateMemoryGameScore",
       callback: (data) => {
-        console.log(data.score, data);
         dispatch(updateScore(data.score));
       },
     },
