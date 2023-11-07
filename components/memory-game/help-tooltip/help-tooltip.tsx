@@ -115,14 +115,14 @@ const HelpTooltip: FC = () => {
           ) : (
             <StyledDarkImage
               alt="help-tooltip-girl"
-              width={340}
+              width={274}
               height={509}
               src="/memory-game/help-tooltip/dark-help-tooltip-girl.png"
             />
           )}
           <StyledToolTipContainer
-            $bottom={_mode == "light" ? "56px" : "270px"}
-            $right={_mode == "light" ? "350px" : "240px"}
+            $bottom={_mode == "light" ? "56px" : "290px"}
+            $right={_mode == "light" ? "350px" : "180px"}
           >
             <StyledVolumeContainer>
               <StyledVolumeCta
