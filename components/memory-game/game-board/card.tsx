@@ -1,8 +1,9 @@
-import { useId } from "react";
+import { forwardRef, useId } from "react";
 // types
 import type { ICard } from "@/types/store/slice/memory-game";
 import type { FC } from "react";
 import type { User } from "@/types/user";
+import type { ForwardRefRenderFunction } from "react";
 // styled components
 import {
   StyledCard,
@@ -13,6 +14,7 @@ import {
   StyledCardName,
   StyledPatternContainer,
   StyledCardPattern,
+  StyledCardContent,
 } from "@/styles/components/memory-game/game-board/card.style";
 
 // mui theme
@@ -72,7 +74,7 @@ const CardPattern: FC<{ size: number | string; image: string }> = ({
   image,
 }) => {
   const image_id = useId();
-  const image_path = `/memory-game/game-board/card/${image}.png`;
+  const image_path = `/memory-game/game-board/card/${image}.jpg`;
 
   return (
     <svg
@@ -117,17 +119,15 @@ interface IProps extends ICard {
   is_clickable: boolean;
   user: User;
 }
+interface IForwardedRef {
+  flip_sound: HTMLAudioElement | null;
+  card_match_sound: HTMLAudioElement | null;
+}
 
-const Card: FC<IProps> = ({
-  suit,
-  card,
-  cardColor,
-  flipped,
-  id,
-  is_clickable,
-  user,
-  card_image,
-}) => {
+const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
+  { suit, card, cardColor, flipped, id, is_clickable, user, card_image },
+  ref
+) => {
   const theme = useMuiTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const _card_list = useAppSelector(card_list);
@@ -138,17 +138,18 @@ const Card: FC<IProps> = ({
     (card) => card.id == _last_flipped_card_id
   )[0];
   const _score = useAppSelector(score);
-
   const getCardColor: any = () => {
     if (flipped) {
       return cardColor == "red" ? "#D62839" : "#090302";
     }
     return "#000";
   };
+
   return (
     <StyledCard
       onClick={() => {
         if (is_clickable) {
+          typeof ref !== "function" && ref?.current?.flip_sound?.play();
           dispatch(memoryGameCardEvent({ card_id: id, flipped: true }));
           dispatch(updateCardTurnCount((_card_turn_count + 1) as 0 | 1));
           if (_card_turn_count == 0) {
@@ -162,16 +163,20 @@ const Card: FC<IProps> = ({
                 _last_flipped_card.suit !== suit)
             ) {
               setTimeout(() => {
+                typeof ref !== "function" && ref?.current?.flip_sound?.play();
                 dispatch(
                   memoryGameCardEvent({
                     card_id: _last_flipped_card.id,
                     flipped: false,
                   })
                 );
+                typeof ref !== "function" && ref?.current?.flip_sound?.play();
                 dispatch(memoryGameCardEvent({ card_id: id, flipped: false }));
               }, 2000);
             } else {
               if (_score) {
+                typeof ref !== "function" &&
+                  ref?.current?.card_match_sound?.play();
                 dispatch(
                   updateScoreEvent({
                     score: {
@@ -190,7 +195,7 @@ const Card: FC<IProps> = ({
       }}
       $showBackground={!flipped}
     >
-      {flipped && (
+      <StyledCardContent $display={flipped ? "block" : "none"}>
         <StyledBorder $backgroundColor={"#F3FAE1"} $borderColor={getCardColor}>
           <>
             <StyledCardNumber $position="top" $color={getCardColor}>
@@ -206,28 +211,26 @@ const Card: FC<IProps> = ({
             </StyledCardName>
           </>
         </StyledBorder>
-      )}
-      {!flipped && (
-        <>
-          <StyledText $top="20px" $right="-12px" $rotate="90deg">
-            Cogni<StyledTextSpan>Match</StyledTextSpan>
-          </StyledText>
-          <StyledText $bottom="20px" $left="-12px" $rotate="270deg">
-            Cogni<StyledTextSpan>Match</StyledTextSpan>
-          </StyledText>
-          <StyledPatternContainer $top="3px" $left="2.5px">
-            <PatternTop size={20} />
-          </StyledPatternContainer>
-          <StyledPatternContainer $bottom="-1px" $right="3px">
-            <PatternBottom size={20} />
-          </StyledPatternContainer>
-          <StyledCardPattern>
-            <CardPattern size={isMobile ? "100%" : 52} image={card_image} />
-          </StyledCardPattern>
-        </>
-      )}
+      </StyledCardContent>
+      <StyledCardContent $display={!flipped ? "block" : "none"}>
+        <StyledText $top="20px" $right="-12px" $rotate="90deg">
+          Cogni<StyledTextSpan>Match</StyledTextSpan>
+        </StyledText>
+        <StyledText $bottom="20px" $left="-12px" $rotate="270deg">
+          Cogni<StyledTextSpan>Match</StyledTextSpan>
+        </StyledText>
+        <StyledPatternContainer $top="3px" $left="2.5px">
+          <PatternTop size={20} />
+        </StyledPatternContainer>
+        <StyledPatternContainer $bottom="-1px" $right="3px">
+          <PatternBottom size={20} />
+        </StyledPatternContainer>
+        <StyledCardPattern>
+          <CardPattern size={isMobile ? "100%" : 52} image={card_image} />
+        </StyledCardPattern>
+      </StyledCardContent>
     </StyledCard>
   );
 };
 
-export default Card;
+export default forwardRef(Card);

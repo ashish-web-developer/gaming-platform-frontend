@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useEffect, useRef } from "react";
 
 // styled components
 import {
@@ -31,6 +32,22 @@ const GameBoard = () => {
   const _user = useAppSelector(user);
   const _player_turn_id = useAppSelector(player_turn_id);
   const _game_comlexity = useAppSelector(game_complexity);
+  const soundRef = useRef<{
+    flip_sound: HTMLAudioElement | null;
+    card_match_sound: HTMLAudioElement | null;
+  }>({
+    flip_sound: null,
+    card_match_sound: null,
+  });
+
+  useEffect(() => {
+    soundRef.current.flip_sound = new Audio(
+      "/memory-game/game-board/card/audio/flip-card-sound.mp3"
+    );
+    soundRef.current.card_match_sound = new Audio(
+      "/memory-game/game-board/card/audio/congratulation-sound.mp3"
+    );
+  }, []);
   return (
     <StyledGameBoardContainer>
       <StyledTopBoardContainer>
@@ -66,6 +83,7 @@ const GameBoard = () => {
                   is_clickable={_player_turn_id == _user.id}
                   user={_user}
                   card_image={card.card_image}
+                  ref={soundRef}
                 />
               );
             })}
