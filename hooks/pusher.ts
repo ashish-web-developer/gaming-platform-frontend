@@ -139,7 +139,6 @@ function usePresenceChannel(
         ) {
           dispatch(updateIsGamingUserIn(true));
         }
-        console.log(user_ids, _gaming_user);
       })
       .leaving((user_ids: User_ids) => {
         if (

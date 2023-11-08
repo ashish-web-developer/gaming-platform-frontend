@@ -33,12 +33,17 @@ type IStyledPatternContainer = {
   $bottom?: string;
 };
 
+type IStyledCardContent = {
+  $display: "block" | "none";
+};
+
 const StyledCard = styled.div<IStyledCard>`
   width: 80px;
   height: 120px;
   background: ${({ theme }) => theme.palette.game_board.card.background};
   border-radius: 6px;
   position: relative;
+  cursor: pointer;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 100%;
     aspect-ratio: 1/1.5;
@@ -120,6 +125,9 @@ const StyledCardPattern = styled.span`
   left: 50%;
   transform: translate(-50%, -50%);
 `;
+const StyledCardContent = styled.div<IStyledCardContent>`
+  display: ${(props) => props.$display};
+`;
 
 export {
   StyledCard,
@@ -130,4 +138,5 @@ export {
   StyledCardName,
   StyledPatternContainer,
   StyledCardPattern,
+  StyledCardContent,
 };

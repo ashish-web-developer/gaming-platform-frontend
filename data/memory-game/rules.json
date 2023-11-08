@@ -13,11 +13,11 @@
   ],
   [
     "3. Taking Turns:",
-    "Players take turns in this game. Decide who goes first through a coin toss, rock-paper-scissors, or any other method you prefer. Players alternate turns throughout the game."
+    "In CogniMatch, the player who proposed the game takes the first turn. Players alternate turns throughout the game, with the initiator going first and the challenger taking the next turn, and so on."
   ],
   [
     "4. Making Matches:",
-    "On their turn, a player selects two cards from the grid and flips them face-up. If the two cards have the same image, it's a match! The player keeps the matched pair and takes another turn. If the cards do not match, the player must carefully flip them back face-down, and the next player's turn begins."
+    "On their turn, a player selects two cards from the grid and flips them face-up. If the two cards matched, it's a match! The player keeps the matched pair and takes another turn. If the cards do not match, cards will get flip down."
   ],
   [
     "5. Memory Strategy:",

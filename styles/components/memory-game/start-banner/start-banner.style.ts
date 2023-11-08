@@ -57,7 +57,7 @@ const StyledImageContainer = styled.div`
   position: absolute;
   bottom: 0px;
   width: 180px;
-  height: 241px;
+  height: 210px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 120px;
   }
@@ -67,6 +67,7 @@ const StyledImage = styled(Image)`
   position: absolute;
   bottom: 0px;
   left: 0px;
+  object-fit: contain;
 `;
 
 const StyledContentContainer = styled.div`
