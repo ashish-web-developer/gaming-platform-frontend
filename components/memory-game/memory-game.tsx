@@ -59,13 +59,14 @@ import HelpTooltip from "@/components/memory-game/help-tooltip/help-tooltip";
 //   }
 // );
 
-const MobileHelpTooltip = dynamic(
-  () =>
-    import("@/components/memory-game/help-tooltip/mobile/mobile-help-tooltip"),
-  {
-    ssr: false,
-  }
-);
+// const MobileHelpTooltip = dynamic(
+//   () =>
+//     import("@/components/memory-game/help-tooltip/mobile/mobile-help-tooltip"),
+//   {
+//     ssr: false,
+//   }
+// );
+import MobileHelpTooltip from "@/components/memory-game/help-tooltip/mobile/mobile-help-tooltip";
 
 const GameBoard = dynamic(
   () => import("@/components/memory-game/game-board/game-board"),
@@ -231,7 +232,7 @@ const MemoryGame: FC = () => {
   return (
     <>
       <GlobalStyles />
-      {isMobile && _show_help_drawer && <MobileHelpTooltip />}
+      {isMobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
       <StyledContainer>
         {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
         <StyledHelpCtaContainer>
