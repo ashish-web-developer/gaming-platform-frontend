@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -51,12 +51,13 @@ const MobileNav = dynamic(
   }
 );
 
-const HelpTooltip = dynamic(
-  () => import("@/components/memory-game/help-tooltip/help-tooltip"),
-  {
-    ssr: false,
-  }
-);
+import HelpTooltip from "@/components/memory-game/help-tooltip/help-tooltip";
+// const HelpTooltip = dynamic(
+//   () => import("@/components/memory-game/help-tooltip/help-tooltip"),
+//   {
+//     ssr: false,
+//   }
+// );
 
 const MobileHelpTooltip = dynamic(
   () =>
@@ -155,6 +156,9 @@ const MemoryGame: FC = () => {
     `(max-width:${theme.palette.breakpoints.mobile})`
   );
   const _user = useAppSelector(user);
+  const voiceRef = useRef<{ voice: SpeechSynthesisVoice[] }>({
+    voice: [],
+  });
 
   usePresenceChannel(`game.${_room_id}`, [
     {
@@ -191,6 +195,7 @@ const MemoryGame: FC = () => {
       event: "UpdateMemoryGameScore",
       callback: (data) => {
         dispatch(updateScore(data.score));
+        console.log(data);
       },
     },
   ]);
@@ -212,12 +217,23 @@ const MemoryGame: FC = () => {
     }
   }, [_is_proposal_sender, _is_gaming_user_in]);
 
+  useEffect(() => {
+    const updateVoices = () => {
+      voiceRef.current.voice = speechSynthesis.getVoices();
+    };
+    updateVoices();
+    window.speechSynthesis.addEventListener("voiceschanged", updateVoices);
+    return () => {
+      window.speechSynthesis.removeEventListener("voiceschanged", updateVoices);
+    };
+  }, []);
+
   return (
     <>
       <GlobalStyles />
       {isMobile && _show_help_drawer && <MobileHelpTooltip />}
       <StyledContainer>
-        {_show_help_tooltip && <HelpTooltip />}
+        {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
         <StyledHelpCtaContainer>
           <Tooltip title="Need Help?" placement="right-start">
             <StyledHelpCta
