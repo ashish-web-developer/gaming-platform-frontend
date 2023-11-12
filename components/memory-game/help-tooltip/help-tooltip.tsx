@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { FC, ForwardRefRenderFunction } from "react";
 import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 
 // styled components
@@ -53,7 +53,11 @@ import { AnimatePresence } from "framer-motion";
 // context
 import { UttranceContext } from "context";
 
-const HelpTooltip: FC = () => {
+type IForwardRef = {
+  voice: SpeechSynthesisVoice[];
+};
+
+const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const SpeechUttrance = useContext(UttranceContext);
@@ -79,9 +83,11 @@ const HelpTooltip: FC = () => {
       _play_audio
     ) {
       SpeechUttrance.text = _help_tooltip_text[1];
-      SpeechUttrance.uttrance.voice = speechSynthesis
-        .getVoices()
-        .filter((voice) => voice.voiceURI.includes("Female"))[0];
+      if (typeof voiceRef !== "function" && voiceRef?.current) {
+        SpeechUttrance.uttrance.voice = voiceRef.current.voice.filter((voice) =>
+          voice.voiceURI.includes("Female")
+        )[0];
+      }
       speechSynthesis.speak(SpeechUttrance.uttrance);
       SpeechUttrance.uttrance.addEventListener("end", handleEnd);
     }
@@ -193,7 +199,7 @@ const HelpTooltip: FC = () => {
     </AnimatePresence>
   );
 };
-export default HelpTooltip;
+export default forwardRef(HelpTooltip);
 
 const Pattern: FC<{ color: string }> = ({ color }) => {
   return (

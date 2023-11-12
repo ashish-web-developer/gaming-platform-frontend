@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { FC, ForwardRefRenderFunction } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 // mui
 import { Drawer } from "@mui/material";
@@ -50,7 +50,14 @@ import BackIcon from "@/components/memory-game/help-tooltip/icons/back";
 // context
 import { UttranceContext } from "context";
 
-const MobileHelpTooltip: FC = () => {
+type IForwardedRef = {
+  voice: SpeechSynthesisVoice[];
+};
+
+const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
+  props,
+  voiceRef
+) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const SpeechUttrance = useContext(UttranceContext);
@@ -76,9 +83,11 @@ const MobileHelpTooltip: FC = () => {
       _play_audio
     ) {
       SpeechUttrance.text = _help_tooltip_text[1];
-      SpeechUttrance.uttrance.voice = speechSynthesis
-        .getVoices()
-        .filter((voice) => voice.voiceURI.includes("Female"))[0];
+      if (typeof voiceRef !== "function" && voiceRef?.current) {
+        SpeechUttrance.uttrance.voice = voiceRef.current.voice.filter((voice) =>
+          voice.voiceURI.includes("Female")
+        )[0];
+      }
       speechSynthesis.speak(SpeechUttrance.uttrance);
       SpeechUttrance.uttrance.addEventListener("end", handleEnd);
     }
@@ -185,4 +194,4 @@ const MobileHelpTooltip: FC = () => {
     </Drawer>
   );
 };
-export default MobileHelpTooltip;
+export default forwardRef(MobileHelpTooltip);
