@@ -5,6 +5,14 @@ type IStyledLogoSpan = {
   $color: string;
 };
 
+type IStyledScoreContainer = {
+  $backgroundColor: string;
+};
+
+type IStyledScore = {
+  $backgroundColor: string;
+};
+
 const StyledScoreBoardContainer = styled.div`
   position: relative;
   width: 100%;
@@ -17,7 +25,9 @@ const StyledScoreBoardContainer = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   z-index: 3;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 `;
 
 const StyledTrofyBannerContainer = styled.div`
@@ -83,6 +93,78 @@ const StyledWinnerName = styled.div`
   text-transform: uppercase;
 `;
 
+const StyledScoreContainer = styled.div<IStyledScoreContainer>`
+  width: 90%;
+  height: 60px;
+  border-radius: 16px;
+  background-color: ${(props) => props.$backgroundColor};
+  display: grid;
+  grid-template-columns: 70px 1fr;
+`;
+
+const StyledRank = styled.span`
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledNameAndScoreContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding-right: 6px;
+`;
+const StyledNameAndScore = styled.div`
+  height: 80%;
+  width: 100%;
+  border-radius: 16px;
+  border: 3px solid #fff;
+  background: #191308;
+  display: flex;
+  align-items: center;
+  padding-left: 1.2rem;
+  gap: 1rem;
+`;
+
+const StyledScore = styled.div<IStyledScore>`
+  width: 30px;
+  height: 30px;
+  background: ${(props) => props.$backgroundColor};
+  border-radius: 4px;
+  color: #fff;
+  text-align: center;
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+`;
+
+const StyledCrownIconContainer = styled.span`
+  position: absolute;
+  top: -20px;
+`;
+
+const StyledUserName = styled.div`
+  color: #fff;
+  text-align: center;
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+`;
+
 export {
   StyledScoreBoardContainer,
   StyledTrofyBannerContainer,
@@ -91,4 +173,11 @@ export {
   StyledLogo,
   StyledLogoSpan,
   StyledWinnerName,
+  StyledScoreContainer,
+  StyledRank,
+  StyledNameAndScoreContainer,
+  StyledNameAndScore,
+  StyledScore,
+  StyledCrownIconContainer,
+  StyledUserName,
 };
