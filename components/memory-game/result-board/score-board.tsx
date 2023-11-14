@@ -19,6 +19,12 @@ import {
   StyledUserName,
 } from "@/styles/components/result-board/score-board.style";
 
+// redux
+import { useAppSelector } from "@/hooks/redux";
+import { score } from "@/store/slice/memory-game.slice";
+import { user } from "@/store/slice/user.slice";
+import { gaming_user } from "@/store/slice/game.slice";
+
 const CrownIcon: FC = () => {
   return (
     <svg
@@ -42,13 +48,24 @@ const CrownIcon: FC = () => {
   );
 };
 
-const Score: FC<{ backgroundColor: string; showCrown: boolean }> = ({
+interface IScoreProps {
+  backgroundColor: string;
+  showCrown: boolean;
+  score: number;
+  name: string;
+  rank: number;
+}
+
+const Score: FC<IScoreProps> = ({
   backgroundColor,
   showCrown,
+  score,
+  name,
+  rank,
 }) => {
   return (
     <StyledScoreContainer $backgroundColor={backgroundColor}>
-      <StyledRank>1.</StyledRank>
+      <StyledRank>{rank}.</StyledRank>
       <StyledNameAndScoreContainer>
         <StyledNameAndScore>
           <StyledScore $backgroundColor={backgroundColor}>
@@ -57,9 +74,9 @@ const Score: FC<{ backgroundColor: string; showCrown: boolean }> = ({
                 <CrownIcon />
               </StyledCrownIconContainer>
             )}
-            06
+            {score}
           </StyledScore>
-          <StyledUserName>Ashish</StyledUserName>
+          <StyledUserName>{name}</StyledUserName>
         </StyledNameAndScore>
       </StyledNameAndScoreContainer>
     </StyledScoreContainer>
@@ -67,6 +84,28 @@ const Score: FC<{ backgroundColor: string; showCrown: boolean }> = ({
 };
 
 const ScoreBoard: FC = () => {
+  const _score = useAppSelector(score);
+  const _score_list = _score && Object.values(_score);
+  const _max_score_user_id =
+    _score &&
+    _score_list &&
+    Object.entries(_score).filter(([key, value]) => {
+      if (value == Math.max(..._score_list)) {
+        return true;
+      }
+    })[0][0];
+  const _min_score_user_id =
+    _score &&
+    _score_list &&
+    Object.entries(_score).filter(([key, value]) => {
+      if (value == Math.min(..._score_list)) {
+        return true;
+      }
+    })[0][0];
+  const _user = useAppSelector(user);
+  const _gaming_user = useAppSelector(gaming_user);
+  const winner = _user.id == _max_score_user_id ? _user : _gaming_user;
+  const loser = _user.id == _min_score_user_id ? _user : _gaming_user;
   return (
     <StyledScoreBoardContainer>
       <StyledTrofyBannerContainer>
@@ -80,11 +119,23 @@ const ScoreBoard: FC = () => {
             <StyledLogoSpan $color="#FFFFFF">Cogni</StyledLogoSpan>
             <StyledLogoSpan $color="#FF2400">Match</StyledLogoSpan>
           </StyledLogo>
-          <StyledWinnerName>Ashish</StyledWinnerName>
+          <StyledWinnerName>{winner?.name}</StyledWinnerName>
         </StyledScoreBoardContent>
       </StyledTrofyBannerContainer>
-      <Score backgroundColor="#329F5B" showCrown={true} />
-      <Score backgroundColor="#FF2400" showCrown={false} />
+      <Score
+        backgroundColor="#329F5B"
+        showCrown={true}
+        score={_score_list ? Math.max(..._score_list) : 0}
+        name={winner?.name as string}
+        rank={1}
+      />
+      <Score
+        backgroundColor="#FF2400"
+        showCrown={false}
+        score={_score_list ? Math.min(..._score_list) : 0}
+        name={loser?.name as string}
+        rank={2}
+      />
     </StyledScoreBoardContainer>
   );
 };

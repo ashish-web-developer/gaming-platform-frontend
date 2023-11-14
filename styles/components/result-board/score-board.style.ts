@@ -91,6 +91,8 @@ const StyledWinnerName = styled.div`
   font-weight: 700;
   line-height: normal;
   text-transform: uppercase;
+  position: relative;
+  z-index: 3;
 `;
 
 const StyledScoreContainer = styled.div<IStyledScoreContainer>`
