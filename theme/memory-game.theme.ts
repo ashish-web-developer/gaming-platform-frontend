@@ -145,6 +145,10 @@ const lightTheme: CustomThemePalette = {
       background_color: "#2B061E",
       border_color: "#F5E960",
       text_color: "#F5E960",
+      score_board: {
+        background_color: "#2B061E",
+        border_color: "#F5E960",
+      },
       star_icon: {
         background_color: "#2B061E",
         stroke_color: "#F5E960",
@@ -311,6 +315,10 @@ const darkTheme: CustomThemePalette = {
       background_color: "#080F0F",
       border_color: "#FFFFFF",
       text_color: "#16C172",
+      score_board: {
+        background_color: "#080F0F",
+        border_color: "#FFFFFF",
+      },
       star_icon: {
         background_color: "#080F0F",
         stroke_color: "#16C172",

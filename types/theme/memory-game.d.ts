@@ -141,6 +141,10 @@ type CustomMemoryGameThemePalette = {
         background_color: string;
         stroke_color: string;
       };
+      score_board: {
+        background_color: string;
+        border_color: string;
+      };
     };
     secondary: {
       main: string;
