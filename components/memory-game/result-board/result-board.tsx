@@ -11,6 +11,10 @@ import {
   StyledCircularText,
   StyledCircularLetter,
   StyledPointsText,
+  StyledLogoContainer,
+  StyledLogoSpan,
+  StyledCrownImageContainer,
+  StyledCrownImage,
 } from "@/styles/components/result-board/result-board.style";
 
 // styled theme
@@ -41,6 +45,24 @@ const StartIcon: FC<{ size: number; color: string; stroke: string }> = ({
   );
 };
 
+const TextPattern: FC<{ color: string }> = ({ color }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="261"
+      height="25"
+      fill="none"
+      viewBox="0 0 261 25"
+    >
+      <path
+        stroke={color}
+        strokeWidth="7"
+        d="M2 21S40.971 5.901 81.138 3.867C142.998.737 260 21 260 21"
+      ></path>
+    </svg>
+  );
+};
+
 const ResultBoard = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const circularTextRef = useRef<HTMLDivElement | null>(null);
@@ -57,6 +79,7 @@ const ResultBoard = () => {
         </StyledStartIconContainer>
         <StyledBoardText>
           Bravo! You've triumphed over the cards. Victory dance time!
+          <TextPattern color={theme.palette.result_board.text_color} />
         </StyledBoardText>
         <StyledCircularTextContainer>
           <StyledCircularText ref={circularTextRef}>
@@ -70,6 +93,19 @@ const ResultBoard = () => {
           </StyledCircularText>
           <StyledPointsText>10+</StyledPointsText>
         </StyledCircularTextContainer>
+        <StyledLogoContainer>
+          <StyledCrownImageContainer>
+            <StyledCrownImage
+              fill={true}
+              priority={false}
+              alt="crown"
+              src="/memory-game/result-board/crown.png"
+              sizes="(max-width: 1400px) 20vw"
+            />
+          </StyledCrownImageContainer>
+          <StyledLogoSpan $color="#FFFFFF">Cogni</StyledLogoSpan>
+          <StyledLogoSpan $color="#FF2400">Match</StyledLogoSpan>
+        </StyledLogoContainer>
       </StyledResultBoardContainer>
     </>
   );

@@ -1,7 +1,11 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 type IStyledCircularLetter = {
   $rotate: number;
+};
+type IStyledLogoSpan = {
+  $color: string;
 };
 
 const StyledResultBoardContainer = styled.div`
@@ -68,6 +72,30 @@ const StyledPointsText = styled.p`
   font-size: 20px;
   font-weight: 900;
 `;
+const StyledLogoContainer = styled.div`
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-size: 40px;
+  font-weight: 900;
+  transform: rotate(-10deg);
+  position: absolute;
+  right: 50px;
+  bottom: 100px;
+`;
+const StyledLogoSpan = styled.span<IStyledLogoSpan>`
+  color: ${(props) => props.$color};
+`;
+const StyledCrownImageContainer = styled.div`
+  position: absolute;
+  top: -92px;
+  left: -20px;
+  transform: rotate(10deg);
+  width: 291px;
+  height: 111px;
+`;
+
+const StyledCrownImage = styled(Image)`
+  object-fit: cover;
+`;
 
 export {
   StyledResultBoardContainer,
@@ -77,4 +105,8 @@ export {
   StyledCircularText,
   StyledCircularLetter,
   StyledPointsText,
+  StyledLogoContainer,
+  StyledLogoSpan,
+  StyledCrownImageContainer,
+  StyledCrownImage,
 };
