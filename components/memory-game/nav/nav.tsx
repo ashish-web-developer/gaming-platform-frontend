@@ -29,6 +29,7 @@ import { mode, updateMode } from "@/store/slice/common.slice";
 import {
   updatePlayerTurnId,
   updateShowHelpTooltip,
+  updateLastFlippedCard,
 } from "@/store/slice/memory-game.slice";
 
 const Nav: FC = () => {
@@ -40,12 +41,13 @@ const Nav: FC = () => {
     <StyledNav>
       <StyledIconButton
         onClick={() => {
-          router.push("/chat");
           dispatch(updateGamingUser(null));
           dispatch(udpateIsProposalSender(false));
           dispatch(updateRoomId(null));
           dispatch(updateShowHelpTooltip(false));
           dispatch(updatePlayerTurnId(null));
+          dispatch(updateLastFlippedCard(null));
+          router.push("/chat");
         }}
       >
         <ChatIcon color={theme.palette.nav.color} width={40} height={30} />

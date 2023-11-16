@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { createPortal } from "react-dom";
 // types
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 import type { FC } from "react";
@@ -15,12 +16,14 @@ import {
   StyledLogoSpan,
   StyledCrownImageContainer,
   StyledCrownImage,
+  StyledLottieContainer,
 } from "@/styles/components/result-board/result-board.style";
 
 // styled theme
 import { useTheme } from "styled-components";
 
-import React from "react";
+// helpers package
+import "@dotlottie/player-component";
 
 const StartIcon: FC<{ size: number; color: string; stroke: string }> = ({
   size,
@@ -70,6 +73,13 @@ const ResultBoard = () => {
   return (
     <>
       <StyledResultBoardContainer>
+        <StyledLottieContainer>
+          <dotlottie-player
+            src="/memory-game/result-board/confetti-animation.lottie"
+            autoplay
+            loop
+          />
+        </StyledLottieContainer>
         <StyledStartIconContainer>
           <StartIcon
             size={63}
