@@ -84,6 +84,19 @@ const MobileGameBoard = dynamic(
     ssr: false,
   }
 );
+
+const ScoreBoard = dynamic(
+  () => import("@/components/memory-game/result-board/score-board"),
+  {
+    ssr: false,
+  }
+);
+const ResultBoard = dynamic(
+  () => import("@/components/memory-game/result-board/result-board"),
+  {
+    ssr: false,
+  }
+);
 // styled components
 import GlobalStyles, {
   StyledContainer,
@@ -115,6 +128,7 @@ import {
   show_help_drawer,
   show_game_board,
   is_gaming_user_in,
+  score,
   // api call
   getCards,
   updateScoreEvent,
@@ -140,6 +154,7 @@ import HelpIcon from "@/components/memory-game/icons/help";
 
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher";
+import { Score } from "@mui/icons-material";
 
 const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
@@ -160,6 +175,8 @@ const MemoryGame: FC = () => {
   const voiceRef = useRef<{ voice: SpeechSynthesisVoice[] }>({
     voice: [],
   });
+  const _score = useAppSelector(score);
+  const _score_list = _score && Object.values(_score);
 
   usePresenceChannel(`game.${_room_id}`, [
     {
@@ -292,12 +309,25 @@ const MemoryGame: FC = () => {
                   )}
                 </>
               )}
-              {_show_game_board && (
-                <>{isMobile ? <MobileGameBoard /> : <GameBoard />}</>
-              )}
+              {_show_game_board &&
+                (_score_list?.reduce(
+                  (acc, currentValue) => acc + currentValue,
+                  0
+                ) == 9 ? (
+                  <ResultBoard />
+                ) : (
+                  <>{isMobile ? <MobileGameBoard /> : <GameBoard />}</>
+                ))}
             </StyledLeftContainer>
             <StyledRightContainer>
-              <Chat />
+              {_score_list?.reduce(
+                (acc, currentValue) => acc + currentValue,
+                0
+              ) == 9 ? (
+                <ScoreBoard />
+              ) : (
+                <Chat />
+              )}
               <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
             </StyledRightContainer>
           </StyledGrid>

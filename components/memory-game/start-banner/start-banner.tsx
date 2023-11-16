@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -44,6 +45,17 @@ const StartBanner: FC = () => {
   );
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
+  const count_down_sound_ref = useRef<{
+    count_down_audio: HTMLAudioElement | null;
+  }>({
+    count_down_audio: null,
+  });
+
+  useEffect(() => {
+    count_down_sound_ref.current.count_down_audio = new Audio(
+      "/memory-game/start-banner/audio/count-down.mp3"
+    );
+  }, []);
   return (
     <StyledContainer>
       <StyledBannerBackgroundOne />
@@ -89,7 +101,7 @@ const StartBanner: FC = () => {
         >
           <Play size={isMobile ? 40 : 68} />
         </StyledPlayButton>
-        <CountDown />
+        <CountDown ref={count_down_sound_ref} />
       </StyledContentContainer>
     </StyledContainer>
   );

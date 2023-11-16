@@ -133,6 +133,19 @@ type CustomMemoryGameThemePalette = {
         };
       };
     };
+    result_board: {
+      background_color: string;
+      border_color: string;
+      text_color: string;
+      star_icon: {
+        background_color: string;
+        stroke_color: string;
+      };
+      score_board: {
+        background_color: string;
+        border_color: string;
+      };
+    };
     secondary: {
       main: string;
       info: string;

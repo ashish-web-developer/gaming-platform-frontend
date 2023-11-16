@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { FC, ForwardRefRenderFunction } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 
 // styled components
@@ -16,7 +16,9 @@ import {
   updateShowGameBoard,
 } from "@/store/slice/memory-game.slice";
 
-const CountDown: FC = () => {
+const CountDown: ForwardRefRenderFunction<{
+  count_down_audio: HTMLAudioElement | null;
+}> = (props, count_down_sound_ref) => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
   const [count, setCount] = useState(5);
@@ -35,7 +37,12 @@ const CountDown: FC = () => {
 
   useEffect(() => {
     timerRef.current = setInterval(() => {
-      setCount((prev) => prev - 1);
+      setCount((prev) => {
+        if (prev == 3 && typeof count_down_sound_ref !== "function") {
+          count_down_sound_ref?.current?.count_down_audio?.play();
+        }
+        return prev - 1;
+      });
     }, 1000);
     return () => {
       timerRef.current && clearInterval(timerRef.current);
@@ -52,4 +59,4 @@ const CountDown: FC = () => {
   );
 };
 
-export default CountDown;
+export default forwardRef(CountDown);
