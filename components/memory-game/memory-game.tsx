@@ -154,7 +154,6 @@ import HelpIcon from "@/components/memory-game/icons/help";
 
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher";
-import { Score } from "@mui/icons-material";
 
 const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;

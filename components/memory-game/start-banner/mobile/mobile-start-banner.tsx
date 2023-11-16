@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 // tyeps
 import type { FC } from "react";
 
@@ -40,6 +41,16 @@ const StartIcon: FC = () => {
 const MobileStartBanner: FC = () => {
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
+  const count_down_sound_ref = useRef<{
+    count_down_audio: HTMLAudioElement | null;
+  }>({
+    count_down_audio: null,
+  });
+  useEffect(() => {
+    count_down_sound_ref.current.count_down_audio = new Audio(
+      "/memory-game/start-banner/audio/count-down.mp3"
+    );
+  }, []);
   return (
     <StyledStartBannerContainer>
       <StyledStartBanner>

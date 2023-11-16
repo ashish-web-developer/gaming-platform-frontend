@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -59,6 +59,23 @@ const MobileGameBoard: FC = () => {
   )}`;
 
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
+  const soundRef = useRef<{
+    flip_sound: HTMLAudioElement | null;
+    card_match_sound: HTMLAudioElement | null;
+  }>({
+    flip_sound: null,
+    card_match_sound: null,
+  });
+
+  if (!soundRef.current.flip_sound || !soundRef.current.card_match_sound) {
+    soundRef.current.flip_sound = new Audio(
+      "/memory-game/game-board/card/audio/flip-card-sound.mp3"
+    );
+    soundRef.current.card_match_sound = new Audio(
+      "/memory-game/game-board/card/audio/congratulation-sound.mp3"
+    );
+  }
+
   return (
     <StyledGameBoardContainer>
       <MobileScoreBoard />
@@ -81,6 +98,7 @@ const MobileGameBoard: FC = () => {
                   is_clickable={_player_turn_id == _user.id}
                   user={_user}
                   card_image={card.card_image}
+                  ref={soundRef}
                 />
               );
             })}

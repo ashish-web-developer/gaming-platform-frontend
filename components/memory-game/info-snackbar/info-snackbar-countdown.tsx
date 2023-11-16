@@ -13,6 +13,11 @@ import {
   udpateIsProposalSender,
   updateRoomId,
 } from "@/store/slice/game.slice";
+import {
+  updateLastFlippedCard,
+  updateShowHelpTooltip,
+  updatePlayerTurnId,
+} from "@/store/slice/memory-game.slice";
 
 const InfoSnackbarCountdown: FC = () => {
   const dispatch = useAppDispatch();
@@ -21,21 +26,24 @@ const InfoSnackbarCountdown: FC = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCount((prev) => prev - 1);
+      setCount((prev) => {
+        if (prev == 0) {
+          dispatch(updateGamingUser(null));
+          dispatch(udpateIsProposalSender(false));
+          dispatch(updateRoomId(null));
+          dispatch(updateShowHelpTooltip(false));
+          dispatch(updatePlayerTurnId(null));
+          dispatch(updateLastFlippedCard(null));
+          router.push("/chat");
+        }
+        return prev - 1;
+      });
     }, 1000);
     return () => {
       clearInterval(timer);
     };
   }, []);
 
-  useEffect(() => {
-    if (count == 0) {
-      router.push("/chat");
-      dispatch(updateGamingUser(null));
-      dispatch(udpateIsProposalSender(false));
-      dispatch(updateRoomId(null));
-    }
-  }, [count]);
   return <StyledCountDown>{String(count).padStart(2, "0")}</StyledCountDown>;
 };
 
