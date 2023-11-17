@@ -1,7 +1,7 @@
 // types
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 import type { Score } from "@/types/store/slice/memory-game";
-import type { User } from "@/types/user";
+import type { FC } from "react";
 // styled components
 import {
   StyledScoreBoard,
@@ -30,6 +30,22 @@ import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { is_gaming_user_in, score } from "@/store/slice/memory-game.slice";
 
+const Scores: FC<{ children: number }> = ({ children }) => {
+  return (
+    <StyledScore
+      key={children}
+      initial={{
+        scale: 2,
+      }}
+      animate={{
+        scale: 1,
+      }}
+    >
+      {children}
+    </StyledScore>
+  );
+};
+
 const ScoreBoard = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const _user = useAppSelector(user);
@@ -39,7 +55,16 @@ const ScoreBoard = () => {
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const _score = useAppSelector(score) as Score;
   return (
-    <StyledScoreBoard>
+    <StyledScoreBoard
+      initial={{
+        x: 100,
+        scale: 2,
+      }}
+      animate={{
+        x: 0,
+        scale: 1,
+      }}
+    >
       <StyledContentContainer>
         <StyledProfileContainer>
           <Badge
@@ -60,16 +85,16 @@ const ScoreBoard = () => {
           <StyledUserName>{_user.name?.split(" ")[0]}</StyledUserName>
         </StyledProfileContainer>
         <StyledScoreContainer>
-          <StyledScore>{_score[_user.id as number]}</StyledScore>
+          <Scores>{_score[_user.id as number]}</Scores>
           <StyledBannerImage
             alt="banner-image"
             src="/memory-game/game-board/banner-image.png"
             width={60}
             height={50}
           />
-          <StyledScore>
+          <Scores>
             {_gaming_user ? _score[_gaming_user.id as number] : 0}
-          </StyledScore>
+          </Scores>
         </StyledScoreContainer>
         <StyledProfileContainer>
           <Badge

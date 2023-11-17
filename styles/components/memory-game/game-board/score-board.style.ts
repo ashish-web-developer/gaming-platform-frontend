@@ -1,11 +1,14 @@
 import Image from "next/image";
 import styled from "styled-components";
 
+// framer motion
+import { motion } from "framer-motion";
+
 type IStyledBadgeContent = {
   $backgroundColor: string;
 };
 
-const StyledScoreBoard = styled.div`
+const StyledScoreBoard = styled(motion.div)`
   width: 97.5%;
   height: 90%;
   border-radius: 25px;
@@ -74,7 +77,7 @@ const StyledScoreContainer = styled.div`
 `;
 const StyledBannerImage = styled(Image)``;
 
-const StyledScore = styled.div`
+const StyledScore = styled(motion.div)`
   color: #fff;
   text-align: center;
   font-family: Poppins;
