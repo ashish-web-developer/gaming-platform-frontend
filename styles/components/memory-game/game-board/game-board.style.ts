@@ -2,7 +2,10 @@ import styled from "styled-components";
 // mui
 import { Skeleton } from "@mui/material";
 
-const StyledGameBoardContainer = styled.div`
+// framer motion
+import { motion } from "framer-motion";
+
+const StyledGameBoardContainer = styled(motion.div)`
   width: 100%;
   height: auto;
   display: flex;

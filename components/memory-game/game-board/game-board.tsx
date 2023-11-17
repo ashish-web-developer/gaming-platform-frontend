@@ -48,7 +48,14 @@ const GameBoard = () => {
     );
   }
   return (
-    <StyledGameBoardContainer>
+    <StyledGameBoardContainer
+      initial={{
+        opacity: 0,
+      }}
+      animate={{
+        opacity: 1,
+      }}
+    >
       <StyledTopBoardContainer>
         <StyledScoreBoardContainer>
           <ScoreBoard />
