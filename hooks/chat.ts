@@ -37,34 +37,5 @@ function useConversation() {
     }
   }, [_active_user]);
 }
-/**
- *
- * @param value // query with which you want to search user
- */
-const useSearchedUserOptions = (
-  value: string | null
-): [options: User[], setOptions: Dispatch<SetStateAction<User[]>>] => {
-  const [options, setOptions] = useState<User[]>([]);
-  const handleInput = async (query: string) => {
-    const res = await Axios.post("/chat/search-user", null, {
-      params: {
-        query,
-      },
-    });
-    setOptions(res.data.user);
-  };
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (value) {
-      timer = setTimeout(() => {
-        handleInput(value);
-      }, 300);
-    }
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value]);
-  return [options, setOptions];
-};
 
-export { useConversation, useSearchedUserOptions };
+export { useConversation };

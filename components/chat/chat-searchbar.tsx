@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 
 // types
 import type { FC } from "react";
@@ -18,38 +18,56 @@ import {
   StyledPaperComponent,
 } from "@/styles/components/chat/chat-searchbar.style";
 
-// helpers
-
-import { v4 as uuidv4 } from "uuid";
-
 // redux
-import { useSearchedUserOptions } from "@/hooks/chat";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import {
+  // state
+  searched_user,
+  searched_input_value,
+  // actions
+  updateSearchedUser,
+  updateSearchedInputValue,
+  // api calls
+  searchUserApi,
+} from "@/store/slice/chat.slice";
 
 const CustomPaperComponent = (props: any) => {
   return <StyledPaperComponent {...props} elevation={8} />;
 };
 
 const ChatSearchbar: FC = () => {
+  const dispatch = useAppDispatch();
   const theme = useTheme();
-  const [searchedInputValue, setSearchedInputValue] = useState<string | null>(
-    null
-  );
-  const [options, setOptions] = useSearchedUserOptions(searchedInputValue);
+  const _searched_user = useAppSelector(searched_user);
+  const _searched_input_value = useAppSelector(searched_input_value);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (_searched_input_value) {
+      timer = setTimeout(() => {
+        dispatch(searchUserApi());
+      }, 800);
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [_searched_input_value]);
   return (
     <StyledSearchbar
       disablePortal
       id="combo-box-demo"
-      options={options}
+      options={_searched_user}
       getOptionLabel={(option: any) => option.name}
       fullWidth
       PaperComponent={CustomPaperComponent}
       onBlur={() => {
-        setOptions([]);
+        dispatch(updateSearchedUser([]));
+        dispatch(updateSearchedInputValue(""));
       }}
       renderOption={(props, option: any) => {
         return (
           <Profile
-            key={uuidv4()}
+            key={option.id}
             user={option}
             width={50}
             height={50}
@@ -66,7 +84,9 @@ const ChatSearchbar: FC = () => {
               "& fieldset": { border: "none" },
             }}
             placeholder="Search"
-            onInput={(event: any) => setSearchedInputValue(event.target.value)}
+            onInput={(event: any) => {
+              dispatch(updateSearchedInputValue(event.target.value));
+            }}
             {...params}
             InputProps={{
               ...params.InputProps,

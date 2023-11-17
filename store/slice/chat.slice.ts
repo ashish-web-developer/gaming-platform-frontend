@@ -1,11 +1,14 @@
 // types
-import type { InitialState } from "@/types/store/slice/chat";
+import type {
+  InitialState,
+  SendMessgeResponseType,
+  Conversation,
+  ISearchUserResponse,
+} from "@/types/store/slice/chat";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "@/types/user";
 import type { RootState } from "@/store/rootReducer";
-import type { Conversation } from "@/types/store/slice/chat";
 import type { AxiosResponse } from "axios";
-import type { SendMessgeResponseType } from "@/types/store/slice/chat";
 
 // Redux
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -35,14 +38,41 @@ export const sendMessage = createAsyncThunk<
   }
 });
 
+export const searchUserApi = createAsyncThunk<
+  ISearchUserResponse,
+  undefined,
+  { state: RootState }
+>(
+  "api/chat/search-user",
+  async (_, { rejectWithValue, dispatch, getState }) => {
+    try {
+      const state = getState();
+      const res: AxiosResponse<{
+        success: boolean;
+        user: User[];
+      }> = await Axios.post("/chat/search-user", null, {
+        params: {
+          query: state.chat.searched_input_value,
+        },
+      });
+      dispatch(updateSearchedUser(res.data.user));
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 const initialState: InitialState = {
   users: [],
   active_user: null,
   active_user_conversation: [],
   is_submitting: false,
   chat_input_value: "",
-  show_chat:false,
-  is_audio_playing:false,
+  show_chat: false,
+  is_audio_playing: false,
+  searched_user: [],
+  searched_input_value: "",
 };
 const chatSlice = createSlice({
   name: "chat",
@@ -87,12 +117,18 @@ const chatSlice = createSlice({
     updateChatInputValue: (state, action: PayloadAction<string>) => {
       state.chat_input_value = action.payload;
     },
-    updateShowChat:(state,action:PayloadAction<boolean>)=>{
+    updateShowChat: (state, action: PayloadAction<boolean>) => {
       state.show_chat = action.payload;
     },
-    updateIsAudioPlaying:(state,action:PayloadAction<boolean>)=>{
+    updateIsAudioPlaying: (state, action: PayloadAction<boolean>) => {
       state.is_audio_playing = action.payload;
-    }
+    },
+    updateSearchedUser: (state, action: PayloadAction<User[]>) => {
+      state.searched_user = action.payload;
+    },
+    updateSearchedInputValue: (state, action: PayloadAction<string>) => {
+      state.searched_input_value = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(sendMessage.pending, (state, action) => {
@@ -117,13 +153,19 @@ export const is_submitting = (state: RootState) => state.chat.is_submitting;
 export const chat_input_value = (state: RootState) =>
   state.chat.chat_input_value;
 
-export const show_chat = (state:RootState) => state.chat.show_chat;
-export const is_audio_playing = (state:RootState) => state.chat.is_audio_playing;
+export const show_chat = (state: RootState) => state.chat.show_chat;
+export const is_audio_playing = (state: RootState) =>
+  state.chat.is_audio_playing;
+export const searched_user = (state: RootState) => state.chat.searched_user;
+export const searched_input_value = (state: RootState) =>
+  state.chat.searched_input_value;
 export const {
   updateUsersList,
   updateActiveUser,
   updateActiveUserConversation,
   updateChatInputValue,
   updateShowChat,
-  updateIsAudioPlaying
+  updateIsAudioPlaying,
+  updateSearchedUser,
+  updateSearchedInputValue,
 } = chatSlice.actions;

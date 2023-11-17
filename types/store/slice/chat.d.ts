@@ -1,8 +1,6 @@
 import type { User } from "@/types/user";
 
-
-
-interface ChatUser extends User{
+interface ChatUser extends User {
   received_messages?: Conversation[];
   sent_messages?: Conversation[];
 }
@@ -10,6 +8,11 @@ interface ChatUser extends User{
 type SendMessgeResponseType = {
   success: boolean;
   conversation: Conversation;
+};
+
+type ISearchUserResponse = {
+  success: boolean;
+  user: User[];
 };
 
 type Conversation = {
@@ -27,8 +30,16 @@ type InitialState = {
   active_user_conversation: Conversation[];
   is_submitting: boolean;
   chat_input_value: string;
-  show_chat:boolean;
-  is_audio_playing:boolean;
+  show_chat: boolean;
+  is_audio_playing: boolean;
+  searched_user: User[];
+  searched_input_value: string;
 };
 
-export { InitialState, Conversation, SendMessgeResponseType ,ChatUser};
+export {
+  InitialState,
+  Conversation,
+  SendMessgeResponseType,
+  ChatUser,
+  ISearchUserResponse,
+};
