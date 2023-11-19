@@ -1,5 +1,5 @@
 // types
-import { useEffect, type FC } from "react";
+import { type FC } from "react";
 
 // styled components
 import {
@@ -12,6 +12,8 @@ import {
   StyledUserImg,
   StyledUserData,
   StyledUserName,
+  StyledMoneyBagImg,
+  StyledUserPointsContainer,
   StyledUserPoints,
   StyledNotificationContainer,
 } from "@/styles/components/chat/chat-header/chat-header.style";
@@ -65,7 +67,15 @@ const ChatHeader: FC = () => {
           </StyledUserImgContainer>
           <StyledUserData>
             <StyledUserName>{_user.name}</StyledUserName>
-            <StyledUserPoints>300.00</StyledUserPoints>
+            <StyledUserPointsContainer>
+              <StyledMoneyBagImg
+                alt="money bag"
+                src="/chat/chat-header/money-bag.svg"
+                width={15}
+                height={19}
+              />
+              <StyledUserPoints>300.00</StyledUserPoints>
+            </StyledUserPointsContainer>
           </StyledUserData>
         </StyledUserProfileContainer>
         <StyledNotificationContainer>

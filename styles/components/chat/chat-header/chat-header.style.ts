@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledChatHeader = styled.div`
   display: flex;
@@ -65,6 +66,16 @@ const StyledUserName = styled.span`
   line-height: normal;
 `;
 
+
+const StyledUserPointsContainer = styled.span`
+  display:flex;
+  align-items:center;
+  gap:4px;
+`
+
+const StyledMoneyBagImg = styled(Image)`
+`
+
 const StyledUserPoints = styled.span`
   color: #fff;
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
@@ -95,6 +106,8 @@ export {
   StyledUserImg,
   StyledUserData,
   StyledUserName,
+  StyledUserPointsContainer,
   StyledUserPoints,
   StyledNotificationContainer,
+  StyledMoneyBagImg
 };
