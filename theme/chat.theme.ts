@@ -5,6 +5,7 @@ const lightTheme: CustomChatTheme = {
   palette: {
     primary: {
       main: "#000000",
+      info: "#A2F263",
     },
     fontFamily: {
       lobster: "Lobster",
@@ -16,6 +17,7 @@ const darkTheme: CustomChatTheme = {
   palette: {
     primary: {
       main: "#000000",
+      info: "#A2F263",
     },
     fontFamily: {
       lobster: "Lobster",

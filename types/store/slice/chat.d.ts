@@ -1,45 +1,18 @@
+// types
 import type { User } from "@/types/user";
 
-interface ChatUser extends User {
-  received_messages?: Conversation[];
-  sent_messages?: Conversation[];
-}
+type IChatInitialState = {
+  search_input_value: string;
+  page: number;
+};
 
-type SendMessgeResponseType = {
+type IFetchUserResponse = {
   success: boolean;
-  conversation: Conversation;
+  user_data: {
+    current_page: number;
+    data: Array<User>;
+  };
 };
 
-type ISearchUserResponse = {
-  success: boolean;
-  user: User[];
-};
-
-type Conversation = {
-  id: number;
-  message: string;
-  receiver_id: number;
-  sender_id: number;
-  created_at: string;
-  updated_at: string;
-};
-
-type InitialState = {
-  users: ChatUser[];
-  active_user: User | null;
-  active_user_conversation: Conversation[];
-  is_submitting: boolean;
-  chat_input_value: string;
-  show_chat: boolean;
-  is_audio_playing: boolean;
-  searched_user: User[];
-  searched_input_value: string;
-};
-
-export {
-  InitialState,
-  Conversation,
-  SendMessgeResponseType,
-  ChatUser,
-  ISearchUserResponse,
-};
+export default IChatInitialState;
+export { IFetchUserResponse };
