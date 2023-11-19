@@ -1,55 +1,30 @@
-import { createTheme } from "@mui/material";
+// types
+import CustomChatTheme from "@/types/theme/chat";
 
-const lightPalette:any = {
-  primary: {
-    main: "#FFFFFF",
-    light:"#f4f6f8"
-  },
-  secondary: {
-    main: "#f5f6f8",
-  },
-  text: {
-    main: "#1C120E",
-    light: "#989A9F",
-  },
-  border: {
-    searchbar: "#f1f1f2",
-  },
-  chat:{
-    main:"#ffd140",
-    light:"#f4f6f8"
-  }
-};
-
-const darkPalette:any = {
-  primary: {
-    main: "#202634",
-    light:"#131821"
-  },
-  secondary: {
-    main: "#15171f",
-  },
-  text: {
-    main: "#FFFFFF",
-    light: "#989A9F",
-  },
-  border: {
-    searchbar: "#202634",
-  },
-  chat:{
-    main:"#ffd140",
-    light:"#f4f6f8"
-  }
-};
-
-const getTheme = (mode: "dark" | "light") => {
-  const theme = createTheme({
-    palette: {
-      mode,
-      ...(mode == "dark" ? darkPalette : lightPalette),
+const lightTheme: CustomChatTheme = {
+  palette: {
+    primary: {
+      main: "#000000",
     },
-  });
-  return theme;
+    fontFamily: {
+      lobster: "Lobster",
+    },
+  },
+};
+
+const darkTheme: CustomChatTheme = {
+  palette: {
+    primary: {
+      main: "#000000",
+    },
+    fontFamily: {
+      lobster: "Lobster",
+    },
+  },
+};
+
+const getTheme = (mode: "dark" | "light"): CustomChatTheme => {
+  return mode == "light" ? lightTheme : darkTheme;
 };
 
 export default getTheme;
