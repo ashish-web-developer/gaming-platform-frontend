@@ -20,6 +20,8 @@ import {
   fetched_user_result,
   is_request_pending,
   // action
+  updateSearchInputValue,
+  updateFetchUserResult,
   // api call
   fetchUser,
 } from "@/store/slice/chat.slice";
@@ -81,6 +83,19 @@ const ChatSearchResult: FC = () => {
       timeout_ref.current && clearTimeout(timeout_ref.current);
     };
   }, [_page]);
+
+  useEffect(() => {
+    const handleclick = (event: MouseEvent) => {
+      if (!scrollable_content_ref.current?.contains(event.target as Node)) {
+        dispatch(updateSearchInputValue(""));
+        dispatch(updateFetchUserResult([]));
+      }
+    };
+    document.addEventListener("click", handleclick);
+    return () => {
+      document.removeEventListener("click", handleclick);
+    };
+  }, []);
   return (
     <StyledChatSearchResult ref={scrollable_content_ref}>
       {_fetched_user_result.map(({ id, name, username }) => {
