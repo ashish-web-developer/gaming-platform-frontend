@@ -2,6 +2,7 @@ type CustomChatTheme = {
   palette: {
     primary: {
       main: string;
+      green: string;
       info: string;
     };
     fontFamily: {

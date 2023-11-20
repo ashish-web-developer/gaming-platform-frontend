@@ -16,7 +16,7 @@ const StyledChatSearchInput = styled.input`
   height: 54px;
   border-radius: 16px;
   background: ${({ theme }) => theme.palette.primary.main};
-  border: 2px solid ${({ theme }) => theme.palette.primary.info};
+  border: 2px solid ${({ theme }) => theme.palette.primary.green};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   padding-left: 18px;
   color: #fff;

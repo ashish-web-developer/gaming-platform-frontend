@@ -16,6 +16,7 @@ import {
   search_input_value,
   // actions
   updateSearchInputValue,
+  updateFetchUserResult,
   // api calls
   fetchUser,
 } from "@/store/slice/chat.slice";
@@ -30,8 +31,10 @@ const ChatSearchInput: FC = () => {
         value={_search_input_value}
         onChange={(event) => {
           dispatch(updateSearchInputValue(event.target.value));
-          timeout_ref.current && clearInterval(timeout_ref.current);
-          if (_search_input_value) {
+          if (!event.target.value) {
+            dispatch(updateFetchUserResult([]));
+          } else {
+            timeout_ref.current && clearInterval(timeout_ref.current);
             timeout_ref.current = setTimeout(() => {
               dispatch(fetchUser());
             }, 800);

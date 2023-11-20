@@ -6,11 +6,13 @@ import { StyledChatSidebar } from "@/styles/components/chat/chat-sidebar/chat-si
 
 // local components
 import ChatSearchInput from "@/components/chat/chat-sidebar/chat-search-input";
+import ChatSearchResult from "@/components/chat/chat-sidebar/chat-search-result";
 
 const ChatSidebar: FC = () => {
   return (
     <StyledChatSidebar>
       <ChatSearchInput />
+      <ChatSearchResult />
     </StyledChatSidebar>
   );
 };
