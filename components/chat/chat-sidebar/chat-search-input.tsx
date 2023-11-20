@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 
@@ -23,22 +23,19 @@ import {
 const ChatSearchInput: FC = () => {
   const dispatch = useAppDispatch();
   const _search_input_value = useAppSelector(search_input_value);
-
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
-    if (_search_input_value) {
-      timeoutId = setTimeout(() => {
-        dispatch(fetchUser());
-      }, 800);
-    }
-    return () => timeoutId && clearInterval(timeoutId);
-  }, [_search_input_value]);
+  const timeout_ref = useRef<NodeJS.Timeout | null>(null);
   return (
     <StyledChatSearchInputContainer>
       <StyledChatSearchInput
         value={_search_input_value}
         onChange={(event) => {
           dispatch(updateSearchInputValue(event.target.value));
+          timeout_ref.current && clearInterval(timeout_ref.current);
+          if (_search_input_value) {
+            timeout_ref.current = setTimeout(() => {
+              dispatch(fetchUser());
+            }, 800);
+          }
         }}
         placeholder="Search Players"
       />
