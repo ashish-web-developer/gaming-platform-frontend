@@ -11,7 +11,6 @@ import type { User } from "@/types/user";
 import { Axios } from "@/helpers/axios";
 
 // api calls
-
 export const fetchUser = createAsyncThunk<
   IFetchUserResponse,
   undefined,
@@ -27,12 +26,10 @@ export const fetchUser = createAsyncThunk<
         {
           params: {
             query: state.chat.search_input_value,
-            page: state.chat.page,
+            page: state.chat.fetch_user.page,
           },
         }
       );
-      console.log(response.data.user_data.data);
-      dispatch(updateFetchUserResult(response.data.user_data.data));
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data);
@@ -42,8 +39,11 @@ export const fetchUser = createAsyncThunk<
 
 const initialState: IChatInitialState = {
   search_input_value: "",
-  page: 1,
-  fetched_user_result: [],
+  fetch_user: {
+    page: 1,
+    fetched_user_result: [],
+    is_request_pending: false,
+  },
 };
 
 const chatSlice = createSlice({
@@ -54,19 +54,48 @@ const chatSlice = createSlice({
       state.search_input_value = action.payload;
     },
     updatePage: (state, action: PayloadAction<number>) => {
-      state.page = action.payload;
+      state.fetch_user.page = action.payload;
     },
     updateFetchUserResult: (state, action: PayloadAction<User[]>) => {
-      state.fetched_user_result = action.payload;
+      if (!action.payload.length) {
+        state.fetch_user.fetched_user_result = [];
+      } else {
+        state.fetch_user.fetched_user_result = [
+          ...state.fetch_user.fetched_user_result,
+          ...action.payload,
+        ];
+      }
     },
+    updateIsRequestPending: (state, action: PayloadAction<boolean>) => {
+      state.fetch_user.is_request_pending = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      state.fetch_user.fetched_user_result = [
+        ...state.fetch_user.fetched_user_result,
+        ...action.payload.user_data.data,
+      ];
+      state.fetch_user.page = state.fetch_user.page + 1;
+      state.fetch_user.is_request_pending = false;
+    });
+    builder.addCase(fetchUser.pending, (state, action) => {
+      state.fetch_user.is_request_pending = true;
+    });
   },
 });
 
 export default chatSlice.reducer;
 export const search_input_value = (state: RootState) =>
   state.chat.search_input_value;
-export const page = (state: RootState) => state.chat.page;
+export const page = (state: RootState) => state.chat.fetch_user.page;
 export const fetched_user_result = (state: RootState) =>
-  state.chat.fetched_user_result;
-export const { updateSearchInputValue, updatePage, updateFetchUserResult } =
-  chatSlice.actions;
+  state.chat.fetch_user.fetched_user_result;
+export const is_request_pending = (state: RootState) =>
+  state.chat.fetch_user.is_request_pending;
+export const {
+  updateSearchInputValue,
+  updatePage,
+  updateFetchUserResult,
+  updateIsRequestPending,
+} = chatSlice.actions;

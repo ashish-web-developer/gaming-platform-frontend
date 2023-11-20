@@ -17,6 +17,7 @@ import {
   // actions
   updateSearchInputValue,
   updateFetchUserResult,
+  updatePage,
   // api calls
   fetchUser,
 } from "@/store/slice/chat.slice";
@@ -31,6 +32,8 @@ const ChatSearchInput: FC = () => {
         value={_search_input_value}
         onChange={(event) => {
           dispatch(updateSearchInputValue(event.target.value));
+          dispatch(updatePage(1));
+          dispatch(updateFetchUserResult([]));
           if (!event.target.value) {
             dispatch(updateFetchUserResult([]));
           } else {

@@ -3,8 +3,11 @@ import type { User } from "@/types/user";
 
 type IChatInitialState = {
   search_input_value: string;
-  page: number;
-  fetched_user_result: User[];
+  fetch_user: {
+    is_request_pending: boolean;
+    fetched_user_result: User[];
+    page: number;
+  };
 };
 
 type IFetchUserResponse = {

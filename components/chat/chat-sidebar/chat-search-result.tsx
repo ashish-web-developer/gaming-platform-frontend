@@ -1,3 +1,5 @@
+import { useRef, useEffect } from "react";
+// types
 import type { FC } from "react";
 
 // styled components
@@ -11,8 +13,16 @@ import {
 } from "@/styles/components/chat/chat-sidebar/chat-search-result.style";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
-import { fetched_user_result } from "@/store/slice/chat.slice";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import {
+  // state
+  page,
+  fetched_user_result,
+  is_request_pending,
+  // action
+  // api call
+  fetchUser,
+} from "@/store/slice/chat.slice";
 
 // hooks
 import useAvatar from "@/hooks/profile";
@@ -38,22 +48,51 @@ const ChatResultProfile: FC<{ name: string; username: string }> = ({
 };
 
 const ChatSearchResult: FC = () => {
+  const dispatch = useAppDispatch();
+  const timeout_ref = useRef<NodeJS.Timeout>();
   const _fetched_user_result = useAppSelector(fetched_user_result);
+  const _page = useAppSelector(page);
+  const _is_request_pending = useAppSelector(is_request_pending);
+  const scrollable_content_ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const fetchUserData = () => {
+      timeout_ref.current && clearTimeout(timeout_ref.current);
+      // calling api when reached the end of container
+      if (
+        !_is_request_pending &&
+        scrollable_content_ref.current &&
+        scrollable_content_ref.current.scrollHeight <=
+          scrollable_content_ref.current.scrollTop +
+            scrollable_content_ref.current.clientHeight
+      ) {
+        // added timeout so that api don't get call multiple times, when scrolled
+        timeout_ref.current = setTimeout(() => {
+          dispatch(fetchUser());
+        }, 300);
+      }
+    };
+    scrollable_content_ref.current?.addEventListener("scroll", fetchUserData);
+    return () => {
+      scrollable_content_ref.current?.removeEventListener(
+        "scroll",
+        fetchUserData
+      );
+      timeout_ref.current && clearTimeout(timeout_ref.current);
+    };
+  }, [_page]);
   return (
-    <>
-      {_fetched_user_result.length && (
-        <StyledChatSearchResult>
-          {_fetched_user_result.map(({ name, username }) => {
-            return (
-              <ChatResultProfile
-                name={name as string}
-                username={username as string}
-              />
-            );
-          })}
-        </StyledChatSearchResult>
-      )}
-    </>
+    <StyledChatSearchResult ref={scrollable_content_ref}>
+      {_fetched_user_result.map(({ id, name, username }) => {
+        return (
+          <ChatResultProfile
+            key={id}
+            name={name as string}
+            username={username as string}
+          />
+        );
+      })}
+    </StyledChatSearchResult>
   );
 };
 
