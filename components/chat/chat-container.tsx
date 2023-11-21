@@ -8,11 +8,14 @@ import {
   StyledChatMainContainer,
   StyledChatMainContentContainer,
   StyledChatMainContent,
+  StyledMessageContainer,
+  StyledMessageInputContainer,
 } from "@/styles/components/chat/chat-container.style";
 
 // local components
 import ChatHeader from "@/components/chat/chat-header/chat-header";
 import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
+import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 
 // redux
 import { useAppDispatch } from "@/hooks/redux";
@@ -31,7 +34,12 @@ const ChatContainer: FC = () => {
         <StyledChatMainContainer>
           <ChatSidebar />
           <StyledChatMainContentContainer>
-            <StyledChatMainContent></StyledChatMainContent>
+            <StyledChatMainContent>
+              <StyledMessageContainer>
+                <ChatMessageContainer />
+              </StyledMessageContainer>
+              <StyledMessageInputContainer></StyledMessageInputContainer>
+            </StyledChatMainContent>
           </StyledChatMainContentContainer>
         </StyledChatMainContainer>
       </StyledChatContainer>

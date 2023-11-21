@@ -33,7 +33,18 @@ const StyledChatMainContentContainer = styled.div`
 const StyledChatMainContent = styled.div`
   width: 100%;
   height: 100%;
-  border: 2px solid red;
+  display: grid;
+  grid-template-rows: 1fr 60px;
+`;
+
+const StyledMessageContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const StyledMessageInputContainer = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 export default GlobalStyles;
@@ -43,4 +54,6 @@ export {
   StyledChatMainContainer,
   StyledChatMainContentContainer,
   StyledChatMainContent,
+  StyledMessageContainer,
+  StyledMessageInputContainer,
 };
