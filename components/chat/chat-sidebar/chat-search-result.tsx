@@ -16,7 +16,6 @@ import {
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
   // state
-  page,
   fetched_user_result,
   is_request_pending,
   // action
@@ -43,7 +42,7 @@ const ChatResultProfile: FC<{ name: string; username: string }> = ({
       />
       <StyledProfileDetails>
         <StyledName>{name}</StyledName>
-        <StyledUserName>{username}</StyledUserName>
+        <StyledUserName>@{username}</StyledUserName>
       </StyledProfileDetails>
     </StyledProfileContainer>
   );
@@ -53,36 +52,25 @@ const ChatSearchResult: FC = () => {
   const dispatch = useAppDispatch();
   const timeout_ref = useRef<NodeJS.Timeout>();
   const _fetched_user_result = useAppSelector(fetched_user_result);
-  const _page = useAppSelector(page);
   const _is_request_pending = useAppSelector(is_request_pending);
   const scrollable_content_ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fetchUserData = () => {
-      timeout_ref.current && clearTimeout(timeout_ref.current);
-      // calling api when reached the end of container
-      if (
-        !_is_request_pending &&
-        scrollable_content_ref.current &&
-        scrollable_content_ref.current.scrollHeight <=
-          scrollable_content_ref.current.scrollTop +
-            scrollable_content_ref.current.clientHeight
-      ) {
-        // added timeout so that api don't get call multiple times, when scrolled
-        timeout_ref.current = setTimeout(() => {
-          dispatch(fetchUser());
-        }, 300);
-      }
-    };
-    scrollable_content_ref.current?.addEventListener("scroll", fetchUserData);
-    return () => {
-      scrollable_content_ref.current?.removeEventListener(
-        "scroll",
-        fetchUserData
-      );
-      timeout_ref.current && clearTimeout(timeout_ref.current);
-    };
-  }, [_page]);
+  const fetchUserData = () => {
+    timeout_ref.current && clearTimeout(timeout_ref.current);
+    // calling api when reached the end of container
+    if (
+      !_is_request_pending &&
+      scrollable_content_ref.current &&
+      scrollable_content_ref.current.scrollHeight <=
+        scrollable_content_ref.current.scrollTop +
+          scrollable_content_ref.current.clientHeight
+    ) {
+      // added timeout so that api don't get call multiple times, when scrolled
+      timeout_ref.current = setTimeout(() => {
+        dispatch(fetchUser());
+      }, 300);
+    }
+  };
 
   useEffect(() => {
     const handleclick = (event: MouseEvent) => {
@@ -97,7 +85,7 @@ const ChatSearchResult: FC = () => {
     };
   }, []);
   return (
-    <StyledChatSearchResult ref={scrollable_content_ref}>
+    <StyledChatSearchResult onScroll={fetchUserData} ref={scrollable_content_ref}>
       {_fetched_user_result.map(({ id, name, username }) => {
         return (
           <ChatResultProfile
