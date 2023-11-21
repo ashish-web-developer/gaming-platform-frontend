@@ -29,27 +29,30 @@ import {
 // hooks
 import useAvatar from "@/hooks/profile";
 
-const ChatResultLoader: FC = () => {
-  return <StyledSkeletonLoader />;
-};
-
-const ChatResultProfile: FC<{ name: string; username: string }> = ({
-  name,
-  username,
-}) => {
+const ChatResultProfile: FC<{
+  name: string;
+  username: string;
+  is_request_pending: boolean;
+}> = ({ name, username, is_request_pending }) => {
   const avatar = useAvatar(name ?? "");
   return (
-    <StyledProfileContainer>
-      <StyledProfileImage
-        dangerouslySetInnerHTML={{
-          __html: avatar,
-        }}
-      />
-      <StyledProfileDetails>
-        <StyledName>{name}</StyledName>
-        <StyledUserName>@{username}</StyledUserName>
-      </StyledProfileDetails>
-    </StyledProfileContainer>
+    <>
+      {is_request_pending ? (
+        <StyledSkeletonLoader />
+      ) : (
+        <StyledProfileContainer>
+          <StyledProfileImage
+            dangerouslySetInnerHTML={{
+              __html: avatar,
+            }}
+          />
+          <StyledProfileDetails>
+            <StyledName>{name}</StyledName>
+            <StyledUserName>@{username}</StyledUserName>
+          </StyledProfileDetails>
+        </StyledProfileContainer>
+      )}
+    </>
   );
 };
 
@@ -96,17 +99,12 @@ const ChatSearchResult: FC = () => {
     >
       {_fetched_user_result.map(({ id, name, username }) => {
         return (
-          <>
-            {!_is_request_pending ? (
-              <ChatResultProfile
-                key={id}
-                name={name as string}
-                username={username as string}
-              />
-            ) : (
-              <ChatResultLoader />
-            )}
-          </>
+          <ChatResultProfile
+            key={`result-${id}`}
+            name={name as string}
+            username={username as string}
+            is_request_pending={_is_request_pending}
+          />
         );
       })}
     </StyledChatSearchResult>
