@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { FC, ForwardRefRenderFunction } from "react";
 
 // styled components
 import {
@@ -56,7 +56,10 @@ const ChatResultProfile: FC<{
   );
 };
 
-const ChatSearchResult: FC = () => {
+const ChatSearchResult: ForwardRefRenderFunction<HTMLDivElement> = (
+  props,
+  search_input_ref
+) => {
   const dispatch = useAppDispatch();
   const timeout_ref = useRef<NodeJS.Timeout>();
   const _fetched_user_result = useAppSelector(fetched_user_result);
@@ -82,7 +85,11 @@ const ChatSearchResult: FC = () => {
 
   useEffect(() => {
     const handleclick = (event: MouseEvent) => {
-      if (!scrollable_content_ref.current?.contains(event.target as Node)) {
+      if (
+        !scrollable_content_ref.current?.contains(event.target as Node) &&
+        typeof search_input_ref !== "function" &&
+        !search_input_ref?.current?.contains(event.target as Node)
+      ) {
         dispatch(updateSearchInputValue(""));
         dispatch(updateFetchUserResult([]));
       }
@@ -111,4 +118,4 @@ const ChatSearchResult: FC = () => {
   );
 };
 
-export default ChatSearchResult;
+export default forwardRef(ChatSearchResult);

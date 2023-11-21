@@ -1,6 +1,6 @@
-import { useRef } from "react";
+import { useRef, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { ForwardRefRenderFunction } from "react";
 
 // styled components
 import {
@@ -22,12 +22,15 @@ import {
   fetchUser,
 } from "@/store/slice/chat.slice";
 
-const ChatSearchInput: FC = () => {
+const ChatSearchInput: ForwardRefRenderFunction<HTMLDivElement> = (
+  props,
+  ref
+) => {
   const dispatch = useAppDispatch();
   const _search_input_value = useAppSelector(search_input_value);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
   return (
-    <StyledChatSearchInputContainer>
+    <StyledChatSearchInputContainer ref={ref}>
       <StyledChatSearchInput
         value={_search_input_value}
         onChange={(event) => {
@@ -55,4 +58,4 @@ const ChatSearchInput: FC = () => {
   );
 };
 
-export default ChatSearchInput;
+export default forwardRef(ChatSearchInput);

@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 
@@ -7,12 +8,7 @@ import { StyledChatSidebar } from "@/styles/components/chat/chat-sidebar/chat-si
 
 // local components
 import ChatSearchInput from "@/components/chat/chat-sidebar/chat-search-input";
-const ChatSearchResult = dynamic(
-  import("@/components/chat/chat-sidebar/chat-search-result"),
-  {
-    ssr: false,
-  }
-);
+import ChatSearchResult from "@/components/chat/chat-sidebar/chat-search-result";
 
 // redux
 import { useAppSelector } from "@/hooks/redux";
@@ -20,10 +16,13 @@ import { fetched_user_result } from "@/store/slice/chat.slice";
 
 const ChatSidebar: FC = () => {
   const _fetched_user_result = useAppSelector(fetched_user_result);
+  const search_input_ref = useRef<HTMLDivElement>(null);
   return (
     <StyledChatSidebar>
-      <ChatSearchInput />
-      {_fetched_user_result.length && <ChatSearchResult />}
+      <ChatSearchInput ref={search_input_ref} />
+      {_fetched_user_result.length && (
+        <ChatSearchResult ref={search_input_ref} />
+      )}
     </StyledChatSidebar>
   );
 };
