@@ -7,6 +7,7 @@ import {
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,
+  StyledChatMainContent,
 } from "@/styles/components/chat/chat-container.style";
 
 // local components
@@ -29,7 +30,9 @@ const ChatContainer: FC = () => {
         <ChatHeader />
         <StyledChatMainContainer>
           <ChatSidebar />
-          <StyledChatMainContentContainer></StyledChatMainContentContainer>
+          <StyledChatMainContentContainer>
+            <StyledChatMainContent></StyledChatMainContent>
+          </StyledChatMainContentContainer>
         </StyledChatMainContainer>
       </StyledChatContainer>
     </>

@@ -61,6 +61,7 @@ const initialState: IChatInitialState = {
     is_request_pending: false,
   },
   default_users: [],
+  active_user: null,
 };
 
 const chatSlice = createSlice({
@@ -95,6 +96,12 @@ const chatSlice = createSlice({
     ) => {
       state.default_users.push(action.payload);
     },
+    updateActiveUser: (
+      state,
+      action: PayloadAction<IUsersWithConversation>
+    ) => {
+      state.active_user = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -123,10 +130,13 @@ export const fetched_user_result = (state: RootState) =>
 export const is_request_pending = (state: RootState) =>
   state.chat.fetch_user.is_request_pending;
 export const default_users = (state: RootState) => state.chat.default_users;
+
+export const active_user = (state: RootState) => state.chat.active_user;
 export const {
   updateSearchInputValue,
   updatePage,
   updateFetchUserResult,
   updateIsRequestPending,
   updateDefaultUser,
+  updateActiveUser,
 } = chatSlice.actions;

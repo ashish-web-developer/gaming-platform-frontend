@@ -28,6 +28,7 @@ type IChatInitialState = {
     page: number;
   };
   default_users: IUsersWithConversation[];
+  active_user: IUsersWithConversation | null;
 };
 
 type IFetchUserResponse = {

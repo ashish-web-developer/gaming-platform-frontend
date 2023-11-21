@@ -15,19 +15,9 @@ const ChatUsersList: FC = () => {
   const _default_users = useAppSelector(default_users);
   return (
     <StyledUsersList>
-      {_default_users.map(
-        ({ id, name, username, sent_messages, received_messages }) => {
-          return (
-            <ChatUserProfile
-              key={`default-user-${id}`}
-              name={name}
-              username={username}
-              sent_messsages={sent_messages}
-              received_messages={received_messages}
-            />
-          );
-        }
-      )}
+      {_default_users.map((user) => {
+        return <ChatUserProfile key={`default-user-${user.id}`} user={user} />;
+      })}
     </StyledUsersList>
   );
 };

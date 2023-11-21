@@ -1,6 +1,6 @@
 // type
 import type { FC } from "react";
-import type { IConversation } from "@/types/store/slice/chat";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 // styled components
 import {
   StyledUsersProfile,
@@ -12,28 +12,29 @@ import {
 
 // hooks
 import useAvatar from "@/hooks/profile";
+
+// redux
+import { useAppDispatch } from "@/hooks/redux";
+import { updateActiveUser } from "@/store/slice/chat.slice";
 interface IProps {
-  name: string;
-  username: string;
-  sent_messsages: IConversation[] | undefined;
-  received_messages: IConversation[] | undefined;
+  user: IUsersWithConversation;
 }
-const ChatUserProfile: FC<IProps> = ({
-  name,
-  username,
-  sent_messsages,
-  received_messages,
-}) => {
-  const avatar = useAvatar(username ?? "");
+const ChatUserProfile: FC<IProps> = ({ user }) => {
+  const dispatch = useAppDispatch();
+  const avatar = useAvatar(user.username ?? "");
   return (
-    <StyledUsersProfile>
+    <StyledUsersProfile
+      onClick={() => {
+        dispatch(updateActiveUser(user));
+      }}
+    >
       <StyledUserImage
         dangerouslySetInnerHTML={{
           __html: avatar,
         }}
       />
       <StyledUserDetails>
-        <StyledUserName>{name}</StyledUserName>
+        <StyledUserName>{user.name}</StyledUserName>
         <StyledUserMessage>What is up men?</StyledUserMessage>
       </StyledUserDetails>
     </StyledUsersProfile>
