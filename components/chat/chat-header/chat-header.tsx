@@ -50,7 +50,7 @@ const NotificationIcon: FC<{
 
 const ChatHeader: FC = () => {
   const _user = useAppSelector(user);
-  const _user_avatar = useAvatar(_user?.name ?? "");
+  const _user_avatar = useAvatar(_user?.username ?? "");
   return (
     <StyledChatHeader>
       <StyledWelcomeText>

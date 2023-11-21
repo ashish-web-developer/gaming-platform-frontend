@@ -5,13 +5,16 @@ const StyledChatSearchResult = styled.div`
   height: auto;
   border: 3px solid ${({ theme }) => theme.palette.primary.green};
   border-radius: 16px;
-  margin-top: 14px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 24px;
   overflow: scroll;
   max-height: 277px;
+  position: absolute;
+  margin-top: 14px;
+  z-index: 2;
+  background: ${({ theme }) => theme.palette.primary.main};
 `;
 
 const StyledProfileContainer = styled.div`

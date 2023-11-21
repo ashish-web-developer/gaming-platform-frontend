@@ -1,0 +1,12 @@
+import styled from "styled-components";
+
+const StyledUsersList = styled.div`
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+export { StyledUsersList };

@@ -22,33 +22,41 @@ import {
   // action
   updateSearchInputValue,
   updateFetchUserResult,
+  updateDefaultUser,
   // api call
   fetchUser,
 } from "@/store/slice/chat.slice";
 
 // hooks
 import useAvatar from "@/hooks/profile";
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const ChatResultProfile: FC<{
-  name: string;
-  username: string;
+  user: IUsersWithConversation;
   is_request_pending: boolean;
-}> = ({ name, username, is_request_pending }) => {
-  const avatar = useAvatar(name ?? "");
+}> = ({ user, is_request_pending }) => {
+  const dispatch = useAppDispatch();
+  const avatar = useAvatar(user.username ?? "");
   return (
     <>
       {is_request_pending ? (
         <StyledSkeletonLoader />
       ) : (
-        <StyledProfileContainer>
+        <StyledProfileContainer
+          onClick={() => {
+            dispatch(updateDefaultUser(user));
+            dispatch(updateFetchUserResult([]));
+            dispatch(updateSearchInputValue(""));
+          }}
+        >
           <StyledProfileImage
             dangerouslySetInnerHTML={{
               __html: avatar,
             }}
           />
           <StyledProfileDetails>
-            <StyledName>{name}</StyledName>
-            <StyledUserName>@{username}</StyledUserName>
+            <StyledName>{user.name}</StyledName>
+            <StyledUserName>@{user.username}</StyledUserName>
           </StyledProfileDetails>
         </StyledProfileContainer>
       )}
@@ -104,12 +112,11 @@ const ChatSearchResult: ForwardRefRenderFunction<HTMLDivElement> = (
       onScroll={fetchUserData}
       ref={scrollable_content_ref}
     >
-      {_fetched_user_result.map(({ id, name, username }) => {
+      {_fetched_user_result.map((user) => {
         return (
           <ChatResultProfile
-            key={`result-${id}`}
-            name={name as string}
-            username={username as string}
+            key={`result-${user.id}`}
+            user={user}
             is_request_pending={_is_request_pending}
           />
         );
