@@ -10,6 +10,7 @@ import {
   StyledProfileDetails,
   StyledName,
   StyledUserName,
+  StyledSkeletonLoader,
 } from "@/styles/components/chat/chat-sidebar/chat-search-result.style";
 
 // redux
@@ -27,6 +28,10 @@ import {
 
 // hooks
 import useAvatar from "@/hooks/profile";
+
+const ChatResultLoader: FC = () => {
+  return <StyledSkeletonLoader />;
+};
 
 const ChatResultProfile: FC<{ name: string; username: string }> = ({
   name,
@@ -85,14 +90,23 @@ const ChatSearchResult: FC = () => {
     };
   }, []);
   return (
-    <StyledChatSearchResult onScroll={fetchUserData} ref={scrollable_content_ref}>
+    <StyledChatSearchResult
+      onScroll={fetchUserData}
+      ref={scrollable_content_ref}
+    >
       {_fetched_user_result.map(({ id, name, username }) => {
         return (
-          <ChatResultProfile
-            key={id}
-            name={name as string}
-            username={username as string}
-          />
+          <>
+            {!_is_request_pending ? (
+              <ChatResultProfile
+                key={id}
+                name={name as string}
+                username={username as string}
+              />
+            ) : (
+              <ChatResultLoader />
+            )}
+          </>
         );
       })}
     </StyledChatSearchResult>
