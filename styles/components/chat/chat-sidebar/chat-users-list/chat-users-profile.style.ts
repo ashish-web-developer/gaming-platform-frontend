@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const StyledUsersProfile = styled.div`
   width: 100%;
-  height: 64px;
+  min-height: 64px;
   border-radius: 16px;
   background: ${({ theme }) => theme.palette.primary.info};
   display: flex;

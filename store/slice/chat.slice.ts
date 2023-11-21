@@ -28,6 +28,7 @@ export const fetchUser = createAsyncThunk<
         params: {
           query: state.chat.search_input_value,
           page: state.chat.fetch_user.page,
+          skip_id: state.chat.default_users.map(({ id }) => id),
         },
       }
     );

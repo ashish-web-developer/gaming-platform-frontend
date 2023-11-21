@@ -8,5 +8,7 @@ const StyledUsersList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  height:calc(100% - 70px);
+  overflow:auto;
 `;
 export { StyledUsersList };

@@ -19,6 +19,7 @@ const StyledChatMainContainer = styled.div`
   margin-top: 40px;
   display: grid;
   grid-template-columns: 320px 1fr;
+  height:calc(100vh - 200px);
 `;
 
 const StyledChatMainContentContainer = styled.div``;
