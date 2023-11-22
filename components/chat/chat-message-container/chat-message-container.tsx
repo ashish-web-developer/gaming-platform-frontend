@@ -36,7 +36,7 @@ const ChatMessageContainer: FC = () => {
               _active_user_conversation.map((conversation)=>{
                 if(conversation.receiver_id == _user.id){
                   return(
-                    <StyledMessageContent $justifyContent="flex-start">
+                    <StyledMessageContent key = {conversation.id} $justifyContent="flex-start">
                       <StyledUserProfile $borderColor="#E7E08B" $order={1}
                           dangerouslySetInnerHTML={{
                             __html: _active_user_avatar,
@@ -50,7 +50,7 @@ const ChatMessageContainer: FC = () => {
                 }
                 if(conversation.sender_id == _user.id){
                   return(
-                    <StyledMessageContent $justifyContent="flex-end">
+                    <StyledMessageContent key = {conversation.id} $justifyContent="flex-end">
                       <StyledUserProfile $borderColor="#AFA2FF" $order={2}
                           dangerouslySetInnerHTML={{
                             __html: _active_user_avatar,

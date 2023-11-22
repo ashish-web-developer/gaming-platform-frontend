@@ -1,3 +1,4 @@
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type CustomChatTheme from "@/types/theme/chat";
@@ -11,6 +12,14 @@ import {
 
 // styled theme
 import { useTheme } from "styled-components";
+
+// redux
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import {
+  send_message_request_pending,
+  active_user,
+  sendMessage,
+} from "@/store/slice/chat.slice";
 
 const EmojiIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -69,19 +78,42 @@ const GameIcon: FC<{ width: number; height: number; color: string }> = ({
 
 const ChatInput: FC = () => {
   const theme = useTheme() as CustomChatTheme;
+  const dispatch = useAppDispatch();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const _send_message_request_pending = useAppSelector(
+    send_message_request_pending
+  );
+  const _active_user = useAppSelector(active_user);
   return (
-    <StyledChatInputContainer>
-      <StyledChatInput placeholder="Your Message" />
-      <StyledButton $left="16px">
-        <EmojiIcon size={30} color={theme.palette.primary.green} />
-      </StyledButton>
-      <StyledButton $right="75px">
-        <SendIcon size={30} color={theme.palette.primary.green} />
-      </StyledButton>
-      <StyledButton $right="16px">
-        <GameIcon width={40} height={25} color={theme.palette.primary.green} />
-      </StyledButton>
-    </StyledChatInputContainer>
+    <>
+      {_active_user && (
+        <StyledChatInputContainer>
+          <StyledChatInput ref={inputRef} placeholder="Your Message" />
+          <StyledButton $left="16px">
+            <EmojiIcon size={30} color={theme.palette.primary.green} />
+          </StyledButton>
+          <StyledButton
+            onClick={() => {
+              if (inputRef.current) {
+                dispatch(sendMessage({ message: inputRef.current.value }));
+                inputRef.current.value = "";
+              }
+            }}
+            $right="75px"
+            disabled={_send_message_request_pending}
+          >
+            <SendIcon size={30} color={theme.palette.primary.green} />
+          </StyledButton>
+          <StyledButton $right="16px">
+            <GameIcon
+              width={40}
+              height={25}
+              color={theme.palette.primary.green}
+            />
+          </StyledButton>
+        </StyledChatInputContainer>
+      )}
+    </>
   );
 };
 export default ChatInput;

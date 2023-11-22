@@ -7,6 +7,8 @@ import type {
   IFetchDefaultUserResponse,
   IUsersWithConversation,
   IFetchMessagesResponse,
+  ISendMessageRequest,
+  ISendMessageResponse,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -74,6 +76,30 @@ export const fetchMessages = createAsyncThunk<
   }
 });
 
+export const sendMessage = createAsyncThunk<
+  ISendMessageResponse,
+  ISendMessageRequest,
+  { state: RootState }
+>(
+  "api/chat/send-message",
+  async ({ message }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<ISendMessageResponse> = await Axios.post(
+        "/chat/send-message",
+        {
+          sender_id: state.user.user.id,
+          receiver_id: state.chat.active_user?.id,
+          message,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const initialState: IChatInitialState = {
   search_input_value: "",
   fetch_user: {
@@ -84,6 +110,9 @@ const initialState: IChatInitialState = {
   default_users: [],
   active_user: null,
   active_user_conversation: [],
+  send_message: {
+    is_request_pending: false,
+  },
 };
 
 const chatSlice = createSlice({
@@ -143,6 +172,16 @@ const chatSlice = createSlice({
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
       state.active_user_conversation = action.payload.conversation;
     });
+    builder.addCase(sendMessage.fulfilled, (state, action) => {
+      state.active_user_conversation.push(action.payload.conversation);
+      state.send_message.is_request_pending = false;
+    });
+    builder.addCase(sendMessage.pending, (state, action) => {
+      state.send_message.is_request_pending = true;
+    });
+    builder.addCase(sendMessage.rejected, (state, action) => {
+      state.send_message.is_request_pending = false;
+    });
   },
 });
 
@@ -160,6 +199,8 @@ export const active_user = (state: RootState) => state.chat.active_user;
 
 export const active_user_conversation = (state: RootState) =>
   state.chat.active_user_conversation;
+export const send_message_request_pending = (state: RootState) =>
+  state.chat.send_message.is_request_pending;
 export const {
   updateSearchInputValue,
   updatePage,

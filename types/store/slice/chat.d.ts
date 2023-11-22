@@ -30,6 +30,9 @@ type IChatInitialState = {
   default_users: IUsersWithConversation[];
   active_user: IUsersWithConversation | null;
   active_user_conversation: IConversation[];
+  send_message: {
+    is_request_pending: boolean;
+  };
 };
 
 type IFetchUserResponse = {
@@ -50,6 +53,14 @@ type IFetchMessagesResponse = {
   conversation: IConversation[];
 };
 
+type ISendMessageRequest = {
+  message: string;
+};
+type ISendMessageResponse = {
+  success: boolean;
+  conversation: IConversation;
+};
+
 export default IChatInitialState;
 export {
   IFetchUserResponse,
@@ -57,4 +68,6 @@ export {
   IConversation,
   IUsersWithConversation,
   IFetchMessagesResponse,
+  ISendMessageRequest,
+  ISendMessageResponse,
 };
