@@ -29,6 +29,7 @@ type IChatInitialState = {
   };
   default_users: IUsersWithConversation[];
   active_user: IUsersWithConversation | null;
+  active_user_conversation: IConversation[];
 };
 
 type IFetchUserResponse = {
@@ -44,10 +45,16 @@ type IFetchDefaultUserResponse = {
   users: IUsersWithConversation[];
 };
 
+type IFetchMessagesResponse = {
+  success: boolean;
+  conversation: IConversation[];
+};
+
 export default IChatInitialState;
 export {
   IFetchUserResponse,
   IFetchDefaultUserResponse,
   IConversation,
   IUsersWithConversation,
+  IFetchMessagesResponse,
 };

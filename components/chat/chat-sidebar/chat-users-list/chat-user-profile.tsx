@@ -15,7 +15,7 @@ import useAvatar from "@/hooks/profile";
 
 // redux
 import { useAppDispatch } from "@/hooks/redux";
-import { updateActiveUser } from "@/store/slice/chat.slice";
+import { updateActiveUser, fetchMessages } from "@/store/slice/chat.slice";
 interface IProps {
   user: IUsersWithConversation;
 }
@@ -26,6 +26,7 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
     <StyledUsersProfile
       onClick={() => {
         dispatch(updateActiveUser(user));
+        dispatch(fetchMessages());
       }}
     >
       <StyledUserImage

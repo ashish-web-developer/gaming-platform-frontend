@@ -6,6 +6,7 @@ import type {
   IFetchUserResponse,
   IFetchDefaultUserResponse,
   IUsersWithConversation,
+  IFetchMessagesResponse,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -53,6 +54,26 @@ export const fetchDefaultUser = createAsyncThunk<
   }
 });
 
+export const fetchMessages = createAsyncThunk<
+  IFetchMessagesResponse,
+  undefined,
+  { state: RootState }
+>("api/chat/get-messages", async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IFetchMessagesResponse> = await Axios.post(
+      "/chat/get-messages",
+      {
+        sender_id: state.user.user.id,
+        receiver_id: state.chat.active_user?.id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
 const initialState: IChatInitialState = {
   search_input_value: "",
   fetch_user: {
@@ -62,6 +83,7 @@ const initialState: IChatInitialState = {
   },
   default_users: [],
   active_user: null,
+  active_user_conversation: [],
 };
 
 const chatSlice = createSlice({
@@ -118,6 +140,9 @@ const chatSlice = createSlice({
     builder.addCase(fetchDefaultUser.fulfilled, (state, action) => {
       state.default_users = action.payload.users;
     });
+    builder.addCase(fetchMessages.fulfilled, (state, action) => {
+      state.active_user_conversation = action.payload.conversation;
+    });
   },
 });
 
@@ -132,6 +157,9 @@ export const is_request_pending = (state: RootState) =>
 export const default_users = (state: RootState) => state.chat.default_users;
 
 export const active_user = (state: RootState) => state.chat.active_user;
+
+export const active_user_conversation = (state: RootState) =>
+  state.chat.active_user_conversation;
 export const {
   updateSearchInputValue,
   updatePage,
