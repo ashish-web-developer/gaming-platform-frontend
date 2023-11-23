@@ -25,6 +25,7 @@ import useAvatar from "@/hooks/profile";
 
 const ChatMessageContainer: FC = () => {
   const _user = useAppSelector(user);
+  const _user_avatar = useAvatar(_user.username ?? "");
   const _active_user = useAppSelector(active_user);
   const _active_user_avatar = useAvatar(_active_user?.username ?? "");
   const _active_user_conversation = useAppSelector(active_user_conversation);
@@ -69,7 +70,7 @@ const ChatMessageContainer: FC = () => {
                       $borderColor="#AFA2FF"
                       $order={2}
                       dangerouslySetInnerHTML={{
-                        __html: _active_user_avatar,
+                        __html: _user_avatar,
                       }}
                     />
                     <StyledMessage $borderColor="#AFA2FF" $order={1}>
