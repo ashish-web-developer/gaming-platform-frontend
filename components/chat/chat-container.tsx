@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 // types
 import type { FC } from "react";
 // styled components
@@ -18,15 +17,11 @@ import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 import ChatInput from "@/components/chat/chat-input";
 
-// redux
-import { useAppDispatch } from "@/hooks/redux";
-import { fetchDefaultUser } from "@/store/slice/chat.slice";
+// hooks
+import { useDefaultUser } from "@/hooks/chat/chat.hook";
 
 const ChatContainer: FC = () => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchDefaultUser());
-  }, []);
+  useDefaultUser();
   return (
     <>
       <GlobalStyles />

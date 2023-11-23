@@ -11,7 +11,7 @@ const GlobalStyles = createGlobalStyle`
 `;
 
 const StyledChatContainer = styled.div`
-  width: 70rem;
+  width: 75rem;
   height: auto;
 `;
 

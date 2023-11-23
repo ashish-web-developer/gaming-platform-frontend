@@ -9,6 +9,7 @@ import type {
   IFetchMessagesResponse,
   ISendMessageRequest,
   ISendMessageResponse,
+  IConversation,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -157,6 +158,12 @@ const chatSlice = createSlice({
     updateShowEmoji: (state, action: PayloadAction<boolean>) => {
       state.show_emoji = action.payload;
     },
+    updateActiveUserConversation: (
+      state,
+      action: PayloadAction<IConversation>
+    ) => {
+      state.active_user_conversation.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -214,4 +221,5 @@ export const {
   updateDefaultUser,
   updateActiveUser,
   updateShowEmoji,
+  updateActiveUserConversation,
 } = chatSlice.actions;

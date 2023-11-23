@@ -79,17 +79,6 @@ const ChatMessageContainer: FC = () => {
                 );
               }
             })}
-            {/* <StyledMessageContent>
-              <StyledUserProfile
-                dangerouslySetInnerHTML={{
-                  __html: avatar,
-                }}
-              >
-              </StyledUserProfile>
-              <StyledMessage>
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-              </StyledMessage>
-            </StyledMessageContent> */}
           </StyledChatMessageContentContainer>
         </StyledMessageContainer>
       )}

@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type CustomChatTheme from "@/types/theme/chat";
@@ -26,6 +26,9 @@ import {
 
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
+
+// hooks
+import { useEmojiOutsideClickHandler } from "@/hooks/chat/chat.hook";
 
 const EmojiIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -85,40 +88,23 @@ const GameIcon: FC<{ width: number; height: number; color: string }> = ({
 const ChatInput: FC = () => {
   const theme = useTheme() as CustomChatTheme;
   const dispatch = useAppDispatch();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const emojiRef = useRef<HTMLButtonElement>(null);
-  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const input_ref = useRef<HTMLInputElement>(null);
+  const emoji_cta_ref = useRef<HTMLButtonElement>(null);
+  const emoji_container_ref = useRef<HTMLDivElement>(null);
   const _send_message_request_pending = useAppSelector(
     send_message_request_pending
   );
   const _show_emoji = useAppSelector(show_emoji);
   const _active_user = useAppSelector(active_user);
+  useEmojiOutsideClickHandler({ emoji_cta_ref, emoji_container_ref });
 
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (
-        !emojiRef.current?.contains(event.target as Node) &&
-        !emojiPickerRef.current?.contains(event.target as Node)
-      ) {
-        dispatch(updateShowEmoji(false));
-      }
-    };
-    if (_show_emoji) {
-      document.addEventListener("click", handleClick);
-    }
-    return () => {
-      if (_show_emoji) {
-        document.removeEventListener("click", handleClick);
-      }
-    };
-  }, [_show_emoji]);
   return (
     <>
       {_active_user && (
         <StyledChatInputContainer>
-          <StyledChatInput ref={inputRef} placeholder="Your Message" />
+          <StyledChatInput ref={input_ref} placeholder="Your Message" />
           <StyledButton
-            ref={emojiRef}
+            ref={emoji_cta_ref}
             onClick={() => dispatch(updateShowEmoji(!_show_emoji))}
             $left="16px"
           >
@@ -126,9 +112,9 @@ const ChatInput: FC = () => {
           </StyledButton>
           <StyledButton
             onClick={() => {
-              if (inputRef.current) {
-                dispatch(sendMessage({ message: inputRef.current.value }));
-                inputRef.current.value = "";
+              if (input_ref.current) {
+                dispatch(sendMessage({ message: input_ref.current.value }));
+                input_ref.current.value = "";
               }
             }}
             $right="75px"
@@ -144,12 +130,12 @@ const ChatInput: FC = () => {
             />
           </StyledButton>
           {_show_emoji && (
-            <StyledEmojiContainer ref={emojiPickerRef}>
+            <StyledEmojiContainer ref={emoji_container_ref}>
               <Picker
                 data={data}
                 onEmojiSelect={(data: any) => {
-                  if (inputRef.current) {
-                    inputRef.current.value += data.native;
+                  if (input_ref.current) {
+                    input_ref.current.value += data.native;
                   }
                 }}
               />
@@ -160,4 +146,5 @@ const ChatInput: FC = () => {
     </>
   );
 };
+
 export default ChatInput;
