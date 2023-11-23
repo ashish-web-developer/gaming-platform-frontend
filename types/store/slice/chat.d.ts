@@ -6,7 +6,7 @@ type IConversation = {
   sender_id: number;
   receiver_id: number;
   message: string;
-  watched: string;
+  viewed: boolean;
   created_at: string;
   updated_at: string;
 };

@@ -59,8 +59,9 @@ const ChatMessageContainer: FC = () => {
                       }}
                     />
                     <StyledMessage
+                      $showDoubleTick={false}
                       $content={created_at}
-                      $right="10px"
+                      $right={10}
                       $borderRadius="0px 20px 20px 20px"
                       $borderColor="#E7E08B"
                       $order={2}
@@ -71,6 +72,7 @@ const ChatMessageContainer: FC = () => {
                 );
               }
               if (conversation.sender_id == _user.id) {
+                console.log(conversation);
                 return (
                   <StyledMessageContent
                     key={conversation.id}
@@ -84,8 +86,9 @@ const ChatMessageContainer: FC = () => {
                       }}
                     />
                     <StyledMessage
+                      $showDoubleTick={true && conversation.viewed}
                       $content={created_at}
-                      $left="10px"
+                      $left={10}
                       $borderRadius="20px 0px 20px 20px"
                       $borderColor="#AFA2FF"
                       $order={1}

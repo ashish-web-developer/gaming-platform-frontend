@@ -12,10 +12,11 @@ type IStyledUserProfile = {
 type IStyledMessage = {
   $order: 1 | 2;
   $borderColor: string;
-  $borderRadius:string;
-  $left?:string;
-  $right?:string;
-  $content:string;
+  $borderRadius: string;
+  $left?: number;
+  $right?: number;
+  $content: string;
+  $showDoubleTick: boolean;
 };
 
 const StyledMessageContainer = styled.div`
@@ -58,7 +59,7 @@ const StyledChatMessageContentContainer = styled.div`
   flex-direction: column;
   gap: 40px;
   flex-grow: 1;
-  padding: 16px;
+  padding: 16px 16px 40px 16px;
 `;
 
 const StyledMessageContent = styled.div<IStyledMessageContent>`
@@ -83,19 +84,36 @@ const StyledMessage = styled.div<IStyledMessage>`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  border-radius:${(props)=>props.$borderRadius};
+  border-radius: ${(props) => props.$borderRadius};
   border: 2px solid ${(props) => props.$borderColor};
-  padding: 12px;
+  padding: 12px 12px 12px 12px;
   order: ${(props) => props.$order};
-  position:relative;
-  &::after{
-    content:"${(props)=>props.$content}";
-    position:absolute;
-    bottom:-25px;
-    left:${(props)=>props.$left??"auto"};
-    right:${(props)=>props.$right??"auto"};
-    white-space:nowrap;
-    font-size:12px;
+  position: relative;
+  &::after {
+    content: "${(props) => props.$content}";
+    position: absolute;
+    bottom: -25px;
+    left: ${(props) => props.$left + "px" ?? "auto"};
+    right: ${(props) => props.$right + "px" ?? "auto"};
+    white-space: nowrap;
+    font-size: 12px;
+  }
+  &::before {
+    content: "";
+    display: ${(props) => (props.$showDoubleTick ? "inline-block" : "none")};
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 10px;
+    background: url("/chat/chat-message-container/double-tick.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    left: ${(props) => {
+      if (props.$left) {
+        return `-${props.$left + 20}px`;
+      }
+      return "auto";
+    }};
   }
 `;
 export {
