@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
-const StyledUsersProfile = styled.div`
+type IStyledUsersProfile = {
+  $border: boolean;
+};
+
+const StyledUsersProfile = styled.div<IStyledUsersProfile>`
   width: 100%;
   min-height: 64px;
   border-radius: 16px;
@@ -9,6 +13,8 @@ const StyledUsersProfile = styled.div`
   align-items: center;
   padding-left: 16px;
   gap: 15px;
+  border: ${(props) =>
+    props.$border ? "4px solid " + props.theme.palette.primary.green : "none"};
 `;
 
 const StyledUserImage = styled.div`

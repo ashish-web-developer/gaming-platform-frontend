@@ -33,6 +33,7 @@ type IChatInitialState = {
   send_message: {
     is_request_pending: boolean;
   };
+  show_emoji: boolean;
 };
 
 type IFetchUserResponse = {

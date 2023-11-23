@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 // types
 import type { FC } from "react";
 import type CustomChatTheme from "@/types/theme/chat";
@@ -8,6 +8,7 @@ import {
   StyledChatInputContainer,
   StyledChatInput,
   StyledButton,
+  StyledEmojiContainer,
 } from "@/styles/components/chat/chat-input.style";
 
 // styled theme
@@ -19,7 +20,12 @@ import {
   send_message_request_pending,
   active_user,
   sendMessage,
+  show_emoji,
+  updateShowEmoji,
 } from "@/store/slice/chat.slice";
+
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 const EmojiIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -80,16 +86,42 @@ const ChatInput: FC = () => {
   const theme = useTheme() as CustomChatTheme;
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement>(null);
+  const emojiRef = useRef<HTMLButtonElement>(null);
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
   const _send_message_request_pending = useAppSelector(
     send_message_request_pending
   );
+  const _show_emoji = useAppSelector(show_emoji);
   const _active_user = useAppSelector(active_user);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (
+        !emojiRef.current?.contains(event.target as Node) &&
+        !emojiPickerRef.current?.contains(event.target as Node)
+      ) {
+        dispatch(updateShowEmoji(false));
+      }
+    };
+    if (_show_emoji) {
+      document.addEventListener("click", handleClick);
+    }
+    return () => {
+      if (_show_emoji) {
+        document.removeEventListener("click", handleClick);
+      }
+    };
+  }, [_show_emoji]);
   return (
     <>
       {_active_user && (
         <StyledChatInputContainer>
           <StyledChatInput ref={inputRef} placeholder="Your Message" />
-          <StyledButton $left="16px">
+          <StyledButton
+            ref={emojiRef}
+            onClick={() => dispatch(updateShowEmoji(!_show_emoji))}
+            $left="16px"
+          >
             <EmojiIcon size={30} color={theme.palette.primary.green} />
           </StyledButton>
           <StyledButton
@@ -111,6 +143,18 @@ const ChatInput: FC = () => {
               color={theme.palette.primary.green}
             />
           </StyledButton>
+          {_show_emoji && (
+            <StyledEmojiContainer ref={emojiPickerRef}>
+              <Picker
+                data={data}
+                onEmojiSelect={(data: any) => {
+                  if (inputRef.current) {
+                    inputRef.current.value += data.native;
+                  }
+                }}
+              />
+            </StyledEmojiContainer>
+          )}
         </StyledChatInputContainer>
       )}
     </>

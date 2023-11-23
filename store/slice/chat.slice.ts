@@ -113,6 +113,7 @@ const initialState: IChatInitialState = {
   send_message: {
     is_request_pending: false,
   },
+  show_emoji: false,
 };
 
 const chatSlice = createSlice({
@@ -152,6 +153,9 @@ const chatSlice = createSlice({
       action: PayloadAction<IUsersWithConversation>
     ) => {
       state.active_user = action.payload;
+    },
+    updateShowEmoji: (state, action: PayloadAction<boolean>) => {
+      state.show_emoji = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -201,6 +205,7 @@ export const active_user_conversation = (state: RootState) =>
   state.chat.active_user_conversation;
 export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
+export const show_emoji = (state: RootState) => state.chat.show_emoji;
 export const {
   updateSearchInputValue,
   updatePage,
@@ -208,4 +213,5 @@ export const {
   updateIsRequestPending,
   updateDefaultUser,
   updateActiveUser,
+  updateShowEmoji,
 } = chatSlice.actions;

@@ -45,4 +45,15 @@ const StyledButton = styled.button<IStyledButton>`
   transform: translateY(-50%);
 `;
 
-export { StyledChatInputContainer, StyledChatInput, StyledButton };
+const StyledEmojiContainer = styled.div`
+  position: absolute;
+  z-index: 2;
+  bottom: 80px;
+`;
+
+export {
+  StyledChatInputContainer,
+  StyledChatInput,
+  StyledButton,
+  StyledEmojiContainer,
+};
