@@ -1,5 +1,9 @@
 // types
 import type { FC } from "react";
+import type {
+  IUsersWithConversation,
+  IConversation,
+} from "@/types/store/slice/chat";
 // styled components
 import GlobalStyles from "@/styles/components/chat/chat-container.style";
 import {
@@ -17,11 +21,36 @@ import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 import ChatInput from "@/components/chat/chat-input";
 
+// redux
+import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import {
+  active_user,
+  updateActiveUserConversation,
+} from "@/store/slice/chat.slice";
+import { user } from "@/store/slice/user.slice";
+
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
+import { usePrivateChannel } from "@/hooks/pusher";
 
 const ChatContainer: FC = () => {
+  const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
+  const _active_user = useAppSelector(active_user);
   useDefaultUser();
+  usePrivateChannel(`chat.${_user.id}`, [
+    {
+      event: "ChatEvent",
+      callback: (data: {
+        user: IUsersWithConversation;
+        conversation: IConversation;
+      }) => {
+        if (data.user.id == _active_user?.id) {
+          dispatch(updateActiveUserConversation(data.conversation));
+        }
+      },
+    },
+  ]);
   return (
     <>
       <GlobalStyles />

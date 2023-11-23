@@ -43,6 +43,7 @@ const StyledButton = styled.button<IStyledButton>`
   right: ${(props) => props.$right ?? "auto"};
   top: 50%;
   transform: translateY(-50%);
+  font-size: 30px;
 `;
 
 const StyledEmojiContainer = styled.div`

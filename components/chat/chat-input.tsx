@@ -102,13 +102,29 @@ const ChatInput: FC = () => {
     <>
       {_active_user && (
         <StyledChatInputContainer>
-          <StyledChatInput ref={input_ref} placeholder="Your Message" />
+          <StyledChatInput
+            ref={input_ref}
+            placeholder="Your Message"
+            onKeyDown={(event) => {
+              if (
+                input_ref.current &&
+                input_ref.current.value &&
+                !_send_message_request_pending &&
+                (event.metaKey || event.ctrlKey) &&
+                event.key == "Enter"
+              ) {
+                dispatch(sendMessage({ message: input_ref.current.value }));
+                input_ref.current.value = "";
+              }
+            }}
+          />
           <StyledButton
             ref={emoji_cta_ref}
             onClick={() => dispatch(updateShowEmoji(!_show_emoji))}
             $left="16px"
           >
-            <EmojiIcon size={30} color={theme.palette.primary.green} />
+            😉
+            {/* <EmojiIcon size={30} color={theme.palette.primary.green} /> */}
           </StyledButton>
           <StyledButton
             onClick={() => {
@@ -118,7 +134,9 @@ const ChatInput: FC = () => {
               }
             }}
             $right="75px"
-            disabled={_send_message_request_pending}
+            disabled={
+              _send_message_request_pending || !input_ref.current?.value
+            }
           >
             <SendIcon size={30} color={theme.palette.primary.green} />
           </StyledButton>
