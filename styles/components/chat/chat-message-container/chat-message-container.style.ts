@@ -17,6 +17,14 @@ type IStyledMessage = {
 const StyledMessageContainer = styled.div`
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const StyledUserDetailsContainer = styled.div`
+  width: 100%;
+  flex-basis: 50px;
 `;
 const StyledActiveUserName = styled.h6`
   color: ${({ theme }) => theme.palette.primary.green};
@@ -39,11 +47,14 @@ const StyledMessagesCount = styled.span`
 `;
 
 const StyledChatMessageContentContainer = styled.div`
-  margin-top: 20px;
   width: 400px;
+  min-height: calc(100% - 70px);
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   gap: 40px;
+  flex-grow: 1;
+  padding: 16px;
 `;
 
 const StyledMessageContent = styled.div<IStyledMessageContent>`
@@ -75,6 +86,7 @@ const StyledMessage = styled.div<IStyledMessage>`
 `;
 export {
   StyledMessageContainer,
+  StyledUserDetailsContainer,
   StyledActiveUserName,
   StyledMessagesCount,
   StyledChatMessageContentContainer,

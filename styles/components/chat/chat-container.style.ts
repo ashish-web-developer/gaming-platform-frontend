@@ -25,7 +25,7 @@ const StyledChatMainContainer = styled.div`
 
 const StyledChatMainContentContainer = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   border-left: 2px solid ${({ theme }) => theme.palette.primary.green};
   padding-left: 40px;
 `;
@@ -33,19 +33,19 @@ const StyledChatMainContentContainer = styled.div`
 const StyledChatMainContent = styled.div`
   width: 100%;
   height: 100%;
-  display: grid;
-  grid-template-rows: 1fr 60px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledMessageContainer = styled.div`
   width: 100%;
-  max-height: 100%;
-  overflow: hidden;
+  max-height: calc(100% - 60px);
+  flex-grow: 1;
 `;
 
 const StyledMessageInputContainer = styled.div`
   width: 100%;
-  height: 100%;
+  flex-basis: 60px;
 `;
 
 export default GlobalStyles;
