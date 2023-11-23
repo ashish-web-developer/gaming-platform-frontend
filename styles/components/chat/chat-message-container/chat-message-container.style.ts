@@ -12,6 +12,10 @@ type IStyledUserProfile = {
 type IStyledMessage = {
   $order: 1 | 2;
   $borderColor: string;
+  $borderRadius:string;
+  $left?:string;
+  $right?:string;
+  $content:string;
 };
 
 const StyledMessageContainer = styled.div`
@@ -79,10 +83,20 @@ const StyledMessage = styled.div<IStyledMessage>`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  border-radius: 0px 16px 16px 16px;
+  border-radius:${(props)=>props.$borderRadius};
   border: 2px solid ${(props) => props.$borderColor};
   padding: 12px;
   order: ${(props) => props.$order};
+  position:relative;
+  &::after{
+    content:"${(props)=>props.$content}";
+    position:absolute;
+    bottom:-25px;
+    left:${(props)=>props.$left??"auto"};
+    right:${(props)=>props.$right??"auto"};
+    white-space:nowrap;
+    font-size:12px;
+  }
 `;
 export {
   StyledMessageContainer,

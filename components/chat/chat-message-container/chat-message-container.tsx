@@ -23,6 +23,9 @@ import {
 // hooks
 import useAvatar from "@/hooks/profile";
 
+// helpers
+import { readableFormatDate } from "@/helpers/common";
+
 const ChatMessageContainer: FC = () => {
   const _user = useAppSelector(user);
   const _user_avatar = useAvatar(_user.username ?? "");
@@ -41,6 +44,7 @@ const ChatMessageContainer: FC = () => {
           </StyledUserDetailsContainer>
           <StyledChatMessageContentContainer>
             {_active_user_conversation.map((conversation) => {
+              const created_at = readableFormatDate(conversation.created_at);
               if (conversation.receiver_id == _user.id) {
                 return (
                   <StyledMessageContent
@@ -54,7 +58,13 @@ const ChatMessageContainer: FC = () => {
                         __html: _active_user_avatar,
                       }}
                     />
-                    <StyledMessage $borderColor="#E7E08B" $order={2}>
+                    <StyledMessage
+                      $content={created_at}
+                      $right="10px"
+                      $borderRadius="0px 20px 20px 20px"
+                      $borderColor="#E7E08B"
+                      $order={2}
+                    >
                       {conversation.message}
                     </StyledMessage>
                   </StyledMessageContent>
@@ -73,7 +83,13 @@ const ChatMessageContainer: FC = () => {
                         __html: _user_avatar,
                       }}
                     />
-                    <StyledMessage $borderColor="#AFA2FF" $order={1}>
+                    <StyledMessage
+                      $content={created_at}
+                      $left="10px"
+                      $borderRadius="20px 0px 20px 20px"
+                      $borderColor="#AFA2FF"
+                      $order={1}
+                    >
                       {conversation.message}
                     </StyledMessage>
                   </StyledMessageContent>
