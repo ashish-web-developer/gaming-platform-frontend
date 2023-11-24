@@ -1,13 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 // types
-import type { RefObject } from "react";
+import type { ForwardedRef, RefObject } from "react";
+import type { IConversation } from "@/types/store/slice/chat";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   show_emoji,
   updateShowEmoji,
   fetchDefaultUser,
+  updateView,
 } from "@/store/slice/chat.slice";
+import { user } from "@/store/slice/user.slice";
 
 /**
  * To fetch default user
@@ -48,4 +51,47 @@ const useEmojiOutsideClickHandler = ({
   }, [_show_emoji]);
 };
 
-export { useDefaultUser, useEmojiOutsideClickHandler };
+/**
+ * To handle the view of the message
+ */
+
+const useMessageView = ({
+  root_ref,
+  target_ref,
+  conversation,
+}: {
+  root_ref: ForwardedRef<HTMLDivElement>;
+  target_ref: RefObject<HTMLDivElement>;
+  conversation: IConversation;
+}) => {
+  const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
+  const observer_ref = useRef<IntersectionObserver | null>(null);
+  let is_api_called = false;
+  useEffect(() => {
+    if (
+      typeof root_ref !== "function" &&
+      root_ref?.current &&
+      !conversation.viewed &&
+      _user.id == conversation.receiver_id
+    ) {
+      observer_ref.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && !is_api_called) {
+            dispatch(updateView({ conversation_id: conversation.id }));
+            is_api_called = true;
+          }
+        },
+        { root: root_ref.current, threshold: 1 }
+      );
+      if (target_ref.current) {
+        observer_ref.current.observe(target_ref.current);
+      }
+    }
+    return () => {
+      observer_ref.current?.disconnect();
+    };
+  }, [_user]);
+};
+
+export { useDefaultUser, useEmojiOutsideClickHandler, useMessageView };

@@ -10,6 +10,8 @@ import type {
   ISendMessageRequest,
   ISendMessageResponse,
   IConversation,
+  IUpdateViewRequest,
+  IUpdateViewResponse,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -69,6 +71,24 @@ export const fetchMessages = createAsyncThunk<
       {
         sender_id: state.user.user.id,
         receiver_id: state.chat.active_user?.id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const updateView = createAsyncThunk<
+  IUpdateViewResponse,
+  IUpdateViewRequest,
+  { state: RootState }
+>("api/chat/view", async ({ conversation_id }, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<IUpdateViewResponse> = await Axios.post(
+      "chat/viewed",
+      {
+        conversation_id,
       }
     );
     return response.data;
@@ -164,6 +184,22 @@ const chatSlice = createSlice({
     ) => {
       state.active_user_conversation.push(action.payload);
     },
+    updateConversationView: (state, action: PayloadAction<IConversation>) => {
+      const updatedConversation = action.payload;
+      const updatedConversations = state.active_user_conversation.map(
+        (conversation) => {
+          if (conversation.id === updatedConversation.id) {
+            return updatedConversation;
+          }
+          return conversation;
+        }
+      );
+
+      return {
+        ...state,
+        active_user_conversation: updatedConversations,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -192,6 +228,22 @@ const chatSlice = createSlice({
     });
     builder.addCase(sendMessage.rejected, (state, action) => {
       state.send_message.is_request_pending = false;
+    });
+    builder.addCase(updateView.fulfilled, (state, action) => {
+      const updatedConversation = action.payload.conversation;
+      const updatedConversations = state.active_user_conversation.map(
+        (conversation) => {
+          if (conversation.id === updatedConversation.id) {
+            return updatedConversation;
+          }
+          return conversation;
+        }
+      );
+
+      return {
+        ...state,
+        active_user_conversation: updatedConversations,
+      };
     });
   },
 });
@@ -222,4 +274,5 @@ export const {
   updateActiveUser,
   updateShowEmoji,
   updateActiveUserConversation,
+  updateConversationView,
 } = chatSlice.actions;

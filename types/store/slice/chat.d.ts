@@ -65,6 +65,14 @@ type ISendMessageResponse = {
   conversation: IConversation;
 };
 
+type IUpdateViewRequest = {
+  conversation_id: number;
+};
+type IUpdateViewResponse = {
+  success: boolean;
+  conversation: IConversation;
+};
+
 export default IChatInitialState;
 export {
   IFetchUserResponse,
@@ -74,4 +82,6 @@ export {
   IFetchMessagesResponse,
   ISendMessageRequest,
   ISendMessageResponse,
+  IUpdateViewRequest,
+  IUpdateViewResponse,
 };
