@@ -42,7 +42,9 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
       />
       <StyledUserDetails>
         <StyledUserName>{user.name}</StyledUserName>
-        <StyledUserMessage>What is up men?</StyledUserMessage>
+        <StyledUserMessage>
+          {user.latest_conversation?.message ?? "@" + user.username}
+        </StyledUserMessage>
       </StyledUserDetails>
     </StyledUsersProfile>
   );

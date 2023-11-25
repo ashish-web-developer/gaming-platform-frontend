@@ -19,8 +19,7 @@ type IUsersWithConversation = {
   email_verified_at: string;
   created_at: string;
   updated_at: string;
-  sent_messages?: IConversation[];
-  received_messages?: IConversation[];
+  latest_conversation?: IConversation;
 };
 
 type IChatInitialState = {

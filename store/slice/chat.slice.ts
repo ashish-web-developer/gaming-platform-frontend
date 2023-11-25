@@ -183,6 +183,15 @@ const chatSlice = createSlice({
       action: PayloadAction<IConversation>
     ) => {
       state.active_user_conversation.push(action.payload);
+      state.default_users = state.default_users.map((user) => {
+        if (user.id == action.payload.sender_id) {
+          return {
+            ...user,
+            latest_conversation: action.payload,
+          };
+        }
+        return user;
+      });
     },
     updateConversationView: (state, action: PayloadAction<IConversation>) => {
       const updatedConversation = action.payload;
@@ -222,6 +231,17 @@ const chatSlice = createSlice({
     builder.addCase(sendMessage.fulfilled, (state, action) => {
       state.active_user_conversation.push(action.payload.conversation);
       state.send_message.is_request_pending = false;
+      state.default_users = state.default_users.map((user) => {
+        if (user.id == action.payload.conversation.receiver_id) {
+          {
+            return {
+              ...user,
+              latest_conversation: action.payload.conversation,
+            };
+          }
+        }
+        return user;
+      });
     });
     builder.addCase(sendMessage.pending, (state, action) => {
       state.send_message.is_request_pending = true;

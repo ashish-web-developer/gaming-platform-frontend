@@ -56,6 +56,10 @@ const StyledUserMessage = styled.span`
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;
 `;
 export {
   StyledUsersProfile,
