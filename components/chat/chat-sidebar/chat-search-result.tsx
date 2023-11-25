@@ -81,8 +81,10 @@ const ChatSearchResult: ForwardRefRenderFunction<HTMLDivElement> = (
       !_is_request_pending &&
       scrollable_content_ref.current &&
       scrollable_content_ref.current.scrollHeight <=
-        scrollable_content_ref.current.scrollTop +
-          scrollable_content_ref.current.clientHeight
+        Math.ceil(
+          scrollable_content_ref.current.scrollTop +
+            scrollable_content_ref.current.clientHeight
+        )
     ) {
       // added timeout so that api don't get call multiple times, when scrolled
       timeout_ref.current = setTimeout(() => {

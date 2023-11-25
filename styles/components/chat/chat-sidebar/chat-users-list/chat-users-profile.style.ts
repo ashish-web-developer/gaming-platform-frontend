@@ -15,6 +15,17 @@ const StyledUsersProfile = styled.div<IStyledUsersProfile>`
   gap: 15px;
   border: ${(props) =>
     props.$border ? "4px solid " + props.theme.palette.primary.green : "none"};
+  position: relative;
+  &::after {
+    content: "4m";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    right: 16px;
+    top: 12px;
+    font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+    font-size: 12px;
+  }
 `;
 
 const StyledUserImage = styled.div`

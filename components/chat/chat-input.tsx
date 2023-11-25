@@ -124,7 +124,6 @@ const ChatInput: FC = () => {
             $left="16px"
           >
             😉
-            {/* <EmojiIcon size={30} color={theme.palette.primary.green} /> */}
           </StyledButton>
           <StyledButton
             onClick={() => {
@@ -134,9 +133,7 @@ const ChatInput: FC = () => {
               }
             }}
             $right="75px"
-            disabled={
-              _send_message_request_pending || !input_ref.current?.value
-            }
+            disabled={_send_message_request_pending}
           >
             <SendIcon size={30} color={theme.palette.primary.green} />
           </StyledButton>
