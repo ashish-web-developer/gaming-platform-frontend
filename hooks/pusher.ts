@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 //types
-import type { User } from "@/types/user";
+import { User } from "@/types/user";
 
 // helpers
 import { PusherAxios } from "@/helpers/axios";
@@ -11,12 +11,8 @@ import Pusher from "pusher-js";
 //redux
 import { useAppSelector, useAppDispatch } from "./redux";
 import { user } from "@/store/slice/user.slice";
-import { active_user } from "@/store/slice/chat.slice";
-import {
-  gaming_user,
-  updateGamingUser,
-  updateTimerStartCount,
-} from "@/store/slice/game.slice";
+import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
+import { gaming_user, updateTimerStartCount } from "@/store/slice/game.slice";
 import {
   updateIsGamingUserIn,
   updateIsGamingUserLeaving,
@@ -79,8 +75,10 @@ function usePrivateChannel(
     callback: (data: any) => void;
   }[]
 ) {
+  const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
+  const timer = useRef<NodeJS.Timeout>();
   const echo = useEcho();
   useEffect(() => {
     const subscription = echo
@@ -88,6 +86,18 @@ function usePrivateChannel(
       .subscribed(() => {
         console.log("connected to channel");
       })
+      .listenForWhisper(
+        "typing",
+        (event: { is_typing: boolean; user: User }) => {
+          if (_active_user?.id == event.user.id) {
+            dispatch(updateIsTyping(true));
+            clearTimeout(timer.current);
+            timer.current = setTimeout(() => {
+              dispatch(updateIsTyping(false));
+            }, 900);
+          }
+        }
+      )
       .error((error: any) => {
         console.log("error", error);
       });

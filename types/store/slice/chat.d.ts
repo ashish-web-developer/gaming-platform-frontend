@@ -24,6 +24,7 @@ type IUsersWithConversation = {
 
 type IChatInitialState = {
   search_input_value: string;
+  is_typing: boolean;
   fetch_user: {
     is_request_pending: boolean;
     fetched_user_result: IUsersWithConversation[];

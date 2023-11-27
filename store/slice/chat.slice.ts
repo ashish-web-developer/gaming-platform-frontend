@@ -123,6 +123,7 @@ export const sendMessage = createAsyncThunk<
 
 const initialState: IChatInitialState = {
   search_input_value: "",
+  is_typing: false,
   fetch_user: {
     page: 1,
     fetched_user_result: [],
@@ -209,6 +210,9 @@ const chatSlice = createSlice({
         active_user_conversation: updatedConversations,
       };
     },
+    updateIsTyping: (state, action: PayloadAction<boolean>) => {
+      state.is_typing = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -285,6 +289,8 @@ export const active_user_conversation = (state: RootState) =>
 export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
 export const show_emoji = (state: RootState) => state.chat.show_emoji;
+
+export const is_typing = (state: RootState) => state.chat.is_typing;
 export const {
   updateSearchInputValue,
   updatePage,
@@ -295,4 +301,5 @@ export const {
   updateShowEmoji,
   updateActiveUserConversation,
   updateConversationView,
+  updateIsTyping,
 } = chatSlice.actions;

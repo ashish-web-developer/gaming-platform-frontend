@@ -16,11 +16,13 @@ import { useTheme } from "styled-components";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { user } from "@/store/slice/user.slice";
 import {
   send_message_request_pending,
   active_user,
   sendMessage,
   show_emoji,
+  is_typing,
   updateShowEmoji,
 } from "@/store/slice/chat.slice";
 
@@ -29,6 +31,7 @@ import Picker from "@emoji-mart/react";
 
 // hooks
 import { useEmojiOutsideClickHandler } from "@/hooks/chat/chat.hook";
+import { useEcho } from "@/hooks/pusher";
 
 const EmojiIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -88,6 +91,7 @@ const GameIcon: FC<{ width: number; height: number; color: string }> = ({
 const ChatInput: FC = () => {
   const theme = useTheme() as CustomChatTheme;
   const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
   const input_ref = useRef<HTMLInputElement>(null);
   const emoji_cta_ref = useRef<HTMLButtonElement>(null);
   const emoji_container_ref = useRef<HTMLDivElement>(null);
@@ -96,6 +100,8 @@ const ChatInput: FC = () => {
   );
   const _show_emoji = useAppSelector(show_emoji);
   const _active_user = useAppSelector(active_user);
+  const echo = useEcho();
+  const _is_typing = useAppSelector(is_typing);
   useEmojiOutsideClickHandler({ emoji_cta_ref, emoji_container_ref });
 
   return (
@@ -104,8 +110,16 @@ const ChatInput: FC = () => {
         <StyledChatInputContainer>
           <StyledChatInput
             ref={input_ref}
-            placeholder="Your Message"
+            placeholder={_is_typing?`${_active_user.name} is typing....`:"Your Message"}
             onKeyDown={(event) => {
+              setTimeout(() => {
+                echo?.private(`chat.${_active_user.id}`)
+                //@ts-ignore
+                  .whisper("typing",{
+                    is_typing:true,
+                    user:_user
+                  })
+              }, 300);
               if (
                 input_ref.current &&
                 input_ref.current.value &&
