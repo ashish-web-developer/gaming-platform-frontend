@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 type IStyledUsersProfile = {
   $border: boolean;
+  $not_viewed: number;
 };
 
 const StyledUsersProfile = styled.div<IStyledUsersProfile>`
@@ -25,6 +26,22 @@ const StyledUsersProfile = styled.div<IStyledUsersProfile>`
     top: 12px;
     font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
     font-size: 12px;
+  }
+  &::before {
+    display: ${(props) => (props.$not_viewed ? "flex" : "none")};
+    content: "${(props) => props.$not_viewed}";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: 10px;
+    border-radius: 50%;
+    background: #afa2ff;
+    border: 1px solid #000;
+    bottom: 12px;
+    font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+    font-size: 12px;
+    justify-content: center;
+    align-items: center;
   }
 `;
 

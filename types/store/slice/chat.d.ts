@@ -20,6 +20,7 @@ type IUsersWithConversation = {
   created_at: string;
   updated_at: string;
   latest_conversation?: IConversation;
+  not_viewed: number;
 };
 
 type IChatInitialState = {

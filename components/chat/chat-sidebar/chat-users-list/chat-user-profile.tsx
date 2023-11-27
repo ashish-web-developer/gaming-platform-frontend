@@ -29,6 +29,7 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
   const _active_user = useAppSelector(active_user);
   return (
     <StyledUsersProfile
+      $not_viewed={user.not_viewed}
       $border={_active_user?.id == user.id ? true : false}
       onClick={() => {
         dispatch(updateActiveUser(user));
