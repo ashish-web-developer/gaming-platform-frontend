@@ -18,6 +18,7 @@ import {
   updateIsGamingUserLeaving,
   updateCardList,
 } from "@/store/slice/memory-game.slice";
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 type User_ids =
   | {
@@ -72,7 +73,7 @@ function usePrivateChannel(
   channel: string, // channel to which you want to connect
   events: {
     event: string;
-    callback: (data: any) => void;
+    callback: (data: any,active_user:IUsersWithConversation) => void;
   }[]
 ) {
   const dispatch = useAppDispatch();
@@ -81,31 +82,33 @@ function usePrivateChannel(
   const timer = useRef<NodeJS.Timeout>();
   const echo = useEcho();
   useEffect(() => {
+    const handleTyping = (event: { is_typing: boolean; user: User }) => {
+      if (_active_user?.id == event.user.id) {
+        dispatch(updateIsTyping(true));
+        clearTimeout(timer.current);
+        timer.current = setTimeout(() => {
+          dispatch(updateIsTyping(false));
+        }, 900);
+      }
+    };
     const subscription = echo
       ?.private(channel)
       .subscribed(() => {
         console.log("connected to channel");
       })
-      .listenForWhisper(
-        "typing",
-        (event: { is_typing: boolean; user: User }) => {
-          if (_active_user?.id == event.user.id) {
-            dispatch(updateIsTyping(true));
-            clearTimeout(timer.current);
-            timer.current = setTimeout(() => {
-              dispatch(updateIsTyping(false));
-            }, 900);
-          }
-        }
-      )
+      .listenForWhisper("typing", handleTyping)
       .error((error: any) => {
         console.log("error", error);
       });
 
     events.forEach(({ event, callback }) => {
-      subscription?.listen(event, (data: any) => callback(data));
+      subscription?.listen(event, callback);
     });
     return () => {
+      subscription?.stopListeningForWhisper("typing", handleTyping);
+      events.forEach(({ event, callback }) => {
+        subscription?.stopListening(event, callback);
+      });
       echo?.leaveChannel(channel);
     };
   }, [echo, _user, _active_user]);

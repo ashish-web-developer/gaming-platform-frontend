@@ -26,6 +26,7 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
   active_user,
   updateActiveUserConversation,
+  updateDefaultUserConversation,
   updateConversationView,
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
@@ -46,6 +47,7 @@ const ChatContainer: FC = () => {
         user: IUsersWithConversation;
         conversation: IConversation;
       }) => {
+        dispatch(updateDefaultUserConversation(data.conversation));
         if (data.user.id == _active_user?.id) {
           dispatch(updateActiveUserConversation(data.conversation));
         }

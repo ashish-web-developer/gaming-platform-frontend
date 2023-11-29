@@ -184,11 +184,17 @@ const chatSlice = createSlice({
       action: PayloadAction<IConversation>
     ) => {
       state.active_user_conversation.push(action.payload);
+    },
+    updateDefaultUserConversation: (
+      state,
+      action: PayloadAction<IConversation>
+    ) => {
       state.default_users = state.default_users.map((user) => {
         if (user.id == action.payload.sender_id) {
           return {
             ...user,
             latest_conversation: action.payload,
+            not_viewed: user.not_viewed + 1,
           };
         }
         return user;
@@ -254,20 +260,24 @@ const chatSlice = createSlice({
       state.send_message.is_request_pending = false;
     });
     builder.addCase(updateView.fulfilled, (state, action) => {
-      const updatedConversation = action.payload.conversation;
-      const updatedConversations = state.active_user_conversation.map(
+      const updated_conversation = action.payload.conversation;
+      state.active_user_conversation = state.active_user_conversation.map(
         (conversation) => {
-          if (conversation.id === updatedConversation.id) {
-            return updatedConversation;
+          if (conversation.id == updated_conversation.id) {
+            return updated_conversation;
           }
           return conversation;
         }
       );
-
-      return {
-        ...state,
-        active_user_conversation: updatedConversations,
-      };
+      state.default_users = state.default_users.map((user) => {
+        if (user.id == updated_conversation.sender_id) {
+          return {
+            ...user,
+            not_viewed: user.not_viewed - 1,
+          };
+        }
+        return user;
+      });
     });
   },
 });
@@ -300,6 +310,7 @@ export const {
   updateActiveUser,
   updateShowEmoji,
   updateActiveUserConversation,
+  updateDefaultUserConversation,
   updateConversationView,
   updateIsTyping,
 } = chatSlice.actions;
