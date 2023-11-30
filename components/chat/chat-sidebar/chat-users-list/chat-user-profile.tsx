@@ -24,6 +24,10 @@ import {
   updateActiveUser,
   fetchMessages,
 } from "@/store/slice/chat.slice";
+// helpers
+import { getTimeDifference } from "@/helpers/common";
+
+
 interface IProps {
   user: IUsersWithConversation;
 }
@@ -34,6 +38,7 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
   const _active_user = useAppSelector(active_user);
   return (
     <StyledUsersProfile
+      $time = {getTimeDifference(user.latest_conversation?.created_at as string)}
       $not_viewed={user.not_viewed}
       $border={
         _active_user?.id == user.id

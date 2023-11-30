@@ -3,6 +3,7 @@ import styled from "styled-components";
 type IStyledUsersProfile = {
   $border: string;
   $not_viewed: number;
+  $time:string
 };
 
 const StyledUsersProfile = styled.div<IStyledUsersProfile>`
@@ -17,10 +18,8 @@ const StyledUsersProfile = styled.div<IStyledUsersProfile>`
   border: ${(props) => props.$border};
   position: relative;
   &::after {
-    content: "4m";
+    content: "${(props)=>props.$time}";
     position: absolute;
-    width: 10px;
-    height: 10px;
     right: 16px;
     top: 12px;
     font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
