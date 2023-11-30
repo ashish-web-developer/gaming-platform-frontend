@@ -3,7 +3,7 @@ import styled from "styled-components";
 const StyledChatSearchResult = styled.div`
   width: 100%;
   height: auto;
-  border: 3px solid ${({ theme }) => theme.palette.primary.green};
+  border: ${({ theme }) => theme.palette.searchbar_result_container.border};
   border-radius: 16px;
   padding: 1rem;
   display: flex;
@@ -14,14 +14,18 @@ const StyledChatSearchResult = styled.div`
   position: absolute;
   margin-top: 14px;
   z-index: 2;
-  background: ${({ theme }) => theme.palette.primary.main};
+  background: ${({ theme }) =>
+    theme.palette.searchbar_result_container.background};
 `;
 
 const StyledProfileContainer = styled.div`
   width: 100%;
   min-height: 64px;
   border-radius: 16px;
-  background: ${({ theme }) => theme.palette.primary.info};
+  background: ${({ theme }) =>
+    theme.palette.searchbar_result_container.search_result.background};
+  border: ${({ theme }) =>
+    theme.palette.searchbar_result_container.search_result.border};
   display: flex;
   align-items: center;
   padding-left: 12px;

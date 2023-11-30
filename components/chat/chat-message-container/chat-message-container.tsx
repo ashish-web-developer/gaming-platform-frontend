@@ -1,6 +1,7 @@
 import { useRef, forwardRef } from "react";
 // types
 import type { FC } from "react";
+import type CustomChatTheme from "@/types/theme/chat";
 import type {
   IConversation,
   IUsersWithConversation,
@@ -18,6 +19,8 @@ import {
   StyledUserProfile,
   StyledMessage,
 } from "@/styles/components/chat/chat-message-container/chat-message-container.style";
+// styled theme
+import { useTheme } from "styled-components";
 // redux
 import { useAppSelector } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
@@ -45,13 +48,14 @@ const ChatMessage = forwardRef<
   const created_at = readableFormatDate(conversation.created_at);
   const user_avatar = useAvatar(user.username ?? "");
   const active_user_avatar = useAvatar(active_user?.username ?? "");
+  const theme = useTheme() as CustomChatTheme;
   useMessageView({ root_ref, target_ref, conversation });
 
   if (conversation.receiver_id == user.id) {
     return (
       <StyledMessageContent $justifyContent="flex-start">
         <StyledUserProfile
-          $borderColor="#E7E08B"
+          $borderColor={theme.palette.messages.received_message_border}
           $order={1}
           dangerouslySetInnerHTML={{
             __html: active_user_avatar,
@@ -63,7 +67,7 @@ const ChatMessage = forwardRef<
           $content={created_at}
           $right={10}
           $borderRadius="0px 20px 20px 20px"
-          $borderColor="#E7E08B"
+          $borderColor={theme.palette.messages.received_message_border}
           $order={2}
         >
           {conversation.message}
@@ -75,7 +79,7 @@ const ChatMessage = forwardRef<
     return (
       <StyledMessageContent $justifyContent="flex-end">
         <StyledUserProfile
-          $borderColor="#AFA2FF"
+          $borderColor={theme.palette.messages.send_message_border}
           $order={2}
           dangerouslySetInnerHTML={{
             __html: user_avatar,
@@ -87,7 +91,7 @@ const ChatMessage = forwardRef<
           $content={created_at}
           $left={10}
           $borderRadius="20px 0px 20px 20px"
-          $borderColor="#AFA2FF"
+          $borderColor={theme.palette.messages.send_message_border}
           $order={1}
         >
           {conversation.message}

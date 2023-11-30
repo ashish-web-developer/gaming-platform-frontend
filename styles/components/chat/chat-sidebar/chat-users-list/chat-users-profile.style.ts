@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 type IStyledUsersProfile = {
-  $border: boolean;
+  $border: string;
   $not_viewed: number;
 };
 
@@ -9,13 +9,12 @@ const StyledUsersProfile = styled.div<IStyledUsersProfile>`
   width: 100%;
   min-height: 64px;
   border-radius: 16px;
-  background: ${({ theme }) => theme.palette.primary.info};
+  background: ${({ theme }) => theme.palette.default_user_profile.background};
   display: flex;
   align-items: center;
   padding-left: 16px;
   gap: 15px;
-  border: ${(props) =>
-    props.$border ? "4px solid " + props.theme.palette.primary.green : "none"};
+  border: ${(props) => props.$border};
   position: relative;
   &::after {
     content: "4m";

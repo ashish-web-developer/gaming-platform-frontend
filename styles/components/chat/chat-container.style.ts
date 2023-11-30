@@ -1,8 +1,13 @@
 import styled, { createGlobalStyle } from "styled-components";
 
-const GlobalStyles = createGlobalStyle`
+type IGlobalStyles = {
+  $background_image: boolean;
+};
+const GlobalStyles = createGlobalStyle<IGlobalStyles>`
     body {
         background:${({ theme }) => theme.palette.primary.main};
+        background-image:${(props) =>
+          props.$background_image ? "url('/chat/background.jpg')" : "none"};
         background-repeat:no-repeat;
         background-size:cover;
         display:flex;
@@ -26,7 +31,7 @@ const StyledChatMainContainer = styled.div`
 const StyledChatMainContentContainer = styled.div`
   width: 100%;
   min-height: 100%;
-  border-left: 2px solid ${({ theme }) => theme.palette.primary.green};
+  border-left: 2px solid ${({ theme }) => theme.palette.secondary.main};
   padding-left: 40px;
 `;
 

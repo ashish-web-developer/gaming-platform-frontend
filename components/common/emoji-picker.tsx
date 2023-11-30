@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useRef ,useEffect} from "react";
+import { useRef} from "react";
 // types
 import type { FC } from "react";
 

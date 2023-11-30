@@ -15,14 +15,14 @@ const StyledChatSearchInput = styled.input`
   width: 100%;
   height: 54px;
   border-radius: 16px;
-  background: ${({ theme }) => theme.palette.primary.main};
-  border: 2px solid ${({ theme }) => theme.palette.primary.green};
+  background: ${({ theme }) => theme.palette.searchbar.background};
+  border: ${({ theme }) => theme.palette.searchbar.border};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   padding-left: 18px;
-  color: #fff;
+  color: ${({ theme }) => theme.palette.primary.info};
   z-index: 1;
   &::placeholder {
-    color: #fff;
+    color: ${({ theme }) => theme.palette.primary.info};
     font-size: 14px;
   }
   &:focus {

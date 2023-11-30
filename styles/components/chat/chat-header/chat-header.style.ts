@@ -9,7 +9,7 @@ const StyledChatHeader = styled.div`
 `;
 
 const StyledWelcomeText = styled.div`
-  color: #a2f263;
+  color: ${({ theme }) => theme.palette.primary.info};
   font-family: Lobster;
   font-size: 24px;
   font-style: normal;
@@ -17,7 +17,7 @@ const StyledWelcomeText = styled.div`
   line-height: normal;
 `;
 const StyledSpan = styled.span`
-  color: #fff;
+  color: ${({ theme }) => theme.palette.secondary.main};
 `;
 
 const StyledRightContainer = styled.div`
@@ -33,12 +33,12 @@ const StyledUserProfileContainer = styled.div`
 `;
 
 const StyledUserImgContainer = styled.span`
-  background: #000;
+  background: ${({ theme }) => theme.palette.primary.main};
   display: inline-block;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 3px solid #fff;
+  border: 3px solid ${({ theme }) => theme.palette.primary.info};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,7 +49,7 @@ const StyledUserImg = styled.span`
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.primary.info};
 `;
 
 const StyledUserData = styled.span`
@@ -58,7 +58,7 @@ const StyledUserData = styled.span`
 `;
 
 const StyledUserName = styled.span`
-  color: #fff;
+  color: ${({ theme }) => theme.palette.primary.info};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   font-size: 12px;
   font-style: normal;
@@ -66,18 +66,16 @@ const StyledUserName = styled.span`
   line-height: normal;
 `;
 
-
 const StyledUserPointsContainer = styled.span`
-  display:flex;
-  align-items:center;
-  gap:4px;
-`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
 
-const StyledMoneyBagImg = styled(Image)`
-`
+const StyledMoneyBagImg = styled(Image)``;
 
 const StyledUserPoints = styled.span`
-  color: #fff;
+  color: ${({ theme }) => theme.palette.primary.info};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   font-size: 12px;
   font-style: normal;
@@ -89,8 +87,8 @@ const StyledNotificationContainer = styled.div`
   width: 40px;
   height: 40px;
   border-radius: 6px;
-  border: 2px solid #fff;
-  background: #afa2ff;
+  border: 2px solid ${({ theme }) => theme.palette.primary.info};
+  background: ${({ theme }) => theme.palette.secondary.main};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -109,5 +107,5 @@ export {
   StyledUserPointsContainer,
   StyledUserPoints,
   StyledNotificationContainer,
-  StyledMoneyBagImg
+  StyledMoneyBagImg,
 };

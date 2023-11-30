@@ -32,7 +32,7 @@ const StyledUserDetailsContainer = styled.div`
   flex-basis: 50px;
 `;
 const StyledActiveUserName = styled.h6`
-  color: ${({ theme }) => theme.palette.primary.green};
+  color: ${({ theme }) => theme.palette.secondary.main};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   font-size: 24px;
   font-style: normal;
@@ -78,7 +78,7 @@ const StyledUserProfile = styled.div<IStyledUserProfile>`
 const StyledMessage = styled.div<IStyledMessage>`
   max-width: 260px;
   height: auto;
-  color: #fff;
+  color: ${({ theme }) => theme.palette.primary.info};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   font-size: 14px;
   font-style: normal;
@@ -105,7 +105,7 @@ const StyledMessage = styled.div<IStyledMessage>`
     width: 20px;
     height: 20px;
     top: 10px;
-    background: url("/chat/chat-message-container/double-tick.png");
+    background: ${({theme})=>theme.palette.messages.double_tick_img};
     background-size: cover;
     background-repeat: no-repeat;
     left: ${(props) => {

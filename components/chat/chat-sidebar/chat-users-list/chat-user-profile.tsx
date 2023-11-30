@@ -1,6 +1,7 @@
 // type
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type CustomChatTheme from "@/types/theme/chat";
 // styled components
 import {
   StyledUsersProfile,
@@ -9,6 +10,9 @@ import {
   StyledUserName,
   StyledUserMessage,
 } from "@/styles/components/chat/chat-sidebar/chat-users-list/chat-users-profile.style";
+
+// styled theme
+import { useTheme } from "styled-components";
 
 // hooks
 import useAvatar from "@/hooks/profile";
@@ -26,11 +30,16 @@ interface IProps {
 const ChatUserProfile: FC<IProps> = ({ user }) => {
   const dispatch = useAppDispatch();
   const avatar = useAvatar(user.username ?? "");
+  const theme = useTheme() as CustomChatTheme;
   const _active_user = useAppSelector(active_user);
   return (
     <StyledUsersProfile
       $not_viewed={user.not_viewed}
-      $border={_active_user?.id == user.id ? true : false}
+      $border={
+        _active_user?.id == user.id
+          ? theme.palette.default_user_profile.active_user_border
+          : theme.palette.default_user_profile.border
+      }
       onClick={() => {
         dispatch(updateActiveUser(user));
         dispatch(fetchMessages());

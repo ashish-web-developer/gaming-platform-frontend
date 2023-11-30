@@ -21,6 +21,7 @@ import {
 // redux
 import { useAppSelector } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import useAvatar from "@/hooks/profile";
@@ -50,6 +51,7 @@ const NotificationIcon: FC<{
 
 const ChatHeader: FC = () => {
   const _user = useAppSelector(user);
+  const _mode = useAppSelector(mode);
   const _user_avatar = useAvatar(_user?.username ?? "");
   return (
     <StyledChatHeader>
@@ -70,9 +72,14 @@ const ChatHeader: FC = () => {
             <StyledUserPointsContainer>
               <StyledMoneyBagImg
                 alt="money bag"
-                src="/chat/chat-header/money-bag.svg"
+                src={
+                  "/chat/chat-header/" +
+                  (_mode == "light"
+                    ? "money-bag-light.png"
+                    : "money-bag-dark.png")
+                }
                 width={15}
-                height={19}
+                height={15}
               />
               <StyledUserPoints>300.00</StyledUserPoints>
             </StyledUserPointsContainer>

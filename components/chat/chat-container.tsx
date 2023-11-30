@@ -30,6 +30,7 @@ import {
   updateConversationView,
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
@@ -37,6 +38,7 @@ import { usePrivateChannel } from "@/hooks/pusher";
 
 const ChatContainer: FC = () => {
   const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   useDefaultUser();
@@ -67,7 +69,7 @@ const ChatContainer: FC = () => {
   ]);
   return (
     <>
-      <GlobalStyles />
+      <GlobalStyles $background_image={_mode == "light" ? true : false} />
       <StyledChatContainer>
         <ChatHeader />
         <StyledChatMainContainer>
