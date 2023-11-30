@@ -1,6 +1,7 @@
 import { useRef, forwardRef } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
+import type CustomChatTheme from "@/types/theme/chat";
 
 // styled components
 import {
@@ -8,6 +9,9 @@ import {
   StyledChatSearchInput,
   StyledInputIcon,
 } from "@/styles/components/chat/chat-sidebar/chat-search-input.style";
+
+// styled theme
+import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
@@ -27,6 +31,7 @@ const ChatSearchInput: ForwardRefRenderFunction<HTMLDivElement> = (
   ref
 ) => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as CustomChatTheme;
   const _search_input_value = useAppSelector(search_input_value);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
   return (
@@ -52,7 +57,7 @@ const ChatSearchInput: ForwardRefRenderFunction<HTMLDivElement> = (
         alt="search icon"
         width={35}
         height={35}
-        src="/chat/chat-sidebar/chat-search-input/search.svg"
+        src={theme.palette.chat_input.search_img}
       />
     </StyledChatSearchInputContainer>
   );

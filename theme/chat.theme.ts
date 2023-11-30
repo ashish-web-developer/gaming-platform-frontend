@@ -30,14 +30,15 @@ const lightTheme: CustomChatTheme = {
     },
     chat_input: {
       border: "3px solid #000000",
+      search_img: "/chat/chat-sidebar/chat-search-input/light-search.png",
     },
     messages: {
       send_message_border: "#000000",
       received_message_border: "#EE964B",
-      double_tick_img:`url("/chat/chat-message-container/dark-double-tick.png")`
+      double_tick_img: `url("/chat/chat-message-container/dark-double-tick.png")`,
     },
-    emoji_container:{
-      border:"1px solid #000"
+    emoji_container: {
+      border: "1px solid #000",
     },
     fontFamily: {
       lobster: "Lobster",
@@ -75,13 +76,14 @@ const darkTheme: CustomChatTheme = {
     messages: {
       send_message_border: "#AFA2FF",
       received_message_border: "#E7E08B",
-      double_tick_img:`url("/chat/chat-message-container/light-double-tick.png")`
+      double_tick_img: `url("/chat/chat-message-container/light-double-tick.png")`,
     },
     chat_input: {
       border: "3px solid #A2F263",
+      search_img: "/chat/chat-sidebar/chat-search-input/dark-search.png",
     },
-    emoji_container:{
-      border:"1px solid #A2F263"
+    emoji_container: {
+      border: "1px solid #A2F263",
     },
     fontFamily: {
       lobster: "Lobster",

@@ -22,6 +22,7 @@ type CustomChatTheme = {
     };
     chat_input: {
       border: string;
+      search_img: string;
     };
     default_user_profile: {
       background: string;
@@ -31,11 +32,11 @@ type CustomChatTheme = {
     messages: {
       send_message_border: string;
       received_message_border: string;
-      double_tick_img:string;
+      double_tick_img: string;
     };
-    emoji_container:{
-      border:string;
-    },
+    emoji_container: {
+      border: string;
+    };
     fontFamily: {
       lobster: string;
     };
