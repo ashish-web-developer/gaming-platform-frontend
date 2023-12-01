@@ -49,7 +49,7 @@ const ChatContainer: FC = () => {
         user: IUsersWithConversation;
         conversation: IConversation;
       }) => {
-        dispatch(updateDefaultUserConversation(data.conversation));
+        dispatch(updateDefaultUserConversation(data));
         if (data.user.id == _active_user?.id) {
           dispatch(updateActiveUserConversation(data.conversation));
         }

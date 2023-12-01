@@ -187,18 +187,27 @@ const chatSlice = createSlice({
     },
     updateDefaultUserConversation: (
       state,
-      action: PayloadAction<IConversation>
+      action: PayloadAction<{user:IUsersWithConversation,conversation:IConversation}>
     ) => {
-      state.default_users = state.default_users.map((user) => {
-        if (user.id == action.payload.sender_id) {
-          return {
-            ...user,
-            latest_conversation: action.payload,
-            not_viewed: user.not_viewed + 1,
-          };
-        }
-        return user;
-      });
+      let is_user_exit = state.default_users.find((user)=>user.id == action.payload.user.id);
+      if(is_user_exit){
+        state.default_users = state.default_users.map((user) => {
+          if (user.id == action.payload.user.id) {
+            return {
+              ...user,
+              latest_conversation: action.payload.conversation,
+              not_viewed: user.not_viewed + 1,
+            };
+          }
+          return user;
+        });
+      }else{
+        state.default_users.push({
+          ... action.payload.user,
+          latest_conversation:action.payload.conversation,
+          not_viewed:1
+        })
+      }
     },
     updateConversationView: (state, action: PayloadAction<IConversation>) => {
       const updatedConversation = action.payload;
