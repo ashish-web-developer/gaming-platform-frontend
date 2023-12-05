@@ -37,6 +37,9 @@ type IChatInitialState = {
   send_message: {
     is_request_pending: boolean;
   };
+  game_snackbar: {
+    show_memory_game_snackbar: boolean;
+  };
   show_emoji: boolean;
 };
 
@@ -74,6 +77,22 @@ type IUpdateViewResponse = {
   conversation: IConversation;
 };
 
+type ISendInvitationApiRequest = {
+  game: string;
+};
+
+type ISendInvitationApiResponse = {
+  success: boolean;
+  message: string;
+};
+type IAcceptInvitationApiRequest = {
+  is_accepted: boolean;
+};
+type IAcceptInvitationApiResponse = {
+  success: boolean;
+  message: string;
+};
+
 export default IChatInitialState;
 export {
   IFetchUserResponse,
@@ -85,4 +104,8 @@ export {
   ISendMessageResponse,
   IUpdateViewRequest,
   IUpdateViewResponse,
+  ISendInvitationApiRequest,
+  ISendInvitationApiResponse,
+  IAcceptInvitationApiRequest,
+  IAcceptInvitationApiResponse,
 };

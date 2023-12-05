@@ -13,6 +13,9 @@ import {
   StyledChatMainContent,
   StyledMessageContainer,
   StyledMessageInputContainer,
+  StyledThemeTogglerIcon,
+  StyledNotificationContainer,
+  StyledNotificationHeading,
 } from "@/styles/components/chat/chat-container.style";
 
 // local components
@@ -20,27 +23,54 @@ import ChatHeader from "@/components/chat/chat-header/chat-header";
 import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 import ChatInput from "@/components/chat/chat-input";
+import InvitationCard from "@/components/common/invitation-card";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import {
   active_user,
+  show_memory_game_snackbar,
   updateActiveUserConversation,
   updateDefaultUserConversation,
   updateConversationView,
+  updateShowMemoryGameSnackbar,
 } from "@/store/slice/chat.slice";
+import { updateMode } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
 import { usePrivateChannel } from "@/hooks/pusher";
+import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
+
+const ThemeTogglerIcon: FC<{
+  color: string;
+  width: number;
+  height: number;
+}> = ({ color, width, height }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 44 46"
+    >
+      <path
+        fill={color}
+        d="M27.25 45.245c6.797-1.198 12.457-5.403 15.672-11.223.476-.861-.382-1.845-1.29-1.5-10.332 3.933-21.605-2.578-23.518-13.43A17.633 17.633 0 0124.19 2.456c.75-.624.316-1.858-.663-1.867a22.449 22.449 0 00-4.092.34C7.27 3.074-.855 14.726 1.304 26.973c2.156 12.231 13.765 20.42 25.945 18.272z"
+      ></path>
+    </svg>
+  );
+};
 
 const ChatContainer: FC = () => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
+  const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
   useDefaultUser();
   usePrivateChannel(`chat.${_user.id}`, [
     {
@@ -66,10 +96,45 @@ const ChatContainer: FC = () => {
         }
       },
     },
+    {
+      event: "PlayGameInvitationEvent",
+      callback: (data: {
+        game: string;
+        receiver_id: number;
+        room_id: string;
+        user: IUsersWithConversation;
+      }) => {
+        dispatch(updateShowMemoryGameSnackbar(true));
+        dispatch(updateGamingUser(data.user));
+        dispatch(updateRoomId(data.room_id));
+      },
+    },
+    {
+      event: "AcceptGameInvitationEvent",
+      callback: (data: {
+        user: IUsersWithConversation;
+        is_accepted: boolean;
+      }) => {
+        if (data.is_accepted) {
+          console.log("redirect");
+        }
+      },
+    },
   ]);
   return (
     <>
       <GlobalStyles $background_image={_mode == "light" ? true : false} />
+      <StyledThemeTogglerIcon
+        onClick={() =>
+          dispatch(updateMode(_mode == "light" ? "dark" : "light"))
+        }
+      >
+        <ThemeTogglerIcon
+          width={40}
+          height={45}
+          color={_mode == "dark" ? "#fff" : "#000"}
+        />
+      </StyledThemeTogglerIcon>
       <StyledChatContainer>
         <ChatHeader />
         <StyledChatMainContainer>
@@ -84,6 +149,14 @@ const ChatContainer: FC = () => {
               </StyledMessageInputContainer>
             </StyledChatMainContent>
           </StyledChatMainContentContainer>
+          {_show_memory_game_snackbar && (
+            <StyledNotificationContainer>
+              <StyledNotificationHeading>
+                Notifications
+                <InvitationCard />
+              </StyledNotificationHeading>
+            </StyledNotificationContainer>
+          )}
         </StyledChatMainContainer>
       </StyledChatContainer>
     </>

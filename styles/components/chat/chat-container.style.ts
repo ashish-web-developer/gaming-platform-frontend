@@ -15,6 +15,15 @@ const GlobalStyles = createGlobalStyle<IGlobalStyles>`
     }
 `;
 
+const StyledThemeTogglerIcon = styled.button`
+  background: transparent;
+  border: none;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+`;
+
 const StyledChatContainer = styled.div`
   width: 75rem;
   height: auto;
@@ -23,7 +32,7 @@ const StyledChatContainer = styled.div`
 const StyledChatMainContainer = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 320px 440px 1fr;
   height: calc(100vh - 200px);
   gap: 40px;
 `;
@@ -53,6 +62,20 @@ const StyledMessageInputContainer = styled.div`
   flex-basis: 60px;
 `;
 
+const StyledNotificationContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+const StyledNotificationHeading = styled.h6`
+  color: ${({ theme }) => theme.palette.secondary.main};
+  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration-line: underline;
+`;
+
 export default GlobalStyles;
 
 export {
@@ -62,4 +85,7 @@ export {
   StyledChatMainContent,
   StyledMessageContainer,
   StyledMessageInputContainer,
+  StyledThemeTogglerIcon,
+  StyledNotificationContainer,
+  StyledNotificationHeading,
 };

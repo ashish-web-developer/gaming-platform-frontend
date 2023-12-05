@@ -24,7 +24,9 @@ import {
   show_emoji,
   is_typing,
   updateShowEmoji,
+  sendInvitationApi,
 } from "@/store/slice/chat.slice";
+import { updateRoomId } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 
 import data from "@emoji-mart/data";
@@ -33,6 +35,9 @@ import Picker from "@emoji-mart/react";
 // hooks
 import { useEmojiOutsideClickHandler } from "@/hooks/chat/chat.hook";
 import { useEcho } from "@/hooks/pusher";
+
+// helpers package
+import { v4 as uuidv4 } from "uuid";
 
 const SendIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -139,7 +144,14 @@ const ChatInput: FC = () => {
           >
             <SendIcon size={30} color={theme.palette.secondary.main} />
           </StyledButton>
-          <StyledButton $right="16px">
+          <StyledButton
+            onClick={() => {
+              let room_id = uuidv4();
+              dispatch(updateRoomId(room_id));
+              dispatch(sendInvitationApi({ game: "memory-game" }));
+            }}
+            $right="16px"
+          >
             <GameIcon
               width={40}
               height={25}

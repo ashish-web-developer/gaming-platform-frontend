@@ -12,6 +12,10 @@ import type {
   IConversation,
   IUpdateViewRequest,
   IUpdateViewResponse,
+  ISendInvitationApiRequest,
+  ISendInvitationApiResponse,
+  IAcceptInvitationApiRequest,
+  IAcceptInvitationApiResponse,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -97,6 +101,46 @@ export const updateView = createAsyncThunk<
   }
 });
 
+export const sendInvitationApi = createAsyncThunk<
+  ISendInvitationApiResponse,
+  ISendInvitationApiRequest,
+  { state: RootState }
+>("api/game/invitation", async ({ game }, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<ISendInvitationApiResponse> =
+      await Axios.post("game/game-invitation", {
+        receiver_id: state.chat.active_user?.id,
+        game,
+        room_id: state.game.room_id,
+      });
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const acceptInvitationApi = createAsyncThunk<
+  IAcceptInvitationApiResponse,
+  IAcceptInvitationApiRequest,
+  { state: RootState }
+>(
+  "api/game/accept-invitation",
+  async ({ is_accepted }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IAcceptInvitationApiResponse> =
+        await Axios.post("game/accept-invitation", {
+          is_accepted,
+          room_id: state.game.room_id,
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 export const sendMessage = createAsyncThunk<
   ISendMessageResponse,
   ISendMessageRequest,
@@ -136,6 +180,9 @@ const initialState: IChatInitialState = {
     is_request_pending: false,
   },
   show_emoji: false,
+  game_snackbar: {
+    show_memory_game_snackbar: false,
+  },
 };
 
 const chatSlice = createSlice({
@@ -187,10 +234,15 @@ const chatSlice = createSlice({
     },
     updateDefaultUserConversation: (
       state,
-      action: PayloadAction<{user:IUsersWithConversation,conversation:IConversation}>
+      action: PayloadAction<{
+        user: IUsersWithConversation;
+        conversation: IConversation;
+      }>
     ) => {
-      let is_user_exit = state.default_users.find((user)=>user.id == action.payload.user.id);
-      if(is_user_exit){
+      let is_user_exit = state.default_users.find(
+        (user) => user.id == action.payload.user.id
+      );
+      if (is_user_exit) {
         state.default_users = state.default_users.map((user) => {
           if (user.id == action.payload.user.id) {
             return {
@@ -201,12 +253,12 @@ const chatSlice = createSlice({
           }
           return user;
         });
-      }else{
+      } else {
         state.default_users.push({
-          ... action.payload.user,
-          latest_conversation:action.payload.conversation,
-          not_viewed:1
-        })
+          ...action.payload.user,
+          latest_conversation: action.payload.conversation,
+          not_viewed: 1,
+        });
       }
     },
     updateConversationView: (state, action: PayloadAction<IConversation>) => {
@@ -227,6 +279,9 @@ const chatSlice = createSlice({
     },
     updateIsTyping: (state, action: PayloadAction<boolean>) => {
       state.is_typing = action.payload;
+    },
+    updateShowMemoryGameSnackbar: (state, action: PayloadAction<boolean>) => {
+      state.game_snackbar.show_memory_game_snackbar = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -310,6 +365,8 @@ export const send_message_request_pending = (state: RootState) =>
 export const show_emoji = (state: RootState) => state.chat.show_emoji;
 
 export const is_typing = (state: RootState) => state.chat.is_typing;
+export const show_memory_game_snackbar = (state: RootState) =>
+  state.chat.game_snackbar.show_memory_game_snackbar;
 export const {
   updateSearchInputValue,
   updatePage,
@@ -322,4 +379,5 @@ export const {
   updateDefaultUserConversation,
   updateConversationView,
   updateIsTyping,
+  updateShowMemoryGameSnackbar,
 } = chatSlice.actions;

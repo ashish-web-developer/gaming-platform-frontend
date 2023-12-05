@@ -52,7 +52,7 @@ const StyledMessagesCount = styled.span`
 `;
 
 const StyledChatMessageContentContainer = styled.div`
-  width: 400px;
+  width: 100%;
   min-height: calc(100% - 70px);
   overflow: scroll;
   display: flex;
@@ -105,7 +105,7 @@ const StyledMessage = styled.div<IStyledMessage>`
     width: 20px;
     height: 20px;
     top: 10px;
-    background: ${({theme})=>theme.palette.messages.double_tick_img};
+    background: ${({ theme }) => theme.palette.messages.double_tick_img};
     background-size: cover;
     background-repeat: no-repeat;
     left: ${(props) => {
