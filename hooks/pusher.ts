@@ -16,7 +16,6 @@ import { gaming_user, updateTimerStartCount } from "@/store/slice/game.slice";
 import {
   updateIsGamingUserIn,
   updateIsGamingUserLeaving,
-  updateCardList,
 } from "@/store/slice/memory-game.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
@@ -73,7 +72,7 @@ function usePrivateChannel(
   channel: string, // channel to which you want to connect
   events: {
     event: string;
-    callback: (data: any,active_user:IUsersWithConversation) => void;
+    callback: (data: any, active_user: IUsersWithConversation) => void;
   }[]
 ) {
   const dispatch = useAppDispatch();
@@ -125,58 +124,39 @@ function usePresenceChannel(
   const dispatch = useAppDispatch();
   const _gaming_user = useAppSelector(gaming_user);
   useEffect(() => {
+    const handlePresence = (
+      user_ids: User_ids,
+      event: "here" | "joining" | "leaving"
+    ) => {
+      const isUserInChannel = Array.isArray(user_ids)
+        ? user_ids.some((user_id) => user_id.id === _gaming_user?.id)
+        : user_ids.id === _gaming_user?.id;
+      if (event == "leaving" && isUserInChannel) {
+        dispatch(updateIsGamingUserLeaving(isUserInChannel));
+        dispatch(updateIsGamingUserIn(!isUserInChannel));
+        return;
+      }
+      dispatch(updateIsGamingUserIn(isUserInChannel));
+    };
     const subscription = echo
       ?.join(channel)
       .here((user_ids: User_ids) => {
-        if (
-          Array.isArray(user_ids) &&
-          user_ids.some((user_id) => user_id.id == _gaming_user?.id)
-        ) {
-          dispatch(updateIsGamingUserIn(true));
-        } else if (
-          !Array.isArray(user_ids) &&
-          user_ids.id == _gaming_user?.id
-        ) {
-          dispatch(updateIsGamingUserIn(true));
-        }
+        handlePresence(user_ids, "here");
       })
       .joining((user_ids: User_ids) => {
-        if (
-          Array.isArray(user_ids) &&
-          user_ids.some((user_id) => user_id.id == _gaming_user?.id)
-        ) {
-          dispatch(updateIsGamingUserIn(true));
-        } else if (
-          !Array.isArray(user_ids) &&
-          user_ids.id == _gaming_user?.id
-        ) {
-          dispatch(updateIsGamingUserIn(true));
-        }
+        handlePresence(user_ids, "joining");
       })
       .leaving((user_ids: User_ids) => {
-        if (
-          Array.isArray(user_ids) &&
-          user_ids.some((user_id) => user_id.id == _gaming_user?.id)
-        ) {
-          dispatch(updateIsGamingUserIn(false));
-          dispatch(updateIsGamingUserLeaving(true));
-        } else if (
-          !Array.isArray(user_ids) &&
-          user_ids.id == _gaming_user?.id
-        ) {
-          dispatch(updateIsGamingUserIn(false));
-          dispatch(updateIsGamingUserLeaving(true));
-        }
+        handlePresence(user_ids, "leaving");
       });
     events.forEach(({ event, callback }) => {
-      subscription?.listen(event, (data: any) => callback(data));
+      subscription?.listen(event, callback);
     });
     return () => {
+      events.forEach(({ event, callback }) => {
+        subscription?.stopListening(event, callback);
+      });
       echo?.leave(channel);
-      dispatch(updateIsGamingUserLeaving(false));
-      dispatch(updateCardList([]));
-      dispatch(updateIsGamingUserIn(false));
-      dispatch(updateTimerStartCount(null));
     };
   }, [echo, _gaming_user]);
 }

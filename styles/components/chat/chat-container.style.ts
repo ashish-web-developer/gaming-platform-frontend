@@ -1,18 +1,18 @@
 import styled, { createGlobalStyle } from "styled-components";
 
-type IGlobalStyles = {
+type IStyledPage = {
   $background_image: boolean;
 };
-const GlobalStyles = createGlobalStyle<IGlobalStyles>`
-    body {
-        background:${({ theme }) => theme.palette.primary.main};
-        background-image:${(props) =>
-          props.$background_image ? "url('/chat/background.jpg')" : "none"};
-        background-repeat:no-repeat;
-        background-size:cover;
-        display:flex;
-        justify-content:center;
-    }
+const StyledPage = styled.div<IStyledPage>`
+  width: 100vw;
+  height: 100vh;
+  background: ${({ theme }) => theme.palette.primary.main};
+  background-image: ${(props) =>
+    props.$background_image ? "url('/chat/background.jpg')" : "none"};
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
 `;
 
 const StyledThemeTogglerIcon = styled.button`
@@ -76,9 +76,8 @@ const StyledNotificationHeading = styled.h6`
   text-decoration-line: underline;
 `;
 
-export default GlobalStyles;
-
 export {
+  StyledPage,
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,

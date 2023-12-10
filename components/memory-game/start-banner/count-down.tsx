@@ -39,7 +39,7 @@ const CountDown: ForwardRefRenderFunction<{
     timerRef.current = setInterval(() => {
       setCount((prev) => {
         if (prev == 4 && typeof count_down_sound_ref !== "function") {
-          count_down_sound_ref?.current?.count_down_audio?.play();
+          //count_down_sound_ref?.current?.count_down_audio?.play();
         }
         return prev - 1;
       });

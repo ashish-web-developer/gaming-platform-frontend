@@ -98,7 +98,8 @@ const ResultBoard = dynamic(
   }
 );
 // styled components
-import GlobalStyles, {
+import {
+  StyledPage,
   StyledContainer,
   StyledGrid,
   StyledLeftContainer,
@@ -231,6 +232,7 @@ const MemoryGame: FC = () => {
           },
         })
       );
+      dispatch(updatePlayerTurnId(_user.id));
     }
   }, [_is_proposal_sender, _is_gaming_user_in]);
 
@@ -246,8 +248,7 @@ const MemoryGame: FC = () => {
   }, []);
 
   return (
-    <>
-      <GlobalStyles />
+    <StyledPage>
       {isMobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
       <StyledContainer>
         {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
@@ -332,7 +333,7 @@ const MemoryGame: FC = () => {
           </StyledGrid>
         </StyledContentContainer>
       </StyledContainer>
-    </>
+    </StyledPage>
   );
 };
 

@@ -74,7 +74,8 @@ const lightTheme: CustomThemePalette = {
         main: "#2B061E",
         text: "#F7FFF6",
       },
-      messages_background: "#3C91E6",
+      sender_messages_background: "#16C172",
+      receiver_messages_background: "#3C91E6",
       scrollbar_color: "#3C91E6",
       input: {
         text_color: "#F7FFF6",
@@ -244,7 +245,8 @@ const darkTheme: CustomThemePalette = {
         main: "#2B061E",
         text: "#F7FFF6",
       },
-      messages_background: "#FF934F",
+      receiver_messages_background: "#FF934F",
+      sender_messages_background: "#329F5B",
       scrollbar_color: "#3C91E6",
       input: {
         text_color: "#f9f8f8",

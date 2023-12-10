@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
 import type {
@@ -5,8 +6,8 @@ import type {
   IConversation,
 } from "@/types/store/slice/chat";
 // styled components
-import GlobalStyles from "@/styles/components/chat/chat-container.style";
 import {
+  StyledPage,
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,
@@ -66,6 +67,7 @@ const ThemeTogglerIcon: FC<{
 };
 
 const ChatContainer: FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
@@ -116,14 +118,14 @@ const ChatContainer: FC = () => {
         is_accepted: boolean;
       }) => {
         if (data.is_accepted) {
-          console.log("redirect");
+          dispatch(updateGamingUser(data.user));
+          router.push("/memory-game");
         }
       },
     },
   ]);
   return (
-    <>
-      <GlobalStyles $background_image={_mode == "light" ? true : false} />
+    <StyledPage $background_image={_mode == "light" ? true : false}>
       <StyledThemeTogglerIcon
         onClick={() =>
           dispatch(updateMode(_mode == "light" ? "dark" : "light"))
@@ -159,7 +161,7 @@ const ChatContainer: FC = () => {
           )}
         </StyledChatMainContainer>
       </StyledChatContainer>
-    </>
+    </StyledPage>
   );
 };
 

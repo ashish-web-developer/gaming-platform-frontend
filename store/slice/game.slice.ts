@@ -10,7 +10,7 @@ import type {
   IUpdateTimerStartCountEventRequest,
 } from "@/types/store/slice/game";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { User } from "@/types/user";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
 // redux
@@ -129,7 +129,10 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    updateGamingUser: (state, action: PayloadAction<User | null>) => {
+    updateGamingUser: (
+      state,
+      action: PayloadAction<IUsersWithConversation | null>
+    ) => {
       state.gaming_user = action.payload;
     },
     updateRoomId: (state, action: PayloadAction<string | null>) => {

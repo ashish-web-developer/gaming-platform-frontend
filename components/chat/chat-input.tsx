@@ -26,9 +26,10 @@ import {
   updateShowEmoji,
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
-import { updateRoomId } from "@/store/slice/game.slice";
+import { updateRoomId, udpateIsProposalSender } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 
+// emoji picker
 import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
@@ -149,6 +150,7 @@ const ChatInput: FC = () => {
               let room_id = uuidv4();
               dispatch(updateRoomId(room_id));
               dispatch(sendInvitationApi({ game: "memory-game" }));
+              dispatch(udpateIsProposalSender(true));
             }}
             $right="16px"
           >

@@ -67,7 +67,8 @@ type CustomMemoryGameThemePalette = {
         main: string;
         text: string;
       };
-      messages_background: string;
+      sender_messages_background: string;
+      receiver_messages_background: string;
       scrollbar_color: string;
       input: {
         text_color: string;

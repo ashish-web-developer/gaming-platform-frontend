@@ -1,7 +1,7 @@
-import type { User } from "@/types/user";
+import { IUsersWithConversation } from "./chat";
 
 type InitialState = {
-  gaming_user: User | null;
+  gaming_user: IUsersWithConversation | null;
   room_id: string | null;
   show_invitation_snackbar: boolean;
   show_denied_snackbar: boolean;

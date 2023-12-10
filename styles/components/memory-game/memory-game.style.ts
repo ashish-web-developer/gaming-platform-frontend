@@ -12,12 +12,12 @@ type IStyledGrid = {
   $paddingTop: string | null;
 };
 
-const GlobalStyles = createGlobalStyle`
-    body {
-        background: ${({ theme }) => theme.palette.primary.main} !important;
-        background-repeat:no-repeat;
-        background-size:cover;
-    }
+const StyledPage = styled.div`
+  background: ${({ theme }) => theme.palette.primary.main} !important;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
 `;
 const StyledContainer = styled.div`
   width: 100%;
@@ -178,8 +178,8 @@ const StyledHelpCta = styled(IconButton)`
   }
 `;
 
-export default GlobalStyles;
 export {
+  StyledPage,
   StyledContainer,
   StyledGrid,
   StyledLeftContainer,

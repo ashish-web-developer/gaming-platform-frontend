@@ -2,8 +2,10 @@ import { useEffect } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
-import type { User } from "@/types/user";
-import type { Conversation } from "@/types/store/slice/chat";
+import type {
+  IConversation,
+  IUsersWithConversation,
+} from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -15,15 +17,11 @@ import {
   StyledVersusImage,
   StyledVersusText,
   StyledChatContent,
-  StyledChatContentContainer,
-  StyledChatInputContainer,
-  StyledChatInput,
-  StyledSendIcon,
-  StyledEmojiIcon,
-  StyledChatsContainer,
-  StyledChat,
-  StyledEmojiPicker,
 } from "@/styles/components/memory-game/chat/chat.style";
+
+// local components
+import ChatInput from "@/components/memory-game/chat/chat-input";
+import ChatMessageContainer from "@/components/memory-game/chat/chat-message-container";
 
 // theme
 import { useTheme } from "styled-components";
@@ -34,22 +32,19 @@ import { IconButton } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
+import { updateDefaultUserConversation } from "@/store/slice/chat.slice";
 import {
   // state
   active_user,
-  chat_input_value,
-  sendMessage,
-  is_submitting,
-  active_user_conversation,
   // actions
-  updateChatInputValue,
   updateActiveUser,
   updateActiveUserConversation,
+  // api
+  fetchMessages,
 } from "@/store/slice/chat.slice";
-import { mode, showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
+import { mode, showEmoji } from "@/store/slice/common.slice";
 // hooks
 import useAvatar from "@/hooks/profile";
-import { useConversation } from "@/hooks/chat";
 import { usePrivateChannel } from "@/hooks/pusher";
 
 const Chat: FC = () => {
@@ -59,35 +54,30 @@ const Chat: FC = () => {
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _gaming_user = useAppSelector(gaming_user);
-  const _chat_input_value = useAppSelector(chat_input_value);
-  const _active_user_conversation = useAppSelector(active_user_conversation);
-  const _is_submitting = useAppSelector(is_submitting);
-  const _showEmoji = useAppSelector(showEmoji);
   const user_avatar = useAvatar(_user.username ?? "");
-  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
-  useConversation();
   usePrivateChannel(`chat.${_user.id}`, [
     {
       event: "ChatEvent",
-      callback: (data: { user: User; conversation: Conversation }) => {
+      callback: (data: {
+        user: IUsersWithConversation;
+        conversation: IConversation;
+      }) => {
+        dispatch(updateDefaultUserConversation(data));
         if (data.user.id == _active_user?.id) {
           dispatch(updateActiveUserConversation(data.conversation));
         }
       },
     },
   ]);
+
   useEffect(() => {
     if (_gaming_user?.id) {
       dispatch(updateActiveUser(_gaming_user));
+      dispatch(fetchMessages());
     }
   }, [_gaming_user]);
   return (
     <StyledChatContainer>
-      <StyledEmojiPicker
-        callback={(data) => {
-          dispatch(updateChatInputValue(`${_chat_input_value} ${data.native}`));
-        }}
-      />
       <StyledTopBackground>
         <StyledChatAvatar dangerouslySetInnerHTML={{ __html: user_avatar }} />
         <StyledVersusContainer>
@@ -106,74 +96,8 @@ const Chat: FC = () => {
       </StyledTopBackground>
       <StyledCenteredBackground $mode={_mode} />
       <StyledChatContent>
-        <StyledChatContentContainer>
-          {_active_user_conversation.map(({ sender_id, message }, index) => {
-            return (
-              <StyledChatsContainer
-                key={index}
-                $justifyContent={
-                  _user.id == sender_id ? "flex-end" : "flex-start"
-                }
-              >
-                <StyledChatAvatar
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      _user.id == sender_id ? user_avatar : gaming_user_avatar,
-                  }}
-                  $order={_user.id == sender_id ? 2 : 1}
-                />
-                <StyledChat
-                  $backgroundColor={
-                    _user.id == sender_id
-                      ? "#329F5B"
-                      : theme.palette.chat.messages_background
-                  }
-                  $borderRadius={
-                    _user.id == sender_id
-                      ? "10px 0px 10px 10px;"
-                      : "0px 10px 10px 10px"
-                  }
-                  $order={_user.id == sender_id ? 1 : 2}
-                >
-                  {message}
-                </StyledChat>
-              </StyledChatsContainer>
-            );
-          })}
-        </StyledChatContentContainer>
-        <StyledChatInputContainer>
-          <StyledChatInput
-            value={_chat_input_value}
-            onChange={(event) =>
-              dispatch(updateChatInputValue(event.target.value))
-            }
-            onKeyDown={(event) => {
-              if ((event.ctrlKey || event.metaKey) && event.key == "Enter") {
-                dispatch(sendMessage());
-              }
-            }}
-            fullWidth={true}
-            disableUnderline={true}
-            placeholder="Write Here"
-            endAdornment={
-              <>
-                <IconButton
-                  disabled={_is_submitting}
-                  onClick={() => dispatch(sendMessage())}
-                >
-                  <StyledSendIcon />
-                </IconButton>
-              </>
-            }
-          />
-          <IconButton
-            onClick={() => {
-              dispatch(updateShowEmoji(!_showEmoji));
-            }}
-          >
-            <StyledEmojiIcon />
-          </IconButton>
-        </StyledChatInputContainer>
+        <ChatMessageContainer />
+        <ChatInput />
       </StyledChatContent>
     </StyledChatContainer>
   );

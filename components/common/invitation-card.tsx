@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
 // styled components
@@ -20,6 +21,7 @@ import { acceptInvitation } from "@/store/slice/game.slice";
 
 const InvitationCard: FC = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   return (
     <StyledInvitationCard>
       <StyledCardContent>
@@ -39,7 +41,7 @@ const InvitationCard: FC = () => {
           <StyledPlayButton
             onClick={() => {
               dispatch(acceptInvitation({ is_accepted: true }));
-              console.log("redirect");
+              router.push("/memory-game");
             }}
           >
             Play Now
