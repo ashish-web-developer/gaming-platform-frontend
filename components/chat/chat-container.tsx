@@ -106,9 +106,9 @@ const ChatContainer: FC = () => {
         room_id: string;
         user: IUsersWithConversation;
       }) => {
-        dispatch(updateShowMemoryGameSnackbar(true));
         dispatch(updateGamingUser(data.user));
         dispatch(updateRoomId(data.room_id));
+        dispatch(updateShowMemoryGameSnackbar(true));
       },
     },
     {

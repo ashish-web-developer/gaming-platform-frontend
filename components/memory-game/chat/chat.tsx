@@ -26,8 +26,6 @@ import ChatMessageContainer from "@/components/memory-game/chat/chat-message-con
 // theme
 import { useTheme } from "styled-components";
 
-// mui
-import { IconButton } from "@mui/material";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
@@ -37,15 +35,13 @@ import {
   // state
   active_user,
   // actions
-  updateActiveUser,
   updateActiveUserConversation,
-  // api
-  fetchMessages,
 } from "@/store/slice/chat.slice";
-import { mode, showEmoji } from "@/store/slice/common.slice";
+import { mode } from "@/store/slice/common.slice";
 // hooks
 import useAvatar from "@/hooks/profile";
 import { usePrivateChannel } from "@/hooks/pusher";
+import { useChatInitializer } from "@/hooks/memory-game/chat.hook";
 
 const Chat: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
@@ -55,6 +51,7 @@ const Chat: FC = () => {
   const _active_user = useAppSelector(active_user);
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user.username ?? "");
+  useChatInitializer();
   usePrivateChannel(`chat.${_user.id}`, [
     {
       event: "ChatEvent",
@@ -70,12 +67,6 @@ const Chat: FC = () => {
     },
   ]);
 
-  useEffect(() => {
-    if (_gaming_user?.id) {
-      dispatch(updateActiveUser(_gaming_user));
-      dispatch(fetchMessages());
-    }
-  }, [_gaming_user]);
   return (
     <StyledChatContainer>
       <StyledTopBackground>

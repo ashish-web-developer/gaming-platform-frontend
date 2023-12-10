@@ -16,12 +16,14 @@ import {
 } from "@/styles/components/common/invitation-card.style";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
-import { acceptInvitation } from "@/store/slice/game.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { gaming_user, acceptInvitation } from "@/store/slice/game.slice";
+import { updateShowMemoryGameSnackbar } from "@/store/slice/chat.slice";
 
 const InvitationCard: FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const _gaming_user = useAppSelector(gaming_user);
   return (
     <StyledInvitationCard>
       <StyledCardContent>
@@ -36,11 +38,12 @@ const InvitationCard: FC = () => {
           />
         </StyledGirlImageContainer>
         <StyledLeftContent>
-          <StyledUserName>@ashish_classic</StyledUserName>
+          <StyledUserName>@{_gaming_user?.username}</StyledUserName>
           <StyledCardHeading>Ready for a memory showdown?</StyledCardHeading>
           <StyledPlayButton
             onClick={() => {
               dispatch(acceptInvitation({ is_accepted: true }));
+              dispatch(updateShowMemoryGameSnackbar(false));
               router.push("/memory-game");
             }}
           >

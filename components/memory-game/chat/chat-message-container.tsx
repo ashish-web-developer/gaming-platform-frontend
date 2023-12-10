@@ -70,11 +70,10 @@ const ChatMessage: FC<{ conversation: IConversation }> = ({ conversation }) => {
 };
 
 const ChatMessagesContainer: FC = () => {
-  const _active_user = useAppSelector(active_user);
   const _active_user_conversation = useAppSelector(active_user_conversation);
   return (
     <StyledChatContentContainer>
-      {_active_user_conversation.map((conversation, index) => (
+      {_active_user_conversation.map((conversation) => (
         <ChatMessage key={conversation.id} conversation={conversation} />
       ))}
     </StyledChatContentContainer>
