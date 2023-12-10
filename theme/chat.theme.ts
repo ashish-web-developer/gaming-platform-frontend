@@ -43,6 +43,9 @@ const lightTheme: CustomChatTheme = {
     fontFamily: {
       lobster: "Lobster",
     },
+    breakpoints: {
+      mobile: "600px",
+    },
   },
 };
 
@@ -87,6 +90,9 @@ const darkTheme: CustomChatTheme = {
     },
     fontFamily: {
       lobster: "Lobster",
+    },
+    breakpoints: {
+      mobile: "600px",
     },
   },
 };

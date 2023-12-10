@@ -8,7 +8,11 @@ const StyledUsersList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  height:calc(100% - 70px);
-  overflow:auto;
+  height: calc(100% - 70px);
+  overflow: auto;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    position: static;
+    height: auto;
+  }
 `;
 export { StyledUsersList };
