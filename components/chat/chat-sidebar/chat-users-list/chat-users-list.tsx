@@ -14,11 +14,15 @@ import { default_users } from "@/store/slice/chat.slice";
 const ChatUsersList: FC = () => {
   const _default_users = useAppSelector(default_users);
   return (
-    <StyledUsersList>
-      {_default_users.map((user) => {
-        return <ChatUserProfile key={`default-user-${user.id}`} user={user} />;
-      })}
-    </StyledUsersList>
+    <>
+      <StyledUsersList>
+        {_default_users.map((user) => {
+          return (
+            <ChatUserProfile key={`default-user-${user.id}`} user={user} />
+          );
+        })}
+      </StyledUsersList>
+    </>
   );
 };
 

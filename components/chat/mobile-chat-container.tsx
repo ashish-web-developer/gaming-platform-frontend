@@ -18,6 +18,8 @@ const MobileChatContainer: FC = () => {
   useDefaultUser();
   return (
     <StyledMobileChatContainer>
+      <div id = "search-dialog-container">
+      </div>
       <MobileChatHeader />
       <StyledDivider />
       <ChatUsersList />

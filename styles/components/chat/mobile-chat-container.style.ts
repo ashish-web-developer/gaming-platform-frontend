@@ -4,7 +4,7 @@ const StyledMobileChatContainer = styled.div`
   width: 100vw;
   height: 100vh;
   background: ${({ theme }) => theme.palette.primary.main};
-  padding: 1rem;
+  padding: 1.2rem;
 `;
 
 const StyledDivider = styled.div`

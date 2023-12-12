@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledUsersList = styled.div`
-  position: absolute;
+  position: relative;
   z-index: 1;
   width: 100%;
   margin-top: 20px;
@@ -11,8 +11,9 @@ const StyledUsersList = styled.div`
   height: calc(100% - 70px);
   overflow: auto;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    position: static;
+    position: relative;
     height: auto;
   }
 `;
+
 export { StyledUsersList };
