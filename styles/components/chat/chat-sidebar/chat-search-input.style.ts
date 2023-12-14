@@ -34,7 +34,6 @@ const StyledChatSearchInput = styled.input`
     outline: none;
   }
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    border: 2px solid #000;
     font-size: 18px;
   }
 `;

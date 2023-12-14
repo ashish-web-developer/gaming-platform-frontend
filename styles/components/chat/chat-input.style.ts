@@ -5,7 +5,6 @@ type IStyledButton = {
   $right?: string;
 };
 
-
 const StyledChatInputContainer = styled.div`
   width: 400px;
   height: 100%;
@@ -45,14 +44,15 @@ const StyledButton = styled.button<IStyledButton>`
   top: 50%;
   transform: translateY(-50%);
   font-size: 30px;
+  cursor: pointer;
 `;
 
 const StyledEmojiContainer = styled.div`
   position: absolute;
   z-index: 2;
   bottom: 80px;
-  border: ${({theme})=>theme.palette.emoji_container.border};
-  border-radius:10px;
+  border: ${({ theme }) => theme.palette.emoji_container.border};
+  border-radius: 10px;
 `;
 
 export {

@@ -12,7 +12,7 @@ const lightTheme: CustomChatTheme = {
     },
     searchbar: {
       background: "#FFF3F0",
-      border: "1px solid #000",
+      border: "2px solid #000",
     },
     searchbar_result_container: {
       background: "#FFFFFF",
@@ -25,8 +25,8 @@ const lightTheme: CustomChatTheme = {
     },
     default_user_profile: {
       background: "#FFF3F0",
-      border: "1px solid #000000",
-      active_user_border: "1px solid #EE964B",
+      border: "2px solid #000000",
+      active_user_border: "2px solid #EE964B",
     },
     chat_input: {
       border: "3px solid #000000",
