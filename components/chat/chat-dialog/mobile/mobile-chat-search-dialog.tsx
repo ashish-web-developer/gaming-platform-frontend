@@ -7,14 +7,24 @@ import { StyledDialogContainer } from "@/styles/components/chat/chat-dialog/mobi
 
 // local components
 import ChatSearchInput from "@/components/chat/chat-sidebar/chat-search-input";
+import ChatSearchResult from "@/components/chat/chat-sidebar/chat-search-result";
+
+// redux
+import { useAppSelector } from "@/hooks/redux";
+import { fetched_user_result } from "@/store/slice/chat.slice";
 
 const MobileChatSearchDialog: ForwardRefRenderFunction<HTMLDialogElement> = (
   props,
   dialog_ref
 ) => {
+  const search_input_ref = useRef<HTMLDivElement>(null);
+  const _fetched_user_result = useAppSelector(fetched_user_result);
   return (
     <StyledDialogContainer ref={dialog_ref}>
-      <ChatSearchInput />
+      <ChatSearchInput ref={search_input_ref} />
+      {!!_fetched_user_result.length && (
+        <ChatSearchResult ref={search_input_ref} />
+      )}
     </StyledDialogContainer>
   );
 };

@@ -7,9 +7,10 @@ const StyledDialogContainer = styled.dialog`
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  height: 64px;
+  height: 355px;
   border: none;
   border-radius: 16px;
+  background: transparent;
 `;
 
 export { StyledDialogContainer };

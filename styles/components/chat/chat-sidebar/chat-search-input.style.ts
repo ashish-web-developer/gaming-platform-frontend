@@ -7,7 +7,7 @@ const StyledChatSearchInputContainer = styled.div`
   height: 54px;
   position: relative;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    height: 100%;
+    height: 64px;
   }
 `;
 
