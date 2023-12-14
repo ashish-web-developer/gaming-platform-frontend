@@ -26,6 +26,8 @@ const StyledHamBurgerIcon = styled.span`
   height: 3px;
   background: ${({ theme }) => theme.palette.primary.info};
   position: relative;
+  top: 10px;
+  cursor: pointer;
   &::before {
     content: "";
     width: 25px;
