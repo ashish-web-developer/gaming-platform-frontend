@@ -34,7 +34,8 @@ import { IUsersWithConversation } from "@/types/store/slice/chat";
 const ChatResultProfile: FC<{
   user: IUsersWithConversation;
   is_request_pending: boolean;
-}> = ({ user, is_request_pending }) => {
+  handleModalClose?: () => void;
+}> = ({ user, is_request_pending, handleModalClose }) => {
   const dispatch = useAppDispatch();
   const avatar = useAvatar(user.username ?? "");
   return (
@@ -47,6 +48,7 @@ const ChatResultProfile: FC<{
             dispatch(updateDefaultUser(user));
             dispatch(updateFetchUserResult([]));
             dispatch(updateSearchInputValue(""));
+            handleModalClose && handleModalClose();
           }}
         >
           <StyledProfileImage
@@ -64,10 +66,12 @@ const ChatResultProfile: FC<{
   );
 };
 
-const ChatSearchResult: ForwardRefRenderFunction<HTMLDivElement> = (
-  props,
-  search_input_ref
-) => {
+const ChatSearchResult: ForwardRefRenderFunction<
+  HTMLDivElement,
+  {
+    handleModalClose?: () => void;
+  }
+> = ({ handleModalClose }, search_input_ref) => {
   const dispatch = useAppDispatch();
   const timeout_ref = useRef<NodeJS.Timeout>();
   const _fetched_user_result = useAppSelector(fetched_user_result);
@@ -120,6 +124,7 @@ const ChatSearchResult: ForwardRefRenderFunction<HTMLDivElement> = (
             key={`result-${user.id}`}
             user={user}
             is_request_pending={_is_request_pending}
+            handleModalClose={handleModalClose}
           />
         );
       })}
