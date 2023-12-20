@@ -183,6 +183,9 @@ const initialState: IChatInitialState = {
   game_snackbar: {
     show_memory_game_snackbar: false,
   },
+  mobile: {
+    show_chat: false,
+  },
 };
 
 const chatSlice = createSlice({
@@ -283,6 +286,9 @@ const chatSlice = createSlice({
     updateShowMemoryGameSnackbar: (state, action: PayloadAction<boolean>) => {
       state.game_snackbar.show_memory_game_snackbar = action.payload;
     },
+    updateShowChat: (state, action: PayloadAction<boolean>) => {
+      state.mobile.show_chat = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -367,6 +373,7 @@ export const show_emoji = (state: RootState) => state.chat.show_emoji;
 export const is_typing = (state: RootState) => state.chat.is_typing;
 export const show_memory_game_snackbar = (state: RootState) =>
   state.chat.game_snackbar.show_memory_game_snackbar;
+export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
 export const {
   updateSearchInputValue,
   updatePage,
@@ -380,4 +387,5 @@ export const {
   updateConversationView,
   updateIsTyping,
   updateShowMemoryGameSnackbar,
+  updateShowChat,
 } = chatSlice.actions;

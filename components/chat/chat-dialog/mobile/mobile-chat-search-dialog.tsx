@@ -1,6 +1,6 @@
-import { useRef, forwardRef, useImperativeHandle } from "react";
+import { useRef, forwardRef } from "react";
 // types
-import type { FC, ForwardRefRenderFunction } from "react";
+import type { ForwardRefRenderFunction } from "react";
 
 // styled components
 import { StyledDialogContainer } from "@/styles/components/chat/chat-dialog/mobile/mobile-chat-search-dialog.style";

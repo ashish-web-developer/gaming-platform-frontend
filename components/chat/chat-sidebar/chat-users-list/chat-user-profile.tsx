@@ -16,17 +16,18 @@ import { useTheme } from "styled-components";
 
 // hooks
 import useAvatar from "@/hooks/profile";
+import { useIsMobile } from "@/hooks/common.hook";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   active_user,
+  updateShowChat,
   updateActiveUser,
   fetchMessages,
 } from "@/store/slice/chat.slice";
 // helpers
 import { getTimeDifference } from "@/helpers/common";
-
 
 interface IProps {
   user: IUsersWithConversation;
@@ -36,9 +37,10 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
   const avatar = useAvatar(user.username ?? "");
   const theme = useTheme() as CustomChatTheme;
   const _active_user = useAppSelector(active_user);
+  const is_mobile = useIsMobile();
   return (
     <StyledUsersProfile
-      $time = {getTimeDifference(user.latest_conversation?.created_at as string)}
+      $time={getTimeDifference(user.latest_conversation?.created_at as string)}
       $not_viewed={user.not_viewed}
       $border={
         _active_user?.id == user.id
@@ -48,6 +50,9 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
       onClick={() => {
         dispatch(updateActiveUser(user));
         dispatch(fetchMessages());
+        if (is_mobile) {
+          dispatch(updateShowChat(true));
+        }
       }}
     >
       <StyledUserImage

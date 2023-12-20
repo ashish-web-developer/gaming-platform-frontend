@@ -40,6 +40,9 @@ type IChatInitialState = {
   game_snackbar: {
     show_memory_game_snackbar: boolean;
   };
+  mobile: {
+    show_chat: boolean;
+  };
   show_emoji: boolean;
 };
 
