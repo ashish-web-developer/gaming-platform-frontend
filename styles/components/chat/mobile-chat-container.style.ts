@@ -28,9 +28,15 @@ const StyledBottomContainer = styled.div`
   justify-content: space-between;
 `;
 
+const StyledInvitationCta = styled.button`
+  background: transparent;
+  border: none;
+`;
+
 export {
   StyledMobileChatContainer,
   StyledDivider,
   StyledMainContainer,
   StyledBottomContainer,
+  StyledInvitationCta,
 };

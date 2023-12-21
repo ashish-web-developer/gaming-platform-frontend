@@ -108,7 +108,7 @@ const ChatInput: FC = () => {
                 input_ref.current.value = "";
               }
             }}
-            $right="25px"
+            $right={is_mobile ? "25px" : "75px"}
             disabled={_send_message_request_pending}
           >
             <SendIcon size={30} color={theme.palette.secondary.main} />

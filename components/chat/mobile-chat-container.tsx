@@ -7,7 +7,11 @@ import {
   StyledDivider,
   StyledMainContainer,
   StyledBottomContainer,
+  StyledInvitationCta,
 } from "@/styles/components/chat/mobile-chat-container.style";
+
+// styled theme
+import { useTheme } from "styled-components";
 
 // local components
 import MobileChatHeader from "@/components/chat/chat-header/mobile/mobile-chat-header";
@@ -22,7 +26,11 @@ import { show_chat } from "@/store/slice/chat.slice";
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
 
+// icon
+import GameIcon from "@/components/chat/chat-input/icon/game-icon";
+
 const MobileChatContainer: FC = () => {
+  const theme = useTheme();
   const _show_chat = useAppSelector(show_chat);
   useDefaultUser();
   return (
@@ -40,6 +48,13 @@ const MobileChatContainer: FC = () => {
           <MobileChatMessageContainer />
           <StyledBottomContainer>
             <ChatInput />
+            <StyledInvitationCta>
+              <GameIcon
+                color={theme.palette.secondary.main}
+                width={40}
+                height={25}
+              />
+            </StyledInvitationCta>
           </StyledBottomContainer>
         </StyledMainContainer>
       )}
