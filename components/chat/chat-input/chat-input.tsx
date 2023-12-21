@@ -36,6 +36,7 @@ import Picker from "@emoji-mart/react";
 // hooks
 import { useEmojiOutsideClickHandler } from "@/hooks/chat/chat.hook";
 import { useEcho } from "@/hooks/pusher";
+import { useIsMobile } from "@/hooks/common.hook";
 
 // helpers package
 import { v4 as uuidv4 } from "uuid";
@@ -59,6 +60,7 @@ const ChatInput: FC = () => {
   const _mode = useAppSelector(mode);
   const echo = useEcho();
   const _is_typing = useAppSelector(is_typing);
+  const is_mobile = useIsMobile();
   useEmojiOutsideClickHandler({ emoji_cta_ref, emoji_container_ref });
 
   return (
@@ -106,26 +108,28 @@ const ChatInput: FC = () => {
                 input_ref.current.value = "";
               }
             }}
-            $right="75px"
+            $right="25px"
             disabled={_send_message_request_pending}
           >
             <SendIcon size={30} color={theme.palette.secondary.main} />
           </StyledButton>
-          <StyledButton
-            onClick={() => {
-              let room_id = uuidv4();
-              dispatch(updateRoomId(room_id));
-              dispatch(sendInvitationApi({ game: "memory-game" }));
-              dispatch(udpateIsProposalSender(true));
-            }}
-            $right="16px"
-          >
-            <GameIcon
-              width={40}
-              height={25}
-              color={theme.palette.secondary.main}
-            />
-          </StyledButton>
+          {!is_mobile && (
+            <StyledButton
+              onClick={() => {
+                let room_id = uuidv4();
+                dispatch(updateRoomId(room_id));
+                dispatch(sendInvitationApi({ game: "memory-game" }));
+                dispatch(udpateIsProposalSender(true));
+              }}
+              $right="16px"
+            >
+              <GameIcon
+                width={40}
+                height={25}
+                color={theme.palette.secondary.main}
+              />
+            </StyledButton>
+          )}
           {_show_emoji && (
             <StyledEmojiContainer ref={emoji_container_ref}>
               <Picker

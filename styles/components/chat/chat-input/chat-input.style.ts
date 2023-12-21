@@ -9,6 +9,10 @@ const StyledChatInputContainer = styled.div`
   width: 400px;
   height: 100%;
   position: relative;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    width: calc(100% - 62px);
+    height: 100%;
+  }
 `;
 
 const StyledChatInput = styled.input`
@@ -31,6 +35,9 @@ const StyledChatInput = styled.input`
   }
   &:focus {
     outline: none;
+  }
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    border-radius: 25px;
   }
 `;
 

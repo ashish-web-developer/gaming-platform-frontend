@@ -21,4 +21,16 @@ const StyledDivider = styled.div`
   background: ${({ theme }) => theme.palette.secondary.main};
 `;
 
-export { StyledMobileChatContainer, StyledDivider, StyledMainContainer };
+const StyledBottomContainer = styled.div`
+  width: 100%;
+  flex-basis: 50px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export {
+  StyledMobileChatContainer,
+  StyledDivider,
+  StyledMainContainer,
+  StyledBottomContainer,
+};
