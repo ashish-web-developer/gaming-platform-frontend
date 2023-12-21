@@ -23,7 +23,7 @@ import {
 import ChatHeader from "@/components/chat/chat-header/chat-header";
 import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
-import ChatInput from "@/components/chat/chat-input";
+import ChatInput from "@/components/chat/chat-input/chat-input";
 import InvitationCard from "@/components/common/invitation-card";
 
 // redux

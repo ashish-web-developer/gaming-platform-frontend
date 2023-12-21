@@ -52,7 +52,7 @@ const StyledWelcomingSpan = styled.span`
 const StyledBackCta = styled.button`
   width: 60px;
   height: 60px;
-  background: #000;
+  background: ${({theme})=>theme.palette.back_button.background};
   border: none;
   border-radius: 50%;
   display: flex;
@@ -64,7 +64,7 @@ const StyledChatUserProfile = styled.div`
   height: 50px;
   width: auto;
   border-radius: 25px;
-  background: #000;
+  background: ${({theme})=>theme.palette.active_user_profile.background};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
@@ -72,12 +72,13 @@ const StyledChatUserProfile = styled.div`
   padding: 6px;
   gap: 12px;
   padding-right: 24px;
+  border:2px solid ${({theme})=>theme.palette.active_user_profile.border};
 `;
 
 const StyledAvatar = styled.span`
   display: inline-block;
   border-radius: 40px;
-  border: 2px solid #fff;
+  border: 2px solid ${({theme})=>theme.palette.active_user_profile.text_main};
   width: 40px;
   height: 40px;
 `;
@@ -89,7 +90,7 @@ const StyledUserDetails = styled.div`
 `;
 
 const StyledUserName = styled.span`
-  color: #fff;
+  color: ${({theme})=>theme.palette.active_user_profile.text_main};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   font-size: 14px;
   font-style: normal;
@@ -98,7 +99,7 @@ const StyledUserName = styled.span`
 `;
 
 const StyledMessageCount = styled.span`
-  color: #f6ae2d;
+  color:${({theme})=>theme.palette.active_user_profile.text_secondary};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
   font-size: 10px;
   font-style: normal;

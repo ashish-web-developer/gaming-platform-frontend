@@ -5,11 +5,14 @@ import type { FC } from "react";
 import {
   StyledMobileChatContainer,
   StyledDivider,
+  StyledMainContainer
 } from "@/styles/components/chat/mobile-chat-container.style";
 
 // local components
 import MobileChatHeader from "@/components/chat/chat-header/mobile/mobile-chat-header";
 import ChatUsersList from "@/components/chat/chat-sidebar/chat-users-list/chat-users-list";
+import MobileChatMessageContainer from "@/components/chat/chat-message-container/mobile/mobile-chat-message-container";
+import MobileChatInput from "@/components/chat/chat-input/mobile/mobile-chat-input";
 
 // redux
 import { useAppSelector } from "@/hooks/redux";
@@ -31,6 +34,14 @@ const MobileChatContainer: FC = () => {
           <ChatUsersList />
         </>
       )}
+      {
+        _show_chat && (
+          <StyledMainContainer>
+            <MobileChatMessageContainer/>
+            <MobileChatInput/>
+          </StyledMainContainer>
+        )
+      }
     </StyledMobileChatContainer>
   );
 };

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
+import type CustomChatTheme from "@/types/theme/chat";
 
 // styled components
 import {
@@ -19,6 +20,9 @@ import {
   StyledUserName,
   StyledMessageCount,
 } from "@/styles/components/chat/chat-header/mobile/mobile-chat-header.style";
+
+// styled theme
+import { useTheme } from "styled-components";
 
 // local components
 import MobileChatSearchDialog from "@/components/chat/chat-dialog/mobile/mobile-chat-search-dialog";
@@ -37,7 +41,7 @@ import {
 import { useIsMounted } from "@/hooks/common.hook";
 import useAvatar from "@/hooks/profile";
 
-const BackIcon: FC<{ size: number }> = ({ size }) => {
+const BackIcon: FC<{ size: number, color:string }> = ({ size, color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +51,7 @@ const BackIcon: FC<{ size: number }> = ({ size }) => {
       viewBox="0 0 22 22"
     >
       <path
-        fill="#fff"
+        fill={color}
         d="M12.576 19.895l-1.084 1.084a1.167 1.167 0 01-1.656 0L.344 11.492a1.167 1.167 0 010-1.656L9.836.344a1.167 1.167 0 011.656 0l1.084 1.084c.463.464.454 1.22-.02 1.675L6.672 8.709h14.034c.649 0 1.171.522 1.171 1.171v1.563c0 .65-.522 1.172-1.171 1.172H6.672l5.884 5.605c.479.454.488 1.211.02 1.675z"
       ></path>
     </svg>
@@ -56,6 +60,7 @@ const BackIcon: FC<{ size: number }> = ({ size }) => {
 
 const MobileChatHeader: FC = () => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as CustomChatTheme;
   const _mode = useAppSelector(mode);
   const _active_user = useAppSelector(active_user);
   const _show_chat = useAppSelector(show_chat);
@@ -79,7 +84,7 @@ const MobileChatHeader: FC = () => {
               dispatch(updateShowChat(false));
             }}
           >
-            <BackIcon size={22} />
+            <BackIcon color = {theme.palette.back_button.icon} size={22} />
           </StyledBackCta>
           <StyledHamBurgerIcon />
         </StyledMobileHeader>

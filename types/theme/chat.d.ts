@@ -29,6 +29,15 @@ type CustomChatTheme = {
       border: string;
       active_user_border: string;
     };
+    active_user_profile: {
+      background: string;
+      border: string;
+      text_main: string;
+      text_secondary: string;
+    };
+    chat_messages_container: {
+      border: string;
+    };
     messages: {
       send_message_border: string;
       received_message_border: string;
@@ -36,6 +45,10 @@ type CustomChatTheme = {
     };
     emoji_container: {
       border: string;
+    };
+    back_button: {
+      background: string;
+      icon: string;
     };
     fontFamily: {
       lobster: string;
