@@ -34,6 +34,12 @@ const StyledInvitationCard = styled.div`
         border-style:solid;
         background: url("/common/invitation-card/background.png"),  #F42C04;
     }
+    @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+      margin-top:0px;
+      flex-basis:124px;
+      width:100%;
+      height:124px;
+    }
 `;
 const StyledCardContent = styled.div`
   position: absolute;
