@@ -35,6 +35,7 @@ import {
   active_user,
   active_user_conversation,
   updateShowChat,
+  updateActiveUser
 } from "@/store/slice/chat.slice";
 
 // hooks
@@ -82,6 +83,7 @@ const MobileChatHeader: FC = () => {
           <StyledBackCta
             onClick={() => {
               dispatch(updateShowChat(false));
+              dispatch(updateActiveUser(null));
             }}
           >
             <BackIcon color = {theme.palette.back_button.icon} size={22} />

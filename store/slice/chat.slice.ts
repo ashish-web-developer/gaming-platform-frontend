@@ -222,7 +222,7 @@ const chatSlice = createSlice({
     },
     updateActiveUser: (
       state,
-      action: PayloadAction<IUsersWithConversation>
+      action: PayloadAction<IUsersWithConversation|null>
     ) => {
       state.active_user = action.payload;
     },
