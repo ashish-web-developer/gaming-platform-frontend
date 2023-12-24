@@ -1,6 +1,12 @@
+import dynamic from "next/dynamic";
 // local components
 import ChatContainer from "@/components/chat/chat-container";
-import MobileChatContainer from "@/components/chat/mobile-chat-container";
+const MobileChatContainer = dynamic(
+  () => import("@/components/chat/mobile-chat-container"),
+  {
+    ssr: false,
+  }
+);
 
 // theme provider
 import { ThemeProvider } from "styled-components";

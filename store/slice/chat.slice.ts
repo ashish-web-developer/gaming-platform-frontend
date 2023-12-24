@@ -304,6 +304,9 @@ const chatSlice = createSlice({
     });
     builder.addCase(fetchDefaultUser.fulfilled, (state, action) => {
       state.default_users = action.payload.users;
+      if (window.innerWidth >= 600) {
+        state.active_user = action.payload.users[0];
+      }
     });
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
       state.active_user_conversation = action.payload.conversation;

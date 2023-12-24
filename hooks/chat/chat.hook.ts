@@ -6,9 +6,11 @@ import type { IConversation } from "@/types/store/slice/chat";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import {
   show_emoji,
+  active_user,
   updateShowEmoji,
-  fetchDefaultUser,
   updateView,
+  fetchMessages,
+  fetchDefaultUser,
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 
@@ -20,6 +22,21 @@ const useDefaultUser = () => {
   useEffect(() => {
     dispatch(fetchDefaultUser());
   }, []);
+};
+
+/**
+ * To fetch the conversation for first user
+ */
+const useFirstUserConversation = () => {
+  const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
+  const _active_user = useAppSelector(active_user);
+  const _active_user_defined = !!_active_user;
+  useEffect(() => {
+    if (_active_user_defined && _user.id) {
+      dispatch(fetchMessages());
+    }
+  }, [_active_user_defined, _user.id]);
 };
 
 /**
@@ -94,4 +111,9 @@ const useMessageView = ({
   }, [_user]);
 };
 
-export { useDefaultUser, useEmojiOutsideClickHandler, useMessageView };
+export {
+  useDefaultUser,
+  useEmojiOutsideClickHandler,
+  useMessageView,
+  useFirstUserConversation,
+};
