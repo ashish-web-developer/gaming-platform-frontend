@@ -14,6 +14,7 @@ import {
   StyledBottomMessage,
   StyledUserName,
   StyledDrawerImageContainer,
+  StyledPlayCta
 } from "@/styles/components/chat/chat-game-invitation/memory-game-invitation-drawer.style";
 
 // redux
@@ -41,6 +42,9 @@ const MemoryGameInvitationDrawer: FC = () => {
   const dispatch = useAppDispatch();
   return (
     <StyledContainer>
+      <StyledPlayCta>
+        Play Now
+      </StyledPlayCta>
       <StyledDrawerImageContainer>
         <Image
           alt="girl"

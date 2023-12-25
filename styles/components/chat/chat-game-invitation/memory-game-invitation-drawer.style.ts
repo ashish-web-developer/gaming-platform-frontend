@@ -66,6 +66,24 @@ const StyledDrawerImageContainer = styled.div`
   background-position: -25px 170px;
 `;
 
+const StyledPlayCta = styled.button`
+  position:absolute;
+  height:60px;
+  right:28px;
+  bottom:28px;
+  background:#000;
+  z-index:2;
+  color: #FFF;
+  font-family: ${({theme})=>theme.palette.fontFamily.poppins};
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  padding:0px 28px;
+  border:3.5px solid #F42C04;
+  border-radius:16px;
+  transform:skewX(-20deg);
+`
+
 export {
   StyledContainer,
   StyledHeaderContainer,
@@ -77,4 +95,5 @@ export {
   StyledBottomMessage,
   StyledUserName,
   StyledDrawerImageContainer,
+  StyledPlayCta
 };
