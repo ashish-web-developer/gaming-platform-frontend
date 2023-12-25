@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-
 type IStyledMessageContent = {
   $justifyContent: "flex-start" | "flex-end";
 };
@@ -33,7 +32,7 @@ const StyledUserProfile = styled.div<IStyledUserProfile>`
 `;
 
 const StyledMessage = styled.div<IStyledMessage>`
-  max-width: 260px;
+  max-width: 230px;
   height: auto;
   color: ${({ theme }) => theme.palette.primary.info};
   font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
@@ -73,8 +72,4 @@ const StyledMessage = styled.div<IStyledMessage>`
     }};
   }
 `;
-export {
-    StyledMessageContent,
-    StyledUserProfile,
-    StyledMessage
-}
+export { StyledMessageContent, StyledUserProfile, StyledMessage };

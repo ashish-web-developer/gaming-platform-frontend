@@ -5,6 +5,7 @@ const StyledMobileChatContainer = styled.div`
   height: 100vh;
   background: ${({ theme }) => theme.palette.primary.main};
   padding: 1.2rem;
+  position: relative;
 `;
 
 const StyledMainContainer = styled.div`

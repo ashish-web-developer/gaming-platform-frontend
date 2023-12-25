@@ -23,7 +23,7 @@ import MobileChatHeader from "@/components/chat/chat-header/mobile/mobile-chat-h
 import ChatUsersList from "@/components/chat/chat-sidebar/chat-users-list/chat-users-list";
 import MobileChatMessageContainer from "@/components/chat/chat-message-container/mobile/mobile-chat-message-container";
 import ChatInput from "@/components/chat/chat-input/chat-input";
-import InvitationCard from "@/components/common/invitation-card";
+import MemoryGameInvitationDrawer from "@/components/chat/chat-game-invitation/memory-game-invitation-drawer";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux";
@@ -115,6 +115,7 @@ const MobileChatContainer: FC = () => {
   ]);
   return (
     <StyledMobileChatContainer>
+      {_show_memory_game_snackbar && <MemoryGameInvitationDrawer />}
       <div id="search-dialog-container"></div>
       <MobileChatHeader />
       {!_show_chat && (
@@ -125,7 +126,6 @@ const MobileChatContainer: FC = () => {
       )}
       {_show_chat && (
         <StyledMainContainer>
-          {_show_memory_game_snackbar && <InvitationCard />}
           <MobileChatMessageContainer />
           <StyledBottomContainer>
             <ChatInput />

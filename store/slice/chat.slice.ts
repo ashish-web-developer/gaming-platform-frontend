@@ -181,7 +181,7 @@ const initialState: IChatInitialState = {
   },
   show_emoji: false,
   game_snackbar: {
-    show_memory_game_snackbar: false,
+    show_memory_game_snackbar: true,
   },
   mobile: {
     show_chat: false,
@@ -222,7 +222,7 @@ const chatSlice = createSlice({
     },
     updateActiveUser: (
       state,
-      action: PayloadAction<IUsersWithConversation|null>
+      action: PayloadAction<IUsersWithConversation | null>
     ) => {
       state.active_user = action.payload;
     },

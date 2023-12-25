@@ -88,6 +88,7 @@ const StyledPlayButton = styled.button`
   color: #fff;
   font-family: Poppins;
   font-size: 10px;
+  cursor: pointer;
 `;
 
 const StyledGirlImageContainer = styled.div`
