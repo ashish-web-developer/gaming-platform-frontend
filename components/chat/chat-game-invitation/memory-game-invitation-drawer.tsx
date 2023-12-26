@@ -8,7 +8,7 @@ import {
   StyledContainer,
   StyledHeaderContainer,
   StyledLogoContainer,
-  StyledLogoSpan,
+  StyledSpan,
   StyledCloseCta,
   StyledMessageContainer,
   StyledTopMessage,
@@ -17,7 +17,6 @@ import {
   StyledDrawerImageContainer,
   StyledPlayCta,
   StyledVsContainer,
-  StyledVsSpan,
   StyledUserAvatar,
 } from "@/styles/components/chat/chat-game-invitation/memory-game-invitation-drawer.style";
 
@@ -86,7 +85,7 @@ const MemoryGameInvitationDrawer: FC = () => {
         </StyledDrawerImageContainer>
         <StyledHeaderContainer>
           <StyledLogoContainer>
-            Cogni<StyledLogoSpan>Match</StyledLogoSpan>
+            Cogni<StyledSpan $color="#F42C04">Match</StyledSpan>
           </StyledLogoContainer>
           <StyledCloseCta
             onClick={() => {
@@ -102,8 +101,8 @@ const MemoryGameInvitationDrawer: FC = () => {
           </StyledTopMessage>
           <StyledBottomMessage>Ready For Memory ShowDown?</StyledBottomMessage>
           <StyledVsContainer>
-            Ashish <StyledVsSpan>V</StyledVsSpan>\<StyledVsSpan>S</StyledVsSpan>{" "}
-            Angelina
+            Ashish <StyledSpan $color="#F42C04">V</StyledSpan>\
+            <StyledSpan $color="#F42C04">S</StyledSpan> Angelina
           </StyledVsContainer>
         </StyledMessageContainer>
       </StyledContainer>

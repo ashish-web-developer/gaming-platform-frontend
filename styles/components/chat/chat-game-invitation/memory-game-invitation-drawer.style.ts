@@ -7,6 +7,9 @@ type IStyledUserAvatar = {
   $left: string;
   $border: string;
 };
+type IStyledSpan = {
+  $color: string;
+};
 
 const StyledBackground = styled.div`
   position: absolute;
@@ -51,8 +54,9 @@ const StyledLogoContainer = styled.h6`
   font-weight: 600;
   line-height: normal;
 `;
-const StyledLogoSpan = styled.span`
-  color: #f42c04;
+
+const StyledSpan = styled.span<IStyledSpan>`
+  color: ${(props) => props.$color};
 `;
 
 const StyledCloseCta = styled.button`
@@ -123,9 +127,6 @@ const StyledVsContainer = styled.p`
   font-weight: 600;
   line-height: normal;
 `;
-const StyledVsSpan = styled.span`
-  color: #f42c04;
-`;
 const StyledUserAvatar = styled.div<IStyledUserAvatar>`
   position: absolute;
   width: ${(props) => props.$width};
@@ -142,7 +143,7 @@ export {
   StyledContainer,
   StyledHeaderContainer,
   StyledLogoContainer,
-  StyledLogoSpan,
+  StyledSpan,
   StyledCloseCta,
   StyledMessageContainer,
   StyledTopMessage,
@@ -151,6 +152,5 @@ export {
   StyledDrawerImageContainer,
   StyledPlayCta,
   StyledVsContainer,
-  StyledVsSpan,
   StyledUserAvatar,
 };
