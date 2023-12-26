@@ -55,6 +55,7 @@ const lightTheme: CustomChatTheme = {
     },
     fontFamily: {
       lobster: "Lobster",
+      poppins: "'Poppins', sans-serif;",
     },
     breakpoints: {
       mobile: "600px",
@@ -116,6 +117,7 @@ const darkTheme: CustomChatTheme = {
     },
     fontFamily: {
       lobster: "Lobster",
+      poppins: "'Poppins', sans-serif;",
     },
     breakpoints: {
       mobile: "600px",

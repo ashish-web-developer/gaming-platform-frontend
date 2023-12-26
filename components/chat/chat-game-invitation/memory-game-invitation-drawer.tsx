@@ -4,6 +4,7 @@ import type { FC } from "react";
 
 // styled components
 import {
+  StyledBackground,
   StyledContainer,
   StyledHeaderContainer,
   StyledLogoContainer,
@@ -14,12 +15,20 @@ import {
   StyledBottomMessage,
   StyledUserName,
   StyledDrawerImageContainer,
-  StyledPlayCta
+  StyledPlayCta,
+  StyledVsContainer,
+  StyledVsSpan,
+  StyledUserAvatar,
 } from "@/styles/components/chat/chat-game-invitation/memory-game-invitation-drawer.style";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { user } from "@/store/slice/user.slice";
+import { gaming_user } from "@/store/slice/game.slice";
 import { updateShowMemoryGameSnackbar } from "@/store/slice/chat.slice";
+
+// hooks
+import useAvatar from "@/hooks/profile";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -40,37 +49,65 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 
 const MemoryGameInvitationDrawer: FC = () => {
   const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
+  const _gaming_user = useAppSelector(gaming_user);
+  const user_avatar = useAvatar(_user?.username ?? "");
+  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
   return (
-    <StyledContainer>
-      <StyledPlayCta>
-        Play Now
-      </StyledPlayCta>
-      <StyledDrawerImageContainer>
-        <Image
-          alt="girl"
-          fill={true}
-          src="/chat/chat-game-invitation/girl-image.png"
-        />
-      </StyledDrawerImageContainer>
-      <StyledHeaderContainer>
-        <StyledLogoContainer>
-          Cogni<StyledLogoSpan>Match</StyledLogoSpan>
-        </StyledLogoContainer>
-        <StyledCloseCta
-          onClick={() => {
-            dispatch(updateShowMemoryGameSnackbar(false));
+    <StyledBackground>
+      <StyledContainer>
+        <StyledUserAvatar
+          $width={"100px"}
+          $height={"100px"}
+          $left={"40px"}
+          $top={"290px"}
+          $border={"3px solid #F5E960"}
+          dangerouslySetInnerHTML={{
+            __html: user_avatar,
           }}
-        >
-          <CloseIcon size={20} color="#E7E08B" />
-        </StyledCloseCta>
-      </StyledHeaderContainer>
-      <StyledMessageContainer>
-        <StyledTopMessage>
-          Hi there, <StyledUserName>Ashish</StyledUserName>
-        </StyledTopMessage>
-        <StyledBottomMessage>Ready For Memory ShowDown?</StyledBottomMessage>
-      </StyledMessageContainer>
-    </StyledContainer>
+        ></StyledUserAvatar>
+        <StyledUserAvatar
+          $width={"60px"}
+          $height={"60px"}
+          $left={"312px"}
+          $top={"230px"}
+          $border={"3px solid #F42C04"}
+          dangerouslySetInnerHTML={{
+            __html: gaming_user_avatar,
+          }}
+        ></StyledUserAvatar>
+        <StyledPlayCta>Play Now</StyledPlayCta>
+        <StyledDrawerImageContainer>
+          <Image
+            alt="girl"
+            fill={true}
+            src="/chat/chat-game-invitation/girl-image.png"
+          />
+        </StyledDrawerImageContainer>
+        <StyledHeaderContainer>
+          <StyledLogoContainer>
+            Cogni<StyledLogoSpan>Match</StyledLogoSpan>
+          </StyledLogoContainer>
+          <StyledCloseCta
+            onClick={() => {
+              dispatch(updateShowMemoryGameSnackbar(false));
+            }}
+          >
+            <CloseIcon size={20} color="#E7E08B" />
+          </StyledCloseCta>
+        </StyledHeaderContainer>
+        <StyledMessageContainer>
+          <StyledTopMessage>
+            Hi there, <StyledUserName>Ashish</StyledUserName>
+          </StyledTopMessage>
+          <StyledBottomMessage>Ready For Memory ShowDown?</StyledBottomMessage>
+          <StyledVsContainer>
+            Ashish <StyledVsSpan>V</StyledVsSpan>\<StyledVsSpan>S</StyledVsSpan>{" "}
+            Angelina
+          </StyledVsContainer>
+        </StyledMessageContainer>
+      </StyledContainer>
+    </StyledBackground>
   );
 };
 

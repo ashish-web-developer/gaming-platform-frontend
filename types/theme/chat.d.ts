@@ -52,6 +52,7 @@ type CustomChatTheme = {
     };
     fontFamily: {
       lobster: string;
+      poppins: string;
     };
     breakpoints: {
       mobile: string;
