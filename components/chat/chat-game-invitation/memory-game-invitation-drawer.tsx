@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 // types
 import type { FC } from "react";
@@ -24,7 +25,7 @@ import {
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
+import { gaming_user, acceptInvitation } from "@/store/slice/game.slice";
 import { updateShowMemoryGameSnackbar } from "@/store/slice/chat.slice";
 
 // hooks
@@ -49,6 +50,7 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 
 const MemoryGameInvitationDrawer: FC = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user?.username ?? "");
@@ -140,7 +142,15 @@ const MemoryGameInvitationDrawer: FC = () => {
             __html: gaming_user_avatar,
           }}
         ></StyledUserAvatar>
-        <StyledPlayCta>Play Now</StyledPlayCta>
+        <StyledPlayCta
+          onClick={() => {
+            dispatch(acceptInvitation({ is_accepted: true }));
+            dispatch(updateShowMemoryGameSnackbar(false));
+            router.push("/memory-game");
+          }}
+        >
+          Play Now
+        </StyledPlayCta>
         <StyledDrawerImageContainer>
           <StyledDrawerMainImage
             alt="girl"
@@ -154,6 +164,7 @@ const MemoryGameInvitationDrawer: FC = () => {
           </StyledLogoContainer>
           <StyledCloseCta
             onClick={() => {
+              dispatch(acceptInvitation({ is_accepted: true }));
               dispatch(updateShowMemoryGameSnackbar(false));
             }}
           >
@@ -162,15 +173,15 @@ const MemoryGameInvitationDrawer: FC = () => {
         </StyledHeaderContainer>
         <StyledMessageContainer>
           <StyledTopMessage>
-            Hi there, <StyledUserName>Ashish</StyledUserName>
+            Hi there, <StyledUserName>{_user.name}</StyledUserName>
           </StyledTopMessage>
           <StyledBottomMessage>
             Ready For Memory <br />
             ShowDown?
           </StyledBottomMessage>
           <StyledVsContainer>
-            Ashish <StyledSpan $color="#F42C04">V</StyledSpan>\
-            <StyledSpan $color="#F42C04">S</StyledSpan> Angelina
+            {_user.name} <StyledSpan $color="#F42C04">V</StyledSpan>\
+            <StyledSpan $color="#F42C04">S</StyledSpan> {_gaming_user?.name}
           </StyledVsContainer>
         </StyledMessageContainer>
       </StyledContainer>

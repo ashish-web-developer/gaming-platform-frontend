@@ -181,7 +181,7 @@ const initialState: IChatInitialState = {
   },
   show_emoji: false,
   game_snackbar: {
-    show_memory_game_snackbar: true,
+    show_memory_game_snackbar: false,
   },
   mobile: {
     show_chat: false,
