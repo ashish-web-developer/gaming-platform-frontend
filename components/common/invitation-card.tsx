@@ -17,8 +17,11 @@ import {
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import { gaming_user, acceptInvitation } from "@/store/slice/game.slice";
-import { updateShowMemoryGameSnackbar } from "@/store/slice/chat.slice";
+import { gaming_user } from "@/store/slice/game.slice";
+import {
+  updateShowMemoryGameSnackbar,
+  acceptInvitationApi,
+} from "@/store/slice/chat.slice";
 
 const InvitationCard: FC = () => {
   const dispatch = useAppDispatch();
@@ -42,7 +45,7 @@ const InvitationCard: FC = () => {
           <StyledCardHeading>Ready for a memory showdown?</StyledCardHeading>
           <StyledPlayButton
             onClick={() => {
-              dispatch(acceptInvitation({ is_accepted: true }));
+              dispatch(acceptInvitationApi({ is_accepted: true }));
               dispatch(updateShowMemoryGameSnackbar(false));
               router.push("/memory-game");
             }}

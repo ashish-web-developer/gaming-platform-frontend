@@ -131,8 +131,8 @@ export const acceptInvitationApi = createAsyncThunk<
       const state = getState();
       const response: AxiosResponse<IAcceptInvitationApiResponse> =
         await Axios.post("game/accept-invitation", {
+          receiver_id: state.game.gaming_user?.id,
           is_accepted,
-          room_id: state.game.room_id,
         });
       return response.data;
     } catch (error: any) {

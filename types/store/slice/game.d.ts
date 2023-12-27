@@ -10,22 +10,6 @@ type InitialState = {
   timer_start_count: null | number;
 };
 
-type ISendInvitationResponse = {
-  success: boolean;
-  message?: string;
-  error?: any;
-};
-
-type IAcceptInvitationResponse = ISendInvitationResponse;
-
-type IAcceptInvitationRequest = {
-  is_accepted: boolean;
-};
-
-type ISendInvitationRequest = {
-  game: string;
-};
-
 type IUpdatePlayerTurnResponse = {
   success: boolean;
   error?: any;
@@ -39,10 +23,6 @@ type IUpdateTimerStartCountEventResponse = IUpdatePlayerTurnResponse;
 
 export {
   InitialState,
-  ISendInvitationResponse,
-  ISendInvitationRequest,
-  IAcceptInvitationRequest,
-  IAcceptInvitationResponse,
   IUpdatePlayerTurnResponse,
   IUpdateTimerStartCountEventRequest,
   IUpdateTimerStartCountEventResponse,

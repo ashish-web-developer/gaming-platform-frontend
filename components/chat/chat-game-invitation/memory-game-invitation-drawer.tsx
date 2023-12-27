@@ -25,8 +25,11 @@ import {
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { user } from "@/store/slice/user.slice";
-import { gaming_user, acceptInvitation } from "@/store/slice/game.slice";
-import { updateShowMemoryGameSnackbar } from "@/store/slice/chat.slice";
+import { gaming_user, updateRoomId } from "@/store/slice/game.slice";
+import {
+  acceptInvitationApi,
+  updateShowMemoryGameSnackbar,
+} from "@/store/slice/chat.slice";
 
 // hooks
 import useAvatar from "@/hooks/profile";
@@ -144,7 +147,7 @@ const MemoryGameInvitationDrawer: FC = () => {
         ></StyledUserAvatar>
         <StyledPlayCta
           onClick={() => {
-            dispatch(acceptInvitation({ is_accepted: true }));
+            dispatch(acceptInvitationApi({ is_accepted: true }));
             dispatch(updateShowMemoryGameSnackbar(false));
             router.push("/memory-game");
           }}
@@ -164,8 +167,9 @@ const MemoryGameInvitationDrawer: FC = () => {
           </StyledLogoContainer>
           <StyledCloseCta
             onClick={() => {
-              dispatch(acceptInvitation({ is_accepted: true }));
+              dispatch(acceptInvitationApi({ is_accepted: false }));
               dispatch(updateShowMemoryGameSnackbar(false));
+              dispatch(updateRoomId(null));
             }}
           >
             <CloseIcon size={close_icon_size} color="#E7E08B" />

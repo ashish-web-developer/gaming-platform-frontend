@@ -109,6 +109,9 @@ const MobileChatContainer: FC = () => {
         if (data.is_accepted) {
           dispatch(updateGamingUser(data.user));
           router.push("/memory-game");
+        } else {
+          dispatch(updateRoomId(null));
+          dispatch(udpateIsProposalSender(false));
         }
       },
     },
