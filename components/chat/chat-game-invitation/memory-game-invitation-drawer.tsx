@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { useEffect, useState } from "react";
 // types
 import type { FC } from "react";
 
@@ -15,6 +15,7 @@ import {
   StyledBottomMessage,
   StyledUserName,
   StyledDrawerImageContainer,
+  StyledDrawerMainImage,
   StyledPlayCta,
   StyledVsContainer,
   StyledUserAvatar,
@@ -52,12 +53,77 @@ const MemoryGameInvitationDrawer: FC = () => {
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user?.username ?? "");
   const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
+  const [close_icon_size, setCloseIconSize] = useState(20);
+  const [avatar_styles, setAvatarStyles] = useState<{
+    avatar_1: {
+      $width: string;
+      $height: string;
+    };
+    avatar_2: {
+      $width: string;
+      $height: string;
+    };
+  }>({
+    avatar_1: {
+      $width: "100px",
+      $height: "100px",
+    },
+    avatar_2: {
+      $width: "60px",
+      $height: "60px",
+    },
+  });
+
+  useEffect(() => {
+    if (window.innerWidth <= 375) {
+      setAvatarStyles({
+        avatar_1: {
+          $width: "80px",
+          $height: "80px",
+        },
+        avatar_2: {
+          $width: "60px",
+          $height: "60px",
+        },
+      });
+    }
+    const resizeHandler = () => {
+      if (window.innerWidth <= 375) {
+        setCloseIconSize(16);
+        setAvatarStyles({
+          avatar_1: {
+            $width: "80px",
+            $height: "80px",
+          },
+          avatar_2: {
+            $width: "60px",
+            $height: "60px",
+          },
+        });
+      } else {
+        setAvatarStyles({
+          avatar_1: {
+            $width: "100px",
+            $height: "100px",
+          },
+          avatar_2: {
+            $width: "60px",
+            $height: "60px",
+          },
+        });
+        setCloseIconSize(20);
+      }
+    };
+    window.addEventListener("resize", resizeHandler);
+    return () => {
+      window.removeEventListener("resize", resizeHandler);
+    };
+  }, []);
   return (
     <StyledBackground>
       <StyledContainer>
         <StyledUserAvatar
-          $width={"100px"}
-          $height={"100px"}
+          {...avatar_styles.avatar_1}
           $left={"40px"}
           $top={"290px"}
           $border={"3px solid #F5E960"}
@@ -66,9 +132,8 @@ const MemoryGameInvitationDrawer: FC = () => {
           }}
         ></StyledUserAvatar>
         <StyledUserAvatar
-          $width={"60px"}
-          $height={"60px"}
-          $left={"312px"}
+          {...avatar_styles.avatar_2}
+          $right={"20px"}
           $top={"230px"}
           $border={"3px solid #F42C04"}
           dangerouslySetInnerHTML={{
@@ -77,7 +142,7 @@ const MemoryGameInvitationDrawer: FC = () => {
         ></StyledUserAvatar>
         <StyledPlayCta>Play Now</StyledPlayCta>
         <StyledDrawerImageContainer>
-          <Image
+          <StyledDrawerMainImage
             alt="girl"
             fill={true}
             src="/chat/chat-game-invitation/girl-image.png"
@@ -92,14 +157,17 @@ const MemoryGameInvitationDrawer: FC = () => {
               dispatch(updateShowMemoryGameSnackbar(false));
             }}
           >
-            <CloseIcon size={20} color="#E7E08B" />
+            <CloseIcon size={close_icon_size} color="#E7E08B" />
           </StyledCloseCta>
         </StyledHeaderContainer>
         <StyledMessageContainer>
           <StyledTopMessage>
             Hi there, <StyledUserName>Ashish</StyledUserName>
           </StyledTopMessage>
-          <StyledBottomMessage>Ready For Memory ShowDown?</StyledBottomMessage>
+          <StyledBottomMessage>
+            Ready For Memory <br />
+            ShowDown?
+          </StyledBottomMessage>
           <StyledVsContainer>
             Ashish <StyledSpan $color="#F42C04">V</StyledSpan>\
             <StyledSpan $color="#F42C04">S</StyledSpan> Angelina
