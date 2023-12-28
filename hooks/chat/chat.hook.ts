@@ -97,9 +97,12 @@ const useMessageView = ({
           if (entries[0].isIntersecting && !is_api_called) {
             dispatch(updateView({ conversation_id: conversation.id }));
             is_api_called = true;
+            if(target_ref.current){
+              observer_ref.current?.unobserve(target_ref.current);
+            }
           }
         },
-        { root: root_ref.current, threshold: 1 }
+        {threshold: 1 }
       );
       if (target_ref.current) {
         observer_ref.current.observe(target_ref.current);

@@ -11,7 +11,7 @@ const StyledMobileChatMessageContainer = styled.div<IStyledMobileChatMessageCont
   border: 3px solid
     ${({ theme }) => theme.palette.chat_messages_container.border};
   background: ${({ theme }) => theme.palette.primary.main};
-  padding: 30px 20px;
+  padding: 30px 20px 40px 20px;
   overflow: auto;
   display: flex;
   flex-direction: column;
