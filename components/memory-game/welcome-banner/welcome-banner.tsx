@@ -26,7 +26,7 @@ import Fire from "@/components/memory-game/welcome-banner/icons/fire";
 
 // redux
 
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import {
@@ -38,7 +38,7 @@ import {
 import { Badge } from "@mui/material";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 
 const WelcomeBanner: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;

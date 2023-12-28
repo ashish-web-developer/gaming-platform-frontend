@@ -8,7 +8,7 @@ import { StyledUsersList } from "@/styles/components/chat/chat-sidebar/chat-user
 import ChatUserProfile from "@/components/chat/chat-sidebar/chat-users-list/chat-user-profile";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { default_users } from "@/store/slice/chat.slice";
 
 const ChatUsersList: FC = () => {

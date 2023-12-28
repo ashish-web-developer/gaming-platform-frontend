@@ -7,7 +7,7 @@ import type { FC } from "react";
 import { StyledCountDown } from "@/styles/components/memory-game/info-snackbar/info-snackbar-countdown.style";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux.hook";
 import {
   updateGamingUser,
   udpateIsProposalSender,

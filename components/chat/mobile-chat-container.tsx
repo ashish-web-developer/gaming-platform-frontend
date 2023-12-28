@@ -26,7 +26,7 @@ import ChatInput from "@/components/chat/chat-input/chat-input";
 import MemoryGameInvitationDrawer from "@/components/chat/chat-game-invitation/memory-game-invitation-drawer";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   show_chat,
   show_memory_game_snackbar,
@@ -46,7 +46,7 @@ import { sendInvitationApi } from "@/store/slice/chat.slice";
 
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
-import { usePrivateChannel } from "@/hooks/pusher";
+import { usePrivateChannel } from "@/hooks/pusher.hook";
 
 // icon
 import GameIcon from "@/components/chat/chat-input/icon/game-icon";

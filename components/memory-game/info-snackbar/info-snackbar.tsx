@@ -13,12 +13,12 @@ import {
 import InfoSnackbarCountdown from "@/components/memory-game/info-snackbar/info-snackbar-countdown";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { show_info_snackbar } from "@/store/slice/memory-game.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 
 const InfoSnackbar: FC<{
   children: string;

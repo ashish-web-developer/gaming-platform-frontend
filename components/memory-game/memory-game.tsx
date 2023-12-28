@@ -120,7 +120,7 @@ import { useTheme } from "styled-components";
 import { useMediaQuery, Tooltip } from "@mui/material";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   // state
@@ -154,7 +154,7 @@ import { mode } from "@/store/slice/common.slice";
 import HelpIcon from "@/components/memory-game/icons/help";
 
 // hooks
-import { usePresenceChannel } from "@/hooks/pusher";
+import { usePresenceChannel } from "@/hooks/pusher.hook";
 
 const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;

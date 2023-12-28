@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import type { ForwardedRef, RefObject } from "react";
 import type { IConversation } from "@/types/store/slice/chat";
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   show_emoji,
   active_user,

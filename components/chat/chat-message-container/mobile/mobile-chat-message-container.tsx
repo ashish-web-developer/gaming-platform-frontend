@@ -10,7 +10,7 @@ import { StyledMobileChatMessageContainer } from "@/styles/components/chat/chat-
 import ChatMessage from "@/components/chat/chat-message-container/chat-message";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   active_user,

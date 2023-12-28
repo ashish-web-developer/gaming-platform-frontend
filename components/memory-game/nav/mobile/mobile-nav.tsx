@@ -20,7 +20,7 @@ import HelpIcon from "@/components/memory-game/nav/icons/help";
 import MoonIcon from "@/components/memory-game/nav/icons/moon";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   show_mobile_chat,
   updateShowHelpDrawer,

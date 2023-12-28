@@ -15,7 +15,7 @@ import {
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import {
   active_user,
   active_user_conversation,
@@ -23,7 +23,7 @@ import {
 import { user } from "@/store/slice/user.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 
 const ChatMessage: FC<{ conversation: IConversation }> = ({ conversation }) => {
   const theme = useTheme() as CustomMemoryGameThemePalette;

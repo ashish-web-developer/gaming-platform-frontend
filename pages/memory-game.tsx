@@ -13,7 +13,7 @@ import path from "path";
 import type Colors from "@/types/data/colors";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   updateCardTurnCount,
   updateGameRules,

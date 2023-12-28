@@ -11,7 +11,7 @@ import { RootContainer } from "@/styles/pages/login.style";
 
 // Redux
 import { user } from "@/store/slice/user.slice";
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 
 const Login: NextPage = () => {
   const _user = useAppSelector(user);

@@ -16,7 +16,7 @@ import {
 } from "@/styles/components/common/invitation-card.style";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { gaming_user } from "@/store/slice/game.slice";
 import {
   updateShowMemoryGameSnackbar,

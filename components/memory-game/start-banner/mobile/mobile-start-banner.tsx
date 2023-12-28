@@ -17,7 +17,7 @@ import {
 import MobileCountDown from "@/components/memory-game/start-banner/mobile/mobile-count-down";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 

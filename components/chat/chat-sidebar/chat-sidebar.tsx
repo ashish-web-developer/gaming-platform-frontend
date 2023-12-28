@@ -12,7 +12,7 @@ import ChatSearchResult from "@/components/chat/chat-sidebar/chat-search-result"
 import ChatUsersList from "@/components/chat/chat-sidebar/chat-users-list/chat-users-list";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { fetched_user_result } from "@/store/slice/chat.slice";
 
 const ChatSidebar: FC = () => {

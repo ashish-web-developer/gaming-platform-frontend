@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, forwardRef } from "react";
 import type { ForwardRefRenderFunction } from "react";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux.hook";
 import { updateShowGameBoard } from "@/store/slice/memory-game.slice";
 
 const MobileCountDown: ForwardRefRenderFunction<{

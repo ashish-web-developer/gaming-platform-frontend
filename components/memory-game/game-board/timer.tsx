@@ -11,7 +11,7 @@ import {
 import TimerIcon from "@/components/memory-game/game-board/icons/timer";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   player_turn_id,

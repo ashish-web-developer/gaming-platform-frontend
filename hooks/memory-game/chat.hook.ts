@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { updateActiveUser, fetchMessages } from "@/store/slice/chat.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 const useChatInitializer = () => {

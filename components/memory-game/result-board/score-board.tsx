@@ -20,7 +20,7 @@ import {
 } from "@/styles/components/result-board/score-board.style";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { score } from "@/store/slice/memory-game.slice";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";

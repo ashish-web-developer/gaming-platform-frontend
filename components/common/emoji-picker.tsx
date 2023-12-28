@@ -10,7 +10,7 @@ const Picker = dynamic(()=>import("@emoji-mart/react"),{
   ssr:false
 });
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { showEmoji } from "@/store/slice/common.slice";
 
 interface Props {

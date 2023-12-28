@@ -28,7 +28,7 @@ import { useTheme } from "styled-components";
 import MobileChatSearchDialog from "@/components/chat/chat-dialog/mobile/mobile-chat-search-dialog";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 import {
   show_chat,
@@ -40,7 +40,7 @@ import {
 
 // hooks
 import { useIsMounted } from "@/hooks/common.hook";
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 
 const BackIcon: FC<{ size: number, color:string }> = ({ size, color }) => {
   return (

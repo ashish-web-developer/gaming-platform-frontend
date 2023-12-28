@@ -13,7 +13,7 @@ import {
 } from "@/styles/components/memory-game/chat/chat-input.style";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   active_user,
   send_message_request_pending,
@@ -25,7 +25,7 @@ import {
 import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 // hooks
-import { useEcho } from "@/hooks/pusher";
+import { useEcho } from "@/hooks/pusher.hook";
 
 // emoji picker
 import data from "@emoji-mart/data";

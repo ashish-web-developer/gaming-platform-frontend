@@ -9,7 +9,7 @@ import { PusherAxios } from "@/helpers/axios";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 //redux
-import { useAppSelector, useAppDispatch } from "./redux";
+import { useAppSelector, useAppDispatch } from "./redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
 import { gaming_user, updateTimerStartCount } from "@/store/slice/game.slice";

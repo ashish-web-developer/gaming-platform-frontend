@@ -26,7 +26,7 @@ import { useTheme } from "styled-components";
 import { IconButton } from "@mui/material";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
   show_help_tooltip,

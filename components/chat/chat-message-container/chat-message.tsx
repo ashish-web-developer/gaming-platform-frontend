@@ -17,7 +17,7 @@ import {
 import { useTheme } from "styled-components";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 import { useMessageView } from "@/hooks/chat/chat.hook";
 
 // helpers

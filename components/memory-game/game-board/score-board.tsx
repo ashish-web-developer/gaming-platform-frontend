@@ -22,10 +22,10 @@ import { useTheme } from "styled-components";
 import { Badge } from "@mui/material";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { is_gaming_user_in, score } from "@/store/slice/memory-game.slice";

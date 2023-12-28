@@ -18,7 +18,7 @@ import HomeIcon from "@/components/memory-game/nav/icons/home";
 import MoonIcon from "@/components/memory-game/nav/icons/moon";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   updateGamingUser,
   udpateIsProposalSender,

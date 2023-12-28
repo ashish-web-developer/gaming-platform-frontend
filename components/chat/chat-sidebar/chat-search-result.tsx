@@ -14,7 +14,7 @@ import {
 } from "@/styles/components/chat/chat-sidebar/chat-search-result.style";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
   fetched_user_result,
@@ -28,7 +28,7 @@ import {
 } from "@/store/slice/chat.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const ChatResultProfile: FC<{

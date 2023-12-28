@@ -15,7 +15,7 @@ import {
 } from "@/styles/components/game/denied-snackbar.style";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { show_denied_snackbar } from "@/store/slice/game.slice";
 
 const DeniedSnackbar: FC<{

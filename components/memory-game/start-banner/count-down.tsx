@@ -10,7 +10,7 @@ import { StyledCountDown } from "@/styles/components/memory-game/start-banner/co
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   show_game_board,
   updateShowGameBoard,

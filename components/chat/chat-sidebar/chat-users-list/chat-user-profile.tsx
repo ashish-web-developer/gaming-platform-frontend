@@ -15,11 +15,11 @@ import {
 import { useTheme } from "styled-components";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 import { useIsMobile } from "@/hooks/common.hook";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   active_user,
   updateShowChat,

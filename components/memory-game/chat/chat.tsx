@@ -27,7 +27,7 @@ import ChatMessageContainer from "@/components/memory-game/chat/chat-message-con
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { updateDefaultUserConversation } from "@/store/slice/chat.slice";
@@ -39,8 +39,8 @@ import {
 } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 // hooks
-import useAvatar from "@/hooks/profile";
-import { usePrivateChannel } from "@/hooks/pusher";
+import useAvatar from "@/hooks/profile.hook";
+import { usePrivateChannel } from "@/hooks/pusher.hook";
 import { useChatInitializer } from "@/hooks/memory-game/chat.hook";
 
 const Chat: FC = () => {

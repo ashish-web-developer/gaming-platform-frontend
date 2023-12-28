@@ -29,7 +29,7 @@ import Card from "@/components/memory-game/game-board/card";
 import MobileGameBoardTimer from "@/components/memory-game/game-board/mobile/game-board/mobile-game-board-timer";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { card_list, player_turn_id } from "@/store/slice/memory-game.slice";
 import { user } from "@/store/slice/user.slice";
 
@@ -43,7 +43,7 @@ import {
 import { Badge } from "@mui/material";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 
 const MobileGameBoard: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;

@@ -15,7 +15,7 @@ import {
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   send_message_request_pending,
@@ -35,7 +35,7 @@ import Picker from "@emoji-mart/react";
 
 // hooks
 import { useEmojiOutsideClickHandler } from "@/hooks/chat/chat.hook";
-import { useEcho } from "@/hooks/pusher";
+import { useEcho } from "@/hooks/pusher.hook";
 import { useIsMobile } from "@/hooks/common.hook";
 
 // helpers package

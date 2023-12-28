@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 // types
 import type { FC } from "react";
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   player_turn_id,

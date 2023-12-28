@@ -15,7 +15,7 @@ import { ThemeProvider } from "styled-components";
 import getTheme from "@/theme/chat.theme";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 
 // hooks

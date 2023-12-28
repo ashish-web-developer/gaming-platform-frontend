@@ -27,7 +27,7 @@ import ChatInput from "@/components/chat/chat-input/chat-input";
 import InvitationCard from "@/components/common/invitation-card";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   active_user,
   show_memory_game_snackbar,
@@ -45,7 +45,7 @@ import {
   useDefaultUser,
   useFirstUserConversation,
 } from "@/hooks/chat/chat.hook";
-import { usePrivateChannel } from "@/hooks/pusher";
+import { usePrivateChannel } from "@/hooks/pusher.hook";
 import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
 
 const ThemeTogglerIcon: FC<{

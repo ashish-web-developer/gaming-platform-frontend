@@ -23,7 +23,7 @@ import {
 } from "@/styles/components/chat/chat-game-invitation/memory-game-invitation-drawer.style";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user, updateRoomId } from "@/store/slice/game.slice";
 import {
@@ -32,7 +32,7 @@ import {
 } from "@/store/slice/chat.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile";
+import useAvatar from "@/hooks/profile.hook";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
