@@ -117,7 +117,7 @@ import {
 // styled theme
 import { useTheme } from "styled-components";
 // mui
-import { useMediaQuery, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -155,6 +155,7 @@ import HelpIcon from "@/components/memory-game/icons/help";
 
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
+import { useIsMobile } from "@/hooks/common.hook";
 
 const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
@@ -168,9 +169,7 @@ const MemoryGame: FC = () => {
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const _is_proposal_sender = useAppSelector(is_proposal_sender);
   const _gaming_user = useAppSelector(gaming_user);
-  const isMobile = useMediaQuery(
-    `(max-width:${theme.palette.breakpoints.mobile})`
-  );
+  const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
   const voiceRef = useRef<{ voice: SpeechSynthesisVoice[] }>({
     voice: [],
@@ -249,7 +248,7 @@ const MemoryGame: FC = () => {
 
   return (
     <StyledPage>
-      {isMobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
+      {is_mobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
       <StyledContainer>
         {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
         <StyledHelpCtaContainer>
@@ -276,10 +275,10 @@ const MemoryGame: FC = () => {
           <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
         </StyledInfoSnackbarContainer>
         <StyledContentContainer>
-          {isMobile ? <MobileNav /> : <Nav />}
+          {is_mobile ? <MobileNav /> : <Nav />}
           {!_show_game_board && (
             <>
-              {isMobile ? (
+              {is_mobile ? (
                 <StyledMainText>
                   Good Morning,
                   <br />
@@ -291,12 +290,12 @@ const MemoryGame: FC = () => {
             </>
           )}
           <StyledGrid
-            $paddingTop={_show_game_board && !isMobile ? "70px" : null}
+            $paddingTop={_show_game_board && !is_mobile ? "70px" : null}
           >
             <StyledLeftContainer>
               {!_show_game_board && (
                 <>
-                  {isMobile ? (
+                  {is_mobile ? (
                     <>
                       <MobileWelcomeBanner />
                       <MobileStartBanner />
@@ -316,7 +315,7 @@ const MemoryGame: FC = () => {
                 ) == 9 ? (
                   <ResultBoard />
                 ) : (
-                  <>{isMobile ? <MobileGameBoard /> : <GameBoard />}</>
+                  <>{is_mobile ? <MobileGameBoard /> : <GameBoard />}</>
                 ))}
             </StyledLeftContainer>
             <StyledRightContainer>

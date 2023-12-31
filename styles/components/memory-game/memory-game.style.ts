@@ -1,8 +1,4 @@
-import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
-
-// mui
-import { IconButton } from "@mui/material";
 
 type IStyledBackgroundCircle = {
   $mode: "dark" | "light";
@@ -170,12 +166,13 @@ const StyledHelpCtaContainer = styled.div`
   }
 `;
 
-const StyledHelpCta = styled(IconButton)`
-  &.MuiIconButton-root {
-    position: absolute;
-    right: 60px;
-    top: 60px;
-  }
+const StyledHelpCta = styled.button`
+  position: absolute;
+  right: 65px;
+  top: 65px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
 
 export {

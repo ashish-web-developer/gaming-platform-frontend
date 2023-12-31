@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 // types
 import { type FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
