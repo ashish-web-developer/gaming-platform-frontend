@@ -147,6 +147,10 @@ type CustomMemoryGameThemePalette = {
         border_color: string;
       };
     };
+    live_stream_chat: {
+      background: string;
+      border: string;
+    };
     secondary: {
       main: string;
       info: string;

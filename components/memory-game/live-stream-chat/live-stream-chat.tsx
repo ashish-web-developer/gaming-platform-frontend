@@ -1,6 +1,7 @@
 import { useRef } from "react";
 // types
 import type { FC } from "react";
+import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 
 // styled components
 import {
@@ -19,6 +20,9 @@ import {
   StyledMessageUserName,
   StyledMessage,
 } from "@/styles/components/memory-game/live-stream-chat/live-stream-chat.style";
+
+// styled theme
+import { useTheme } from "styled-components";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
@@ -90,6 +94,7 @@ const LiveStreamChat: FC = () => {
   const dispatch = useAppDispatch();
   const input_ref = useRef<HTMLInputElement>(null);
   const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
+  const theme = useTheme() as CustomMemoryGameThemePalette;
   return (
     <StyledContainer>
       <StyledDivider />
@@ -116,7 +121,7 @@ const LiveStreamChat: FC = () => {
             }
           }}
         >
-          <SendIcon size={30} color="#fff" />
+          <SendIcon size={30} color={theme.palette.live_stream_chat.border} />
         </StyledSendCta>
       </StyledMessageInputContainer>
     </StyledContainer>

@@ -6,9 +6,9 @@ const StyledContainer = styled.div`
   left: 0px;
   height: 350px;
   width: 100%;
-  background: #000;
+  background: ${({ theme }) => theme.palette.live_stream_chat.background};
   z-index: 10;
-  border: 3px solid #fff;
+  border: 3px solid ${({ theme }) => theme.palette.live_stream_chat.border};
   border-radius: 25px 25px 0px 0px;
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@ const StyledContainer = styled.div`
 const StyledDivider = styled.div`
   width: 60px;
   height: 3px;
-  background: #fff;
+  background: ${({ theme }) => theme.palette.live_stream_chat.border};
 `;
 const StyledHeader = styled.div`
   width: 100%;
@@ -61,7 +61,7 @@ const StyledInput = styled.input`
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  border: 2px solid #fff;
+  border: 2px solid ${({ theme }) => theme.palette.live_stream_chat.border};
   background: transparent;
   padding-left: 18px;
   color: #fff;

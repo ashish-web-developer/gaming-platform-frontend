@@ -155,6 +155,10 @@ const lightTheme: CustomThemePalette = {
         stroke_color: "#F5E960",
       },
     },
+    live_stream_chat: {
+      background: "#2B061E",
+      border: "#F5E960",
+    },
     secondary: {
       main: "#F65BE3",
       info: "#ff934f",
@@ -325,6 +329,10 @@ const darkTheme: CustomThemePalette = {
         background_color: "#080F0F",
         stroke_color: "#16C172",
       },
+    },
+    live_stream_chat: {
+      background: "#000000",
+      border: "#FFF",
     },
     secondary: {
       main: "#F65BE3",
