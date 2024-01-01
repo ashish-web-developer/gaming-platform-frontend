@@ -3,7 +3,6 @@ import { IUsersWithConversation } from "./chat";
 type InitialState = {
   gaming_user: IUsersWithConversation | null;
   room_id: string | null;
-  show_invitation_snackbar: boolean;
   show_denied_snackbar: boolean;
   sending_invitation: boolean;
   is_proposal_sender: boolean;
@@ -20,10 +19,16 @@ type IUpdateTimerStartCountEventRequest = {
   timer_count: number;
 };
 type IUpdateTimerStartCountEventResponse = IUpdatePlayerTurnResponse;
+type ILiveStreamChatApiResponse = IUpdatePlayerTurnResponse;
+type ILiveStreamChatApiRequest = {
+  message: string;
+};
 
 export {
   InitialState,
   IUpdatePlayerTurnResponse,
   IUpdateTimerStartCountEventRequest,
   IUpdateTimerStartCountEventResponse,
+  ILiveStreamChatApiResponse,
+  ILiveStreamChatApiRequest,
 };

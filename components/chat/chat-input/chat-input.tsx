@@ -18,12 +18,15 @@ import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
+  // state
   send_message_request_pending,
   active_user,
   sendMessage,
   show_emoji,
   is_typing,
+  // action
   updateShowEmoji,
+  // api
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
 import { updateRoomId, udpateIsProposalSender } from "@/store/slice/game.slice";

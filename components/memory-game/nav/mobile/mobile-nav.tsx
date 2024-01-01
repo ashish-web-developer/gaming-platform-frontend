@@ -22,9 +22,8 @@ import MoonIcon from "@/components/memory-game/nav/icons/moon";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
-  show_mobile_chat,
   updateShowHelpDrawer,
-  updateShowMobileChat,
+  updateShowChatStreamingModal,
 } from "@/store/slice/memory-game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
 
@@ -32,7 +31,6 @@ const MobileNav: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _show_mobile_chat = useAppSelector(show_mobile_chat);
   return (
     <StyledNavContainer>
       <StyledNav>
@@ -40,7 +38,7 @@ const MobileNav: FC = () => {
           <HomeIcon width={30} height={24} color="#FFF" />
         </IconButton>
         <IconButton
-          onClick={() => dispatch(updateShowMobileChat(!_show_mobile_chat))}
+          onClick={() => dispatch(updateShowChatStreamingModal(true))}
         >
           <ChatIcon width={30} height={24} color="#FFF" />
         </IconButton>

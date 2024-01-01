@@ -4,6 +4,8 @@ import type {
   IUpdatePlayerTurnResponse,
   IUpdateTimerStartCountEventResponse,
   IUpdateTimerStartCountEventRequest,
+  ILiveStreamChatApiResponse,
+  ILiveStreamChatApiRequest
 } from "@/types/store/slice/game";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -56,10 +58,31 @@ export const updateTimerStartCountEvent = createAsyncThunk<
   }
 );
 
+export const liveStreamChatApi = createAsyncThunk<
+  ILiveStreamChatApiResponse,
+  ILiveStreamChatApiRequest,
+  { state: RootState }
+>(
+  "game/update-timer-start-count",
+  async ({message}, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response = await Axios.post("/game/live-stream-chat", {
+        room_id: state.game.room_id,
+        message
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+
+
 const initialState: InitialState = {
   gaming_user: null,
   room_id: null,
-  show_invitation_snackbar: false,
   show_denied_snackbar: false,
   sending_invitation: false,
   is_proposal_sender: false,

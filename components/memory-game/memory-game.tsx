@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // local components
 import Chat from "@/components/memory-game/chat/chat";
@@ -97,6 +98,12 @@ const ResultBoard = dynamic(
     ssr: false,
   }
 );
+const LiveStreamChat = dynamic(
+  () => import("@/components/memory-game/live-stream-chat/live-stream-chat"),
+  {
+    ssr: false,
+  }
+);
 // styled components
 import {
   StyledPage,
@@ -107,7 +114,6 @@ import {
   StyledBackgroundCircleOne,
   StyledBackgroundCircleTwo,
   StyledMainText,
-  StyledChatContainer,
   StyledContentContainer,
   StyledInfoSnackbarContainer,
   StyledHelpCtaContainer,
@@ -124,12 +130,12 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   // state
-  show_mobile_chat,
   show_help_tooltip,
   show_help_drawer,
   show_game_board,
   is_gaming_user_in,
   score,
+  show_chat_streaming_modal,
   // api call
   getCards,
   updateScoreEvent,
@@ -140,6 +146,7 @@ import {
   updatePlayerTurnId,
   updateLastFlippedCard,
   updateScore,
+  updateLiveStreamChatList,
 } from "@/store/slice/memory-game.slice";
 import {
   room_id,
@@ -161,7 +168,6 @@ const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _show_mobile_chat = useAppSelector(show_mobile_chat);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _show_help_drawer = useAppSelector(show_help_drawer);
   const _show_game_board = useAppSelector(show_game_board);
@@ -176,6 +182,7 @@ const MemoryGame: FC = () => {
   });
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
+  const _show_chat_streaming_modal = useAppSelector(show_chat_streaming_modal);
 
   usePresenceChannel(`game.${_room_id}`, [
     {
@@ -215,6 +222,12 @@ const MemoryGame: FC = () => {
         console.log(data);
       },
     },
+    {
+      event: "LiveChatStreamEvent",
+      callback: (data: { user: IUsersWithConversation; message: string }) => {
+        dispatch(updateLiveStreamChatList(data));
+      },
+    },
   ]);
 
   useEffect(() => {
@@ -248,6 +261,7 @@ const MemoryGame: FC = () => {
 
   return (
     <StyledPage>
+      {is_mobile && _show_chat_streaming_modal && <LiveStreamChat />}
       {is_mobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
       <StyledContainer>
         {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
@@ -266,11 +280,6 @@ const MemoryGame: FC = () => {
         </StyledHelpCtaContainer>
         <StyledBackgroundCircleOne $mode={_mode} />
         <StyledBackgroundCircleTwo $mode={_mode} />
-        {_show_mobile_chat && (
-          <StyledChatContainer>
-            <Chat />
-          </StyledChatContainer>
-        )}
         <StyledInfoSnackbarContainer>
           <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
         </StyledInfoSnackbarContainer>

@@ -12,7 +12,7 @@ import Pusher from "pusher-js";
 import { useAppSelector, useAppDispatch } from "./redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
-import { gaming_user, updateTimerStartCount } from "@/store/slice/game.slice";
+import { gaming_user } from "@/store/slice/game.slice";
 import {
   updateIsGamingUserIn,
   updateIsGamingUserLeaving,

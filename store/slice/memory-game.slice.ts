@@ -15,6 +15,7 @@ import type {
   IUpdateScoreResponse,
   Score,
 } from "@/types/store/slice/memory-game";
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // helpers
 import { Axios } from "@/helpers/axios";
@@ -105,12 +106,13 @@ const initialState: InitialState = {
   show_audio_play_modal: true,
   show_info_snackbar: false,
   is_gaming_user_leaving: false,
-  show_mobile_chat: false,
   show_help_tooltip: false,
   play_audio: true,
   show_game_board: false,
   card_turn_count: 0,
   score: null,
+  show_chat_streaming_modal: false,
+  live_stream_chat_list:[],
   mobile: {
     show_help_drawer: false,
   },
@@ -158,9 +160,6 @@ export const memoryGameSlice = createSlice({
       state.is_gaming_user_leaving = action.payload;
       state.show_info_snackbar = action.payload;
     },
-    updateShowMobileChat: (state, action: PayloadAction<boolean>) => {
-      state.show_mobile_chat = action.payload;
-    },
     updateShowHelpTooltip: (state, action: PayloadAction<boolean>) => {
       state.show_help_tooltip = action.payload;
     },
@@ -182,6 +181,12 @@ export const memoryGameSlice = createSlice({
     updateScore: (state, action: PayloadAction<Score | null>) => {
       state.score = action.payload;
     },
+    updateShowChatStreamingModal: (state, action: PayloadAction<boolean>) => {
+      state.show_chat_streaming_modal = action.payload;
+    },
+    updateLiveStreamChatList: (state,action:PayloadAction<{message:string;user:IUsersWithConversation}>) => {
+      state.live_stream_chat_list.push(action.payload);
+    }
   },
 });
 
@@ -194,7 +199,6 @@ export const {
   updateCurrentRuleIndex,
   updateShowInfoSnackbar,
   updateIsGamingUserLeaving,
-  updateShowMobileChat,
   updateShowHelpTooltip,
   updatePlayAudio,
   updateShowHelpDrawer,
@@ -203,6 +207,8 @@ export const {
   updatePlayerTurnId,
   updateCardTurnCount,
   updateScore,
+  updateShowChatStreamingModal,
+  updateLiveStreamChatList
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;
 export const last_flipped_card_id = (state: RootState) =>
@@ -222,8 +228,6 @@ export const show_info_snackbar = (state: RootState) =>
 
 export const is_gaming_user_leaving = (state: RootState) =>
   state.memoryGame.is_gaming_user_leaving;
-export const show_mobile_chat = (state: RootState) =>
-  state.memoryGame.show_mobile_chat;
 export const show_help_tooltip = (state: RootState) =>
   state.memoryGame.show_help_tooltip;
 export const play_audio = (state: RootState) => state.memoryGame.play_audio;
@@ -240,4 +244,7 @@ export const game_complexity = (state: RootState) =>
   state.memoryGame.game_complexity;
 
 export const score = (state: RootState) => state.memoryGame.score;
+export const show_chat_streaming_modal = (state: RootState) =>
+  state.memoryGame.show_chat_streaming_modal;
+export const live_stream_chat_list = (state:RootState) => state.memoryGame.live_stream_chat_list;
 export default memoryGameSlice.reducer;

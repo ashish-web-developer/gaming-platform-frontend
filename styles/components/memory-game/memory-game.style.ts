@@ -28,19 +28,6 @@ const StyledContainer = styled.div`
   }
 `;
 
-const StyledChatContainer = styled.div`
-  display: none;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 100%;
-    height: 60%;
-    position: fixed;
-    bottom: 100px;
-    z-index: 6;
-    display: flex;
-    justify-content: center;
-  }
-`;
-
 const StyledContentContainer = styled.div`
   width: 70rem;
   height: 100%;
@@ -181,7 +168,6 @@ export {
   StyledGrid,
   StyledLeftContainer,
   StyledRightContainer,
-  StyledChatContainer,
   StyledContentContainer,
   StyledBackgroundCircleOne,
   StyledBackgroundCircleTwo,
