@@ -112,7 +112,21 @@ const LiveStreamChat: FC = () => {
         })}
       </StyledMessagesContainer>
       <StyledMessageInputContainer>
-        <StyledInput type="text" ref={input_ref} placeholder="Write Here" />
+        <StyledInput
+          onKeyDown={(event) => {
+            if (
+              input_ref.current?.value &&
+              (event.metaKey || event.ctrlKey) &&
+              event.key == "Enter"
+            ) {
+              dispatch(liveStreamChatApi({ message: input_ref.current.value }));
+              input_ref.current.value = "";
+            }
+          }}
+          type="text"
+          ref={input_ref}
+          placeholder="Write Here"
+        />
         <StyledSendCta
           onClick={() => {
             if (input_ref.current) {

@@ -42,7 +42,7 @@ const StyledCloseIcon = styled.button`
 
 const StyledMessagesContainer = styled.div`
   width: 100%;
-  height: calc(100% - 126px);
+  height: calc(100% - 102px);
   display: flex;
   flex-direction: column;
   gap: 18px;
@@ -80,7 +80,7 @@ const StyledSendCta = styled.button`
 `;
 const StyledMessageContainer = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
 `;
 const StyledProfileContainer = styled.div`
@@ -102,6 +102,11 @@ const StyledMessageUserName = styled.span`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+  width: 100px;
+  flex-grow: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const StyledMessage = styled.p`
