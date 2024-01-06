@@ -124,10 +124,10 @@ const StyledMainText = styled.div`
 `;
 
 const StyledInfoSnackbarContainer = styled.div`
-  display: none;
+  width: 412px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     position: absolute;
-    bottom: 60px;
+    bottom: 80px;
     width: 100%;
     display: flex;
     flex-direction: column;

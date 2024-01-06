@@ -30,12 +30,17 @@ import {
   updateShowChatStreamingModal,
 } from "@/store/slice/memory-game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
+import { gaming_user } from "@/store/slice/game.slice";
 
 const MobileNav: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
+  const _gaming_user = useAppSelector(gaming_user);
   const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
+  const _live_stream_gaming_user_chat = _live_stream_chat_list.filter(
+    (chat) => chat.user.id == _gaming_user?.id
+  );
   return (
     <StyledNavContainer>
       <StyledNav>
@@ -44,8 +49,8 @@ const MobileNav: FC = () => {
         </StyledIconButton>
         <StyledChatButton
           $content={`${
-            _live_stream_chat_list.length
-              ? String(_live_stream_chat_list.length).padStart(2, "0")
+            _live_stream_gaming_user_chat.length
+              ? String(_live_stream_gaming_user_chat.length).padStart(2, "0")
               : ""
           }`}
           onClick={() => dispatch(updateShowChatStreamingModal(true))}

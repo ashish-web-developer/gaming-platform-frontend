@@ -136,6 +136,8 @@ import {
   is_gaming_user_in,
   score,
   show_chat_streaming_modal,
+  info_snackbar,
+  show_leaving_snackbar,
   // api call
   getCards,
   updateScoreEvent,
@@ -147,6 +149,7 @@ import {
   updateLastFlippedCard,
   updateScore,
   updateLiveStreamChatList,
+  updateInfoSnackbar,
 } from "@/store/slice/memory-game.slice";
 import {
   room_id,
@@ -183,6 +186,8 @@ const MemoryGame: FC = () => {
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
   const _show_chat_streaming_modal = useAppSelector(show_chat_streaming_modal);
+  const _info_snackbar = useAppSelector(info_snackbar);
+  const _show_leaving_snackbar = useAppSelector(show_leaving_snackbar);
 
   usePresenceChannel(`game.${_room_id}`, [
     {
@@ -226,6 +231,24 @@ const MemoryGame: FC = () => {
       event: "LiveChatStreamEvent",
       callback: (data: { user: IUsersWithConversation; message: string }) => {
         dispatch(updateLiveStreamChatList(data));
+        if (data.user.id !== _user.id) {
+          dispatch(
+            updateInfoSnackbar({
+              name: data.user.name,
+              message: data.message,
+              show_snacbar: true,
+            })
+          );
+          setTimeout(() => {
+            dispatch(
+              updateInfoSnackbar({
+                name: "",
+                message: "",
+                show_snacbar: false,
+              })
+            );
+          }, 3000);
+        }
       },
     },
   ]);
@@ -280,9 +303,23 @@ const MemoryGame: FC = () => {
         </StyledHelpCtaContainer>
         <StyledBackgroundCircleOne $mode={_mode} />
         <StyledBackgroundCircleTwo $mode={_mode} />
-        <StyledInfoSnackbarContainer>
-          <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
-        </StyledInfoSnackbarContainer>
+        {(_show_leaving_snackbar || _info_snackbar.show_info_snackbar) &&
+          is_mobile && (
+            <StyledInfoSnackbarContainer>
+              <InfoSnackbar
+                receiver_name={
+                  _info_snackbar.name
+                    ? _info_snackbar.name
+                    : (_gaming_user?.name as string)
+                }
+                show_count_down={_show_leaving_snackbar}
+              >
+                {_info_snackbar.message
+                  ? _info_snackbar.message
+                  : "👋 I am leaving the game"}
+              </InfoSnackbar>
+            </StyledInfoSnackbarContainer>
+          )}
         <StyledContentContainer>
           {is_mobile ? <MobileNav /> : <Nav />}
           {!_show_game_board && (
@@ -336,7 +373,24 @@ const MemoryGame: FC = () => {
               ) : (
                 <Chat />
               )}
-              <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
+
+              {(_show_leaving_snackbar ||
+                _info_snackbar.show_info_snackbar) && (
+                <StyledInfoSnackbarContainer>
+                  <InfoSnackbar
+                    receiver_name={
+                      _info_snackbar.name
+                        ? _info_snackbar.name
+                        : (_gaming_user?.name as string)
+                    }
+                    show_count_down={_show_leaving_snackbar}
+                  >
+                    {_info_snackbar.message
+                      ? _info_snackbar.message
+                      : "👋 I am leaving the game"}
+                  </InfoSnackbar>
+                </StyledInfoSnackbarContainer>
+              )}
             </StyledRightContainer>
           </StyledGrid>
         </StyledContentContainer>

@@ -7,37 +7,42 @@ type IStyledText = {
 const StyledSnackbarContainer = styled.div`
   position: relative;
   z-index: 10;
-  width: 398px;
+  width: auto;
   height: 85px;
   border-radius: 80px;
   margin-top: 30px;
-  border-radius: 80px;
   border: 3px solid ${({ theme }) => theme.palette.info_snackbar.border_color};
   background: ${({ theme }) => theme.palette.info_snackbar.background};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
+  justify-content: flex-start;
   align-items: center;
+  padding-left: 8px;
   z-index: 1052;
+  gap: 12px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 90%;
+    width: 85%;
+    height: 66px;
   }
 `;
 const StyledUserAvatar = styled.div`
-  position: absolute;
-  width: 75px;
-  height: 75px;
-  background-color: ${({ theme }) =>
-    theme.palette.info_snackbar.profile_background};
+  width: 65px;
+  height: 65px;
+  background-color: transparent;
+  border: 2px solid #fff;
   border-radius: 50%;
-  border: 3px solid ${({ theme }) => theme.palette.main};
-  left: 3px;
-  top: 50%;
-  transform: translateY(-50%);
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    width: 50px;
+    height: 50px;
+    left: 6px;
+  }
 `;
 
 const StyledContent = styled.div`
-  position: absolute;
   left: 104px;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    left: 70px;
+  }
 `;
 
 const StyledText = styled.p<IStyledText>`
