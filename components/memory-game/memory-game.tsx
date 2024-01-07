@@ -6,7 +6,6 @@ import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // local components
-import Chat from "@/components/memory-game/chat/chat";
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
 
 const WelcomeBanner = dynamic(
@@ -98,12 +97,22 @@ const ResultBoard = dynamic(
     ssr: false,
   }
 );
-const LiveStreamChat = dynamic(
-  () => import("@/components/memory-game/live-stream-chat/live-stream-chat"),
+const MobileLiveStreamChat = dynamic(
+  () =>
+    import(
+      "@/components/memory-game/live-stream-chat/mobile/mobile-live-stream-chat"
+    ),
   {
     ssr: false,
   }
 );
+const LiveStreamChat = dynamic(
+  () => import("@/components/memory-game/live-stream-chat/live-stream-chat"),
+  {
+    ssr: true,
+  }
+);
+
 // styled components
 import {
   StyledPage,
@@ -284,7 +293,7 @@ const MemoryGame: FC = () => {
 
   return (
     <StyledPage>
-      {is_mobile && _show_chat_streaming_modal && <LiveStreamChat />}
+      {is_mobile && _show_chat_streaming_modal && <MobileLiveStreamChat />}
       {is_mobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
       <StyledContainer>
         {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
@@ -371,7 +380,7 @@ const MemoryGame: FC = () => {
               ) == 9 ? (
                 <ScoreBoard />
               ) : (
-                <Chat />
+                <LiveStreamChat />
               )}
 
               {(_show_leaving_snackbar ||

@@ -59,22 +59,6 @@ type CustomMemoryGameThemePalette = {
         text: string;
       };
     };
-    chat: {
-      main: string;
-      top_background: string;
-      icon_color: string;
-      vs_container: {
-        main: string;
-        text: string;
-      };
-      sender_messages_background: string;
-      receiver_messages_background: string;
-      scrollbar_color: string;
-      input: {
-        text_color: string;
-        placeholder_color: string;
-      };
-    };
     info_snackbar: {
       background: string;
       border_color: string;

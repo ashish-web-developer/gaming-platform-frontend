@@ -7,6 +7,7 @@ import {
   StyledUserAvatar,
   StyledContent,
   StyledText,
+  StyledMessage,
 } from "@/styles/components/memory-game/info-snackbar/info-snackbar.style";
 
 // local components
@@ -34,7 +35,7 @@ const InfoSnackbar: FC<{
         />
         <StyledContent>
           <StyledText $fontSize="16px">{receiver_name}</StyledText>
-          <StyledText $fontSize="14px">{children}</StyledText>
+          <StyledMessage>{children}</StyledMessage>
         </StyledContent>
         {show_count_down && <InfoSnackbarCountdown />}
       </StyledSnackbarContainer>

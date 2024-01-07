@@ -1,135 +1,154 @@
+
 import styled from "styled-components";
 
+
+type IStyledAvatar = {
+    $size:string;
+    $border:string;
+}
+
 const StyledContainer = styled.div`
-  position: fixed;
-  bottom: 0px;
-  left: 0px;
-  height: 350px;
-  width: 100%;
-  background: ${({ theme }) => theme.palette.live_stream_chat.background};
-  z-index: 10;
-  border: 3px solid ${({ theme }) => theme.palette.live_stream_chat.border};
-  border-radius: 25px 25px 0px 0px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-`;
-const StyledDivider = styled.div`
-  width: 60px;
-  height: 3px;
-  background: ${({ theme }) => theme.palette.live_stream_chat.border};
-`;
+    width:400px;
+    height:534px;
+    background:#080F0F;
+    border-radius:25px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    border:2px solid #fff;
+    position:relative;
+    z-index:4;
+`
 const StyledHeader = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 0px;
-`;
-const StyledMainText = styled.div`
-  color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-`;
-const StyledCloseIcon = styled.button`
-  background: transparent;
-  border: none;
-  cursor: pointer;
-`;
-
-const StyledMessagesContainer = styled.div`
-  width: 100%;
-  height: calc(100% - 102px);
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  overflow: auto;
-`;
-
-const StyledMessageInputContainer = styled.div`
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-`;
-const StyledInput = styled.input`
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  border: 2px solid ${({ theme }) => theme.palette.live_stream_chat.border};
-  background: transparent;
-  padding-left: 18px;
-  color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  &::placeholder {
+    width:100%;
+    height:70px;
+    border-bottom:2px solid #fff;
+    padding:24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+`
+const StyledMainText = styled.h4`
     color: #fff;
-  }
-`;
-const StyledSendCta = styled.button`
-  background: transparent;
-  border: none;
-  display: flex;
-`;
-const StyledMessageContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-`;
-const StyledProfileContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-const StyledUserProfile = styled.span`
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  border: 1px solid #fff;
-  border-radius: 50%;
-`;
-const StyledMessageUserName = styled.span`
-  color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-  width: 100px;
-  flex-grow: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+    font-family: ${({theme})=> theme.palette.fontFamily.poppins};
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+`
 
-const StyledMessage = styled.p`
-  color: #ded1d1;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-`;
+const StyledAvatarGroup = styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+`
+
+const StyledAvatar = styled.div<IStyledAvatar>`
+    width:${(props)=>props.$size};
+    height:${(props)=>props.$size};
+    border:${(props)=>props.$border};
+    border-radius:50%;
+    &:not(:first-child){
+        margin-left:-10px;
+    }
+`
+const StyledChatMainContainer = styled.div`
+    width:100%;
+    height:calc(100% - 70px);
+    padding:24px;
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+`
+const StyledMessageContainer = styled.div`
+    width:100%;
+    height:calc(100% - 74px);
+    display:flex;
+    flex-direction:column;
+    gap:24px;
+    overflow:scroll;
+`
+
+const StyledInputContainer = styled.div`
+    width:100%;
+    height:50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+`
+
+const StyledInput = styled.input`
+    width:calc(100% - 60px);
+    height:100%;
+    border:2px solid #fff;
+    background:transparent;
+    border-radius:8px;
+    color: #FFF;
+    font-family: ${({theme})=>theme.palette.fontFamily.poppins};
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding:0px 18px;
+    &::placeholder{
+        color:#fff;
+    }
+`
+const StyledSentCta = styled.button`
+    width:40px;
+    height:40px;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+`
+const StyledMessage = styled.div`
+    width:100%;
+    height:auto;
+    border:2px solid #fff;
+    border-radius:16px;
+`
+const StyledMessageHeader = styled.div`
+    width:100%;
+    height:50px;
+    border-bottom:2px solid #fff;
+    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+`
+
+const StyledUserName = styled.span`
+    color: #FFF;
+    font-family: ${({theme})=>theme.palette.fontFamily.poppins};
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    text-transform: capitalize;
+`
+const StyledMessageText = styled.p`
+    color: #D5CECE;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding:16px;
+`
+
+
 export {
-  StyledContainer,
-  StyledDivider,
-  StyledHeader,
-  StyledMainText,
-  StyledCloseIcon,
-  StyledMessagesContainer,
-  StyledMessageInputContainer,
-  StyledInput,
-  StyledSendCta,
-  StyledMessageContainer,
-  StyledProfileContainer,
-  StyledUserProfile,
-  StyledMessageUserName,
-  StyledMessage,
-};
+    StyledContainer,
+    StyledHeader,
+    StyledMainText,
+    StyledAvatarGroup,
+    StyledAvatar,
+    StyledChatMainContainer,
+    StyledMessageContainer,
+    StyledInputContainer,
+    StyledInput,
+    StyledSentCta,
+    StyledMessage,
+    StyledMessageHeader,
+    StyledUserName,
+    StyledMessageText
+}

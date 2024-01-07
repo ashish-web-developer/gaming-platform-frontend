@@ -66,22 +66,6 @@ const lightTheme: CustomThemePalette = {
         text: "#F7FFF6",
       },
     },
-    chat: {
-      main: "#2B061E",
-      top_background: `url("/memory-game/chat/light-background.svg")`,
-      icon_color: "#1E96FC",
-      vs_container: {
-        main: "#2B061E",
-        text: "#F7FFF6",
-      },
-      sender_messages_background: "#16C172",
-      receiver_messages_background: "#3C91E6",
-      scrollbar_color: "#3C91E6",
-      input: {
-        text_color: "#F7FFF6",
-        placeholder_color: "",
-      },
-    },
     info_snackbar: {
       background: "#2B061E",
       border_color: "#F5E960",
@@ -239,22 +223,6 @@ const darkTheme: CustomThemePalette = {
       vs_container: {
         main: "#080f0f",
         text: "#f9f8f8",
-      },
-    },
-    chat: {
-      main: "#080F0F",
-      top_background: `url("/memory-game/chat/dark-background.svg")`,
-      icon_color: "#FF934F",
-      vs_container: {
-        main: "#2B061E",
-        text: "#F7FFF6",
-      },
-      receiver_messages_background: "#FF934F",
-      sender_messages_background: "#329F5B",
-      scrollbar_color: "#3C91E6",
-      input: {
-        text_color: "#f9f8f8",
-        placeholder_color: "",
       },
     },
     info_snackbar: {

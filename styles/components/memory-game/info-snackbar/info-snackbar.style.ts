@@ -45,10 +45,28 @@ const StyledContent = styled.div`
   }
 `;
 
-const StyledText = styled.p<IStyledText>`
+const StyledText = styled.span<IStyledText>`
   font-size: ${(props) => props.$fontSize};
   color: ${({ theme }) => theme.palette.info_snackbar.text_color};
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
 `;
+const StyledMessage = styled.p`
+  color: ${({ theme }) => theme.palette.info_snackbar.text_color};
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-size: 14px;
+  white-space: nowrap;
+  width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+    width: 200px;
+  }
+`;
 
-export { StyledSnackbarContainer, StyledUserAvatar, StyledContent, StyledText };
+export {
+  StyledSnackbarContainer,
+  StyledUserAvatar,
+  StyledContent,
+  StyledText,
+  StyledMessage,
+};
