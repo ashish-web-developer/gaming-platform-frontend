@@ -3,8 +3,8 @@ import { useRef } from "react";
 import type { FC } from "react";
 import type {
   IUsersWithConversation,
-  IConversation,
 } from "@/types/store/slice/chat";
+import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 // styled components
 import {
   StyledContainer,
@@ -22,6 +22,9 @@ import {
   StyledUserName,
   StyledMessageText,
 } from "@/styles/components/memory-game/live-stream-chat/live-stream-chat.style";
+
+// styled theme
+import { useTheme } from "styled-components";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { gaming_user } from "@/store/slice/game.slice";
@@ -71,6 +74,7 @@ const Message: FC<{
 };
 
 const LiveStreamChat: FC = () => {
+  const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
@@ -95,7 +99,7 @@ const LiveStreamChat: FC = () => {
               __html: gaming_avatar,
             }}
             $size={"40px"}
-            $border="2px solid #fff"
+            $border={`2px solid #fff`}
           />
         </StyledAvatarGroup>
       </StyledHeader>
@@ -109,7 +113,7 @@ const LiveStreamChat: FC = () => {
           <StyledInput
             ref={input_ref}
             type="text"
-            placeholder="Write Here"
+            placeholder="Write Here..."
             onKeyDown={(event) => {
               if (
                 input_ref.current?.value &&
@@ -133,7 +137,7 @@ const LiveStreamChat: FC = () => {
               }
             }}
           >
-            <SendIcon color="#fff" size={30} />
+            <SendIcon color={theme.palette.live_stream_chat.border} size={30} />
           </StyledSentCta>
         </StyledInputContainer>
       </StyledChatMainContainer>

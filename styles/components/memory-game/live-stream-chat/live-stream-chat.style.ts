@@ -10,29 +10,29 @@ type IStyledAvatar = {
 const StyledContainer = styled.div`
     width:400px;
     height:534px;
-    background:#080F0F;
+    background:${({theme})=>theme.palette.live_stream_chat.background};
     border-radius:25px;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    border:2px solid #fff;
+    border:2px solid ${({theme})=>theme.palette.live_stream_chat.border};
     position:relative;
-    z-index:4;
+    z-index:3;
 `
 const StyledHeader = styled.div`
     width:100%;
     height:70px;
-    border-bottom:2px solid #fff;
+    border-bottom:2px solid ${({theme})=>theme.palette.live_stream_chat.border};
     padding:24px;
     display:flex;
     justify-content:space-between;
     align-items:center;
 `
 const StyledMainText = styled.h4`
-    color: #fff;
     font-family: ${({theme})=> theme.palette.fontFamily.poppins};
     font-size: 18px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+    color:${({theme})=>theme.palette.live_stream_chat.border};
 `
 
 const StyledAvatarGroup = styled.div`
@@ -79,14 +79,14 @@ const StyledInputContainer = styled.div`
 const StyledInput = styled.input`
     width:calc(100% - 60px);
     height:100%;
-    border:2px solid #fff;
+    border:2px solid ${({theme})=>theme.palette.live_stream_chat.border};
     background:transparent;
     border-radius:8px;
     color: #FFF;
     font-family: ${({theme})=>theme.palette.fontFamily.poppins};
     font-size: 16px;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
     padding:0px 18px;
     &::placeholder{
@@ -103,13 +103,13 @@ const StyledSentCta = styled.button`
 const StyledMessage = styled.div`
     width:100%;
     height:auto;
-    border:2px solid #fff;
+    border:2px solid ${({theme})=>theme.palette.live_stream_chat.border};
     border-radius:16px;
 `
 const StyledMessageHeader = styled.div`
     width:100%;
     height:50px;
-    border-bottom:2px solid #fff;
+    border-bottom:2px solid ${({theme})=>theme.palette.live_stream_chat.border};
     padding:14px;
     display:flex;
     align-items:center;
