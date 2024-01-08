@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
@@ -7,6 +6,7 @@ import {
   StyledInvitationCard,
   StyledCardContent,
   StyledGirlImageContainer,
+  StyledImage,
   StyledLogo,
   StyledLogoSpan,
   StyledLeftContent,
@@ -34,7 +34,7 @@ const InvitationCard: FC = () => {
           Cogni<StyledLogoSpan color="#F42C04">Match</StyledLogoSpan>
         </StyledLogo>
         <StyledGirlImageContainer>
-          <Image
+          <StyledImage
             alt="girl"
             fill={true}
             src="/common/invitation-card/girl.png"

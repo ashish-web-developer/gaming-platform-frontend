@@ -56,8 +56,9 @@ const StyledBannerBackgroundTwo = styled.div`
 const StyledImageContainer = styled.div`
   position: absolute;
   bottom: 0px;
-  width: 180px;
-  height: 210px;
+  left: -30px;
+  width: 253px;
+  height: 203px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 120px;
   }
@@ -65,8 +66,6 @@ const StyledImageContainer = styled.div`
 
 const StyledImage = styled(Image)`
   position: absolute;
-  bottom: 0px;
-  left: 0px;
   object-fit: contain;
 `;
 

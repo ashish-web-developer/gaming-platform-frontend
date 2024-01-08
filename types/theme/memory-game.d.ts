@@ -45,7 +45,6 @@ type CustomMemoryGameThemePalette = {
       main: string;
       background_one: string;
       background_two: string;
-      start_banner_girl_src: string;
       mobile: {
         background_one: string;
         background_two: string;

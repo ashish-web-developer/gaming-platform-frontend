@@ -47,8 +47,6 @@ const lightTheme: CustomThemePalette = {
     },
     start_banner: {
       main: "#1E96FC",
-      start_banner_girl_src:
-        "/memory-game/start-banner/light-start-banner-girl.png",
       background_one: `url("/memory-game/start-banner/light-background-one.svg")`,
       background_two:
         "url('/memory-game/start-banner/light-background-two.svg')",
@@ -210,8 +208,6 @@ const darkTheme: CustomThemePalette = {
       background_one: `url("/memory-game/start-banner/dark-background-one.svg")`,
       background_two:
         "url('/memory-game/start-banner/light-background-two.svg')",
-      start_banner_girl_src:
-        "/memory-game/start-banner/dark-start-banner-girl.png",
       mobile: {
         background_one: `url("/memory-game/start-banner/mobile/dark-background-one.svg")`,
         background_two: `url("/memory-game/start-banner/mobile/dark-background-two.svg")`,

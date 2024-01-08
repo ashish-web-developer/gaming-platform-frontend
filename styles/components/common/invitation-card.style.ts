@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 const StyledInvitationCard = styled.div`
@@ -95,8 +96,10 @@ const StyledGirlImageContainer = styled.div`
   position: absolute;
   width: 150px;
   height: 100%;
-  object-fit: contain;
   right: 10px;
+`;
+const StyledImage = styled(Image)`
+  object-fit: contain;
 `;
 
 const StyledLogo = styled.p`
@@ -127,4 +130,5 @@ export {
   StyledUserName,
   StyledCardHeading,
   StyledPlayButton,
+  StyledImage,
 };
