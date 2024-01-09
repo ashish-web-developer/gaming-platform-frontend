@@ -133,6 +133,10 @@ type CustomMemoryGameThemePalette = {
     live_stream_chat: {
       background: string;
       border: string;
+      banner: {
+        cta_background: string;
+        cta_color: string;
+      };
     };
     secondary: {
       main: string;

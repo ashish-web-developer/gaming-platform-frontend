@@ -73,6 +73,7 @@ type InitialState = {
     message: string;
     user: IUsersWithConversation;
   }>;
+  show_live_stream_chat: boolean;
   mobile: {
     show_help_drawer: boolean;
   };

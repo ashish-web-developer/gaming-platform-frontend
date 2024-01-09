@@ -113,6 +113,7 @@ const initialState: InitialState = {
   score: null,
   show_chat_streaming_modal: false,
   live_stream_chat_list: [],
+  show_live_stream_chat: false,
   info_snackbar: {
     show_info_snackbar: false,
     message: "",
@@ -204,6 +205,9 @@ export const memoryGameSlice = createSlice({
     ) => {
       state.live_stream_chat_list.push(action.payload);
     },
+    updateShowLiveSteamChat: (state, action: PayloadAction<boolean>) => {
+      state.show_live_stream_chat = action.payload;
+    },
   },
 });
 
@@ -226,6 +230,7 @@ export const {
   updateScore,
   updateShowChatStreamingModal,
   updateLiveStreamChatList,
+  updateShowLiveSteamChat,
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;
 export const last_flipped_card_id = (state: RootState) =>
@@ -267,4 +272,6 @@ export const live_stream_chat_list = (state: RootState) =>
   state.memoryGame.live_stream_chat_list;
 export const show_leaving_snackbar = (state: RootState) =>
   state.memoryGame.show_leaving_snackbar;
+export const show_live_stream_chat = (state: RootState) =>
+  state.memoryGame.show_live_stream_chat;
 export default memoryGameSlice.reducer;

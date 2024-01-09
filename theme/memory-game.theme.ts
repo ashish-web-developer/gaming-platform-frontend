@@ -140,6 +140,10 @@ const lightTheme: CustomThemePalette = {
     live_stream_chat: {
       background: "#2B061E",
       border: "#F5E960",
+      banner: {
+        cta_background: "#F5E960",
+        cta_color: "#000",
+      },
     },
     secondary: {
       main: "#F65BE3",
@@ -297,6 +301,10 @@ const darkTheme: CustomThemePalette = {
     live_stream_chat: {
       background: "#000000",
       border: "#FFF",
+      banner: {
+        cta_background: "#F42C04",
+        cta_color: "#fff",
+      },
     },
     secondary: {
       main: "#F65BE3",

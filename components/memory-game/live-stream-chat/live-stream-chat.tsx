@@ -1,9 +1,8 @@
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type {
-  IUsersWithConversation,
-} from "@/types/store/slice/chat";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { User } from "@/types/user";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 // styled components
 import {
@@ -21,6 +20,13 @@ import {
   StyledMessageHeader,
   StyledUserName,
   StyledMessageText,
+  StyledBannerContent,
+  StyledLogo,
+  StyledSpan,
+  StyledBannerMainContent,
+  StyledBannerMainText,
+  StyledOutlinedSpan,
+  StyledChatNowCta,
 } from "@/styles/components/memory-game/live-stream-chat/live-stream-chat.style";
 
 // styled theme
@@ -29,7 +35,11 @@ import { useTheme } from "styled-components";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { gaming_user } from "@/store/slice/game.slice";
 import { user } from "@/store/slice/user.slice";
-import { live_stream_chat_list } from "@/store/slice/memory-game.slice";
+import {
+  live_stream_chat_list,
+  show_live_stream_chat,
+  updateShowLiveSteamChat,
+} from "@/store/slice/memory-game.slice";
 import { liveStreamChatApi } from "@/store/slice/game.slice";
 // hooks
 import useAvatar from "@/hooks/profile.hook";
@@ -55,7 +65,7 @@ const Message: FC<{
   message: string;
   user: IUsersWithConversation;
 }> = ({ user, message }) => {
-  const user_avatar = useAvatar(user.name);
+  const user_avatar = useAvatar(user.username);
   return (
     <StyledMessage>
       <StyledMessageHeader>
@@ -73,18 +83,80 @@ const Message: FC<{
   );
 };
 
+const LiveStreamBanner: FC<{
+  user_avatar: string;
+  gaming_user_avatar: string;
+  user: User;
+  gaming_user: IUsersWithConversation;
+}> = ({ user_avatar, gaming_user_avatar, user, gaming_user }) => {
+  const dispatch = useAppDispatch();
+  return (
+    <StyledContainer $show_background={true}>
+      <StyledBannerContent>
+        <StyledLogo>
+          Cogni<StyledSpan $color="#F42C04">Match</StyledSpan>
+        </StyledLogo>
+        <StyledHeader>
+          <div></div>
+          <StyledAvatarGroup>
+            <StyledAvatar
+              dangerouslySetInnerHTML={{
+                __html: user_avatar,
+              }}
+              $size={"40px"}
+              $border="2px solid #fff"
+            />
+            <StyledAvatar
+              dangerouslySetInnerHTML={{
+                __html: gaming_user_avatar,
+              }}
+              $size={"40px"}
+              $border={`2px solid #fff`}
+            />
+          </StyledAvatarGroup>
+        </StyledHeader>
+        <StyledBannerMainContent>
+          <StyledBannerMainText>
+            {user.name?.split(" ")[0]} <br />
+            <StyledOutlinedSpan>V\S</StyledOutlinedSpan>
+            <br /> {gaming_user?.name.split(" ")[0]}
+          </StyledBannerMainText>
+        </StyledBannerMainContent>
+        <StyledChatNowCta
+          onClick={() => {
+            dispatch(updateShowLiveSteamChat(true));
+          }}
+        >
+          Join the live chat!
+        </StyledChatNowCta>
+      </StyledBannerContent>
+    </StyledContainer>
+  );
+};
+
 const LiveStreamChat: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user?.username ?? "");
-  const gaming_avatar = useAvatar(_gaming_user?.username ?? "");
+  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
+  const _show_live_stream_chat = useAppSelector(show_live_stream_chat);
   const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
   const input_ref = useRef<HTMLInputElement>(null);
+  if (!_live_stream_chat_list.length && !_show_live_stream_chat) {
+    return (
+      <LiveStreamBanner
+        user_avatar={user_avatar}
+        gaming_user_avatar={gaming_user_avatar}
+        user={_user}
+        gaming_user={_gaming_user as IUsersWithConversation}
+      />
+    );
+  }
   return (
     <StyledContainer>
-      <StyledHeader>
+      <StyledHeader $show_border={true}>
         <StyledMainText>Live Chat</StyledMainText>
         <StyledAvatarGroup>
           <StyledAvatar
@@ -96,7 +168,7 @@ const LiveStreamChat: FC = () => {
           />
           <StyledAvatar
             dangerouslySetInnerHTML={{
-              __html: gaming_avatar,
+              __html: gaming_user_avatar,
             }}
             $size={"40px"}
             $border={`2px solid #fff`}
