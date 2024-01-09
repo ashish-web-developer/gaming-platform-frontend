@@ -11,6 +11,8 @@ import {
   StyledMainText,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledInstructAvatar,
+  StyledImage,
   StyledChatMainContainer,
   StyledMessageContainer,
   StyledInputContainer,
@@ -177,6 +179,25 @@ const LiveStreamChat: FC = () => {
       </StyledHeader>
       <StyledChatMainContainer>
         <StyledMessageContainer>
+          <StyledMessage>
+            <StyledMessageHeader>
+              <StyledInstructAvatar>
+                <StyledImage
+                  alt="girl"
+                  width={35}
+                  height={35}
+                  src="/memory-game/live-stream-chat/girl.png"
+                />
+              </StyledInstructAvatar>
+              <StyledUserName>Mind Mistress</StyledUserName>
+            </StyledMessageHeader>
+            <StyledMessageText>
+              🌟 Welcome to CogniMatch Central! 🚀🎉 Get ready to boost your
+              memory skills and have a blast with fellow gamers! Chat,
+              strategize, and aim for victory! 🧠💬 Let the CogniMatch fun
+              begin! 🌈🎮
+            </StyledMessageText>
+          </StyledMessage>
           {_live_stream_chat_list.map((chat) => {
             return <Message {...chat} />;
           })}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 type IStyledContainer = {
@@ -81,6 +82,21 @@ const StyledAvatar = styled.div<IStyledAvatar>`
   &:not(:first-child) {
     margin-left: -10px;
   }
+`;
+
+const StyledInstructAvatar = styled.div`
+  width: 30px;
+  height: 30px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+`;
+const StyledImage = styled(Image)`
+  object-fit: contain;
 `;
 const StyledChatMainContainer = styled.div`
   width: 100%;
@@ -242,6 +258,8 @@ export {
   StyledMainText,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledInstructAvatar,
+  StyledImage,
   StyledChatMainContainer,
   StyledMessageContainer,
   StyledInputContainer,
