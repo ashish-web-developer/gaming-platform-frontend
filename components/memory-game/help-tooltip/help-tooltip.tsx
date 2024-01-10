@@ -6,8 +6,8 @@ import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 // styled components
 import {
   StyledHelpTooltipContainer,
-  StyledLightImage,
-  StyledDarkImage,
+  StyledHelpTooltipImageContainer,
+  StyledImage,
   StyledToolTipContainer,
   StyledVolumeContainer,
   StyledVolumeCta,
@@ -111,25 +111,14 @@ const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
             x: 750,
           }}
         >
-          {_mode == "light" ? (
-            <StyledLightImage
-              alt="help-tooltip-girl"
-              width={350}
-              height={365}
-              src="/memory-game/help-tooltip/light-help-tooltip-girl.png"
+          <StyledHelpTooltipImageContainer>
+            <StyledImage
+              alt="girl"
+              fill={true}
+              src="/memory-game/help-tooltip/help-tooltip-girl.png"
             />
-          ) : (
-            <StyledDarkImage
-              alt="help-tooltip-girl"
-              width={274}
-              height={509}
-              src="/memory-game/help-tooltip/dark-help-tooltip-girl.png"
-            />
-          )}
-          <StyledToolTipContainer
-            $bottom={_mode == "light" ? "56px" : "290px"}
-            $right={_mode == "light" ? "350px" : "180px"}
-          >
+          </StyledHelpTooltipImageContainer>
+          <StyledToolTipContainer>
             <StyledVolumeContainer>
               <StyledVolumeCta
                 onClick={() => dispatch(updatePlayAudio(!_play_audio))}
