@@ -12,17 +12,20 @@ const StyledHelpTooltipContainer = styled(motion.div)`
 
 const StyledHelpTooltipImageContainer = styled.div`
   position: relative;
-  width: 303px;
-  height: 540px;
+  width: 600px;
+  height: 600px;
   bottom: -30px;
+  right:-140px;
 `;
 
-const StyledImage = styled(Image)``;
+const StyledImage = styled(Image)`
+  object-fit:contain;
+`;
 
 const StyledToolTipContainer = styled.div`
   position: absolute;
-  bottom: 290px;
-  right: 210px;
+  bottom: 340px;
+  right: 240px;
   display: flex;
   flex-direction: column;
 `;

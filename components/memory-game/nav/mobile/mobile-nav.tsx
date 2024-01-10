@@ -28,9 +28,10 @@ import {
   // actions
   updateShowHelpDrawer,
   updateShowChatStreamingModal,
+  resetMemoryGame
 } from "@/store/slice/memory-game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
-import { gaming_user } from "@/store/slice/game.slice";
+import { gaming_user,resetGame } from "@/store/slice/game.slice";
 
 const MobileNav: FC = () => {
   const router = useRouter();
@@ -44,7 +45,11 @@ const MobileNav: FC = () => {
   return (
     <StyledNavContainer>
       <StyledNav>
-        <StyledIconButton onClick={() => router.push("/")}>
+        <StyledIconButton onClick={() => {
+          dispatch(resetGame());
+          dispatch(resetMemoryGame());
+          router.push('/');
+        }}>
           <HomeIcon width={30} height={24} color="#FFF" />
         </StyledIconButton>
         <StyledChatButton

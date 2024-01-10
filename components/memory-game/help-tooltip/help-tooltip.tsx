@@ -61,7 +61,6 @@ const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const SpeechUttrance = useContext(UttranceContext);
-  const _mode = useAppSelector(mode);
   const _help_tooltip_text = useAppSelector(help_tooltip_text);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _current_rule_index = useAppSelector(current_rule_index);
@@ -115,7 +114,7 @@ const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
             <StyledImage
               alt="girl"
               fill={true}
-              src="/memory-game/help-tooltip/help-tooltip-girl.png"
+              src={"/memory-game/help-tooltip/help-tooltip-girl.png"}
             />
           </StyledHelpTooltipImageContainer>
           <StyledToolTipContainer>

@@ -127,6 +127,7 @@ export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
   initialState,
   reducers: {
+    resetMemoryGame:()=>initialState,
     updateCardList: (state, action: PayloadAction<ICard[]>) => {
       state.card_list = action.payload;
     },
@@ -212,6 +213,7 @@ export const memoryGameSlice = createSlice({
 });
 
 export const {
+  resetMemoryGame,
   updateCardList,
   updateLastFlippedCard,
   updateIsGamingUserIn,

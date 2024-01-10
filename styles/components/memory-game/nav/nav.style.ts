@@ -16,7 +16,7 @@ const StyledNav = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 4px;
   z-index: 4;
 `;
 

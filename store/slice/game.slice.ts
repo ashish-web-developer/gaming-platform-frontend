@@ -92,6 +92,7 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
+    resetGame:()=>initialState, 
     updateGamingUser: (
       state,
       action: PayloadAction<IUsersWithConversation | null>
@@ -125,6 +126,7 @@ export const is_proposal_sender = (state: RootState) =>
 export const timer_start_count = (state: RootState) =>
   state.game.timer_start_count;
 export const {
+  resetGame,
   updateGamingUser,
   updateRoomId,
   updateShowDeniedSnackbar,
