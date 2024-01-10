@@ -1,10 +1,9 @@
 import styled from "styled-components";
 
-// mui
-import { Avatar, AvatarGroup } from "@mui/material";
-
-type IStyledBadgeContent = {
-  $backgroundColor: string;
+type IStyledAvatar = {
+  $size: string;
+  $border: string;
+  $online: boolean;
 };
 
 const StyledBanner = styled.div`
@@ -112,27 +111,32 @@ const StyledBannerPara = styled.p`
     width: 100%;
   }
 `;
-const StyledAvatarGroup = styled(AvatarGroup)`
-  margin-left: 5px;
-  justify-content: flex-end;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    position: absolute !important;
-    top: 10px;
-    right: 10px;
-  }
+
+const StyledAvatarGroup = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
-const StyledAvatar = styled(Avatar)`
-  &.MuiAvatar-root {
-    border: 3px solid ${({ theme }) => theme.palette.primary.main};
-  }
-`;
-
-const StyledBadgeContent = styled.div<IStyledBadgeContent>`
-  width: 12px;
-  height: 12px;
+const StyledAvatar = styled.div<IStyledAvatar>`
+  width: ${(props) => props.$size};
+  height: ${(props) => props.$size};
+  border: ${(props) => props.$border};
   border-radius: 50%;
-  background-color: ${(prop) => prop.$backgroundColor};
+  position: relative;
+  &:not(:first-child) {
+    margin-left: -10px;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
+    top: -5px;
+    right: 3px;
+  }
 `;
 
 export {
@@ -145,6 +149,5 @@ export {
   StyledBannerPara,
   StyledAvatarGroup,
   StyledAvatar,
-  StyledBadgeContent,
   StyledBannerImage,
 };

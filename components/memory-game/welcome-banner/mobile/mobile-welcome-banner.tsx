@@ -13,14 +13,10 @@ import {
   StyledContent,
   StyledAvatarGroup,
   StyledAvatar,
-  StyledBadgeContent
 } from "@/styles/components/memory-game/welcome-banner/mobile/mobile-welcome-banner.style";
 
 // styled theme
 import { useTheme } from "styled-components";
-
-// mui
-import { Badge } from "@mui/material";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -59,11 +55,6 @@ const MobileWelcomeBanner: FC = () => {
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user.username ?? "");
   const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
-  const user_avatar_src = `data:image/svg+xml;base64,${btoa(user_avatar)}`;
-  const gaming_user_avatar_src = `data:image/svg+xml;base64,${btoa(
-    gaming_user_avatar
-  )}`;
-
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   return (
     <StyledContainer>
@@ -140,33 +131,23 @@ const MobileWelcomeBanner: FC = () => {
             />
           </StyledStarContainer>
 
-          <StyledAvatarGroup max={2}>
-            <Badge
-              overlap="circular"
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              badgeContent={
-                <StyledBadgeContent
-                  $backgroundColor={theme.palette.secondary.green}
-                />
-              }
-            >
-              <StyledAvatar alt="user" src={user_avatar_src} />
-            </Badge>
-            <Badge
-              overlap="circular"
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              badgeContent={
-                <StyledBadgeContent
-                  $backgroundColor={
-                    _is_gaming_user_in
-                      ? theme.palette.secondary.green
-                      : theme.palette.secondary.red
-                  }
-                />
-              }
-            >
-              <StyledAvatar alt="user" src={gaming_user_avatar_src} />
-            </Badge>
+          <StyledAvatarGroup>
+            <StyledAvatar
+            $size = "40px"
+            $border= {theme.palette.welcome_banner.mobile.avatar.border}
+            $online = {true}
+            dangerouslySetInnerHTML={{
+              __html: user_avatar,
+            }}
+            />
+            <StyledAvatar
+            $size = "40px"
+            $border = {theme.palette.welcome_banner.mobile.avatar.border}
+            $online = {_is_gaming_user_in}
+            dangerouslySetInnerHTML={{
+              __html: gaming_user_avatar,
+            }}
+            />
           </StyledAvatarGroup>
           <StyledContent>
             &ldquo;CogniMatch&rdquo; is a captivating memory game designed to boost your

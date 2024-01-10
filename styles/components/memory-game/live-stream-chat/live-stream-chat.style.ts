@@ -38,7 +38,7 @@ const StyledContainer = styled.div<IStyledContainer>`
             height:100%;
             top:0px;
             left:0px;
-            background:url("/memory-game/live-stream-chat/background.jpg");
+            background:${props.theme.palette.live_stream_chat.banner.background_image};
             background-size:cover;
             background-repeat:no-repeat;
             border-radius:25px;

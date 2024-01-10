@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -15,7 +15,6 @@ import {
   StyledText,
   StyledAvatarGroup,
   StyledAvatar,
-  StyledBadgeContent,
   StyledTimer,
 } from "@/styles/components/memory-game/game-board/mobile/mobile-game-board.style";
 
@@ -53,10 +52,6 @@ const MobileGameBoard: FC = () => {
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user.username ?? "");
   const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
-  const user_avatar_src = `data:image/svg+xml;base64,${btoa(user_avatar)}`;
-  const gaming_user_avatar_src = `data:image/svg+xml;base64,${btoa(
-    gaming_user_avatar
-  )}`;
 
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const soundRef = useRef<{
@@ -110,33 +105,23 @@ const MobileGameBoard: FC = () => {
                 {_player_turn_id == _user.id ? "Your Turn" : "Waiting..."}
               </StyledText>
             </StyledTurnIndicator>
-            <StyledAvatarGroup max={2}>
-              <Badge
-                overlap="circular"
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                badgeContent={
-                  <StyledBadgeContent
-                    $backgroundColor={theme.palette.secondary.green}
-                  />
-                }
-              >
-                <StyledAvatar alt="user" src={user_avatar_src} />
-              </Badge>
-              <Badge
-                overlap="circular"
-                anchorOrigin={{ vertical: "top", horizontal: "right" }}
-                badgeContent={
-                  <StyledBadgeContent
-                    $backgroundColor={
-                      _is_gaming_user_in
-                        ? theme.palette.secondary.green
-                        : theme.palette.secondary.red
-                    }
-                  />
-                }
-              >
-                <StyledAvatar alt="user" src={gaming_user_avatar_src} />
-              </Badge>
+            <StyledAvatarGroup>
+              <StyledAvatar
+                $size="40px"
+                $border="3px solid #fff"
+                $online={true}
+                dangerouslySetInnerHTML={{
+                  __html: user_avatar,
+                }}
+              />
+              <StyledAvatar
+                $size="40px"
+                $border="3px solid #fff"
+                $online={_is_gaming_user_in}
+                dangerouslySetInnerHTML={{
+                  __html: gaming_user_avatar,
+                }}
+              />
             </StyledAvatarGroup>
           </StyledBottomContainer>
         </StyledGameBoardContent>

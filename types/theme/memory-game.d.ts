@@ -39,6 +39,9 @@ type CustomMemoryGameThemePalette = {
         dotted_container: {
           border: string;
         };
+        avatar: {
+          border: string;
+        };
       };
     };
     start_banner: {
@@ -134,6 +137,7 @@ type CustomMemoryGameThemePalette = {
       background: string;
       border: string;
       banner: {
+        background_image: string;
         cta_background: string;
         cta_color: string;
       };

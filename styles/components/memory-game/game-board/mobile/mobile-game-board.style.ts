@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
-// mui
-import { AvatarGroup, Avatar } from "@mui/material";
-
 type IStyledBadgeContent = {
   $backgroundColor: string;
+};
+
+type IStyledAvatar = {
+  $size: string;
+  $border: string;
+  $online: boolean;
 };
 
 const StyledGameBoardContainer = styled.div`
@@ -88,14 +91,30 @@ const StyledText = styled.span`
   margin-left: 18px;
 `;
 
-const StyledAvatarGroup = styled(AvatarGroup)`
-  margin-left: 5px;
-  justify-content: flex-end;
+const StyledAvatarGroup = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
-const StyledAvatar = styled(Avatar)`
-  &.MuiAvatar-root {
-    border: 3px solid #fff;
+const StyledAvatar = styled.div<IStyledAvatar>`
+  width: ${(props) => props.$size};
+  height: ${(props) => props.$size};
+  border: ${(props) => props.$border};
+  border-radius: 50%;
+  position: relative;
+  &:not(:first-child) {
+    margin-left: -10px;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
+    top: -5px;
+    right: 3px;
   }
 `;
 
