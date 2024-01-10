@@ -1,8 +1,4 @@
-import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
-
-// mui
-import { IconButton } from "@mui/material";
 
 type IStyledBackgroundCircle = {
   $mode: "dark" | "light";
@@ -12,12 +8,12 @@ type IStyledGrid = {
   $paddingTop: string | null;
 };
 
-const GlobalStyles = createGlobalStyle`
-    body {
-        background: ${({ theme }) => theme.palette.primary.main} !important;
-        background-repeat:no-repeat;
-        background-size:cover;
-    }
+const StyledPage = styled.div`
+  background: ${({ theme }) => theme.palette.primary.main} !important;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
 `;
 const StyledContainer = styled.div`
   width: 100%;
@@ -29,19 +25,6 @@ const StyledContainer = styled.div`
   position: relative;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     overflow: auto;
-  }
-`;
-
-const StyledChatContainer = styled.div`
-  display: none;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 100%;
-    height: 60%;
-    position: fixed;
-    bottom: 100px;
-    z-index: 6;
-    display: flex;
-    justify-content: center;
   }
 `;
 
@@ -141,10 +124,10 @@ const StyledMainText = styled.div`
 `;
 
 const StyledInfoSnackbarContainer = styled.div`
-  display: none;
+  width: 412px;
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     position: absolute;
-    bottom: 60px;
+    bottom: 80px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -170,21 +153,21 @@ const StyledHelpCtaContainer = styled.div`
   }
 `;
 
-const StyledHelpCta = styled(IconButton)`
-  &.MuiIconButton-root {
-    position: absolute;
-    right: 60px;
-    top: 60px;
-  }
+const StyledHelpCta = styled.button`
+  position: absolute;
+  right: 65px;
+  top: 65px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 `;
 
-export default GlobalStyles;
 export {
+  StyledPage,
   StyledContainer,
   StyledGrid,
   StyledLeftContainer,
   StyledRightContainer,
-  StyledChatContainer,
   StyledContentContainer,
   StyledBackgroundCircleOne,
   StyledBackgroundCircleTwo,

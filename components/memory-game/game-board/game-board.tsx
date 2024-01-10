@@ -19,7 +19,7 @@ const Timer = dynamic(import("@/components/memory-game/game-board/timer"), {
 });
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import {
   card_list,
   player_turn_id,

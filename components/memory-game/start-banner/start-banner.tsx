@@ -32,7 +32,7 @@ import Play from "@/components/memory-game/start-banner/icons/play";
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { updateShowGameBoard } from "@/store/slice/memory-game.slice";
@@ -63,7 +63,7 @@ const StartBanner: FC = () => {
       <StyledImageContainer>
         <StyledImage
           alt="girl"
-          src={theme.palette.start_banner.start_banner_girl_src}
+          src={"/memory-game/start-banner/start-banner-girl-image.png"}
           fill={true}
           sizes="(max-width: 1400px) 20vw"
         />

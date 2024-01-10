@@ -7,7 +7,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: InitialState = {
   showEmoji: false,
-  mode: "dark",
+  mode: "light",
 };
 export const commonSlice = createSlice({
   name: "common",

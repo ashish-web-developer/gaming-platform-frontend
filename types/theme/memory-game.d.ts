@@ -39,13 +39,15 @@ type CustomMemoryGameThemePalette = {
         dotted_container: {
           border: string;
         };
+        avatar: {
+          border: string;
+        };
       };
     };
     start_banner: {
       main: string;
       background_one: string;
       background_two: string;
-      start_banner_girl_src: string;
       mobile: {
         background_one: string;
         background_two: string;
@@ -57,21 +59,6 @@ type CustomMemoryGameThemePalette = {
       vs_container: {
         main: string;
         text: string;
-      };
-    };
-    chat: {
-      main: string;
-      top_background: string;
-      icon_color: string;
-      vs_container: {
-        main: string;
-        text: string;
-      };
-      messages_background: string;
-      scrollbar_color: string;
-      input: {
-        text_color: string;
-        placeholder_color: string;
       };
     };
     info_snackbar: {
@@ -144,6 +131,15 @@ type CustomMemoryGameThemePalette = {
       score_board: {
         background_color: string;
         border_color: string;
+      };
+    };
+    live_stream_chat: {
+      background: string;
+      border: string;
+      banner: {
+        background_image: string;
+        cta_background: string;
+        cta_color: string;
       };
     };
     secondary: {

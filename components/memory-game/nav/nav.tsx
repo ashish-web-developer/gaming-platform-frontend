@@ -18,18 +18,14 @@ import HomeIcon from "@/components/memory-game/nav/icons/home";
 import MoonIcon from "@/components/memory-game/nav/icons/moon";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
-  updateGamingUser,
-  udpateIsProposalSender,
-  updateRoomId,
+  resetGame
 } from "@/store/slice/game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
 
 import {
-  updatePlayerTurnId,
-  updateShowHelpTooltip,
-  updateLastFlippedCard,
+  resetMemoryGame
 } from "@/store/slice/memory-game.slice";
 
 const Nav: FC = () => {
@@ -41,20 +37,22 @@ const Nav: FC = () => {
     <StyledNav>
       <StyledIconButton
         onClick={() => {
-          dispatch(updateGamingUser(null));
-          dispatch(udpateIsProposalSender(false));
-          dispatch(updateRoomId(null));
-          dispatch(updateShowHelpTooltip(false));
-          dispatch(updatePlayerTurnId(null));
-          dispatch(updateLastFlippedCard(null));
+          dispatch(resetGame());
+          dispatch(resetMemoryGame());
           router.push("/chat");
         }}
       >
         <ChatIcon color={theme.palette.nav.color} width={40} height={30} />
       </StyledIconButton>
-      <Link href="/">
+      <StyledIconButton
+        onClick={()=>{
+          dispatch(resetGame());
+          dispatch(resetMemoryGame());
+          router.push('/');
+        }}
+      >
         <HomeIcon color={theme.palette.nav.color} width={40} height={30} />
-      </Link>
+      </StyledIconButton>
       <StyledIconButton
         onClick={() => {
           if (_mode == "dark") {

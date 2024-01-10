@@ -26,7 +26,7 @@ import {
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
   play_audio,

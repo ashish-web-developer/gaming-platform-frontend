@@ -1,129 +1,394 @@
-// types
-import type { InitialState } from "@/types/store/slice/chat";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import type { User } from "@/types/user";
-import type { RootState } from "@/store/rootReducer";
-import type { Conversation } from "@/types/store/slice/chat";
-import type { AxiosResponse } from "axios";
-import type { SendMessgeResponseType } from "@/types/store/slice/chat";
-
-// Redux
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+// types
+import { PayloadAction } from "@reduxjs/toolkit";
+import type IChatInitialState from "@/types/store/slice/chat";
+import type {
+  IFetchUserResponse,
+  IFetchDefaultUserResponse,
+  IUsersWithConversation,
+  IFetchMessagesResponse,
+  ISendMessageRequest,
+  ISendMessageResponse,
+  IConversation,
+  IUpdateViewRequest,
+  IUpdateViewResponse,
+  ISendInvitationApiRequest,
+  ISendInvitationApiResponse,
+  IAcceptInvitationApiRequest,
+  IAcceptInvitationApiResponse,
+} from "@/types/store/slice/chat";
+import type { RootState } from "@/store/rootReducer";
+import type { AxiosResponse } from "axios";
 
 // helpers
 import { Axios } from "@/helpers/axios";
 
-export const sendMessage = createAsyncThunk<
-  SendMessgeResponseType,
+// api calls
+export const fetchUser = createAsyncThunk<
+  IFetchUserResponse,
   undefined,
   { state: RootState }
->("api/send-message", async (_, { rejectWithValue, getState, dispatch }) => {
+>("api/chat/search-user", async (_, { getState, rejectWithValue }) => {
   try {
     const state = getState();
-    const res: AxiosResponse<{
-      success: boolean;
-      conversation: Conversation;
-    }> = await Axios.post("/chat/send-message", {
-      sender_id: state.user.user.id,
-      receiver_id: state.chat.active_user?.id,
-      message: state.chat.chat_input_value,
-    });
-    dispatch(updateActiveUserConversation(res.data.conversation));
-    return res.data;
-  } catch (error) {
-    return rejectWithValue(error);
+    const response: AxiosResponse<IFetchUserResponse> = await Axios.post(
+      "/chat/search-user",
+      null,
+      {
+        params: {
+          query: state.chat.search_input_value,
+          page: state.chat.fetch_user.page,
+          skip_id: state.chat.default_users.map(({ id }) => id),
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
   }
 });
 
-const initialState: InitialState = {
-  users: [],
+export const fetchDefaultUser = createAsyncThunk<
+  IFetchDefaultUserResponse,
+  undefined,
+  { state: RootState }
+>("api/chat/get-default-user", async (_, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<IFetchDefaultUserResponse> = await Axios.get(
+      "/chat/get-user"
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const fetchMessages = createAsyncThunk<
+  IFetchMessagesResponse,
+  undefined,
+  { state: RootState }
+>("api/chat/get-messages", async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IFetchMessagesResponse> = await Axios.post(
+      "/chat/get-messages",
+      {
+        sender_id: state.user.user.id,
+        receiver_id: state.chat.active_user?.id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const updateView = createAsyncThunk<
+  IUpdateViewResponse,
+  IUpdateViewRequest,
+  { state: RootState }
+>("api/chat/view", async ({ conversation_id }, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<IUpdateViewResponse> = await Axios.post(
+      "chat/viewed",
+      {
+        conversation_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const sendInvitationApi = createAsyncThunk<
+  ISendInvitationApiResponse,
+  ISendInvitationApiRequest,
+  { state: RootState }
+>("api/game/invitation", async ({ game }, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<ISendInvitationApiResponse> =
+      await Axios.post("game/game-invitation", {
+        receiver_id: state.chat.active_user?.id,
+        game,
+        room_id: state.game.room_id,
+      });
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const acceptInvitationApi = createAsyncThunk<
+  IAcceptInvitationApiResponse,
+  IAcceptInvitationApiRequest,
+  { state: RootState }
+>(
+  "api/game/accept-invitation",
+  async ({ is_accepted }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IAcceptInvitationApiResponse> =
+        await Axios.post("game/accept-invitation", {
+          receiver_id: state.game.gaming_user?.id,
+          is_accepted,
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const sendMessage = createAsyncThunk<
+  ISendMessageResponse,
+  ISendMessageRequest,
+  { state: RootState }
+>(
+  "api/chat/send-message",
+  async ({ message }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<ISendMessageResponse> = await Axios.post(
+        "/chat/send-message",
+        {
+          sender_id: state.user.user.id,
+          receiver_id: state.chat.active_user?.id,
+          message,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+const initialState: IChatInitialState = {
+  search_input_value: "",
+  is_typing: false,
+  fetch_user: {
+    page: 1,
+    fetched_user_result: [],
+    is_request_pending: false,
+  },
+  default_users: [],
   active_user: null,
   active_user_conversation: [],
-  is_submitting: false,
-  chat_input_value: "",
-  show_chat:false,
-  is_audio_playing:false,
+  send_message: {
+    is_request_pending: false,
+  },
+  show_emoji: false,
+  game_snackbar: {
+    show_memory_game_snackbar: false,
+  },
+  mobile: {
+    show_chat: false,
+  },
 };
+
 const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    updateUsersList: (state, action: PayloadAction<User | User[]>) => {
-      if (Array.isArray(action.payload)) {
-        action.payload.forEach((newUser) => {
-          if (
-            !state.users.some((existingUser) => existingUser.id == newUser.id)
-          ) {
-            state.users.push(newUser);
-          }
-        });
+    updateSearchInputValue: (state, action: PayloadAction<string>) => {
+      state.search_input_value = action.payload;
+    },
+    updatePage: (state, action: PayloadAction<number>) => {
+      state.fetch_user.page = action.payload;
+    },
+    updateFetchUserResult: (
+      state,
+      action: PayloadAction<IUsersWithConversation[]>
+    ) => {
+      if (!action.payload.length) {
+        state.fetch_user.fetched_user_result = [];
       } else {
-        const newUser = action.payload as User;
-        if (!state.users.some((user) => user.id == newUser.id)) {
-          state.users.push(action.payload);
-        }
+        state.fetch_user.fetched_user_result = [
+          ...state.fetch_user.fetched_user_result,
+          ...action.payload,
+        ];
       }
     },
-    updateActiveUser: (state, action: PayloadAction<User>) => {
+    updateIsRequestPending: (state, action: PayloadAction<boolean>) => {
+      state.fetch_user.is_request_pending = action.payload;
+    },
+    updateDefaultUser: (
+      state,
+      action: PayloadAction<IUsersWithConversation>
+    ) => {
+      state.default_users.push(action.payload);
+    },
+    updateActiveUser: (
+      state,
+      action: PayloadAction<IUsersWithConversation | null>
+    ) => {
       state.active_user = action.payload;
+    },
+    updateShowEmoji: (state, action: PayloadAction<boolean>) => {
+      state.show_emoji = action.payload;
     },
     updateActiveUserConversation: (
       state,
-      action: PayloadAction<Conversation[] | Conversation>
+      action: PayloadAction<IConversation>
     ) => {
-      if (Array.isArray(action.payload)) {
-        state.active_user_conversation = action.payload;
+      state.active_user_conversation.push(action.payload);
+    },
+    updateDefaultUserConversation: (
+      state,
+      action: PayloadAction<{
+        user: IUsersWithConversation;
+        conversation: IConversation;
+      }>
+    ) => {
+      let is_user_exit = state.default_users.find(
+        (user) => user.id == action.payload.user.id
+      );
+      if (is_user_exit) {
+        state.default_users = state.default_users.map((user) => {
+          if (user.id == action.payload.user.id) {
+            return {
+              ...user,
+              latest_conversation: action.payload.conversation,
+              not_viewed: user.not_viewed + 1,
+            };
+          }
+          return user;
+        });
       } else {
-        const newConversation = action.payload as Conversation;
-        if (
-          !state.active_user_conversation.some(
-            (conversation) => conversation.id == newConversation.id
-          )
-        ) {
-          state.active_user_conversation.push(action.payload);
-        }
+        state.default_users.push({
+          ...action.payload.user,
+          latest_conversation: action.payload.conversation,
+          not_viewed: 1,
+        });
       }
     },
-    updateChatInputValue: (state, action: PayloadAction<string>) => {
-      state.chat_input_value = action.payload;
+    updateConversationView: (state, action: PayloadAction<IConversation>) => {
+      const updatedConversation = action.payload;
+      const updatedConversations = state.active_user_conversation.map(
+        (conversation) => {
+          if (conversation.id === updatedConversation.id) {
+            return updatedConversation;
+          }
+          return conversation;
+        }
+      );
+
+      return {
+        ...state,
+        active_user_conversation: updatedConversations,
+      };
     },
-    updateShowChat:(state,action:PayloadAction<boolean>)=>{
-      state.show_chat = action.payload;
+    updateIsTyping: (state, action: PayloadAction<boolean>) => {
+      state.is_typing = action.payload;
     },
-    updateIsAudioPlaying:(state,action:PayloadAction<boolean>)=>{
-      state.is_audio_playing = action.payload;
-    }
+    updateShowMemoryGameSnackbar: (state, action: PayloadAction<boolean>) => {
+      state.game_snackbar.show_memory_game_snackbar = action.payload;
+    },
+    updateShowChat: (state, action: PayloadAction<boolean>) => {
+      state.mobile.show_chat = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(sendMessage.pending, (state, action) => {
-      state.is_submitting = true;
+    builder.addCase(fetchUser.fulfilled, (state, action) => {
+      state.fetch_user.fetched_user_result = [
+        ...state.fetch_user.fetched_user_result,
+        ...action.payload.user_data.data,
+      ];
+      state.fetch_user.page = state.fetch_user.page + 1;
+      state.fetch_user.is_request_pending = false;
     });
-    builder.addCase(sendMessage.fulfilled, (state) => {
-      state.is_submitting = false;
-      state.chat_input_value = "";
+    builder.addCase(fetchUser.pending, (state, action) => {
+      state.fetch_user.is_request_pending = true;
+    });
+    builder.addCase(fetchDefaultUser.fulfilled, (state, action) => {
+      state.default_users = action.payload.users;
+      if (window.innerWidth >= 600) {
+        state.active_user = action.payload.users[0];
+      }
+    });
+    builder.addCase(fetchMessages.fulfilled, (state, action) => {
+      state.active_user_conversation = action.payload.conversation;
+    });
+    builder.addCase(sendMessage.fulfilled, (state, action) => {
+      state.active_user_conversation.push(action.payload.conversation);
+      state.send_message.is_request_pending = false;
+      state.default_users = state.default_users.map((user) => {
+        if (user.id == action.payload.conversation.receiver_id) {
+          {
+            return {
+              ...user,
+              latest_conversation: action.payload.conversation,
+            };
+          }
+        }
+        return user;
+      });
+    });
+    builder.addCase(sendMessage.pending, (state, action) => {
+      state.send_message.is_request_pending = true;
     });
     builder.addCase(sendMessage.rejected, (state, action) => {
-      state.is_submitting = true;
+      state.send_message.is_request_pending = false;
+    });
+    builder.addCase(updateView.fulfilled, (state, action) => {
+      const updated_conversation = action.payload.conversation;
+      state.active_user_conversation = state.active_user_conversation.map(
+        (conversation) => {
+          if (conversation.id == updated_conversation.id) {
+            return updated_conversation;
+          }
+          return conversation;
+        }
+      );
+      state.default_users = state.default_users.map((user) => {
+        if (user.id == updated_conversation.sender_id) {
+          return {
+            ...user,
+            not_viewed: user.not_viewed - 1,
+          };
+        }
+        return user;
+      });
     });
   },
 });
 
 export default chatSlice.reducer;
-export const users = (state: RootState) => state.chat.users;
+export const search_input_value = (state: RootState) =>
+  state.chat.search_input_value;
+export const page = (state: RootState) => state.chat.fetch_user.page;
+export const fetched_user_result = (state: RootState) =>
+  state.chat.fetch_user.fetched_user_result;
+export const is_request_pending = (state: RootState) =>
+  state.chat.fetch_user.is_request_pending;
+export const default_users = (state: RootState) => state.chat.default_users;
+
 export const active_user = (state: RootState) => state.chat.active_user;
+
 export const active_user_conversation = (state: RootState) =>
   state.chat.active_user_conversation;
-export const is_submitting = (state: RootState) => state.chat.is_submitting;
-export const chat_input_value = (state: RootState) =>
-  state.chat.chat_input_value;
+export const send_message_request_pending = (state: RootState) =>
+  state.chat.send_message.is_request_pending;
+export const show_emoji = (state: RootState) => state.chat.show_emoji;
 
-export const show_chat = (state:RootState) => state.chat.show_chat;
-export const is_audio_playing = (state:RootState) => state.chat.is_audio_playing;
+export const is_typing = (state: RootState) => state.chat.is_typing;
+export const show_memory_game_snackbar = (state: RootState) =>
+  state.chat.game_snackbar.show_memory_game_snackbar;
+export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
 export const {
-  updateUsersList,
+  updateSearchInputValue,
+  updatePage,
+  updateFetchUserResult,
+  updateIsRequestPending,
+  updateDefaultUser,
   updateActiveUser,
+  updateShowEmoji,
   updateActiveUserConversation,
-  updateChatInputValue,
+  updateDefaultUserConversation,
+  updateConversationView,
+  updateIsTyping,
+  updateShowMemoryGameSnackbar,
   updateShowChat,
-  updateIsAudioPlaying
 } = chatSlice.actions;

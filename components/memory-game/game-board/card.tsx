@@ -24,7 +24,7 @@ import { useTheme as useMuiTheme, useMediaQuery } from "@mui/material";
 import { getCardName } from "@/helpers/memory-game/game";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   memoryGameCardEvent,
   updateLastFlippedCardEvent,
@@ -148,7 +148,7 @@ const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
   return (
     <StyledCard
       onClick={() => {
-        if (is_clickable) {
+        if (is_clickable && id !== _last_flipped_card_id) {
           typeof ref !== "function" && ref?.current?.flip_sound?.play();
           dispatch(memoryGameCardEvent({ card_id: id, flipped: true }));
           dispatch(updateCardTurnCount((_card_turn_count + 1) as 0 | 1));
@@ -194,6 +194,7 @@ const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
         }
       }}
       $showBackground={!flipped}
+      $cursor={id !== _last_flipped_card_id}
     >
       <StyledCardContent $display={flipped ? "block" : "none"}>
         <StyledBorder $backgroundColor={"#F3FAE1"} $borderColor={getCardColor}>

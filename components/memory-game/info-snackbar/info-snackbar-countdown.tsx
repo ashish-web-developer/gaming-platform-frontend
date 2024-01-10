@@ -7,16 +7,12 @@ import type { FC } from "react";
 import { StyledCountDown } from "@/styles/components/memory-game/info-snackbar/info-snackbar-countdown.style";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch } from "@/hooks/redux.hook";
 import {
-  updateGamingUser,
-  udpateIsProposalSender,
-  updateRoomId,
+  resetGame
 } from "@/store/slice/game.slice";
 import {
-  updateLastFlippedCard,
-  updateShowHelpTooltip,
-  updatePlayerTurnId,
+  resetMemoryGame
 } from "@/store/slice/memory-game.slice";
 
 const InfoSnackbarCountdown: FC = () => {
@@ -28,12 +24,8 @@ const InfoSnackbarCountdown: FC = () => {
     const timer = setInterval(() => {
       setCount((prev) => {
         if (prev == 0) {
-          dispatch(updateGamingUser(null));
-          dispatch(udpateIsProposalSender(false));
-          dispatch(updateRoomId(null));
-          dispatch(updateShowHelpTooltip(false));
-          dispatch(updatePlayerTurnId(null));
-          dispatch(updateLastFlippedCard(null));
+          dispatch(resetGame());
+          dispatch(resetMemoryGame());
           router.push("/chat");
         }
         return prev - 1;

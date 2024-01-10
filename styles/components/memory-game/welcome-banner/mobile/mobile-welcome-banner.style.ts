@@ -1,4 +1,3 @@
-import { AvatarGroup, Avatar } from "@mui/material";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
@@ -14,10 +13,12 @@ type IStyledMainSpan = {
   $color: string;
 };
 
-type IStyledBadgeContent = {
-  $backgroundColor: string;
-};
 
+type IStyledAvatar = {
+  $size: string;
+  $border: string;
+  $online:boolean;
+};
 const StyledContainer = styled.div`
   width: 100%;
   display: flex;
@@ -98,26 +99,38 @@ const StyledContent = styled.p`
   font-weight: 600;
 `;
 
-const StyledAvatarGroup = styled(AvatarGroup)`
+
+const StyledAvatarGroup = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   position: absolute;
   bottom: 16px;
   right: 16px;
 `;
 
-const StyledAvatar = styled(Avatar)`
-  width: 36px;
-  height: 36px;
-  &.MuiAvatar-root {
-    border: 3px solid ${({ theme }) => theme.palette.primary.main};
+
+const StyledAvatar = styled.div<IStyledAvatar>`
+  width: ${(props) => props.$size};
+  height: ${(props) => props.$size};
+  border: ${(props) => props.$border};
+  border-radius: 50%;
+  position:relative;
+  &:not(:first-child) {
+    margin-left: -10px;
+  }
+  &::after{
+    content:"";
+    position:absolute;
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:${(props)=>props.$online?"#16C172":"#F42C04"};
+    top:-5px;
+    right:3px;
   }
 `;
 
-const StyledBadgeContent = styled.div<IStyledBadgeContent>`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: ${(prop) => prop.$backgroundColor};
-`;
 
 export {
   StyledContainer,
@@ -129,5 +142,4 @@ export {
   StyledContent,
   StyledAvatarGroup,
   StyledAvatar,
-  StyledBadgeContent,
 };

@@ -16,7 +16,7 @@ import {
 import MobileScoreBoardBackground from "@/components/memory-game/game-board/mobile/score-board/mobile-score-board-background";
 
 // redux
-import { useAppSelector } from "@/hooks/redux";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { score } from "@/store/slice/memory-game.slice";

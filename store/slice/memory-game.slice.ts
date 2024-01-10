@@ -15,6 +15,7 @@ import type {
   IUpdateScoreResponse,
   Score,
 } from "@/types/store/slice/memory-game";
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // helpers
 import { Axios } from "@/helpers/axios";
@@ -103,14 +104,21 @@ const initialState: InitialState = {
   current_rule_index: 0,
   game_rules_list: [],
   show_audio_play_modal: true,
-  show_info_snackbar: false,
+  show_leaving_snackbar: false,
   is_gaming_user_leaving: false,
-  show_mobile_chat: false,
   show_help_tooltip: false,
   play_audio: true,
   show_game_board: false,
   card_turn_count: 0,
   score: null,
+  show_chat_streaming_modal: false,
+  live_stream_chat_list: [],
+  show_live_stream_chat: false,
+  info_snackbar: {
+    show_info_snackbar: false,
+    message: "",
+    name: "",
+  },
   mobile: {
     show_help_drawer: false,
   },
@@ -119,6 +127,7 @@ export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
   initialState,
   reducers: {
+    resetMemoryGame:()=>initialState,
     updateCardList: (state, action: PayloadAction<ICard[]>) => {
       state.card_list = action.payload;
     },
@@ -151,15 +160,21 @@ export const memoryGameSlice = createSlice({
       state.current_rule_index = action.payload;
       state.help_tooltip_text = state.game_rules_list[action.payload];
     },
-    updateShowInfoSnackbar: (state, action: PayloadAction<boolean>) => {
-      state.show_info_snackbar = action.payload;
+    updateInfoSnackbar: (
+      state,
+      action: PayloadAction<{
+        show_snacbar: boolean;
+        message: string;
+        name: string;
+      }>
+    ) => {
+      state.info_snackbar.show_info_snackbar = action.payload.show_snacbar;
+      state.info_snackbar.message = action.payload.message;
+      state.info_snackbar.name = action.payload.name;
     },
     updateIsGamingUserLeaving: (state, action: PayloadAction<boolean>) => {
       state.is_gaming_user_leaving = action.payload;
-      state.show_info_snackbar = action.payload;
-    },
-    updateShowMobileChat: (state, action: PayloadAction<boolean>) => {
-      state.show_mobile_chat = action.payload;
+      state.show_leaving_snackbar = action.payload;
     },
     updateShowHelpTooltip: (state, action: PayloadAction<boolean>) => {
       state.show_help_tooltip = action.payload;
@@ -182,19 +197,31 @@ export const memoryGameSlice = createSlice({
     updateScore: (state, action: PayloadAction<Score | null>) => {
       state.score = action.payload;
     },
+    updateShowChatStreamingModal: (state, action: PayloadAction<boolean>) => {
+      state.show_chat_streaming_modal = action.payload;
+    },
+    updateLiveStreamChatList: (
+      state,
+      action: PayloadAction<{ message: string; user: IUsersWithConversation }>
+    ) => {
+      state.live_stream_chat_list.push(action.payload);
+    },
+    updateShowLiveSteamChat: (state, action: PayloadAction<boolean>) => {
+      state.show_live_stream_chat = action.payload;
+    },
   },
 });
 
 export const {
+  resetMemoryGame,
   updateCardList,
   updateLastFlippedCard,
   updateIsGamingUserIn,
   updateGameRules,
   updateShowAudioPlayModal,
   updateCurrentRuleIndex,
-  updateShowInfoSnackbar,
+  updateInfoSnackbar,
   updateIsGamingUserLeaving,
-  updateShowMobileChat,
   updateShowHelpTooltip,
   updatePlayAudio,
   updateShowHelpDrawer,
@@ -203,6 +230,9 @@ export const {
   updatePlayerTurnId,
   updateCardTurnCount,
   updateScore,
+  updateShowChatStreamingModal,
+  updateLiveStreamChatList,
+  updateShowLiveSteamChat,
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;
 export const last_flipped_card_id = (state: RootState) =>
@@ -217,13 +247,11 @@ export const show_audio_play_modal = (state: RootState) =>
   state.memoryGame.show_audio_play_modal;
 export const current_rule_index = (state: RootState) =>
   state.memoryGame.current_rule_index;
-export const show_info_snackbar = (state: RootState) =>
-  state.memoryGame.show_info_snackbar;
+export const info_snackbar = (state: RootState) =>
+  state.memoryGame.info_snackbar;
 
 export const is_gaming_user_leaving = (state: RootState) =>
   state.memoryGame.is_gaming_user_leaving;
-export const show_mobile_chat = (state: RootState) =>
-  state.memoryGame.show_mobile_chat;
 export const show_help_tooltip = (state: RootState) =>
   state.memoryGame.show_help_tooltip;
 export const play_audio = (state: RootState) => state.memoryGame.play_audio;
@@ -240,4 +268,12 @@ export const game_complexity = (state: RootState) =>
   state.memoryGame.game_complexity;
 
 export const score = (state: RootState) => state.memoryGame.score;
+export const show_chat_streaming_modal = (state: RootState) =>
+  state.memoryGame.show_chat_streaming_modal;
+export const live_stream_chat_list = (state: RootState) =>
+  state.memoryGame.live_stream_chat_list;
+export const show_leaving_snackbar = (state: RootState) =>
+  state.memoryGame.show_leaving_snackbar;
+export const show_live_stream_chat = (state: RootState) =>
+  state.memoryGame.show_live_stream_chat;
 export default memoryGameSlice.reducer;

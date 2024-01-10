@@ -6,8 +6,8 @@ import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 // styled components
 import {
   StyledHelpTooltipContainer,
-  StyledLightImage,
-  StyledDarkImage,
+  StyledHelpTooltipImageContainer,
+  StyledImage,
   StyledToolTipContainer,
   StyledVolumeContainer,
   StyledVolumeCta,
@@ -26,7 +26,7 @@ import { useTheme } from "styled-components";
 import { IconButton } from "@mui/material";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
   show_help_tooltip,
@@ -61,7 +61,6 @@ const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const SpeechUttrance = useContext(UttranceContext);
-  const _mode = useAppSelector(mode);
   const _help_tooltip_text = useAppSelector(help_tooltip_text);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _current_rule_index = useAppSelector(current_rule_index);
@@ -111,25 +110,14 @@ const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
             x: 750,
           }}
         >
-          {_mode == "light" ? (
-            <StyledLightImage
-              alt="help-tooltip-girl"
-              width={350}
-              height={365}
-              src="/memory-game/help-tooltip/light-help-tooltip-girl.png"
+          <StyledHelpTooltipImageContainer>
+            <StyledImage
+              alt="girl"
+              fill={true}
+              src={"/memory-game/help-tooltip/help-tooltip-girl.png"}
             />
-          ) : (
-            <StyledDarkImage
-              alt="help-tooltip-girl"
-              width={274}
-              height={509}
-              src="/memory-game/help-tooltip/dark-help-tooltip-girl.png"
-            />
-          )}
-          <StyledToolTipContainer
-            $bottom={_mode == "light" ? "56px" : "290px"}
-            $right={_mode == "light" ? "350px" : "180px"}
-          >
+          </StyledHelpTooltipImageContainer>
+          <StyledToolTipContainer>
             <StyledVolumeContainer>
               <StyledVolumeCta
                 onClick={() => dispatch(updatePlayAudio(!_play_audio))}

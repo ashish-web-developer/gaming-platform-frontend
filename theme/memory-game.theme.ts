@@ -43,12 +43,13 @@ const lightTheme: CustomThemePalette = {
         dotted_container: {
           border: "2px dashed #2B061E;",
         },
+        avatar:{
+          border:"3px solid #000"
+        }
       },
     },
     start_banner: {
       main: "#1E96FC",
-      start_banner_girl_src:
-        "/memory-game/start-banner/light-start-banner-girl.png",
       background_one: `url("/memory-game/start-banner/light-background-one.svg")`,
       background_two:
         "url('/memory-game/start-banner/light-background-two.svg')",
@@ -64,21 +65,6 @@ const lightTheme: CustomThemePalette = {
       vs_container: {
         main: "#2B061E",
         text: "#F7FFF6",
-      },
-    },
-    chat: {
-      main: "#2B061E",
-      top_background: `url("/memory-game/chat/light-background.svg")`,
-      icon_color: "#1E96FC",
-      vs_container: {
-        main: "#2B061E",
-        text: "#F7FFF6",
-      },
-      messages_background: "#3C91E6",
-      scrollbar_color: "#3C91E6",
-      input: {
-        text_color: "#F7FFF6",
-        placeholder_color: "",
       },
     },
     info_snackbar: {
@@ -154,6 +140,15 @@ const lightTheme: CustomThemePalette = {
         stroke_color: "#F5E960",
       },
     },
+    live_stream_chat: {
+      background: "#2B061E",
+      border: "#F5E960",
+      banner: {
+        background_image:"url('/memory-game/live-stream-chat/light-background.jpg')",
+        cta_background: "#F5E960",
+        cta_color: "#000",
+      },
+    },
     secondary: {
       main: "#F65BE3",
       info: "#ff934f",
@@ -214,6 +209,9 @@ const darkTheme: CustomThemePalette = {
         dotted_container: {
           border: "2px dashed #FFF",
         },
+        avatar:{
+          border:"3px solid #fff"
+        }
       },
     },
     start_banner: {
@@ -221,8 +219,6 @@ const darkTheme: CustomThemePalette = {
       background_one: `url("/memory-game/start-banner/dark-background-one.svg")`,
       background_two:
         "url('/memory-game/start-banner/light-background-two.svg')",
-      start_banner_girl_src:
-        "/memory-game/start-banner/dark-start-banner-girl.png",
       mobile: {
         background_one: `url("/memory-game/start-banner/mobile/dark-background-one.svg")`,
         background_two: `url("/memory-game/start-banner/mobile/dark-background-two.svg")`,
@@ -234,21 +230,6 @@ const darkTheme: CustomThemePalette = {
       vs_container: {
         main: "#080f0f",
         text: "#f9f8f8",
-      },
-    },
-    chat: {
-      main: "#080F0F",
-      top_background: `url("/memory-game/chat/dark-background.svg")`,
-      icon_color: "#FF934F",
-      vs_container: {
-        main: "#2B061E",
-        text: "#F7FFF6",
-      },
-      messages_background: "#FF934F",
-      scrollbar_color: "#3C91E6",
-      input: {
-        text_color: "#f9f8f8",
-        placeholder_color: "",
       },
     },
     info_snackbar: {
@@ -324,6 +305,15 @@ const darkTheme: CustomThemePalette = {
         stroke_color: "#16C172",
       },
     },
+    live_stream_chat: {
+      background: "#000000",
+      border: "#FFF",
+      banner: {
+        background_image:"url('/memory-game/live-stream-chat/dark-background.jpg')",
+        cta_background: "#F42C04",
+        cta_color: "#fff",
+      },
+    },
     secondary: {
       main: "#F65BE3",
       info: "#FF934F",
@@ -346,3 +336,4 @@ const getTheme = (mode: "dark" | "light"): CustomThemePalette => {
 };
 
 export default getTheme;
+

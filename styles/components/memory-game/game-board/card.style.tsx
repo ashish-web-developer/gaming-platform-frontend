@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 type IStyledCard = {
   $showBackground: boolean;
+  $cursor: boolean;
 };
 
 type IStyledBorder = {
@@ -43,7 +44,7 @@ const StyledCard = styled.div<IStyledCard>`
   background: ${({ theme }) => theme.palette.game_board.card.background};
   border-radius: 6px;
   position: relative;
-  cursor: pointer;
+  cursor: ${(props) => (props.$cursor ? "pointer" : "not-allowed")};
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 100%;
     aspect-ratio: 1/1.5;

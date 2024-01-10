@@ -1,234 +1,171 @@
+import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
-import type { User } from "@/types/user";
-
-// mui
-import { IconButton } from "@mui/material";
-
-// local components
-import ChatSidebar from "@/components/chat/chat-sidebar";
-import ChatAvatar from "@/components/chat/chat-avatar";
-import InvitationSnackbar from "@/components/game/invitation-snackbar";
-import DeniedSnackbar from "@/components/game/denied-snackbar";
-
+import type {
+  IUsersWithConversation,
+  IConversation,
+} from "@/types/store/slice/chat";
 // styled components
 import {
-  // components
-  StyledContainer,
-  StyledContainerItem,
-  StyledChatItem,
-  StyledChatWrapper,
-  StyledChat,
-  StyledAvatar,
-  StyledChatInput,
-  StyledChatContainerName,
-  StyledEmojiPicker,
-  StyledPlayButton,
-  // icons
-  StyledEmojiIcon,
-  StyledSendIcon,
-  StyledAudioIcon,
+  StyledPage,
+  StyledChatContainer,
+  StyledChatMainContainer,
+  StyledChatMainContentContainer,
+  StyledChatMainContent,
+  StyledMessageContainer,
+  StyledMessageInputContainer,
+  StyledThemeTogglerIcon,
+  StyledNotificationContainer,
+  StyledNotificationHeading,
 } from "@/styles/components/chat/chat-container.style";
 
-// styled theme
-import { useTheme } from "styled-components";
+// local components
+import ChatHeader from "@/components/chat/chat-header/chat-header";
+import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
+import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
+import ChatInput from "@/components/chat/chat-input/chat-input";
+import InvitationCard from "@/components/common/invitation-card";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  // state
   active_user,
-  active_user_conversation,
-  is_submitting,
-  chat_input_value,
-  // actions
-  sendMessage,
-  updateChatInputValue,
+  show_memory_game_snackbar,
+  updateActiveUserConversation,
+  updateDefaultUserConversation,
+  updateConversationView,
+  updateShowMemoryGameSnackbar,
 } from "@/store/slice/chat.slice";
-
+import { updateMode } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
-import { showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
-import {
-  // states
-  sending_invitation,
-  sendInvitation,
-  // actions
-} from "@/store/slice/game.slice";
+import { mode } from "@/store/slice/common.slice";
 
-const ChatContainer: FC<{
-  users: User[];
-}> = ({ users }) => {
+// hooks
+import {
+  useDefaultUser,
+  useFirstUserConversation,
+} from "@/hooks/chat/chat.hook";
+import { usePrivateChannel } from "@/hooks/pusher.hook";
+import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
+
+const ThemeTogglerIcon: FC<{
+  color: string;
+  width: number;
+  height: number;
+}> = ({ color, width, height }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={width}
+      height={height}
+      fill="none"
+      viewBox="0 0 44 46"
+    >
+      <path
+        fill={color}
+        d="M27.25 45.245c6.797-1.198 12.457-5.403 15.672-11.223.476-.861-.382-1.845-1.29-1.5-10.332 3.933-21.605-2.578-23.518-13.43A17.633 17.633 0 0124.19 2.456c.75-.624.316-1.858-.663-1.867a22.449 22.449 0 00-4.092.34C7.27 3.074-.855 14.726 1.304 26.973c2.156 12.231 13.765 20.42 25.945 18.272z"
+      ></path>
+    </svg>
+  );
+};
+
+const ChatContainer: FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
+  const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
-  const _active_user_conversation = useAppSelector(active_user_conversation);
-  const _sending_invitation = useAppSelector(sending_invitation);
-  const _is_submitting = useAppSelector(is_submitting);
-  const _chat_input_value = useAppSelector(chat_input_value);
-  const _showEmoji = useAppSelector(showEmoji);
-
+  const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
+  useDefaultUser();
+  useFirstUserConversation();
+  usePrivateChannel(`chat.${_user.id}`, [
+    {
+      event: "ChatEvent",
+      callback: (data: {
+        user: IUsersWithConversation;
+        conversation: IConversation;
+      }) => {
+        dispatch(updateDefaultUserConversation(data));
+        if (data.user.id == _active_user?.id) {
+          dispatch(updateActiveUserConversation(data.conversation));
+        }
+      },
+    },
+    {
+      event: "ChatViewEvent",
+      callback: (data: {
+        user: IUsersWithConversation;
+        conversation: IConversation;
+      }) => {
+        if (data.user.id == _active_user?.id) {
+          dispatch(updateConversationView(data.conversation));
+        }
+      },
+    },
+    {
+      event: "PlayGameInvitationEvent",
+      callback: (data: {
+        game: string;
+        receiver_id: number;
+        room_id: string;
+        user: IUsersWithConversation;
+      }) => {
+        dispatch(updateGamingUser(data.user));
+        dispatch(updateRoomId(data.room_id));
+        dispatch(updateShowMemoryGameSnackbar(true));
+      },
+    },
+    {
+      event: "AcceptGameInvitationEvent",
+      callback: (data: {
+        user: IUsersWithConversation;
+        is_accepted: boolean;
+      }) => {
+        if (data.is_accepted) {
+          dispatch(updateGamingUser(data.user));
+          router.push("/memory-game");
+        }
+      },
+    },
+  ]);
   return (
-    <>
-      <InvitationSnackbar vertical="top" horizontal="right" />
-      <DeniedSnackbar vertical="top" horizontal="right" />
-      <StyledContainer>
-        <StyledContainerItem $flexBasis={"400px"}>
-          <ChatSidebar users={users} />
-        </StyledContainerItem>
-        <StyledContainerItem $flexGrow={1}>
-          <StyledEmojiPicker
-            callback={(data) => {
-              dispatch(
-                updateChatInputValue(`${_chat_input_value} ${data.native}`)
-              );
-            }}
-          />
-          {_active_user && (
-            <>
-              <StyledChatItem
-                $flexBasis="100px"
-                $flexShrink={0}
-                $isFlex={true}
-                $flexDirection="row"
-                $padding="10px 0px 0px 0px"
-              >
-                <ChatAvatar
-                  width={60}
-                  height={60}
-                  username={_active_user.username as string}
-                />
-                <div>
-                  <StyledChatContainerName
-                    $fontSize="18px"
-                    $color={theme.palette.text.main}
-                  >
-                    {_active_user.name}
-                  </StyledChatContainerName>
-                  <StyledChatContainerName
-                    $fontSize="12px"
-                    $color={theme.palette.text.light}
-                  >
-                    @{_active_user.username}
-                  </StyledChatContainerName>
-                </div>
-              </StyledChatItem>
-              <StyledChatItem
-                $flexGrow={1}
-                $isFlex={true}
-                $flexDirection="column"
-              >
-                {_active_user_conversation.map((conversation, index) => {
-                  return (
-                    <StyledChatWrapper
-                      key={index}
-                      $alignSelf={
-                        _user.id == conversation.sender_id
-                          ? "flex-end"
-                          : "flex-start"
-                      }
-                      $flexDirection={
-                        _user.id == conversation.sender_id
-                          ? "row"
-                          : "row-reverse"
-                      }
-                    >
-                      <StyledChat
-                        $backgroundColor={
-                          _user.id == conversation.sender_id
-                            ? theme.palette.chat.main
-                            : theme.palette.chat.light
-                        }
-                        $borderRadius={
-                          _user.id == conversation.sender_id
-                            ? "10px 10px 0px 10px"
-                            : "10px  10px 10px 0px"
-                        }
-                        $flexBasis="1"
-                      >
-                        {conversation.message}
-                      </StyledChat>
-                      <StyledAvatar $flexBasis="50">
-                        <ChatAvatar
-                          width={40}
-                          height={40}
-                          username={
-                            _user.id == conversation.sender_id
-                              ? (_user.username as string)
-                              : (_active_user?.username as string)
-                          }
-                        />
-                      </StyledAvatar>
-                    </StyledChatWrapper>
-                  );
-                })}
-              </StyledChatItem>
-              <StyledChatItem
-                $flexBasis={"100px"}
-                $flexShrink={0}
-                $isFlex={true}
-                $alignItems="center"
-              >
-                <div
-                  style={{
-                    height: "60px",
-                    display: "flex",
-                    width: "100%",
-                    gap: "20px",
-                  }}
-                >
-                  <IconButton>
-                    <StyledAudioIcon />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => {
-                      dispatch(updateShowEmoji(!_showEmoji));
-                    }}
-                  >
-                    <StyledEmojiIcon />
-                  </IconButton>
-                  <StyledChatInput
-                    value={_chat_input_value}
-                    onChange={(event) =>
-                      dispatch(updateChatInputValue(event.target.value))
-                    }
-                    onKeyDown={(event) => {
-                      if (
-                        (event.ctrlKey || event.metaKey) &&
-                        event.key == "Enter"
-                      ) {
-                        dispatch(sendMessage());
-                      }
-                    }}
-                    fullWidth={true}
-                    disableUnderline={true}
-                    placeholder="Write Here"
-                    endAdornment={
-                      <>
-                        <IconButton
-                          disabled={_is_submitting}
-                          onClick={() => dispatch(sendMessage())}
-                        >
-                          <StyledSendIcon />
-                        </IconButton>
-                      </>
-                    }
-                  />
-                  <StyledPlayButton
-                    onClick={() =>
-                      dispatch(sendInvitation({ game: "memory-game" }))
-                    }
-                  >
-                    {_sending_invitation ? "Sending" : "Let's Play"}
-                  </StyledPlayButton>
-                </div>
-              </StyledChatItem>
-            </>
+    <StyledPage $background_image={_mode == "light" ? true : false}>
+      <StyledThemeTogglerIcon
+        onClick={() =>
+          dispatch(updateMode(_mode == "light" ? "dark" : "light"))
+        }
+      >
+        <ThemeTogglerIcon
+          width={40}
+          height={45}
+          color={_mode == "dark" ? "#fff" : "#000"}
+        />
+      </StyledThemeTogglerIcon>
+      <StyledChatContainer>
+        <ChatHeader />
+        <StyledChatMainContainer>
+          <ChatSidebar />
+          <StyledChatMainContentContainer>
+            <StyledChatMainContent>
+              <StyledMessageContainer>
+                <ChatMessageContainer />
+              </StyledMessageContainer>
+              <StyledMessageInputContainer>
+                <ChatInput />
+              </StyledMessageInputContainer>
+            </StyledChatMainContent>
+          </StyledChatMainContentContainer>
+          {_show_memory_game_snackbar && (
+            <StyledNotificationContainer>
+              <StyledNotificationHeading>
+                Notifications
+                <InvitationCard />
+              </StyledNotificationHeading>
+            </StyledNotificationContainer>
           )}
-        </StyledContainerItem>
-        <StyledContainerItem $flexBasis={"200px"}></StyledContainerItem>
-      </StyledContainer>
-    </>
+        </StyledChatMainContainer>
+      </StyledChatContainer>
+    </StyledPage>
   );
 };
 

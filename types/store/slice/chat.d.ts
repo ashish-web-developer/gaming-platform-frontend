@@ -1,34 +1,114 @@
+// types
 import type { User } from "@/types/user";
 
-
-
-interface ChatUser extends User{
-  received_messages?: Conversation[];
-  sent_messages?: Conversation[];
-}
-
-type SendMessgeResponseType = {
-  success: boolean;
-  conversation: Conversation;
-};
-
-type Conversation = {
+type IConversation = {
   id: number;
-  message: string;
-  receiver_id: number;
   sender_id: number;
+  receiver_id: number;
+  message: string;
+  viewed: boolean;
   created_at: string;
   updated_at: string;
 };
-
-type InitialState = {
-  users: ChatUser[];
-  active_user: User | null;
-  active_user_conversation: Conversation[];
-  is_submitting: boolean;
-  chat_input_value: string;
-  show_chat:boolean;
-  is_audio_playing:boolean;
+type IUsersWithConversation = {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  admin: 1 | 0;
+  email_verified_at: string;
+  created_at: string;
+  updated_at: string;
+  latest_conversation?: IConversation;
+  not_viewed: number;
 };
 
-export { InitialState, Conversation, SendMessgeResponseType ,ChatUser};
+type IChatInitialState = {
+  search_input_value: string;
+  is_typing: boolean;
+  fetch_user: {
+    is_request_pending: boolean;
+    fetched_user_result: IUsersWithConversation[];
+    page: number;
+  };
+  default_users: IUsersWithConversation[];
+  active_user: IUsersWithConversation | null;
+  active_user_conversation: IConversation[];
+  send_message: {
+    is_request_pending: boolean;
+  };
+  game_snackbar: {
+    show_memory_game_snackbar: boolean;
+  };
+  mobile: {
+    show_chat: boolean;
+  };
+  show_emoji: boolean;
+};
+
+type IFetchUserResponse = {
+  success: boolean;
+  user_data: {
+    current_page: number;
+    data: Array<IUsersWithConversation>;
+  };
+};
+
+type IFetchDefaultUserResponse = {
+  success: boolean;
+  users: IUsersWithConversation[];
+};
+
+type IFetchMessagesResponse = {
+  success: boolean;
+  conversation: IConversation[];
+};
+
+type ISendMessageRequest = {
+  message: string;
+};
+type ISendMessageResponse = {
+  success: boolean;
+  conversation: IConversation;
+};
+
+type IUpdateViewRequest = {
+  conversation_id: number;
+};
+type IUpdateViewResponse = {
+  success: boolean;
+  conversation: IConversation;
+};
+
+type ISendInvitationApiRequest = {
+  game: string;
+};
+
+type ISendInvitationApiResponse = {
+  success: boolean;
+  message: string;
+};
+type IAcceptInvitationApiRequest = {
+  is_accepted: boolean;
+};
+type IAcceptInvitationApiResponse = {
+  success: boolean;
+  message: string;
+};
+
+export default IChatInitialState;
+export {
+  IFetchUserResponse,
+  IFetchDefaultUserResponse,
+  IConversation,
+  IUsersWithConversation,
+  IFetchMessagesResponse,
+  ISendMessageRequest,
+  ISendMessageResponse,
+  IUpdateViewRequest,
+  IUpdateViewResponse,
+  ISendInvitationApiRequest,
+  ISendInvitationApiResponse,
+  IAcceptInvitationApiRequest,
+  IAcceptInvitationApiResponse,
+};

@@ -1,173 +1,90 @@
-// mui
-import { Box, Input, Button } from "@mui/material";
+import styled, { createGlobalStyle } from "styled-components";
 
-// local components
-import EmojiPicker from "@/components/common/emoji-picker";
-
-// styled
-import styled from "styled-components";
-
-// icons
-import SendIcon from "@mui/icons-material/Send";
-import KeyboardVoiceOutlinedIcon from "@mui/icons-material/KeyboardVoiceOutlined";
-import EmojiEmotionsOutlinedIcon from "@mui/icons-material/EmojiEmotionsOutlined";
-
-interface IStyledContainerItem {
-  $flexBasis?: string | number;
-  $flexGrow?: number;
-}
-
-interface IStyledChatItem extends IStyledContainerItem {
-  $isFlex: boolean;
-  $flexDirection?: string;
-  $padding?: string;
-  $flexShrink?: number;
-  $justifyContent?: string;
-  $alignItems?: string;
-}
-
-type IStyledChatContainerName = {
-  $fontSize: string;
-  $color: string;
+type IStyledPage = {
+  $background_image: boolean;
 };
-
-type IStyledChatWrapper = {
-  $alignSelf: string;
-  $flexDirection: string;
-};
-
-type IStyledChat = {
-  $backgroundColor: string;
-  $borderRadius: string;
-  $flexBasis: string;
-};
-
-type IStyledAvatar = {
-  $flexBasis: string;
-};
-const StyledContainer = styled(Box)`
-  width: 100%;
+const StyledPage = styled.div<IStyledPage>`
+  width: 100vw;
   height: 100vh;
-  background-color: ${({ theme }) => theme.palette.primary.main};
+  background: ${({ theme }) => theme.palette.primary.main};
+  background-image: ${(props) =>
+    props.$background_image ? "url('/chat/background.jpg')" : "none"};
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
-  gap: 60px;
-  @media (max-width: 600px) {
-    padding: 0;
-    display: block;
-  }
+  justify-content: center;
 `;
 
-const StyledContainerItem = styled(Box)<IStyledContainerItem>`
-  flex-basis: ${(props) => props.$flexBasis ?? "auto"};
-  flex-grow: ${(props) => props.$flexGrow ?? 0};
+const StyledThemeTogglerIcon = styled.button`
+  background: transparent;
+  border: none;
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  cursor: pointer;
+`;
+
+const StyledChatContainer = styled.div`
+  width: 75rem;
+  height: auto;
+`;
+
+const StyledChatMainContainer = styled.div`
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 320px 440px 1fr;
+  height: calc(100vh - 200px);
+  gap: 40px;
+`;
+
+const StyledChatMainContentContainer = styled.div`
+  width: 100%;
+  min-height: 100%;
+  border-left: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  padding-left: 40px;
+`;
+
+const StyledChatMainContent = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
 
-const StyledChatItem = styled.div<IStyledChatItem>`
-  flex-basis: ${(props) => props.$flexBasis ?? "auto"};
-  flex-grow: ${(props) => props.$flexGrow ?? 0};
-  flex-shrink: ${(props) => props.$flexShrink ?? 1};
-  padding: ${(props) => props.$padding ?? 0};
-  overflow: scroll;
-  scroll: hidden;
-  ${(props) =>
-    props.$isFlex &&
-    `
-    display:flex;
-    flex-direction:${props.$flexDirection};
-    justify-content:${props.$justifyContent ?? "flex-start"};
-    align-items:${props.$alignItems ?? "flex-start"};
-    gap:20px;
-  `}
+const StyledMessageContainer = styled.div`
+  width: 100%;
+  max-height: calc(100% - 60px);
+  flex-grow: 1;
 `;
 
-const StyledChatContainerName = styled.h6<IStyledChatContainerName>`
-  font-family: "Poppins", sans-serif;
-  font-size: ${(props) => props.$fontSize};
-  color: ${(props) => props.$color};
+const StyledMessageInputContainer = styled.div`
+  width: 100%;
+  flex-basis: 60px;
 `;
 
-const StyledChatWrapper = styled.div<IStyledChatWrapper>`
-  display: flex;
-  gap: 10px;
-  align-self: ${(props) => props.$alignSelf};
-  flex-direction: ${(props) => props.$flexDirection};
-  align-items: flex-end;
-`;
-
-const StyledChat = styled.div<IStyledChat>`
-  max-width: 250px;
-  background-color: ${(props) => props.$backgroundColor};
-  padding: 10px;
-  border-radius: ${(props) => props.$borderRadius};
-  font-family: "Poppins", sans-serif;
-  font-size: 14px;
-  flex-basis: ${(props) => props.$flexBasis};
-`;
-
-const StyledAvatar = styled.div<IStyledAvatar>`
-  flex-basis: ${(props) => props.$flexBasis};
-`;
-
-const StyledChatInput = styled(Input)`
-  color: ${({ theme }) => theme.palette.text.main};
-  font-weight: 400;
-  background-color: ${({ theme }) => theme.palette.primary.light};
-  padding: 6px 10px;
-  border: 2px solid ${({ theme }) => theme.palette.border.searchbar};
-  border-radius: 10px;
+const StyledNotificationContainer = styled.div`
+  width: 100%;
   height: 100%;
 `;
-
-const StyledEmojiIcon = styled(EmojiEmotionsOutlinedIcon)`
-  color: ${({ theme }) => theme.palette.text.light};
-`;
-
-const StyledAudioIcon = styled(KeyboardVoiceOutlinedIcon)`
-  color: ${({ theme }) => theme.palette.text.light};
-  font-size: 28px;
-  flex-basis: 25px;
-`;
-
-const StyledSendIcon = styled(SendIcon)`
-  color: ${({ theme }) => theme.palette.text.main};
-  font-size: 30px;
-`;
-const StyledPlayButton = styled(Button)`
-    &.MuiButton-root {
-      color: ${({ theme }) => theme.palette.text.main};
-      background-color: ${({ theme }) => theme.palette.primary.light};
-      font-size: 14px;
-      font-family: "Rubik Moonrocks", cursive;
-      border-radius: 8px;
-      flex-basis: 145px;
-      flex-shrink: 0;
-      height: 100%;
-      &:hover {
-        background-color: ${({ theme }) => theme.palette.primary.light};
-      }
-    }
-`;
-
-const StyledEmojiPicker = styled(EmojiPicker)`
-  position: absolute;
-  z-index: 10;
-  bottom: 110px;
+const StyledNotificationHeading = styled.h6`
+  color: ${({ theme }) => theme.palette.secondary.main};
+  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-decoration-line: underline;
 `;
 
 export {
-  StyledContainer,
-  StyledContainerItem,
-  StyledChatItem,
-  StyledChatContainerName,
-  StyledChatWrapper,
-  StyledChat,
-  StyledAvatar,
-  StyledChatInput,
-  StyledSendIcon,
-  StyledPlayButton,
-  StyledEmojiIcon,
-  StyledAudioIcon,
-  StyledEmojiPicker,
+  StyledPage,
+  StyledChatContainer,
+  StyledChatMainContainer,
+  StyledChatMainContentContainer,
+  StyledChatMainContent,
+  StyledMessageContainer,
+  StyledMessageInputContainer,
+  StyledThemeTogglerIcon,
+  StyledNotificationContainer,
+  StyledNotificationHeading,
 };

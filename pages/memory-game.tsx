@@ -9,11 +9,8 @@ import MemoryGame from "@/components/memory-game/memory-game";
 import fs from "fs";
 import path from "path";
 
-// types
-import type Colors from "@/types/data/colors";
-
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   updateCardTurnCount,
   updateGameRules,
@@ -28,8 +25,6 @@ import { ThemeProvider } from "styled-components";
 // theme
 import getTheme from "@/theme/memory-game.theme";
 
-// context
-import { ColorsContext } from "context";
 import { UttranceContext } from "context";
 
 // helpers
@@ -37,10 +32,9 @@ import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 
 interface Props {
   files: string[];
-  colors: Colors;
   rules: [string, string][];
 }
-const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
+const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const theme = getTheme(_mode);
@@ -60,11 +54,9 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
   return (
     <>
       <UttranceContext.Provider value={speechUttrance}>
-        <ColorsContext.Provider value={colors}>
-          <ThemeProvider theme={theme}>
-            <MemoryGame />
-          </ThemeProvider>
-        </ColorsContext.Provider>
+        <ThemeProvider theme={theme}>
+          <MemoryGame />
+        </ThemeProvider>
       </UttranceContext.Provider>
     </>
   );
@@ -72,11 +64,6 @@ const MemoryGamePage: NextPage<Props> = ({ files, colors, rules }) => {
 
 export async function getStaticProps() {
   try {
-    // Getting the colors
-    const colorsFolderPath = path.join(process.cwd(), "./data/colors.json");
-    let colors: Colors | string = fs.readFileSync(colorsFolderPath, "utf-8");
-    colors = JSON.parse(colors) as Colors;
-
     // getting all the rules to play memory game
     const rulesFolderPath = path.join(
       process.cwd(),
@@ -93,7 +80,6 @@ export async function getStaticProps() {
     return {
       props: {
         files,
-        colors,
         rules,
       },
     };
@@ -101,7 +87,6 @@ export async function getStaticProps() {
     return {
       props: {
         files: [],
-        colors: [],
         rules: [],
       },
     };

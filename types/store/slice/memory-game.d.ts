@@ -1,4 +1,5 @@
 import type { GetRandomCard } from "@/types/helpers/memory-game/game";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 type MemoryGameCardEventArgs = {
   card_id: string;
@@ -56,13 +57,23 @@ type InitialState = {
   current_rule_index: number;
   game_rules_list: [string, string][];
   show_audio_play_modal: boolean;
-  show_info_snackbar: boolean;
+  show_leaving_snackbar: boolean;
   is_gaming_user_leaving: boolean;
-  show_mobile_chat: boolean;
   show_help_tooltip: boolean;
   play_audio: boolean;
   show_game_board: boolean;
   card_turn_count: 0 | 1;
+  show_chat_streaming_modal: boolean;
+  info_snackbar: {
+    show_info_snackbar: boolean;
+    message: string;
+    name: string;
+  };
+  live_stream_chat_list: Array<{
+    message: string;
+    user: IUsersWithConversation;
+  }>;
+  show_live_stream_chat: boolean;
   mobile: {
     show_help_drawer: boolean;
   };

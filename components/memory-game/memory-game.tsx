@@ -3,9 +3,9 @@ import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // local components
-import Chat from "@/components/memory-game/chat/chat";
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
 
 const WelcomeBanner = dynamic(
@@ -97,8 +97,25 @@ const ResultBoard = dynamic(
     ssr: false,
   }
 );
+const MobileLiveStreamChat = dynamic(
+  () =>
+    import(
+      "@/components/memory-game/live-stream-chat/mobile/mobile-live-stream-chat"
+    ),
+  {
+    ssr: false,
+  }
+);
+const LiveStreamChat = dynamic(
+  () => import("@/components/memory-game/live-stream-chat/live-stream-chat"),
+  {
+    ssr: true,
+  }
+);
+
 // styled components
-import GlobalStyles, {
+import {
+  StyledPage,
   StyledContainer,
   StyledGrid,
   StyledLeftContainer,
@@ -106,7 +123,6 @@ import GlobalStyles, {
   StyledBackgroundCircleOne,
   StyledBackgroundCircleTwo,
   StyledMainText,
-  StyledChatContainer,
   StyledContentContainer,
   StyledInfoSnackbarContainer,
   StyledHelpCtaContainer,
@@ -116,19 +132,21 @@ import GlobalStyles, {
 // styled theme
 import { useTheme } from "styled-components";
 // mui
-import { useMediaQuery, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   // state
-  show_mobile_chat,
   show_help_tooltip,
   show_help_drawer,
   show_game_board,
   is_gaming_user_in,
   score,
+  show_chat_streaming_modal,
+  info_snackbar,
+  show_leaving_snackbar,
   // api call
   getCards,
   updateScoreEvent,
@@ -139,6 +157,8 @@ import {
   updatePlayerTurnId,
   updateLastFlippedCard,
   updateScore,
+  updateLiveStreamChatList,
+  updateInfoSnackbar,
 } from "@/store/slice/memory-game.slice";
 import {
   room_id,
@@ -153,13 +173,13 @@ import { mode } from "@/store/slice/common.slice";
 import HelpIcon from "@/components/memory-game/icons/help";
 
 // hooks
-import { usePresenceChannel } from "@/hooks/pusher";
+import { usePresenceChannel } from "@/hooks/pusher.hook";
+import { useIsMobile } from "@/hooks/common.hook";
 
 const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _show_mobile_chat = useAppSelector(show_mobile_chat);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _show_help_drawer = useAppSelector(show_help_drawer);
   const _show_game_board = useAppSelector(show_game_board);
@@ -167,15 +187,16 @@ const MemoryGame: FC = () => {
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const _is_proposal_sender = useAppSelector(is_proposal_sender);
   const _gaming_user = useAppSelector(gaming_user);
-  const isMobile = useMediaQuery(
-    `(max-width:${theme.palette.breakpoints.mobile})`
-  );
+  const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
   const voiceRef = useRef<{ voice: SpeechSynthesisVoice[] }>({
     voice: [],
   });
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
+  const _show_chat_streaming_modal = useAppSelector(show_chat_streaming_modal);
+  const _info_snackbar = useAppSelector(info_snackbar);
+  const _show_leaving_snackbar = useAppSelector(show_leaving_snackbar);
 
   usePresenceChannel(`game.${_room_id}`, [
     {
@@ -215,6 +236,30 @@ const MemoryGame: FC = () => {
         console.log(data);
       },
     },
+    {
+      event: "LiveChatStreamEvent",
+      callback: (data: { user: IUsersWithConversation; message: string }) => {
+        dispatch(updateLiveStreamChatList(data));
+        if (data.user.id !== _user.id) {
+          dispatch(
+            updateInfoSnackbar({
+              name: data.user.name,
+              message: data.message,
+              show_snacbar: true,
+            })
+          );
+          setTimeout(() => {
+            dispatch(
+              updateInfoSnackbar({
+                name: "",
+                message: "",
+                show_snacbar: false,
+              })
+            );
+          }, 3000);
+        }
+      },
+    },
   ]);
 
   useEffect(() => {
@@ -231,6 +276,7 @@ const MemoryGame: FC = () => {
           },
         })
       );
+      dispatch(updatePlayerTurnId(_user.id));
     }
   }, [_is_proposal_sender, _is_gaming_user_in]);
 
@@ -246,9 +292,9 @@ const MemoryGame: FC = () => {
   }, []);
 
   return (
-    <>
-      <GlobalStyles />
-      {isMobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
+    <StyledPage>
+      {is_mobile && _show_chat_streaming_modal && <MobileLiveStreamChat />}
+      {is_mobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
       <StyledContainer>
         {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
         <StyledHelpCtaContainer>
@@ -266,19 +312,28 @@ const MemoryGame: FC = () => {
         </StyledHelpCtaContainer>
         <StyledBackgroundCircleOne $mode={_mode} />
         <StyledBackgroundCircleTwo $mode={_mode} />
-        {_show_mobile_chat && (
-          <StyledChatContainer>
-            <Chat />
-          </StyledChatContainer>
-        )}
-        <StyledInfoSnackbarContainer>
-          <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
-        </StyledInfoSnackbarContainer>
+        {(_show_leaving_snackbar || _info_snackbar.show_info_snackbar) &&
+          is_mobile && (
+            <StyledInfoSnackbarContainer>
+              <InfoSnackbar
+                receiver_name={
+                  _info_snackbar.name
+                    ? _info_snackbar.name
+                    : (_gaming_user?.name as string)
+                }
+                show_count_down={_show_leaving_snackbar}
+              >
+                {_info_snackbar.message
+                  ? _info_snackbar.message
+                  : "👋 I am leaving the game"}
+              </InfoSnackbar>
+            </StyledInfoSnackbarContainer>
+          )}
         <StyledContentContainer>
-          {isMobile ? <MobileNav /> : <Nav />}
+          {is_mobile ? <MobileNav /> : <Nav />}
           {!_show_game_board && (
             <>
-              {isMobile ? (
+              {is_mobile ? (
                 <StyledMainText>
                   Good Morning,
                   <br />
@@ -290,12 +345,12 @@ const MemoryGame: FC = () => {
             </>
           )}
           <StyledGrid
-            $paddingTop={_show_game_board && !isMobile ? "70px" : null}
+            $paddingTop={_show_game_board && !is_mobile ? "70px" : null}
           >
             <StyledLeftContainer>
               {!_show_game_board && (
                 <>
-                  {isMobile ? (
+                  {is_mobile ? (
                     <>
                       <MobileWelcomeBanner />
                       <MobileStartBanner />
@@ -315,7 +370,7 @@ const MemoryGame: FC = () => {
                 ) == 9 ? (
                   <ResultBoard />
                 ) : (
-                  <>{isMobile ? <MobileGameBoard /> : <GameBoard />}</>
+                  <>{is_mobile ? <MobileGameBoard /> : <GameBoard />}</>
                 ))}
             </StyledLeftContainer>
             <StyledRightContainer>
@@ -325,14 +380,31 @@ const MemoryGame: FC = () => {
               ) == 9 ? (
                 <ScoreBoard />
               ) : (
-                <Chat />
+                <LiveStreamChat />
               )}
-              <InfoSnackbar>👋 I am leaving the game</InfoSnackbar>
+
+              {(_show_leaving_snackbar ||
+                _info_snackbar.show_info_snackbar) && (
+                <StyledInfoSnackbarContainer>
+                  <InfoSnackbar
+                    receiver_name={
+                      _info_snackbar.name
+                        ? _info_snackbar.name
+                        : (_gaming_user?.name as string)
+                    }
+                    show_count_down={_show_leaving_snackbar}
+                  >
+                    {_info_snackbar.message
+                      ? _info_snackbar.message
+                      : "👋 I am leaving the game"}
+                  </InfoSnackbar>
+                </StyledInfoSnackbarContainer>
+              )}
             </StyledRightContainer>
           </StyledGrid>
         </StyledContentContainer>
       </StyledContainer>
-    </>
+    </StyledPage>
   );
 };
 
