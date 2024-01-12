@@ -1,7 +1,6 @@
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 
 // styled components
 import {
@@ -45,7 +44,6 @@ import { Badge } from "@mui/material";
 import useAvatar from "@/hooks/profile.hook";
 
 const MobileGameBoard: FC = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
   const _card_list = useAppSelector(card_list);
   const _player_turn_id = useAppSelector(player_turn_id);
   const _user = useAppSelector(user);
@@ -93,6 +91,7 @@ const MobileGameBoard: FC = () => {
                   is_clickable={_player_turn_id == _user.id}
                   user={_user}
                   card_image={card.card_image}
+                  player_turn_id={_player_turn_id as number}
                   ref={soundRef}
                 />
               );

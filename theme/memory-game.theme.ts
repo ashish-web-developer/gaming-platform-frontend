@@ -142,7 +142,7 @@ const lightTheme: CustomThemePalette = {
     },
     live_stream_chat: {
       background: "#2B061E",
-      border: "#3C91E6",
+      border: "#F5E960",
       banner: {
         background_image:
           "url('/memory-game/live-stream-chat/light-background.jpg')",
