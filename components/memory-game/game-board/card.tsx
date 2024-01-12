@@ -206,7 +206,7 @@ const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
         }
       }}
       $showBackground={!flipped}
-      $cursor={id !== _last_flipped_card_id}
+      $cursor={id !== _last_flipped_card_id && user.id == player_turn_id}
     >
       <StyledCardContent $display={flipped ? "block" : "none"}>
         <StyledBorder $backgroundColor={"#F3FAE1"} $borderColor={getCardColor}>
