@@ -140,6 +140,8 @@ type CustomMemoryGameThemePalette = {
         background_image: string;
         cta_background: string;
         cta_color: string;
+        logo_color: string;
+        versus_color: string;
       };
     };
     secondary: {

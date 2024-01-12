@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 type IStyledContainer = {
   $show_background?: boolean;
+  $show_gray_background?: boolean;
 };
 
 type IStyledAvatar = {
@@ -38,7 +39,10 @@ const StyledContainer = styled.div<IStyledContainer>`
             height:100%;
             top:0px;
             left:0px;
-            background:${props.theme.palette.live_stream_chat.banner.background_image};
+            background:${
+              props.theme.palette.live_stream_chat.banner.background_image
+            };
+            filter:${props.$show_gray_background ? "grayscale(1)" : "none"}; 
             background-size:cover;
             background-repeat:no-repeat;
             border-radius:25px;
@@ -194,7 +198,7 @@ const StyledBannerContent = styled.div`
   align-items: center;
 `;
 const StyledLogo = styled.p`
-  color: #fff;
+  color: ${({ theme }) => theme.palette.live_stream_chat.banner.logo_color};
   text-align: center;
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-size: 20px;
@@ -220,10 +224,10 @@ const StyledBannerMainContent = styled.div`
   justify-content: center;
 `;
 const StyledBannerMainText = styled.h3`
-  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #fff;
   color: transparent;
-  font-size: 40px;
+  font-size: 45px;
   font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
   font-weight: 700;
   text-transform: uppercase;
@@ -231,9 +235,9 @@ const StyledBannerMainText = styled.h3`
   text-align: center;
 `;
 const StyledOutlinedSpan = styled.span`
-  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: ${({ theme }) =>
-    theme.palette.live_stream_chat.banner.cta_background};
+    theme.palette.live_stream_chat.banner.versus_color};
 `;
 
 const StyledChatNowCta = styled.button`
@@ -250,6 +254,26 @@ const StyledChatNowCta = styled.button`
   border-radius: 16px;
   border: 3px solid #fff;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    background: url("/memory-game/live-stream-chat/cta-background.png");
+  }
+`;
+const StyledCtaContent = styled.div`
+  position: absolute;
+  z-index: 2;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
 `;
 
 export {
@@ -276,4 +300,5 @@ export {
   StyledBannerMainText,
   StyledOutlinedSpan,
   StyledChatNowCta,
+  StyledCtaContent,
 };
