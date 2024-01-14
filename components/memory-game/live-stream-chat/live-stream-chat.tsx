@@ -37,6 +37,7 @@ import { useTheme } from "styled-components";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { gaming_user } from "@/store/slice/game.slice";
 import { user } from "@/store/slice/user.slice";
+import { mode } from "@/store/slice/common.slice";
 import {
   live_stream_chat_list,
   show_live_stream_chat,
@@ -92,8 +93,12 @@ const LiveStreamBanner: FC<{
   gaming_user: IUsersWithConversation;
 }> = ({ user_avatar, gaming_user_avatar, user, gaming_user }) => {
   const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
   return (
-    <StyledContainer $show_background={true}>
+    <StyledContainer
+      $show_gray_background={_mode == "light" ? true : false}
+      $show_background={true}
+    >
       <StyledBannerContent>
         <StyledLogo>
           Cogni<StyledSpan $color="#F42C04">Match</StyledSpan>

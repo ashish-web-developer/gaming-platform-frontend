@@ -43,9 +43,9 @@ const lightTheme: CustomThemePalette = {
         dotted_container: {
           border: "2px dashed #2B061E;",
         },
-        avatar:{
-          border:"3px solid #000"
-        }
+        avatar: {
+          border: "3px solid #000",
+        },
       },
     },
     start_banner: {
@@ -144,9 +144,12 @@ const lightTheme: CustomThemePalette = {
       background: "#2B061E",
       border: "#F5E960",
       banner: {
-        background_image:"url('/memory-game/live-stream-chat/light-background.jpg')",
-        cta_background: "#F5E960",
-        cta_color: "#000",
+        background_image:
+          "url('/memory-game/live-stream-chat/light-background.jpg')",
+        cta_background: "#3C91E6",
+        cta_color: "#fff",
+        logo_color: "#000",
+        versus_color: "#F5E960",
       },
     },
     secondary: {
@@ -209,9 +212,9 @@ const darkTheme: CustomThemePalette = {
         dotted_container: {
           border: "2px dashed #FFF",
         },
-        avatar:{
-          border:"3px solid #fff"
-        }
+        avatar: {
+          border: "3px solid #fff",
+        },
       },
     },
     start_banner: {
@@ -309,9 +312,12 @@ const darkTheme: CustomThemePalette = {
       background: "#000000",
       border: "#FFF",
       banner: {
-        background_image:"url('/memory-game/live-stream-chat/dark-background.jpg')",
+        background_image:
+          "url('/memory-game/live-stream-chat/dark-background.jpg')",
         cta_background: "#F42C04",
         cta_color: "#fff",
+        logo_color: "#fff",
+        versus_color: "#F42C04",
       },
     },
     secondary: {
@@ -336,4 +342,3 @@ const getTheme = (mode: "dark" | "light"): CustomThemePalette => {
 };
 
 export default getTheme;
-

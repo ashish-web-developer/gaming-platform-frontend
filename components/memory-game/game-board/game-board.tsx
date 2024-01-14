@@ -90,6 +90,7 @@ const GameBoard = () => {
                   user={_user}
                   card_image={card.card_image}
                   ref={soundRef}
+                  player_turn_id={_player_turn_id as number}
                 />
               );
             })}

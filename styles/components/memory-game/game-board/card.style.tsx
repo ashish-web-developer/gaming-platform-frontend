@@ -3,6 +3,7 @@ import styled from "styled-components";
 type IStyledCard = {
   $showBackground: boolean;
   $cursor: boolean;
+  $filter: boolean;
 };
 
 type IStyledBorder = {
@@ -45,6 +46,7 @@ const StyledCard = styled.div<IStyledCard>`
   border-radius: 6px;
   position: relative;
   cursor: ${(props) => (props.$cursor ? "pointer" : "not-allowed")};
+  filter: ${(props) => (props.$filter ? "grayscale(1)" : "none")};
   @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
     width: 100%;
     aspect-ratio: 1/1.5;

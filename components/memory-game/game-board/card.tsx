@@ -118,6 +118,7 @@ const CardPattern: FC<{ size: number | string; image: string }> = ({
 interface IProps extends ICard {
   is_clickable: boolean;
   user: User;
+  player_turn_id: number;
 }
 interface IForwardedRef {
   flip_sound: HTMLAudioElement | null;
@@ -125,7 +126,17 @@ interface IForwardedRef {
 }
 
 const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
-  { suit, card, cardColor, flipped, id, is_clickable, user, card_image },
+  {
+    suit,
+    card,
+    cardColor,
+    flipped,
+    id,
+    is_clickable,
+    user,
+    card_image,
+    player_turn_id,
+  },
   ref
 ) => {
   const theme = useMuiTheme();
@@ -147,6 +158,7 @@ const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
 
   return (
     <StyledCard
+      $filter={player_turn_id == user.id ? false : true}
       onClick={() => {
         if (is_clickable && id !== _last_flipped_card_id) {
           typeof ref !== "function" && ref?.current?.flip_sound?.play();
@@ -194,7 +206,7 @@ const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
         }
       }}
       $showBackground={!flipped}
-      $cursor={id !== _last_flipped_card_id}
+      $cursor={id !== _last_flipped_card_id && user.id == player_turn_id}
     >
       <StyledCardContent $display={flipped ? "block" : "none"}>
         <StyledBorder $backgroundColor={"#F3FAE1"} $borderColor={getCardColor}>
