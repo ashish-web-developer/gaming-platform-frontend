@@ -127,7 +127,7 @@ export const memoryGameSlice = createSlice({
   name: "memory-game-slice",
   initialState,
   reducers: {
-    resetMemoryGame:()=>initialState,
+    resetMemoryGame: () => initialState,
     updateCardList: (state, action: PayloadAction<ICard[]>) => {
       state.card_list = action.payload;
     },
@@ -202,9 +202,28 @@ export const memoryGameSlice = createSlice({
     },
     updateLiveStreamChatList: (
       state,
-      action: PayloadAction<{ message: string; user: IUsersWithConversation }>
+      action: PayloadAction<{
+        message: string;
+        user: IUsersWithConversation;
+        viewed: boolean;
+        id: string;
+      }>
     ) => {
       state.live_stream_chat_list.push(action.payload);
+    },
+    updateLiveSteamMessageView: (
+      state,
+      action: PayloadAction<{ id: string; viewed: boolean }>
+    ) => {
+      state.live_stream_chat_list = state.live_stream_chat_list.map((chat) => {
+        if (chat.id == action.payload.id) {
+          return {
+            ...chat,
+            viewed: true,
+          };
+        }
+        return chat;
+      });
     },
     updateShowLiveSteamChat: (state, action: PayloadAction<boolean>) => {
       state.show_live_stream_chat = action.payload;
@@ -232,6 +251,7 @@ export const {
   updateScore,
   updateShowChatStreamingModal,
   updateLiveStreamChatList,
+  updateLiveSteamMessageView,
   updateShowLiveSteamChat,
 } = memoryGameSlice.actions;
 export const card_list = (state: RootState) => state.memoryGame.card_list;

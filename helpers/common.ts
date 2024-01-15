@@ -20,7 +20,7 @@ function readableFormatDate(dateString: string) {
   return formattedDate;
 }
 
-function getTimeDifference(dateTimeString:string) {
+function getTimeDifference(dateTimeString: string) {
   // Parse the input string to a Date object
   const inputDate = new Date(dateTimeString);
 
@@ -37,19 +37,16 @@ function getTimeDifference(dateTimeString:string) {
 
   // Determine the appropriate time description
   if (seconds < 60) {
-    return `${seconds}s`;
+    return `${seconds} sec`;
   } else if (minutes < 60) {
-    return `${minutes}m`;
-  } else if (hours < 24 && currentDate.getDate() === inputDate.getDate()) {
-    return `${hours} hours ago`;
-  } else if (hours < 48 && currentDate.getDate() !== inputDate.getDate()) {
-    return 'yesterday';
-  } else if (hours >= 48) {
-    return "";
+    return `${minutes} min`;
+  } else if (hours <= 24) {
+    return `today`;
+  } else if (hours > 24 && hours <= 48) {
+    return "yesterday";
   } else {
-    return 'today';
+    return "";
   }
 }
-
 
 export { readableFormatDate, shuffleArray, getTimeDifference };

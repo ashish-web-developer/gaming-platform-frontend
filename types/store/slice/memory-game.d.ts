@@ -70,7 +70,9 @@ type InitialState = {
     name: string;
   };
   live_stream_chat_list: Array<{
+    id: string;
     message: string;
+    viewed: boolean;
     user: IUsersWithConversation;
   }>;
   show_live_stream_chat: boolean;

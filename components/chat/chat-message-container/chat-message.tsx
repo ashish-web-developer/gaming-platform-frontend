@@ -20,6 +20,10 @@ import { useTheme } from "styled-components";
 import useAvatar from "@/hooks/profile.hook";
 import { useMessageView } from "@/hooks/chat/chat.hook";
 
+// redux
+import { useAppDispatch } from "@/hooks/redux.hook";
+import { updateView } from "@/store/slice/chat.slice";
+
 // helpers
 import { readableFormatDate } from "@/helpers/common";
 
@@ -31,12 +35,23 @@ const ChatMessage = forwardRef<
     active_user: IUsersWithConversation;
   }
 >(({ conversation, user, active_user }, root_ref) => {
+  const dispatch = useAppDispatch();
   const target_ref = useRef<HTMLDivElement>(null);
   const created_at = readableFormatDate(conversation.created_at);
   const user_avatar = useAvatar(user.username ?? "");
   const active_user_avatar = useAvatar(active_user?.username ?? "");
   const theme = useTheme() as CustomChatTheme;
-  useMessageView({ root_ref, target_ref, conversation });
+  useMessageView({
+    root_ref,
+    target_ref,
+    callback: (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !conversation.viewed) {
+          dispatch(updateView({ conversation_id: conversation.id }));
+        }
+      });
+    },
+  });
 
   if (conversation.receiver_id == user.id) {
     return (
