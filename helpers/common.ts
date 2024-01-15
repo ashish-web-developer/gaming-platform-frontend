@@ -19,6 +19,15 @@ function readableFormatDate(dateString: string) {
   const formattedDate = date.toLocaleString("en-US", options);
   return formattedDate;
 }
+function isToday(date: Date) {
+  const today = new Date();
+
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+}
 
 function getTimeDifference(dateTimeString: string) {
   // Parse the input string to a Date object
@@ -40,9 +49,9 @@ function getTimeDifference(dateTimeString: string) {
     return `${seconds} sec`;
   } else if (minutes < 60) {
     return `${minutes} min`;
-  } else if (hours <= 24) {
+  } else if (hours <= 24 && isToday(inputDate)) {
     return `today`;
-  } else if (hours > 24 && hours <= 48) {
+  } else if (hours <= 48) {
     return "yesterday";
   } else {
     return "";
