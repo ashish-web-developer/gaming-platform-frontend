@@ -46,8 +46,13 @@ const ChatMessage = forwardRef<
     target_ref,
     callback: (entries, observer) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting && !conversation.viewed) {
+        if (
+          entry.isIntersecting &&
+          !conversation.viewed &&
+          user.id == conversation.receiver_id
+        ) {
           dispatch(updateView({ conversation_id: conversation.id }));
+          observer.unobserve(target_ref.current as HTMLDivElement);
         }
       });
     },
