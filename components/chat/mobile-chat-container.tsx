@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
@@ -23,7 +24,21 @@ import MobileChatHeader from "@/components/chat/chat-header/mobile/mobile-chat-h
 import ChatUsersList from "@/components/chat/chat-sidebar/chat-users-list/chat-users-list";
 import MobileChatMessageContainer from "@/components/chat/chat-message-container/mobile/mobile-chat-message-container";
 import ChatInput from "@/components/chat/chat-input/chat-input";
-import MemoryGameInvitationDrawer from "@/components/chat/chat-game-invitation/memory-game-invitation-drawer";
+const MemoryGameInvitationDrawer = dynamic(
+  () =>
+    import(
+      "@/components/chat/chat-game-invitation/memory-game-invitation-drawer"
+    ),
+  {
+    ssr: false,
+  }
+);
+const ChatProfile = dynamic(
+  () => import("@/components/chat/chat-profile/chat-profile"),
+  {
+    ssr: false,
+  }
+);
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -119,6 +134,7 @@ const MobileChatContainer: FC = () => {
   return (
     <StyledMobileChatContainer>
       {_show_memory_game_snackbar && <MemoryGameInvitationDrawer />}
+      <ChatProfile />
       <div id="search-dialog-container"></div>
       <MobileChatHeader />
       {!_show_chat && (
