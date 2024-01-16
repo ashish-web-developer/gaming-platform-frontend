@@ -34,7 +34,7 @@ const MemoryGameInvitationDrawer = dynamic(
   }
 );
 const ChatProfile = dynamic(
-  () => import("@/components/chat/chat-profile/chat-profile"),
+  () => import("@/components/chat/chat-profile/chat-user-profile"),
   {
     ssr: false,
   }
