@@ -48,7 +48,7 @@ const ChatMessage = forwardRef<
       ? {
           root: typeof root_ref !== "function" ? root_ref?.current : null,
           threshold: 1,
-          rootMargin: "0px 0px 1px 0px",
+          rootMargin: "0px 0px 50px 0px",
         }
       : {
           root: typeof root_ref !== "function" ? root_ref?.current : null,
