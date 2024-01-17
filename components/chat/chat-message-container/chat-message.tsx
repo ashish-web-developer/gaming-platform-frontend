@@ -1,4 +1,4 @@
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useMemo } from "react";
 // types
 import type CustomChatTheme from "@/types/theme/chat";
 import type {
@@ -19,6 +19,7 @@ import { useTheme } from "styled-components";
 // hooks
 import useAvatar from "@/hooks/profile.hook";
 import { useMessageView } from "@/hooks/chat/chat.hook";
+import { useIsMobile } from "@/hooks/common.hook";
 
 // redux
 import { useAppDispatch } from "@/hooks/redux.hook";
@@ -36,13 +37,26 @@ const ChatMessage = forwardRef<
   }
 >(({ conversation, user, active_user }, root_ref) => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as CustomChatTheme;
+  const is_mobile = useIsMobile();
   const target_ref = useRef<HTMLDivElement>(null);
   const created_at = readableFormatDate(conversation.created_at);
   const user_avatar = useAvatar(user.username ?? "");
   const active_user_avatar = useAvatar(active_user?.username ?? "");
-  const theme = useTheme() as CustomChatTheme;
+  const intersection_observer_options = useMemo(() => {
+    return is_mobile
+      ? {
+          root: typeof root_ref !== "function" ? root_ref?.current : null,
+          threshold: 1,
+          rootMargin: "0px 0px 1px 0px",
+        }
+      : {
+          root: typeof root_ref !== "function" ? root_ref?.current : null,
+          threshold: 1,
+          rootMargin: "0px",
+        };
+  }, [is_mobile]);
   useMessageView({
-    root_ref,
     target_ref,
     callback: (entries, observer) => {
       entries.forEach((entry) => {
@@ -56,6 +70,7 @@ const ChatMessage = forwardRef<
         }
       });
     },
+    options: intersection_observer_options,
   });
 
   if (conversation.receiver_id == user.id) {

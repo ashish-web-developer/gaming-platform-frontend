@@ -80,7 +80,6 @@ const Message = forwardRef<
   const target_ref = useRef<HTMLDivElement>(null);
   const user_avatar = useAvatar(user?.username);
   useMessageView({
-    root_ref,
     target_ref,
     callback: (entries, observer) => {
       entries.forEach((entry) => {
@@ -89,6 +88,11 @@ const Message = forwardRef<
           observer.unobserve(target_ref.current as HTMLDivElement);
         }
       });
+    },
+    options: {
+      root: typeof root_ref !== "function" ? root_ref?.current : null,
+      threshold: 1,
+      rootMargin: "0px",
     },
   });
   return (
