@@ -57,7 +57,7 @@ import {
   udpateIsProposalSender,
   updateGamingUser,
 } from "@/store/slice/game.slice";
-import { sendInvitationApi } from "@/store/slice/chat.slice";
+import { show_user_profile, sendInvitationApi } from "@/store/slice/chat.slice";
 
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
@@ -77,6 +77,7 @@ const MobileChatContainer: FC = () => {
   const _user = useAppSelector(user);
   const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
   const _show_chat = useAppSelector(show_chat);
+  const _show_user_profile = useAppSelector(show_user_profile);
   useDefaultUser();
   usePrivateChannel(`chat.${_user.id}`, [
     {
@@ -134,7 +135,7 @@ const MobileChatContainer: FC = () => {
   return (
     <StyledMobileChatContainer>
       {_show_memory_game_snackbar && <MemoryGameInvitationDrawer />}
-      <ChatProfile />
+      {_show_user_profile && <ChatProfile />}
       <div id="search-dialog-container"></div>
       <MobileChatHeader />
       {!_show_chat && (

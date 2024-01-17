@@ -20,7 +20,7 @@ const StyledMobileChatSearchIcon = styled.button`
   padding: 0px;
 `;
 
-const StyledHamBurgerIcon = styled.span`
+const StyledHamBurgerIcon = styled.button`
   display: inline-block;
   width: 30px;
   height: 3px;
@@ -28,6 +28,7 @@ const StyledHamBurgerIcon = styled.span`
   position: relative;
   top: 10px;
   cursor: pointer;
+  border: none;
   &::before {
     content: "";
     width: 25px;

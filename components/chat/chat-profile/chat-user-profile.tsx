@@ -14,11 +14,16 @@ import {
   StyledPointsTag,
   StyledPointsImage,
   StyledPointsText,
+  StyledUserDetailsWrapper,
+  StyledName,
+  StyledUserNameWrapper,
+  StyledUserName,
 } from "@/styles/components/chat/chat-profile/chat-user-profile.style";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
+import { updateShowUserProfile } from "@/store/slice/chat.slice";
 // hooks
 import useAvatar from "@/hooks/profile.hook";
 
@@ -69,7 +74,11 @@ const ChatProfile: FC = () => {
   return (
     <StyledWrapper>
       <StyledHeader>
-        <StyledBackButton>
+        <StyledBackButton
+          onClick={() => {
+            dispatch(updateShowUserProfile(false));
+          }}
+        >
           <BackIcon size={22} color="#000" />
         </StyledBackButton>
         <StyledHeaderText>Gamer Profile</StyledHeaderText>
@@ -95,6 +104,12 @@ const ChatProfile: FC = () => {
           </StyledPointsTag>
         </StyledProfileWrappper>
       </StyledChatProfileContent>
+      <StyledUserDetailsWrapper>
+        <StyledName>{_user.name}</StyledName>
+        <StyledUserNameWrapper>
+          <StyledUserName>@{_user.username}</StyledUserName>
+        </StyledUserNameWrapper>
+      </StyledUserDetailsWrapper>
     </StyledWrapper>
   );
 };

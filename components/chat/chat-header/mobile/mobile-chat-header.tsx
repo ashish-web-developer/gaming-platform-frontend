@@ -35,14 +35,15 @@ import {
   active_user,
   active_user_conversation,
   updateShowChat,
-  updateActiveUser
+  updateActiveUser,
+  updateShowUserProfile,
 } from "@/store/slice/chat.slice";
 
 // hooks
 import { useIsMounted } from "@/hooks/common.hook";
 import useAvatar from "@/hooks/profile.hook";
 
-const BackIcon: FC<{ size: number, color:string }> = ({ size, color }) => {
+const BackIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -86,9 +87,13 @@ const MobileChatHeader: FC = () => {
               dispatch(updateActiveUser(null));
             }}
           >
-            <BackIcon color = {theme.palette.back_button.icon} size={22} />
+            <BackIcon color={theme.palette.back_button.icon} size={22} />
           </StyledBackCta>
-          <StyledHamBurgerIcon />
+          <StyledHamBurgerIcon
+            onClick={() => {
+              dispatch(updateShowUserProfile(true));
+            }}
+          />
         </StyledMobileHeader>
         <StyledChatUserProfile>
           <StyledAvatar
@@ -133,7 +138,11 @@ const MobileChatHeader: FC = () => {
               height={40}
             />
           </StyledMobileChatSearchIcon>
-          <StyledHamBurgerIcon />
+          <StyledHamBurgerIcon
+            onClick={() => {
+              dispatch(updateShowUserProfile(true));
+            }}
+          />
         </StyledMobileHeader>
         <StyledWelcomingText>
           Welcome Gaming,

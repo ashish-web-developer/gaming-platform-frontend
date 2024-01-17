@@ -176,6 +176,7 @@ const initialState: IChatInitialState = {
   default_users: [],
   active_user: null,
   active_user_conversation: [],
+  show_user_profile: false,
   send_message: {
     is_request_pending: false,
   },
@@ -289,6 +290,9 @@ const chatSlice = createSlice({
     updateShowChat: (state, action: PayloadAction<boolean>) => {
       state.mobile.show_chat = action.payload;
     },
+    updateShowUserProfile: (state, action: PayloadAction<boolean>) => {
+      state.show_user_profile = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -377,6 +381,8 @@ export const is_typing = (state: RootState) => state.chat.is_typing;
 export const show_memory_game_snackbar = (state: RootState) =>
   state.chat.game_snackbar.show_memory_game_snackbar;
 export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
+export const show_user_profile = (state: RootState) =>
+  state.chat.show_user_profile;
 export const {
   updateSearchInputValue,
   updatePage,
@@ -391,4 +397,5 @@ export const {
   updateIsTyping,
   updateShowMemoryGameSnackbar,
   updateShowChat,
+  updateShowUserProfile,
 } = chatSlice.actions;

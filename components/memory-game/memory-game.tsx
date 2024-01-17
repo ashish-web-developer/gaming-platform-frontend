@@ -236,7 +236,6 @@ const MemoryGame: FC = () => {
       event: "UpdateMemoryGameScore",
       callback: (data) => {
         dispatch(updateScore(data.score));
-        console.log(data);
       },
     },
     {

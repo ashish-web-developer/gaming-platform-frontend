@@ -105,6 +105,52 @@ const StyledPointsText = styled.span`
   line-height: normal;
 `;
 
+const StyledUserDetailsWrapper = styled.div`
+  transform: rotate(-10deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+`;
+
+const StyledName = styled.h3`
+  color: #a2f263;
+  font-size: 40px;
+  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  text-align: center;
+`;
+const StyledUserNameWrapper = styled.div`
+  height: 30px;
+  border: 2px solid #ffffff;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 16px;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: 140%;
+    background: transparent;
+    border: 2px solid #fff;
+    border-radius: 25px;
+  }
+`;
+
+const StyledUserName = styled.p`
+  color: #a2f263;
+  text-align: center;
+  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+`;
+
 export {
   StyledWrapper,
   StyledHeader,
@@ -117,4 +163,8 @@ export {
   StyledPointsTag,
   StyledPointsImage,
   StyledPointsText,
+  StyledUserDetailsWrapper,
+  StyledName,
+  StyledUserNameWrapper,
+  StyledUserName,
 };
