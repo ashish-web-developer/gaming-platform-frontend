@@ -1,14 +1,12 @@
 import { useEffect, useRef } from "react";
 // types
 import type { ForwardedRef, RefObject } from "react";
-import type { IConversation } from "@/types/store/slice/chat";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   show_emoji,
   active_user,
   updateShowEmoji,
-  updateView,
   fetchMessages,
   fetchDefaultUser,
 } from "@/store/slice/chat.slice";
@@ -71,46 +69,45 @@ const useEmojiOutsideClickHandler = ({
 /**
  * To handle the view of the message
  */
-
 const useMessageView = ({
   root_ref,
   target_ref,
-  conversation,
+  callback,
 }: {
   root_ref: ForwardedRef<HTMLDivElement>;
   target_ref: RefObject<HTMLDivElement>;
-  conversation: IConversation;
+  callback: (
+    entries: IntersectionObserverEntry[],
+    observer: IntersectionObserver
+  ) => void; // intersection observer callback
 }) => {
-  const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
-  const observer_ref = useRef<IntersectionObserver | null>(null);
-  let is_api_called = false;
   useEffect(() => {
     if (
       typeof root_ref !== "function" &&
       root_ref?.current &&
-      !conversation.viewed &&
-      _user.id == conversation.receiver_id
+      target_ref.current
     ) {
-      observer_ref.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0].isIntersecting && !is_api_called) {
-            dispatch(updateView({ conversation_id: conversation.id }));
-            is_api_called = true;
-            if(target_ref.current){
-              observer_ref.current?.unobserve(target_ref.current);
-            }
-          }
-        },
-        {threshold: 1 }
-      );
+      // options
+      let options: {
+        root?: Element | Document | null;
+        rootMargin?: string;
+        threshold?: number | number[];
+      } = {
+        root: root_ref.current,
+        rootMargin: "0px",
+        threshold: 1.0,
+      };
+
+      // observer
+      let observer = new IntersectionObserver(callback, options);
       if (target_ref.current) {
-        observer_ref.current.observe(target_ref.current);
+        observer.observe(target_ref.current);
       }
+      return () => {
+        observer.disconnect();
+      };
     }
-    return () => {
-      observer_ref.current?.disconnect();
-    };
   }, [_user]);
 };
 

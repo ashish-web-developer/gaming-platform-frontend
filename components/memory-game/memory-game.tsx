@@ -176,6 +176,9 @@ import HelpIcon from "@/components/memory-game/icons/help";
 import { usePresenceChannel } from "@/hooks/pusher.hook";
 import { useIsMobile } from "@/hooks/common.hook";
 
+// package
+import { v4 as uuidv4 } from "uuid";
+
 const MemoryGame: FC = () => {
   const theme = useTheme() as CustomMemoryGameThemePalette;
   const dispatch = useAppDispatch();
@@ -239,7 +242,9 @@ const MemoryGame: FC = () => {
     {
       event: "LiveChatStreamEvent",
       callback: (data: { user: IUsersWithConversation; message: string }) => {
-        dispatch(updateLiveStreamChatList(data));
+        dispatch(
+          updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
+        );
         if (data.user.id !== _user.id) {
           dispatch(
             updateInfoSnackbar({

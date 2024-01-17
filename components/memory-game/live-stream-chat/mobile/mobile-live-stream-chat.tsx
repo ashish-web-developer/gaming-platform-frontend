@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { forwardRef, useRef } from "react";
 // types
 import type { FC } from "react";
 import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
@@ -29,12 +29,14 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   live_stream_chat_list,
   updateShowChatStreamingModal,
+  updateLiveSteamMessageView,
 } from "@/store/slice/memory-game.slice";
 import { liveStreamChatApi } from "@/store/slice/game.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // hooks
 import useAvatar from "@/hooks/profile.hook";
+import { useMessageView } from "@/hooks/chat/chat.hook";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -70,33 +72,50 @@ const SendIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
-const Message: FC<{ user: IUsersWithConversation; message: string }> = ({
-  user,
-  message,
-}) => {
-  const user_avatar = useAvatar(user.username);
+const Message = forwardRef<
+  HTMLDivElement,
+  { user: IUsersWithConversation; message: string; viewed: boolean; id: string }
+>(({ user, message, viewed, id }, root_ref) => {
+  const dispatch = useAppDispatch();
+  const target_ref = useRef<HTMLDivElement>(null);
+  const user_avatar = useAvatar(user?.username);
+  useMessageView({
+    root_ref,
+    target_ref,
+    callback: (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          dispatch(updateLiveSteamMessageView({ id, viewed: true }));
+          observer.unobserve(target_ref.current as HTMLDivElement);
+        }
+      });
+    },
+  });
   return (
-    <StyledMessageContainer>
-      <StyledProfileContainer>
-        <StyledUserProfile
-          dangerouslySetInnerHTML={{
-            __html: user_avatar,
-          }}
-        />
-        <StyledMessageUserName>{user.name}</StyledMessageUserName>
-      </StyledProfileContainer>
-      <StyledMessage>{message}</StyledMessage>
-    </StyledMessageContainer>
+    <>
+      <StyledMessageContainer ref={target_ref}>
+        <StyledProfileContainer>
+          <StyledUserProfile
+            dangerouslySetInnerHTML={{
+              __html: user_avatar,
+            }}
+          />
+          <StyledMessageUserName>{user.name}</StyledMessageUserName>
+        </StyledProfileContainer>
+        <StyledMessage>{message}</StyledMessage>
+      </StyledMessageContainer>
+    </>
   );
-};
+});
 
 const LiveStreamChat: FC = () => {
   const dispatch = useAppDispatch();
   const input_ref = useRef<HTMLInputElement>(null);
   const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
   const theme = useTheme() as CustomMemoryGameThemePalette;
+  const container_ref = useRef<HTMLDivElement>(null);
   return (
-    <StyledContainer>
+    <StyledContainer ref={container_ref}>
       <StyledDivider />
       <StyledHeader>
         <StyledMainText>Live Chat</StyledMainText>
@@ -108,7 +127,7 @@ const LiveStreamChat: FC = () => {
       </StyledHeader>
       <StyledMessagesContainer>
         {_live_stream_chat_list.map((chat) => {
-          return <Message {...chat} />;
+          return <Message ref={container_ref} {...chat} />;
         })}
       </StyledMessagesContainer>
       <StyledMessageInputContainer>

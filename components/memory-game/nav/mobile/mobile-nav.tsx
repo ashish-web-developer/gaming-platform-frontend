@@ -28,10 +28,10 @@ import {
   // actions
   updateShowHelpDrawer,
   updateShowChatStreamingModal,
-  resetMemoryGame
+  resetMemoryGame,
 } from "@/store/slice/memory-game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
-import { gaming_user,resetGame } from "@/store/slice/game.slice";
+import { gaming_user, resetGame } from "@/store/slice/game.slice";
 
 const MobileNav: FC = () => {
   const router = useRouter();
@@ -40,16 +40,18 @@ const MobileNav: FC = () => {
   const _gaming_user = useAppSelector(gaming_user);
   const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
   const _live_stream_gaming_user_chat = _live_stream_chat_list.filter(
-    (chat) => chat.user.id == _gaming_user?.id
+    (chat) => chat.user.id == _gaming_user?.id && !chat.viewed
   );
   return (
     <StyledNavContainer>
       <StyledNav>
-        <StyledIconButton onClick={() => {
-          dispatch(resetGame());
-          dispatch(resetMemoryGame());
-          router.push('/');
-        }}>
+        <StyledIconButton
+          onClick={() => {
+            dispatch(resetGame());
+            dispatch(resetMemoryGame());
+            router.push("/");
+          }}
+        >
           <HomeIcon width={30} height={24} color="#FFF" />
         </StyledIconButton>
         <StyledChatButton
