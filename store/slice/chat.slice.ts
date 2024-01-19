@@ -177,6 +177,7 @@ const initialState: IChatInitialState = {
   active_user: null,
   active_user_conversation: [],
   show_user_profile: false,
+  show_profile_upload_modal: false,
   send_message: {
     is_request_pending: false,
   },
@@ -293,6 +294,9 @@ const chatSlice = createSlice({
     updateShowUserProfile: (state, action: PayloadAction<boolean>) => {
       state.show_user_profile = action.payload;
     },
+    updateShowProfileUploadModal: (state, action: PayloadAction<boolean>) => {
+      state.show_profile_upload_modal = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUser.fulfilled, (state, action) => {
@@ -383,6 +387,8 @@ export const show_memory_game_snackbar = (state: RootState) =>
 export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
 export const show_user_profile = (state: RootState) =>
   state.chat.show_user_profile;
+export const show_profile_upload_modal = (state: RootState) =>
+  state.chat.show_profile_upload_modal;
 export const {
   updateSearchInputValue,
   updatePage,
@@ -398,4 +404,5 @@ export const {
   updateShowMemoryGameSnackbar,
   updateShowChat,
   updateShowUserProfile,
+  updateShowProfileUploadModal,
 } = chatSlice.actions;

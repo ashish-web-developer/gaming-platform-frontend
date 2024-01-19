@@ -23,7 +23,13 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { updateShowUserProfile } from "@/store/slice/chat.slice";
+import {
+  updateShowUserProfile,
+  updateShowProfileUploadModal,
+} from "@/store/slice/chat.slice";
+
+// local components
+import ChatUserUpload from "@/components/chat/chat-profile/chat-user-upload";
 // hooks
 import useAvatar from "@/hooks/profile.hook";
 
@@ -73,6 +79,7 @@ const ChatProfile: FC = () => {
   const user_avatar = useAvatar(_user.username ?? "");
   return (
     <StyledWrapper>
+      <ChatUserUpload />
       <StyledHeader>
         <StyledBackButton
           onClick={() => {
@@ -90,7 +97,11 @@ const ChatProfile: FC = () => {
               __html: user_avatar,
             }}
           />
-          <StyledUploadButton>
+          <StyledUploadButton
+            onClick={() => {
+              dispatch(updateShowProfileUploadModal(true));
+            }}
+          >
             <UploadIcon width={30} height={25} color="#A2F263" stroke="#000" />
           </StyledUploadButton>
           <StyledPointsTag>

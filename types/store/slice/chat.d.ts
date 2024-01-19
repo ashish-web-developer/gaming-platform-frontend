@@ -35,6 +35,7 @@ type IChatInitialState = {
   active_user: IUsersWithConversation | null;
   active_user_conversation: IConversation[];
   show_user_profile: boolean;
+  show_profile_upload_modal: boolean;
   send_message: {
     is_request_pending: boolean;
   };
