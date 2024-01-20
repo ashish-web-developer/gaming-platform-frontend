@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // types
-import { PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { User } from "@/types/user";
 import type IChatInitialState from "@/types/store/slice/chat";
 import type {
   IFetchUserResponse,
@@ -20,6 +21,8 @@ import type {
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
 
+// actions
+import { updateUser } from "@/store/slice/user.slice";
 // helpers
 import { Axios } from "@/helpers/axios";
 
@@ -82,6 +85,38 @@ export const fetchMessages = createAsyncThunk<
     return rejectWithValue(error?.response?.data);
   }
 });
+
+export const updateProfileApi = createAsyncThunk<
+  {
+    success: boolean;
+    message: string;
+    user: User;
+    error?: any;
+  },
+  {
+    form_data: FormData;
+  }
+>(
+  "api/user/update-profile",
+  async ({ form_data }, { rejectWithValue, dispatch }) => {
+    try {
+      const response: AxiosResponse<{
+        success: boolean;
+        message: string;
+        user: User;
+        error?: any;
+      }> = await Axios.post("/user/update-profile", form_data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      dispatch(updateUser(response.data.user));
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 
 export const updateView = createAsyncThunk<
   IUpdateViewResponse,

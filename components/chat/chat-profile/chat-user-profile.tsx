@@ -1,3 +1,4 @@
+import Image from "next/image";
 // types
 import type { FC } from "react";
 
@@ -24,6 +25,7 @@ import {
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
+  show_profile_upload_modal,
   updateShowUserProfile,
   updateShowProfileUploadModal,
 } from "@/store/slice/chat.slice";
@@ -75,11 +77,12 @@ const UploadIcon: FC<{
 
 const ChatProfile: FC = () => {
   const dispatch = useAppDispatch();
+  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
   const user_avatar = useAvatar(_user.username ?? "");
   return (
     <StyledWrapper>
-      <ChatUserUpload />
+      <ChatUserUpload key={Number(_show_profile_upload_modal)} />
       <StyledHeader>
         <StyledBackButton
           onClick={() => {
@@ -92,11 +95,22 @@ const ChatProfile: FC = () => {
       </StyledHeader>
       <StyledChatProfileContent>
         <StyledProfileWrappper>
-          <StyledUserProfile
-            dangerouslySetInnerHTML={{
-              __html: user_avatar,
-            }}
-          />
+          {_user.avatar_url ? (
+            <StyledUserProfile
+              src={`${process.env.NEXT_PUBLIC_API_END_POINT}${
+                _user.avatar_url
+              }?timestamp=${new Date().getTime()}`}
+              fill={true}
+              alt="profile"
+              as={Image}
+            />
+          ) : (
+            <StyledUserProfile
+              dangerouslySetInnerHTML={{
+                __html: user_avatar,
+              }}
+            />
+          )}
           <StyledUploadButton
             onClick={() => {
               dispatch(updateShowProfileUploadModal(true));

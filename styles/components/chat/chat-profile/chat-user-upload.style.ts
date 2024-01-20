@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styled from "styled-components";
 
 const StyledChatUserUploadWrapper = styled.dialog`
@@ -54,6 +55,11 @@ const StyledUploadLabel = styled.label`
   height: 270px;
   border: 3px dashed #a2f263;
   border-radius: 25px;
+  position: relative;
+  overflow: hidden;
+`;
+const StyledUploadedImage = styled(Image)`
+  object-fit: cover;
 `;
 const StyledUploadInput = styled.input`
   width: 100%;
@@ -77,6 +83,29 @@ const StyledText = styled.p`
   line-height: normal;
 `;
 
+const StyledSaveCtaWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+`;
+
+const StyledSaveCta = styled.button`
+  width: auto;
+  height: auto;
+  border: 2px solid #a2f263;
+  background: linear-gradient(95deg, #ffe666 8.66%, #fb3 95.1%);
+  padding: 6px 24px;
+  color: #000;
+  text-align: center;
+  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-radius: 5px;
+`;
+
 export {
   StyledChatUserUploadWrapper,
   StyledHeader,
@@ -86,6 +115,9 @@ export {
   StyledUploadInputContainer,
   StyledUploadInput,
   StyledUploadLabel,
+  StyledUploadedImage,
   StyledUploadBottomInfoWrapper,
   StyledText,
+  StyledSaveCtaWrapper,
+  StyledSaveCta,
 };
