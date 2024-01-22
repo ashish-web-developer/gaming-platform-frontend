@@ -1,7 +1,7 @@
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type CustomChatTheme from "@/types/theme/chat";
+import type { Theme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -49,7 +49,7 @@ import GameIcon from "@/components/chat/chat-input/icon/game-icon";
 import SendIcon from "@/components/chat/chat-input/icon/send-icon";
 
 const ChatInput: FC = () => {
-  const theme = useTheme() as CustomChatTheme;
+  const theme = useTheme() as Theme;
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const input_ref = useRef<HTMLInputElement>(null);
@@ -72,6 +72,7 @@ const ChatInput: FC = () => {
         <StyledChatInputContainer>
           <StyledChatInput
             ref={input_ref}
+            $mode={_mode}
             placeholder={
               _is_typing ? `${_active_user.name} is typing....` : "Your Message"
             }
@@ -114,7 +115,14 @@ const ChatInput: FC = () => {
             $right={is_mobile ? "25px" : "75px"}
             disabled={_send_message_request_pending}
           >
-            <SendIcon size={30} color={theme.palette.secondary.main} />
+            <SendIcon
+              size={30}
+              color={
+                _mode == "light"
+                  ? theme.palette.primary.light
+                  : theme.palette.primary.dark
+              }
+            />
           </StyledButton>
           {!is_mobile && (
             <StyledButton
@@ -129,7 +137,11 @@ const ChatInput: FC = () => {
               <GameIcon
                 width={40}
                 height={25}
-                color={theme.palette.secondary.main}
+                color={
+                  _mode == "light"
+                    ? theme.palette.primary.light
+                    : theme.palette.primary.dark
+                }
               />
             </StyledButton>
           )}

@@ -1,7 +1,7 @@
 // type
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type CustomChatTheme from "@/types/theme/chat";
+import type { Theme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledUsersProfile,
@@ -26,6 +26,7 @@ import {
   updateActiveUser,
   fetchMessages,
 } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
 // helpers
 import { getTimeDifference } from "@/helpers/common";
 
@@ -35,17 +36,22 @@ interface IProps {
 const ChatUserProfile: FC<IProps> = ({ user }) => {
   const dispatch = useAppDispatch();
   const avatar = useAvatar(user.username ?? "");
-  const theme = useTheme() as CustomChatTheme;
+  const theme = useTheme() as Theme;
+  const _mode = useAppSelector(mode);
   const _active_user = useAppSelector(active_user);
   const is_mobile = useIsMobile();
   return (
     <StyledUsersProfile
       $time={getTimeDifference(user.latest_conversation?.created_at as string)}
       $not_viewed={user.not_viewed}
-      $border={
+      $border_color={
         _active_user?.id == user.id
-          ? theme.palette.default_user_profile.active_user_border
-          : theme.palette.default_user_profile.border
+          ? _mode == "light"
+            ? theme.palette.primary.light
+            : theme.palette.primary.dark
+          : _mode == "light"
+          ? theme.palette.primary.dark
+          : theme.palette.secondary.main
       }
       onClick={() => {
         dispatch(updateActiveUser(user));

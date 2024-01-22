@@ -26,6 +26,7 @@ import {
   // api call
   fetchUser,
 } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import useAvatar from "@/hooks/profile.hook";
@@ -37,6 +38,7 @@ const ChatResultProfile: FC<{
   handleModalClose?: () => void;
 }> = ({ user, is_request_pending, handleModalClose }) => {
   const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
   const avatar = useAvatar(user.username ?? "");
   return (
     <>
@@ -44,6 +46,7 @@ const ChatResultProfile: FC<{
         <StyledSkeletonLoader />
       ) : (
         <StyledProfileContainer
+          $mode={_mode}
           onClick={() => {
             dispatch(updateDefaultUser(user));
             dispatch(updateFetchUserResult([]));

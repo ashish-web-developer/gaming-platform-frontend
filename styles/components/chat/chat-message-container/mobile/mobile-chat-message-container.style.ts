@@ -8,8 +8,7 @@ const StyledMobileChatMessageContainer = styled.div<IStyledMobileChatMessageCont
   width: 100%;
   flex-grow: 1;
   border-radius: 30px;
-  border: 3px solid
-    ${({ theme }) => theme.palette.chat_messages_container.border};
+  border: 3px solid ${({ theme }) => theme.palette.primary.dark};
   background: ${({ theme }) => theme.palette.primary.main};
   padding: 30px 20px 40px 20px;
   overflow: auto;

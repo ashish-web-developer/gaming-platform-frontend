@@ -10,7 +10,7 @@ const StyledUsersList = styled.div`
   gap: 20px;
   height: calc(100% - 70px);
   overflow: auto;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     position: relative;
     height: auto;
   }

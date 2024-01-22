@@ -20,11 +20,16 @@ const StyledMobileChatSearchIcon = styled.button`
   padding: 0px;
 `;
 
-const StyledHamBurgerIcon = styled.span`
+const StyledHamBurgerIcon = styled.span<{
+  $mode: "light" | "dark";
+}>`
   display: inline-block;
   width: 30px;
   height: 3px;
-  background: ${({ theme }) => theme.palette.primary.info};
+  background: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
   position: relative;
   top: 10px;
   cursor: pointer;
@@ -35,24 +40,37 @@ const StyledHamBurgerIcon = styled.span`
     position: absolute;
     right: 0px;
     top: 10px;
-    background: ${({ theme }) => theme.palette.primary.info};
+    background: ${(props) =>
+      props.$mode == "light"
+        ? props.theme.palette.primary.dark
+        : props.theme.palette.primary.light};
   }
 `;
 
-const StyledWelcomingText = styled.h1`
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+const StyledWelcomingText = styled.h1<{
+  $mode: "light" | "dark";
+}>`
+  font-family: lobster;
   text-align: center;
-  color: ${({ theme }) => theme.palette.primary.info};
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
   font-size: 30px;
 `;
-const StyledWelcomingSpan = styled.span`
-  color: ${({ theme }) => theme.palette.secondary.main};
+const StyledWelcomingSpan = styled.span<{
+  $mode: "light" | "dark";
+}>`
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.light
+      : props.theme.palette.primary.dark};
 `;
 
 const StyledBackCta = styled.button`
   width: 60px;
   height: 60px;
-  background: ${({ theme }) => theme.palette.back_button.background};
+  background: ${({ theme }) => theme.palette.primary.dark};
   border: none;
   border-radius: 50%;
   display: flex;
@@ -60,25 +78,33 @@ const StyledBackCta = styled.button`
   justify-content: center;
 `;
 
-const StyledChatUserProfile = styled.div`
+const StyledChatUserProfile = styled.div<{
+  $mode: "light" | "dark";
+}>`
   height: 50px;
   width: auto;
   border-radius: 25px;
-  background: ${({ theme }) => theme.palette.active_user_profile.background};
+  background: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.main};
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 4px;
   gap: 12px;
   padding-right: 24px;
-  border: 2px solid ${({ theme }) => theme.palette.active_user_profile.border};
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  box-shadow: ${(props) =>
+    props.$mode == "light"
+      ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+      : "0px 4px 4px 0px rgba(255, 255, 255, 0.25)"};
 `;
 
 const StyledAvatar = styled.span`
   display: inline-block;
   border-radius: 40px;
-  border: 2px solid
-    ${({ theme }) => theme.palette.active_user_profile.text_main};
+  border: 2px solid #fff;
   width: 40px;
   height: 40px;
 `;
@@ -89,18 +115,28 @@ const StyledUserDetails = styled.div`
   gap: 2px;
 `;
 
-const StyledUserName = styled.span`
-  color: ${({ theme }) => theme.palette.active_user_profile.text_main};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+const StyledUserName = styled.span<{
+  $mode: "light" | "dark";
+}>`
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.main
+      : props.theme.palette.primary.light};
+  font-family: lobster;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
 `;
 
-const StyledMessageCount = styled.span`
-  color: ${({ theme }) => theme.palette.active_user_profile.text_secondary};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+const StyledMessageCount = styled.span<{
+  $mode: "light" | "dark";
+}>`
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.light
+      : props.theme.palette.primary.dark};
+  font-family: lobster;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;

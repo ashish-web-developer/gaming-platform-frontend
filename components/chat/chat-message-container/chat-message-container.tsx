@@ -18,8 +18,10 @@ import {
   active_user,
   active_user_conversation,
 } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
 
 const ChatMessageContainer: FC = () => {
+  const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _active_user_conversation = useAppSelector(active_user_conversation);
@@ -29,8 +31,10 @@ const ChatMessageContainer: FC = () => {
       {_active_user && (
         <StyledMessageContainer>
           <StyledUserDetailsContainer>
-            <StyledActiveUserName>{_active_user.name}</StyledActiveUserName>
-            <StyledMessagesCount>
+            <StyledActiveUserName $mode={_mode}>
+              {_active_user.name}
+            </StyledActiveUserName>
+            <StyledMessagesCount $mode={_mode}>
               {_active_user_conversation.length} messages{" "}
             </StyledMessagesCount>
           </StyledUserDetailsContainer>

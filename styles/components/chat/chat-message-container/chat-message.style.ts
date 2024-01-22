@@ -1,47 +1,46 @@
 import styled from "styled-components";
 
-type IStyledMessageContent = {
+const StyledMessageContent = styled.div<{
   $justifyContent: "flex-start" | "flex-end";
-};
-
-type IStyledUserProfile = {
-  $order: 1 | 2;
-  $borderColor: string;
-};
-
-type IStyledMessage = {
-  $order: 1 | 2;
-  $borderColor: string;
-  $borderRadius: string;
-  $left?: number;
-  $right?: number;
-  $content: string;
-  $showDoubleTick: boolean;
-};
-const StyledMessageContent = styled.div<IStyledMessageContent>`
+}>`
   display: flex;
   gap: 16px;
   justify-content: ${(props) => props.$justifyContent};
 `;
-const StyledUserProfile = styled.div<IStyledUserProfile>`
+const StyledUserProfile = styled.div<{
+  $order: 1 | 2;
+  $border_color: string;
+}>`
   width: 40px;
   height: 40px;
   border-radius: 8px;
-  border: 2px solid ${(props) => props.$borderColor};
+  border: 2px solid ${(props) => props.$border_color};
   order: ${(props) => props.$order};
 `;
 
-const StyledMessage = styled.div<IStyledMessage>`
+const StyledMessage = styled.div<{
+  $order: 1 | 2;
+  $border_color: string;
+  $border_radius: string;
+  $left?: number;
+  $right?: number;
+  $content: string;
+  $show_double_tick: boolean;
+  $mode: "light" | "dark";
+}>`
   max-width: 230px;
   height: auto;
-  color: ${({ theme }) => theme.palette.primary.info};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
+  font-family: lobster;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  border-radius: ${(props) => props.$borderRadius};
-  border: 2px solid ${(props) => props.$borderColor};
+  border-radius: ${(props) => props.$border_radius};
+  border: 2px solid ${(props) => props.$border_color};
   padding: 12px 12px 12px 12px;
   order: ${(props) => props.$order};
   position: relative;
@@ -56,12 +55,13 @@ const StyledMessage = styled.div<IStyledMessage>`
   }
   &::before {
     content: "";
-    display: ${(props) => (props.$showDoubleTick ? "inline-block" : "none")};
+    display: ${(props) => (props.$show_double_tick ? "inline-block" : "none")};
     position: absolute;
     width: 20px;
     height: 20px;
     top: 10px;
-    background: ${({ theme }) => theme.palette.messages.double_tick_img};
+    background: url("/chat/chat-message-container/${(props) =>
+      props.$mode == "light" ? "dark" : "light"}-double-tick.png");
     background-size: cover;
     background-repeat: no-repeat;
     left: ${(props) => {

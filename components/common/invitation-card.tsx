@@ -22,13 +22,15 @@ import {
   updateShowMemoryGameSnackbar,
   acceptInvitationApi,
 } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
 
 const InvitationCard: FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const _gaming_user = useAppSelector(gaming_user);
+  const _mode = useAppSelector(mode);
   return (
-    <StyledInvitationCard>
+    <StyledInvitationCard $mode={_mode}>
       <StyledCardContent>
         <StyledLogo>
           Cogni<StyledLogoSpan color="#F42C04">Match</StyledLogoSpan>
@@ -44,6 +46,7 @@ const InvitationCard: FC = () => {
           <StyledUserName>@{_gaming_user?.username}</StyledUserName>
           <StyledCardHeading>Ready for a memory showdown?</StyledCardHeading>
           <StyledPlayButton
+            $mode={_mode}
             onClick={() => {
               dispatch(acceptInvitationApi({ is_accepted: true }));
               dispatch(updateShowMemoryGameSnackbar(false));

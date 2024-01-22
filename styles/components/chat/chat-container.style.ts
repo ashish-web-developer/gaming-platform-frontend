@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 
 type IStyledPage = {
   $background_image: boolean;
@@ -37,10 +37,16 @@ const StyledChatMainContainer = styled.div`
   gap: 40px;
 `;
 
-const StyledChatMainContentContainer = styled.div`
+const StyledChatMainContentContainer = styled.div<{
+  $mode: "light" | "dark";
+}>`
   width: 100%;
   min-height: 100%;
-  border-left: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  border-left: 2px solid
+    ${(props) =>
+      props.$mode == "light"
+        ? props.theme.palette.primary.light
+        : props.theme.palette.primary.dark};
   padding-left: 40px;
 `;
 
@@ -66,9 +72,14 @@ const StyledNotificationContainer = styled.div`
   width: 100%;
   height: 100%;
 `;
-const StyledNotificationHeading = styled.h6`
-  color: ${({ theme }) => theme.palette.secondary.main};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+const StyledNotificationHeading = styled.h6<{
+  $mode: "light" | "dark";
+}>`
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.light
+      : props.theme.palette.primary.dark};
+  font-family: lobster;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;

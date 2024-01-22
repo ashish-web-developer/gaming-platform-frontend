@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Image from "next/image";
 
 const StyledChatHeader = styled.div`
   display: flex;
@@ -9,7 +8,7 @@ const StyledChatHeader = styled.div`
 `;
 
 const StyledWelcomeText = styled.div`
-  color: ${({ theme }) => theme.palette.primary.info};
+  color: ${({ theme }) => theme.palette.primary.dark};
   font-family: Lobster;
   font-size: 24px;
   font-style: normal;
@@ -17,7 +16,7 @@ const StyledWelcomeText = styled.div`
   line-height: normal;
 `;
 const StyledSpan = styled.span`
-  color: ${({ theme }) => theme.palette.secondary.main};
+  color: ${({ theme }) => theme.palette.primary.light};
 `;
 
 const StyledRightContainer = styled.div`
@@ -32,24 +31,42 @@ const StyledUserProfileContainer = styled.div`
   gap: 12px;
 `;
 
-const StyledUserImgContainer = styled.span`
+const StyledUserImgContainer = styled.span<{
+  $mode: "light" | "dark";
+}>`
   background: ${({ theme }) => theme.palette.primary.main};
   display: inline-block;
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 3px solid ${({ theme }) => theme.palette.primary.info};
   display: flex;
   align-items: center;
   justify-content: center;
+  ${(props) => {
+    switch (props.$mode) {
+      case "dark":
+        return `
+          border: 3px solid ${props.theme.palette.primary.light};
+        `;
+      case "light":
+        return `
+          border: 3px solid ${props.theme.palette.primary.dark};
+        `;
+    }
+  }}
 `;
 
-const StyledUserImg = styled.span`
+const StyledUserImg = styled.span<{
+  $mode: "light" | "dark";
+}>`
   display: inline-block;
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: ${({ theme }) => theme.palette.primary.info};
+  background: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
 `;
 
 const StyledUserData = styled.span`
@@ -57,9 +74,14 @@ const StyledUserData = styled.span`
   flex-direction: column;
 `;
 
-const StyledUserName = styled.span`
-  color: ${({ theme }) => theme.palette.primary.info};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+const StyledText = styled.span<{
+  $mode: "light" | "dark";
+}>`
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
+  font-family: lobster;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -72,26 +94,29 @@ const StyledUserPointsContainer = styled.span`
   gap: 4px;
 `;
 
-const StyledMoneyBagImg = styled(Image)``;
-
-const StyledUserPoints = styled.span`
-  color: ${({ theme }) => theme.palette.primary.info};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-
-const StyledNotificationContainer = styled.div`
+const StyledNotificationContainer = styled.div<{
+  $mode: "light" | "dark";
+}>`
   width: 40px;
   height: 40px;
   border-radius: 6px;
-  border: 2px solid ${({ theme }) => theme.palette.primary.info};
-  background: ${({ theme }) => theme.palette.secondary.main};
   display: flex;
   justify-content: center;
   align-items: center;
+  ${(props) => {
+    switch (props.$mode) {
+      case "dark":
+        return `
+          border: 2px solid ${props.theme.palette.primary.light};
+          background: ${props.theme.palette.primary.dark};
+        `;
+      case "light":
+        return `
+          border: 2px solid ${props.theme.palette.primary.dark};
+          background:${props.theme.palette.primary.light};
+        `;
+    }
+  }}
 `;
 
 export {
@@ -103,9 +128,7 @@ export {
   StyledUserImgContainer,
   StyledUserImg,
   StyledUserData,
-  StyledUserName,
+  StyledText,
   StyledUserPointsContainer,
-  StyledUserPoints,
   StyledNotificationContainer,
-  StyledMoneyBagImg,
 };

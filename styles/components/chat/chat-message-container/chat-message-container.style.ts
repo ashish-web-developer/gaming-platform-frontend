@@ -12,24 +12,34 @@ const StyledUserDetailsContainer = styled.div`
   width: 100%;
   flex-basis: 50px;
 `;
-const StyledActiveUserName = styled.h6`
-  color: ${({ theme }) => theme.palette.secondary.main};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+const StyledActiveUserName = styled.h6<{
+  $mode: "light" | "dark";
+}>`
+  font-family: lobster;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.light
+      : props.theme.palette.primary.dark};
 `;
 
-const StyledMessagesCount = styled.span`
+const StyledMessagesCount = styled.span<{
+  $mode: "light" | "dark";
+}>`
   display: block;
-  color: ${({ theme }) => theme.palette.primary.info};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-family: lobster;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   padding-top: 4px;
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
 `;
 
 const StyledChatMessageContentContainer = styled.div`

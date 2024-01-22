@@ -21,8 +21,9 @@ import useAvatar from "@/hooks/profile.hook";
 import { useMessageView } from "@/hooks/chat/chat.hook";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux.hook";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { updateView } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // helpers
 import { readableFormatDate } from "@/helpers/common";
@@ -36,6 +37,7 @@ const ChatMessage = forwardRef<
   }
 >(({ conversation, user, active_user }, root_ref) => {
   const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
   const target_ref = useRef<HTMLDivElement>(null);
   const created_at = readableFormatDate(conversation.created_at);
   const user_avatar = useAvatar(user.username ?? "");
@@ -62,7 +64,7 @@ const ChatMessage = forwardRef<
     return (
       <StyledMessageContent $justifyContent="flex-start">
         <StyledUserProfile
-          $borderColor={theme.palette.messages.received_message_border}
+          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
           $order={1}
           dangerouslySetInnerHTML={{
             __html: active_user_avatar,
@@ -70,12 +72,13 @@ const ChatMessage = forwardRef<
         />
         <StyledMessage
           ref={target_ref}
-          $showDoubleTick={false}
+          $show_double_tick={false}
           $content={created_at}
           $right={10}
-          $borderRadius="0px 20px 20px 20px"
-          $borderColor={theme.palette.messages.received_message_border}
+          $border_radius="0px 20px 20px 20px"
+          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
           $order={2}
+          $mode={_mode}
         >
           {conversation.message}
         </StyledMessage>
@@ -86,7 +89,7 @@ const ChatMessage = forwardRef<
     return (
       <StyledMessageContent $justifyContent="flex-end">
         <StyledUserProfile
-          $borderColor={theme.palette.messages.send_message_border}
+          $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
           $order={2}
           dangerouslySetInnerHTML={{
             __html: user_avatar,
@@ -94,12 +97,13 @@ const ChatMessage = forwardRef<
         />
         <StyledMessage
           ref={target_ref}
-          $showDoubleTick={conversation.viewed}
+          $show_double_tick={conversation.viewed}
           $content={created_at}
           $left={10}
-          $borderRadius="20px 0px 20px 20px"
-          $borderColor={theme.palette.messages.send_message_border}
+          $border_radius="20px 0px 20px 20px"
+          $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
           $order={1}
+          $mode={_mode}
         >
           {conversation.message}
         </StyledMessage>

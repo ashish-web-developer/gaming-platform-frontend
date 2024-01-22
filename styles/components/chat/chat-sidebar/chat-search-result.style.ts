@@ -3,7 +3,7 @@ import styled from "styled-components";
 const StyledChatSearchResult = styled.div`
   width: 100%;
   height: auto;
-  border: ${({ theme }) => theme.palette.searchbar_result_container.border};
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 16px;
   padding: 1rem;
   display: flex;
@@ -14,18 +14,21 @@ const StyledChatSearchResult = styled.div`
   position: absolute;
   margin-top: 14px;
   z-index: 2;
-  background: ${({ theme }) =>
-    theme.palette.searchbar_result_container.background};
+  background: ${({ theme }) => theme.palette.primary.main};
 `;
 
-const StyledProfileContainer = styled.div`
+const StyledProfileContainer = styled.div<{
+  $mode: "light" | "dark";
+}>`
   width: 100%;
   min-height: 64px;
   border-radius: 16px;
-  background: ${({ theme }) =>
-    theme.palette.searchbar_result_container.search_result.background};
-  border: ${({ theme }) =>
-    theme.palette.searchbar_result_container.search_result.border};
+  background: ${({ theme }) => theme.palette.secondary.main};
+  border: 2px solid
+    ${(props) =>
+      props.$mode == "light"
+        ? props.theme.palette.primary.dark
+        : props.theme.palette.secondary.main};
   display: flex;
   align-items: center;
   padding-left: 12px;
@@ -46,7 +49,7 @@ const StyledProfileDetails = styled.div`
 
 const StyledName = styled.span`
   color: #000;
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-family: lobster;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -54,7 +57,7 @@ const StyledName = styled.span`
 `;
 const StyledUserName = styled.span`
   color: #40434e;
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-family: lobster;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

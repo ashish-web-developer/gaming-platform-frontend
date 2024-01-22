@@ -134,7 +134,7 @@ const StyledPlayCta = styled.button`
   background: #000;
   z-index: 2;
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: poppins;
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
@@ -153,7 +153,7 @@ const StyledPlayCta = styled.button`
 
 const StyledVsContainer = styled.p`
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: poppins;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;

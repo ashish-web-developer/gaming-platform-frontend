@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
+import type { Theme } from "@/theme/chat.theme";
 import type {
   IUsersWithConversation,
   IConversation,
@@ -43,6 +44,7 @@ import {
   updateGamingUser,
 } from "@/store/slice/game.slice";
 import { sendInvitationApi } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
@@ -55,8 +57,9 @@ import GameIcon from "@/components/chat/chat-input/icon/game-icon";
 import { v4 as uuidv4 } from "uuid";
 
 const MobileChatContainer: FC = () => {
-  const theme = useTheme();
+  const theme = useTheme() as Theme;
   const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
   const router = useRouter();
   const _active_user = useAppSelector(active_user);
   const _user = useAppSelector(user);
@@ -123,7 +126,7 @@ const MobileChatContainer: FC = () => {
       <MobileChatHeader />
       {!_show_chat && (
         <>
-          <StyledDivider />
+          <StyledDivider $mode={_mode} />
           <ChatUsersList />
         </>
       )}
@@ -141,7 +144,11 @@ const MobileChatContainer: FC = () => {
               }}
             >
               <GameIcon
-                color={theme.palette.secondary.main}
+                color={
+                  _mode == "light"
+                    ? theme.palette.primary.light
+                    : theme.palette.primary.dark
+                }
                 width={40}
                 height={25}
               />
