@@ -15,7 +15,7 @@ const StyledUserDetailsContainer = styled.div`
 const StyledActiveUserName = styled.h6<{
   $mode: "light" | "dark";
 }>`
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
@@ -30,7 +30,7 @@ const StyledMessagesCount = styled.span<{
   $mode: "light" | "dark";
 }>`
   display: block;
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

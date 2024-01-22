@@ -20,7 +20,7 @@ const StyledChatSearchInput = styled.input<{
   width: 100%;
   height: 100%;
   border-radius: 16px;
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   padding-left: 18px;
   z-index: 1;
   &:focus {

@@ -33,7 +33,7 @@ const StyledChatInput = styled.input<{
     props.$mode == "light"
       ? props.theme.palette.primary.dark
       : props.theme.palette.primary.light};
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;
   &::placeholder {
     color: ${(props) =>

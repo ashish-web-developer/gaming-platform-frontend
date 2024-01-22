@@ -49,7 +49,7 @@ const StyledProfileDetails = styled.div`
 
 const StyledName = styled.span`
   color: #000;
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -57,7 +57,7 @@ const StyledName = styled.span`
 `;
 const StyledUserName = styled.span`
   color: #40434e;
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

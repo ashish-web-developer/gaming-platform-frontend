@@ -34,7 +34,7 @@ const StyledMessage = styled.div<{
     props.$mode == "light"
       ? props.theme.palette.primary.dark
       : props.theme.palette.primary.light};
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

@@ -79,7 +79,7 @@ const StyledNotificationHeading = styled.h6<{
     props.$mode == "light"
       ? props.theme.palette.primary.light
       : props.theme.palette.primary.dark};
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 24px;
   font-style: normal;
   font-weight: 400;

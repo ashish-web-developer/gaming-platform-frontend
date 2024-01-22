@@ -20,7 +20,7 @@ const StyledUsersProfile = styled.div<{
     position: absolute;
     right: 16px;
     top: 12px;
-    font-family: lobster;
+    font-family: ${({ theme }) => theme.fontFamily.lobster};
     font-size: 12px;
   }
   &::before {
@@ -34,7 +34,7 @@ const StyledUsersProfile = styled.div<{
     background: #afa2ff;
     border: 1px solid #000;
     bottom: 12px;
-    font-family: lobster;
+    font-family: ${({ theme }) => theme.fontFamily.lobster};
     font-size: 12px;
     justify-content: center;
     align-items: center;
@@ -55,7 +55,7 @@ const StyledUserDetails = styled.div`
 
 const StyledUserName = styled.span`
   color: #000;
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -64,7 +64,7 @@ const StyledUserName = styled.span`
 
 const StyledUserMessage = styled.span`
   color: #40434e;
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

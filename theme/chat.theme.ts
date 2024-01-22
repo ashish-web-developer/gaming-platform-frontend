@@ -1,7 +1,7 @@
 // breakpoints
-import Breakpoints from "@/theme/chat.breakpoints";
+import Breakpoints from "breakpoints";
 // types
-import type { IBreakpoints } from "@/theme/chat.breakpoints";
+import type { IBreakpoints } from "breakpoints";
 
 export type Theme = {
   palette: {
@@ -15,6 +15,9 @@ export type Theme = {
     };
   };
   breakpoints: IBreakpoints;
+  fontFamily:{
+    lobster:string;
+  }
 };
 export const darkTheme: Theme = {
   palette: {
@@ -30,6 +33,9 @@ export const darkTheme: Theme = {
   breakpoints: {
     ...Breakpoints,
   },
+  fontFamily:{
+    lobster:"'Lobster',sans-serif"
+  }
 };
 
 export const lightTheme: Theme = {
@@ -46,4 +52,7 @@ export const lightTheme: Theme = {
   breakpoints: {
     ...Breakpoints,
   },
+  fontFamily:{
+    lobster:"'Lobster',sans-serif"
+  }
 };

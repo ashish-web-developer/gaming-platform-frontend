@@ -50,7 +50,7 @@ const StyledHamBurgerIcon = styled.span<{
 const StyledWelcomingText = styled.h1<{
   $mode: "light" | "dark";
 }>`
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   text-align: center;
   color: ${(props) =>
     props.$mode == "light"
@@ -122,7 +122,7 @@ const StyledUserName = styled.span<{
     props.$mode == "light"
       ? props.theme.palette.primary.main
       : props.theme.palette.primary.light};
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -136,7 +136,7 @@ const StyledMessageCount = styled.span<{
     props.$mode == "light"
       ? props.theme.palette.primary.light
       : props.theme.palette.primary.dark};
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 10px;
   font-style: normal;
   font-weight: 400;

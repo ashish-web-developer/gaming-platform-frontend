@@ -9,7 +9,7 @@ const StyledChatHeader = styled.div`
 
 const StyledWelcomeText = styled.div`
   color: ${({ theme }) => theme.palette.primary.dark};
-  font-family: Lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
@@ -81,7 +81,7 @@ const StyledText = styled.span<{
     props.$mode == "light"
       ? props.theme.palette.primary.dark
       : props.theme.palette.primary.light};
-  font-family: lobster;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
