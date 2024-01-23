@@ -15,9 +15,10 @@ export type Theme = {
     };
   };
   breakpoints: IBreakpoints;
-  fontFamily:{
-    lobster:string;
-  }
+  fontFamily: {
+    lobster: string;
+    poppins: string;
+  };
 };
 export const darkTheme: Theme = {
   palette: {
@@ -33,9 +34,10 @@ export const darkTheme: Theme = {
   breakpoints: {
     ...Breakpoints,
   },
-  fontFamily:{
-    lobster:"'Lobster',sans-serif"
-  }
+  fontFamily: {
+    lobster: "'Lobster',sans-serif",
+    poppins: "'Poppins',sans-serif",
+  },
 };
 
 export const lightTheme: Theme = {
@@ -52,7 +54,8 @@ export const lightTheme: Theme = {
   breakpoints: {
     ...Breakpoints,
   },
-  fontFamily:{
-    lobster:"'Lobster',sans-serif"
-  }
+  fontFamily: {
+    lobster: "'Lobster',sans-serif",
+    poppins: "'Poppins',sans-serif",
+  },
 };
