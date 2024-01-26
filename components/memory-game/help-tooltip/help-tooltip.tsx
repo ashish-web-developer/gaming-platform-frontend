@@ -1,7 +1,7 @@
 import { useContext, useEffect, forwardRef } from "react";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
-import CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled components
 import {
@@ -14,16 +14,13 @@ import {
   StyledTooltip,
   StyledTooltipHeader,
   StyledTooltipPara,
-  StyledPattern,
-  StyledIconButton,
+  StyledCloseIconCta,
   StyledNavContainer,
+  StyledIconCta,
 } from "@/styles/components/memory-game/help-tooltip/help-tooltip.style";
 
 // styled theme
 import { useTheme } from "styled-components";
-
-// mui
-import { IconButton } from "@mui/material";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -38,7 +35,6 @@ import {
   updateCurrentRuleIndex,
   updatePlayAudio,
 } from "@/store/slice/memory-game.slice";
-import { mode } from "@/store/slice/common.slice";
 
 // icons
 import CloseIcon from "@/components/memory-game/help-tooltip/icons/close";
@@ -59,7 +55,7 @@ type IForwardRef = {
 
 const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
   const dispatch = useAppDispatch();
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
   const SpeechUttrance = useContext(UttranceContext);
   const _help_tooltip_text = useAppSelector(help_tooltip_text);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
@@ -125,51 +121,39 @@ const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
                 {_play_audio ? (
                   <VolumeOffIcon
                     size={20}
-                    color={theme.palette.help_tooltip.volume.color}
+                    color={theme.palette.primary.light}
                   />
                 ) : (
-                  <VolumeOnIcon
-                    size={20}
-                    color={theme.palette.help_tooltip.volume.color}
-                  />
+                  <VolumeOnIcon size={20} color={theme.palette.primary.light} />
                 )}
               </StyledVolumeCta>
             </StyledVolumeContainer>
             <StyledTooltip>
-              <StyledIconButton
+              <StyledCloseIconCta
                 onClick={() => {
                   dispatch(updateShowHelpTooltip(false));
                   dispatch(updateCurrentRuleIndex(0));
                 }}
               >
-                <CloseIcon
-                  color={theme.palette.help_tooltip.tooltip.icons}
-                  size={33}
-                />
-              </StyledIconButton>
+                <CloseIcon color={theme.palette.primary.light} size={33} />
+              </StyledCloseIconCta>
               <StyledNavContainer>
-                <IconButton
+                <StyledIconCta
                   disabled={_current_rule_index == 0}
                   onClick={() => {
                     dispatch(updateCurrentRuleIndex(_current_rule_index - 1));
                   }}
                 >
-                  <PrevIcon
-                    color={theme.palette.help_tooltip.tooltip.icons}
-                    size={33}
-                  />
-                </IconButton>
-                <IconButton
+                  <PrevIcon color={theme.palette.primary.light} size={33} />
+                </StyledIconCta>
+                <StyledIconCta
                   disabled={_current_rule_index == 7}
                   onClick={() => {
                     dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
                   }}
                 >
-                  <NextIcon
-                    color={theme.palette.help_tooltip.tooltip.icons}
-                    size={33}
-                  />
-                </IconButton>
+                  <NextIcon color={theme.palette.primary.light} size={33} />
+                </StyledIconCta>
               </StyledNavContainer>
               <StyledTooltipHeader>
                 {_help_tooltip_text && _help_tooltip_text[0]}
@@ -177,9 +161,6 @@ const HelpTooltip: ForwardRefRenderFunction<IForwardRef> = ({}, voiceRef) => {
               <StyledTooltipPara>
                 {_help_tooltip_text && _help_tooltip_text[1]}
               </StyledTooltipPara>
-              <StyledPattern>
-                <Pattern color={theme.palette.help_tooltip.tooltip.pattern} />
-              </StyledPattern>
             </StyledTooltip>
           </StyledToolTipContainer>
         </StyledHelpTooltipContainer>
