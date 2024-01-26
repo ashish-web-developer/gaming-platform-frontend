@@ -1,15 +1,16 @@
 // types
 import { type FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled components
 import {
   StyledBanner,
-  StyledBannerContent,
+  StyledWelcomeBannerPatternContainer,
+  StyledWelcomeBannerContent,
+  StyledStarIconWrapper,
   StyledBannerCircle,
-  StyledPopularTag,
-  StyledPopularText,
   StyledMainBannerHeader,
+  StyledSpan,
   StyledBannerPara,
   StyledAvatarGroup,
   StyledAvatar,
@@ -19,8 +20,8 @@ import {
 // theme
 import { useTheme } from "styled-components";
 
-// icons
-import Fire from "@/components/memory-game/welcome-banner/icons/fire";
+// local components
+import WelcomeBannerPattern from "@/components/memory-game/welcome-banner/welcome-banner-pattern";
 
 // redux
 
@@ -31,12 +32,31 @@ import {
   // state
   is_gaming_user_in,
 } from "@/store/slice/memory-game.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import useAvatar from "@/hooks/profile.hook";
 
+const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill="none"
+      viewBox="0 0 20 19"
+    >
+      <path
+        fill={color}
+        d="M10 0l2.245 6.91h7.266l-5.878 4.27 2.245 6.91L10 13.82l-5.878 4.27 2.245-6.91L.49 6.91h7.266L10 0z"
+      ></path>
+    </svg>
+  );
+};
+
 const WelcomeBanner: FC = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
+  const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user.username ?? "");
@@ -47,46 +67,47 @@ const WelcomeBanner: FC = () => {
     <>
       <StyledBanner>
         <StyledBannerCircle />
-        <StyledBannerContent>
-          <StyledPopularTag>
-            <Fire />
-            <StyledPopularText>Popular</StyledPopularText>
-          </StyledPopularTag>
-          <StyledMainBannerHeader>
-            <span
-              style={{
-                color: theme.palette.welcome_banner.side_container.text,
-              }}
-            >
+        <StyledWelcomeBannerPatternContainer>
+          <WelcomeBannerPattern
+            color={theme.palette.primary.contrast}
+            stroke={theme.palette.primary.light}
+          />
+          <StyledWelcomeBannerContent>
+            <StyledStarIconWrapper>
+              <StarIcon size={20} color="#080F0F" />
+              <StarIcon size={20} color="#FFFFFF" />
+              <StarIcon size={20} color="#16C172" />
+            </StyledStarIconWrapper>
+            <StyledMainBannerHeader>
               Cogni
-            </span>
-            Match
-          </StyledMainBannerHeader>
-          <StyledBannerPara>
-            &ldquo;CogniMatch&rdquo; is a captivating memory game designed to
-            boost your cognitive skills. Flip cards, match pairs, and enhance
-            your memory in a fun and challenging way. Perfect for all ages!
-          </StyledBannerPara>
-          <StyledAvatarGroup>
-            <StyledAvatar
-              $size="40px"
-              $border="3px solid #000"
-              $online={true}
-              dangerouslySetInnerHTML={{
-                __html: user_avatar,
-              }}
-            />
-            <StyledAvatar
-              $size="40px"
-              $online={_is_gaming_user_in}
-              $border="3px solid #000"
-              dangerouslySetInnerHTML={{
-                __html: gaming_user_avatar,
-              }}
-            />
-          </StyledAvatarGroup>
-        </StyledBannerContent>
-        <StyledBannerImage></StyledBannerImage>
+              <StyledSpan $color={theme.palette.primary.dark}>Match</StyledSpan>
+            </StyledMainBannerHeader>
+            <StyledBannerPara>
+              &ldquo;CogniMatch&rdquo; is a captivating memory game designed to
+              boost your cognitive skills. Flip cards, match pairs, and enhance
+              your memory in a fun and challenging way. Perfect for all ages!
+            </StyledBannerPara>
+            <StyledAvatarGroup>
+              <StyledAvatar
+                $size="40px"
+                $border="3px solid #000"
+                $online={true}
+                dangerouslySetInnerHTML={{
+                  __html: user_avatar,
+                }}
+              />
+              <StyledAvatar
+                $size="40px"
+                $online={_is_gaming_user_in}
+                $border="3px solid #000"
+                dangerouslySetInnerHTML={{
+                  __html: gaming_user_avatar,
+                }}
+              />
+            </StyledAvatarGroup>
+          </StyledWelcomeBannerContent>
+        </StyledWelcomeBannerPatternContainer>
+        <StyledBannerImage />
       </StyledBanner>
     </>
   );

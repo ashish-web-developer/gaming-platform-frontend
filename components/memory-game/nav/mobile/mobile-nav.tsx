@@ -11,9 +11,6 @@ import {
   StyledChatButton,
 } from "@/styles/components/memory-game/nav/mobile/mobile-nav.style";
 
-// mui
-import { IconButton } from "@mui/material";
-
 // icons
 import HomeIcon from "@/components/memory-game/nav/icons/home";
 import ChatIcon from "@/components/memory-game/nav/icons/chat";
@@ -77,9 +74,7 @@ const MobileNav: FC = () => {
         </StyledIconButton>
       </StyledNav>
       <StyledHelpCta>
-        <IconButton onClick={() => dispatch(updateShowHelpDrawer(true))}>
-          <HelpIcon size={35} color="#fff" />
-        </IconButton>
+        <HelpIcon size={35} color="#fff" />
       </StyledHelpCta>
     </StyledNavContainer>
   );

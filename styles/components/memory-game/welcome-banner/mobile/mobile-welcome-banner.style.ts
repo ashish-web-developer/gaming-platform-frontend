@@ -1,24 +1,10 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-type IStyledMainText = {
-  $top?: string;
-  $bottom?: string;
-  $left?: string;
-  $right?: string;
-  $rotate?: string;
-};
-
 type IStyledMainSpan = {
   $color: string;
 };
 
-
-type IStyledAvatar = {
-  $size: string;
-  $border: string;
-  $online:boolean;
-};
 const StyledContainer = styled.div`
   width: 100%;
   display: flex;
@@ -26,11 +12,16 @@ const StyledContainer = styled.div`
   align-items: center;
 `;
 
-const StyledDottedContainer = styled.div`
+const StyledDottedContainer = styled.div<{
+  $mode: "light" | "dark";
+}>`
   width: 98%;
   height: 240px;
-  border: ${({ theme }) =>
-    theme.palette.welcome_banner.mobile.dotted_container.border};
+  border: 2px dashed
+    ${(props) =>
+      props.$mode == "light"
+        ? props.theme.palette.primary.dark
+        : props.theme.palette.primary.light};
   border-radius: 25px;
   margin-top: 1.5rem;
 `;
@@ -38,12 +29,11 @@ const StyledDottedContainer = styled.div`
 const StyledWelcomeBannerContainer = styled(motion.div)`
   width: 100%;
   height: 240px;
-  border: ${({ theme }) =>
-    theme.palette.welcome_banner.mobile.container.border};
+  border: 4px solid ${({ theme }) => theme.palette.primary.light};
   border-radius: 25px;
   position: relative;
-  background: ${({ theme }) =>
-    theme.palette.welcome_banner.mobile.container.background};
+  background: url("/memory-game/welcome-banner/mobile/background-pattern.png"),
+    ${({ theme }) => theme.palette.primary.contrast};
   display: flex;
   justify-content: center;
   &::after {
@@ -53,8 +43,7 @@ const StyledWelcomeBannerContainer = styled(motion.div)`
     width: 45px;
     height: 45px;
     background: rgba(255, 255, 255, 0.7);
-    border: ${({ theme }) =>
-      theme.palette.welcome_banner.mobile.container.trophy_container.border};
+    border: 2px solid #16c172;
     border-radius: 50%;
     transform: translate(0%, -50%);
     background-image: url("/memory-game/welcome-banner/mobile/banner-image.png");
@@ -65,8 +54,15 @@ const StyledWelcomeBannerContainer = styled(motion.div)`
   }
 `;
 
-const StyledMainText = styled.span<IStyledMainText>`
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+const StyledMainText = styled.div<{
+  $top?: string;
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+  $rotate?: string;
+}>`
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.primary.light};
   font-size: 12px;
   font-weight: 800;
   position: absolute;
@@ -77,7 +73,9 @@ const StyledMainText = styled.span<IStyledMainText>`
   right: ${(props) => props.$right ?? "auto"};
 `;
 
-const StyledMainSpan = styled.span<IStyledMainSpan>`
+const StyledSpan = styled.span<{
+  $color: string;
+}>`
   color: ${(props) => props.$color};
 `;
 
@@ -90,15 +88,13 @@ const StyledStarContainer = styled.span`
 
 const StyledContent = styled.p`
   margin-top: 30px;
-  color: ${({ theme }) =>
-    theme.palette.welcome_banner.mobile.container.content_text_color};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.primary.light};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 15px;
   text-transform: capitalize;
   width: 75%;
   font-weight: 600;
 `;
-
 
 const StyledAvatarGroup = styled.div`
   display: flex;
@@ -109,35 +105,37 @@ const StyledAvatarGroup = styled.div`
   right: 16px;
 `;
 
-
-const StyledAvatar = styled.div<IStyledAvatar>`
+const StyledAvatar = styled.div<{
+  $size: string;
+  $border: string;
+  $online: boolean;
+}>`
   width: ${(props) => props.$size};
   height: ${(props) => props.$size};
   border: ${(props) => props.$border};
   border-radius: 50%;
-  position:relative;
+  position: relative;
   &:not(:first-child) {
     margin-left: -10px;
   }
-  &::after{
-    content:"";
-    position:absolute;
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:${(props)=>props.$online?"#16C172":"#F42C04"};
-    top:-5px;
-    right:3px;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
+    top: -5px;
+    right: 3px;
   }
 `;
-
 
 export {
   StyledContainer,
   StyledDottedContainer,
   StyledWelcomeBannerContainer,
   StyledMainText,
-  StyledMainSpan,
+  StyledSpan,
   StyledStarContainer,
   StyledContent,
   StyledAvatarGroup,

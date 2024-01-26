@@ -1,24 +1,16 @@
 import styled from "styled-components";
 
-type IStyledAvatar = {
-  $size: string;
-  $border: string;
-  $online: boolean;
-};
-
 const StyledBanner = styled.div`
   position: relative;
   width: 600px;
   height: 300px;
-  background: ${({ theme }) => theme.palette.welcome_banner.main};
+  background: ${({ theme }) => theme.palette.primary.dark};
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
   z-index: 2;
   margin-top: 26px;
   display: flex;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 100%;
-  }
+  justify-content: flex-end;
 `;
 
 const StyledBannerCircle = styled.div`
@@ -34,20 +26,33 @@ const StyledBannerCircle = styled.div`
   filter: blur(200px);
 `;
 
-const StyledBannerContent = styled.div`
-  background: ${({ theme }) =>
-    theme.palette.welcome_banner.side_container.background};
+const StyledWelcomeBannerPatternContainer = styled.div`
   width: 321px;
   height: 300.5px;
-  background-repeat: no-repeat;
-  padding: 18px;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 100%;
-    background: ${({ theme }) =>
-      theme.palette.welcome_banner.side_container.mobile.background};
-    background-size: 100%;
-    background-repeat: no-repeat;
-  }
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  z-index: 0;
+`;
+const StyledWelcomeBannerContent = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding-left: 24px;
+  gap: 6px;
+`;
+
+const StyledStarIconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
 `;
 
 const StyledBannerImage = styled.div`
@@ -57,59 +62,35 @@ const StyledBannerImage = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    display: none;
-  }
 `;
 
-const StyledPopularTag = styled.div`
-  width: 80px;
-  height: 20px;
-  background: ${({ theme }) => theme.palette.welcome_banner.tag.main};
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-`;
-
-const StyledPopularText = styled.span`
-  color: ${({ theme }) => theme.palette.primary.info};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-`;
 const StyledMainBannerHeader = styled.h3`
-  color: ${({ theme }) => theme.palette.welcome_banner.main};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.primary.light};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
   text-transform: capitalize;
-  margin-top: 8px;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    font-size: 18px;
-  }
+  line-height: 1;
+`;
+
+const StyledSpan = styled.span<{
+  $color: string;
+}>`
+  color: ${(props) => props.$color};
 `;
 
 const StyledBannerPara = styled.p`
-  color: ${({ theme }) => theme.palette.welcome_banner.side_container.text};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-  font-size: 16px;
+  color: ${({ theme }) => theme.palette.primary.light};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
+  font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: 21px; /* 131.25% */
   text-transform: capitalize;
-  margin-top: 8px;
   width: 246px;
   line-height: 22px;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
-    width: 100%;
-  }
 `;
 
 const StyledAvatarGroup = styled.div`
@@ -118,7 +99,11 @@ const StyledAvatarGroup = styled.div`
   align-items: center;
 `;
 
-const StyledAvatar = styled.div<IStyledAvatar>`
+const StyledAvatar = styled.div<{
+  $size: string;
+  $border: string;
+  $online: boolean;
+}>`
   width: ${(props) => props.$size};
   height: ${(props) => props.$size};
   border: ${(props) => props.$border};
@@ -141,11 +126,12 @@ const StyledAvatar = styled.div<IStyledAvatar>`
 
 export {
   StyledBanner,
-  StyledBannerContent,
+  StyledWelcomeBannerPatternContainer,
+  StyledWelcomeBannerContent,
+  StyledStarIconWrapper,
   StyledBannerCircle,
-  StyledPopularTag,
-  StyledPopularText,
   StyledMainBannerHeader,
+  StyledSpan,
   StyledBannerPara,
   StyledAvatarGroup,
   StyledAvatar,
