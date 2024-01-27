@@ -112,7 +112,7 @@ const StyledAvatar = styled.div<{
 }>`
   width: ${(props) => props.$size};
   height: ${(props) => props.$size};
-  border: ${(props) => props.$border};
+  border: 3px solid ${(props) => props.$border};
   border-radius: 50%;
   position: relative;
   &:not(:first-child) {

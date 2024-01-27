@@ -1,13 +1,12 @@
 import Image from "next/image";
 import { useEffect, useContext, forwardRef } from "react";
 // types
-import type { FC, ForwardRefRenderFunction } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
-// mui
-import { Drawer } from "@mui/material";
+import type { ForwardRefRenderFunction } from "react";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled components
 import {
+  StyledTooltipDrawer,
   StyledTooltipContainer,
   StyledTopBackground,
   StyledVolumeCta,
@@ -59,7 +58,7 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
   voiceRef
 ) => {
   const dispatch = useAppDispatch();
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
   const SpeechUttrance = useContext(UttranceContext);
   const _mode = useAppSelector(mode);
   const _play_audio = useAppSelector(play_audio);
@@ -98,19 +97,13 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
   }, [_show_help_drawer, _current_rule_index, _play_audio]);
 
   return (
-    <Drawer
-      anchor="right"
-      open={_show_help_drawer}
-      onClose={() => {
-        dispatch(updateShowHelpDrawer(false));
-      }}
-    >
+    <StyledTooltipDrawer open={_show_help_drawer}>
       <StyledTooltipContainer>
         <StyledTopBackground>
           <Image
             layout="responsive"
             alt="girl"
-            src={theme.palette.help_tooltip.mobile.mobile_top_background}
+            src={"/memory-game/help-tooltip/mobile/light-top-background.svg"}
             width={390}
             height={350}
           />
@@ -150,17 +143,14 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
               dispatch(updateShowHelpDrawer(false));
               dispatch(updateCurrentRuleIndex(0));
             }}
-            startIcon={
-              <StyledBackIconContainer>
-                <BackIcon
-                  width={12}
-                  height={22}
-                  color={theme.palette.help_tooltip.mobile.back_cta.start_icon}
-                />
-              </StyledBackIconContainer>
-            }
-            variant="contained"
           >
+            <StyledBackIconContainer>
+              <BackIcon
+                width={12}
+                height={22}
+                color={theme.palette.primary.dark}
+              />
+            </StyledBackIconContainer>
             Go Back
           </StyledBackButton>
           <StyledNavIconContainer>
@@ -171,10 +161,7 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
                 }
               }}
             >
-              <PrevIcon
-                size={50}
-                color={theme.palette.help_tooltip.mobile.icons}
-              />
+              <PrevIcon size={50} color={theme.palette.primary.dark} />
             </StyledNavCta>
             <StyledNavCta
               onClick={() => {
@@ -183,15 +170,12 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
                 }
               }}
             >
-              <NextIcon
-                size={50}
-                color={theme.palette.help_tooltip.mobile.icons}
-              />
+              <NextIcon size={50} color={theme.palette.primary.dark} />
             </StyledNavCta>
           </StyledNavIconContainer>
         </StyledBottomCta>
       </StyledTooltipContainer>
-    </Drawer>
+    </StyledTooltipDrawer>
   );
 };
 export default forwardRef(MobileHelpTooltip);

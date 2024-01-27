@@ -73,7 +73,9 @@ const MobileNav: FC = () => {
           <MoonIcon width={24} height={30} color="#FFF" />
         </StyledIconButton>
       </StyledNav>
-      <StyledHelpCta>
+      <StyledHelpCta onClick = {()=>{
+        dispatch(updateShowHelpDrawer(true));
+      }}>
         <HelpIcon size={35} color="#fff" />
       </StyledHelpCta>
     </StyledNavContainer>
