@@ -87,7 +87,7 @@ const StyledTooltip = styled.div`
 `;
 
 const StyledTooltipHeader = styled.h6`
-  color: ${({ theme }) => theme.palette.primary.light};
+  color: ${({ theme }) => theme.palette.primary.dark};
   font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 14px;
   font-style: normal;

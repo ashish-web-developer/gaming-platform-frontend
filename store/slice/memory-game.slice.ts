@@ -182,9 +182,6 @@ export const memoryGameSlice = createSlice({
     updatePlayAudio: (state, action) => {
       state.play_audio = action.payload;
     },
-    updateShowHelpDrawer: (state, action: PayloadAction<boolean>) => {
-      state.mobile.show_help_drawer = action.payload;
-    },
     updateShowGameBoard: (state, action: PayloadAction<boolean>) => {
       state.show_game_board = action.payload;
     },
@@ -243,7 +240,6 @@ export const {
   updateIsGamingUserLeaving,
   updateShowHelpTooltip,
   updatePlayAudio,
-  updateShowHelpDrawer,
   updateShowGameBoard,
   updateCardState,
   updatePlayerTurnId,
@@ -275,8 +271,6 @@ export const is_gaming_user_leaving = (state: RootState) =>
 export const show_help_tooltip = (state: RootState) =>
   state.memoryGame.show_help_tooltip;
 export const play_audio = (state: RootState) => state.memoryGame.play_audio;
-export const show_help_drawer = (state: RootState) =>
-  state.memoryGame.mobile.show_help_drawer;
 export const show_game_board = (state: RootState) =>
   state.memoryGame.show_game_board;
 export const player_turn_id = (state: RootState) =>

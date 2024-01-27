@@ -23,9 +23,9 @@ import {
   // state
   live_stream_chat_list,
   // actions
-  updateShowHelpDrawer,
   updateShowChatStreamingModal,
   resetMemoryGame,
+  updateShowHelpTooltip,
 } from "@/store/slice/memory-game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
 import { gaming_user, resetGame } from "@/store/slice/game.slice";
@@ -73,9 +73,11 @@ const MobileNav: FC = () => {
           <MoonIcon width={24} height={30} color="#FFF" />
         </StyledIconButton>
       </StyledNav>
-      <StyledHelpCta onClick = {()=>{
-        dispatch(updateShowHelpDrawer(true));
-      }}>
+      <StyledHelpCta
+        onClick={() => {
+          dispatch(updateShowHelpTooltip(true));
+        }}
+      >
         <HelpIcon size={35} color="#fff" />
       </StyledHelpCta>
     </StyledNavContainer>

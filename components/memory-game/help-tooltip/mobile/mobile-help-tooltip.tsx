@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { useEffect, useContext, forwardRef } from "react";
 // types
-import type { ForwardRefRenderFunction } from "react";
+import type { FC } from "react";
 import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled components
@@ -21,22 +20,14 @@ import {
   StyledBackIconContainer,
 } from "@/styles/components/memory-game/help-tooltip/mobile/mobile-help-tooltip.style";
 
+// hoc
+import withHelpTooltipFunctionality from "@/hoc/memory-game/with-help-tooltip-funtionality";
+
 // theme
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import {
-  // state
-  play_audio,
-  show_help_drawer,
-  help_tooltip_text,
-  current_rule_index,
-  // actions
-  updateShowHelpDrawer,
-  updatePlayAudio,
-  updateCurrentRuleIndex,
-} from "@/store/slice/memory-game.slice";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 
 // icons
@@ -46,58 +37,30 @@ import PrevIcon from "@/components/memory-game/help-tooltip/icons/prev";
 import NextIcon from "@/components/memory-game/help-tooltip/icons/next";
 import BackIcon from "@/components/memory-game/help-tooltip/icons/back";
 
-// context
-import { UttranceContext } from "context";
-
-type IForwardedRef = {
-  voice: SpeechSynthesisVoice[];
+type IProps = {
+  is_open: boolean;
+  play_audio: boolean;
+  help_tooltip_text: [string, string] | null;
+  current_rule_index: number;
+  handlePlayAudio: () => void;
+  closeHelpTooltip: () => void;
+  updateRuleIndex: (index: number) => void;
 };
 
-const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
-  props,
-  voiceRef
-) => {
-  const dispatch = useAppDispatch();
+const MobileHelpTooltip: FC<IProps> = ({
+  is_open,
+  play_audio,
+  help_tooltip_text,
+  current_rule_index,
+  handlePlayAudio,
+  closeHelpTooltip,
+  updateRuleIndex,
+}) => {
   const theme = useTheme() as ITheme;
-  const SpeechUttrance = useContext(UttranceContext);
   const _mode = useAppSelector(mode);
-  const _play_audio = useAppSelector(play_audio);
-  const _show_help_drawer = useAppSelector(show_help_drawer);
-  const _help_tooltip_text = useAppSelector(help_tooltip_text);
-  const _current_rule_index = useAppSelector(current_rule_index);
-
-  useEffect(() => {
-    const handleEnd = () => {
-      if (_current_rule_index < 7) {
-        dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
-        return;
-      }
-      dispatch(updateShowHelpDrawer(false));
-      dispatch(updateCurrentRuleIndex(0));
-    };
-    if (
-      _show_help_drawer &&
-      _help_tooltip_text &&
-      SpeechUttrance &&
-      _play_audio
-    ) {
-      SpeechUttrance.text = _help_tooltip_text[1];
-      if (typeof voiceRef !== "function" && voiceRef?.current) {
-        SpeechUttrance.uttrance.voice = voiceRef.current.voice.filter((voice) =>
-          voice.voiceURI.includes("Female")
-        )[0];
-      }
-      speechSynthesis.speak(SpeechUttrance.uttrance);
-      SpeechUttrance.uttrance.addEventListener("end", handleEnd);
-    }
-    return () => {
-      SpeechUttrance?.uttrance.removeEventListener("end", handleEnd);
-      speechSynthesis.cancel();
-    };
-  }, [_show_help_drawer, _current_rule_index, _play_audio]);
 
   return (
-    <StyledTooltipDrawer open={_show_help_drawer}>
+    <StyledTooltipDrawer open={is_open}>
       <StyledTooltipContainer>
         <StyledTopBackground>
           <Image
@@ -108,12 +71,8 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
             height={350}
           />
         </StyledTopBackground>
-        <StyledVolumeCta
-          onClick={() => {
-            dispatch(updatePlayAudio(!_play_audio));
-          }}
-        >
-          {_play_audio ? (
+        <StyledVolumeCta onClick={handlePlayAudio}>
+          {play_audio ? (
             <VolumeOffIcon size={30} color={"#fff"} />
           ) : (
             <VolumeOnIcon size={30} color={"#fff"} />
@@ -121,10 +80,10 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
         </StyledVolumeCta>
         <StyledContent>
           <StyledHeader>
-            {_help_tooltip_text ? _help_tooltip_text[0] : ""}
+            {help_tooltip_text ? help_tooltip_text[0] : ""}
           </StyledHeader>
           <StyledPara>
-            {_help_tooltip_text ? _help_tooltip_text[1] : ""}
+            {help_tooltip_text ? help_tooltip_text[1] : ""}
           </StyledPara>
           <StyledTrofyImage $showBackground={_mode == "light"}>
             <Image
@@ -137,13 +96,7 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
           </StyledTrofyImage>
         </StyledContent>
         <StyledBottomCta>
-          <StyledBackButton
-            onClick={() => {
-              dispatch(updatePlayAudio(true));
-              dispatch(updateShowHelpDrawer(false));
-              dispatch(updateCurrentRuleIndex(0));
-            }}
-          >
+          <StyledBackButton onClick={closeHelpTooltip}>
             <StyledBackIconContainer>
               <BackIcon
                 width={12}
@@ -156,8 +109,8 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
           <StyledNavIconContainer>
             <StyledNavCta
               onClick={() => {
-                if (_current_rule_index >= 1) {
-                  dispatch(updateCurrentRuleIndex(_current_rule_index - 1));
+                if (current_rule_index >= 1) {
+                  updateRuleIndex(current_rule_index - 1);
                 }
               }}
             >
@@ -165,8 +118,8 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
             </StyledNavCta>
             <StyledNavCta
               onClick={() => {
-                if (_current_rule_index <= 6) {
-                  dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
+                if (current_rule_index <= 6) {
+                  updateRuleIndex(current_rule_index + 1);
                 }
               }}
             >
@@ -178,4 +131,4 @@ const MobileHelpTooltip: ForwardRefRenderFunction<IForwardedRef> = (
     </StyledTooltipDrawer>
   );
 };
-export default forwardRef(MobileHelpTooltip);
+export default withHelpTooltipFunctionality(MobileHelpTooltip);
