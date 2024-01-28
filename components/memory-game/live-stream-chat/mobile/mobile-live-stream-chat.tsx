@@ -1,7 +1,7 @@
 import { forwardRef, useRef } from "react";
 // types
 import type { FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled components
 import {
@@ -112,7 +112,7 @@ const LiveStreamChat: FC = () => {
   const dispatch = useAppDispatch();
   const input_ref = useRef<HTMLInputElement>(null);
   const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
   const container_ref = useRef<HTMLDivElement>(null);
   return (
     <StyledContainer ref={container_ref}>
@@ -126,8 +126,8 @@ const LiveStreamChat: FC = () => {
         </StyledCloseIcon>
       </StyledHeader>
       <StyledMessagesContainer>
-        {_live_stream_chat_list.map((chat) => {
-          return <Message ref={container_ref} {...chat} />;
+        {_live_stream_chat_list.map((chat, index) => {
+          return <Message key={index} ref={container_ref} {...chat} />;
         })}
       </StyledMessagesContainer>
       <StyledMessageInputContainer>
@@ -154,7 +154,7 @@ const LiveStreamChat: FC = () => {
             }
           }}
         >
-          <SendIcon size={30} color={theme.palette.live_stream_chat.border} />
+          <SendIcon size={30} color={theme.palette.primary.light} />
         </StyledSendCta>
       </StyledMessageInputContainer>
     </StyledContainer>

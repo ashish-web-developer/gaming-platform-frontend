@@ -4,17 +4,17 @@ import type { FC } from "react";
 
 // styled components
 import {
-  StyledStartBannerContainer,
-  StyledStartBanner,
-  StyledStartBannerContent,
+  StyledTimerBannerContainer,
+  StyledTimerBanner,
+  StyledTimerBannerContent,
   StyledMainText,
   StyledTextSpan,
   StyledVsContainer,
-  StyledStartButton,
-} from "@/styles/components/memory-game/start-banner/mobile/mobile-start-banner.style";
+  StyledTimerButton,
+} from "@/styles/components/memory-game/timer-banner/mobile/mobile-timer-banner.style";
 
 // local components
-import MobileCountDown from "@/components/memory-game/start-banner/mobile/mobile-count-down";
+import MobileCountDown from "@/components/memory-game/timer-banner/mobile/mobile-count-down";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -52,9 +52,9 @@ const MobileStartBanner: FC = () => {
     );
   }, []);
   return (
-    <StyledStartBannerContainer>
-      <StyledStartBanner>
-        <StyledStartBannerContent>
+    <StyledTimerBannerContainer>
+      <StyledTimerBanner>
+        <StyledTimerBannerContent>
           <StyledMainText>
             Cogni<StyledTextSpan $color="#F42C04">Match</StyledTextSpan> <br />
             Starting in <br />
@@ -66,12 +66,12 @@ const MobileStartBanner: FC = () => {
             {_user.name} <StyledTextSpan $color="#FF2400">V/s</StyledTextSpan>{" "}
             {_gaming_user?.name}
           </StyledVsContainer>
-          <StyledStartButton>
+          <StyledTimerButton>
             <StartIcon />
-          </StyledStartButton>
-        </StyledStartBannerContent>
-      </StyledStartBanner>
-    </StyledStartBannerContainer>
+          </StyledTimerButton>
+        </StyledTimerBannerContent>
+      </StyledTimerBanner>
+    </StyledTimerBannerContainer>
   );
 };
 

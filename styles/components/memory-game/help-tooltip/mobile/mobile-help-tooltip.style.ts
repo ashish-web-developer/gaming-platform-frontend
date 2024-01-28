@@ -1,3 +1,4 @@
+import Image from "next/image";
 // styled
 import styled from "styled-components";
 
@@ -26,11 +27,15 @@ const StyledTooltipContainer = styled.div`
   }
 `;
 
-const StyledTopBackground = styled.div`
+const StyledTopBackgroundContainer = styled.div`
   position: absolute;
   z-index: 2;
   width: 100%;
   height: 350px;
+`;
+
+const StyledTopBackground = styled(Image)`
+  object-fit: cover;
 `;
 
 const StyledVolumeCta = styled.button`
@@ -81,7 +86,7 @@ const StyledPara = styled.p`
   text-transform: capitalize;
 `;
 
-const StyledTrofyImage = styled.div<{
+const StyledTrofyImageContainer = styled.div<{
   $showBackground: boolean;
 }>`
   width: 200px;
@@ -91,6 +96,10 @@ const StyledTrofyImage = styled.div<{
   @media (max-height: 840px) {
     display: none;
   }
+`;
+
+const StyledTrofyImage = styled(Image)`
+  object-fit: contain;
 `;
 
 const StyledBottomCta = styled.div`
@@ -149,11 +158,13 @@ const StyledBackIconContainer = styled.span`
 export {
   StyledTooltipDrawer,
   StyledTooltipContainer,
+  StyledTopBackgroundContainer,
   StyledTopBackground,
   StyledVolumeCta,
   StyledContent,
   StyledHeader,
   StyledPara,
+  StyledTrofyImageContainer,
   StyledTrofyImage,
   StyledBottomCta,
   StyledNavIconContainer,

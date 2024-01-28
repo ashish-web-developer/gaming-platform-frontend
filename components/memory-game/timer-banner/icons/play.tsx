@@ -1,7 +1,7 @@
 // types
 import type { FC } from "react";
 
-const Play:FC<{size:number}> = ({size})=>{
+const Play: FC<{ size: number }> = ({ size }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,6 @@ const Play:FC<{size:number}> = ({size})=>{
       </defs>
     </svg>
   );
-}
-
+};
 
 export default Play;

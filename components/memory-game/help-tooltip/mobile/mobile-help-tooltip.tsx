@@ -1,4 +1,3 @@
-import Image from "next/image";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/memory-game.theme";
@@ -7,11 +6,13 @@ import type { ITheme } from "@/theme/memory-game.theme";
 import {
   StyledTooltipDrawer,
   StyledTooltipContainer,
+  StyledTopBackgroundContainer,
   StyledTopBackground,
   StyledVolumeCta,
   StyledContent,
   StyledHeader,
   StyledPara,
+  StyledTrofyImageContainer,
   StyledTrofyImage,
   StyledBottomCta,
   StyledNavIconContainer,
@@ -62,15 +63,13 @@ const MobileHelpTooltip: FC<IProps> = ({
   return (
     <StyledTooltipDrawer open={is_open}>
       <StyledTooltipContainer>
-        <StyledTopBackground>
-          <Image
-            layout="responsive"
+        <StyledTopBackgroundContainer>
+          <StyledTopBackground
+            fill={true}
             alt="girl"
-            src={"/memory-game/help-tooltip/mobile/light-top-background.svg"}
-            width={390}
-            height={350}
+            src={"/memory-game/help-tooltip/mobile/top-background.svg"}
           />
-        </StyledTopBackground>
+        </StyledTopBackgroundContainer>
         <StyledVolumeCta onClick={handlePlayAudio}>
           {play_audio ? (
             <VolumeOffIcon size={30} color={"#fff"} />
@@ -85,15 +84,15 @@ const MobileHelpTooltip: FC<IProps> = ({
           <StyledPara>
             {help_tooltip_text ? help_tooltip_text[1] : ""}
           </StyledPara>
-          <StyledTrofyImage $showBackground={_mode == "light"}>
-            <Image
+          <StyledTrofyImageContainer $showBackground={_mode == "light"}>
+            <StyledTrofyImage
               alt="banner"
               layout="responsive"
               width={200}
               height={283}
               src="/memory-game/help-tooltip/mobile/banner-image.png"
             />
-          </StyledTrofyImage>
+          </StyledTrofyImageContainer>
         </StyledContent>
         <StyledBottomCta>
           <StyledBackButton onClick={closeHelpTooltip}>
