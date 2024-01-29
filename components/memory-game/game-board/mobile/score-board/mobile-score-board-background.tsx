@@ -1,11 +1,11 @@
 import type { FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled theme
 import { useTheme } from "styled-components";
 
 const MobileScoreBoardBackground: FC = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
 
   return (
     <svg
@@ -18,7 +18,7 @@ const MobileScoreBoardBackground: FC = () => {
     >
       <g filter="url(#filter0_d_761_355)">
         <path
-          fill={theme.palette.game_board.score_board.mobile.background_color}
+          fill={theme.palette.primary.contrast}
           fillRule="evenodd"
           d="M6 60.038c0-15.42 11.689-28.327 27.032-29.853l282-28.035C332.687.395 348 14.261 348 32.003v100.87c0 16.568-13.431 30-30 30h-53.065c-16.543 0-29.335-14.249-37.544-28.612C217.4 116.781 198.576 105 177 105c-21.576 0-40.4 11.781-50.391 29.262-8.209 14.362-21.001 28.611-37.544 28.611H36c-16.569 0-30-13.432-30-30V60.038z"
           clipRule="evenodd"

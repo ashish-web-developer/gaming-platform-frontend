@@ -73,19 +73,6 @@ const StyledVsContainer = styled.span`
   left: 1.5rem;
 `;
 
-const StyledTimerButton = styled.span`
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  background: #fff;
-  background: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 50%;
-  bottom: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 export {
   StyledTimerBannerContainer,
   StyledTimerBanner,
@@ -93,5 +80,4 @@ export {
   StyledMainText,
   StyledTextSpan,
   StyledVsContainer,
-  StyledTimerButton,
 };

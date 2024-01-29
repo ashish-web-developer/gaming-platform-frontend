@@ -42,12 +42,12 @@ type IStyledCardContent = {
 const StyledCard = styled.div<IStyledCard>`
   width: 80px;
   height: 120px;
-  background: ${({ theme }) => theme.palette.game_board.card.background};
+  background: ${({ theme }) => theme.palette.primary.light};
   border-radius: 6px;
   position: relative;
   cursor: ${(props) => (props.$cursor ? "pointer" : "not-allowed")};
   filter: ${(props) => (props.$filter ? "grayscale(1)" : "none")};
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.mobile}) {
     width: 100%;
     aspect-ratio: 1/1.5;
     height: auto;
@@ -68,7 +68,7 @@ const StyledBorder = styled.div<IStyledBorder>`
 
 const StyledText = styled.div<IStyledText>`
   color: #000;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 6px;
   font-style: normal;
   font-weight: 800;
@@ -97,7 +97,7 @@ const StyledCardNumber = styled.span<IStyledCardNumber>`
   right: ${(props) => (props.$position == "top" ? 0 : 4)}px;
   bottom: ${(props) => (props.$position == "top" ? 0 : 4)}px;
   transform: rotate(${(props) => (props.$position == "top" ? 0 : 180)}deg);
-  font-family: ${({ theme }) => theme.palette.fontFamily.jim};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   display: flex;
   flex-direction: column;
   gap: 0px;
@@ -109,8 +109,7 @@ const StyledCardName = styled.span<IStyledCardName>`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-21deg);
-  font-family: ${({ theme }) =>
-    theme.palette.fontFamily.oleo_script_swash_caps};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 12px;
 `;
 

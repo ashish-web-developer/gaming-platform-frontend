@@ -1,4 +1,3 @@
-import { useRef, useEffect } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/memory-game.theme";
@@ -16,19 +15,20 @@ import {
   StyledVersusContainer,
   StyledVersusImage,
   StyledVersusText,
+  StyledCountDown,
+  StyledOutlinedText,
 } from "@/styles/components/memory-game/timer-banner/timer-banner.style";
 
-// local components
-import CountDown from "@/components/memory-game/timer-banner/count-down";
+// hoc
+import withCountDown from "@/hoc/memory-game/with-count-down";
 
 // theme
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
-import { useIsMobile } from "@/hooks/common.hook";
 
 const PatternOne: FC<{ color: string }> = ({ color }) => {
   return (
@@ -64,23 +64,12 @@ const PatternTwo: FC<{ color: string }> = ({ color }) => {
   );
 };
 
-const StartBanner: FC = () => {
+const TimerBanner: FC<{
+  count_down: number;
+}> = ({ count_down }) => {
   const theme = useTheme() as ITheme;
-  const dispatch = useAppDispatch();
-  const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  const count_down_sound_ref = useRef<{
-    count_down_audio: HTMLAudioElement | null;
-  }>({
-    count_down_audio: null,
-  });
-
-  useEffect(() => {
-    count_down_sound_ref.current.count_down_audio = new Audio(
-      "/memory-game/start-banner/audio/count-down.mp3"
-    );
-  }, []);
   return (
     <StyledContainer>
       <StyledPatternContainer>
@@ -117,10 +106,15 @@ const StartBanner: FC = () => {
             />
           </StyledVersusContainer>
         </StyledContentTop>
-        <CountDown ref={count_down_sound_ref} />
+        <StyledCountDown>
+          00:
+          <StyledOutlinedText>
+            {String(count_down).padStart(2, "0")}
+          </StyledOutlinedText>
+        </StyledCountDown>
       </StyledContentContainer>
     </StyledContainer>
   );
 };
 
-export default StartBanner;
+export default withCountDown(TimerBanner);

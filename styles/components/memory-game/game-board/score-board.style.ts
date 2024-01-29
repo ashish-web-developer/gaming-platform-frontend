@@ -4,10 +4,6 @@ import styled from "styled-components";
 // framer motion
 import { motion } from "framer-motion";
 
-type IStyledBadgeContent = {
-  $backgroundColor: string;
-};
-
 const StyledScoreBoard = styled(motion.div)`
   width: 97.5%;
   height: 90%;
@@ -53,11 +49,32 @@ const StyledProfileContainer = styled.div`
   justify-content: center;
 `;
 
-const StyeldUserProfile = styled.div`
-  width: 40px;
-  height: 40px;
+const StyledAvatar = styled.div<{
+  $size: string;
+  $online: boolean;
+}>`
+  width: ${(props) => props.$size};
+  height: ${(props) => props.$size};
+  border: 3px solid ${({ theme }) => theme.palette.primary.light};
   border-radius: 50%;
-  border: 3px solid #000;
+  position: relative;
+  &:not(:first-child) {
+    margin-left: -10px;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: ${(props) =>
+      props.$online
+        ? props.theme.palette.success.main
+        : props.theme.palette.warning.main};
+    border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+    top: -5px;
+    right: 3px;
+  }
 `;
 
 const StyledUserName = styled.span`
@@ -88,20 +105,13 @@ const StyledScore = styled(motion.div)`
   text-transform: capitalize;
 `;
 
-const StyledBadgeContent = styled.div<IStyledBadgeContent>`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: ${(prop) => prop.$backgroundColor};
-`;
 export {
   StyledScoreBoard,
   StyledContentContainer,
   StyledProfileContainer,
-  StyeldUserProfile,
+  StyledAvatar,
   StyledUserName,
   StyledScoreContainer,
   StyledBannerImage,
   StyledScore,
-  StyledBadgeContent,
 };

@@ -17,14 +17,13 @@ import {
   StyledTimer,
 } from "@/styles/components/memory-game/game-board/mobile/mobile-game-board.style";
 
-// styled theme
-import { useTheme } from "styled-components";
-
 // local components
 import MobileScoreBoard from "@/components/memory-game/game-board/mobile/score-board/mobile-score-board";
 import MobileGameBoardBackground from "@/components/memory-game/game-board/mobile/game-board/mobile-game-board-background";
 import Card from "@/components/memory-game/game-board/card";
-import MobileGameBoardTimer from "@/components/memory-game/game-board/mobile/game-board/mobile-game-board-timer";
+
+// hoc
+import withTimer from "@/hoc/memory-game/with-timer";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -37,13 +36,12 @@ import {
   is_gaming_user_in,
 } from "@/store/slice/memory-game.slice";
 
-// mui
-import { Badge } from "@mui/material";
-
 // hooks
 import useAvatar from "@/hooks/profile.hook";
 
-const MobileGameBoard: FC = () => {
+const MobileGameBoard: FC<{
+  timer_count: number;
+}> = ({ timer_count }) => {
   const _card_list = useAppSelector(card_list);
   const _player_turn_id = useAppSelector(player_turn_id);
   const _user = useAppSelector(user);
@@ -75,9 +73,7 @@ const MobileGameBoard: FC = () => {
       <StyledGameBoardBackground>
         <MobileGameBoardBackground />
         <StyledGameBoardContent>
-          <StyledTimer>
-            <MobileGameBoardTimer />
-          </StyledTimer>
+          <StyledTimer>{String(timer_count).padStart(2, "0")}</StyledTimer>
           <StyledCardContainer>
             {_card_list.map((card, index) => {
               return (
@@ -129,4 +125,4 @@ const MobileGameBoard: FC = () => {
   );
 };
 
-export default MobileGameBoard;
+export default withTimer(MobileGameBoard);

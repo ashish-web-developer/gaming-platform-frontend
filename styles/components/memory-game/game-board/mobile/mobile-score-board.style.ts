@@ -1,9 +1,5 @@
 import styled from "styled-components";
 
-type IStyledScoreContainer = {
-  $alignItems: string;
-};
-
 const StyledScoreBoardContainer = styled.div`
   width: 100%;
   display: flex;
@@ -21,17 +17,18 @@ const StyledScoreBoardContent = styled.div`
   padding: 30px 1.5rem 0px 1.5rem;
 `;
 
-const StyledScoreContainer = styled.div<IStyledScoreContainer>`
+const StyledScoreContainer = styled.div<{
+  $alignItems: string;
+}>`
   display: flex;
   flex-direction: column;
   align-items: ${(props) => props.$alignItems};
-  gap:12px;
+  gap: 12px;
 `;
 
 const StyledUserName = styled.span`
-  color: ${({ theme }) =>
-    theme.palette.game_board.score_board.mobile.user_name_color};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.primary.light};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 1rem;
   font-style: normal;
   font-weight: 700;
@@ -42,7 +39,7 @@ const StyledUserName = styled.span`
 const StyledScore = styled.span`
   color: #fff;
   text-align: center;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 2.25rem;
   font-style: normal;
   font-weight: 700;

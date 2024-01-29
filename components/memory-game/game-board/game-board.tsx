@@ -1,5 +1,4 @@
-import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 // styled components
 import {
@@ -8,15 +7,12 @@ import {
   StyledScoreBoardContainer,
   StyledTimeBoardContainer,
   StyledBottomGameBoardContainer,
-  StyledSkeleton,
 } from "@/styles/components/memory-game/game-board/game-board.style";
 
 // local components
 import ScoreBoard from "@/components/memory-game/game-board/score-board";
 import Card from "@/components/memory-game/game-board/card";
-const Timer = dynamic(import("@/components/memory-game/game-board/timer"), {
-  ssr: false,
-});
+import Timer from "@/components/memory-game/game-board/timer";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -65,35 +61,23 @@ const GameBoard = () => {
         </StyledTimeBoardContainer>
       </StyledTopBoardContainer>
       <StyledBottomGameBoardContainer>
-        {!_card_list.length
-          ? new Array(_game_comlexity).fill(0).map((_, index) => {
-              return (
-                <StyledSkeleton
-                  animation="wave"
-                  variant="rounded"
-                  width={80}
-                  height={120}
-                  key={index}
-                />
-              );
-            })
-          : _card_list.map((card, index) => {
-              return (
-                <Card
-                  suit={card.suit}
-                  cardColor={card.cardColor}
-                  card={card.card}
-                  flipped={card.flipped}
-                  id={card.id}
-                  key={index}
-                  is_clickable={_player_turn_id == _user.id}
-                  user={_user}
-                  card_image={card.card_image}
-                  ref={soundRef}
-                  player_turn_id={_player_turn_id as number}
-                />
-              );
-            })}
+        {_card_list.map((card, index) => {
+          return (
+            <Card
+              suit={card.suit}
+              cardColor={card.cardColor}
+              card={card.card}
+              flipped={card.flipped}
+              id={card.id}
+              key={index}
+              is_clickable={_player_turn_id == _user.id}
+              user={_user}
+              card_image={card.card_image}
+              ref={soundRef}
+              player_turn_id={_player_turn_id as number}
+            />
+          );
+        })}
       </StyledBottomGameBoardContainer>
     </StyledGameBoardContainer>
   );

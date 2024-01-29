@@ -25,7 +25,7 @@ const StyledTopBoardContainer = styled.div`
 const StyledTimeBoardContainer = styled.div`
   width: 38%;
   height: 100%;
-  background: ${({ theme }) => theme.palette.game_board.background};
+  background: ${({ theme }) => theme.palette.primary.dark};
   border-radius: 25px 25px 0 0;
   position: relative;
   display: flex;
@@ -40,15 +40,14 @@ const StyledTimeBoardContainer = styled.div`
     background: transparent;
     bottom: 0px;
     left: -30px;
-    box-shadow: 12px 12px 0
-      ${({ theme }) => theme.palette.game_board.background};
+    box-shadow: 12px 12px 0 ${({ theme }) => theme.palette.primary.dark};
   }
 `;
 
 const StyledBottomGameBoardContainer = styled.div`
   width: 100%;
   height: auto;
-  background: ${({ theme }) => theme.palette.game_board.background};
+  background: ${({ theme }) => theme.palette.primary.dark};
   border-radius: 25px 0 25px 25px;
   display: grid;
   grid-template-rows: repeat(3, 1fr);
@@ -62,15 +61,10 @@ const StyledScoreBoardContainer = styled.div`
   height: 100%;
 `;
 
-const StyledSkeleton = styled(Skeleton)`
-  background: #392030;
-`;
-
 export {
   StyledGameBoardContainer,
   StyledTopBoardContainer,
   StyledScoreBoardContainer,
   StyledTimeBoardContainer,
   StyledBottomGameBoardContainer,
-  StyledSkeleton,
 };

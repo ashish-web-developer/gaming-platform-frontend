@@ -1,15 +1,5 @@
 import styled from "styled-components";
 
-type IStyledBadgeContent = {
-  $backgroundColor: string;
-};
-
-type IStyledAvatar = {
-  $size: string;
-  $border: string;
-  $online: boolean;
-};
-
 const StyledGameBoardContainer = styled.div`
   position: relative;
   z-index: 5;
@@ -83,7 +73,7 @@ const StyledTrofyCircle = styled.div`
 
 const StyledText = styled.span`
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
@@ -97,7 +87,11 @@ const StyledAvatarGroup = styled.div`
   align-items: center;
 `;
 
-const StyledAvatar = styled.div<IStyledAvatar>`
+const StyledAvatar = styled.div<{
+  $size: string;
+  $border: string;
+  $online: boolean;
+}>`
   width: ${(props) => props.$size};
   height: ${(props) => props.$size};
   border: ${(props) => props.$border};
@@ -112,17 +106,13 @@ const StyledAvatar = styled.div<IStyledAvatar>`
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
+    background: ${(props) =>
+      props.$online
+        ? props.theme.palette.success.main
+        : props.theme.palette.warning.main};
     top: -5px;
     right: 3px;
   }
-`;
-
-const StyledBadgeContent = styled.div<IStyledBadgeContent>`
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: ${(prop) => prop.$backgroundColor};
 `;
 
 const StyledTimer = styled.div`
@@ -139,7 +129,7 @@ const StyledTimer = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 24px;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
 `;
 
 export {
@@ -153,6 +143,5 @@ export {
   StyledText,
   StyledAvatarGroup,
   StyledAvatar,
-  StyledBadgeContent,
   StyledTimer,
 };
