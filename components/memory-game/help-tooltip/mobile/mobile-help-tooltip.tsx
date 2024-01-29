@@ -68,6 +68,7 @@ const MobileHelpTooltip: FC<IProps> = ({
             fill={true}
             alt="girl"
             src={"/memory-game/help-tooltip/mobile/top-background.svg"}
+            sizes="(max-width: 1400px) 10vw"
           />
         </StyledTopBackgroundContainer>
         <StyledVolumeCta onClick={handlePlayAudio}>
@@ -87,10 +88,9 @@ const MobileHelpTooltip: FC<IProps> = ({
           <StyledTrofyImageContainer $showBackground={_mode == "light"}>
             <StyledTrofyImage
               alt="banner"
-              layout="responsive"
-              width={200}
-              height={283}
+              fill={true}
               src="/memory-game/help-tooltip/mobile/banner-image.png"
+              sizes="(max-width: 1400px) 10vw"
             />
           </StyledTrofyImageContainer>
         </StyledContent>

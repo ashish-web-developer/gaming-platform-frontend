@@ -113,7 +113,7 @@ const StartBanner: FC = () => {
               width={40}
               height={40}
               alt="chips"
-              src="/memory-game/start-banner/versus-container/chips.png"
+              src="/memory-game/timer-banner/versus-container/chips.png"
             />
           </StyledVersusContainer>
         </StyledContentTop>

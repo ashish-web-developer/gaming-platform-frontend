@@ -21,22 +21,6 @@ import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 
-const StartIcon: FC = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="22"
-      height="25"
-      fill="none"
-      viewBox="0 0 22 25"
-    >
-      <path
-        fill="#000"
-        d="M20.723 10.482L3.535.32C2.14-.504 0 .296 0 2.337v20.318c0 1.83 1.987 2.934 3.535 2.016l17.188-10.156c1.533-.903 1.538-3.13 0-4.033z"
-      ></path>
-    </svg>
-  );
-};
 
 const MobileStartBanner: FC = () => {
   const _user = useAppSelector(user);
@@ -66,9 +50,6 @@ const MobileStartBanner: FC = () => {
             {_user.name} <StyledTextSpan $color="#FF2400">V/s</StyledTextSpan>{" "}
             {_gaming_user?.name}
           </StyledVsContainer>
-          <StyledTimerButton>
-            <StartIcon />
-          </StyledTimerButton>
         </StyledTimerBannerContent>
       </StyledTimerBanner>
     </StyledTimerBannerContainer>

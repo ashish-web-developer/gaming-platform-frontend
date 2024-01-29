@@ -3,12 +3,18 @@ import { useRef } from "react";
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
 import type { User } from "@/types/user";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 // styled components
 import {
   StyledContainer,
+  StyledContent,
   StyledHeader,
   StyledMainText,
+  StyledBannerAvatarContainer,
+  StyledBannerGirlContainer,
+  StyledBannerGirlImage,
+  StyledBannerTextPatternContainer,
+  StyledPlayButtonContainer,
   StyledAvatarGroup,
   StyledAvatar,
   StyledInstructAvatar,
@@ -22,15 +28,10 @@ import {
   StyledMessageHeader,
   StyledUserName,
   StyledMessageText,
-  StyledBannerContent,
-  StyledLogo,
-  StyledSpan,
-  StyledBannerMainContent,
-  StyledBannerMainText,
-  StyledOutlinedSpan,
-  StyledChatNowCta,
 } from "@/styles/components/memory-game/live-stream-chat/live-stream-chat.style";
-
+// local components
+import TextPattern from "@/components/memory-game/live-stream-chat/text-pattern";
+import PlayButtonPattern from "@/components/memory-game/live-stream-chat/play-button-pattern";
 // styled theme
 import { useTheme } from "styled-components";
 // redux
@@ -86,6 +87,8 @@ const Message: FC<{
   );
 };
 
+import React from "react";
+
 const LiveStreamBanner: FC<{
   user_avatar: string;
   gaming_user_avatar: string;
@@ -93,18 +96,12 @@ const LiveStreamBanner: FC<{
   gaming_user: IUsersWithConversation;
 }> = ({ user_avatar, gaming_user_avatar, user, gaming_user }) => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
   return (
-    <StyledContainer
-      $show_gray_background={_mode == "light" ? true : false}
-      $show_background={true}
-    >
-      <StyledBannerContent>
-        <StyledLogo>
-          Cogni<StyledSpan $color="#F42C04">Match</StyledSpan>
-        </StyledLogo>
-        <StyledHeader>
-          <div></div>
+    <StyledContainer>
+      <StyledContent>
+        <StyledBannerAvatarContainer>
           <StyledAvatarGroup>
             <StyledAvatar
               dangerouslySetInnerHTML={{
@@ -121,28 +118,36 @@ const LiveStreamBanner: FC<{
               $border={`2px solid #fff`}
             />
           </StyledAvatarGroup>
-        </StyledHeader>
-        <StyledBannerMainContent>
-          <StyledBannerMainText>
-            {user.name?.split(" ")[0]} <br />
-            <StyledOutlinedSpan>V\S</StyledOutlinedSpan>
-            <br /> {gaming_user?.name.split(" ")[0]}
-          </StyledBannerMainText>
-        </StyledBannerMainContent>
-        <StyledChatNowCta
-          onClick={() => {
-            dispatch(updateShowLiveSteamChat(true));
-          }}
-        >
-          Join the live chat!
-        </StyledChatNowCta>
-      </StyledBannerContent>
+        </StyledBannerAvatarContainer>
+        {/* <StyledBannerGirlContainer>
+          <StyledBannerGirlImage alt = {"girl"} fill = {true} src = "/memory-game/live-stream-chat/banner-girl.png"/>
+        </StyledBannerGirlContainer> */}
+        <StyledBannerTextPatternContainer>
+          <TextPattern
+            onClick={() => {
+              dispatch(updateShowLiveSteamChat(true));
+            }}
+          >
+            👉 Tap into your memory skills, chat with fellow gamers, and win
+            cool prizes! 🎮💬
+          </TextPattern>
+        </StyledBannerTextPatternContainer>
+        <StyledPlayButtonContainer>
+          <PlayButtonPattern
+            on_click={() => {
+              dispatch(updateShowLiveSteamChat(true));
+            }}
+          >
+            Chat Now
+          </PlayButtonPattern>
+        </StyledPlayButtonContainer>
+      </StyledContent>
     </StyledContainer>
   );
 };
 
 const LiveStreamChat: FC = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
@@ -163,7 +168,7 @@ const LiveStreamChat: FC = () => {
   }
   return (
     <StyledContainer>
-      <StyledHeader $show_border={true}>
+      <StyledHeader>
         <StyledMainText>Live Chat</StyledMainText>
         <StyledAvatarGroup>
           <StyledAvatar
@@ -235,7 +240,7 @@ const LiveStreamChat: FC = () => {
               }
             }}
           >
-            <SendIcon color={theme.palette.live_stream_chat.border} size={30} />
+            <SendIcon color={theme.palette.primary.light} size={30} />
           </StyledSentCta>
         </StyledInputContainer>
       </StyledChatMainContainer>

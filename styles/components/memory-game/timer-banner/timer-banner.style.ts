@@ -1,13 +1,12 @@
 import Image from "next/image";
 import styled from "styled-components";
 
-
 const StyledContainer = styled.div`
   width: 600px;
   height: 153px;
-  background:url("/memory-game/timer-banner/timer-background-image.jpg") ;
-  background-size:cover;
-  background-repeat:no-repeat;
+  background: url("/memory-game/timer-banner/timer-background-image.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 25px;
   margin-top: 70px;
@@ -15,12 +14,11 @@ const StyledContainer = styled.div`
   z-index: 3;
 `;
 
-
 const StyledPatternContainer = styled.div`
-  position:absolute;
-  top:0px;
-  left:0px;
-`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+`;
 
 const StyledImageContainer = styled.div`
   position: absolute;
@@ -49,7 +47,7 @@ const StyledContentTop = styled.div`
 `;
 
 const StyledLogo = styled.div`
-  color: ${({theme})=>theme.palette.primary.light};
+  color: ${({ theme }) => theme.palette.primary.light};
   font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 18px;
   font-style: normal;
@@ -59,15 +57,14 @@ const StyledLogo = styled.div`
 `;
 
 const StyledSpan = styled.span<{
-  $color:string;
+  $color: string;
 }>`
-  color:${(props)=>props.$color};
-`
+  color: ${(props) => props.$color};
+`;
 
 const StyledVersusContainer = styled.div`
   height: 38px;
-  background-color: ${({ theme }) =>
-    theme.palette.primary.dark};
+  background-color: ${({ theme }) => theme.palette.primary.dark};
   border-radius: 8px;
   display: flex;
   justify-content: space-between;
@@ -89,7 +86,6 @@ const StyledVersusText = styled.span`
   line-height: normal;
   text-transform: capitalize;
 `;
-
 
 export {
   StyledContainer,
