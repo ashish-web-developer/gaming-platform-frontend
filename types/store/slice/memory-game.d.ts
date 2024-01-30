@@ -62,7 +62,6 @@ type InitialState = {
   show_help_tooltip: boolean;
   play_audio: boolean;
   show_game_board: boolean;
-  card_turn_count: 0 | 1;
   show_chat_streaming_modal: boolean;
   info_snackbar: {
     show_info_snackbar: boolean;

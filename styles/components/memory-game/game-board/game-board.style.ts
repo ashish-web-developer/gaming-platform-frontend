@@ -1,6 +1,4 @@
 import styled from "styled-components";
-// mui
-import { Skeleton } from "@mui/material";
 
 // framer motion
 import { motion } from "framer-motion";

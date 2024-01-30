@@ -29,16 +29,11 @@ const GameBoard = () => {
   const _player_turn_id = useAppSelector(player_turn_id);
   const _game_comlexity = useAppSelector(game_complexity);
   const soundRef = useRef<{
-    flip_sound: HTMLAudioElement | null;
     card_match_sound: HTMLAudioElement | null;
   }>({
-    flip_sound: null,
     card_match_sound: null,
   });
-  if (!soundRef.current.flip_sound || !soundRef.current.card_match_sound) {
-    soundRef.current.flip_sound = new Audio(
-      "/memory-game/game-board/card/audio/flip-card-sound.mp3"
-    );
+  if (!soundRef.current.card_match_sound) {
     soundRef.current.card_match_sound = new Audio(
       "/memory-game/game-board/card/audio/congratulation-sound.mp3"
     );
@@ -69,8 +64,8 @@ const GameBoard = () => {
               card={card.card}
               flipped={card.flipped}
               id={card.id}
-              key={index}
-              is_clickable={_player_turn_id == _user.id}
+              key={card.id}
+              is_clickable={_player_turn_id == _user.id && !card.flipped}
               user={_user}
               card_image={card.card_image}
               ref={soundRef}

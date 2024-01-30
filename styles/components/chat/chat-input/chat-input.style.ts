@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-type IStyledButton = {
-  $left?: string;
-  $right?: string;
-};
-
 const StyledChatInputContainer = styled.div`
   width: 400px;
   height: 100%;
@@ -49,7 +44,10 @@ const StyledChatInput = styled.input<{
   }
 `;
 
-const StyledButton = styled.button<IStyledButton>`
+const StyledButton = styled.button<{
+  $left?: string;
+  $right?: string;
+}>`
   position: absolute;
   z-index: 2;
   background: transparent;
@@ -66,7 +64,7 @@ const StyledEmojiContainer = styled.div`
   position: absolute;
   z-index: 2;
   bottom: 80px;
-  border: ${({ theme }) => theme.palette.emoji_container.border};
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 10px;
 `;
 

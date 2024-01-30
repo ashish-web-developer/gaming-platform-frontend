@@ -22,7 +22,7 @@ const StyledContainer = styled.div<{
   height: 100vh;
   background: ${(props) =>
     props.$mode == "light"
-      ? "url('/memory-game/background/light-background.png')"
+      ? "url('/memory-game/background/light-background.jpg')"
       : "url('/memory-game/background/dark-background.png')"};
   background-repeat: no-repeat;
   background-size: cover;
@@ -71,7 +71,7 @@ const StyledLeftContainer = styled.div`
 const StyledRightContainer = styled.div`
   width: 40%;
   flex-grow: 1;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     display: none;
   }
 `;

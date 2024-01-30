@@ -168,82 +168,84 @@ const LiveStreamChat: FC = () => {
   }
   return (
     <StyledContainer>
-      <StyledHeader>
-        <StyledMainText>Live Chat</StyledMainText>
-        <StyledAvatarGroup>
-          <StyledAvatar
-            dangerouslySetInnerHTML={{
-              __html: user_avatar,
-            }}
-            $size={"40px"}
-            $border="2px solid #fff"
-          />
-          <StyledAvatar
-            dangerouslySetInnerHTML={{
-              __html: gaming_user_avatar,
-            }}
-            $size={"40px"}
-            $border={`2px solid #fff`}
-          />
-        </StyledAvatarGroup>
-      </StyledHeader>
-      <StyledChatMainContainer>
-        <StyledMessageContainer>
-          <StyledMessage>
-            <StyledMessageHeader>
-              <StyledInstructAvatar>
-                <StyledImage
-                  alt="girl"
-                  width={35}
-                  height={35}
-                  src="/memory-game/live-stream-chat/girl.png"
-                />
-              </StyledInstructAvatar>
-              <StyledUserName>Mind Mistress</StyledUserName>
-            </StyledMessageHeader>
-            <StyledMessageText>
-              🌟 Welcome to CogniMatch Central! 🚀🎉 Get ready to boost your
-              memory skills and have a blast with fellow gamers! Chat,
-              strategize, and aim for victory! 🧠💬 Let the CogniMatch fun
-              begin! 🌈🎮
-            </StyledMessageText>
-          </StyledMessage>
-          {_live_stream_chat_list.map((chat) => {
-            return <Message {...chat} />;
-          })}
-        </StyledMessageContainer>
-        <StyledInputContainer>
-          <StyledInput
-            ref={input_ref}
-            type="text"
-            placeholder="Write Here..."
-            onKeyDown={(event) => {
-              if (
-                input_ref.current?.value &&
-                (event.metaKey || event.ctrlKey) &&
-                event.key == "Enter"
-              ) {
-                dispatch(
-                  liveStreamChatApi({ message: input_ref.current.value })
-                );
-                input_ref.current.value = "";
-              }
-            }}
-          />
-          <StyledSentCta
-            onClick={() => {
-              if (input_ref.current) {
-                dispatch(
-                  liveStreamChatApi({ message: input_ref.current.value })
-                );
-                input_ref.current.value = "";
-              }
-            }}
-          >
-            <SendIcon color={theme.palette.primary.light} size={30} />
-          </StyledSentCta>
-        </StyledInputContainer>
-      </StyledChatMainContainer>
+      <StyledContent>
+        <StyledHeader>
+          <StyledMainText>Live Chat</StyledMainText>
+          <StyledAvatarGroup>
+            <StyledAvatar
+              dangerouslySetInnerHTML={{
+                __html: user_avatar,
+              }}
+              $size={"40px"}
+              $border="2px solid #fff"
+            />
+            <StyledAvatar
+              dangerouslySetInnerHTML={{
+                __html: gaming_user_avatar,
+              }}
+              $size={"40px"}
+              $border={`2px solid #fff`}
+            />
+          </StyledAvatarGroup>
+        </StyledHeader>
+        <StyledChatMainContainer>
+          <StyledMessageContainer>
+            <StyledMessage>
+              <StyledMessageHeader>
+                <StyledInstructAvatar>
+                  <StyledImage
+                    alt="girl"
+                    width={35}
+                    height={35}
+                    src="/memory-game/live-stream-chat/girl.png"
+                  />
+                </StyledInstructAvatar>
+                <StyledUserName>Mind Mistress</StyledUserName>
+              </StyledMessageHeader>
+              <StyledMessageText>
+                🌟 Welcome to CogniMatch Central! 🚀🎉 Get ready to boost your
+                memory skills and have a blast with fellow gamers! Chat,
+                strategize, and aim for victory! 🧠💬 Let the CogniMatch fun
+                begin! 🌈🎮
+              </StyledMessageText>
+            </StyledMessage>
+            {_live_stream_chat_list.map((chat) => {
+              return <Message {...chat} />;
+            })}
+          </StyledMessageContainer>
+          <StyledInputContainer>
+            <StyledInput
+              ref={input_ref}
+              type="text"
+              placeholder="Write Here..."
+              onKeyDown={(event) => {
+                if (
+                  input_ref.current?.value &&
+                  (event.metaKey || event.ctrlKey) &&
+                  event.key == "Enter"
+                ) {
+                  dispatch(
+                    liveStreamChatApi({ message: input_ref.current.value })
+                  );
+                  input_ref.current.value = "";
+                }
+              }}
+            />
+            <StyledSentCta
+              onClick={() => {
+                if (input_ref.current) {
+                  dispatch(
+                    liveStreamChatApi({ message: input_ref.current.value })
+                  );
+                  input_ref.current.value = "";
+                }
+              }}
+            >
+              <SendIcon color={theme.palette.primary.light} size={30} />
+            </StyledSentCta>
+          </StyledInputContainer>
+        </StyledChatMainContainer>
+      </StyledContent>
     </StyledContainer>
   );
 };

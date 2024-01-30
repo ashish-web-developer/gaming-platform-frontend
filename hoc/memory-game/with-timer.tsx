@@ -6,10 +6,8 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   player_turn_id,
-  card_turn_count,
   last_flipped_card_id,
   memoryGameCardEvent,
-  updateCardTurnCount,
   updateLastFlippedCardEvent,
 } from "@/store/slice/memory-game.slice";
 import {
@@ -27,7 +25,6 @@ const withTimer = (BaseComponent: ComponentType<IBaseProps>) => {
     const _user = useAppSelector(user);
     const _player_turn_id = useAppSelector(player_turn_id);
     const _timer_start_count = useAppSelector(timer_start_count);
-    const _card_turn_count = useAppSelector(card_turn_count);
     const _last_flipped_card_id = useAppSelector(last_flipped_card_id);
 
     useEffect(() => {
@@ -37,15 +34,23 @@ const withTimer = (BaseComponent: ComponentType<IBaseProps>) => {
         if (time_remaining <= 0) {
           if (_player_turn_id == _user.id) {
             dispatch(updatePlayerTurnEvent());
-            if (_card_turn_count == 1) {
+            /**
+             * if user have flipped up only one card
+             * in 30 sec then flip down that card
+             * again
+             */
+            if (_last_flipped_card_id) {
               dispatch(
                 memoryGameCardEvent({
-                  card_id: _last_flipped_card_id as string,
+                  card_id: _last_flipped_card_id,
                   flipped: false,
                 })
               );
-              dispatch(updateCardTurnCount(0));
-              dispatch(updateLastFlippedCardEvent({ card_id: null }));
+              dispatch(
+                updateLastFlippedCardEvent({
+                  card_id: null,
+                })
+              );
             }
           }
         } else {
@@ -57,7 +62,7 @@ const withTimer = (BaseComponent: ComponentType<IBaseProps>) => {
       return () => {
         clearInterval(timer);
       };
-    }, [_timer_start_count, _card_turn_count, _last_flipped_card_id]);
+    }, [_timer_start_count, _last_flipped_card_id]);
     return <BaseComponent timer_count={timer_count} />;
   };
   return EnhancedComponent;

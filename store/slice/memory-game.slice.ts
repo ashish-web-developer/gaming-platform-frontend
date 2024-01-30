@@ -109,7 +109,6 @@ const initialState: InitialState = {
   show_help_tooltip: false,
   play_audio: true,
   show_game_board: false,
-  card_turn_count: 0,
   score: null,
   show_chat_streaming_modal: false,
   live_stream_chat_list: [],
@@ -188,9 +187,6 @@ export const memoryGameSlice = createSlice({
     updatePlayerTurnId: (state, action: PayloadAction<number | null>) => {
       state.player_turn_id = action.payload;
     },
-    updateCardTurnCount: (state, action: PayloadAction<0 | 1>) => {
-      state.card_turn_count = action.payload;
-    },
     updateScore: (state, action: PayloadAction<Score | null>) => {
       state.score = action.payload;
     },
@@ -243,7 +239,6 @@ export const {
   updateShowGameBoard,
   updateCardState,
   updatePlayerTurnId,
-  updateCardTurnCount,
   updateScore,
   updateShowChatStreamingModal,
   updateLiveStreamChatList,
@@ -276,8 +271,6 @@ export const show_game_board = (state: RootState) =>
 export const player_turn_id = (state: RootState) =>
   state.memoryGame.player_turn_id;
 
-export const card_turn_count = (state: RootState) =>
-  state.memoryGame.card_turn_count;
 export const game_complexity = (state: RootState) =>
   state.memoryGame.game_complexity;
 

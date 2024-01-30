@@ -10,6 +10,12 @@ export type ITheme = {
       dark: string;
       light: string;
     };
+    success: {
+      main: string;
+    };
+    warning: {
+      main: string;
+    };
   };
   breakpoints: IBreakpoints;
   fontFamily: {
@@ -24,6 +30,12 @@ export const darkTheme: ITheme = {
       contrast: "#D62839",
       dark: "#080F0F",
       light: "#FFFFFF",
+    },
+    success: {
+      main: "#16C172",
+    },
+    warning: {
+      main: "#F42C04",
     },
   },
   breakpoints: {
@@ -41,6 +53,12 @@ export const lightTheme: ITheme = {
       contrast: "#EF233C",
       dark: "#120309",
       light: "#E6E8E6",
+    },
+    success: {
+      main: "#16C172",
+    },
+    warning: {
+      main: "#F42C04",
     },
   },
   breakpoints: {
