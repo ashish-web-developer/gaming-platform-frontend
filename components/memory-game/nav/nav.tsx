@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 // styled components
 import {
   StyledNav,
@@ -19,17 +19,13 @@ import MoonIcon from "@/components/memory-game/nav/icons/moon";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
-import {
-  resetGame
-} from "@/store/slice/game.slice";
+import { resetGame } from "@/store/slice/game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
 
-import {
-  resetMemoryGame
-} from "@/store/slice/memory-game.slice";
+import { resetMemoryGame } from "@/store/slice/memory-game.slice";
 
 const Nav: FC = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const router = useRouter();
@@ -42,16 +38,16 @@ const Nav: FC = () => {
           router.push("/chat");
         }}
       >
-        <ChatIcon color={theme.palette.nav.color} width={40} height={30} />
+        <ChatIcon color={theme.palette.primary.light} width={40} height={30} />
       </StyledIconButton>
       <StyledIconButton
-        onClick={()=>{
+        onClick={() => {
           dispatch(resetGame());
           dispatch(resetMemoryGame());
-          router.push('/');
+          router.push("/");
         }}
       >
-        <HomeIcon color={theme.palette.nav.color} width={40} height={30} />
+        <HomeIcon color={theme.palette.primary.light} width={40} height={30} />
       </StyledIconButton>
       <StyledIconButton
         onClick={() => {
@@ -62,7 +58,7 @@ const Nav: FC = () => {
           }
         }}
       >
-        <MoonIcon color={theme.palette.nav.color} width={35} height={40} />
+        <MoonIcon color={theme.palette.primary.light} width={35} height={40} />
       </StyledIconButton>
     </StyledNav>
   );

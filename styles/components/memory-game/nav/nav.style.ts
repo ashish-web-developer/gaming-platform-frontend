@@ -1,8 +1,5 @@
 import styled from "styled-components";
 
-// mui
-import { IconButton } from "@mui/material";
-
 const StyledNav = styled.div`
   position: absolute;
   top: 0px;
@@ -10,19 +7,20 @@ const StyledNav = styled.div`
   width: 60px;
   height: 180px;
   border-radius: 0px 0px 30px 30px;
-  background: ${({ theme }) => theme.palette.nav.background};
+  background: ${({ theme }) => theme.palette.primary.contrast};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 12px;
   z-index: 4;
 `;
 
-const StyledIconButton = styled(IconButton)`
-  margin: 0px;
-  padding: 0px;
+const StyledIconButton = styled.button`
+  border: none;
+  background: transparent;
+  cursor: pointer;
 `;
 
 export { StyledNav, StyledIconButton };

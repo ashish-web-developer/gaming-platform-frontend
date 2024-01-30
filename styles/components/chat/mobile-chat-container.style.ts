@@ -16,10 +16,15 @@ const StyledMainContainer = styled.div`
   gap: 30px;
 `;
 
-const StyledDivider = styled.div`
+const StyledDivider = styled.div<{
+  $mode: "light" | "dark";
+}>`
   width: 100%;
   height: 2px;
-  background: ${({ theme }) => theme.palette.secondary.main};
+  background: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.light
+      : props.theme.palette.primary.dark};
 `;
 
 const StyledBottomContainer = styled.div`

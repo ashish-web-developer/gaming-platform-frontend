@@ -1,25 +1,22 @@
 import styled from "styled-components";
 
-type IStyledButton = {
-  $left?: string;
-  $right?: string;
-};
-
 const StyledChatInputContainer = styled.div`
   width: 400px;
   height: 100%;
   position: relative;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     width: calc(100% - 62px);
     height: 100%;
   }
 `;
 
-const StyledChatInput = styled.input`
+const StyledChatInput = styled.input<{
+  $mode: "light" | "dark";
+}>`
   width: 100%;
   height: 100%;
   background: ${({ theme }) => theme.palette.primary.main};
-  border: ${({ theme }) => theme.palette.chat_input.border};
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 16px;
   position: absolute;
   top: 0px;
@@ -27,21 +24,30 @@ const StyledChatInput = styled.input`
   z-index: 1;
   padding-left: 60px;
   padding-right: 110px;
-  color: ${({ theme }) => theme.palette.primary.info};
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;
   &::placeholder {
-    color: ${({ theme }) => theme.palette.primary.info};
+    color: ${(props) =>
+      props.$mode == "light"
+        ? props.theme.palette.primary.dark
+        : props.theme.palette.primary.light};
   }
   &:focus {
     outline: none;
   }
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     border-radius: 25px;
   }
 `;
 
-const StyledButton = styled.button<IStyledButton>`
+const StyledButton = styled.button<{
+  $left?: string;
+  $right?: string;
+}>`
   position: absolute;
   z-index: 2;
   background: transparent;
@@ -58,7 +64,7 @@ const StyledEmojiContainer = styled.div`
   position: absolute;
   z-index: 2;
   bottom: 80px;
-  border: ${({ theme }) => theme.palette.emoji_container.border};
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 10px;
 `;
 

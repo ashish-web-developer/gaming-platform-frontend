@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type CustomChatTheme from "@/types/theme/chat";
+import type { Theme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -35,14 +35,14 @@ import {
   active_user,
   active_user_conversation,
   updateShowChat,
-  updateActiveUser
+  updateActiveUser,
 } from "@/store/slice/chat.slice";
 
 // hooks
 import { useIsMounted } from "@/hooks/common.hook";
 import useAvatar from "@/hooks/profile.hook";
 
-const BackIcon: FC<{ size: number, color:string }> = ({ size, color }) => {
+const BackIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -61,7 +61,7 @@ const BackIcon: FC<{ size: number, color:string }> = ({ size, color }) => {
 
 const MobileChatHeader: FC = () => {
   const dispatch = useAppDispatch();
-  const theme = useTheme() as CustomChatTheme;
+  const theme = useTheme() as Theme;
   const _mode = useAppSelector(mode);
   const _active_user = useAppSelector(active_user);
   const _show_chat = useAppSelector(show_chat);
@@ -86,19 +86,19 @@ const MobileChatHeader: FC = () => {
               dispatch(updateActiveUser(null));
             }}
           >
-            <BackIcon color = {theme.palette.back_button.icon} size={22} />
+            <BackIcon color={theme.palette.primary.main} size={22} />
           </StyledBackCta>
-          <StyledHamBurgerIcon />
+          <StyledHamBurgerIcon $mode={_mode} />
         </StyledMobileHeader>
-        <StyledChatUserProfile>
+        <StyledChatUserProfile $mode={_mode}>
           <StyledAvatar
             dangerouslySetInnerHTML={{
               __html: active_user_avatar,
             }}
           ></StyledAvatar>
           <StyledUserDetails>
-            <StyledUserName>{_active_user?.name}</StyledUserName>
-            <StyledMessageCount>
+            <StyledUserName $mode={_mode}>{_active_user?.name}</StyledUserName>
+            <StyledMessageCount $mode={_mode}>
               {_active_user_conversation.length} Messages
             </StyledMessageCount>
           </StyledUserDetails>
@@ -133,12 +133,12 @@ const MobileChatHeader: FC = () => {
               height={40}
             />
           </StyledMobileChatSearchIcon>
-          <StyledHamBurgerIcon />
+          <StyledHamBurgerIcon $mode={_mode} />
         </StyledMobileHeader>
-        <StyledWelcomingText>
+        <StyledWelcomingText $mode={_mode}>
           Welcome Gaming,
           <br />
-          <StyledWelcomingSpan>Buddy</StyledWelcomingSpan>
+          <StyledWelcomingSpan $mode={_mode}>Buddy</StyledWelcomingSpan>
         </StyledWelcomingText>
       </StyledMobileHeaderContainer>
     </>

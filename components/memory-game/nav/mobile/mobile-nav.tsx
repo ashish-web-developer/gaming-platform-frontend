@@ -11,9 +11,6 @@ import {
   StyledChatButton,
 } from "@/styles/components/memory-game/nav/mobile/mobile-nav.style";
 
-// mui
-import { IconButton } from "@mui/material";
-
 // icons
 import HomeIcon from "@/components/memory-game/nav/icons/home";
 import ChatIcon from "@/components/memory-game/nav/icons/chat";
@@ -26,9 +23,9 @@ import {
   // state
   live_stream_chat_list,
   // actions
-  updateShowHelpDrawer,
   updateShowChatStreamingModal,
   resetMemoryGame,
+  updateShowHelpTooltip,
 } from "@/store/slice/memory-game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
 import { gaming_user, resetGame } from "@/store/slice/game.slice";
@@ -76,10 +73,12 @@ const MobileNav: FC = () => {
           <MoonIcon width={24} height={30} color="#FFF" />
         </StyledIconButton>
       </StyledNav>
-      <StyledHelpCta>
-        <IconButton onClick={() => dispatch(updateShowHelpDrawer(true))}>
-          <HelpIcon size={35} color="#fff" />
-        </IconButton>
+      <StyledHelpCta
+        onClick={() => {
+          dispatch(updateShowHelpTooltip(true));
+        }}
+      >
+        <HelpIcon size={35} color="#fff" />
       </StyledHelpCta>
     </StyledNavContainer>
   );

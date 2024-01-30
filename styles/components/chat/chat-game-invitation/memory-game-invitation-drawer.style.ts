@@ -53,7 +53,7 @@ const StyledHeaderContainer = styled.div`
 `;
 const StyledLogoContainer = styled.h6`
   color: #ffffff;
-  font-family: Poppins;
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
@@ -79,7 +79,7 @@ const StyledMessageContainer = styled.div`
 `;
 const StyledTopMessage = styled.div`
   color: #fff;
-  font-family: Poppins;
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
@@ -90,7 +90,7 @@ const StyledTopMessage = styled.div`
 `;
 const StyledBottomMessage = styled.div`
   color: #f5e960;
-  font-family: Poppins;
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 28px;
   font-style: normal;
   font-weight: 600;
@@ -134,7 +134,7 @@ const StyledPlayCta = styled.button`
   background: #000;
   z-index: 2;
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 24px;
   font-style: normal;
   font-weight: 600;
@@ -153,7 +153,7 @@ const StyledPlayCta = styled.button`
 
 const StyledVsContainer = styled.p`
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 20px;
   font-style: normal;
   font-weight: 600;

@@ -8,11 +8,10 @@ const MobileChatContainer = dynamic(
   }
 );
 
+// themes
+import { darkTheme, lightTheme } from "@/theme/chat.theme";
 // theme provider
 import { ThemeProvider } from "styled-components";
-
-// theme
-import getTheme from "@/theme/chat.theme";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -23,11 +22,10 @@ import { useIsMobile } from "@/hooks/common.hook";
 
 const ChatPage = () => {
   const _mode = useAppSelector(mode);
-  const theme = getTheme(_mode);
   const is_mobile = useIsMobile();
 
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={_mode == "light" ? lightTheme : darkTheme}>
       {is_mobile ? <MobileChatContainer /> : <ChatContainer />}
     </ThemeProvider>
   );

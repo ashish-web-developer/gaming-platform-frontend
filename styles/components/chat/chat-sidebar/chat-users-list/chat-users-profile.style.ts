@@ -1,28 +1,26 @@
 import styled from "styled-components";
 
-type IStyledUsersProfile = {
-  $border: string;
+const StyledUsersProfile = styled.div<{
+  $border_color: string;
   $not_viewed: number;
-  $time:string
-};
-
-const StyledUsersProfile = styled.div<IStyledUsersProfile>`
+  $time: string;
+}>`
   width: 100%;
   min-height: 64px;
   border-radius: 16px;
-  background: ${({ theme }) => theme.palette.default_user_profile.background};
+  background: ${({ theme }) => theme.palette.secondary.main};
   display: flex;
   align-items: center;
   padding-left: 16px;
   gap: 15px;
-  border: ${(props) => props.$border};
+  border: 2px solid ${(props) => props.$border_color};
   position: relative;
   &::after {
-    content: "${(props)=>props.$time}";
+    content: "${(props) => props.$time}";
     position: absolute;
     right: 16px;
     top: 12px;
-    font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+    font-family: ${({ theme }) => theme.fontFamily.lobster};
     font-size: 12px;
   }
   &::before {
@@ -36,7 +34,7 @@ const StyledUsersProfile = styled.div<IStyledUsersProfile>`
     background: #afa2ff;
     border: 1px solid #000;
     bottom: 12px;
-    font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+    font-family: ${({ theme }) => theme.fontFamily.lobster};
     font-size: 12px;
     justify-content: center;
     align-items: center;
@@ -57,7 +55,7 @@ const StyledUserDetails = styled.div`
 
 const StyledUserName = styled.span`
   color: #000;
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -66,7 +64,7 @@ const StyledUserName = styled.span`
 
 const StyledUserMessage = styled.span`
   color: #40434e;
-  font-family: ${({ theme }) => theme.palette.fontFamily.lobster};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

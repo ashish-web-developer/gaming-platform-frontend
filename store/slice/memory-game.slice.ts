@@ -109,7 +109,6 @@ const initialState: InitialState = {
   show_help_tooltip: false,
   play_audio: true,
   show_game_board: false,
-  card_turn_count: 0,
   score: null,
   show_chat_streaming_modal: false,
   live_stream_chat_list: [],
@@ -182,17 +181,11 @@ export const memoryGameSlice = createSlice({
     updatePlayAudio: (state, action) => {
       state.play_audio = action.payload;
     },
-    updateShowHelpDrawer: (state, action: PayloadAction<boolean>) => {
-      state.mobile.show_help_drawer = action.payload;
-    },
     updateShowGameBoard: (state, action: PayloadAction<boolean>) => {
       state.show_game_board = action.payload;
     },
     updatePlayerTurnId: (state, action: PayloadAction<number | null>) => {
       state.player_turn_id = action.payload;
-    },
-    updateCardTurnCount: (state, action: PayloadAction<0 | 1>) => {
-      state.card_turn_count = action.payload;
     },
     updateScore: (state, action: PayloadAction<Score | null>) => {
       state.score = action.payload;
@@ -243,11 +236,9 @@ export const {
   updateIsGamingUserLeaving,
   updateShowHelpTooltip,
   updatePlayAudio,
-  updateShowHelpDrawer,
   updateShowGameBoard,
   updateCardState,
   updatePlayerTurnId,
-  updateCardTurnCount,
   updateScore,
   updateShowChatStreamingModal,
   updateLiveStreamChatList,
@@ -275,15 +266,11 @@ export const is_gaming_user_leaving = (state: RootState) =>
 export const show_help_tooltip = (state: RootState) =>
   state.memoryGame.show_help_tooltip;
 export const play_audio = (state: RootState) => state.memoryGame.play_audio;
-export const show_help_drawer = (state: RootState) =>
-  state.memoryGame.mobile.show_help_drawer;
 export const show_game_board = (state: RootState) =>
   state.memoryGame.show_game_board;
 export const player_turn_id = (state: RootState) =>
   state.memoryGame.player_turn_id;
 
-export const card_turn_count = (state: RootState) =>
-  state.memoryGame.card_turn_count;
 export const game_complexity = (state: RootState) =>
   state.memoryGame.game_complexity;
 

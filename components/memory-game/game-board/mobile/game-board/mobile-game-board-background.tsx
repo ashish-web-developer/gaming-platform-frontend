@@ -1,15 +1,12 @@
-
 // types
 import type { FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled theme
 import { useTheme } from "styled-components";
 
-
-
-const MobileGameBoardBackground = ()=> {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+const MobileGameBoardBackground = () => {
+  const theme = useTheme() as ITheme;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -26,7 +23,7 @@ const MobileGameBoardBackground = ()=> {
         ></path>
       </mask>
       <path
-        fill={theme.palette.game_board.background}
+        fill={theme.palette.primary.dark}
         fillRule="evenodd"
         d="M212.272 21.767C221.639 35.433 234.431 50 251 50h61c16.569 0 30 13.431 30 30v476c0 16.569-13.431 30-30 30H30c-16.569 0-30-13.431-30-30V80c0-16.569 13.431-30 30-30h61c16.569 0 29.361-14.567 38.728-28.233C138.737 8.623 153.862 0 171 0c17.138 0 32.263 8.623 41.272 21.767z"
         clipRule="evenodd"
@@ -38,6 +35,6 @@ const MobileGameBoardBackground = ()=> {
       ></path>
     </svg>
   );
-}
+};
 
 export default MobileGameBoardBackground;

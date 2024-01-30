@@ -6,9 +6,9 @@ const StyledContainer = styled.div`
   left: 0px;
   height: 350px;
   width: 100%;
-  background: ${({ theme }) => theme.palette.live_stream_chat.background};
+  background: ${({ theme }) => theme.palette.primary.dark};
   z-index: 10;
-  border: 3px solid ${({ theme }) => theme.palette.live_stream_chat.border};
+  border: 3px solid ${({ theme }) => theme.palette.primary.light};
   border-radius: 25px 25px 0px 0px;
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@ const StyledContainer = styled.div`
 const StyledDivider = styled.div`
   width: 60px;
   height: 3px;
-  background: ${({ theme }) => theme.palette.live_stream_chat.border};
+  background: ${({ theme }) => theme.palette.primary.light};
 `;
 const StyledHeader = styled.div`
   width: 100%;
@@ -28,7 +28,7 @@ const StyledHeader = styled.div`
 `;
 const StyledMainText = styled.div`
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
@@ -61,11 +61,11 @@ const StyledInput = styled.input`
   width: 100%;
   height: 100%;
   border-radius: 8px;
-  border: 2px solid ${({ theme }) => theme.palette.live_stream_chat.border};
+  border: 2px solid ${({ theme }) => theme.palette.primary.light};
   background: transparent;
   padding-left: 18px;
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 12px;
   font-style: normal;
   font-weight: 500;
@@ -97,7 +97,7 @@ const StyledUserProfile = styled.span`
 `;
 const StyledMessageUserName = styled.span`
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -111,7 +111,7 @@ const StyledMessageUserName = styled.span`
 
 const StyledMessage = styled.p`
   color: #ded1d1;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 14px;
   font-style: normal;
   font-weight: 500;

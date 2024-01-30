@@ -19,9 +19,9 @@ const StyledNavContainer = styled.div`
 const StyledNav = styled.div`
   width: 190px;
   height: 52px;
-  background: ${({ theme }) => theme.palette.nav.mobile.background};
+  background: ${({ theme }) => theme.palette.primary.dark};
   border-radius: 25px;
-  border: ${({ theme }) => theme.palette.nav.mobile.border};
+  border: 2px solid ${({ theme }) => theme.palette.primary.light};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: space-between;
@@ -29,16 +29,16 @@ const StyledNav = styled.div`
   padding: 0px 24px;
 `;
 
-const StyledHelpCta = styled.div`
+const StyledHelpCta = styled.button`
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background-color: #f42c04;
-  border: ${({ theme }) => theme.palette.nav.mobile.help_tooltip_border};
+  background-color: ${({ theme }) => theme.palette.primary.contrast};
+  border: 2px solid ${({ theme }) => theme.palette.primary.light};
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 const StyledIconButton = styled.button`
   background: transparent;

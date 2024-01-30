@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
+import type { Theme } from "@/theme/chat.theme";
 import type {
   IUsersWithConversation,
   IConversation,
@@ -25,6 +26,9 @@ import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 import ChatInput from "@/components/chat/chat-input/chat-input";
 import InvitationCard from "@/components/common/invitation-card";
+
+// theme
+import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -72,6 +76,7 @@ const ThemeTogglerIcon: FC<{
 const ChatContainer: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const theme = useTheme() as Theme;
   const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
@@ -138,14 +143,18 @@ const ChatContainer: FC = () => {
         <ThemeTogglerIcon
           width={40}
           height={45}
-          color={_mode == "dark" ? "#fff" : "#000"}
+          color={
+            _mode == "dark"
+              ? theme.palette.primary.light
+              : theme.palette.primary.dark
+          }
         />
       </StyledThemeTogglerIcon>
       <StyledChatContainer>
         <ChatHeader />
         <StyledChatMainContainer>
           <ChatSidebar />
-          <StyledChatMainContentContainer>
+          <StyledChatMainContentContainer $mode={_mode}>
             <StyledChatMainContent>
               <StyledMessageContainer>
                 <ChatMessageContainer />
@@ -157,7 +166,7 @@ const ChatContainer: FC = () => {
           </StyledChatMainContentContainer>
           {_show_memory_game_snackbar && (
             <StyledNotificationContainer>
-              <StyledNotificationHeading>
+              <StyledNotificationHeading $mode={_mode}>
                 Notifications
                 <InvitationCard />
               </StyledNotificationHeading>

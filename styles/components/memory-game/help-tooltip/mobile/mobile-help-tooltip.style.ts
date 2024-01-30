@@ -1,17 +1,20 @@
-// mui
-import { Box, IconButton, Button } from "@mui/material";
-
+import Image from "next/image";
 // styled
 import styled from "styled-components";
 
-type IStyledTrofyImage = {
-  $showBackground: boolean;
-};
-
-const StyledTooltipContainer = styled(Box)`
-  width: 100vw;
+const StyledTooltipDrawer = styled.dialog`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+  width: 100%;
   height: 100%;
-  background: ${({ theme }) => theme.palette.help_tooltip.mobile.background};
+`;
+
+const StyledTooltipContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  background: ${({ theme }) => theme.palette.primary.contrast};
   position: relative;
   &::after {
     content: "";
@@ -24,26 +27,33 @@ const StyledTooltipContainer = styled(Box)`
   }
 `;
 
-const StyledTopBackground = styled.div`
+const StyledTopBackgroundContainer = styled.div`
   position: absolute;
   z-index: 2;
   width: 100%;
   height: 350px;
 `;
 
-const StyledVolumeCta = styled(IconButton)`
-  &.MuiIconButton-root{
-    position: absolute;
-    padding: 0px;
-    margin: 0px;
-    width: 60px;
-    height: 60px;
-    background: #2b061e;
-    top: calc(100vw / 1.14 - 70px);
-    left: 14px;
-    z-index: 2;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  }
+const StyledTopBackground = styled(Image)`
+  object-fit: cover;
+`;
+
+const StyledVolumeCta = styled.button`
+  position: absolute;
+  padding: 0px;
+  margin: 0px;
+  width: 60px;
+  height: 60px;
+  background: ${({ theme }) => theme.palette.primary.dark};
+  top: calc(100vw / 1.14 - 70px);
+  left: 14px;
+  z-index: 2;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledContent = styled.div`
@@ -57,8 +67,8 @@ const StyledContent = styled.div`
 `;
 
 const StyledHeader = styled.h6`
-  color: ${({ theme }) => theme.palette.help_tooltip.mobile.heading};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.primary.dark};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
@@ -67,8 +77,8 @@ const StyledHeader = styled.h6`
 `;
 
 const StyledPara = styled.p`
-  color: ${({ theme }) => theme.palette.help_tooltip.mobile.para};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.primary.light};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
@@ -76,24 +86,20 @@ const StyledPara = styled.p`
   text-transform: capitalize;
 `;
 
-const StyledTrofyImage = styled.div<IStyledTrofyImage>`
+const StyledTrofyImageContainer = styled.div<{
+  $showBackground: boolean;
+}>`
   width: 200px;
   height: 283px;
   align-self: center;
   position: relative;
-  &::before {
-    display: ${(props) => (props.$showBackground ? "block" : "none")};
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-    z-index: -1;
-    filter: blur(150px);
-  }
   @media (max-height: 840px) {
     display: none;
   }
+`;
+
+const StyledTrofyImage = styled(Image)`
+  object-fit: contain;
 `;
 
 const StyledBottomCta = styled.div`
@@ -112,28 +118,35 @@ const StyledNavIconContainer = styled.span`
   gap: 10px;
 `;
 
-const StyledNavCta = styled(IconButton)`
-  margin: 0px;
-  padding: 0px;
+const StyledNavCta = styled.button`
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
-const StyledBackButton = styled(Button)`
-  &.MuiButton-root{
-    background-color: ${({ theme }) =>
-      theme.palette.help_tooltip.mobile.back_cta.background};
-    border-radius: 25px;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    color: ${({ theme }) =>
-      theme.palette.help_tooltip.mobile.back_cta.text_color};
-    font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
-    font-weight: 600;
-  }
+const StyledBackButton = styled.button`
+  background: ${({ theme }) => theme.palette.primary.dark};
+  padding: 14px 24px 14px 48px;
+  color: ${({ theme }) => theme.palette.primary.light};
+  position: relative;
+  border: none;
+  border-radius: 30px;
+  font-family: ${({ theme }) => theme.palette.primary.poppins};
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 const StyledBackIconContainer = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
   width: 30px;
   height: 30px;
-  background: ${({ theme }) =>
-    theme.palette.help_tooltip.mobile.back_cta.start_icon_background};
+  background: ${({ theme }) => theme.palette.primary.light};
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -143,12 +156,15 @@ const StyledBackIconContainer = styled.span`
 `;
 
 export {
+  StyledTooltipDrawer,
   StyledTooltipContainer,
+  StyledTopBackgroundContainer,
   StyledTopBackground,
   StyledVolumeCta,
   StyledContent,
   StyledHeader,
   StyledPara,
+  StyledTrofyImageContainer,
   StyledTrofyImage,
   StyledBottomCta,
   StyledNavIconContainer,

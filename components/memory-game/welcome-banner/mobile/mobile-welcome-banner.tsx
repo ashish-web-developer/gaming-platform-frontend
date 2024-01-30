@@ -1,14 +1,14 @@
 // types
 import type { FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled components
 import {
   StyledContainer,
   StyledDottedContainer,
   StyledWelcomeBannerContainer,
-  StyledMainSpan,
   StyledMainText,
+  StyledSpan,
   StyledStarContainer,
   StyledContent,
   StyledAvatarGroup,
@@ -26,11 +26,10 @@ import {
   // state
   is_gaming_user_in,
 } from "@/store/slice/memory-game.slice";
+import { mode } from "@/store/slice/common.slice";
 
 // helpers hooks
 import useAvatar from "@/hooks/profile.hook";
-
-
 
 const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -50,7 +49,8 @@ const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 };
 
 const MobileWelcomeBanner: FC = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
+  const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
   const user_avatar = useAvatar(_user.username ?? "");
@@ -58,101 +58,55 @@ const MobileWelcomeBanner: FC = () => {
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   return (
     <StyledContainer>
-      <StyledDottedContainer>
+      <StyledDottedContainer $mode={_mode}>
         <StyledWelcomeBannerContainer
-        animate = {{
-          rotate:-5,
-          transition:{
-            duration:0.5,
-            type: "spring",
-            stiffness: 260,
-            damping: 20
-          }
-        }}
+          animate={{
+            rotate: -5,
+            transition: {
+              duration: 0.5,
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            },
+          }}
         >
           <StyledMainText $rotate={"90deg"} $bottom="20%" $left={"-20px"}>
-            <StyledMainSpan
-              $color={
-                theme.palette.welcome_banner.mobile.container.logo_text
-                  .cogni_text_color
-              }
-            >
-              Cogni
-            </StyledMainSpan>
-            <StyledMainSpan
-              $color={
-                theme.palette.welcome_banner.mobile.container.logo_text
-                  .match_text_color
-              }
-            >
-              Match
-            </StyledMainSpan>
+            Cogni
+            <StyledSpan $color={theme.palette.primary.dark}>Match</StyledSpan>
+          </StyledMainText>
+          <StyledMainText $right={"10px"} $top={"5px"}>
+            Cogni
+            <StyledSpan $color={theme.palette.primary.dark}>Match</StyledSpan>
           </StyledMainText>
 
-          <StyledMainText $right={"10px"} $top={"5px"}>
-            <StyledMainSpan
-              $color={
-                theme.palette.welcome_banner.mobile.container.logo_text
-                  .cogni_text_color
-              }
-            >
-              Cogni
-            </StyledMainSpan>
-            <StyledMainSpan
-              $color={
-                theme.palette.welcome_banner.mobile.container.logo_text
-                  .match_text_color
-              }
-            >
-              Match
-            </StyledMainSpan>
-          </StyledMainText>
           <StyledStarContainer>
-            <StarIcon
-              size={20}
-              color={
-                theme.palette.welcome_banner.mobile.container.stars
-                  .stars_first_color
-              }
-            />
-            <StarIcon
-              size={20}
-              color={
-                theme.palette.welcome_banner.mobile.container.stars
-                  .stars_second_color
-              }
-            />
-            <StarIcon
-              size={20}
-              color={
-                theme.palette.welcome_banner.mobile.container.stars
-                  .stars_third_color
-              }
-            />
+            <StarIcon size={20} color={"#080F0F"} />
+            <StarIcon size={20} color={"#FFFFFF"} />
+            <StarIcon size={20} color={"#16C172"} />
           </StyledStarContainer>
 
           <StyledAvatarGroup>
             <StyledAvatar
-            $size = "40px"
-            $border= {theme.palette.welcome_banner.mobile.avatar.border}
-            $online = {true}
-            dangerouslySetInnerHTML={{
-              __html: user_avatar,
-            }}
+              $size="40px"
+              $border={theme.palette.primary.light}
+              $online={true}
+              dangerouslySetInnerHTML={{
+                __html: user_avatar,
+              }}
             />
             <StyledAvatar
-            $size = "40px"
-            $border = {theme.palette.welcome_banner.mobile.avatar.border}
-            $online = {_is_gaming_user_in}
-            dangerouslySetInnerHTML={{
-              __html: gaming_user_avatar,
-            }}
+              $size="40px"
+              $border={theme.palette.primary.light}
+              $online={_is_gaming_user_in}
+              dangerouslySetInnerHTML={{
+                __html: gaming_user_avatar,
+              }}
             />
           </StyledAvatarGroup>
           <StyledContent>
-            &ldquo;CogniMatch&rdquo; is a captivating memory game designed to boost your
-            cognitive skills. Flip cards, match pairs, and enhance your memory
-            in a fun and challenging way. Perfect for all ages!
+            &ldquo;CogniMatch&rdquo; is a captivating memory game designed to
+            boost your cognitive skills. Flip cards, match pairs, and enhance
+            your memory in a fun and challenging way. Perfect for all ages!
           </StyledContent>
         </StyledWelcomeBannerContainer>
       </StyledDottedContainer>

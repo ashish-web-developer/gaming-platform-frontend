@@ -1,3 +1,4 @@
+import Image from "next/image";
 // types
 import { type FC } from "react";
 
@@ -11,10 +12,8 @@ import {
   StyledUserImgContainer,
   StyledUserImg,
   StyledUserData,
-  StyledUserName,
-  StyledMoneyBagImg,
+  StyledText,
   StyledUserPointsContainer,
-  StyledUserPoints,
   StyledNotificationContainer,
 } from "@/styles/components/chat/chat-header/chat-header.style";
 
@@ -60,17 +59,18 @@ const ChatHeader: FC = () => {
       </StyledWelcomeText>
       <StyledRightContainer>
         <StyledUserProfileContainer>
-          <StyledUserImgContainer>
+          <StyledUserImgContainer $mode={_mode}>
             <StyledUserImg
+              $mode={_mode}
               dangerouslySetInnerHTML={{
                 __html: _user_avatar,
               }}
             />
           </StyledUserImgContainer>
           <StyledUserData>
-            <StyledUserName>{_user.name}</StyledUserName>
+            <StyledText $mode={_mode}>{_user.name}</StyledText>
             <StyledUserPointsContainer>
-              <StyledMoneyBagImg
+              <Image
                 alt="money bag"
                 src={
                   "/chat/chat-header/" +
@@ -81,11 +81,11 @@ const ChatHeader: FC = () => {
                 width={15}
                 height={15}
               />
-              <StyledUserPoints>300.00</StyledUserPoints>
+              <StyledText $mode={_mode}>300.00</StyledText>
             </StyledUserPointsContainer>
           </StyledUserData>
         </StyledUserProfileContainer>
-        <StyledNotificationContainer>
+        <StyledNotificationContainer $mode={_mode}>
           <NotificationIcon width={22} height={25} color="#000" />
         </StyledNotificationContainer>
       </StyledRightContainer>

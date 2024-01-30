@@ -11,19 +11,14 @@ import path from "path";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import {
-  updateCardTurnCount,
-  updateGameRules,
-  updatePlayAudio,
-  updateShowGameBoard,
-} from "@/store/slice/memory-game.slice";
+import { updateGameRules } from "@/store/slice/memory-game.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // theme provider
 import { ThemeProvider } from "styled-components";
 
 // theme
-import getTheme from "@/theme/memory-game.theme";
+import { lightTheme, darkTheme } from "@/theme/memory-game.theme";
 
 import { UttranceContext } from "context";
 
@@ -37,24 +32,18 @@ interface Props {
 const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const theme = getTheme(_mode);
   const [speechUttrance, setSpeechUttrance] =
     useState<MutableSpeechUtterance | null>(null);
 
   useEffect(() => {
     dispatch(updateGameRules(rules));
     setSpeechUttrance(new MutableSpeechUtterance());
-    return () => {
-      dispatch(updateShowGameBoard(false));
-      dispatch(updateCardTurnCount(0));
-      dispatch(updatePlayAudio(true));
-    };
   }, []);
 
   return (
     <>
       <UttranceContext.Provider value={speechUttrance}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={_mode == "dark" ? darkTheme : lightTheme}>
           <MemoryGame />
         </ThemeProvider>
       </UttranceContext.Provider>
