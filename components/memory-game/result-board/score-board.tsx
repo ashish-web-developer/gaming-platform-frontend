@@ -1,5 +1,9 @@
 // types
 import type { FC } from "react";
+import type { ITheme } from "@/theme/memory-game.theme";
+
+// theme
+import { useTheme } from "styled-components";
 
 // styled components
 import {
@@ -84,6 +88,7 @@ const Score: FC<IScoreProps> = ({
 };
 
 const ScoreBoard: FC = () => {
+  const theme = useTheme() as ITheme;
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
   const _max_score_user_id =
@@ -116,21 +121,25 @@ const ScoreBoard: FC = () => {
             src="/memory-game/result-board/score-board/banner-image.png"
           />
           <StyledLogo>
-            <StyledLogoSpan $color="#FFFFFF">Cogni</StyledLogoSpan>
-            <StyledLogoSpan $color="#FF2400">Match</StyledLogoSpan>
+            <StyledLogoSpan $color={theme.palette.primary.light}>
+              Cogni
+            </StyledLogoSpan>
+            <StyledLogoSpan $color={theme.palette.primary.contrast}>
+              Match
+            </StyledLogoSpan>
           </StyledLogo>
           <StyledWinnerName>{winner?.name}</StyledWinnerName>
         </StyledScoreBoardContent>
       </StyledTrofyBannerContainer>
       <Score
-        backgroundColor="#329F5B"
+        backgroundColor={theme.palette.success.main}
         showCrown={true}
         score={_score_list ? Math.max(..._score_list) : 0}
         name={winner?.name as string}
         rank={1}
       />
       <Score
-        backgroundColor="#FF2400"
+        backgroundColor={theme.palette.warning.main}
         showCrown={false}
         score={_score_list ? Math.min(..._score_list) : 0}
         name={loser?.name as string}
