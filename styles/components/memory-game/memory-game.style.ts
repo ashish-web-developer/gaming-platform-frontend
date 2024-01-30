@@ -135,7 +135,7 @@ const StyledMainText = styled.div<{
 
 const StyledInfoSnackbarContainer = styled.div`
   width: 412px;
-  @media (max-width: ${({ theme }) => theme.palette.breakpoints.mobile}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     position: absolute;
     bottom: 80px;
     width: 100%;

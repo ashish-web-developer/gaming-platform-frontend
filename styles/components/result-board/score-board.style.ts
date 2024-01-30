@@ -18,10 +18,8 @@ const StyledScoreBoardContainer = styled.div`
   width: 100%;
   height: 100%;
   border-radius: 25px;
-  border: 10px solid
-    ${({ theme }) => theme.palette.result_board.score_board.border_color};
-  background: ${({ theme }) =>
-    theme.palette.result_board.score_board.background_color};
+  border: 10px solid ${({ theme }) => theme.palette.primary.light};
+  background: ${({ theme }) => theme.palette.primary.dark};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   z-index: 3;
   display: flex;
@@ -47,7 +45,7 @@ const StyledTrofyBannerContainer = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+    font-family: ${({ theme }) => theme.fontFamily.poppins};
     font-size: 180px;
     font-weight: 700;
     text-transform: uppercase;
@@ -75,7 +73,7 @@ const StyledBannerImage = styled(Image)`
 `;
 
 const StyledLogo = styled.p`
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 20px;
   font-weight: 700;
 `;
@@ -85,7 +83,7 @@ const StyledLogoSpan = styled.span<IStyledLogoSpan>`
 
 const StyledWinnerName = styled.div`
   color: #fff;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 28px;
   font-style: normal;
   font-weight: 700;
@@ -105,7 +103,7 @@ const StyledScoreContainer = styled.div<IStyledScoreContainer>`
 `;
 
 const StyledRank = styled.span`
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 32px;
   font-weight: 700;
   color: #fff;
@@ -126,7 +124,7 @@ const StyledNameAndScore = styled.div`
   width: 100%;
   border-radius: 16px;
   border: 3px solid #fff;
-  background: #191308;
+  background: ${({ theme }) => theme.palette.primary.dark};
   display: flex;
   align-items: center;
   padding-left: 1.2rem;
@@ -140,7 +138,7 @@ const StyledScore = styled.div<IStyledScore>`
   border-radius: 4px;
   color: #fff;
   text-align: center;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -159,7 +157,7 @@ const StyledCrownIconContainer = styled.span`
 const StyledUserName = styled.div`
   color: #fff;
   text-align: center;
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 16px;
   font-style: normal;
   font-weight: 700;

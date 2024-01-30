@@ -1,7 +1,6 @@
 import { useRef } from "react";
-import { createPortal } from "react-dom";
 // types
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
+import type { ITheme } from "@/theme/memory-game.theme";
 import type { FC } from "react";
 // styled components
 import {
@@ -67,7 +66,7 @@ const TextPattern: FC<{ color: string }> = ({ color }) => {
 };
 
 const ResultBoard = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
   const circularTextRef = useRef<HTMLDivElement | null>(null);
   const pointTextRef = useRef<string>("Unlocked Points");
   return (
@@ -83,13 +82,13 @@ const ResultBoard = () => {
         <StyledStartIconContainer>
           <StartIcon
             size={63}
-            color={theme.palette.result_board.star_icon.background_color}
-            stroke={theme.palette.result_board.star_icon.stroke_color}
+            color={theme.palette.primary.dark}
+            stroke={theme.palette.success.main}
           />
         </StyledStartIconContainer>
         <StyledBoardText>
           Bravo! You've triumphed over the cards. Victory dance time!
-          <TextPattern color={theme.palette.result_board.text_color} />
+          <TextPattern color={theme.palette.success.main} />
         </StyledBoardText>
         <StyledCircularTextContainer>
           <StyledCircularText ref={circularTextRef}>
@@ -113,8 +112,12 @@ const ResultBoard = () => {
               sizes="(max-width: 1400px) 20vw"
             />
           </StyledCrownImageContainer>
-          <StyledLogoSpan $color="#FFFFFF">Cogni</StyledLogoSpan>
-          <StyledLogoSpan $color="#FF2400">Match</StyledLogoSpan>
+          <StyledLogoSpan $color={theme.palette.primary.light}>
+            Cogni
+          </StyledLogoSpan>
+          <StyledLogoSpan $color={theme.palette.primary.contrast}>
+            Match
+          </StyledLogoSpan>
         </StyledLogoContainer>
       </StyledResultBoardContainer>
     </>

@@ -13,8 +13,8 @@ const StyledResultBoardContainer = styled.div`
   width: 100%;
   height: 524px;
   border-radius: 25px;
-  border: 10px solid ${({ theme }) => theme.palette.result_board.border_color};
-  background: ${({ theme }) => theme.palette.result_board.background_color};
+  border: 10px solid ${({ theme }) => theme.palette.primary.light};
+  background: ${({ theme }) => theme.palette.primary.dark};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   z-index: 3;
 `;
@@ -34,8 +34,8 @@ const StyledStartIconContainer = styled.span`
 `;
 
 const StyledBoardText = styled.div`
-  color: ${({ theme }) => theme.palette.result_board.background_color};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.primary.dark};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 30px;
   font-style: normal;
   font-weight: 900;
@@ -44,8 +44,7 @@ const StyledBoardText = styled.div`
   width: 370px;
   padding: 90px 0px 0px 50px;
   -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: ${({ theme }) =>
-    theme.palette.result_board.text_color};
+  -webkit-text-stroke-color: ${({ theme }) => theme.palette.success.main};
 `;
 const StyledCircularTextContainer = styled.div`
   width: 80px;
@@ -55,8 +54,8 @@ const StyledCircularTextContainer = styled.div`
   bottom: 20px;
   left: 50px;
   text-transform: capitalize;
-  color: ${({ theme }) => theme.palette.result_board.text_color};
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  color: ${({ theme }) => theme.palette.success.main};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
 `;
 
 const StyledCircularText = styled.div`
@@ -73,7 +72,7 @@ const StyledCircularLetter = styled.span<IStyledCircularLetter>`
 `;
 
 const StyledPointsText = styled.p`
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   position: absolute;
   top: 50%;
   left: 50%;
@@ -82,7 +81,7 @@ const StyledPointsText = styled.p`
   font-weight: 900;
 `;
 const StyledLogoContainer = styled.div`
-  font-family: ${({ theme }) => theme.palette.fontFamily.poppins};
+  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 40px;
   font-weight: 900;
   transform: rotate(-10deg);

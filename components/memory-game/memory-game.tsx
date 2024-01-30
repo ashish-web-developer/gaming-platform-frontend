@@ -2,8 +2,8 @@ import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
-import type CustomMemoryGameThemePalette from "@/types/theme/memory-game";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { ITheme } from "@/theme/memory-game.theme";
 
 // local components
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
@@ -11,7 +11,7 @@ import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
 const WelcomeBanner = dynamic(
   () => import("@/components/memory-game/welcome-banner/welcome-banner"),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 
@@ -25,16 +25,16 @@ const MobileWelcomeBanner = dynamic(
   }
 );
 
-const StartBanner = dynamic(
-  () => import("@/components/memory-game/start-banner/start-banner"),
+const TimerBanner = dynamic(
+  () => import("@/components/memory-game/timer-banner/timer-banner"),
   {
     ssr: false,
   }
 );
 
-const MobileStartBanner = dynamic(
+const MobileTimerBanner = dynamic(
   () =>
-    import("@/components/memory-game/start-banner/mobile/mobile-start-banner"),
+    import("@/components/memory-game/timer-banner/mobile/mobile-timer-banner"),
   {
     ssr: false,
   }
@@ -140,7 +140,6 @@ import { user } from "@/store/slice/user.slice";
 import {
   // state
   show_help_tooltip,
-  show_help_drawer,
   show_game_board,
   is_gaming_user_in,
   score,
@@ -180,11 +179,10 @@ import { useIsMobile } from "@/hooks/common.hook";
 import { v4 as uuidv4 } from "uuid";
 
 const MemoryGame: FC = () => {
-  const theme = useTheme() as CustomMemoryGameThemePalette;
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const _show_help_tooltip = useAppSelector(show_help_tooltip);
-  const _show_help_drawer = useAppSelector(show_help_drawer);
   const _show_game_board = useAppSelector(show_game_board);
   const _room_id = useAppSelector(room_id);
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
@@ -192,14 +190,16 @@ const MemoryGame: FC = () => {
   const _gaming_user = useAppSelector(gaming_user);
   const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
-  const voiceRef = useRef<{ voice: SpeechSynthesisVoice[] }>({
-    voice: [],
-  });
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
   const _show_chat_streaming_modal = useAppSelector(show_chat_streaming_modal);
   const _info_snackbar = useAppSelector(info_snackbar);
   const _show_leaving_snackbar = useAppSelector(show_leaving_snackbar);
+  const sound_ref = useRef<{
+    flip_sound: HTMLAudioElement | null;
+  }>({
+    flip_sound: null,
+  });
 
   usePresenceChannel(`game.${_room_id}`, [
     {
@@ -212,6 +212,7 @@ const MemoryGame: FC = () => {
       event: "MemoryGameEvent",
       callback: (data) => {
         dispatch(updateCardState({ id: data.card_id, flipped: data.flipped }));
+        sound_ref.current.flip_sound?.play();
       },
     },
     {
@@ -236,7 +237,6 @@ const MemoryGame: FC = () => {
       event: "UpdateMemoryGameScore",
       callback: (data) => {
         dispatch(updateScore(data.score));
-        console.log(data);
       },
     },
     {
@@ -286,22 +286,19 @@ const MemoryGame: FC = () => {
   }, [_is_proposal_sender, _is_gaming_user_in]);
 
   useEffect(() => {
-    const updateVoices = () => {
-      voiceRef.current.voice = speechSynthesis.getVoices();
-    };
-    updateVoices();
-    window.speechSynthesis.addEventListener("voiceschanged", updateVoices);
-    return () => {
-      window.speechSynthesis.removeEventListener("voiceschanged", updateVoices);
-    };
+    if (!sound_ref.current.flip_sound) {
+      sound_ref.current.flip_sound = new Audio(
+        "/memory-game/game-board/card/audio/flip-card-sound.mp3"
+      );
+    }
   }, []);
 
   return (
     <StyledPage>
       {is_mobile && _show_chat_streaming_modal && <MobileLiveStreamChat />}
-      {is_mobile && _show_help_drawer && <MobileHelpTooltip ref={voiceRef} />}
-      <StyledContainer>
-        {_show_help_tooltip && <HelpTooltip ref={voiceRef} />}
+      {is_mobile && <MobileHelpTooltip />}
+      <StyledContainer $mode={_mode}>
+        {!is_mobile && <HelpTooltip />}
         <StyledHelpCtaContainer>
           <Tooltip title="Need Help?" placement="right-start">
             <StyledHelpCta
@@ -310,7 +307,7 @@ const MemoryGame: FC = () => {
               <HelpIcon
                 width={60}
                 height={60}
-                color={theme.palette.help_tooltip.help_tooltip_cta.cta_color}
+                color={theme.palette.primary.light}
               />
             </StyledHelpCta>
           </Tooltip>
@@ -339,13 +336,15 @@ const MemoryGame: FC = () => {
           {!_show_game_board && (
             <>
               {is_mobile ? (
-                <StyledMainText>
+                <StyledMainText $mode={_mode}>
                   Good Morning,
                   <br />
                   {_user.name}
                 </StyledMainText>
               ) : (
-                <StyledMainText>Good Morning, {_user.name}</StyledMainText>
+                <StyledMainText $mode={_mode}>
+                  Good Morning, {_user.name}
+                </StyledMainText>
               )}
             </>
           )}
@@ -358,12 +357,12 @@ const MemoryGame: FC = () => {
                   {is_mobile ? (
                     <>
                       <MobileWelcomeBanner />
-                      <MobileStartBanner />
+                      <MobileTimerBanner />
                     </>
                   ) : (
                     <>
                       <WelcomeBanner />
-                      <StartBanner />
+                      <TimerBanner />
                     </>
                   )}
                 </>
