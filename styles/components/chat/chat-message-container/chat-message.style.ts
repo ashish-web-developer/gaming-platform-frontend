@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledMessageContent = styled.div<{
   $justifyContent: "flex-start" | "flex-end";
@@ -7,12 +8,10 @@ const StyledMessageContent = styled.div<{
   gap: 16px;
   justify-content: ${(props) => props.$justifyContent};
 `;
-const StyledUserProfile = styled.div<{
+const StyledUserProfile = styled(Image)<{
   $order: 1 | 2;
   $border_color: string;
 }>`
-  width: 40px;
-  height: 40px;
   border-radius: 8px;
   border: 2px solid ${(props) => props.$border_color};
   order: ${(props) => props.$order};

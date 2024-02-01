@@ -1,6 +1,6 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 // types
-import type { ForwardedRef, RefObject } from "react";
+import type { RefObject } from "react";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
@@ -70,35 +70,24 @@ const useEmojiOutsideClickHandler = ({
  * To handle the view of the message
  */
 const useMessageView = ({
-  root_ref,
   target_ref,
   callback,
+  options,
 }: {
-  root_ref: ForwardedRef<HTMLDivElement>;
   target_ref: RefObject<HTMLDivElement>;
   callback: (
     entries: IntersectionObserverEntry[],
     observer: IntersectionObserver
   ) => void; // intersection observer callback
+  options: {
+    root?: Element | Document | null;
+    rootMargin?: string;
+    threshold?: number | number[];
+  };
 }) => {
   const _user = useAppSelector(user);
   useEffect(() => {
-    if (
-      typeof root_ref !== "function" &&
-      root_ref?.current &&
-      target_ref.current
-    ) {
-      // options
-      let options: {
-        root?: Element | Document | null;
-        rootMargin?: string;
-        threshold?: number | number[];
-      } = {
-        root: root_ref.current,
-        rootMargin: "0px",
-        threshold: 1.0,
-      };
-
+    if (target_ref.current) {
       // observer
       let observer = new IntersectionObserver(callback, options);
       if (target_ref.current) {
@@ -108,7 +97,7 @@ const useMessageView = ({
         observer.disconnect();
       };
     }
-  }, [_user]);
+  }, [_user, options]);
 };
 
 export {

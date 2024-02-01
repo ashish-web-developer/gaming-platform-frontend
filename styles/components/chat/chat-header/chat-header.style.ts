@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledChatHeader = styled.div`
   display: flex;
@@ -56,12 +57,9 @@ const StyledUserImgContainer = styled.span<{
   }}
 `;
 
-const StyledUserImg = styled.span<{
+const StyledUserImg = styled(Image)<{
   $mode: "light" | "dark";
 }>`
-  display: inline-block;
-  width: 40px;
-  height: 40px;
   border-radius: 50%;
   background: ${(props) =>
     props.$mode == "light"

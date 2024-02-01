@@ -1,5 +1,7 @@
 import { createAvatar } from "@dicebear/core";
 import { adventurer } from "@dicebear/collection";
+// types
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const useAvatar = (username: string) => {
   const avatar = createAvatar(adventurer, {
@@ -8,4 +10,18 @@ const useAvatar = (username: string) => {
   return avatar.toString();
 };
 
+const useAvatarUrl = (user: IUsersWithConversation) => {
+  if (user?.avatar_url) {
+    return `${process.env.NEXT_PUBLIC_API_END_POINT}${
+      user.avatar_url
+    }?timestamp=${new Date().getTime()}`;
+  }
+  const avatar = createAvatar(adventurer, {
+    seed: user?.username ?? "",
+  });
+  const data_url = `data:image/svg+xml;base64,${btoa(avatar.toString())}`;
+  return data_url;
+};
+
+export { useAvatarUrl };
 export default useAvatar;

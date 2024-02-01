@@ -2,12 +2,51 @@
 import type { InitialState } from "@/types/store/slice/common";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/store/rootReducer";
-//redux
-import { createSlice } from "@reduxjs/toolkit";
+import type { User } from "@/types/user";
+import type { AxiosResponse } from "axios";
+// redux
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { updateUser } from "@/store/slice/user.slice";
+
+// helpers
+import { Axios } from "@/helpers/axios";
+export const updateProfileApi = createAsyncThunk<
+  {
+    success: boolean;
+    message: string;
+    user: User;
+    error?: any;
+  },
+  {
+    form_data: FormData;
+  }
+>(
+  "api/user/update-profile",
+  async ({ form_data }, { rejectWithValue, dispatch }) => {
+    try {
+      const response: AxiosResponse<{
+        success: boolean;
+        message: string;
+        user: User;
+        error?: any;
+      }> = await Axios.post("/user/update-profile", form_data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      dispatch(updateUser(response.data.user));
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 
 const initialState: InitialState = {
   showEmoji: false,
   mode: "light",
+  show_user_profile: false,
+  show_profile_upload_modal: false,
 };
 export const commonSlice = createSlice({
   name: "common",
@@ -19,10 +58,25 @@ export const commonSlice = createSlice({
     updateMode: (state, action: PayloadAction<"dark" | "light">) => {
       state.mode = action.payload;
     },
+    updateShowUserProfile: (state, action: PayloadAction<boolean>) => {
+      state.show_user_profile = action.payload;
+    },
+    updateShowProfileUploadModal: (state, action) => {
+      state.show_profile_upload_modal = action.payload;
+    },
   },
 });
 
 export default commonSlice.reducer;
 export const showEmoji = (state: RootState) => state.common.showEmoji;
 export const mode = (state: RootState) => state.common.mode;
-export const { updateShowEmoji, updateMode } = commonSlice.actions;
+export const show_user_profile = (state: RootState) =>
+  state.common.show_user_profile;
+export const show_profile_upload_modal = (state: RootState) =>
+  state.common.show_profile_upload_modal;
+export const {
+  updateShowEmoji,
+  updateMode,
+  updateShowUserProfile,
+  updateShowProfileUploadModal,
+} = commonSlice.actions;

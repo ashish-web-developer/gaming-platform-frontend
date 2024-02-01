@@ -1,6 +1,7 @@
 import Image from "next/image";
 // types
 import { type FC } from "react";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -23,7 +24,7 @@ import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 import React from "react";
 
@@ -51,7 +52,7 @@ const NotificationIcon: FC<{
 const ChatHeader: FC = () => {
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
-  const _user_avatar = useAvatar(_user?.username ?? "");
+  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   return (
     <StyledChatHeader>
       <StyledWelcomeText>
@@ -62,9 +63,10 @@ const ChatHeader: FC = () => {
           <StyledUserImgContainer $mode={_mode}>
             <StyledUserImg
               $mode={_mode}
-              dangerouslySetInnerHTML={{
-                __html: _user_avatar,
-              }}
+              src={user_avatar_url}
+              width={40}
+              height={40}
+              alt="user-avatar"
             />
           </StyledUserImgContainer>
           <StyledUserData>

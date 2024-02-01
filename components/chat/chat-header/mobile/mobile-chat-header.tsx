@@ -4,6 +4,7 @@ import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type { Theme } from "@/theme/chat.theme";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -37,10 +38,11 @@ import {
   updateShowChat,
   updateActiveUser,
 } from "@/store/slice/chat.slice";
+import { updateShowUserProfile } from "@/store/slice/common.slice";
 
 // hooks
 import { useIsMounted } from "@/hooks/common.hook";
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const BackIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -67,7 +69,9 @@ const MobileChatHeader: FC = () => {
   const _show_chat = useAppSelector(show_chat);
   const search_dialog_ref = useRef<HTMLDialogElement>(null);
   const is_mounted = useIsMounted();
-  const active_user_avatar = useAvatar(_active_user?.username as string);
+  const active_user_avatar_url = useAvatarUrl(
+    _active_user as IUsersWithConversation
+  );
   const _active_user_conversation = useAppSelector(active_user_conversation);
 
   const handleModalClose = (event: MouseEvent) => {
@@ -88,14 +92,20 @@ const MobileChatHeader: FC = () => {
           >
             <BackIcon color={theme.palette.primary.main} size={22} />
           </StyledBackCta>
-          <StyledHamBurgerIcon $mode={_mode} />
+          <StyledHamBurgerIcon
+            onClick={() => {
+              dispatch(updateShowUserProfile(true));
+            }}
+            $mode={_mode}
+          />
         </StyledMobileHeader>
         <StyledChatUserProfile $mode={_mode}>
           <StyledAvatar
-            dangerouslySetInnerHTML={{
-              __html: active_user_avatar,
-            }}
-          ></StyledAvatar>
+            src={active_user_avatar_url}
+            width={40}
+            height={40}
+            alt="user-avatar"
+          />
           <StyledUserDetails>
             <StyledUserName $mode={_mode}>{_active_user?.name}</StyledUserName>
             <StyledMessageCount $mode={_mode}>
@@ -133,7 +143,12 @@ const MobileChatHeader: FC = () => {
               height={40}
             />
           </StyledMobileChatSearchIcon>
-          <StyledHamBurgerIcon $mode={_mode} />
+          <StyledHamBurgerIcon
+            onClick={() => {
+              dispatch(updateShowUserProfile(true));
+            }}
+            $mode={_mode}
+          />
         </StyledMobileHeader>
         <StyledWelcomingText $mode={_mode}>
           Welcome Gaming,

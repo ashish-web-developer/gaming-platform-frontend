@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledChatSearchResult = styled.div`
   width: 100%;
@@ -35,9 +36,7 @@ const StyledProfileContainer = styled.div<{
   gap: 15px;
 `;
 
-const StyledProfileImage = styled.div`
-  width: 40px;
-  height: 40px;
+const StyledProfileImage = styled(Image)`
   border: 2px solid #000;
   border-radius: 8px;
 `;

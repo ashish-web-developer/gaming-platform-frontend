@@ -15,7 +15,7 @@ import {
 import { useTheme } from "styled-components";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useIsMobile } from "@/hooks/common.hook";
 
 // redux
@@ -35,7 +35,7 @@ interface IProps {
 }
 const ChatUserProfile: FC<IProps> = ({ user }) => {
   const dispatch = useAppDispatch();
-  const avatar = useAvatar(user.username ?? "");
+  const avatar_url = useAvatarUrl(user);
   const theme = useTheme() as Theme;
   const _mode = useAppSelector(mode);
   const _active_user = useAppSelector(active_user);
@@ -62,9 +62,10 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
       }}
     >
       <StyledUserImage
-        dangerouslySetInnerHTML={{
-          __html: avatar,
-        }}
+        src={avatar_url}
+        alt="user-avatar"
+        width={40}
+        height={40}
       />
       <StyledUserDetails>
         <StyledUserName>{user.name}</StyledUserName>

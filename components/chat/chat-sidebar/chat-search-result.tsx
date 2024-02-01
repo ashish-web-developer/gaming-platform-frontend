@@ -1,6 +1,7 @@
 import { useRef, useEffect, forwardRef } from "react";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -29,8 +30,7 @@ import {
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const ChatResultProfile: FC<{
   user: IUsersWithConversation;
@@ -39,7 +39,7 @@ const ChatResultProfile: FC<{
 }> = ({ user, is_request_pending, handleModalClose }) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const avatar = useAvatar(user.username ?? "");
+  const avatar_url = useAvatarUrl(user);
   return (
     <>
       {is_request_pending ? (
@@ -55,9 +55,10 @@ const ChatResultProfile: FC<{
           }}
         >
           <StyledProfileImage
-            dangerouslySetInnerHTML={{
-              __html: avatar,
-            }}
+            width={40}
+            height={40}
+            src={avatar_url}
+            alt="user-avatar"
           />
           <StyledProfileDetails>
             <StyledName>{user.name}</StyledName>

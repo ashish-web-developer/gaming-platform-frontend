@@ -21,6 +21,7 @@ type IUsersWithConversation = {
   updated_at: string;
   latest_conversation?: IConversation;
   not_viewed: number;
+  avatar_url: string;
 };
 
 type IChatInitialState = {

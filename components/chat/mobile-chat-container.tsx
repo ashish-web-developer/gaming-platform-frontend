@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
@@ -25,6 +26,12 @@ import ChatUsersList from "@/components/chat/chat-sidebar/chat-users-list/chat-u
 import MobileChatMessageContainer from "@/components/chat/chat-message-container/mobile/mobile-chat-message-container";
 import ChatInput from "@/components/chat/chat-input/chat-input";
 import MemoryGameInvitationDrawer from "@/components/chat/chat-game-invitation/memory-game-invitation-drawer";
+const UserProfile = dynamic(
+  () => import("@/components/common/user-profile/user-profile"),
+  {
+    ssr: false,
+  }
+);
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -44,7 +51,7 @@ import {
   updateGamingUser,
 } from "@/store/slice/game.slice";
 import { sendInvitationApi } from "@/store/slice/chat.slice";
-import { mode } from "@/store/slice/common.slice";
+import { mode, show_user_profile } from "@/store/slice/common.slice";
 
 // hooks
 import { useDefaultUser } from "@/hooks/chat/chat.hook";
@@ -63,6 +70,7 @@ const MobileChatContainer: FC = () => {
   const router = useRouter();
   const _active_user = useAppSelector(active_user);
   const _user = useAppSelector(user);
+  const _show_user_profile = useAppSelector(show_user_profile);
   const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
   const _show_chat = useAppSelector(show_chat);
   useDefaultUser();
@@ -122,6 +130,7 @@ const MobileChatContainer: FC = () => {
   return (
     <StyledMobileChatContainer>
       {_show_memory_game_snackbar && <MemoryGameInvitationDrawer />}
+      {_show_user_profile && <UserProfile />}
       <div id="search-dialog-container"></div>
       <MobileChatHeader />
       {!_show_chat && (
