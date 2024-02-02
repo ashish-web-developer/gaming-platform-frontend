@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledBanner = styled.div`
   position: relative;
@@ -115,13 +116,19 @@ const StyledAvatar = styled.div<{
   &::after {
     content: "";
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
+    border: 2px solid ${(props) => props.theme.palette.primary.dark};
     top: -5px;
     right: 3px;
   }
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 export {
@@ -135,5 +142,6 @@ export {
   StyledBannerPara,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledImage,
   StyledBannerImage,
 };

@@ -98,9 +98,15 @@ const StyledAvatar = styled.div<{
   height: ${(props) => props.$size};
   border: ${(props) => props.$border};
   border-radius: 50%;
+  position: relative;
   &:not(:first-child) {
     margin-left: -10px;
   }
+`;
+
+const StyledAvatarImage = styled(Image)`
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const StyledInstructAvatar = styled.div`
@@ -223,6 +229,7 @@ export {
   StyledPlayButtonContainer,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledAvatarImage,
   StyledInstructAvatar,
   StyledImage,
   StyledChatMainContainer,

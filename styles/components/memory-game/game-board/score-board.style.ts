@@ -64,8 +64,8 @@ const StyledAvatar = styled.div<{
   &::after {
     content: "";
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: ${(props) =>
       props.$online
@@ -75,6 +75,11 @@ const StyledAvatar = styled.div<{
     top: -5px;
     right: 3px;
   }
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 const StyledUserName = styled.span`
@@ -110,6 +115,7 @@ export {
   StyledContentContainer,
   StyledProfileContainer,
   StyledAvatar,
+  StyledImage,
   StyledUserName,
   StyledScoreContainer,
   StyledBannerImage,

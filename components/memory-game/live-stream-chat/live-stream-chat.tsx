@@ -17,6 +17,7 @@ import {
   StyledPlayButtonContainer,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledAvatarImage,
   StyledInstructAvatar,
   StyledImage,
   StyledChatMainContainer,
@@ -46,7 +47,7 @@ import {
 } from "@/store/slice/memory-game.slice";
 import { liveStreamChatApi } from "@/store/slice/game.slice";
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const SendIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -69,17 +70,17 @@ const Message: FC<{
   message: string;
   user: IUsersWithConversation;
 }> = ({ user, message }) => {
-  const user_avatar = useAvatar(user.username);
+  const user_avatar_url = useAvatarUrl(user);
   return (
     <StyledMessage>
       <StyledMessageHeader>
-        <StyledAvatar
-          $size="30px"
-          $border="2px solid #fff"
-          dangerouslySetInnerHTML={{
-            __html: user_avatar,
-          }}
-        />
+        <StyledAvatar $size="30px" $border="2px solid #fff">
+          <StyledAvatarImage
+            src={user_avatar_url}
+            fill={true}
+            alt="user-avatar"
+          />
+        </StyledAvatar>
         <StyledUserName>{user.name}</StyledUserName>
       </StyledMessageHeader>
       <StyledMessageText>{message}</StyledMessageText>
@@ -90,11 +91,11 @@ const Message: FC<{
 import React from "react";
 
 const LiveStreamBanner: FC<{
-  user_avatar: string;
-  gaming_user_avatar: string;
+  user_avatar_url: string;
+  gaming_user_avatar_url: string;
   user: User;
   gaming_user: IUsersWithConversation;
-}> = ({ user_avatar, gaming_user_avatar, user, gaming_user }) => {
+}> = ({ user_avatar_url, gaming_user_avatar_url, user, gaming_user }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
@@ -103,20 +104,20 @@ const LiveStreamBanner: FC<{
       <StyledContent>
         <StyledBannerAvatarContainer>
           <StyledAvatarGroup>
-            <StyledAvatar
-              dangerouslySetInnerHTML={{
-                __html: user_avatar,
-              }}
-              $size={"40px"}
-              $border="2px solid #fff"
-            />
-            <StyledAvatar
-              dangerouslySetInnerHTML={{
-                __html: gaming_user_avatar,
-              }}
-              $size={"40px"}
-              $border={`2px solid #fff`}
-            />
+            <StyledAvatar $size={"40px"} $border="2px solid #fff">
+              <StyledAvatarImage
+                fill={true}
+                src={user_avatar_url}
+                alt="user-avatar"
+              />
+            </StyledAvatar>
+            <StyledAvatar $size={"40px"} $border={`2px solid #fff`}>
+              <StyledAvatarImage
+                fill={true}
+                src={gaming_user_avatar_url}
+                alt="user-avatar"
+              />
+            </StyledAvatar>
           </StyledAvatarGroup>
         </StyledBannerAvatarContainer>
         {/* <StyledBannerGirlContainer>
@@ -151,16 +152,18 @@ const LiveStreamChat: FC = () => {
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar = useAvatar(_user?.username ?? "");
-  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
+  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const gaming_user_avatar_url = useAvatarUrl(
+    _gaming_user as IUsersWithConversation
+  );
   const _show_live_stream_chat = useAppSelector(show_live_stream_chat);
   const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
   const input_ref = useRef<HTMLInputElement>(null);
   if (!_live_stream_chat_list.length && !_show_live_stream_chat) {
     return (
       <LiveStreamBanner
-        user_avatar={user_avatar}
-        gaming_user_avatar={gaming_user_avatar}
+        user_avatar_url={user_avatar_url}
+        gaming_user_avatar_url={gaming_user_avatar_url}
         user={_user}
         gaming_user={_gaming_user as IUsersWithConversation}
       />
@@ -172,20 +175,20 @@ const LiveStreamChat: FC = () => {
         <StyledHeader>
           <StyledMainText>Live Chat</StyledMainText>
           <StyledAvatarGroup>
-            <StyledAvatar
-              dangerouslySetInnerHTML={{
-                __html: user_avatar,
-              }}
-              $size={"40px"}
-              $border="2px solid #fff"
-            />
-            <StyledAvatar
-              dangerouslySetInnerHTML={{
-                __html: gaming_user_avatar,
-              }}
-              $size={"40px"}
-              $border={`2px solid #fff`}
-            />
+            <StyledAvatar $size={"40px"} $border="2px solid #fff">
+              <StyledAvatarImage
+                src={user_avatar_url}
+                fill={true}
+                alt="user-avatar"
+              />
+            </StyledAvatar>
+            <StyledAvatar $size={"40px"} $border={`2px solid #fff`}>
+              <StyledAvatarImage
+                src={gaming_user_avatar_url}
+                fill={true}
+                alt="user-avatar"
+              />
+            </StyledAvatar>
           </StyledAvatarGroup>
         </StyledHeader>
         <StyledChatMainContainer>

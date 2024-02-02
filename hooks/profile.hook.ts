@@ -3,13 +3,6 @@ import { adventurer } from "@dicebear/collection";
 // types
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
-const useAvatar = (username: string) => {
-  const avatar = createAvatar(adventurer, {
-    seed: username,
-  });
-  return avatar.toString();
-};
-
 const useAvatarUrl = (user: IUsersWithConversation) => {
   if (user?.avatar_url) {
     return `${process.env.NEXT_PUBLIC_API_END_POINT}${
@@ -24,4 +17,3 @@ const useAvatarUrl = (user: IUsersWithConversation) => {
 };
 
 export { useAvatarUrl };
-export default useAvatar;

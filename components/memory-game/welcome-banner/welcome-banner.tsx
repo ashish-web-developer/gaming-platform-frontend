@@ -1,5 +1,6 @@
 // types
 import { type FC } from "react";
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 import type { ITheme } from "@/theme/memory-game.theme";
 
 // styled components
@@ -14,6 +15,7 @@ import {
   StyledBannerPara,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledImage,
   StyledBannerImage,
 } from "@/styles/components/memory-game/welcome-banner/welcome-banner.style";
 
@@ -35,7 +37,7 @@ import {
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import useAvatar, { useAvatarUrl } from "@/hooks/profile.hook";
 
 const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -59,8 +61,10 @@ const WelcomeBanner: FC = () => {
   const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar = useAvatar(_user.username ?? "");
-  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
+  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const gaming_user_avatar_url = useAvatarUrl(
+    _gaming_user as IUsersWithConversation
+  );
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
 
   return (
@@ -92,18 +96,26 @@ const WelcomeBanner: FC = () => {
                 $size="40px"
                 $border="3px solid #000"
                 $online={true}
-                dangerouslySetInnerHTML={{
-                  __html: user_avatar,
-                }}
-              />
+              >
+                <StyledImage
+                  alt="user-avatar"
+                  src={user_avatar_url}
+                  fill={true}
+                  sizes="(max-width: 1400px) 10vw"
+                />
+              </StyledAvatar>
               <StyledAvatar
                 $size="40px"
                 $online={_is_gaming_user_in}
                 $border="3px solid #000"
-                dangerouslySetInnerHTML={{
-                  __html: gaming_user_avatar,
-                }}
-              />
+              >
+                <StyledImage
+                  alt="user-avatar"
+                  src={gaming_user_avatar_url}
+                  fill={true}
+                  sizes="(max-width: 1400px) 10vw"
+                />
+              </StyledAvatar>
             </StyledAvatarGroup>
           </StyledWelcomeBannerContent>
         </StyledWelcomeBannerPatternContainer>

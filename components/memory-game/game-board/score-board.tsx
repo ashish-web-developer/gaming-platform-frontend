@@ -1,13 +1,14 @@
 // types
-import type { ITheme } from "@/theme/memory-game.theme";
 import type { Score } from "@/types/store/slice/memory-game";
 import type { FC } from "react";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 // styled components
 import {
   StyledScoreBoard,
   StyledContentContainer,
   StyledProfileContainer,
   StyledAvatar,
+  StyledImage,
   StyledUserName,
   StyledBannerImage,
   StyledScoreContainer,
@@ -15,7 +16,7 @@ import {
 } from "@/styles/components/memory-game/game-board/score-board.style";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -42,8 +43,10 @@ const Scores: FC<{ children: number }> = ({ children }) => {
 const ScoreBoard = () => {
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar = useAvatar(_user.name ?? "");
-  const gaming_user_avatar = useAvatar(_gaming_user?.name ?? "");
+  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const gaming_user_avatar_url = useAvatarUrl(
+    _gaming_user as IUsersWithConversation
+  );
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const _score = useAppSelector(score) as Score;
   return (
@@ -59,13 +62,14 @@ const ScoreBoard = () => {
     >
       <StyledContentContainer>
         <StyledProfileContainer>
-          <StyledAvatar
-            $size="40px"
-            $online={true}
-            dangerouslySetInnerHTML={{
-              __html: user_avatar,
-            }}
-          />
+          <StyledAvatar $size="40px" $online={true}>
+            <StyledImage
+              sizes="(max-width: 1400px) 10vw"
+              src={user_avatar_url}
+              fill={true}
+              alt="user-avatar"
+            />
+          </StyledAvatar>
           <StyledUserName>{_user.name?.split(" ")[0]}</StyledUserName>
         </StyledProfileContainer>
         <StyledScoreContainer>
@@ -81,13 +85,14 @@ const ScoreBoard = () => {
           </Scores>
         </StyledScoreContainer>
         <StyledProfileContainer>
-          <StyledAvatar
-            $size="40px"
-            $online={_is_gaming_user_in}
-            dangerouslySetInnerHTML={{
-              __html: gaming_user_avatar,
-            }}
-          />
+          <StyledAvatar $size="40px" $online={_is_gaming_user_in}>
+            <StyledImage
+              sizes="(max-width: 1400px) 10vw"
+              src={gaming_user_avatar_url}
+              fill={true}
+              alt="user-avatar"
+            />
+          </StyledAvatar>
           <StyledUserName>{_gaming_user?.name?.split(" ")[0]}</StyledUserName>
         </StyledProfileContainer>
       </StyledContentContainer>

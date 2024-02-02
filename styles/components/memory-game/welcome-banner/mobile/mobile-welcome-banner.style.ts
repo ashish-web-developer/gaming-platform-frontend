@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 type IStyledMainSpan = {
   $color: string;
@@ -121,13 +122,19 @@ const StyledAvatar = styled.div<{
   &::after {
     content: "";
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
+    border: 2px solid ${({ theme }) => theme.palette.primary.dark};
     border-radius: 50%;
     background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
     top: -5px;
     right: 3px;
   }
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 export {
@@ -140,4 +147,5 @@ export {
   StyledContent,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledImage,
 };

@@ -1,6 +1,7 @@
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/memory-game.theme";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -13,6 +14,7 @@ import {
   StyledContent,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledImage,
 } from "@/styles/components/memory-game/welcome-banner/mobile/mobile-welcome-banner.style";
 
 // styled theme
@@ -29,7 +31,7 @@ import {
 import { mode } from "@/store/slice/common.slice";
 
 // helpers hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -53,8 +55,10 @@ const MobileWelcomeBanner: FC = () => {
   const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar = useAvatar(_user.username ?? "");
-  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
+  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const gaming_user_avatar_url = useAvatarUrl(
+    _gaming_user as IUsersWithConversation
+  );
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   return (
     <StyledContainer>
@@ -90,18 +94,26 @@ const MobileWelcomeBanner: FC = () => {
               $size="40px"
               $border={theme.palette.primary.light}
               $online={true}
-              dangerouslySetInnerHTML={{
-                __html: user_avatar,
-              }}
-            />
+            >
+              <StyledImage
+                fill={true}
+                alt="user-avatar"
+                src={user_avatar_url}
+                sizes="(max-width: 1400px) 10vw"
+              />
+            </StyledAvatar>
             <StyledAvatar
               $size="40px"
               $border={theme.palette.primary.light}
               $online={_is_gaming_user_in}
-              dangerouslySetInnerHTML={{
-                __html: gaming_user_avatar,
-              }}
-            />
+            >
+              <StyledImage
+                fill={true}
+                alt="user-avatar"
+                src={gaming_user_avatar_url}
+                sizes="(max-width: 1400px) 10vw"
+              />
+            </StyledAvatar>
           </StyledAvatarGroup>
           <StyledContent>
             &ldquo;CogniMatch&rdquo; is a captivating memory game designed to
