@@ -37,7 +37,7 @@ import {
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
-import useAvatar, { useAvatarUrl } from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
