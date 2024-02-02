@@ -15,6 +15,7 @@ const initialState: { user: User } = {
     email_verified_at: null,
     created_at: null,
     updated_at: null,
+    avatar_url: null,
   },
 };
 

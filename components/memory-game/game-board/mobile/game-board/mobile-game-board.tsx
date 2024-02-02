@@ -38,7 +38,7 @@ import {
 } from "@/store/slice/memory-game.slice";
 
 // hooks
-import useAvatar, { useAvatarUrl } from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const MobileGameBoard: FC<{
