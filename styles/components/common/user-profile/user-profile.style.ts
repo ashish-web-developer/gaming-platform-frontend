@@ -3,14 +3,12 @@ import Image from "next/image";
 
 const StyledWrapper = styled.div`
   position: absolute;
-  border: 2px solid red;
   z-index: 6;
   width: 100%;
   height: 100vh;
   top: 0px;
   left: 0px;
-  background: #000000;
-  border: 6px dashed #a2f263;
+  background: ${({ theme }) => theme.palette.primary.main};
 `;
 
 const StyledHeader = styled.div`
@@ -24,14 +22,14 @@ const StyledHeader = styled.div`
 const StyledBackButton = styled.button`
   width: 60px;
   height: 60px;
-  background: #a2f263;
+  background: ${({ theme }) => theme.palette.primary.dark};
   border-radius: 50%;
   border: none;
   cursor: pointer;
 `;
 
 const StyledHeaderText = styled.h3`
-  color: #a2f263;
+  color: ${({ theme }) => theme.palette.primary.dark};
   text-align: center;
   font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 20px;
@@ -50,12 +48,18 @@ const StyledChatProfileContent = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const StyledProfileWrappper = styled.div`
+const StyledProfileWrappper = styled.div<{
+  $mode: "light" | "dark";
+}>`
   width: 180px;
   height: 180px;
   border-radius: 50%;
   background: transparent;
-  border: 5px solid #fff;
+  border: 5px solid
+    ${(props) =>
+      props.$mode == "dark"
+        ? props.theme.palette.primary.light
+        : props.theme.palette.primary.dark};
   position: relative;
   display: flex;
   justify-content: center;
@@ -83,8 +87,8 @@ const StyledPointsTag = styled.div`
   top: 20%;
   transform: translateX(-50%);
   height: 36px;
-  border: 3px solid #a2f263;
-  background: #000;
+  border: 3px solid ${({ theme }) => theme.palette.primary.dark};
+  background: ${({ theme }) => theme.palette.primary.main};
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -95,8 +99,13 @@ const StyledPointsTag = styled.div`
 const StyledPointsImage = styled(Image)`
   object-fit: contain;
 `;
-const StyledPointsText = styled.span`
-  color: #fff;
+const StyledPointsText = styled.span<{
+  $mode: "light" | "dark";
+}>`
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.dark
+      : props.theme.palette.primary.light};
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;
   font-style: normal;
@@ -113,14 +122,20 @@ const StyledUserDetailsWrapper = styled.div`
 `;
 
 const StyledName = styled.h3`
-  color: #a2f263;
+  color: ${({ theme }) => theme.palette.primary.dark};
   font-size: 40px;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   text-align: center;
 `;
-const StyledUserNameWrapper = styled.div`
+const StyledUserNameWrapper = styled.div<{
+  $mode: "light" | "dark";
+}>`
   height: 30px;
-  border: 2px solid #ffffff;
+  border: 2px solid
+    ${(props) =>
+      props.$mode == "dark"
+        ? props.theme.palette.primary.light
+        : props.theme.palette.primary.dark};
   border-radius: 25px;
   display: flex;
   justify-content: center;
@@ -135,13 +150,17 @@ const StyledUserNameWrapper = styled.div`
     height: 100%;
     width: 140%;
     background: transparent;
-    border: 2px solid #fff;
+    border: 2px solid
+      ${(props) =>
+        props.$mode == "dark"
+          ? props.theme.palette.primary.light
+          : props.theme.palette.primary.dark};
     border-radius: 25px;
   }
 `;
 
 const StyledUserName = styled.p`
-  color: #a2f263;
+  color: ${({theme})=>theme.palette.primary.dark};
   text-align: center;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;

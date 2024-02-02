@@ -44,7 +44,7 @@ export const updateProfileApi = createAsyncThunk<
 
 const initialState: InitialState = {
   showEmoji: false,
-  mode: "light",
+  mode: "dark",
   show_user_profile: false,
   show_profile_upload_modal: false,
 };

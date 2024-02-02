@@ -2,6 +2,7 @@ import Image from "next/image";
 // types
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { Theme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -22,10 +23,14 @@ import {
   StyledUserName,
 } from "@/styles/components/common/user-profile/user-profile.style";
 
+// theme
+import { useTheme } from "styled-components";
+
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
+  mode,
   show_profile_upload_modal,
   updateShowUserProfile,
   updateShowProfileUploadModal,
@@ -34,7 +39,7 @@ import {
 // local components
 import ChatUserUpload from "@/components/common/user-profile/upload-profile-modal";
 // hooks
-import useAvatar, { useAvatarUrl } from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const BackIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -78,6 +83,8 @@ const UploadIcon: FC<{
 
 const ChatProfile: FC = () => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as Theme;
+  const _mode = useAppSelector(mode);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
@@ -90,12 +97,12 @@ const ChatProfile: FC = () => {
             dispatch(updateShowUserProfile(false));
           }}
         >
-          <BackIcon size={22} color="#000" />
+          <BackIcon size={22} color={theme.palette.primary.main} />
         </StyledBackButton>
         <StyledHeaderText>Gamer Profile</StyledHeaderText>
       </StyledHeader>
       <StyledChatProfileContent>
-        <StyledProfileWrappper>
+        <StyledProfileWrappper $mode={_mode}>
           <StyledUserProfile
             // src={`${process.env.NEXT_PUBLIC_API_END_POINT}${
             //   _user.avatar_url
@@ -110,7 +117,16 @@ const ChatProfile: FC = () => {
               dispatch(updateShowProfileUploadModal(true));
             }}
           >
-            <UploadIcon width={30} height={25} color="#A2F263" stroke="#000" />
+            <UploadIcon
+              width={30}
+              height={25}
+              color={theme.palette.primary.dark}
+              stroke={
+                _mode == "dark"
+                  ? theme.palette.primary.main
+                  : theme.palette.primary.main
+              }
+            />
           </StyledUploadButton>
           <StyledPointsTag>
             <StyledPointsImage
@@ -119,13 +135,13 @@ const ChatProfile: FC = () => {
               alt="points icon"
               src="/common/user-profile/dollar.png"
             />
-            <StyledPointsText>800.00</StyledPointsText>
+            <StyledPointsText $mode = {_mode}>800.00</StyledPointsText>
           </StyledPointsTag>
         </StyledProfileWrappper>
       </StyledChatProfileContent>
       <StyledUserDetailsWrapper>
         <StyledName>{_user.name}</StyledName>
-        <StyledUserNameWrapper>
+        <StyledUserNameWrapper $mode = {_mode}>
           <StyledUserName>@{_user.username}</StyledUserName>
         </StyledUserNameWrapper>
       </StyledUserDetailsWrapper>

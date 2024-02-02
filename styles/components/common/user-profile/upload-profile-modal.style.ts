@@ -4,14 +4,14 @@ import styled from "styled-components";
 const StyledChatUserUploadWrapper = styled.dialog`
   width: 90%;
   height: 470px;
-  background: #000;
+  background: ${({theme})=>theme.palette.primary.main};
   position: absolute;
   z-index: 1;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -60%);
   border-radius: 25px;
-  border: 3px solid #a2f263;
+  border: 3px solid ${({theme})=>theme.palette.primary.dark};
 `;
 
 const StyledHeader = styled.div`
@@ -22,7 +22,7 @@ const StyledHeader = styled.div`
 `;
 
 const StyledHeaderMainText = styled.h6`
-  color: #a2f263;
+  color: ${({theme})=>theme.palette.primary.dar};
   text-align: center;
   font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 20px;
@@ -53,7 +53,7 @@ const StyledUploadLabel = styled.label`
   align-items: center;
   width: 100%;
   height: 270px;
-  border: 3px dashed #a2f263;
+  border: 3px dashed ${({theme})=>theme.palette.primary.dark};
   border-radius: 25px;
   position: relative;
   overflow: hidden;
@@ -75,7 +75,7 @@ const StyledUploadBottomInfoWrapper = styled.div`
 `;
 
 const StyledText = styled.p`
-  color: #a2f263;
+  color: ${({theme})=>theme.palette.primary.dark};
   font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 12px;
   font-style: normal;
@@ -93,7 +93,7 @@ const StyledSaveCtaWrapper = styled.div`
 const StyledSaveCta = styled.button`
   width: auto;
   height: auto;
-  border: 2px solid #a2f263;
+  border: 2px solid ${({theme})=>theme.palette.primary.dark};
   background: linear-gradient(95deg, #ffe666 8.66%, #fb3 95.1%);
   padding: 6px 24px;
   color: #000;

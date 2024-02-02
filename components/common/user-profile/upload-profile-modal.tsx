@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 // types
 import type { FC } from "react";
+import type { Theme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -19,6 +20,10 @@ import {
   StyledSaveCtaWrapper,
   StyledSaveCta,
 } from "@/styles/components/common/user-profile/upload-profile-modal.style";
+
+// theme
+import { useTheme } from "styled-components";
+
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -50,6 +55,7 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 
 const ChatUserUpload: FC = () => {
   const dispatch = useAppDispatch();
+  const theme = useTheme() as Theme;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const [file_state, setFileState] = useState<{
     state: 0 | 1 | 2;
@@ -68,7 +74,7 @@ const ChatUserUpload: FC = () => {
             dispatch(updateShowProfileUploadModal(false));
           }}
         >
-          <CloseIcon color="#A2F263" size={20} />
+          <CloseIcon color={theme.palette.primary.dark} size={20} />
         </StyledIconButton>
       </StyledHeader>
       <StyledModalContent>
