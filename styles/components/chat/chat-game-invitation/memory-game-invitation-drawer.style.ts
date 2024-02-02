@@ -174,6 +174,11 @@ const StyledUserAvatar = styled.div<IStyledUserAvatar>`
   border-radius: 50%;
 `;
 
+const StyledAvatarImage = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
+`;
+
 export {
   StyledBackground,
   StyledContainer,
@@ -190,4 +195,5 @@ export {
   StyledPlayCta,
   StyledVsContainer,
   StyledUserAvatar,
+  StyledAvatarImage,
 };

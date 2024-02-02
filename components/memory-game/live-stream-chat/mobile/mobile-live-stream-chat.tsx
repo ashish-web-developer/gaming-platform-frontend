@@ -17,6 +17,7 @@ import {
   StyledMessageContainer,
   StyledProfileContainer,
   StyledUserProfile,
+  StyledImage,
   StyledMessageUserName,
   StyledMessage,
 } from "@/styles/components/memory-game/live-stream-chat/mobile/mobile-live-stream-chat.style";
@@ -35,7 +36,7 @@ import { liveStreamChatApi } from "@/store/slice/game.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useMessageView } from "@/hooks/chat/chat.hook";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
@@ -78,9 +79,8 @@ const Message = forwardRef<
 >(({ user, message, viewed, id }, root_ref) => {
   const dispatch = useAppDispatch();
   const target_ref = useRef<HTMLDivElement>(null);
-  const user_avatar = useAvatar(user?.username);
+  const user_avatar_url = useAvatarUrl(user);
   useMessageView({
-    root_ref,
     target_ref,
     callback: (entries, observer) => {
       entries.forEach((entry) => {
@@ -90,16 +90,20 @@ const Message = forwardRef<
         }
       });
     },
+    options: {
+      root: typeof root_ref !== "function" ? root_ref?.current : null,
+      threshold: 1,
+      rootMargin: "0px",
+    },
   });
+
   return (
     <>
       <StyledMessageContainer ref={target_ref}>
         <StyledProfileContainer>
-          <StyledUserProfile
-            dangerouslySetInnerHTML={{
-              __html: user_avatar,
-            }}
-          />
+          <StyledUserProfile>
+            <StyledImage src={user_avatar_url} fill={true} alt="user-avatar" />
+          </StyledUserProfile>
           <StyledMessageUserName>{user.name}</StyledMessageUserName>
         </StyledProfileContainer>
         <StyledMessage>{message}</StyledMessage>

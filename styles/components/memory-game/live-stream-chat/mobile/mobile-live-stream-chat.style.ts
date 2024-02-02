@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledContainer = styled.div`
   position: fixed;
@@ -94,6 +95,12 @@ const StyledUserProfile = styled.span`
   height: 25px;
   border: 1px solid #fff;
   border-radius: 50%;
+  position: relative;
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
 `;
 const StyledMessageUserName = styled.span`
   color: #fff;
@@ -130,6 +137,7 @@ export {
   StyledMessageContainer,
   StyledProfileContainer,
   StyledUserProfile,
+  StyledImage,
   StyledMessageUserName,
   StyledMessage,
 };

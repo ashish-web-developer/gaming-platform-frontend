@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 // types
 import type { FC } from "react";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -20,6 +21,7 @@ import {
   StyledPlayCta,
   StyledVsContainer,
   StyledUserAvatar,
+  StyledAvatarImage,
 } from "@/styles/components/chat/chat-game-invitation/memory-game-invitation-drawer.style";
 
 // redux
@@ -32,7 +34,7 @@ import {
 } from "@/store/slice/chat.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -56,8 +58,10 @@ const MemoryGameInvitationDrawer: FC = () => {
   const router = useRouter();
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar = useAvatar(_user?.username ?? "");
-  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
+  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const gaming_user_avatar_url = useAvatarUrl(
+    _gaming_user as IUsersWithConversation
+  );
   const [close_icon_size, setCloseIconSize] = useState(20);
   const [avatar_styles, setAvatarStyles] = useState<{
     avatar_1: {
@@ -132,19 +136,25 @@ const MemoryGameInvitationDrawer: FC = () => {
           $left={"40px"}
           $top={"290px"}
           $border={"3px solid #F5E960"}
-          dangerouslySetInnerHTML={{
-            __html: user_avatar,
-          }}
-        ></StyledUserAvatar>
+        >
+          <StyledAvatarImage
+            src={user_avatar_url}
+            fill={true}
+            alt="user-avatar"
+          />
+        </StyledUserAvatar>
         <StyledUserAvatar
           {...avatar_styles.avatar_2}
           $right={"20px"}
           $top={"230px"}
           $border={"3px solid #F42C04"}
-          dangerouslySetInnerHTML={{
-            __html: gaming_user_avatar,
-          }}
-        ></StyledUserAvatar>
+        >
+          <StyledAvatarImage
+            src={gaming_user_avatar_url}
+            fill={true}
+            alt="user-avatar"
+          />
+        </StyledUserAvatar>
         <StyledPlayCta
           onClick={() => {
             dispatch(acceptInvitationApi({ is_accepted: true }));

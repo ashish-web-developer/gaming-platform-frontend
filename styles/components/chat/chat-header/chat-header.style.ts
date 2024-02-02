@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledChatHeader = styled.div`
   display: flex;
@@ -31,9 +32,10 @@ const StyledUserProfileContainer = styled.div`
   gap: 12px;
 `;
 
-const StyledUserImgContainer = styled.span<{
+const StyledUserImgContainer = styled.button<{
   $mode: "light" | "dark";
 }>`
+  cursor: pointer;
   background: ${({ theme }) => theme.palette.primary.main};
   display: inline-block;
   width: 50px;
@@ -56,12 +58,9 @@ const StyledUserImgContainer = styled.span<{
   }}
 `;
 
-const StyledUserImg = styled.span<{
+const StyledUserImg = styled(Image)<{
   $mode: "light" | "dark";
 }>`
-  display: inline-block;
-  width: 40px;
-  height: 40px;
   border-radius: 50%;
   background: ${(props) =>
     props.$mode == "light"

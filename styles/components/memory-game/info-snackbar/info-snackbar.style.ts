@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 type IStyledText = {
   $fontSize: string;
@@ -31,11 +32,17 @@ const StyledUserAvatar = styled.div`
   background-color: transparent;
   border: 2px solid #fff;
   border-radius: 50%;
+  position: relative;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     width: 50px;
     height: 50px;
     left: 6px;
   }
+`;
+
+const StyledAvatarImage = styled(Image)`
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 const StyledContent = styled.div`
@@ -66,6 +73,7 @@ const StyledMessage = styled.p`
 export {
   StyledSnackbarContainer,
   StyledUserAvatar,
+  StyledAvatarImage,
   StyledContent,
   StyledText,
   StyledMessage,

@@ -14,6 +14,7 @@ import {
   StyledText,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledImage,
   StyledTimer,
 } from "@/styles/components/memory-game/game-board/mobile/mobile-game-board.style";
 
@@ -37,7 +38,8 @@ import {
 } from "@/store/slice/memory-game.slice";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import useAvatar, { useAvatarUrl } from "@/hooks/profile.hook";
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const MobileGameBoard: FC<{
   timer_count: number;
@@ -46,8 +48,10 @@ const MobileGameBoard: FC<{
   const _player_turn_id = useAppSelector(player_turn_id);
   const _user = useAppSelector(user);
   const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar = useAvatar(_user.username ?? "");
-  const gaming_user_avatar = useAvatar(_gaming_user?.username ?? "");
+  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const gaming_user_avatar_url = useAvatarUrl(
+    _gaming_user as IUsersWithConversation
+  );
 
   const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const soundRef = useRef<{
@@ -105,18 +109,26 @@ const MobileGameBoard: FC<{
                 $size="40px"
                 $border="3px solid #fff"
                 $online={true}
-                dangerouslySetInnerHTML={{
-                  __html: user_avatar,
-                }}
-              />
+              >
+                <StyledImage
+                  sizes="(max-width: 1400px) 10vw"
+                  src={user_avatar_url}
+                  fill={true}
+                  alt="user-avatar"
+                />
+              </StyledAvatar>
               <StyledAvatar
                 $size="40px"
                 $border="3px solid #fff"
                 $online={_is_gaming_user_in}
-                dangerouslySetInnerHTML={{
-                  __html: gaming_user_avatar,
-                }}
-              />
+              >
+                <StyledImage
+                  sizes="(max-width: 1400px) 10vw"
+                  src={gaming_user_avatar_url}
+                  fill={true}
+                  alt="user-avatar"
+                />
+              </StyledAvatar>
             </StyledAvatarGroup>
           </StyledBottomContainer>
         </StyledGameBoardContent>

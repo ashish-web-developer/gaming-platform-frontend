@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledGameBoardContainer = styled.div`
   position: relative;
@@ -103,8 +104,9 @@ const StyledAvatar = styled.div<{
   &::after {
     content: "";
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
+    border: 2px solid ${({ theme }) => theme.palette.primary.dark};
     border-radius: 50%;
     background: ${(props) =>
       props.$online
@@ -113,6 +115,11 @@ const StyledAvatar = styled.div<{
     top: -5px;
     right: 3px;
   }
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: contain;
+  border-radius: 50%;
 `;
 
 const StyledTimer = styled.div`
@@ -143,5 +150,6 @@ export {
   StyledText,
   StyledAvatarGroup,
   StyledAvatar,
+  StyledImage,
   StyledTimer,
 };

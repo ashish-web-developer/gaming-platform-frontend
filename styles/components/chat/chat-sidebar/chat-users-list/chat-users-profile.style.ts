@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledUsersProfile = styled.div<{
   $border_color: string;
@@ -41,9 +42,7 @@ const StyledUsersProfile = styled.div<{
   }
 `;
 
-const StyledUserImage = styled.div`
-  width: 40px;
-  height: 40px;
+const StyledUserImage = styled(Image)`
   border: 2px solid #000;
   border-radius: 8px;
 `;

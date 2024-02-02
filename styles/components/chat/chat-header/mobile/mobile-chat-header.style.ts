@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledMobileHeaderContainer = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const StyledMobileChatSearchIcon = styled.button`
   padding: 0px;
 `;
 
-const StyledHamBurgerIcon = styled.span<{
+const StyledHamBurgerIcon = styled.button<{
   $mode: "light" | "dark";
 }>`
   display: inline-block;
@@ -33,6 +34,7 @@ const StyledHamBurgerIcon = styled.span<{
   position: relative;
   top: 10px;
   cursor: pointer;
+  border: none;
   &::before {
     content: "";
     width: 25px;
@@ -101,12 +103,10 @@ const StyledChatUserProfile = styled.div<{
       : "0px 4px 4px 0px rgba(255, 255, 255, 0.25)"};
 `;
 
-const StyledAvatar = styled.span`
+const StyledAvatar = styled(Image)`
   display: inline-block;
   border-radius: 40px;
   border: 2px solid #fff;
-  width: 40px;
-  height: 40px;
 `;
 
 const StyledUserDetails = styled.div`

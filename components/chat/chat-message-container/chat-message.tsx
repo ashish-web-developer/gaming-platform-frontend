@@ -1,6 +1,5 @@
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useMemo } from "react";
 // types
-import type CustomChatTheme from "@/types/theme/chat";
 import type {
   IConversation,
   IUsersWithConversation,
@@ -14,11 +13,11 @@ import {
   StyledMessage,
 } from "@/styles/components/chat/chat-message-container/chat-message.style";
 // styled theme
-import { useTheme } from "styled-components";
 
 // hooks
-import useAvatar from "@/hooks/profile.hook";
+import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useMessageView } from "@/hooks/chat/chat.hook";
+import { useIsMobile } from "@/hooks/common.hook";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
@@ -38,13 +37,25 @@ const ChatMessage = forwardRef<
 >(({ conversation, user, active_user }, root_ref) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
+  const is_mobile = useIsMobile();
   const target_ref = useRef<HTMLDivElement>(null);
   const created_at = readableFormatDate(conversation.created_at);
-  const user_avatar = useAvatar(user.username ?? "");
-  const active_user_avatar = useAvatar(active_user?.username ?? "");
-  const theme = useTheme() as CustomChatTheme;
+  const user_avatar_url = useAvatarUrl(user as IUsersWithConversation);
+  const active_user_avatar_url = useAvatarUrl(active_user);
+  const intersection_observer_options = useMemo(() => {
+    return is_mobile
+      ? {
+          root: typeof root_ref !== "function" ? root_ref?.current : null,
+          threshold: 1,
+          rootMargin: "0px 0px 50px 0px",
+        }
+      : {
+          root: typeof root_ref !== "function" ? root_ref?.current : null,
+          threshold: 1,
+          rootMargin: "0px",
+        };
+  }, [is_mobile]);
   useMessageView({
-    root_ref,
     target_ref,
     callback: (entries, observer) => {
       entries.forEach((entry) => {
@@ -58,6 +69,7 @@ const ChatMessage = forwardRef<
         }
       });
     },
+    options: intersection_observer_options,
   });
 
   if (conversation.receiver_id == user.id) {
@@ -66,9 +78,10 @@ const ChatMessage = forwardRef<
         <StyledUserProfile
           $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
           $order={1}
-          dangerouslySetInnerHTML={{
-            __html: active_user_avatar,
-          }}
+          src={active_user_avatar_url}
+          width={40}
+          height={40}
+          alt="user-avatar"
         />
         <StyledMessage
           ref={target_ref}
@@ -91,9 +104,10 @@ const ChatMessage = forwardRef<
         <StyledUserProfile
           $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
           $order={2}
-          dangerouslySetInnerHTML={{
-            __html: user_avatar,
-          }}
+          src={user_avatar_url}
+          width={40}
+          height={40}
+          alt="user-avatar"
         />
         <StyledMessage
           ref={target_ref}
