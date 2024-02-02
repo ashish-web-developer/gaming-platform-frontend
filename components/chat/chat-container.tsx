@@ -26,6 +26,7 @@ import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 import ChatInput from "@/components/chat/chat-input/chat-input";
 import InvitationCard from "@/components/common/invitation-card";
+import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 
 // theme
 import { useTheme } from "styled-components";
@@ -40,7 +41,10 @@ import {
   updateConversationView,
   updateShowMemoryGameSnackbar,
 } from "@/store/slice/chat.slice";
-import { updateMode } from "@/store/slice/common.slice";
+import {
+  show_profile_upload_modal,
+  updateMode,
+} from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 
@@ -81,6 +85,7 @@ const ChatContainer: FC = () => {
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
+  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   useDefaultUser();
   useFirstUserConversation();
   usePrivateChannel(`chat.${_user.id}`, [
@@ -164,6 +169,7 @@ const ChatContainer: FC = () => {
               </StyledMessageInputContainer>
             </StyledChatMainContent>
           </StyledChatMainContentContainer>
+          <UploadProfileModal key={Number(_show_profile_upload_modal)} />
           {_show_memory_game_snackbar && (
             <StyledNotificationContainer>
               <StyledNotificationHeading $mode={_mode}>

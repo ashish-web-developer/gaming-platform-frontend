@@ -19,9 +19,9 @@ import {
 } from "@/styles/components/chat/chat-header/chat-header.style";
 
 // redux
-import { useAppSelector } from "@/hooks/redux.hook";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { mode } from "@/store/slice/common.slice";
+import { mode, updateShowProfileUploadModal } from "@/store/slice/common.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -50,6 +50,7 @@ const NotificationIcon: FC<{
 };
 
 const ChatHeader: FC = () => {
+  const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
@@ -60,7 +61,12 @@ const ChatHeader: FC = () => {
       </StyledWelcomeText>
       <StyledRightContainer>
         <StyledUserProfileContainer>
-          <StyledUserImgContainer $mode={_mode}>
+          <StyledUserImgContainer
+            onClick={() => {
+              dispatch(updateShowProfileUploadModal(true));
+            }}
+            $mode={_mode}
+          >
             <StyledUserImg
               $mode={_mode}
               src={user_avatar_url}

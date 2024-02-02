@@ -24,7 +24,6 @@ import {
 // theme
 import { useTheme } from "styled-components";
 
-
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
@@ -53,7 +52,7 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
-const ChatUserUpload: FC = () => {
+const UploadProfileModal: FC = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
@@ -143,4 +142,4 @@ const ChatUserUpload: FC = () => {
     </StyledChatUserUploadWrapper>
   );
 };
-export default ChatUserUpload;
+export default UploadProfileModal;

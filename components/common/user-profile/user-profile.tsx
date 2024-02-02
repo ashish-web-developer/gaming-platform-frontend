@@ -37,7 +37,7 @@ import {
 } from "@/store/slice/common.slice";
 
 // local components
-import ChatUserUpload from "@/components/common/user-profile/upload-profile-modal";
+import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
@@ -90,7 +90,7 @@ const ChatProfile: FC = () => {
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   return (
     <StyledWrapper>
-      <ChatUserUpload key={Number(_show_profile_upload_modal)} />
+      <UploadProfileModal key={Number(_show_profile_upload_modal)} />
       <StyledHeader>
         <StyledBackButton
           onClick={() => {
@@ -135,13 +135,13 @@ const ChatProfile: FC = () => {
               alt="points icon"
               src="/common/user-profile/dollar.png"
             />
-            <StyledPointsText $mode = {_mode}>800.00</StyledPointsText>
+            <StyledPointsText $mode={_mode}>800.00</StyledPointsText>
           </StyledPointsTag>
         </StyledProfileWrappper>
       </StyledChatProfileContent>
       <StyledUserDetailsWrapper>
         <StyledName>{_user.name}</StyledName>
-        <StyledUserNameWrapper $mode = {_mode}>
+        <StyledUserNameWrapper $mode={_mode}>
           <StyledUserName>@{_user.username}</StyledUserName>
         </StyledUserNameWrapper>
       </StyledUserDetailsWrapper>

@@ -32,9 +32,10 @@ const StyledUserProfileContainer = styled.div`
   gap: 12px;
 `;
 
-const StyledUserImgContainer = styled.span<{
+const StyledUserImgContainer = styled.button<{
   $mode: "light" | "dark";
 }>`
+  cursor: pointer;
   background: ${({ theme }) => theme.palette.primary.main};
   display: inline-block;
   width: 50px;
