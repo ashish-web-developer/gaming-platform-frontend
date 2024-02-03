@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+// types
+import { RefObject, ForwardedRef } from "react";
+
 const useIsMobile = () => {
   const [is_mobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -15,16 +18,44 @@ const useIsMobile = () => {
   return is_mobile;
 };
 
-
-const useIsMounted = ()=>{
-  const [is_mounted,setIsMounted] = useState(false);
-  useEffect(()=>{
+const useIsMounted = () => {
+  const [is_mounted, setIsMounted] = useState(false);
+  useEffect(() => {
     setIsMounted(true);
-    return(()=>{
+    return () => {
       setIsMounted(false);
-    })
-  },[])
+    };
+  }, []);
   return is_mounted;
-}
+};
 
-export { useIsMobile, useIsMounted };
+/**
+ * To handle handle outside click
+ */
+const useOutsideClickHandler = ({
+  modal_ref,
+  cta_ref,
+  callback,
+}: {
+  modal_ref: RefObject<HTMLElement> | ForwardedRef<HTMLElement>;
+  cta_ref: ForwardedRef<HTMLElement>;
+  callback: () => void;
+}) => {
+  useEffect(() => {
+    const onClickHandler = (event: MouseEvent) => {
+      if (typeof modal_ref !== "function" && typeof cta_ref !== "function") {
+        if (
+          !modal_ref?.current?.contains(event.target as Element) &&
+          !cta_ref?.current?.contains(event.target as Element)
+        ) {
+          callback();
+        }
+      }
+    };
+    document.addEventListener("click", onClickHandler);
+    return () => {
+      document.removeEventListener("click", onClickHandler);
+    };
+  }, []);
+};
+export { useIsMobile, useIsMounted, useOutsideClickHandler };

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { createPortal } from "react-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 // types
 import { type FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -26,10 +26,15 @@ import UploadProfileModal from "@/components/common/user-profile/upload-profile-
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { mode, updateShowProfileUploadModal } from "@/store/slice/common.slice";
+import {
+  mode,
+  show_profile_upload_modal,
+  updateShowProfileUploadModal,
+} from "@/store/slice/common.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
+import { useIsMounted } from "@/hooks/common.hook";
 
 import React from "react";
 
@@ -56,21 +61,21 @@ const NotificationIcon: FC<{
 
 const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();
-  const [is_mount, setIsMount] = useState<boolean>(false);
+  const is_mounted = useIsMounted();
+  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   const user_avatar_ref = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    setIsMount(true);
-  }, []);
-
   return (
     <>
-      {is_mount &&
+      {is_mounted &&
         createPortal(
-          <UploadProfileModal ref={user_avatar_ref} />,
+          <UploadProfileModal
+            key={Number(_show_profile_upload_modal)}
+            ref={user_avatar_ref}
+          />,
           document.getElementById("upload-profile-modal-container") as Element
         )}
       <StyledChatHeader>

@@ -140,6 +140,7 @@ const ChatContainer: FC = () => {
   ]);
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
+      <div id="upload-profile-modal-container"></div>
       <StyledThemeTogglerIcon
         onClick={() =>
           dispatch(updateMode(_mode == "light" ? "dark" : "light"))
@@ -169,7 +170,6 @@ const ChatContainer: FC = () => {
               </StyledMessageInputContainer>
             </StyledChatMainContent>
           </StyledChatMainContentContainer>
-          <div id="upload-profile-modal-container"></div>
           {_show_memory_game_snackbar && (
             <StyledNotificationContainer>
               <StyledNotificationHeading $mode={_mode}>

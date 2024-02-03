@@ -35,6 +35,12 @@ import {
   updateProfileApi,
 } from "@/store/slice/common.slice";
 
+// helpers package
+import Cropper from "cropperjs";
+
+// hooks
+import { useOutsideClickHandler } from "@/hooks/common.hook";
+
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
     <svg
@@ -52,7 +58,7 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
-const UploadProfileModal: ForwardRefRenderFunction<HTMLButtonElement, {}> = (
+const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
   {},
   cta_ref
 ) => {
@@ -68,22 +74,14 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLButtonElement, {}> = (
   });
   const modal_ref = useRef<HTMLDialogElement>(null);
   const file_ref = useRef<HTMLInputElement>(null);
+  useOutsideClickHandler({
+    modal_ref: modal_ref,
+    cta_ref: cta_ref,
+    callback: () => {
+      dispatch(updateShowProfileUploadModal(false));
+    },
+  });
 
-  useEffect(() => {
-    const onClickHandler = (event: MouseEvent) => {
-      if (
-        !modal_ref.current?.contains(event.target as Element) &&
-        typeof cta_ref !== "function" &&
-        !cta_ref?.current?.contains(event.target as Element)
-      ) {
-        dispatch(updateShowProfileUploadModal(false));
-      }
-    };
-    document.addEventListener("click", onClickHandler);
-    return () => {
-      document.removeEventListener("click", onClickHandler);
-    };
-  }, []);
   return (
     <StyledChatUserUploadWrapper
       ref={modal_ref}

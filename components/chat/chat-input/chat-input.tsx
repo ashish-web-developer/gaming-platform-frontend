@@ -37,7 +37,7 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
 // hooks
-import { useEmojiOutsideClickHandler } from "@/hooks/chat/chat.hook";
+import { useOutsideClickHandler } from "@/hooks/common.hook";
 import { useEcho } from "@/hooks/pusher.hook";
 import { useIsMobile } from "@/hooks/common.hook";
 
@@ -64,7 +64,13 @@ const ChatInput: FC = () => {
   const echo = useEcho();
   const _is_typing = useAppSelector(is_typing);
   const is_mobile = useIsMobile();
-  useEmojiOutsideClickHandler({ emoji_cta_ref, emoji_container_ref });
+  useOutsideClickHandler({
+    modal_ref: emoji_container_ref,
+    cta_ref: emoji_cta_ref,
+    callback: () => {
+      dispatch(updateShowEmoji(false));
+    },
+  });
 
   return (
     <>
