@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -88,9 +88,13 @@ const ChatProfile: FC = () => {
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const upload_cta_ref = useRef<HTMLButtonElement>(null);
   return (
     <StyledWrapper>
-      <UploadProfileModal key={Number(_show_profile_upload_modal)} />
+      <UploadProfileModal
+        ref={upload_cta_ref}
+        key={Number(_show_profile_upload_modal)}
+      />
       <StyledHeader>
         <StyledBackButton
           onClick={() => {
@@ -104,15 +108,13 @@ const ChatProfile: FC = () => {
       <StyledChatProfileContent>
         <StyledProfileWrappper $mode={_mode}>
           <StyledUserProfile
-            // src={`${process.env.NEXT_PUBLIC_API_END_POINT}${
-            //   _user.avatar_url
-            // }?timestamp=${new Date().getTime()}`}
+            sizes="(max-width: 1400px) 10vw"
             src={user_avatar_url}
             fill={true}
             alt="profile"
-            as={Image}
           />
           <StyledUploadButton
+            ref={upload_cta_ref}
             onClick={() => {
               dispatch(updateShowProfileUploadModal(true));
             }}

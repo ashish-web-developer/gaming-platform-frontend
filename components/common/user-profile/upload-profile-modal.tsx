@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState, forwardRef } from "react";
 import Image from "next/image";
 // types
-import type { FC } from "react";
+import type { FC, ForwardRefRenderFunction } from "react";
 import type { Theme } from "@/theme/chat.theme";
 
 // styled components
@@ -52,7 +52,10 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
-const UploadProfileModal: FC = () => {
+const UploadProfileModal: ForwardRefRenderFunction<HTMLButtonElement, {}> = (
+  {},
+  cta_ref
+) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
@@ -63,9 +66,29 @@ const UploadProfileModal: FC = () => {
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
+  const modal_ref = useRef<HTMLDialogElement>(null);
   const file_ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const onClickHandler = (event: MouseEvent) => {
+      if (
+        !modal_ref.current?.contains(event.target as Element) &&
+        typeof cta_ref !== "function" &&
+        !cta_ref?.current?.contains(event.target as Element)
+      ) {
+        dispatch(updateShowProfileUploadModal(false));
+      }
+    };
+    document.addEventListener("click", onClickHandler);
+    return () => {
+      document.removeEventListener("click", onClickHandler);
+    };
+  }, []);
   return (
-    <StyledChatUserUploadWrapper open={_show_profile_upload_modal}>
+    <StyledChatUserUploadWrapper
+      ref={modal_ref}
+      open={_show_profile_upload_modal}
+    >
       <StyledHeader>
         <StyledHeaderMainText>Upload File</StyledHeaderMainText>
         <StyledIconButton
@@ -142,4 +165,4 @@ const UploadProfileModal: FC = () => {
     </StyledChatUserUploadWrapper>
   );
 };
-export default UploadProfileModal;
+export default forwardRef(UploadProfileModal);

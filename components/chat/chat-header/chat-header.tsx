@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { createPortal } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 // types
 import { type FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -17,6 +19,9 @@ import {
   StyledUserPointsContainer,
   StyledNotificationContainer,
 } from "@/styles/components/chat/chat-header/chat-header.style";
+
+// local components
+import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -51,53 +56,68 @@ const NotificationIcon: FC<{
 
 const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();
+  const [is_mount, setIsMount] = useState<boolean>(false);
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const user_avatar_ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    setIsMount(true);
+  }, []);
+
   return (
-    <StyledChatHeader>
-      <StyledWelcomeText>
-        Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
-      </StyledWelcomeText>
-      <StyledRightContainer>
-        <StyledUserProfileContainer>
-          <StyledUserImgContainer
-            onClick={() => {
-              dispatch(updateShowProfileUploadModal(true));
-            }}
-            $mode={_mode}
-          >
-            <StyledUserImg
+    <>
+      {is_mount &&
+        createPortal(
+          <UploadProfileModal ref={user_avatar_ref} />,
+          document.getElementById("upload-profile-modal-container") as Element
+        )}
+      <StyledChatHeader>
+        <StyledWelcomeText>
+          Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
+        </StyledWelcomeText>
+        <StyledRightContainer>
+          <StyledUserProfileContainer>
+            <StyledUserImgContainer
+              ref={user_avatar_ref}
+              onClick={() => {
+                dispatch(updateShowProfileUploadModal(true));
+              }}
               $mode={_mode}
-              src={user_avatar_url}
-              width={40}
-              height={40}
-              alt="user-avatar"
-            />
-          </StyledUserImgContainer>
-          <StyledUserData>
-            <StyledText $mode={_mode}>{_user.name}</StyledText>
-            <StyledUserPointsContainer>
-              <Image
-                alt="money bag"
-                src={
-                  "/chat/chat-header/" +
-                  (_mode == "light"
-                    ? "money-bag-light.png"
-                    : "money-bag-dark.png")
-                }
-                width={15}
-                height={15}
+            >
+              <StyledUserImg
+                $mode={_mode}
+                src={user_avatar_url}
+                width={40}
+                height={40}
+                alt="user-avatar"
               />
-              <StyledText $mode={_mode}>300.00</StyledText>
-            </StyledUserPointsContainer>
-          </StyledUserData>
-        </StyledUserProfileContainer>
-        <StyledNotificationContainer $mode={_mode}>
-          <NotificationIcon width={22} height={25} color="#000" />
-        </StyledNotificationContainer>
-      </StyledRightContainer>
-    </StyledChatHeader>
+            </StyledUserImgContainer>
+            <StyledUserData>
+              <StyledText $mode={_mode}>{_user.name}</StyledText>
+              <StyledUserPointsContainer>
+                <Image
+                  alt="money bag"
+                  src={
+                    "/chat/chat-header/" +
+                    (_mode == "light"
+                      ? "money-bag-light.png"
+                      : "money-bag-dark.png")
+                  }
+                  width={15}
+                  height={15}
+                />
+                <StyledText $mode={_mode}>300.00</StyledText>
+              </StyledUserPointsContainer>
+            </StyledUserData>
+          </StyledUserProfileContainer>
+          <StyledNotificationContainer $mode={_mode}>
+            <NotificationIcon width={22} height={25} color="#000" />
+          </StyledNotificationContainer>
+        </StyledRightContainer>
+      </StyledChatHeader>
+    </>
   );
 };
 

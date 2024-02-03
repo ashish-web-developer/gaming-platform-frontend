@@ -169,7 +169,7 @@ const ChatContainer: FC = () => {
               </StyledMessageInputContainer>
             </StyledChatMainContent>
           </StyledChatMainContentContainer>
-          <UploadProfileModal key={Number(_show_profile_upload_modal)} />
+          <div id="upload-profile-modal-container"></div>
           {_show_memory_game_snackbar && (
             <StyledNotificationContainer>
               <StyledNotificationHeading $mode={_mode}>
