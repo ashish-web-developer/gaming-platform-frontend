@@ -38,35 +38,6 @@ const useFirstUserConversation = () => {
 };
 
 /**
- * To handle outside click when
- * emoji popup is open
- */
-const useEmojiOutsideClickHandler = ({
-  emoji_cta_ref,
-  emoji_container_ref,
-}: {
-  emoji_cta_ref: RefObject<HTMLButtonElement>;
-  emoji_container_ref: RefObject<HTMLDivElement>;
-}) => {
-  const dispatch = useAppDispatch();
-  const _show_emoji = useAppSelector(show_emoji);
-  const handleClick = (event: MouseEvent) => {
-    if (
-      !emoji_cta_ref.current?.contains(event.target as Node) &&
-      !emoji_container_ref.current?.contains(event.target as Node)
-    ) {
-      dispatch(updateShowEmoji(false));
-    }
-  };
-  useEffect(() => {
-    _show_emoji && document.addEventListener("click", handleClick);
-    return () => {
-      _show_emoji && document.removeEventListener("click", handleClick);
-    };
-  }, [_show_emoji]);
-};
-
-/**
  * To handle the view of the message
  */
 const useMessageView = ({
@@ -100,9 +71,4 @@ const useMessageView = ({
   }, [_user, options]);
 };
 
-export {
-  useDefaultUser,
-  useEmojiOutsideClickHandler,
-  useMessageView,
-  useFirstUserConversation,
-};
+export { useDefaultUser, useMessageView, useFirstUserConversation };
