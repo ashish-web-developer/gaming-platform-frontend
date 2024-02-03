@@ -7,7 +7,7 @@ const StyledChatUserUploadWrapper = styled.dialog`
   height: 470px;
   background: ${({ theme }) => theme.palette.primary.main};
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -60%);

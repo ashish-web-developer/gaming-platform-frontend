@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, forwardRef } from "react";
+import { useRef, useState, forwardRef} from "react";
 import Image from "next/image";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
@@ -37,6 +37,7 @@ import {
 
 // helpers package
 import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css"; // import the css file
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -72,8 +73,11 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
+  const [cropper_active,setCropperActive] = useState<boolean>(false);
   const modal_ref = useRef<HTMLDialogElement>(null);
-  const file_ref = useRef<HTMLInputElement>(null);
+  const file_input_ref = useRef<HTMLInputElement>(null);
+  const uploaded_image_ref = useRef<HTMLImageElement>(null);
+  const cropper_ref = useRef<Cropper | null>(null);
   useOutsideClickHandler({
     modal_ref: modal_ref,
     cta_ref: cta_ref,
@@ -99,12 +103,13 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
       </StyledHeader>
       <StyledModalContent>
         <StyledUploadInputContainer>
-          <StyledUploadLabel htmlFor="upload-file">
+          <StyledUploadLabel as = {cropper_active?"div":"label"} htmlFor="upload-file">
             {file_state.state == 2 ? (
               <StyledUploadedImage
                 alt="preview"
                 src={file_state.file as string}
                 fill={true}
+                ref={uploaded_image_ref}
               />
             ) : (
               <Image
@@ -116,7 +121,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             )}
           </StyledUploadLabel>
           <StyledUploadInput
-            ref={file_ref}
+            ref={file_input_ref}
             type="file"
             id="upload-file"
             name="profile"
@@ -142,15 +147,35 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
           </StyledUploadBottomInfoWrapper>
         </StyledUploadInputContainer>
         <StyledSaveCtaWrapper>
+          {file_state.state == 2 && (
+            <button
+              onClick={() => {
+                if (uploaded_image_ref.current) {
+                  cropper_ref.current = new Cropper(
+                    uploaded_image_ref.current,
+                    {
+                      aspectRatio: 0,
+                      viewMode: 0,
+                      ready(){
+                        setCropperActive(true);
+                      }
+                    }
+                  );
+                }
+              }}
+            >
+              crop
+            </button>
+          )}
           <StyledSaveCta
             onClick={() => {
               if (
-                file_ref.current &&
-                file_ref.current.files &&
-                file_ref.current.files[0]
+                file_input_ref.current &&
+                file_input_ref.current.files &&
+                file_input_ref.current.files[0]
               ) {
                 const form_data = new FormData();
-                form_data.append("avatar", file_ref.current.files[0]);
+                form_data.append("avatar", file_input_ref.current.files[0]);
                 dispatch(updateProfileApi({ form_data: form_data }));
                 dispatch(updateShowProfileUploadModal(false));
               }
