@@ -85,10 +85,10 @@ const StyledText = styled.p`
   line-height: normal;
 `;
 
-const StyledSaveCtaWrapper = styled.div`
+const StyledCtaWrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-top: 24px;
 `;
 
@@ -121,6 +121,6 @@ export {
   StyledUploadedImage,
   StyledUploadBottomInfoWrapper,
   StyledText,
-  StyledSaveCtaWrapper,
+  StyledCtaWrapper,
   StyledSaveCta,
 };
