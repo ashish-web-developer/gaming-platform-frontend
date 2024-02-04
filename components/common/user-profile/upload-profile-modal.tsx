@@ -118,7 +118,14 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
           viewMode: 0,
         });
       }
-    } else {
+    } else if (cropper_ref.current) {
+      const canvas = cropper_ref.current.getCroppedCanvas();
+      if (canvas) {
+        setFileState((prev) => ({
+          ...prev,
+          file: canvas.toDataURL("image/jpeg"),
+        }));
+      }
       cropper_ref.current?.destroy();
       cropper_ref.current = null;
     }
