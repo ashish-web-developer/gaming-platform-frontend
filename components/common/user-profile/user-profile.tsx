@@ -91,10 +91,9 @@ const ChatProfile: FC = () => {
   const upload_cta_ref = useRef<HTMLButtonElement>(null);
   return (
     <StyledWrapper>
-      <UploadProfileModal
-        ref={upload_cta_ref}
-        key={Number(_show_profile_upload_modal)}
-      />
+      {_show_profile_upload_modal && (
+        <UploadProfileModal ref={upload_cta_ref} />
+      )}
       <StyledHeader>
         <StyledBackButton
           onClick={() => {
