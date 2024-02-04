@@ -59,8 +59,6 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
-import React from "react";
-
 const CropIcon: FC<{ color: string; size: number }> = ({ color, size }) => {
   return (
     <svg
