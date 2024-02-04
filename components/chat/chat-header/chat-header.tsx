@@ -34,7 +34,6 @@ import {
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
-import { useIsMounted } from "@/hooks/common.hook";
 
 import React from "react";
 
@@ -61,7 +60,6 @@ const NotificationIcon: FC<{
 
 const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();
-  const is_mounted = useIsMounted();
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
@@ -70,10 +68,9 @@ const ChatHeader: FC = () => {
 
   return (
     <>
-      {is_mounted &&
+      {_show_profile_upload_modal &&
         createPortal(
           <UploadProfileModal
-            key={Number(_show_profile_upload_modal)}
             ref={user_avatar_ref}
           />,
           document.getElementById("upload-profile-modal-container") as Element

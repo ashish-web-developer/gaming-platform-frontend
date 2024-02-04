@@ -37,7 +37,7 @@ import {
 
 // helpers package
 import Cropper from "cropperjs";
-import "cropperjs/dist/cropper.css"; // import the css file
+import "cropperjs/dist/cropper.css";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
