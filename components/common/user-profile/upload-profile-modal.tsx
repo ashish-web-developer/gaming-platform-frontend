@@ -173,6 +173,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             type="file"
             id="upload-file"
             name="profile"
+            accept=".jpg,.png"
             onChange={(event) => {
               if (event.target.files) {
                 const file_reader = new FileReader();
