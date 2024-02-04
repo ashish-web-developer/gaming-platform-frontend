@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, forwardRef } from "react";
+import { useRef, useState, forwardRef, useEffect } from "react";
 import Image from "next/image";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
@@ -17,7 +17,7 @@ import {
   StyledUploadInput,
   StyledUploadBottomInfoWrapper,
   StyledText,
-  StyledSaveCtaWrapper,
+  StyledCtaWrapper,
   StyledSaveCta,
 } from "@/styles/components/common/user-profile/upload-profile-modal.style";
 
@@ -37,6 +37,7 @@ import {
 
 // helpers package
 import Cropper from "cropperjs";
+import "cropperjs/dist/cropper.css"; // import the css file
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -58,6 +59,22 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
+const CropIcon: FC<{ color: string; size: number }> = ({ color, size }) => {
+  return (
+    <svg
+      width={size}
+      height={size}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+    >
+      <path
+        fill={color}
+        d="M128 32c0-17.7-14.3-32-32-32S64 14.3 64 32v32H32C14.3 64 0 78.3 0 96s14.3 32 32 32h32v256c0 35.3 28.7 64 64 64h224v-64H128V32zm256 448c0 17.7 14.3 32 32 32s32-14.3 32-32v-32h32c17.7 0 32-14.3 32-32s-14.3-32-32-32h-32V128c0-35.3-28.7-64-64-64H160v64h224v352z"
+      ></path>
+    </svg>
+  );
+};
+
 const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
   {},
   cta_ref
@@ -72,8 +89,11 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
+  const [cropper_active, setCropperActive] = useState<boolean>(false);
   const modal_ref = useRef<HTMLDialogElement>(null);
-  const file_ref = useRef<HTMLInputElement>(null);
+  const file_input_ref = useRef<HTMLInputElement>(null);
+  const uploaded_image_ref = useRef<HTMLImageElement>(null);
+  const cropper_ref = useRef<Cropper | null>(null);
   useOutsideClickHandler({
     modal_ref: modal_ref,
     cta_ref: cta_ref,
@@ -81,6 +101,33 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
       dispatch(updateShowProfileUploadModal(false));
     },
   });
+
+  /**
+   * Not adding the cropper to uploaded_image_ref
+   * inside onClick handler because first
+   * we need to replace label with div, then
+   * add the cropper on uploaded image ref
+   */
+  useEffect(() => {
+    if (cropper_active) {
+      if (uploaded_image_ref.current) {
+        cropper_ref.current = new Cropper(uploaded_image_ref.current, {
+          aspectRatio: 0,
+          viewMode: 0,
+        });
+      }
+    } else if (cropper_ref.current) {
+      const canvas = cropper_ref.current.getCroppedCanvas();
+      if (canvas) {
+        setFileState((prev) => ({
+          ...prev,
+          file: canvas.toDataURL("image/jpeg"),
+        }));
+      }
+      cropper_ref.current?.destroy();
+      cropper_ref.current = null;
+    }
+  }, [cropper_active]);
 
   return (
     <StyledChatUserUploadWrapper
@@ -99,12 +146,16 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
       </StyledHeader>
       <StyledModalContent>
         <StyledUploadInputContainer>
-          <StyledUploadLabel htmlFor="upload-file">
+          <StyledUploadLabel
+            as={cropper_active ? "div" : "label"}
+            htmlFor="upload-file"
+          >
             {file_state.state == 2 ? (
               <StyledUploadedImage
                 alt="preview"
                 src={file_state.file as string}
                 fill={true}
+                ref={uploaded_image_ref}
               />
             ) : (
               <Image
@@ -116,10 +167,11 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             )}
           </StyledUploadLabel>
           <StyledUploadInput
-            ref={file_ref}
+            ref={file_input_ref}
             type="file"
             id="upload-file"
             name="profile"
+            accept=".jpg,.png"
             onChange={(event) => {
               if (event.target.files) {
                 const file_reader = new FileReader();
@@ -141,16 +193,28 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             <StyledText>File Size: 3MB</StyledText>
           </StyledUploadBottomInfoWrapper>
         </StyledUploadInputContainer>
-        <StyledSaveCtaWrapper>
+        <StyledCtaWrapper>
+          <span>
+            {file_state.state == 2 && (
+              <StyledIconButton
+                onClick={() => {
+                  setCropperActive((prev) => !prev);
+                }}
+              >
+                <CropIcon color={theme.palette.primary.dark} size={25} />
+              </StyledIconButton>
+            )}
+          </span>
+
           <StyledSaveCta
             onClick={() => {
               if (
-                file_ref.current &&
-                file_ref.current.files &&
-                file_ref.current.files[0]
+                file_input_ref.current &&
+                file_input_ref.current.files &&
+                file_input_ref.current.files[0]
               ) {
                 const form_data = new FormData();
-                form_data.append("avatar", file_ref.current.files[0]);
+                form_data.append("avatar", file_input_ref.current.files[0]);
                 dispatch(updateProfileApi({ form_data: form_data }));
                 dispatch(updateShowProfileUploadModal(false));
               }
@@ -158,7 +222,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
           >
             Save
           </StyledSaveCta>
-        </StyledSaveCtaWrapper>
+        </StyledCtaWrapper>
       </StyledModalContent>
     </StyledChatUserUploadWrapper>
   );

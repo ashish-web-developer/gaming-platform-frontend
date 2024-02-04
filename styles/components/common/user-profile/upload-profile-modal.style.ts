@@ -7,7 +7,7 @@ const StyledChatUserUploadWrapper = styled.dialog`
   height: 470px;
   background: ${({ theme }) => theme.palette.primary.main};
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -60%);
@@ -85,10 +85,10 @@ const StyledText = styled.p`
   line-height: normal;
 `;
 
-const StyledSaveCtaWrapper = styled.div`
+const StyledCtaWrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-top: 24px;
 `;
 
@@ -121,6 +121,6 @@ export {
   StyledUploadedImage,
   StyledUploadBottomInfoWrapper,
   StyledText,
-  StyledSaveCtaWrapper,
+  StyledCtaWrapper,
   StyledSaveCta,
 };
