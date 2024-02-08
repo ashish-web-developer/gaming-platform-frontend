@@ -15,7 +15,6 @@ import {
   StyledChatMainContent,
   StyledMessageContainer,
   StyledMessageInputContainer,
-  StyledThemeTogglerIcon,
   StyledNotificationContainer,
   StyledNotificationHeading,
 } from "@/styles/components/chat/chat-container.style";
@@ -54,27 +53,6 @@ import {
 } from "@/hooks/chat/chat.hook";
 import { usePrivateChannel } from "@/hooks/pusher.hook";
 import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
-
-const ThemeTogglerIcon: FC<{
-  color: string;
-  width: number;
-  height: number;
-}> = ({ color, width, height }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
-      fill="none"
-      viewBox="0 0 44 46"
-    >
-      <path
-        fill={color}
-        d="M27.25 45.245c6.797-1.198 12.457-5.403 15.672-11.223.476-.861-.382-1.845-1.29-1.5-10.332 3.933-21.605-2.578-23.518-13.43A17.633 17.633 0 0124.19 2.456c.75-.624.316-1.858-.663-1.867a22.449 22.449 0 00-4.092.34C7.27 3.074-.855 14.726 1.304 26.973c2.156 12.231 13.765 20.42 25.945 18.272z"
-      ></path>
-    </svg>
-  );
-};
 
 const ChatContainer: FC = () => {
   const router = useRouter();
@@ -140,21 +118,6 @@ const ChatContainer: FC = () => {
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
       <div id="upload-profile-modal-container"></div>
-      <StyledThemeTogglerIcon
-        onClick={() =>
-          dispatch(updateMode(_mode == "light" ? "dark" : "light"))
-        }
-      >
-        <ThemeTogglerIcon
-          width={40}
-          height={45}
-          color={
-            _mode == "dark"
-              ? theme.palette.primary.light
-              : theme.palette.primary.dark
-          }
-        />
-      </StyledThemeTogglerIcon>
       <StyledChatContainer>
         <ChatHeader />
         <StyledChatMainContainer>

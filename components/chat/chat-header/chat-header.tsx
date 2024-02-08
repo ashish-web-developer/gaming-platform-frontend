@@ -17,15 +17,12 @@ import {
 
 // local components
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
+import Slider from "@/components/common/slider";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import {
-  mode,
-  show_profile_upload_modal,
-  updateShowProfileUploadModal,
-} from "@/store/slice/common.slice";
+import { mode, show_profile_upload_modal } from "@/store/slice/common.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -73,6 +70,7 @@ const ChatHeader: FC = () => {
           Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
         </StyledWelcomeText>
         <StyledRightContainer>
+          <Slider />
           <StyledUserProfileImageWrapper>
             <StyledUserProfileImage
               $mode={_mode}

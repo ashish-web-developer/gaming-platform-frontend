@@ -15,15 +15,6 @@ const StyledPage = styled.div<IStyledPage>`
   justify-content: center;
 `;
 
-const StyledThemeTogglerIcon = styled.button`
-  background: transparent;
-  border: none;
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  cursor: pointer;
-`;
-
 const StyledChatContainer = styled.div`
   width: 75rem;
   height: auto;
@@ -95,7 +86,6 @@ export {
   StyledChatMainContent,
   StyledMessageContainer,
   StyledMessageInputContainer,
-  StyledThemeTogglerIcon,
   StyledNotificationContainer,
   StyledNotificationHeading,
 };
