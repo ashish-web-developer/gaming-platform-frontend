@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useRef } from "react";
 // types
@@ -11,13 +10,9 @@ import {
   StyledWelcomeText,
   StyledSpan,
   StyledRightContainer,
-  StyledUserProfileContainer,
-  StyledUserImgContainer,
-  StyledUserImg,
-  StyledUserData,
-  StyledText,
-  StyledUserPointsContainer,
-  StyledNotificationContainer,
+  StyledUserProfileImageWrapper,
+  StyledUserProfileImage,
+  StyledChevronIcon,
 } from "@/styles/components/chat/chat-header/chat-header.style";
 
 // local components
@@ -70,9 +65,7 @@ const ChatHeader: FC = () => {
     <>
       {_show_profile_upload_modal &&
         createPortal(
-          <UploadProfileModal
-            ref={user_avatar_ref}
-          />,
+          <UploadProfileModal ref={user_avatar_ref} />,
           document.getElementById("upload-profile-modal-container") as Element
         )}
       <StyledChatHeader>
@@ -80,43 +73,21 @@ const ChatHeader: FC = () => {
           Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
         </StyledWelcomeText>
         <StyledRightContainer>
-          <StyledUserProfileContainer>
-            <StyledUserImgContainer
-              ref={user_avatar_ref}
-              onClick={() => {
-                dispatch(updateShowProfileUploadModal(true));
-              }}
+          <StyledUserProfileImageWrapper>
+            <StyledUserProfileImage
               $mode={_mode}
-            >
-              <StyledUserImg
-                $mode={_mode}
-                src={user_avatar_url}
-                width={40}
-                height={40}
-                alt="user-avatar"
-              />
-            </StyledUserImgContainer>
-            <StyledUserData>
-              <StyledText $mode={_mode}>{_user.name}</StyledText>
-              <StyledUserPointsContainer>
-                <Image
-                  alt="money bag"
-                  src={
-                    "/chat/chat-header/" +
-                    (_mode == "light"
-                      ? "money-bag-light.png"
-                      : "money-bag-dark.png")
-                  }
-                  width={15}
-                  height={15}
-                />
-                <StyledText $mode={_mode}>300.00</StyledText>
-              </StyledUserPointsContainer>
-            </StyledUserData>
-          </StyledUserProfileContainer>
-          <StyledNotificationContainer $mode={_mode}>
-            <NotificationIcon width={22} height={25} color="#000" />
-          </StyledNotificationContainer>
+              src={user_avatar_url}
+              width={30}
+              height={30}
+              alt="user-avatar"
+            />
+            <StyledChevronIcon
+              alt="chevron-down"
+              width={20}
+              height={20}
+              src={`/chat/chat-header/${_mode}-chevron-down.png`}
+            />
+          </StyledUserProfileImageWrapper>
         </StyledRightContainer>
       </StyledChatHeader>
     </>
