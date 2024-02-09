@@ -22,6 +22,7 @@ type IUsersWithConversation = {
   latest_conversation?: IConversation;
   not_viewed: number;
   avatar_url: string;
+  earned_points: number;
 };
 
 type IChatInitialState = {

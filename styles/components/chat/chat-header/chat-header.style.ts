@@ -23,7 +23,7 @@ const StyledSpan = styled.span`
 const StyledRightContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 `;
 
 const StyledUserProfileImageWrapper = styled.div`
@@ -50,6 +50,13 @@ const StyledUserProfileImage = styled(Image)<{
 
 const StyledChevronIcon = styled(Image)``;
 
+const StyledNotificationCta = styled.button`
+  background: transparent;
+  border: none;
+`;
+
+const StyledBellIcon = styled(Image)``;
+
 export {
   StyledChatHeader,
   StyledWelcomeText,
@@ -58,4 +65,6 @@ export {
   StyledUserProfileImageWrapper,
   StyledUserProfileImage,
   StyledChevronIcon,
+  StyledNotificationCta,
+  StyledBellIcon,
 };
