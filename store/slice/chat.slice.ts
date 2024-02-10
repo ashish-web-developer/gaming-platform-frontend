@@ -192,6 +192,7 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    resetChat: () => initialState,
     updateSearchInputValue: (state, action: PayloadAction<string>) => {
       state.search_input_value = action.payload;
     },
@@ -378,6 +379,7 @@ export const show_memory_game_snackbar = (state: RootState) =>
   state.chat.game_snackbar.show_memory_game_snackbar;
 export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
 export const {
+  resetChat,
   updateSearchInputValue,
   updatePage,
   updateFetchUserResult,

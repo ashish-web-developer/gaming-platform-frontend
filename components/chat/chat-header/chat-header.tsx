@@ -1,4 +1,3 @@
-import { createPortal } from "react-dom";
 import { useRef } from "react";
 // types
 import { type FC } from "react";
@@ -19,7 +18,6 @@ import {
 } from "@/styles/components/chat/chat-header/chat-header.style";
 
 // local components
-import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 import Slider from "@/components/common/slider";
 import ChatUserPoint from "@/components/chat/chat-header/chat-user-point";
 import UserProfileDropDown from "@/components/common/user-profile/user-profile-drop-down";
@@ -29,7 +27,6 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   mode,
-  show_profile_upload_modal,
   show_profile_drop_down,
   updateShowProfileDropDown,
 } from "@/store/slice/common.slice";
@@ -42,20 +39,13 @@ import React from "react";
 const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();
   const _show_profile_drop_down = useAppSelector(show_profile_drop_down);
-  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const user_avatar_ref = useRef<HTMLButtonElement>(null);
   const chevron_cta_ref = useRef<HTMLButtonElement>(null);
 
   return (
     <>
-      {_show_profile_upload_modal &&
-        createPortal(
-          <UploadProfileModal ref={user_avatar_ref} />,
-          document.getElementById("upload-profile-modal-container") as Element
-        )}
       <StyledChatHeader>
         <StyledWelcomeText>
           Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
@@ -72,9 +62,7 @@ const ChatHeader: FC = () => {
           <ChatUserPoint />
           <Slider />
           <StyledUserProfileImageWrapper>
-            {_show_profile_drop_down && (
-              <UserProfileDropDown ref={chevron_cta_ref} />
-            )}
+            <UserProfileDropDown ref={chevron_cta_ref} />
             <StyledUserProfileImage
               $mode={_mode}
               src={user_avatar_url}

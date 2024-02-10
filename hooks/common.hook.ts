@@ -43,10 +43,15 @@ const useOutsideClickHandler = ({
 }) => {
   useEffect(() => {
     const onClickHandler = (event: MouseEvent) => {
-      if (typeof modal_ref !== "function" && typeof cta_ref !== "function") {
+      if (
+        typeof modal_ref !== "function" &&
+        modal_ref?.current &&
+        typeof cta_ref !== "function" &&
+        cta_ref?.current
+      ) {
         if (
-          !modal_ref?.current?.contains(event.target as Element) &&
-          !cta_ref?.current?.contains(event.target as Element)
+          !modal_ref.current.contains(event.target as Element) &&
+          !cta_ref.current.contains(event.target as Element)
         ) {
           callback();
         }

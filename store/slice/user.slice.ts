@@ -2,7 +2,9 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Types
 import type { User } from "@/types/user";
+import type { AxiosResponse } from "axios";
 import { RootState } from "../rootReducer";
+// helpers
 import { Axios } from "@/helpers/axios";
 
 const initialState: { user: User } = {
@@ -16,6 +18,7 @@ const initialState: { user: User } = {
     created_at: null,
     updated_at: null,
     avatar_url: null,
+    earned_points: null,
   },
 };
 
@@ -31,6 +34,27 @@ export const getUser = createAsyncThunk<User, undefined>(
     }
   }
 );
+
+export const logoutUserApi = createAsyncThunk<
+  {
+    success: boolean;
+    error: any;
+    message: string;
+  },
+  undefined
+>("api/logout", async (_, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<{
+      success: boolean;
+      error: any;
+      message: string;
+    }> = await Axios.post("/logout");
+    return res.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -38,9 +62,10 @@ const userSlice = createSlice({
     updateUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
+    resetUser: () => initialState,
   },
 });
 
-export const { updateUser } = userSlice.actions;
+export const { updateUser, resetUser } = userSlice.actions;
 export const user = (state: RootState) => state.user.user;
 export default userSlice.reducer;

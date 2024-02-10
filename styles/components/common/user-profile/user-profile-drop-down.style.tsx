@@ -29,6 +29,7 @@ const StyledUserImageWrapper = styled.div<{
         ? props.theme.palette.primary.dark
         : props.theme.palette.primary.light};
   border-radius: 50%;
+  overflow: hidden;
 `;
 const StyledUserImage = styled(Image)`
   object-fit: cover;
