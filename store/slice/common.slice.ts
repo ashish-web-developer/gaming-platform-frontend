@@ -47,6 +47,7 @@ const initialState: InitialState = {
   mode: "dark",
   show_user_profile: false,
   show_profile_upload_modal: false,
+  show_profile_drop_down: false,
 };
 export const commonSlice = createSlice({
   name: "common",
@@ -64,6 +65,9 @@ export const commonSlice = createSlice({
     updateShowProfileUploadModal: (state, action) => {
       state.show_profile_upload_modal = action.payload;
     },
+    updateShowProfileDropDown: (state, action) => {
+      state.show_profile_drop_down = action.payload;
+    },
   },
 });
 
@@ -74,9 +78,12 @@ export const show_user_profile = (state: RootState) =>
   state.common.show_user_profile;
 export const show_profile_upload_modal = (state: RootState) =>
   state.common.show_profile_upload_modal;
+export const show_profile_drop_down = (state: RootState) =>
+  state.common.show_profile_drop_down;
 export const {
   updateShowEmoji,
   updateMode,
   updateShowUserProfile,
   updateShowProfileUploadModal,
+  updateShowProfileDropDown,
 } = commonSlice.actions;

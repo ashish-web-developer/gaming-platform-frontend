@@ -12,6 +12,7 @@ import {
   StyledRightContainer,
   StyledUserProfileImageWrapper,
   StyledUserProfileImage,
+  StyledIconCta,
   StyledChevronIcon,
   StyledNotificationCta,
   StyledBellIcon,
@@ -21,11 +22,17 @@ import {
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 import Slider from "@/components/common/slider";
 import ChatUserPoint from "@/components/chat/chat-header/chat-user-point";
+import UserProfileDropDown from "@/components/common/user-profile/user-profile-drop-down";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { mode, show_profile_upload_modal } from "@/store/slice/common.slice";
+import {
+  mode,
+  show_profile_upload_modal,
+  show_profile_drop_down,
+  updateShowProfileDropDown,
+} from "@/store/slice/common.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -33,11 +40,14 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 import React from "react";
 
 const ChatHeader: FC = () => {
+  const dispatch = useAppDispatch();
+  const _show_profile_drop_down = useAppSelector(show_profile_drop_down);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   const user_avatar_ref = useRef<HTMLButtonElement>(null);
+  const chevron_cta_ref = useRef<HTMLButtonElement>(null);
 
   return (
     <>
@@ -62,6 +72,9 @@ const ChatHeader: FC = () => {
           <ChatUserPoint />
           <Slider />
           <StyledUserProfileImageWrapper>
+            {_show_profile_drop_down && (
+              <UserProfileDropDown ref={chevron_cta_ref} />
+            )}
             <StyledUserProfileImage
               $mode={_mode}
               src={user_avatar_url}
@@ -69,12 +82,19 @@ const ChatHeader: FC = () => {
               height={30}
               alt="user-avatar"
             />
-            <StyledChevronIcon
-              alt="chevron-down"
-              width={20}
-              height={20}
-              src={`/chat/chat-header/${_mode}-chevron-down.png`}
-            />
+            <StyledIconCta
+              ref={chevron_cta_ref}
+              onClick={() => {
+                dispatch(updateShowProfileDropDown(!_show_profile_drop_down));
+              }}
+            >
+              <StyledChevronIcon
+                alt="chevron-down"
+                width={20}
+                height={20}
+                src={`/chat/chat-header/${_mode}-chevron-down.png`}
+              />
+            </StyledIconCta>
           </StyledUserProfileImageWrapper>
         </StyledRightContainer>
       </StyledChatHeader>

@@ -34,6 +34,7 @@ const StyledUserProfileImageWrapper = styled.div`
   border-radius: 25px;
   gap: 6px;
   padding-right: 18px;
+  position: relative;
 `;
 
 const StyledUserProfileImage = styled(Image)<{
@@ -46,6 +47,12 @@ const StyledUserProfileImage = styled(Image)<{
         ? props.theme.palette.primary.light
         : props.theme.palette.primary.dark};
   border-radius: 50%;
+`;
+
+const StyledIconCta = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
 `;
 
 const StyledChevronIcon = styled(Image)``;
@@ -64,6 +71,7 @@ export {
   StyledRightContainer,
   StyledUserProfileImageWrapper,
   StyledUserProfileImage,
+  StyledIconCta,
   StyledChevronIcon,
   StyledNotificationCta,
   StyledBellIcon,
