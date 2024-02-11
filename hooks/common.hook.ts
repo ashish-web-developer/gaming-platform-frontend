@@ -35,29 +35,25 @@ const useIsMounted = () => {
 const useOutsideClickHandler = ({
   modal_ref,
   cta_ref,
-  callback,
+  handler,
 }: {
   modal_ref: RefObject<HTMLElement> | ForwardedRef<HTMLElement>;
   cta_ref: ForwardedRef<HTMLElement>;
-  callback: () => void;
+  handler: () => void;
 }) => {
   useEffect(() => {
     const onClickHandler = (event: MouseEvent) => {
+      console.log("inside handler",cta_ref);
       if (
         typeof modal_ref !== "function" &&
-        modal_ref?.current &&
         typeof cta_ref !== "function" &&
-        cta_ref?.current
+        (modal_ref?.current?.contains(event.target as Element) ||
+          cta_ref?.current?.contains(event.target as Element))
       ) {
-        if (
-          !modal_ref.current.contains(event.target as Element) &&
-          !cta_ref.current.contains(event.target as Element)
-        ) {
-          callback();
-        }
+        return;
       }
+      handler();
     };
-    document.addEventListener("click", onClickHandler);
     return () => {
       document.removeEventListener("click", onClickHandler);
     };

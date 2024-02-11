@@ -1,8 +1,7 @@
 import { useRef, forwardRef } from "react";
-import { createPortal } from "react-dom";
 import { useRouter } from "next/router";
 // types
-import { FC, ForwardRefRenderFunction } from "react";
+import { FC, ForwardRefRenderFunction, RefObject } from "react";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 import { Theme } from "@/theme/chat.theme";
 
@@ -17,17 +16,12 @@ import {
   StyledIconCta,
 } from "@/styles/components/common/user-profile/user-profile-drop-down.style";
 
-// local components
-import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
-
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user, logoutUserApi, resetUser } from "@/store/slice/user.slice";
 import { resetChat } from "@/store/slice/chat.slice";
 import {
   mode,
-  show_profile_drop_down,
-  show_profile_upload_modal,
   updateShowProfileUploadModal,
   updateShowProfileDropDown,
 } from "@/store/slice/common.slice";
@@ -112,97 +106,94 @@ const LogOutIcon: FC<{
   );
 };
 
-const UserProfileDropDown: ForwardRefRenderFunction<HTMLElement> = (
-  {},
-  chevron_cta_ref
-) => {
+interface IProps {
+  chevron_cta_ref: RefObject<HTMLButtonElement>;
+}
+
+const UserProfileDropDown: ForwardRefRenderFunction<
+  HTMLButtonElement,
+  IProps
+> = ({ chevron_cta_ref }, camera_cta_ref) => {
   const theme = useTheme() as Theme;
   const dispatch = useAppDispatch();
   const router = useRouter();
   const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
-  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
-  const _show_profile_drop_down = useAppSelector(show_profile_drop_down);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   const container_ref = useRef<HTMLDivElement>(null);
-  const camera_cta_ref = useRef<HTMLButtonElement>(null);
   useOutsideClickHandler({
     modal_ref: container_ref,
     cta_ref: chevron_cta_ref,
-    callback: () => {
+    handler: () => {
       dispatch(updateShowProfileDropDown(false));
     },
   });
+
   return (
     <>
-      {_show_profile_upload_modal &&
-        createPortal(
-          <UploadProfileModal ref={camera_cta_ref} />,
-          document.getElementById("upload-profile-modal-container") as Element
-        )}
-      {_show_profile_drop_down && (
-        <StyledUserProfileDropDownWrapper ref={container_ref}>
-          <StyledUserImageWrapper $mode={_mode}>
-            <StyledUserImage
-              src={user_avatar_url}
-              alt="user-profile"
-              fill={true}
+      <StyledUserProfileDropDownWrapper ref={container_ref}>
+        <StyledUserImageWrapper $mode={_mode}>
+          <StyledUserImage
+            src={user_avatar_url}
+            alt="user-profile"
+            fill={true}
+            sizes="(max-width: 1400px) 10vw"
+          />
+        </StyledUserImageWrapper>
+        <StyledName>{_user.name}</StyledName>
+        <StyledUserName>@{_user.username}</StyledUserName>
+        <StyledCtaWrapper>
+          <StyledIconCta
+            onClick={() => {
+              dispatch(updateShowProfileUploadModal(true));
+              // dispatch(updateShowProfileDropDown(false));
+            }}
+            $mode={_mode}
+            ref={camera_cta_ref}
+          >
+            <CameraIcon
+              size={20}
+              stroke={
+                _mode == "light"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light
+              }
             />
-          </StyledUserImageWrapper>
-          <StyledName>{_user.name}</StyledName>
-          <StyledUserName>@{_user.username}</StyledUserName>
-          <StyledCtaWrapper>
-            <StyledIconCta
-              onClick={() => {
-                dispatch(updateShowProfileUploadModal(true));
-                dispatch(updateShowProfileDropDown(false));
-              }}
-              $mode={_mode}
-              ref={camera_cta_ref}
-            >
-              <CameraIcon
-                size={20}
-                stroke={
-                  _mode == "light"
-                    ? theme.palette.primary.dark
-                    : theme.palette.primary.light
-                }
-              />
-            </StyledIconCta>
+          </StyledIconCta>
 
-            <StyledIconCta $mode={_mode}>
-              <GroupIcon
-                size={20}
-                stroke={
-                  _mode == "light"
-                    ? theme.palette.primary.dark
-                    : theme.palette.primary.light
-                }
-              />
-            </StyledIconCta>
+          <StyledIconCta $mode={_mode}>
+            <GroupIcon
+              size={20}
+              stroke={
+                _mode == "light"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light
+              }
+            />
+          </StyledIconCta>
 
-            <StyledIconCta
-              onClick={() => {
-                dispatch(logoutUserApi());
-                router.push("/login");
-                dispatch(resetUser());
-                dispatch(resetChat());
-              }}
-              $mode={_mode}
-            >
-              <LogOutIcon
-                size={16}
-                color={"rgba(255,255,255,0)"}
-                stroke={
-                  _mode == "light"
-                    ? theme.palette.primary.dark
-                    : theme.palette.primary.light
-                }
-              />
-            </StyledIconCta>
-          </StyledCtaWrapper>
-        </StyledUserProfileDropDownWrapper>
-      )}
+          <StyledIconCta
+            onClick={() => {
+              dispatch(logoutUserApi());
+              router.push("/login");
+              dispatch(resetUser());
+              dispatch(resetChat());
+              dispatch(updateShowProfileDropDown(false));
+            }}
+            $mode={_mode}
+          >
+            <LogOutIcon
+              size={16}
+              color={"rgba(255,255,255,0)"}
+              stroke={
+                _mode == "light"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light
+              }
+            />
+          </StyledIconCta>
+        </StyledCtaWrapper>
+      </StyledUserProfileDropDownWrapper>
     </>
   );
 };

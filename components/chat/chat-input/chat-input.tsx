@@ -8,8 +8,10 @@ import {
   StyledChatInputContainer,
   StyledChatInput,
   StyledButton,
-  StyledEmojiContainer,
 } from "@/styles/components/chat/chat-input/chat-input.style";
+
+// local components
+import EmojiPicker from "@/components/common/emoji-picker";
 
 // styled theme
 import { useTheme } from "styled-components";
@@ -32,12 +34,7 @@ import {
 import { updateRoomId, udpateIsProposalSender } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 
-// emoji picker
-import data from "@emoji-mart/data";
-import Picker from "@emoji-mart/react";
-
 // hooks
-import { useOutsideClickHandler } from "@/hooks/common.hook";
 import { useEcho } from "@/hooks/pusher.hook";
 import { useIsMobile } from "@/hooks/common.hook";
 
@@ -54,7 +51,6 @@ const ChatInput: FC = () => {
   const _user = useAppSelector(user);
   const input_ref = useRef<HTMLInputElement>(null);
   const emoji_cta_ref = useRef<HTMLButtonElement>(null);
-  const emoji_container_ref = useRef<HTMLDivElement>(null);
   const _send_message_request_pending = useAppSelector(
     send_message_request_pending
   );
@@ -64,13 +60,6 @@ const ChatInput: FC = () => {
   const echo = useEcho();
   const _is_typing = useAppSelector(is_typing);
   const is_mobile = useIsMobile();
-  useOutsideClickHandler({
-    modal_ref: emoji_container_ref,
-    cta_ref: emoji_cta_ref,
-    callback: () => {
-      dispatch(updateShowEmoji(false));
-    },
-  });
 
   return (
     <>
@@ -152,17 +141,7 @@ const ChatInput: FC = () => {
             </StyledButton>
           )}
           {_show_emoji && (
-            <StyledEmojiContainer ref={emoji_container_ref}>
-              <Picker
-                theme={_mode}
-                data={data}
-                onEmojiSelect={(data: any) => {
-                  if (input_ref.current) {
-                    input_ref.current.value += data.native;
-                  }
-                }}
-              />
-            </StyledEmojiContainer>
+            <EmojiPicker ref={input_ref} emoji_cta_ref={emoji_cta_ref} />
           )}
         </StyledChatInputContainer>
       )}

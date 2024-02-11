@@ -1,46 +1,51 @@
-import dynamic from "next/dynamic";
-import { useRef} from "react";
+import { useRef, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { ForwardRefRenderFunction, RefObject } from "react";
 
-// mui
-import { Box } from "@mui/material";
-// emoji library
-const Picker = dynamic(()=>import("@emoji-mart/react"),{
-  ssr:false
-});
+// emoji picker
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
+
+// styled components
+import { StyledEmojiContainer } from "@/styles/components/common/emoji-picker.style";
+
 // redux
-import { useAppSelector } from "@/hooks/redux.hook";
-import { showEmoji } from "@/store/slice/common.slice";
+import { useAppSelector, useAppDispatch} from "@/hooks/redux.hook";
+import { updateShowEmoji } from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
+
+// hooks
+import { useOutsideClickHandler } from "@/hooks/common.hook";
 
 interface Props {
-  className?: string;
-  callback: (data: any) => void;
+  emoji_cta_ref:RefObject<HTMLButtonElement>
 }
-const EmojiPicker: FC<Props> = ({ className, callback }) => {
-  const ref = useRef<HTMLDivElement>();
-  const _showEmoji = useAppSelector(showEmoji);
+
+const EmojiPicker: ForwardRefRenderFunction<HTMLInputElement,Props> = ({emoji_cta_ref},input_ref) => {
+  const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
+  const emoji_container_ref = useRef<HTMLDivElement>(null);
+
+  useOutsideClickHandler({
+    modal_ref: emoji_container_ref,
+    cta_ref: emoji_cta_ref,
+    handler: () => {
+      dispatch(updateShowEmoji(false));
+    },
+  });
   return (
-    <>
-      {_showEmoji && (
-        <Box
-         ref = {ref}
-         className={className}
-         >
-          <Picker
-            data={()=>{
-              import("@emoji-mart/data").then(({default:data})=>{
-                return data;
-              })
-            }}
-            onEmojiSelect={(data: any) => callback(data)}
-            theme="light"
-            autoFocus={true}
-          />
-        </Box>
-      )}
-    </>
+    <StyledEmojiContainer ref={emoji_container_ref}>
+      <Picker
+        theme={_mode}
+        data={data}
+        onEmojiSelect={(data: any) => {
+          if (typeof input_ref !== "function" && input_ref?.current) {
+            input_ref.current.value += data.native;
+          }
+        }}
+      />
+    </StyledEmojiContainer>
   );
 };
 
-export default EmojiPicker;
+export default forwardRef(EmojiPicker);
