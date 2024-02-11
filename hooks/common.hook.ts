@@ -43,7 +43,6 @@ const useOutsideClickHandler = ({
 }) => {
   useEffect(() => {
     const onClickHandler = (event: MouseEvent) => {
-      console.log("inside handler",cta_ref);
       if (
         typeof modal_ref !== "function" &&
         typeof cta_ref !== "function" &&
@@ -54,6 +53,7 @@ const useOutsideClickHandler = ({
       }
       handler();
     };
+    document.addEventListener("click",onClickHandler);
     return () => {
       document.removeEventListener("click", onClickHandler);
     };
