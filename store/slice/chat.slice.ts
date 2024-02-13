@@ -3,13 +3,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit";
 import type IChatInitialState from "@/types/store/slice/chat";
 import type {
+  IConversation,
+  IUsersWithConversation,
+  IGroup,
   IFetchUserResponse,
   IFetchDefaultUserResponse,
-  IUsersWithConversation,
   IFetchMessagesResponse,
   ISendMessageRequest,
   ISendMessageResponse,
-  IConversation,
   IUpdateViewRequest,
   IUpdateViewResponse,
   ISendInvitationApiRequest,
@@ -120,6 +121,29 @@ export const sendInvitationApi = createAsyncThunk<
   }
 });
 
+/**
+ * === GROUPS ===
+ */
+
+export const getGroupsApi = createAsyncThunk<
+  {
+    success: boolean;
+    groups: IGroup[];
+    error?: any;
+  },
+  undefined
+>("api/chat/get-group", async (_, { getState, rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<{
+      success: boolean;
+      groups: IGroup[];
+    }> = await Axios.post("/chat/get-group");
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
 export const acceptInvitationApi = createAsyncThunk<
   IAcceptInvitationApiResponse,
   IAcceptInvitationApiRequest,
@@ -174,6 +198,7 @@ const initialState: IChatInitialState = {
     is_request_pending: false,
   },
   default_users: [],
+  default_groups: [],
   active_user: null,
   active_user_conversation: [],
   send_message: {
@@ -353,6 +378,9 @@ const chatSlice = createSlice({
         return user;
       });
     });
+    builder.addCase(getGroupsApi.fulfilled, (state, action) => {
+      state.default_groups = action.payload.groups;
+    });
   },
 });
 
@@ -365,6 +393,7 @@ export const fetched_user_result = (state: RootState) =>
 export const is_request_pending = (state: RootState) =>
   state.chat.fetch_user.is_request_pending;
 export const default_users = (state: RootState) => state.chat.default_users;
+export const default_groups = (state: RootState) => state.chat.default_groups;
 
 export const active_user = (state: RootState) => state.chat.active_user;
 

@@ -9,16 +9,18 @@ import {
   updateShowEmoji,
   fetchMessages,
   fetchDefaultUser,
+  getGroupsApi,
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 
 /**
  * To fetch default user
  */
-const useDefaultUser = () => {
+const useDefault = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchDefaultUser());
+    dispatch(getGroupsApi());
   }, []);
 };
 
@@ -71,4 +73,4 @@ const useMessageView = ({
   }, [_user, options]);
 };
 
-export { useDefaultUser, useMessageView, useFirstUserConversation };
+export { useDefault, useMessageView, useFirstUserConversation };

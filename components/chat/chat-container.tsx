@@ -47,13 +47,9 @@ import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
-import {
-  useDefaultUser,
-  useFirstUserConversation,
-} from "@/hooks/chat/chat.hook";
+import { useDefault, useFirstUserConversation } from "@/hooks/chat/chat.hook";
 import { usePrivateChannel } from "@/hooks/pusher.hook";
 import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
-
 
 const ChatContainer: FC = () => {
   const router = useRouter();
@@ -64,7 +60,7 @@ const ChatContainer: FC = () => {
   const _active_user = useAppSelector(active_user);
   const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
-  useDefaultUser();
+  useDefault();
   useFirstUserConversation();
   usePrivateChannel(`chat.${_user.id}`, [
     {

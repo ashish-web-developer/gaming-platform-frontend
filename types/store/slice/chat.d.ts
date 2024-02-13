@@ -25,6 +25,26 @@ type IUsersWithConversation = {
   earned_points: number;
 };
 
+type IUserGroup = {
+  id: number;
+  user_id: number;
+  group_id: number;
+  user?: IUsersWithConversation;
+  created_at: string;
+  updated_at: string;
+};
+
+type IGroup = {
+  id: number;
+  group_name: string;
+  admin?: IUsersWithConversation;
+  admin_id: number;
+  user_group: IUserGroup[];
+  group_color: string;
+  created_at: string;
+  updated_at: string;
+};
+
 type IChatInitialState = {
   search_input_value: string;
   is_typing: boolean;
@@ -34,6 +54,7 @@ type IChatInitialState = {
     page: number;
   };
   default_users: IUsersWithConversation[];
+  default_groups: IGroup[];
   active_user: IUsersWithConversation | null;
   active_user_conversation: IConversation[];
   send_message: {
@@ -100,10 +121,12 @@ type IAcceptInvitationApiResponse = {
 
 export default IChatInitialState;
 export {
-  IFetchUserResponse,
-  IFetchDefaultUserResponse,
   IConversation,
   IUsersWithConversation,
+  IGroup,
+  IUserGroup,
+  IFetchUserResponse,
+  IFetchDefaultUserResponse,
   IFetchMessagesResponse,
   ISendMessageRequest,
   ISendMessageResponse,

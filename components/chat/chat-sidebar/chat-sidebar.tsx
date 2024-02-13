@@ -10,6 +10,7 @@ import { StyledChatSidebar } from "@/styles/components/chat/chat-sidebar/chat-si
 import ChatSearchInput from "@/components/chat/chat-sidebar/chat-search-input";
 import ChatSearchResult from "@/components/chat/chat-sidebar/chat-search-result";
 import ChatUsersList from "@/components/chat/chat-sidebar/chat-users-list/chat-users-list";
+import ChatGroupList from "@/components/chat/chat-sidebar/chat-group-list/chat-group-list";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -24,6 +25,7 @@ const ChatSidebar: FC = () => {
       {!!_fetched_user_result.length && (
         <ChatSearchResult ref={search_input_ref} />
       )}
+      <ChatGroupList />
       <ChatUsersList />
     </StyledChatSidebar>
   );

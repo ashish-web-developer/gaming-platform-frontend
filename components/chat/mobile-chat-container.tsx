@@ -54,7 +54,7 @@ import { sendInvitationApi } from "@/store/slice/chat.slice";
 import { mode, show_user_profile } from "@/store/slice/common.slice";
 
 // hooks
-import { useDefaultUser } from "@/hooks/chat/chat.hook";
+import { useDefault } from "@/hooks/chat/chat.hook";
 import { usePrivateChannel } from "@/hooks/pusher.hook";
 
 // icon
@@ -73,7 +73,7 @@ const MobileChatContainer: FC = () => {
   const _show_user_profile = useAppSelector(show_user_profile);
   const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
   const _show_chat = useAppSelector(show_chat);
-  useDefaultUser();
+  useDefault();
   usePrivateChannel(`chat.${_user.id}`, [
     {
       event: "ChatEvent",
