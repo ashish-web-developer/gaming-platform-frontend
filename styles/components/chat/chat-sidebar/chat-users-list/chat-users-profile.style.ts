@@ -16,6 +16,9 @@ const StyledUsersProfile = styled.div<{
   gap: 15px;
   border: 2px solid ${(props) => props.$border_color};
   position: relative;
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
   &::after {
     content: "${(props) => props.$time}";
     position: absolute;

@@ -10,6 +10,9 @@ const StyledChatGroupWrapper = styled.div<{
   border-radius: 16px;
   flex-shrink: 0;
   border: 2px solid #000;
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
 `;
 
 const StyledChatGroupContent = styled.div`

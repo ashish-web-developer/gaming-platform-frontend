@@ -6,7 +6,7 @@ const StyledChatGroupListWrapper = styled.div`
   border-radius: 16px;
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   margin-top: 20px;
-  padding: 1rem;
+  padding: 1rem 1rem 0 1rem;
 `;
 
 const StyledGroupTag = styled.h6`
@@ -22,7 +22,7 @@ const StyledGroupListWrapper = styled.div`
   align-items: flex-start;
   gap: 14px;
   overflow: scroll;
-  max-height: 300px;
+  max-height: 250px;
 `;
 
 export { StyledChatGroupListWrapper, StyledGroupTag, StyledGroupListWrapper };

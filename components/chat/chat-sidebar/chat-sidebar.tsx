@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
