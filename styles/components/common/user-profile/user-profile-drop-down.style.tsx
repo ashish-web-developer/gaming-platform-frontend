@@ -52,6 +52,7 @@ const StyledCtaWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 24px;
+  margin-top: 0.75rem;
 `;
 
 const StyledIconCta = styled.button<{

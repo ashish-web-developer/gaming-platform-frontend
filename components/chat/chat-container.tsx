@@ -12,10 +12,10 @@ import {
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,
-  StyledChatMainContent,
-  StyledMessageContainer,
-  StyledMessageInputContainer,
+  StyledMessageWrapper,
+  StyledChatInputWrapper,
   StyledNotificationContainer,
+  StyledGroupSuggestionWrapper,
   StyledNotificationHeading,
 } from "@/styles/components/chat/chat-container.style";
 
@@ -120,23 +120,28 @@ const ChatContainer: FC = () => {
         <StyledChatMainContainer>
           <ChatSidebar />
           <StyledChatMainContentContainer $mode={_mode}>
-            <StyledChatMainContent>
+            <StyledMessageWrapper></StyledMessageWrapper>
+            <StyledChatInputWrapper>
+              <ChatInput />
+            </StyledChatInputWrapper>
+            {/* <StyledChatMainContent>
               <StyledMessageContainer>
                 <ChatMessageContainer />
               </StyledMessageContainer>
               <StyledMessageInputContainer>
                 <ChatInput />
               </StyledMessageInputContainer>
-            </StyledChatMainContent>
+            </StyledChatMainContent> */}
           </StyledChatMainContentContainer>
-          {_show_memory_game_snackbar && (
+          {/* {_show_memory_game_snackbar && (
             <StyledNotificationContainer>
               <StyledNotificationHeading $mode={_mode}>
                 Notifications
                 <InvitationCard />
               </StyledNotificationHeading>
             </StyledNotificationContainer>
-          )}
+          )} */}
+          <StyledGroupSuggestionWrapper></StyledGroupSuggestionWrapper>
         </StyledChatMainContainer>
       </StyledChatContainer>
     </StyledPage>

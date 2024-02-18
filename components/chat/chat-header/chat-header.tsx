@@ -23,14 +23,18 @@ import Slider from "@/components/common/slider";
 import ChatUserPoint from "@/components/chat/chat-header/chat-user-point";
 import UserProfileDropDown from "@/components/common/user-profile/user-profile-drop-down";
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
+import CreateGroupModal from "@/components/common/create-group/create-group-modal";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
+  // states
   mode,
   show_profile_upload_modal,
   show_profile_drop_down,
+  show_create_group_drop_down,
+  // actions
   updateShowProfileDropDown,
 } from "@/store/slice/common.slice";
 
@@ -43,6 +47,9 @@ const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _show_profile_drop_down = useAppSelector(show_profile_drop_down);
+  const _show_create_group_drop_down = useAppSelector(
+    show_create_group_drop_down
+  );
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
@@ -78,6 +85,7 @@ const ChatHeader: FC = () => {
                 chevron_cta_ref={chevron_cta_ref}
               />
             )}
+            {_show_create_group_drop_down && <CreateGroupModal />}
             <StyledUserProfileImage
               $mode={_mode}
               src={user_avatar_url}

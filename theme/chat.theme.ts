@@ -12,6 +12,7 @@ export type Theme = {
     };
     secondary: {
       main: string;
+      dark: string;
     };
   };
   breakpoints: IBreakpoints;
@@ -29,6 +30,7 @@ export const darkTheme: Theme = {
     },
     secondary: {
       main: "#FFF3F0",
+      dark: "#AFA2FF",
     },
   },
   breakpoints: {
@@ -49,6 +51,7 @@ export const lightTheme: Theme = {
     },
     secondary: {
       main: "#FFF3F0",
+      dark: "#AFA2FF",
     },
   },
   breakpoints: {

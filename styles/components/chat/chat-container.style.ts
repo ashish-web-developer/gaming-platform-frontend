@@ -23,7 +23,7 @@ const StyledChatContainer = styled.div`
 const StyledChatMainContainer = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: 320px 440px 1fr;
+  grid-template-columns: 320px 1fr 320px;
   height: calc(100vh - 200px);
   gap: 40px;
 `;
@@ -32,31 +32,25 @@ const StyledChatMainContentContainer = styled.div<{
   $mode: "light" | "dark";
 }>`
   width: 100%;
-  min-height: 100%;
-  border-left: 2px solid
-    ${(props) =>
-      props.$mode == "light"
-        ? props.theme.palette.primary.light
-        : props.theme.palette.primary.dark};
-  padding-left: 40px;
+  display: grid;
+  grid-template-rows: 1fr 140px;
+  gap: 24px;
 `;
 
-const StyledChatMainContent = styled.div`
+const StyledMessageWrapper = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  border: 3px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 25px;
 `;
 
-const StyledMessageContainer = styled.div`
+const StyledChatInputWrapper = styled.div`
   width: 100%;
-  max-height: calc(100% - 60px);
-  flex-grow: 1;
+  height: 100%;
 `;
 
-const StyledMessageInputContainer = styled.div`
-  width: 100%;
-  flex-basis: 60px;
+const StyledGroupSuggestionWrapper = styled.div`
+  border: 2px solid red;
 `;
 
 const StyledNotificationContainer = styled.div`
@@ -83,9 +77,9 @@ export {
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,
-  StyledChatMainContent,
-  StyledMessageContainer,
-  StyledMessageInputContainer,
+  StyledMessageWrapper,
+  StyledChatInputWrapper,
+  StyledGroupSuggestionWrapper,
   StyledNotificationContainer,
   StyledNotificationHeading,
 };

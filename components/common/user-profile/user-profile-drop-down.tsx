@@ -24,6 +24,7 @@ import {
   mode,
   updateShowProfileUploadModal,
   updateShowProfileDropDown,
+  updateShowCreateGroupDrownDown,
 } from "@/store/slice/common.slice";
 
 // styled theme
@@ -161,7 +162,13 @@ const UserProfileDropDown: ForwardRefRenderFunction<
             />
           </StyledIconCta>
 
-          <StyledIconCta $mode={_mode}>
+          <StyledIconCta
+            onClick={() => {
+              dispatch(updateShowProfileDropDown(false));
+              dispatch(updateShowCreateGroupDrownDown(true));
+            }}
+            $mode={_mode}
+          >
             <GroupIcon
               size={20}
               stroke={
