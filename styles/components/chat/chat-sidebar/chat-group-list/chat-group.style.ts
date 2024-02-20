@@ -3,13 +3,30 @@ import styled from "styled-components";
 
 const StyledChatGroupWrapper = styled.div<{
   $group_color: string;
+  $is_active: boolean;
+  $mode: "light" | "dark";
 }>`
   width: 100%;
   height: auto;
   background: ${(props) => props.$group_color};
   border-radius: 16px;
   flex-shrink: 0;
-  border: 2px solid #000;
+  ${(props) => {
+    switch (props.$mode) {
+      case "dark":
+        return `
+          border: 2px solid ${
+            props.$is_active ? props.theme.palette.primary.dark : "#000"
+          };
+        `;
+      case "light":
+        return `
+          border: 2px solid ${
+            props.$is_active ? props.theme.palette.primary.light : "#000"
+          };
+        `;
+    }
+  }}
   &:last-of-type {
     margin-bottom: 1rem;
   }

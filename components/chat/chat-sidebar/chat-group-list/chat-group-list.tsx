@@ -1,5 +1,5 @@
 // types
-import { FC } from "react";
+import type { FC } from "react";
 
 // styled components
 import {
@@ -22,18 +22,9 @@ const ChatGroupList: FC = () => {
     <StyledChatGroupListWrapper>
       <StyledGroupTag>Groups Chat</StyledGroupTag>
       <StyledGroupListWrapper>
-        {_default_groups.map(
-          ({ group_color, admin, group_name, user_group }) => {
-            return (
-              <ChatGroup
-                group_color={group_color}
-                admin={admin as IUsersWithConversation}
-                group_name={group_name}
-                user_group={user_group}
-              />
-            );
-          }
-        )}
+        {_default_groups.map((group) => {
+          return <ChatGroup {...group} />;
+        })}
       </StyledGroupListWrapper>
     </StyledChatGroupListWrapper>
   );

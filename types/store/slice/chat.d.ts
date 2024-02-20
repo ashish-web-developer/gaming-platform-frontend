@@ -5,6 +5,9 @@ type IConversation = {
   id: number;
   sender_id: number;
   receiver_id: number;
+  receiver?: IUsersWithConversation;
+  sender?: IUsersWithConversation;
+  group_id?: number;
   message: string;
   viewed: boolean;
   created_at: string;
@@ -56,7 +59,8 @@ type IChatInitialState = {
   default_users: IUsersWithConversation[];
   default_groups: IGroup[];
   active_user: IUsersWithConversation | null;
-  active_user_conversation: IConversation[];
+  active_group: IGroup | null;
+  active_conversation: IConversation[];
   send_message: {
     is_request_pending: boolean;
   };

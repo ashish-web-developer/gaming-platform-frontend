@@ -120,7 +120,9 @@ const ChatContainer: FC = () => {
         <StyledChatMainContainer>
           <ChatSidebar />
           <StyledChatMainContentContainer $mode={_mode}>
-            <StyledMessageWrapper></StyledMessageWrapper>
+            <StyledMessageWrapper>
+              <ChatMessageContainer />
+            </StyledMessageWrapper>
             <StyledChatInputWrapper>
               <ChatInput />
             </StyledChatInputWrapper>

@@ -21,9 +21,13 @@ import { useIsMobile } from "@/hooks/common.hook";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
+  // state
   active_user,
+  // actions
   updateShowChat,
+  updateActiveGroup,
   updateActiveUser,
+  // api
   fetchMessages,
 } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
@@ -55,6 +59,7 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
       }
       onClick={() => {
         dispatch(updateActiveUser(user));
+        dispatch(updateActiveGroup(null));
         dispatch(fetchMessages());
         if (is_mobile) {
           dispatch(updateShowChat(true));

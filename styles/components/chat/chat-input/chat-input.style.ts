@@ -8,7 +8,7 @@ const StyledChatInputContainer = styled.div<{
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 3px solid
+  border: 2px solid
     ${(props) =>
       props.$mode == "light"
         ? props.theme.palette.primary.dark
@@ -99,12 +99,19 @@ const StyledSendCta = styled.button`
   height: 40px;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 1.2rem;
-  color: ${({ theme }) => theme.palette.primary.dark};
+  color: #a2f263;
   background: #000;
   padding: 0px 2rem;
   border: none;
   border-radius: 25px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+`;
+
+const StyledEmojiContainer = styled.div`
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  transform: translateX(100%);
 `;
 
 export {
@@ -120,4 +127,5 @@ export {
   StyledIconCta,
   StyledIconImage,
   StyledSendCta,
+  StyledEmojiContainer,
 };

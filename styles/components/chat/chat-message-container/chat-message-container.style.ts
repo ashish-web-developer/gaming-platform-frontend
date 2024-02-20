@@ -3,43 +3,45 @@ import styled from "styled-components";
 const StyledMessageContainer = styled.div`
   width: 100%;
   height: 100%;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 25px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: 20px;
 `;
 
-const StyledUserDetailsContainer = styled.div`
+const StyledDetailsWrapper = styled.div`
+  border-bottom: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  height: 60px;
   width: 100%;
-  flex-basis: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem;
 `;
-const StyledActiveUserName = styled.h6<{
-  $mode: "light" | "dark";
+const StyledWrapper = styled.div<{
+  $gap?: string;
 }>`
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.light
-      : props.theme.palette.primary.dark};
+  display: flex;
+  align-items: center;
+  gap: ${(props) => props.$gap ?? 0};
 `;
 
-const StyledMessagesCount = styled.span<{
-  $mode: "light" | "dark";
-}>`
-  display: block;
+const StyledName = styled.h5`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  padding-top: 4px;
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.dark
-      : props.theme.palette.primary.light};
+  color: ${({ theme }) => theme.palette.primary.dark};
+  font-size: 1.25rem;
+`;
+
+const StyledMessageCount = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 0.75rem;
+  color: ${({ theme }) => theme.palette.primary.light};
+`;
+const StyledGroupAvatar = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const StyledChatMessageContentContainer = styled.div`
@@ -55,8 +57,10 @@ const StyledChatMessageContentContainer = styled.div`
 
 export {
   StyledMessageContainer,
-  StyledUserDetailsContainer,
-  StyledActiveUserName,
-  StyledMessagesCount,
+  StyledDetailsWrapper,
+  StyledWrapper,
+  StyledName,
+  StyledMessageCount,
+  StyledGroupAvatar,
   StyledChatMessageContentContainer,
 };

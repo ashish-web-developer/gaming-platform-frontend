@@ -34,7 +34,7 @@ import { mode } from "@/store/slice/common.slice";
 import {
   show_chat,
   active_user,
-  active_user_conversation,
+  active_conversation,
   updateShowChat,
   updateActiveUser,
 } from "@/store/slice/chat.slice";
@@ -72,7 +72,7 @@ const MobileChatHeader: FC = () => {
   const active_user_avatar_url = useAvatarUrl(
     _active_user as IUsersWithConversation
   );
-  const _active_user_conversation = useAppSelector(active_user_conversation);
+  const _active_conversation = useAppSelector(active_conversation);
 
   const handleModalClose = (event: MouseEvent) => {
     if (event.target == search_dialog_ref.current) {
@@ -109,7 +109,7 @@ const MobileChatHeader: FC = () => {
           <StyledUserDetails>
             <StyledUserName $mode={_mode}>{_active_user?.name}</StyledUserName>
             <StyledMessageCount $mode={_mode}>
-              {_active_user_conversation.length} Messages
+              {_active_conversation.length} Messages
             </StyledMessageCount>
           </StyledUserDetails>
         </StyledChatUserProfile>

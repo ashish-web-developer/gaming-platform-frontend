@@ -84,6 +84,32 @@ export const fetchMessages = createAsyncThunk<
   }
 });
 
+export const fetchGroupMessagesApi = createAsyncThunk<
+  {
+    success: boolean;
+    error: any;
+    conversation: IConversation[];
+  },
+  undefined,
+  {
+    state: RootState;
+  }
+>("api/chat/get-group-messages", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<{
+      success: boolean;
+      error: any;
+      conversation: IConversation[];
+    }> = await Axios.post("/chat/get-group-messages", {
+      group_id: state.chat.active_group?.id,
+    });
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
 export const updateView = createAsyncThunk<
   IUpdateViewResponse,
   IUpdateViewRequest,
@@ -200,7 +226,8 @@ const initialState: IChatInitialState = {
   default_users: [],
   default_groups: [],
   active_user: null,
-  active_user_conversation: [],
+  active_group: null,
+  active_conversation: [],
   send_message: {
     is_request_pending: false,
   },
@@ -259,7 +286,7 @@ const chatSlice = createSlice({
       state,
       action: PayloadAction<IConversation>
     ) => {
-      state.active_user_conversation.push(action.payload);
+      state.active_conversation.push(action.payload);
     },
     updateDefaultUserConversation: (
       state,
@@ -292,7 +319,7 @@ const chatSlice = createSlice({
     },
     updateConversationView: (state, action: PayloadAction<IConversation>) => {
       const updatedConversation = action.payload;
-      const updatedConversations = state.active_user_conversation.map(
+      const updatedConversations = state.active_conversation.map(
         (conversation) => {
           if (conversation.id === updatedConversation.id) {
             return updatedConversation;
@@ -303,7 +330,7 @@ const chatSlice = createSlice({
 
       return {
         ...state,
-        active_user_conversation: updatedConversations,
+        active_conversation: updatedConversations,
       };
     },
     updateIsTyping: (state, action: PayloadAction<boolean>) => {
@@ -314,6 +341,9 @@ const chatSlice = createSlice({
     },
     updateShowChat: (state, action: PayloadAction<boolean>) => {
       state.mobile.show_chat = action.payload;
+    },
+    updateActiveGroup: (state, action: PayloadAction<IGroup | null>) => {
+      state.active_group = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -335,10 +365,10 @@ const chatSlice = createSlice({
       }
     });
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
-      state.active_user_conversation = action.payload.conversation;
+      state.active_conversation = action.payload.conversation;
     });
     builder.addCase(sendMessage.fulfilled, (state, action) => {
-      state.active_user_conversation.push(action.payload.conversation);
+      state.active_conversation.push(action.payload.conversation);
       state.send_message.is_request_pending = false;
       state.default_users = state.default_users.map((user) => {
         if (user.id == action.payload.conversation.receiver_id) {
@@ -360,7 +390,7 @@ const chatSlice = createSlice({
     });
     builder.addCase(updateView.fulfilled, (state, action) => {
       const updated_conversation = action.payload.conversation;
-      state.active_user_conversation = state.active_user_conversation.map(
+      state.active_conversation = state.active_conversation.map(
         (conversation) => {
           if (conversation.id == updated_conversation.id) {
             return updated_conversation;
@@ -381,6 +411,9 @@ const chatSlice = createSlice({
     builder.addCase(getGroupsApi.fulfilled, (state, action) => {
       state.default_groups = action.payload.groups;
     });
+    builder.addCase(fetchGroupMessagesApi.fulfilled, (state, action) => {
+      state.active_conversation = action.payload.conversation;
+    });
   },
 });
 
@@ -397,8 +430,8 @@ export const default_groups = (state: RootState) => state.chat.default_groups;
 
 export const active_user = (state: RootState) => state.chat.active_user;
 
-export const active_user_conversation = (state: RootState) =>
-  state.chat.active_user_conversation;
+export const active_conversation = (state: RootState) =>
+  state.chat.active_conversation;
 export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
 export const show_emoji = (state: RootState) => state.chat.show_emoji;
@@ -407,6 +440,7 @@ export const is_typing = (state: RootState) => state.chat.is_typing;
 export const show_memory_game_snackbar = (state: RootState) =>
   state.chat.game_snackbar.show_memory_game_snackbar;
 export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
+export const active_group = (state: RootState) => state.chat.active_group;
 export const {
   resetChat,
   updateSearchInputValue,
@@ -422,4 +456,5 @@ export const {
   updateIsTyping,
   updateShowMemoryGameSnackbar,
   updateShowChat,
+  updateActiveGroup,
 } = chatSlice.actions;

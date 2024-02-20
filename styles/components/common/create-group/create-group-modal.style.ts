@@ -6,6 +6,7 @@ const StyledCreateGroupModalWrapper = styled.div`
   height: 309px;
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 25px;
+  background: ${({ theme }) => theme.palette.primary.main};
   color: white;
   top: calc(100% + 1rem);
   right: 0px;

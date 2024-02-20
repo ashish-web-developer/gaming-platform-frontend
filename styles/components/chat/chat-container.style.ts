@@ -35,22 +35,25 @@ const StyledChatMainContentContainer = styled.div<{
   display: grid;
   grid-template-rows: 1fr 140px;
   gap: 24px;
+  min-height: 0;
+  min-width: 0;
 `;
 
 const StyledMessageWrapper = styled.div`
   width: 100%;
   height: 100%;
-  border: 3px solid ${({ theme }) => theme.palette.primary.dark};
-  border-radius: 25px;
+  overflow: scroll; /* NEW */
 `;
 
 const StyledChatInputWrapper = styled.div`
   width: 100%;
   height: 100%;
+  position: relative;
 `;
 
 const StyledGroupSuggestionWrapper = styled.div`
-  border: 2px solid red;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 25px;
 `;
 
 const StyledNotificationContainer = styled.div`

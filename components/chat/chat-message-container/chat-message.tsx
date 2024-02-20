@@ -71,33 +71,6 @@ const ChatMessage = forwardRef<
     },
     options: intersection_observer_options,
   });
-
-  if (conversation.receiver_id == user.id) {
-    return (
-      <StyledMessageContent $justifyContent="flex-start">
-        <StyledUserProfile
-          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
-          $order={1}
-          src={active_user_avatar_url}
-          width={40}
-          height={40}
-          alt="user-avatar"
-        />
-        <StyledMessage
-          ref={target_ref}
-          $show_double_tick={false}
-          $content={created_at}
-          $right={10}
-          $border_radius="0px 20px 20px 20px"
-          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
-          $order={2}
-          $mode={_mode}
-        >
-          {conversation.message}
-        </StyledMessage>
-      </StyledMessageContent>
-    );
-  }
   if (conversation.sender_id == user.id) {
     return (
       <StyledMessageContent $justifyContent="flex-end">
@@ -124,6 +97,30 @@ const ChatMessage = forwardRef<
       </StyledMessageContent>
     );
   }
+  return (
+    <StyledMessageContent $justifyContent="flex-start">
+      <StyledUserProfile
+        $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
+        $order={1}
+        src={active_user_avatar_url}
+        width={40}
+        height={40}
+        alt="user-avatar"
+      />
+      <StyledMessage
+        ref={target_ref}
+        $show_double_tick={false}
+        $content={created_at}
+        $right={10}
+        $border_radius="0px 20px 20px 20px"
+        $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
+        $order={2}
+        $mode={_mode}
+      >
+        {conversation.message}
+      </StyledMessage>
+    </StyledMessageContent>
+  );
 });
 
 export default ChatMessage;

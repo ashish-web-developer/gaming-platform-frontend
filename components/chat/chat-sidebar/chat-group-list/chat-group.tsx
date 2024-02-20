@@ -1,9 +1,7 @@
 // types
 import type { FC } from "react";
-import type {
-  IUsersWithConversation,
-  IUserGroup,
-} from "@/types/store/slice/chat";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { IGroup } from "@/types/store/slice/chat";
 // styled components
 import {
   StyledChatGroupWrapper,
@@ -23,18 +21,55 @@ import {
 // local components
 import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
 
+// redux
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import {
+  // state
+  active_group,
+  // actions
+  updateActiveGroup,
+  updateActiveUser,
+  // api
+  fetchGroupMessagesApi,
+} from "@/store/slice/chat.slice";
+import { mode } from "@/store/slice/common.slice";
+
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
-const ChatGroup: FC<{
-  group_color: string;
-  admin: IUsersWithConversation;
-  group_name: string;
-  user_group: IUserGroup[];
-}> = ({ group_color, admin, group_name, user_group }) => {
-  const admin_avatar_url = useAvatarUrl(admin);
+const ChatGroup: FC<IGroup> = ({
+  group_color,
+  admin,
+  group_name,
+  user_group,
+  id,
+  ...prop
+}) => {
+  const dispatch = useAppDispatch();
+  const _mode = useAppSelector(mode);
+  const _active_group = useAppSelector(active_group);
+  const admin_avatar_url = useAvatarUrl(admin as IUsersWithConversation);
+  const is_active = _active_group?.id == id;
   return (
-    <StyledChatGroupWrapper $group_color={group_color}>
+    <StyledChatGroupWrapper
+      onClick={() => {
+        dispatch(
+          updateActiveGroup({
+            group_color,
+            admin,
+            group_name,
+            user_group,
+            id,
+            ...prop,
+          })
+        );
+        dispatch(updateActiveUser(null));
+        dispatch(fetchGroupMessagesApi());
+      }}
+      $mode={_mode}
+      $is_active={is_active}
+      $group_color={group_color}
+    >
       <StyledChatGroupContent>
         <StyledWrapperTop>
           <StyledAdminProfile>
@@ -54,9 +89,12 @@ const ChatGroup: FC<{
         <StyledDivider />
         <StyledWrapperBottom>
           <StyledGroupAvatar>
-            {user_group.slice(0, 3).map((user_group) => {
+            {user_group.slice(0, 4).map((_user_group) => {
               return (
-                <ChatAvatar user={user_group.user as IUsersWithConversation} />
+                <ChatAvatar
+                  left_count={user_group.length > 3 ? user_group.length - 3 : 0}
+                  user={_user_group.user as IUsersWithConversation}
+                />
               );
             })}
           </StyledGroupAvatar>
