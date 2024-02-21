@@ -1,4 +1,5 @@
 // types
+import { IBaseResponse } from "@/types/store/slice/common";
 import type { User } from "@/types/user";
 
 type IConversation = {
@@ -43,6 +44,7 @@ type IGroup = {
   admin?: IUsersWithConversation;
   admin_id: number;
   user_group: IUserGroup[];
+  latest_conversation: IConversation | null;
   group_color: string;
   created_at: string;
   updated_at: string;
@@ -91,14 +93,6 @@ type IFetchMessagesResponse = {
   conversation: IConversation[];
 };
 
-type ISendMessageRequest = {
-  message: string;
-};
-type ISendMessageResponse = {
-  success: boolean;
-  conversation: IConversation;
-};
-
 type IUpdateViewRequest = {
   conversation_id: number;
 };
@@ -123,6 +117,25 @@ type IAcceptInvitationApiResponse = {
   message: string;
 };
 
+/**
+ * ===== GROUP API =======
+ */
+type IGetGroupResponse = IBaseResponse & {
+  groups: IGroup[];
+};
+
+/**
+ * ==== SEND MESSAGE API =====
+ */
+
+type ISendMessagePayload = {
+  message: string;
+};
+
+type ISendMessageResponse = IBaseResponse & {
+  conversation: IConversation;
+};
+
 export default IChatInitialState;
 export {
   IConversation,
@@ -132,12 +145,13 @@ export {
   IFetchUserResponse,
   IFetchDefaultUserResponse,
   IFetchMessagesResponse,
-  ISendMessageRequest,
-  ISendMessageResponse,
   IUpdateViewRequest,
   IUpdateViewResponse,
   ISendInvitationApiRequest,
   ISendInvitationApiResponse,
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
+  IGetGroupResponse,
+  ISendMessagePayload,
+  ISendMessageResponse,
 };

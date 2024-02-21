@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // types
-import { PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 import type IChatInitialState from "@/types/store/slice/chat";
+import type { ThunkApiConfig } from "@/types/store/slice/common";
 import type {
   IConversation,
   IUsersWithConversation,
@@ -9,14 +10,15 @@ import type {
   IFetchUserResponse,
   IFetchDefaultUserResponse,
   IFetchMessagesResponse,
-  ISendMessageRequest,
-  ISendMessageResponse,
   IUpdateViewRequest,
   IUpdateViewResponse,
   ISendInvitationApiRequest,
   ISendInvitationApiResponse,
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
+  IGetGroupResponse,
+  ISendMessagePayload,
+  ISendMessageResponse,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -147,18 +149,11 @@ export const sendInvitationApi = createAsyncThunk<
   }
 });
 
-/**
- * === GROUPS ===
- */
-
 export const getGroupsApi = createAsyncThunk<
-  {
-    success: boolean;
-    groups: IGroup[];
-    error?: any;
-  },
-  undefined
->("api/chat/get-group", async (_, { getState, rejectWithValue }) => {
+  IGetGroupResponse,
+  undefined,
+  ThunkApiConfig
+>("api/chat/get-group", async (_, { rejectWithValue }) => {
   try {
     const response: AxiosResponse<{
       success: boolean;
@@ -191,10 +186,10 @@ export const acceptInvitationApi = createAsyncThunk<
   }
 );
 
-export const sendMessage = createAsyncThunk<
+export const sendMessageApi = createAsyncThunk<
   ISendMessageResponse,
-  ISendMessageRequest,
-  { state: RootState }
+  ISendMessagePayload,
+  ThunkApiConfig
 >(
   "api/chat/send-message",
   async ({ message }, { getState, rejectWithValue }) => {
@@ -204,8 +199,14 @@ export const sendMessage = createAsyncThunk<
         "/chat/send-message",
         {
           sender_id: state.user.user.id,
-          receiver_id: state.chat.active_user?.id,
           message,
+          ...(state.chat.active_group
+            ? {
+                group_id: state.chat.active_group.id,
+              }
+            : {
+                receiver_id: state.chat.active_user?.id,
+              }),
         }
       );
       return response.data;
@@ -367,7 +368,7 @@ const chatSlice = createSlice({
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
       state.active_conversation = action.payload.conversation;
     });
-    builder.addCase(sendMessage.fulfilled, (state, action) => {
+    builder.addCase(sendMessageApi.fulfilled, (state, action) => {
       state.active_conversation.push(action.payload.conversation);
       state.send_message.is_request_pending = false;
       state.default_users = state.default_users.map((user) => {
@@ -382,10 +383,10 @@ const chatSlice = createSlice({
         return user;
       });
     });
-    builder.addCase(sendMessage.pending, (state, action) => {
+    builder.addCase(sendMessageApi.pending, (state, action) => {
       state.send_message.is_request_pending = true;
     });
-    builder.addCase(sendMessage.rejected, (state, action) => {
+    builder.addCase(sendMessageApi.rejected, (state, action) => {
       state.send_message.is_request_pending = false;
     });
     builder.addCase(updateView.fulfilled, (state, action) => {

@@ -33,7 +33,6 @@ const ChatMessageContainer: FC = () => {
   const _active_group = useAppSelector(active_group);
   const _active_conversation = useAppSelector(active_conversation);
   const root_ref = useRef<HTMLDivElement>(null);
-  console.log("value of active_conversation", _active_conversation);
   return (
     <>
       {_active_group && (
@@ -41,12 +40,15 @@ const ChatMessageContainer: FC = () => {
           <StyledDetailsWrapper>
             <StyledWrapper $gap="6px">
               <StyledName>{_active_group.group_name}</StyledName>
-              <StyledMessageCount>(24 messages)</StyledMessageCount>
+              <StyledMessageCount>
+                ({_active_conversation.length} messages)
+              </StyledMessageCount>
             </StyledWrapper>
             <StyledGroupAvatar>
-              {_active_group.user_group.slice(0, 4).map((user_group) => {
+              {_active_group.user_group.slice(0, 4).map((user_group, index) => {
                 return (
                   <ChatAvatar
+                    key={`chat-avatar-${index}`}
                     left_count={
                       _active_group.user_group.length > 4
                         ? _active_group.user_group.length - 3
@@ -64,7 +66,7 @@ const ChatMessageContainer: FC = () => {
                 key={conversation.id}
                 conversation={conversation}
                 user={_user}
-                active_user={_active_user as IUsersWithConversation}
+                active_user={conversation.sender as IUsersWithConversation}
                 ref={root_ref}
               />
             ))}
@@ -80,6 +82,17 @@ const ChatMessageContainer: FC = () => {
             </StyledWrapper>
             <ChatAvatar user={_active_user} />
           </StyledDetailsWrapper>
+          <StyledChatMessageContentContainer ref={root_ref}>
+            {_active_conversation.map((conversation) => (
+              <ChatMessage
+                key={conversation.id}
+                conversation={conversation}
+                user={_user}
+                active_user={conversation.sender as IUsersWithConversation}
+                ref={root_ref}
+              />
+            ))}
+          </StyledChatMessageContentContainer>
         </StyledMessageContainer>
       )}
     </>

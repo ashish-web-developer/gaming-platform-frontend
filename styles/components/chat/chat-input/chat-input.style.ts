@@ -105,6 +105,7 @@ const StyledSendCta = styled.button`
   border: none;
   border-radius: 25px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 `;
 
 const StyledEmojiContainer = styled.div`

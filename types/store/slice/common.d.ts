@@ -7,4 +7,12 @@ type InitialState = {
   show_create_group_drop_down: boolean;
 };
 
-export { InitialState };
+type IBaseResponse = {
+  success: boolean;
+  error?: any;
+};
+
+type ThunkApiConfig = {
+  state: RootState;
+};
+export { InitialState, IBaseResponse, ThunkApiConfig };

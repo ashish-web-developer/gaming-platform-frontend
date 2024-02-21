@@ -43,6 +43,7 @@ const ChatGroup: FC<IGroup> = ({
   group_name,
   user_group,
   id,
+  latest_conversation,
   ...prop
 }) => {
   const dispatch = useAppDispatch();
@@ -60,6 +61,7 @@ const ChatGroup: FC<IGroup> = ({
             group_name,
             user_group,
             id,
+            latest_conversation,
             ...prop,
           })
         );
@@ -89,18 +91,21 @@ const ChatGroup: FC<IGroup> = ({
         <StyledDivider />
         <StyledWrapperBottom>
           <StyledGroupAvatar>
-            {user_group.slice(0, 4).map((_user_group) => {
+            {user_group.slice(0, 4).map((_user_group, index) => {
               return (
                 <ChatAvatar
+                  key={`chat-avatar-${index}`}
                   left_count={user_group.length > 3 ? user_group.length - 3 : 0}
                   user={_user_group.user as IUsersWithConversation}
                 />
               );
             })}
           </StyledGroupAvatar>
-          <StyledGroupMessage>
-            Hello how long I have waiting...
-          </StyledGroupMessage>
+          {latest_conversation && (
+            <StyledGroupMessage>
+              {latest_conversation.message}
+            </StyledGroupMessage>
+          )}
         </StyledWrapperBottom>
       </StyledChatGroupContent>
     </StyledChatGroupWrapper>

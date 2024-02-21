@@ -97,6 +97,11 @@ const StyledGroupMessage = styled.p`
   color: #40434e;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 12px;
+  white-space: nowrap;
+  width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 `;
 
 export {

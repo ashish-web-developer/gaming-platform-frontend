@@ -22,8 +22,8 @@ const ChatGroupList: FC = () => {
     <StyledChatGroupListWrapper>
       <StyledGroupTag>Groups Chat</StyledGroupTag>
       <StyledGroupListWrapper>
-        {_default_groups.map((group) => {
-          return <ChatGroup {...group} />;
+        {_default_groups.map((group, index) => {
+          return <ChatGroup key={`chat-group-${index}`} {...group} />;
         })}
       </StyledGroupListWrapper>
     </StyledChatGroupListWrapper>
