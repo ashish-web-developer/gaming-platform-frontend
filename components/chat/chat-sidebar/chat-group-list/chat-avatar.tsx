@@ -17,7 +17,6 @@ const ChatAvatar: FC<{
   left_count?: number; // no of avatars left in avatar group
 }> = ({ user, left_count }) => {
   const avatar_url = useAvatarUrl(user);
-  console.log("length", length);
   return (
     <StyledAvatarWrapper $show_left_count={Boolean(left_count)}>
       <StyledAvatarImage alt="avatar" src={avatar_url} fill={true} />

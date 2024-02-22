@@ -27,7 +27,7 @@ import EmojiPicker from "@/components/common/emoji-picker";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
-import { sendMessageApi } from "@/store/slice/chat.slice";
+import { is_request_pending, sendMessageApi } from "@/store/slice/chat.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -35,6 +35,7 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 const ChatInput: FC<{}> = () => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
+  const _is_request_pending = useAppSelector(is_request_pending);
   const _user = useAppSelector(user);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   const input_ref = useRef<HTMLInputElement>(null);
@@ -50,6 +51,20 @@ const ChatInput: FC<{}> = () => {
             type="text"
             ref={input_ref}
             placeholder="Your Message"
+            onKeyDown={(event) => {
+              if (
+                input_ref.current?.value &&
+                !_is_request_pending &&
+                (event.metaKey || event.ctrlKey) &&
+                event.key == "Enter"
+              ) {
+                dispatch(
+                  sendMessageApi({
+                    message: input_ref.current.value,
+                  })
+                );
+              }
+            }}
           />
           <StyledUserProfileWrapper>
             <StyledUserProfileImage
@@ -107,6 +122,7 @@ const ChatInput: FC<{}> = () => {
                 input_ref.current.value = "";
               }
             }}
+            disabled={_is_request_pending}
           >
             Send
           </StyledSendCta>

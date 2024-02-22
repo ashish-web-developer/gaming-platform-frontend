@@ -42,6 +42,12 @@ const StyledWrapperTop = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+`;
+
+const StyledLeftWrapper = styled.div`
+  display: flex;
+  align-items: center;
   gap: 6px;
 `;
 
@@ -61,6 +67,17 @@ const StyledUserDetails = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+const StyledFollowCta = styled.button`
+  background: transparent;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  color: #000;
+  font-size: 14px;
+  border: 1.5px solid #000;
+  border-radius: 8px;
+  padding: 4px 18px;
+  cursor: pointer;
 `;
 
 const StyledDivider = styled.div`
@@ -108,9 +125,11 @@ export {
   StyledChatGroupWrapper,
   StyledChatGroupContent,
   StyledWrapperTop,
+  StyledLeftWrapper,
   StyledAdminProfile,
   StyledAdminProfileImage,
   StyledUserDetails,
+  StyledFollowCta,
   StyledDivider,
   StyledGroupName,
   StyledGroupCreationDate,

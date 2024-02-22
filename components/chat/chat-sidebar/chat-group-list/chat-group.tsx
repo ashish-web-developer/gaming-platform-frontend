@@ -7,9 +7,11 @@ import {
   StyledChatGroupWrapper,
   StyledChatGroupContent,
   StyledWrapperTop,
+  StyledLeftWrapper,
   StyledAdminProfile,
   StyledAdminProfileImage,
   StyledUserDetails,
+  StyledFollowCta,
   StyledDivider,
   StyledGroupName,
   StyledGroupCreationDate,
@@ -37,13 +39,14 @@ import { mode } from "@/store/slice/common.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
-const ChatGroup: FC<IGroup> = ({
+const ChatGroup: FC<IGroup & { show_follow_cta?: boolean }> = ({
   group_color,
   admin,
   group_name,
   user_group,
   id,
   latest_conversation,
+  show_follow_cta = false,
   ...prop
 }) => {
   const dispatch = useAppDispatch();
@@ -74,19 +77,22 @@ const ChatGroup: FC<IGroup> = ({
     >
       <StyledChatGroupContent>
         <StyledWrapperTop>
-          <StyledAdminProfile>
-            <StyledAdminProfileImage
-              src={admin_avatar_url}
-              alt="admin-profile"
-              fill={true}
-            />
-          </StyledAdminProfile>
-          <StyledUserDetails>
-            <StyledGroupName>{group_name}</StyledGroupName>
-            <StyledGroupCreationDate>
-              12 min, 23 Nov 2023
-            </StyledGroupCreationDate>
-          </StyledUserDetails>
+          <StyledLeftWrapper>
+            <StyledAdminProfile>
+              <StyledAdminProfileImage
+                src={admin_avatar_url}
+                alt="admin-profile"
+                fill={true}
+              />
+            </StyledAdminProfile>
+            <StyledUserDetails>
+              <StyledGroupName>{group_name}</StyledGroupName>
+              <StyledGroupCreationDate>
+                12 min, 23 Nov 2023
+              </StyledGroupCreationDate>
+            </StyledUserDetails>
+          </StyledLeftWrapper>
+          {show_follow_cta && <StyledFollowCta>Follow</StyledFollowCta>}
         </StyledWrapperTop>
         <StyledDivider />
         <StyledWrapperBottom>

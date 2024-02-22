@@ -51,9 +51,10 @@ const StyledChatInputWrapper = styled.div`
   position: relative;
 `;
 
-const StyledGroupSuggestionWrapper = styled.div`
-  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
-  border-radius: 25px;
+const StyledGroupSuggestionContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 `;
 
 const StyledNotificationContainer = styled.div`
@@ -82,7 +83,7 @@ export {
   StyledChatMainContentContainer,
   StyledMessageWrapper,
   StyledChatInputWrapper,
-  StyledGroupSuggestionWrapper,
+  StyledGroupSuggestionContainer,
   StyledNotificationContainer,
   StyledNotificationHeading,
 };

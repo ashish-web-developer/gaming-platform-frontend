@@ -1,3 +1,4 @@
+import { RootState } from "@/store/rootReducer";
 type InitialState = {
   showEmoji: boolean;
   mode: "dark" | "light";

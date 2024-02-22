@@ -17,6 +17,8 @@ import type {
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
   IGetGroupResponse,
+  IGetGroupRecommendationResponse,
+  IGetGroupRecommendationPayload,
   ISendMessagePayload,
   ISendMessageResponse,
 } from "@/types/store/slice/chat";
@@ -153,17 +155,42 @@ export const getGroupsApi = createAsyncThunk<
   IGetGroupResponse,
   undefined,
   ThunkApiConfig
->("api/chat/get-group", async (_, { rejectWithValue }) => {
+>("api/chat/get-group", async (_, { rejectWithValue, dispatch }) => {
   try {
-    const response: AxiosResponse<{
-      success: boolean;
-      groups: IGroup[];
-    }> = await Axios.post("/chat/get-group");
+    const response: AxiosResponse<IGetGroupResponse> = await Axios.post(
+      "/chat/get-group"
+    );
+    dispatch(
+      getGroupRecommendationApi({
+        skip_id: response.data.groups.map((group) => group.id),
+      })
+    );
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error?.response?.data);
   }
 });
+
+export const getGroupRecommendationApi = createAsyncThunk<
+  IGetGroupRecommendationResponse,
+  IGetGroupRecommendationPayload,
+  ThunkApiConfig
+>(
+  "api/chat/group-recommendation",
+  async ({ skip_id }, { getState, rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<IGetGroupRecommendationResponse> =
+        await Axios.post("/chat/group-recommendation", null, {
+          params: {
+            skip_id,
+          },
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 
 export const acceptInvitationApi = createAsyncThunk<
   IAcceptInvitationApiResponse,
@@ -226,6 +253,7 @@ const initialState: IChatInitialState = {
   },
   default_users: [],
   default_groups: [],
+  recommended_groups: [],
   active_user: null,
   active_group: null,
   active_conversation: [],
@@ -412,6 +440,9 @@ const chatSlice = createSlice({
     builder.addCase(getGroupsApi.fulfilled, (state, action) => {
       state.default_groups = action.payload.groups;
     });
+    builder.addCase(getGroupRecommendationApi.fulfilled, (state, action) => {
+      state.recommended_groups = action.payload.groups;
+    });
     builder.addCase(fetchGroupMessagesApi.fulfilled, (state, action) => {
       state.active_conversation = action.payload.conversation;
     });
@@ -442,6 +473,9 @@ export const show_memory_game_snackbar = (state: RootState) =>
   state.chat.game_snackbar.show_memory_game_snackbar;
 export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
 export const active_group = (state: RootState) => state.chat.active_group;
+export const recommended_groups = (state: RootState) =>
+  state.chat.recommended_groups;
+
 export const {
   resetChat,
   updateSearchInputValue,

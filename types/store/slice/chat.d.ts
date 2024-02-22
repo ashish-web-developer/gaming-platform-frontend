@@ -60,6 +60,7 @@ type IChatInitialState = {
   };
   default_users: IUsersWithConversation[];
   default_groups: IGroup[];
+  recommended_groups: IGroup[];
   active_user: IUsersWithConversation | null;
   active_group: IGroup | null;
   active_conversation: IConversation[];
@@ -124,6 +125,11 @@ type IGetGroupResponse = IBaseResponse & {
   groups: IGroup[];
 };
 
+type IGetGroupRecommendationResponse = IGetGroupResponse;
+type IGetGroupRecommendationPayload = {
+  skip_id: number[];
+};
+
 /**
  * ==== SEND MESSAGE API =====
  */
@@ -152,6 +158,8 @@ export {
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
   IGetGroupResponse,
+  IGetGroupRecommendationResponse,
+  IGetGroupRecommendationPayload,
   ISendMessagePayload,
   ISendMessageResponse,
 };

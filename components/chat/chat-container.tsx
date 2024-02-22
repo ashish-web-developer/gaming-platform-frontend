@@ -15,7 +15,7 @@ import {
   StyledMessageWrapper,
   StyledChatInputWrapper,
   StyledNotificationContainer,
-  StyledGroupSuggestionWrapper,
+  StyledGroupSuggestionContainer,
   StyledNotificationHeading,
 } from "@/styles/components/chat/chat-container.style";
 
@@ -25,6 +25,7 @@ import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 import ChatInput from "@/components/chat/chat-input/chat-input";
 import InvitationCard from "@/components/common/invitation-card";
+import GroupSuggestion from "@/components/chat/group-suggestion/group-suggestion";
 
 // theme
 import { useTheme } from "styled-components";
@@ -126,14 +127,6 @@ const ChatContainer: FC = () => {
             <StyledChatInputWrapper>
               <ChatInput />
             </StyledChatInputWrapper>
-            {/* <StyledChatMainContent>
-              <StyledMessageContainer>
-                <ChatMessageContainer />
-              </StyledMessageContainer>
-              <StyledMessageInputContainer>
-                <ChatInput />
-              </StyledMessageInputContainer>
-            </StyledChatMainContent> */}
           </StyledChatMainContentContainer>
           {/* {_show_memory_game_snackbar && (
             <StyledNotificationContainer>
@@ -143,7 +136,9 @@ const ChatContainer: FC = () => {
               </StyledNotificationHeading>
             </StyledNotificationContainer>
           )} */}
-          <StyledGroupSuggestionWrapper></StyledGroupSuggestionWrapper>
+          <StyledGroupSuggestionContainer>
+            <GroupSuggestion />
+          </StyledGroupSuggestionContainer>
         </StyledChatMainContainer>
       </StyledChatContainer>
     </StyledPage>
