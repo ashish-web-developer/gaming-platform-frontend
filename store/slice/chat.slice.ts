@@ -18,7 +18,6 @@ import type {
   IAcceptInvitationApiResponse,
   IGetGroupResponse,
   IGetGroupRecommendationResponse,
-  IGetGroupRecommendationPayload,
   ISendMessagePayload,
   ISendMessageResponse,
 } from "@/types/store/slice/chat";
@@ -160,11 +159,6 @@ export const getGroupsApi = createAsyncThunk<
     const response: AxiosResponse<IGetGroupResponse> = await Axios.post(
       "/chat/get-group"
     );
-    dispatch(
-      getGroupRecommendationApi({
-        skip_id: response.data.groups.map((group) => group.id),
-      })
-    );
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error?.response?.data);
@@ -173,24 +167,17 @@ export const getGroupsApi = createAsyncThunk<
 
 export const getGroupRecommendationApi = createAsyncThunk<
   IGetGroupRecommendationResponse,
-  IGetGroupRecommendationPayload,
+  undefined,
   ThunkApiConfig
->(
-  "api/chat/group-recommendation",
-  async ({ skip_id }, { getState, rejectWithValue }) => {
-    try {
-      const response: AxiosResponse<IGetGroupRecommendationResponse> =
-        await Axios.post("/chat/group-recommendation", null, {
-          params: {
-            skip_id,
-          },
-        });
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
-    }
+>("api/chat/group-recommendation", async (_, { getState, rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<IGetGroupRecommendationResponse> =
+      await Axios.get("/chat/group-recommendation");
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
   }
-);
+});
 
 export const acceptInvitationApi = createAsyncThunk<
   IAcceptInvitationApiResponse,
@@ -260,7 +247,6 @@ const initialState: IChatInitialState = {
   send_message: {
     is_request_pending: false,
   },
-  show_emoji: false,
   game_snackbar: {
     show_memory_game_snackbar: false,
   },
@@ -307,9 +293,6 @@ const chatSlice = createSlice({
       action: PayloadAction<IUsersWithConversation | null>
     ) => {
       state.active_user = action.payload;
-    },
-    updateShowEmoji: (state, action: PayloadAction<boolean>) => {
-      state.show_emoji = action.payload;
     },
     updateActiveUserConversation: (
       state,
@@ -466,7 +449,6 @@ export const active_conversation = (state: RootState) =>
   state.chat.active_conversation;
 export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
-export const show_emoji = (state: RootState) => state.chat.show_emoji;
 
 export const is_typing = (state: RootState) => state.chat.is_typing;
 export const show_memory_game_snackbar = (state: RootState) =>
@@ -484,7 +466,6 @@ export const {
   updateIsRequestPending,
   updateDefaultUser,
   updateActiveUser,
-  updateShowEmoji,
   updateActiveUserConversation,
   updateDefaultUserConversation,
   updateConversationView,

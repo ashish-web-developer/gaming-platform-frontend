@@ -81,6 +81,7 @@ const ChatMessage = forwardRef<
           width={40}
           height={40}
           alt="user-avatar"
+          sizes="(max-width: 1400px) 10vw"
         />
         <StyledMessage
           ref={target_ref}
@@ -106,6 +107,7 @@ const ChatMessage = forwardRef<
         width={40}
         height={40}
         alt="user-avatar"
+        sizes="(max-width: 1400px) 10vw"
       />
       <StyledMessage
         ref={target_ref}

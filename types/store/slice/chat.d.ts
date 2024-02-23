@@ -73,7 +73,6 @@ type IChatInitialState = {
   mobile: {
     show_chat: boolean;
   };
-  show_emoji: boolean;
 };
 
 type IFetchUserResponse = {
@@ -126,9 +125,6 @@ type IGetGroupResponse = IBaseResponse & {
 };
 
 type IGetGroupRecommendationResponse = IGetGroupResponse;
-type IGetGroupRecommendationPayload = {
-  skip_id: number[];
-};
 
 /**
  * ==== SEND MESSAGE API =====
@@ -159,7 +155,6 @@ export {
   IAcceptInvitationApiResponse,
   IGetGroupResponse,
   IGetGroupRecommendationResponse,
-  IGetGroupRecommendationPayload,
   ISendMessagePayload,
   ISendMessageResponse,
 };

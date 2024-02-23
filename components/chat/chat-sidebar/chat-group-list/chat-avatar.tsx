@@ -19,7 +19,12 @@ const ChatAvatar: FC<{
   const avatar_url = useAvatarUrl(user);
   return (
     <StyledAvatarWrapper $show_left_count={Boolean(left_count)}>
-      <StyledAvatarImage alt="avatar" src={avatar_url} fill={true} />
+      <StyledAvatarImage
+        sizes="(max-width: 1400px) 10vw"
+        alt="avatar"
+        src={avatar_url}
+        fill={true}
+      />
       {Boolean(left_count) && <StyledLeftCount>+{left_count}</StyledLeftCount>}
     </StyledAvatarWrapper>
   );

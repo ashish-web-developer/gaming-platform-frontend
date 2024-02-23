@@ -1,6 +1,6 @@
 import { RootState } from "@/store/rootReducer";
 type InitialState = {
-  showEmoji: boolean;
+  show_emoji: boolean;
   mode: "dark" | "light";
   show_user_profile: boolean;
   show_profile_upload_modal: boolean;

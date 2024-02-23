@@ -147,7 +147,6 @@ const UserProfileDropDown: ForwardRefRenderFunction<
           <StyledIconCta
             onClick={() => {
               dispatch(updateShowProfileUploadModal(true));
-              // dispatch(updateShowProfileDropDown(false));
             }}
             $mode={_mode}
             ref={camera_cta_ref}

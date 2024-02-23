@@ -2,10 +2,14 @@ import styled from "styled-components";
 
 const StyledEmojiContainer = styled.div`
   position: absolute;
+  bottom: 150px;
+  right: 0px;
   z-index: 2;
-  bottom: 80px;
+`;
+
+const StyledEmojiWrapper = styled.div`
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 10px;
 `;
 
-export { StyledEmojiContainer };
+export { StyledEmojiContainer, StyledEmojiWrapper };

@@ -108,13 +108,6 @@ const StyledSendCta = styled.button`
   cursor: pointer;
 `;
 
-const StyledEmojiContainer = styled.div`
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  transform: translateX(100%);
-`;
-
 export {
   StyledChatInputContainer,
   StyledChatInputWrapper,
@@ -128,5 +121,4 @@ export {
   StyledIconCta,
   StyledIconImage,
   StyledSendCta,
-  StyledEmojiContainer,
 };

@@ -43,7 +43,7 @@ export const updateProfileApi = createAsyncThunk<
 );
 
 const initialState: InitialState = {
-  showEmoji: false,
+  show_emoji: false,
   mode: "dark",
   show_user_profile: false,
   show_profile_upload_modal: false,
@@ -55,7 +55,7 @@ export const commonSlice = createSlice({
   initialState,
   reducers: {
     updateShowEmoji: (state, action: PayloadAction<boolean>) => {
-      state.showEmoji = action.payload;
+      state.show_emoji = action.payload;
     },
     updateMode: (state, action: PayloadAction<"dark" | "light">) => {
       state.mode = action.payload;
@@ -76,7 +76,7 @@ export const commonSlice = createSlice({
 });
 
 export default commonSlice.reducer;
-export const showEmoji = (state: RootState) => state.common.showEmoji;
+export const show_emoji = (state: RootState) => state.common.show_emoji;
 export const mode = (state: RootState) => state.common.mode;
 export const show_user_profile = (state: RootState) =>
   state.common.show_user_profile;

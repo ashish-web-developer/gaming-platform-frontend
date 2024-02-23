@@ -41,6 +41,11 @@ const StyledName = styled.h3`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   margin-top: 1rem;
   color: ${({ theme }) => theme.palette.primary.dark};
+  white-space: nowrap;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 `;
 
 const StyledUserName = styled.span`

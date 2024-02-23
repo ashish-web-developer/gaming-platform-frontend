@@ -5,10 +5,8 @@ import type { RefObject } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
-  show_emoji,
   active_user,
   // action
-  updateShowEmoji,
   // api
   fetchMessages,
   fetchDefaultUser,
@@ -25,6 +23,7 @@ const useDefault = () => {
   useEffect(() => {
     dispatch(fetchDefaultUser());
     dispatch(getGroupsApi());
+    dispatch(getGroupRecommendationApi());
   }, []);
 };
 

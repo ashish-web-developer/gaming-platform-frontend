@@ -7,23 +7,29 @@ import data from "@emoji-mart/data";
 import Picker from "@emoji-mart/react";
 
 // styled components
-import { StyledEmojiContainer } from "@/styles/components/common/emoji-picker.style";
+import {
+  StyledEmojiContainer,
+  StyledEmojiWrapper,
+} from "@/styles/components/common/emoji-picker.style";
 
 // redux
-import { useAppSelector, useAppDispatch} from "@/hooks/redux.hook";
-import { updateShowEmoji } from "@/store/slice/chat.slice";
-import { mode } from "@/store/slice/common.slice";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { mode, show_emoji, updateShowEmoji } from "@/store/slice/common.slice";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
 
 interface Props {
-  emoji_cta_ref:RefObject<HTMLButtonElement>
+  emoji_cta_ref: RefObject<HTMLButtonElement>;
 }
 
-const EmojiPicker: ForwardRefRenderFunction<HTMLInputElement,Props> = ({emoji_cta_ref},input_ref) => {
+const EmojiPicker: ForwardRefRenderFunction<HTMLInputElement, Props> = (
+  { emoji_cta_ref },
+  input_ref
+) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
+  const _show_emoji = useAppSelector(show_emoji);
   const emoji_container_ref = useRef<HTMLDivElement>(null);
 
   useOutsideClickHandler({
@@ -35,15 +41,19 @@ const EmojiPicker: ForwardRefRenderFunction<HTMLInputElement,Props> = ({emoji_ct
   });
   return (
     <StyledEmojiContainer ref={emoji_container_ref}>
-      <Picker
-        theme={_mode}
-        data={data}
-        onEmojiSelect={(data: any) => {
-          if (typeof input_ref !== "function" && input_ref?.current) {
-            input_ref.current.value += data.native;
-          }
-        }}
-      />
+      {_show_emoji && (
+        <StyledEmojiWrapper>
+          <Picker
+            theme={_mode}
+            data={data}
+            onEmojiSelect={(data: any) => {
+              if (typeof input_ref !== "function" && input_ref?.current) {
+                input_ref.current.value += data.native;
+              }
+            }}
+          />
+        </StyledEmojiWrapper>
+      )}
     </StyledEmojiContainer>
   );
 };
