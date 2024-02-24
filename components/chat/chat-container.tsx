@@ -71,7 +71,7 @@ const ChatContainer: FC = () => {
   useFirstUserConversation();
   usePrivateChannel(`chat.${_user.id}`, [
     {
-      event: "ChatEvent",
+      event: "Chat.ChatEvent",
       callback: (data: {
         user: IUsersWithConversation;
         conversation: IConversation;
@@ -84,7 +84,7 @@ const ChatContainer: FC = () => {
       },
     },
     {
-      event: "ChatViewEvent",
+      event: "Chat.ChatViewEvent",
       callback: (data: {
         user: IUsersWithConversation;
         conversation: IConversation;
