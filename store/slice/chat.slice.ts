@@ -329,6 +329,20 @@ const chatSlice = createSlice({
         });
       }
     },
+    updateDefaultGroupLatestConversation: (
+      state,
+      action: PayloadAction<IConversation>
+    ) => {
+      state.default_groups = state.default_groups.map((group) => {
+        if (group.id == action.payload.group_id) {
+          return {
+            ...group,
+            latest_conversation: action.payload,
+          };
+        }
+        return group;
+      });
+    },
     updateConversationView: (state, action: PayloadAction<IConversation>) => {
       const updatedConversation = action.payload;
       const updatedConversations = state.active_conversation.map(
@@ -382,17 +396,29 @@ const chatSlice = createSlice({
     builder.addCase(sendMessageApi.fulfilled, (state, action) => {
       state.active_conversation.push(action.payload.conversation);
       state.send_message.is_request_pending = false;
-      state.default_users = state.default_users.map((user) => {
-        if (user.id == action.payload.conversation.receiver_id) {
-          {
+      if (action.payload.conversation.group_id) {
+        state.default_groups = state.default_groups.map((group) => {
+          if (group.id == action.payload.conversation.group_id) {
             return {
-              ...user,
+              ...group,
               latest_conversation: action.payload.conversation,
             };
           }
-        }
-        return user;
-      });
+          return group;
+        });
+      } else {
+        state.default_users = state.default_users.map((user) => {
+          if (user.id == action.payload.conversation.receiver_id) {
+            {
+              return {
+                ...user,
+                latest_conversation: action.payload.conversation,
+              };
+            }
+          }
+          return user;
+        });
+      }
     });
     builder.addCase(sendMessageApi.pending, (state, action) => {
       state.send_message.is_request_pending = true;
@@ -468,6 +494,7 @@ export const {
   updateActiveUser,
   updateActiveUserConversation,
   updateDefaultUserConversation,
+  updateDefaultGroupLatestConversation,
   updateConversationView,
   updateIsTyping,
   updateShowMemoryGameSnackbar,

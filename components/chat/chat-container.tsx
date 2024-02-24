@@ -41,6 +41,7 @@ import {
   // action
   updateActiveUserConversation,
   updateDefaultUserConversation,
+  updateDefaultGroupLatestConversation,
   updateConversationView,
   updateShowMemoryGameSnackbar,
 } from "@/store/slice/chat.slice";
@@ -77,6 +78,7 @@ const ChatContainer: FC = () => {
       }) => {
         dispatch(updateDefaultUserConversation(data));
         if (data.user.id == _active_user?.id) {
+          console.log("value of conversation", data.conversation);
           dispatch(updateActiveUserConversation(data.conversation));
         }
       },
@@ -130,6 +132,7 @@ const ChatContainer: FC = () => {
         callback: (data: { conversation: IConversation }) => {
           if (data.conversation.sender_id !== _user.id) {
             dispatch(updateActiveUserConversation(data.conversation));
+            dispatch(updateDefaultGroupLatestConversation(data.conversation));
           }
         },
       },
@@ -147,9 +150,11 @@ const ChatContainer: FC = () => {
             <StyledMessageWrapper>
               <ChatMessageContainer />
             </StyledMessageWrapper>
-            <StyledChatInputWrapper>
-              <ChatInput />
-            </StyledChatInputWrapper>
+            {(_active_group || _active_user) && (
+              <StyledChatInputWrapper>
+                <ChatInput />
+              </StyledChatInputWrapper>
+            )}
           </StyledChatMainContentContainer>
           {/* {_show_memory_game_snackbar && (
             <StyledNotificationContainer>
