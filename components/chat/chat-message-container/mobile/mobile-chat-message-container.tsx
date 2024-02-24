@@ -34,7 +34,6 @@ const MobileChatMessageContainer: FC = () => {
           key={conversation.id}
           conversation={conversation}
           user={_user}
-          active_user={_active_user}
           ref={root_ref}
         />
       ))}

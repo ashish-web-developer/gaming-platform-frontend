@@ -14,7 +14,6 @@ import ChatGroup from "@/components/chat/chat-sidebar/chat-group-list/chat-group
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { default_groups } from "@/store/slice/chat.slice";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const ChatGroupList: FC = () => {
   const _default_groups = useAppSelector(default_groups);
@@ -23,7 +22,13 @@ const ChatGroupList: FC = () => {
       <StyledGroupTag>Groups Chat</StyledGroupTag>
       <StyledGroupListWrapper>
         {_default_groups.map((group, index) => {
-          return <ChatGroup key={`chat-group-${index}`} {...group} />;
+          return (
+            <ChatGroup
+              is_clickable={true}
+              key={`chat-group-${index}`}
+              {...group}
+            />
+          );
         })}
       </StyledGroupListWrapper>
     </StyledChatGroupListWrapper>

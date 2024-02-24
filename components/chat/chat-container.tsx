@@ -5,6 +5,7 @@ import type { Theme } from "@/theme/chat.theme";
 import type {
   IUsersWithConversation,
   IConversation,
+  IGroup,
 } from "@/types/store/slice/chat";
 // styled components
 import {
@@ -33,8 +34,11 @@ import { useTheme } from "styled-components";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
+  // state
   active_user,
+  active_group,
   show_memory_game_snackbar,
+  // action
   updateActiveUserConversation,
   updateDefaultUserConversation,
   updateConversationView,
@@ -49,7 +53,7 @@ import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useDefault, useFirstUserConversation } from "@/hooks/chat/chat.hook";
-import { usePrivateChannel } from "@/hooks/pusher.hook";
+import { usePrivateChannel, usePresenceChannel } from "@/hooks/pusher.hook";
 import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
 
 const ChatContainer: FC = () => {
@@ -59,6 +63,7 @@ const ChatContainer: FC = () => {
   const _mode = useAppSelector(mode);
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
+  const _active_group = useAppSelector(active_group);
   const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   useDefault();
@@ -113,6 +118,24 @@ const ChatContainer: FC = () => {
       },
     },
   ]);
+
+  usePresenceChannel<IGroup | null>({
+    channel: `group-chat.${_active_group?.id}`,
+    handler: (user_ids, type, active_group) => {
+      console.log("user connected", user_ids, type);
+    },
+    events: [
+      {
+        event: "Chat.GroupChatEvent",
+        callback: (data: { conversation: IConversation }) => {
+          if (data.conversation.sender_id !== _user.id) {
+            dispatch(updateActiveUserConversation(data.conversation));
+          }
+        },
+      },
+    ],
+    dependency: _active_group,
+  });
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
       <div id="upload-profile-modal-container"></div>

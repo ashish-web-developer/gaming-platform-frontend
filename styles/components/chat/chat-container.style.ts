@@ -23,7 +23,7 @@ const StyledChatContainer = styled.div`
 const StyledChatMainContainer = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: 320px 1fr 320px;
+  grid-template-columns: 320px minmax(465px, 1fr) 320px;
   height: calc(100vh - 200px);
   gap: 40px;
 `;

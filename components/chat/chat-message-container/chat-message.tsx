@@ -32,16 +32,17 @@ const ChatMessage = forwardRef<
   {
     conversation: IConversation;
     user: User;
-    active_user: IUsersWithConversation;
   }
->(({ conversation, user, active_user }, root_ref) => {
+>(({ conversation, user }, root_ref) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const is_mobile = useIsMobile();
   const target_ref = useRef<HTMLDivElement>(null);
   const created_at = readableFormatDate(conversation.created_at);
   const user_avatar_url = useAvatarUrl(user as IUsersWithConversation);
-  const active_user_avatar_url = useAvatarUrl(active_user);
+  const sender_avatar_url = useAvatarUrl(
+    conversation.sender as IUsersWithConversation
+  );
   const intersection_observer_options = useMemo(() => {
     return is_mobile
       ? {
@@ -103,7 +104,7 @@ const ChatMessage = forwardRef<
       <StyledUserProfile
         $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
         $order={1}
-        src={active_user_avatar_url}
+        src={sender_avatar_url}
         width={40}
         height={40}
         alt="user-avatar"

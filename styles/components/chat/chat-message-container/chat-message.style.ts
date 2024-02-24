@@ -15,6 +15,7 @@ const StyledUserProfile = styled(Image)<{
   border-radius: 8px;
   border: 2px solid ${(props) => props.$border_color};
   order: ${(props) => props.$order};
+  object-fit: cover;
 `;
 
 const StyledMessage = styled.div<{

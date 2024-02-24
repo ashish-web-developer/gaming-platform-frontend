@@ -39,7 +39,9 @@ import { mode } from "@/store/slice/common.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
-const ChatGroup: FC<IGroup & { show_follow_cta?: boolean }> = ({
+const ChatGroup: FC<
+  IGroup & { show_follow_cta?: boolean; is_clickable?: boolean }
+> = ({
   group_color,
   admin,
   group_name,
@@ -47,6 +49,7 @@ const ChatGroup: FC<IGroup & { show_follow_cta?: boolean }> = ({
   id,
   latest_conversation,
   show_follow_cta = false,
+  is_clickable = false,
   ...prop
 }) => {
   const dispatch = useAppDispatch();
@@ -57,19 +60,21 @@ const ChatGroup: FC<IGroup & { show_follow_cta?: boolean }> = ({
   return (
     <StyledChatGroupWrapper
       onClick={() => {
-        dispatch(
-          updateActiveGroup({
-            group_color,
-            admin,
-            group_name,
-            user_group,
-            id,
-            latest_conversation,
-            ...prop,
-          })
-        );
-        dispatch(updateActiveUser(null));
-        dispatch(fetchGroupMessagesApi());
+        if (is_clickable) {
+          dispatch(
+            updateActiveGroup({
+              group_color,
+              admin,
+              group_name,
+              user_group,
+              id,
+              latest_conversation,
+              ...prop,
+            })
+          );
+          dispatch(updateActiveUser(null));
+          dispatch(fetchGroupMessagesApi());
+        }
       }}
       $mode={_mode}
       $is_active={is_active}

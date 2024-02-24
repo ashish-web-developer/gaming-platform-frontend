@@ -113,41 +113,52 @@ function usePrivateChannel(
   }, [echo, _user, _active_user]);
 }
 
-function usePresenceChannel(
-  channel: string, // channel to which you want to connect
+function usePresenceChannel<Type>({
+  channel,
+  handler,
+  events,
+  dependency,
+}: {
+  channel: string; // channel to which you want to connect
+  handler: (
+    user_ids: User_ids,
+    type: "here" | "joining" | "leaving",
+    dependency: Type
+  ) => void;
   events: {
     event: string;
     callback: (data: any) => void;
-  }[]
-) {
+  }[];
+  dependency: Type;
+}) {
   const echo = useEcho();
   const dispatch = useAppDispatch();
   const _gaming_user = useAppSelector(gaming_user);
   useEffect(() => {
-    const handlePresence = (
-      user_ids: User_ids,
-      event: "here" | "joining" | "leaving"
-    ) => {
-      const isUserInChannel = Array.isArray(user_ids)
-        ? user_ids.some((user_id) => user_id.id === _gaming_user?.id)
-        : user_ids.id === _gaming_user?.id;
-      if (event == "leaving" && isUserInChannel) {
-        dispatch(updateIsGamingUserLeaving(isUserInChannel));
-        dispatch(updateIsGamingUserIn(!isUserInChannel));
-        return;
-      }
-      dispatch(updateIsGamingUserIn(isUserInChannel));
-    };
+    // const handlePresence = (
+    //   user_ids: User_ids,
+    //   event: "here" | "joining" | "leaving"
+    // ) => {
+    //   const isUserInChannel = Array.isArray(user_ids)
+    //     ? user_ids.some((user_id) => user_id.id === _gaming_user?.id)
+    //     : user_ids.id === _gaming_user?.id;
+    //   if (event == "leaving" && isUserInChannel) {
+    //     dispatch(updateIsGamingUserLeaving(isUserInChannel));
+    //     dispatch(updateIsGamingUserIn(!isUserInChannel));
+    //     return;
+    //   }
+    //   dispatch(updateIsGamingUserIn(isUserInChannel));
+    // };
     const subscription = echo
       ?.join(channel)
       .here((user_ids: User_ids) => {
-        handlePresence(user_ids, "here");
+        handler(user_ids, "here", dependency);
       })
       .joining((user_ids: User_ids) => {
-        handlePresence(user_ids, "joining");
+        handler(user_ids, "joining", dependency);
       })
       .leaving((user_ids: User_ids) => {
-        handlePresence(user_ids, "leaving");
+        handler(user_ids, "leaving", dependency);
       });
     events.forEach(({ event, callback }) => {
       subscription?.listen(event, callback);
@@ -158,7 +169,7 @@ function usePresenceChannel(
       });
       echo?.leave(channel);
     };
-  }, [echo, _gaming_user]);
+  }, [echo, dependency]);
 }
 
 export { useEcho, usePrivateChannel, usePresenceChannel };
