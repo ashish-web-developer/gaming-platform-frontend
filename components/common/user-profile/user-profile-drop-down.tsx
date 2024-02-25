@@ -109,12 +109,13 @@ const LogOutIcon: FC<{
 
 interface IProps {
   chevron_cta_ref: RefObject<HTMLButtonElement>;
+  group_cta_ref: RefObject<HTMLButtonElement>;
 }
 
 const UserProfileDropDown: ForwardRefRenderFunction<
   HTMLButtonElement,
   IProps
-> = ({ chevron_cta_ref }, camera_cta_ref) => {
+> = ({ chevron_cta_ref, group_cta_ref }, camera_cta_ref) => {
   const theme = useTheme() as Theme;
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -163,10 +164,10 @@ const UserProfileDropDown: ForwardRefRenderFunction<
 
           <StyledIconCta
             onClick={() => {
-              dispatch(updateShowProfileDropDown(false));
               dispatch(updateShowCreateGroupDrownDown(true));
             }}
             $mode={_mode}
+            ref={group_cta_ref}
           >
             <GroupIcon
               size={20}

@@ -9,9 +9,6 @@ import {
   StyledInputIcon,
 } from "@/styles/components/chat/chat-sidebar/chat-search-input.style";
 
-// styled theme
-import { useTheme } from "styled-components";
-
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {

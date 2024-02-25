@@ -63,7 +63,7 @@ const StyledChatInput = styled.input`
   background: #fff;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.875rem;
-  padding-left: 50px;
+  padding: 0px 50px;
   &::placeholder {
     color: #000;
   }

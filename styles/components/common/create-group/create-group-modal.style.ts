@@ -3,7 +3,7 @@ import styled from "styled-components";
 const StyledCreateGroupModalWrapper = styled.div`
   position: absolute;
   width: 300px;
-  height: 309px;
+  height: auto;
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 25px;
   background: ${({ theme }) => theme.palette.primary.main};
@@ -11,6 +11,7 @@ const StyledCreateGroupModalWrapper = styled.div`
   top: calc(100% + 1rem);
   right: 0px;
   padding: 1.125rem;
+  z-index: 2;
 `;
 
 const StyledHeader = styled.div`
@@ -40,6 +41,50 @@ const StyledIconButton = styled.button`
   cursor: pointer;
 `;
 
+const StyledInputGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  gap: 12px;
+`;
+
+const StyledLabel = styled.label`
+  color: ${({ theme }) => theme.palette.primary.dark};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 0.875rem;
+`;
+
+const StyledInput = styled.input`
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  background: rgba(162, 242, 99, 0.1);
+  padding: 0px 12px;
+  color: ${({ theme }) => theme.palette.primary.dark};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 0.75rem;
+  &::placeholder {
+    color: #79a655;
+  }
+`;
+
+const StyledBottomCtaWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+`;
+
+const StyledCreateCta = styled.button`
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 8px;
+  padding: 6px 20px;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 0.875rem;
+  background: linear-gradient(95deg, #ffe666 8.66%, #fb3 95.1%);
+`;
+
 export {
   StyledCreateGroupModalWrapper,
   StyledHeader,
@@ -47,4 +92,9 @@ export {
   StyledHeaderMainText,
   StyledHeaderSubtitle,
   StyledIconButton,
+  StyledInputGroup,
+  StyledLabel,
+  StyledInput,
+  StyledBottomCtaWrapper,
+  StyledCreateCta,
 };

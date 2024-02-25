@@ -55,6 +55,7 @@ const ChatHeader: FC = () => {
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   const chevron_cta_ref = useRef<HTMLButtonElement>(null);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
+  const group_cta_ref = useRef<HTMLButtonElement>(null);
 
   return (
     <>
@@ -83,9 +84,12 @@ const ChatHeader: FC = () => {
               <UserProfileDropDown
                 ref={camera_cta_ref}
                 chevron_cta_ref={chevron_cta_ref}
+                group_cta_ref={group_cta_ref}
               />
             )}
-            {_show_create_group_drop_down && <CreateGroupModal />}
+            {_show_create_group_drop_down && (
+              <CreateGroupModal ref={group_cta_ref} />
+            )}
             <StyledUserProfileImage
               $mode={_mode}
               src={user_avatar_url}

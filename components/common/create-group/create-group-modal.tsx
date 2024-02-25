@@ -1,5 +1,6 @@
+import { useId, useRef, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { ForwardRefRenderFunction, FC } from "react";
 import type { Theme } from "@/theme/chat.theme";
 
 // styled components
@@ -10,7 +11,15 @@ import {
   StyledHeaderMainText,
   StyledHeaderSubtitle,
   StyledIconButton,
+  StyledInputGroup,
+  StyledLabel,
+  StyledInput,
+  StyledBottomCtaWrapper,
+  StyledCreateCta,
 } from "@/styles/components/common/create-group/create-group-modal.style";
+
+// local components
+import PlayerSearch from "@/components/common/create-group/player-search";
 
 // theme
 import { useTheme } from "styled-components";
@@ -18,6 +27,9 @@ import { useTheme } from "styled-components";
 // redux
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { updateShowCreateGroupDrownDown } from "@/store/slice/common.slice";
+
+// hooks
+import { useOutsideClickHandler } from "@/hooks/common.hook";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -36,11 +48,26 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
-const CreateGroupModal: FC = () => {
+const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
+  {},
+  group_cta_ref
+) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
+  const group_input_id = useId();
+  const search_input_id = useId();
+  const container_ref = useRef<HTMLDivElement>(null);
+
+  useOutsideClickHandler({
+    modal_ref: container_ref,
+    cta_ref: typeof group_cta_ref !== "function" ? group_cta_ref : null,
+    handler: () => {
+      dispatch(updateShowCreateGroupDrownDown(false));
+    },
+  });
+
   return (
-    <StyledCreateGroupModalWrapper>
+    <StyledCreateGroupModalWrapper ref={container_ref}>
       <StyledHeader>
         <StyledTextWrapper>
           <StyledHeaderMainText>Create Group</StyledHeaderMainText>
@@ -54,8 +81,27 @@ const CreateGroupModal: FC = () => {
           <CloseIcon color={theme.palette.primary.dark} size={16} />
         </StyledIconButton>
       </StyledHeader>
+      <StyledInputGroup>
+        <StyledLabel htmlFor={`group-${group_input_id}`}>
+          Group Name
+        </StyledLabel>
+        <StyledInput placeholder="Group Name" id={`group-${group_input_id}`} />
+      </StyledInputGroup>
+      <StyledInputGroup>
+        <StyledLabel htmlFor={`search-${search_input_id}`}>
+          Send Invitation
+        </StyledLabel>
+        <StyledInput
+          placeholder="Search Player"
+          id={`search-${search_input_id}`}
+        />
+      </StyledInputGroup>
+      <StyledBottomCtaWrapper>
+        <StyledCreateCta>Create</StyledCreateCta>
+      </StyledBottomCtaWrapper>
+      <PlayerSearch />
     </StyledCreateGroupModalWrapper>
   );
 };
 
-export default CreateGroupModal;
+export default forwardRef(CreateGroupModal);
