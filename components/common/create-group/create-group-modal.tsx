@@ -25,8 +25,11 @@ import PlayerSearch from "@/components/common/create-group/player-search";
 import { useTheme } from "styled-components";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux.hook";
-import { updateShowCreateGroupDrownDown } from "@/store/slice/common.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import {
+  mode,
+  updateShowCreateGroupDrownDown,
+} from "@/store/slice/common.slice";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -54,6 +57,7 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
 ) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
+  const _mode = useAppSelector(mode);
   const group_input_id = useId();
   const search_input_id = useId();
   const container_ref = useRef<HTMLDivElement>(null);
@@ -85,13 +89,18 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
         <StyledLabel htmlFor={`group-${group_input_id}`}>
           Group Name
         </StyledLabel>
-        <StyledInput placeholder="Group Name" id={`group-${group_input_id}`} />
+        <StyledInput
+          $mode={_mode}
+          placeholder="Group Name"
+          id={`group-${group_input_id}`}
+        />
       </StyledInputGroup>
       <StyledInputGroup>
         <StyledLabel htmlFor={`search-${search_input_id}`}>
           Send Invitation
         </StyledLabel>
         <StyledInput
+          $mode={_mode}
           placeholder="Search Player"
           id={`search-${search_input_id}`}
         />

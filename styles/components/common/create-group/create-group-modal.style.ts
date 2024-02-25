@@ -54,18 +54,24 @@ const StyledLabel = styled.label`
   font-size: 0.875rem;
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{
+  $mode: "light" | "dark";
+}>`
   height: 40px;
   width: 100%;
   border-radius: 8px;
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
-  background: rgba(162, 242, 99, 0.1);
+  background: ${(props) =>
+    props.$mode == "light"
+      ? "rgba(238, 150, 75, 0.1)"
+      : "rgba(162, 242, 99, 0.1)"};
   padding: 0px 12px;
   color: ${({ theme }) => theme.palette.primary.dark};
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.75rem;
   &::placeholder {
-    color: #79a655;
+    color: ${(props) =>
+      props.$mode == "dark" ? "rgba(162, 242, 99, 0.6)" : "rgba(0, 0, 0, 0.6)"};
   }
 `;
 
