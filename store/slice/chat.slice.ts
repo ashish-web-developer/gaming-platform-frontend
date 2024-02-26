@@ -8,6 +8,7 @@ import type {
   IUsersWithConversation,
   IGroup,
   IFetchUserResponse,
+  IFetchUserPayload,
   IFetchDefaultUserResponse,
   IFetchMessagesResponse,
   IUpdateViewRequest,
@@ -28,29 +29,34 @@ import type { AxiosResponse } from "axios";
 import { Axios } from "@/helpers/axios";
 
 // api calls
-export const fetchUser = createAsyncThunk<
-  IFetchUserResponse,
-  undefined,
+export const fetchUserApi = createAsyncThunk<
+  IFetchUserResponse & {
+    fetch_type: "chat" | "group";
+  },
+  IFetchUserPayload,
   { state: RootState }
->("api/chat/search-user", async (_, { getState, rejectWithValue }) => {
-  try {
-    const state = getState();
-    const response: AxiosResponse<IFetchUserResponse> = await Axios.post(
-      "/chat/search-user",
-      null,
-      {
-        params: {
-          query: state.chat.search_input_value,
-          page: state.chat.fetch_user.page,
-          skip_id: state.chat.default_users.map(({ id }) => id),
-        },
-      }
-    );
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
+>(
+  "api/chat/search-user",
+  async ({ fetch_type, query }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IFetchUserResponse> = await Axios.post(
+        "/chat/search-user",
+        null,
+        {
+          params: {
+            query,
+            page: state.chat.fetch_user.page,
+            skip_id: state.chat.default_users.map(({ id }) => id),
+          },
+        }
+      );
+      return { fetch_type, ...response.data };
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
   }
-});
+);
 
 export const fetchDefaultUser = createAsyncThunk<
   IFetchDefaultUserResponse,
@@ -231,11 +237,11 @@ export const sendMessageApi = createAsyncThunk<
 );
 
 const initialState: IChatInitialState = {
-  search_input_value: "",
   is_typing: false,
   fetch_user: {
     page: 1,
     fetched_user_result: [],
+    fetch_type: null,
     is_request_pending: false,
   },
   default_users: [],
@@ -260,9 +266,6 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     resetChat: () => initialState,
-    updateSearchInputValue: (state, action: PayloadAction<string>) => {
-      state.search_input_value = action.payload;
-    },
     updatePage: (state, action: PayloadAction<number>) => {
       state.fetch_user.page = action.payload;
     },
@@ -272,6 +275,7 @@ const chatSlice = createSlice({
     ) => {
       if (!action.payload.length) {
         state.fetch_user.fetched_user_result = [];
+        state.fetch_user.fetch_type = null;
       } else {
         state.fetch_user.fetched_user_result = [
           ...state.fetch_user.fetched_user_result,
@@ -373,15 +377,16 @@ const chatSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUser.fulfilled, (state, action) => {
+    builder.addCase(fetchUserApi.fulfilled, (state, action) => {
       state.fetch_user.fetched_user_result = [
         ...state.fetch_user.fetched_user_result,
         ...action.payload.user_data.data,
       ];
       state.fetch_user.page = state.fetch_user.page + 1;
       state.fetch_user.is_request_pending = false;
+      state.fetch_user.fetch_type = action.payload.fetch_type;
     });
-    builder.addCase(fetchUser.pending, (state, action) => {
+    builder.addCase(fetchUserApi.pending, (state, action) => {
       state.fetch_user.is_request_pending = true;
     });
     builder.addCase(fetchDefaultUser.fulfilled, (state, action) => {
@@ -459,11 +464,11 @@ const chatSlice = createSlice({
 });
 
 export default chatSlice.reducer;
-export const search_input_value = (state: RootState) =>
-  state.chat.search_input_value;
 export const page = (state: RootState) => state.chat.fetch_user.page;
 export const fetched_user_result = (state: RootState) =>
   state.chat.fetch_user.fetched_user_result;
+export const fetch_type = (state: RootState) =>
+  state.chat.fetch_user.fetch_type;
 export const is_request_pending = (state: RootState) =>
   state.chat.fetch_user.is_request_pending;
 export const default_users = (state: RootState) => state.chat.default_users;
@@ -486,7 +491,6 @@ export const recommended_groups = (state: RootState) =>
 
 export const {
   resetChat,
-  updateSearchInputValue,
   updatePage,
   updateFetchUserResult,
   updateIsRequestPending,

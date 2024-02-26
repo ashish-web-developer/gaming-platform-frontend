@@ -30,6 +30,15 @@ import {
   mode,
   updateShowCreateGroupDrownDown,
 } from "@/store/slice/common.slice";
+import {
+  // state
+  fetched_user_result,
+  fetch_type,
+  fetchUserApi,
+  // action
+  updateFetchUserResult,
+  updatePage,
+} from "@/store/slice/chat.slice";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -58,15 +67,20 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _mode = useAppSelector(mode);
+  const _fetched_user_result = useAppSelector(fetched_user_result);
+  const _fetch_type = useAppSelector(fetch_type);
   const group_input_id = useId();
   const search_input_id = useId();
   const container_ref = useRef<HTMLDivElement>(null);
+  const search_input_ref = useRef<HTMLInputElement>(null);
+  const timeout_ref = useRef<NodeJS.Timeout | null>(null);
 
   useOutsideClickHandler({
     modal_ref: container_ref,
     cta_ref: typeof group_cta_ref !== "function" ? group_cta_ref : null,
     handler: () => {
       dispatch(updateShowCreateGroupDrownDown(false));
+      dispatch(updateFetchUserResult([]));
     },
   });
 
@@ -103,12 +117,30 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           $mode={_mode}
           placeholder="Search Player"
           id={`search-${search_input_id}`}
+          ref={search_input_ref}
+          onChange={(event) => {
+            dispatch(updatePage(1));
+            dispatch(updateFetchUserResult([]));
+            timeout_ref.current && clearTimeout(timeout_ref.current);
+            if (event.target.value) {
+              timeout_ref.current = setTimeout(() => {
+                dispatch(
+                  fetchUserApi({
+                    fetch_type: "group",
+                    query: event.target.value,
+                  })
+                );
+              }, 800);
+            }
+          }}
         />
       </StyledInputGroup>
       <StyledBottomCtaWrapper>
         <StyledCreateCta>Create</StyledCreateCta>
       </StyledBottomCtaWrapper>
-      <PlayerSearch />
+      {Boolean(_fetched_user_result.length) && _fetch_type == "group" && (
+        <PlayerSearch ref={search_input_ref} />
+      )}
     </StyledCreateGroupModalWrapper>
   );
 };

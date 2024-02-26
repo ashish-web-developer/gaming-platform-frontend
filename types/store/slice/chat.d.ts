@@ -51,11 +51,11 @@ type IGroup = {
 };
 
 type IChatInitialState = {
-  search_input_value: string;
   is_typing: boolean;
   fetch_user: {
     is_request_pending: boolean;
     fetched_user_result: IUsersWithConversation[];
+    fetch_type: "chat" | "group" | null;
     page: number;
   };
   default_users: IUsersWithConversation[];
@@ -75,8 +75,12 @@ type IChatInitialState = {
   };
 };
 
-type IFetchUserResponse = {
-  success: boolean;
+type IFetchUserPayload = {
+  fetch_type: "chat" | "group";
+  query: string;
+};
+
+type IFetchUserResponse = IBaseResponse & {
   user_data: {
     current_page: number;
     data: Array<IUsersWithConversation>;
@@ -144,6 +148,7 @@ export {
   IUsersWithConversation,
   IGroup,
   IUserGroup,
+  IFetchUserPayload,
   IFetchUserResponse,
   IFetchDefaultUserResponse,
   IFetchMessagesResponse,

@@ -1,6 +1,6 @@
 import { useRef, forwardRef } from "react";
 // types
-import type { ForwardRefRenderFunction } from "react";
+import type { ForwardRefRenderFunction, RefObject } from "react";
 
 // styled components
 import {
@@ -13,39 +13,40 @@ import {
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
-  search_input_value,
   // actions
-  updateSearchInputValue,
   updateFetchUserResult,
   updatePage,
   // api calls
-  fetchUser,
+  fetchUserApi,
 } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 
-const ChatSearchInput: ForwardRefRenderFunction<HTMLDivElement> = (
-  props,
-  ref
-) => {
+const ChatSearchInput: ForwardRefRenderFunction<
+  HTMLInputElement,
+  {
+    search_container_ref: RefObject<HTMLDivElement>;
+  }
+> = ({ search_container_ref }, search_input_ref) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _search_input_value = useAppSelector(search_input_value);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
   return (
-    <StyledChatSearchInputContainer ref={ref}>
+    <StyledChatSearchInputContainer ref={search_container_ref}>
       <StyledChatSearchInput
         $mode={_mode}
-        value={_search_input_value}
+        ref={search_input_ref}
         onChange={(event) => {
-          dispatch(updateSearchInputValue(event.target.value));
           dispatch(updatePage(1));
           dispatch(updateFetchUserResult([]));
-          if (!event.target.value) {
-            dispatch(updateFetchUserResult([]));
-          } else {
-            timeout_ref.current && clearInterval(timeout_ref.current);
+          timeout_ref.current && clearInterval(timeout_ref.current);
+          if (event.target.value) {
             timeout_ref.current = setTimeout(() => {
-              dispatch(fetchUser());
+              dispatch(
+                fetchUserApi({
+                  fetch_type: "chat",
+                  query: event.target.value,
+                })
+              );
             }, 800);
           }
         }}

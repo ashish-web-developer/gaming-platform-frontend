@@ -13,16 +13,24 @@ import ChatGroupList from "@/components/chat/chat-sidebar/chat-group-list/chat-g
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { fetched_user_result } from "@/store/slice/chat.slice";
+import { fetched_user_result, fetch_type } from "@/store/slice/chat.slice";
 
 const ChatSidebar: FC = () => {
   const _fetched_user_result = useAppSelector(fetched_user_result);
-  const search_input_ref = useRef<HTMLDivElement>(null);
+  const _fetch_type = useAppSelector(fetch_type);
+  const search_container_ref = useRef<HTMLDivElement>(null);
+  const search_input_ref = useRef<HTMLInputElement>(null);
   return (
     <StyledChatSidebar>
-      <ChatSearchInput ref={search_input_ref} />
-      {!!_fetched_user_result.length && (
-        <ChatSearchResult ref={search_input_ref} />
+      <ChatSearchInput
+        ref={search_input_ref}
+        search_container_ref={search_container_ref}
+      />
+      {!!_fetched_user_result.length && _fetch_type == "chat" && (
+        <ChatSearchResult
+          ref={search_input_ref}
+          search_container_ref={search_container_ref}
+        />
       )}
       <ChatGroupList />
       <ChatUsersList />
