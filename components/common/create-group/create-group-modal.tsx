@@ -104,6 +104,7 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           Group Name
         </StyledLabel>
         <StyledInput
+          type="text"
           $mode={_mode}
           placeholder="Group Name"
           id={`group-${group_input_id}`}
@@ -114,6 +115,7 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           Send Invitation
         </StyledLabel>
         <StyledInput
+          type="text"
           $mode={_mode}
           placeholder="Search Player"
           id={`search-${search_input_id}`}

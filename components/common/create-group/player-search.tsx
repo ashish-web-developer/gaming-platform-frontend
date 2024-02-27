@@ -1,4 +1,4 @@
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useId } from "react";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -8,12 +8,19 @@ import {
   StyledPlayerSearchWrapper,
   StyledHeader,
   StyledProfileListWrapper,
+  StyledProfileContainer,
   StyledProfileWrapper,
   StyledProfileImageWrapper,
   StyledProfileImage,
   StyledProfileDetailsWrapper,
   StyledName,
   StyledUserName,
+  StyledCheckboxWrapper,
+  StyledCheckBoxLabel,
+  StyledLabelImage,
+  StyledCheckBox,
+  StyledBottomContainer,
+  StyledInviteCta,
 } from "@/styles/components/common/create-group/player-search.style";
 
 // redux
@@ -33,21 +40,38 @@ import { fetchOnScroll } from "@/helpers/chat.helper";
 
 const UserProfile: FC<{ user: IUsersWithConversation }> = ({ user }) => {
   const avatar_url = useAvatarUrl(user);
+  const checkbox_input_id = useId();
   return (
-    <StyledProfileWrapper>
-      <StyledProfileImageWrapper>
-        <StyledProfileImage
-          sizes="(max-width: 1400px) 5vw"
-          fill={true}
-          alt="user-avatar"
-          src={avatar_url}
+    <StyledProfileContainer>
+      <StyledProfileWrapper>
+        <StyledProfileImageWrapper>
+          <StyledProfileImage
+            sizes="(max-width: 1400px) 5vw"
+            fill={true}
+            alt="user-avatar"
+            src={avatar_url}
+          />
+        </StyledProfileImageWrapper>
+        <StyledProfileDetailsWrapper>
+          <StyledName>{user.name}</StyledName>
+          <StyledUserName>@{user.username}</StyledUserName>
+        </StyledProfileDetailsWrapper>
+      </StyledProfileWrapper>
+      <StyledCheckboxWrapper>
+        <StyledCheckBox
+          id={`profile-checkbox-${checkbox_input_id}`}
+          type="checkbox"
         />
-      </StyledProfileImageWrapper>
-      <StyledProfileDetailsWrapper>
-        <StyledName>{user.name}</StyledName>
-        <StyledUserName>@{user.username}</StyledUserName>
-      </StyledProfileDetailsWrapper>
-    </StyledProfileWrapper>
+        <StyledCheckBoxLabel htmlFor={`profile-checkbox-${checkbox_input_id}`}>
+          <StyledLabelImage
+            width={15}
+            height={15}
+            alt="ok"
+            src="/common/create-group/player-search/ok.png"
+          />
+        </StyledCheckBoxLabel>
+      </StyledCheckboxWrapper>
+    </StyledProfileContainer>
   );
 };
 
@@ -90,9 +114,12 @@ const PlayerSearch: ForwardRefRenderFunction<HTMLInputElement> = (
         ref={container_ref}
       >
         {_fetched_user_result.map((user) => {
-          return <UserProfile user={user} />;
+          return <UserProfile key={user.id} user={user} />;
         })}
       </StyledProfileListWrapper>
+      <StyledBottomContainer>
+        <StyledInviteCta>Invite</StyledInviteCta>
+      </StyledBottomContainer>
     </StyledPlayerSearchWrapper>
   );
 };

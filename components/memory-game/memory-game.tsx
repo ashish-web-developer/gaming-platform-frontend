@@ -201,71 +201,71 @@ const MemoryGame: FC = () => {
     flip_sound: null,
   });
 
-  usePresenceChannel(`game.${_room_id}`, [
-    {
-      event: "CardListDataEvent",
-      callback: (data) => {
-        dispatch(updateCardList(data.card_list));
-      },
-    },
-    {
-      event: "MemoryGameEvent",
-      callback: (data) => {
-        dispatch(updateCardState({ id: data.card_id, flipped: data.flipped }));
-        sound_ref.current.flip_sound?.play();
-      },
-    },
-    {
-      event: "UpdatePlayerTurnEvent",
-      callback: (data) => {
-        dispatch(updatePlayerTurnId(data.player_turn_id));
-      },
-    },
-    {
-      event: "UpdateLastFlippedCard",
-      callback: (data) => {
-        dispatch(updateLastFlippedCard(data.card_id));
-      },
-    },
-    {
-      event: "UpdateTimerStartCountEvent",
-      callback: (data) => {
-        dispatch(updateTimerStartCount(data.start_timer_count));
-      },
-    },
-    {
-      event: "UpdateMemoryGameScore",
-      callback: (data) => {
-        dispatch(updateScore(data.score));
-      },
-    },
-    {
-      event: "LiveChatStreamEvent",
-      callback: (data: { user: IUsersWithConversation; message: string }) => {
-        dispatch(
-          updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
-        );
-        if (data.user.id !== _user.id) {
-          dispatch(
-            updateInfoSnackbar({
-              name: data.user.name,
-              message: data.message,
-              show_snacbar: true,
-            })
-          );
-          setTimeout(() => {
-            dispatch(
-              updateInfoSnackbar({
-                name: "",
-                message: "",
-                show_snacbar: false,
-              })
-            );
-          }, 3000);
-        }
-      },
-    },
-  ]);
+  // usePresenceChannel(`game.${_room_id}`, [
+  //   {
+  //     event: "CardListDataEvent",
+  //     callback: (data) => {
+  //       dispatch(updateCardList(data.card_list));
+  //     },
+  //   },
+  //   {
+  //     event: "MemoryGameEvent",
+  //     callback: (data) => {
+  //       dispatch(updateCardState({ id: data.card_id, flipped: data.flipped }));
+  //       sound_ref.current.flip_sound?.play();
+  //     },
+  //   },
+  //   {
+  //     event: "UpdatePlayerTurnEvent",
+  //     callback: (data) => {
+  //       dispatch(updatePlayerTurnId(data.player_turn_id));
+  //     },
+  //   },
+  //   {
+  //     event: "UpdateLastFlippedCard",
+  //     callback: (data) => {
+  //       dispatch(updateLastFlippedCard(data.card_id));
+  //     },
+  //   },
+  //   {
+  //     event: "UpdateTimerStartCountEvent",
+  //     callback: (data) => {
+  //       dispatch(updateTimerStartCount(data.start_timer_count));
+  //     },
+  //   },
+  //   {
+  //     event: "UpdateMemoryGameScore",
+  //     callback: (data) => {
+  //       dispatch(updateScore(data.score));
+  //     },
+  //   },
+  //   {
+  //     event: "LiveChatStreamEvent",
+  //     callback: (data: { user: IUsersWithConversation; message: string }) => {
+  //       dispatch(
+  //         updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
+  //       );
+  //       if (data.user.id !== _user.id) {
+  //         dispatch(
+  //           updateInfoSnackbar({
+  //             name: data.user.name,
+  //             message: data.message,
+  //             show_snacbar: true,
+  //           })
+  //         );
+  //         setTimeout(() => {
+  //           dispatch(
+  //             updateInfoSnackbar({
+  //               name: "",
+  //               message: "",
+  //               show_snacbar: false,
+  //             })
+  //           );
+  //         }, 3000);
+  //       }
+  //     },
+  //   },
+  // ]);
 
   useEffect(() => {
     if (_is_gaming_user_in && _is_proposal_sender) {

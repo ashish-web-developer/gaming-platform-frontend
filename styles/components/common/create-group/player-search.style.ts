@@ -26,11 +26,11 @@ const StyledProfileListWrapper = styled.div`
   flex-direction: column;
   gap: 12px;
   padding: 0.875rem;
-  height: calc(100% - 52px);
+  height: calc(100% - 100px);
   overflow: scroll;
 `;
 
-const StyledProfileWrapper = styled.div`
+const StyledProfileContainer = styled.div`
   height: 50px;
   width: 100%;
   max-width: 240px;
@@ -38,9 +38,15 @@ const StyledProfileWrapper = styled.div`
   border-radius: 12px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
   padding: 0px 10px;
   flex-shrink: 0;
+  border: 1.5px solid #000;
+`;
+const StyledProfileWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
 
 const StyledProfileImageWrapper = styled.div`
@@ -73,15 +79,64 @@ const StyledUserName = styled.span`
   font-size: 0.75rem;
   line-height: 1;
 `;
+const StyledCheckboxWrapper = styled.div``;
+const StyledCheckBoxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1.5px solid #000;
+  position: relative;
+`;
+const StyledLabelImage = styled(Image)`
+  display: none;
+`;
+
+const StyledCheckBox = styled.input`
+  display: none;
+  &:checked + ${StyledCheckBoxLabel} {
+    background: #afa2ff;
+    & img {
+      display: block;
+    }
+  }
+`;
+
+const StyledBottomContainer = styled.div`
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0px 0.875rem;
+  border-top: 2px solid ${({ theme }) => theme.palette.primary.dark};
+`;
+
+const StyledInviteCta = styled.button`
+  padding: 6px 20px;
+  border-radius: 8px;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  background: linear-gradient(95deg, #ffe666 8.66%, #fb3 95.1%);
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 0.875rem;
+`;
 
 export {
   StyledPlayerSearchWrapper,
   StyledHeader,
   StyledProfileListWrapper,
+  StyledProfileContainer,
   StyledProfileWrapper,
   StyledProfileImageWrapper,
   StyledProfileImage,
   StyledProfileDetailsWrapper,
   StyledName,
   StyledUserName,
+  StyledCheckboxWrapper,
+  StyledCheckBoxLabel,
+  StyledLabelImage,
+  StyledCheckBox,
+  StyledBottomContainer,
+  StyledInviteCta,
 };
