@@ -51,7 +51,9 @@ const ChatInput: FC<{}> = () => {
   const emoji_cta_ref = useRef(null);
   return (
     <>
-      <EmojiPicker ref={input_ref} emoji_cta_ref={emoji_cta_ref} />
+      {_show_emoji && (
+        <EmojiPicker ref={input_ref} emoji_cta_ref={emoji_cta_ref} />
+      )}
       <StyledChatInputContainer $mode={_mode}>
         <StyledChatInputWrapper>
           <StyledChatInput

@@ -12,6 +12,7 @@ import {
   fetchDefaultUser,
   getGroupsApi,
   getGroupRecommendationApi,
+  getNotificationApi,
 } from "@/store/slice/chat.slice";
 import { user } from "@/store/slice/user.slice";
 
@@ -24,6 +25,7 @@ const useDefault = () => {
     dispatch(fetchDefaultUser());
     dispatch(getGroupsApi());
     dispatch(getGroupRecommendationApi());
+    dispatch(getNotificationApi());
   }, []);
 };
 

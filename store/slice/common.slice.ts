@@ -49,6 +49,7 @@ const initialState: InitialState = {
   show_profile_upload_modal: false,
   show_profile_drop_down: false,
   show_create_group_drop_down: false,
+  show_notification_modal: false,
 };
 export const commonSlice = createSlice({
   name: "common",
@@ -72,6 +73,9 @@ export const commonSlice = createSlice({
     updateShowCreateGroupDrownDown: (state, action: PayloadAction<boolean>) => {
       state.show_create_group_drop_down = action.payload;
     },
+    updateShowNotification: (state, action: PayloadAction<boolean>) => {
+      state.show_notification_modal = action.payload;
+    },
   },
 });
 
@@ -86,6 +90,8 @@ export const show_profile_drop_down = (state: RootState) =>
   state.common.show_profile_drop_down;
 export const show_create_group_drop_down = (state: RootState) =>
   state.common.show_create_group_drop_down;
+export const show_notification_modal = (state: RootState) =>
+  state.common.show_notification_modal;
 export const {
   updateShowEmoji,
   updateMode,
@@ -93,4 +99,5 @@ export const {
   updateShowProfileUploadModal,
   updateShowProfileDropDown,
   updateShowCreateGroupDrownDown,
+  updateShowNotification,
 } = commonSlice.actions;

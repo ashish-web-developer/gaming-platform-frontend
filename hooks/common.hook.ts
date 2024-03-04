@@ -53,7 +53,7 @@ const useOutsideClickHandler = ({
       }
       handler();
     };
-    document.addEventListener("click",onClickHandler);
+    document.addEventListener("click", onClickHandler);
     return () => {
       document.removeEventListener("click", onClickHandler);
     };

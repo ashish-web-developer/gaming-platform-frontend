@@ -1,4 +1,4 @@
-import { useId, useRef, forwardRef } from "react";
+import { useId, useRef, useState, forwardRef } from "react";
 // types
 import type { ForwardRefRenderFunction, FC } from "react";
 import type { Theme } from "@/theme/chat.theme";
@@ -38,6 +38,8 @@ import {
   // action
   updateFetchUserResult,
   updatePage,
+  // api
+  createGroupApi,
 } from "@/store/slice/chat.slice";
 
 // hooks
@@ -74,6 +76,8 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
   const container_ref = useRef<HTMLDivElement>(null);
   const search_input_ref = useRef<HTMLInputElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
+  const group_name_input_ref = useRef<HTMLInputElement>(null);
+  const [group_user_ids, setGroupUserIds] = useState<Array<number>>([]);
 
   useOutsideClickHandler({
     modal_ref: container_ref,
@@ -104,6 +108,7 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           Group Name
         </StyledLabel>
         <StyledInput
+          ref={group_name_input_ref}
           type="text"
           $mode={_mode}
           placeholder="Group Name"
@@ -138,10 +143,42 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
         />
       </StyledInputGroup>
       <StyledBottomCtaWrapper>
-        <StyledCreateCta>Create</StyledCreateCta>
+        <StyledCreateCta
+          onClick={() => {
+            if (group_name_input_ref.current?.value) {
+              dispatch(
+                createGroupApi({
+                  group_name: group_name_input_ref.current.value,
+                  user_ids: group_user_ids,
+                })
+              );
+              dispatch(updateShowCreateGroupDrownDown(false));
+            }
+          }}
+          disabled={
+            !group_user_ids.length || !group_name_input_ref?.current?.value
+          }
+        >
+          Create
+        </StyledCreateCta>
       </StyledBottomCtaWrapper>
       {Boolean(_fetched_user_result.length) && _fetch_type == "group" && (
-        <PlayerSearch ref={search_input_ref} />
+        <PlayerSearch
+          updateGroupUserIds={(id, action) => {
+            if (action == "add") {
+              setGroupUserIds((prev) => [...prev, id]);
+            } else {
+              setGroupUserIds((prev) => {
+                const index = prev.indexOf(id);
+                if (index !== -1) {
+                  return [...prev.slice(0, index), ...prev.slice(index + 1)];
+                }
+                return prev;
+              });
+            }
+          }}
+          ref={search_input_ref}
+        />
       )}
     </StyledCreateGroupModalWrapper>
   );

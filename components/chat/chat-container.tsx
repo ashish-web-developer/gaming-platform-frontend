@@ -54,7 +54,11 @@ import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useDefault, useFirstUserConversation } from "@/hooks/chat/chat.hook";
-import { usePrivateChannel, usePresenceChannel } from "@/hooks/pusher.hook";
+import {
+  usePrivateChannel,
+  usePresenceChannel,
+  useNotificationChannel,
+} from "@/hooks/pusher.hook";
 import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
 
 const ChatContainer: FC = () => {
@@ -69,6 +73,7 @@ const ChatContainer: FC = () => {
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   useDefault();
   useFirstUserConversation();
+  useNotificationChannel();
   usePrivateChannel(`chat.${_user.id}`, [
     {
       event: "Chat.ChatEvent",
@@ -120,7 +125,6 @@ const ChatContainer: FC = () => {
       },
     },
   ]);
-
   usePresenceChannel<IGroup | null>({
     channel: `group-chat.${_active_group?.id}`,
     handler: (user_ids, type, active_group) => {

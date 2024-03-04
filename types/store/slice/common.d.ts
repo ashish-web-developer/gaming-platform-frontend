@@ -6,6 +6,7 @@ type InitialState = {
   show_profile_upload_modal: boolean;
   show_profile_drop_down: boolean;
   show_create_group_drop_down: boolean;
+  show_notification_modal: boolean;
 };
 
 type IBaseResponse = {
@@ -13,7 +14,7 @@ type IBaseResponse = {
   error?: any;
 };
 
-type ThunkApiConfig = {
+type IThunkApiConfig = {
   state: RootState;
 };
-export { InitialState, IBaseResponse, ThunkApiConfig };
+export { InitialState, IBaseResponse, IThunkApiConfig };

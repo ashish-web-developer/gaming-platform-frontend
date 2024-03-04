@@ -89,6 +89,9 @@ const StyledCreateCta = styled.button`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.875rem;
   background: linear-gradient(95deg, #ffe666 8.66%, #fb3 95.1%);
+  &::disabled {
+    opacity: 0.7;
+  }
 `;
 
 export {

@@ -60,6 +60,7 @@ const StyledChevronIcon = styled(Image)``;
 const StyledNotificationCta = styled.button`
   background: transparent;
   border: none;
+  cursor: pointer;
 `;
 
 const StyledBellIcon = styled(Image)``;

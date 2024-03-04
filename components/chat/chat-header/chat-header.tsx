@@ -24,6 +24,7 @@ import ChatUserPoint from "@/components/chat/chat-header/chat-user-point";
 import UserProfileDropDown from "@/components/common/user-profile/user-profile-drop-down";
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 import CreateGroupModal from "@/components/common/create-group/create-group-modal";
+import NotificationModal from "@/components/common/notification-modal/notification-modal";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -34,8 +35,10 @@ import {
   show_profile_upload_modal,
   show_profile_drop_down,
   show_create_group_drop_down,
+  show_notification_modal,
   // actions
   updateShowProfileDropDown,
+  updateShowNotification,
 } from "@/store/slice/common.slice";
 
 // hooks
@@ -50,12 +53,14 @@ const ChatHeader: FC = () => {
   const _show_create_group_drop_down = useAppSelector(
     show_create_group_drop_down
   );
+  const _show_notification_modal = useAppSelector(show_notification_modal);
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   const chevron_cta_ref = useRef<HTMLButtonElement>(null);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const group_cta_ref = useRef<HTMLButtonElement>(null);
+  const notification_cta_ref = useRef<HTMLButtonElement>(null);
 
   return (
     <>
@@ -69,7 +74,12 @@ const ChatHeader: FC = () => {
           Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
         </StyledWelcomeText>
         <StyledRightContainer>
-          <StyledNotificationCta>
+          <StyledNotificationCta
+            onClick={() => {
+              dispatch(updateShowNotification(!_show_notification_modal));
+            }}
+            ref={notification_cta_ref}
+          >
             <StyledBellIcon
               alt="bell-icon"
               src="/chat/chat-header/bell.png"
@@ -89,6 +99,9 @@ const ChatHeader: FC = () => {
             )}
             {_show_create_group_drop_down && (
               <CreateGroupModal ref={group_cta_ref} />
+            )}
+            {_show_notification_modal && (
+              <NotificationModal ref={notification_cta_ref} />
             )}
             <StyledUserProfileImage
               $mode={_mode}

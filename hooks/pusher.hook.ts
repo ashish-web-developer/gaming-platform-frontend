@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 //types
 import { User } from "@/types/user";
-
+import { INotification } from "@/types/store/slice/chat";
 // helpers
 import { PusherAxios } from "@/helpers/axios";
 
@@ -11,7 +11,12 @@ import Pusher from "pusher-js";
 //redux
 import { useAppSelector, useAppDispatch } from "./redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
+import {
+  active_user,
+  updateIsTyping,
+  updateNotification,
+  getNotificationApi,
+} from "@/store/slice/chat.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import {
   updateIsGamingUserIn,
@@ -113,6 +118,34 @@ function usePrivateChannel(
   }, [echo, _user, _active_user]);
 }
 
+function useNotificationChannel() {
+  const dispatch = useAppDispatch();
+  const _user = useAppSelector(user);
+  const echo = useEcho();
+  useEffect(() => {
+    if (_user && echo) {
+      const subscription = echo
+        .private(`notification.${_user.id}`)
+        .subscribed(() => {
+          console.log("connected to notification channel");
+        })
+        .notification((notification: INotification) => {
+          /**
+           * Not updating notification value directly instead of
+           * calling api because getting wrong value of id and
+           * type from notification
+           */
+          dispatch(getNotificationApi());
+        });
+    }
+    return () => {
+      if (_user && echo) {
+        echo.leaveChannel(`notification.${_user.id}`);
+      }
+    };
+  }, [echo, _user]);
+}
+
 function usePresenceChannel<Type>({
   channel,
   handler,
@@ -172,4 +205,9 @@ function usePresenceChannel<Type>({
   }, [echo, dependency]);
 }
 
-export { useEcho, usePrivateChannel, usePresenceChannel };
+export {
+  useEcho,
+  usePrivateChannel,
+  usePresenceChannel,
+  useNotificationChannel,
+};

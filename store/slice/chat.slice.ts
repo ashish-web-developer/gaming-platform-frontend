@@ -2,11 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // types
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type IChatInitialState from "@/types/store/slice/chat";
-import type { ThunkApiConfig } from "@/types/store/slice/common";
+import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type {
   IConversation,
   IUsersWithConversation,
   IGroup,
+  IJoinGroupPayload,
+  IJoinGroupResponse,
   IFetchUserResponse,
   IFetchUserPayload,
   IFetchDefaultUserResponse,
@@ -19,8 +21,14 @@ import type {
   IAcceptInvitationApiResponse,
   IGetGroupResponse,
   IGetGroupRecommendationResponse,
+  ICreateGroupPayload,
+  ICreateGroupResponse,
+  INotificationResponse,
+  IRemoveNotificationPayload,
+  IRemoveNotificationResponse,
   ISendMessagePayload,
   ISendMessageResponse,
+  INotification,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -159,7 +167,7 @@ export const sendInvitationApi = createAsyncThunk<
 export const getGroupsApi = createAsyncThunk<
   IGetGroupResponse,
   undefined,
-  ThunkApiConfig
+  IThunkApiConfig
 >("api/chat/get-group", async (_, { rejectWithValue, dispatch }) => {
   try {
     const response: AxiosResponse<IGetGroupResponse> = await Axios.post(
@@ -174,7 +182,7 @@ export const getGroupsApi = createAsyncThunk<
 export const getGroupRecommendationApi = createAsyncThunk<
   IGetGroupRecommendationResponse,
   undefined,
-  ThunkApiConfig
+  IThunkApiConfig
 >("api/chat/group-recommendation", async (_, { getState, rejectWithValue }) => {
   try {
     const response: AxiosResponse<IGetGroupRecommendationResponse> =
@@ -184,6 +192,36 @@ export const getGroupRecommendationApi = createAsyncThunk<
     return rejectWithValue(error?.response?.data);
   }
 });
+export const joinGroupApi = createAsyncThunk<
+  IJoinGroupResponse & {
+    notification_id?: string;
+  },
+  IJoinGroupPayload,
+  IThunkApiConfig
+>(
+  "api/chat/join-group",
+  async ({ notification_id, group_id }, { rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<IJoinGroupResponse> = await Axios.post(
+        "/chat/join-group",
+        {
+          notification_id,
+          group_id,
+        }
+      );
+      return {
+        ...response.data,
+        ...(notification_id
+          ? {
+              notification_id,
+            }
+          : {}),
+      };
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 
 export const acceptInvitationApi = createAsyncThunk<
   IAcceptInvitationApiResponse,
@@ -209,7 +247,7 @@ export const acceptInvitationApi = createAsyncThunk<
 export const sendMessageApi = createAsyncThunk<
   ISendMessageResponse,
   ISendMessagePayload,
-  ThunkApiConfig
+  IThunkApiConfig
 >(
   "api/chat/send-message",
   async ({ message }, { getState, rejectWithValue }) => {
@@ -236,6 +274,69 @@ export const sendMessageApi = createAsyncThunk<
   }
 );
 
+export const createGroupApi = createAsyncThunk<
+  ICreateGroupResponse,
+  ICreateGroupPayload,
+  IThunkApiConfig
+>(
+  "api/chat/create-group",
+  async ({ user_ids, group_name }, { rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<ICreateGroupResponse> = await Axios.post(
+        "/chat/create-group",
+        null,
+        {
+          params: {
+            group_name,
+            group_users: user_ids,
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const getNotificationApi = createAsyncThunk<
+  INotificationResponse,
+  undefined,
+  IThunkApiConfig
+>("api/chat/get-notification", async (_, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<INotificationResponse> = await Axios.get(
+      "/chat/get-notification"
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+export const removeNotificationApi = createAsyncThunk<
+  IRemoveNotificationResponse & {
+    notification_id: string;
+  },
+  IRemoveNotificationPayload,
+  IThunkApiConfig
+>(
+  "api/chat/remove-notification",
+  async ({ notification_id }, { rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<IRemoveNotificationResponse> =
+        await Axios.post("/chat/remove-notification", {
+          notification_id,
+        });
+      return {
+        ...response.data,
+        notification_id,
+      };
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const initialState: IChatInitialState = {
   is_typing: false,
   fetch_user: {
@@ -244,6 +345,7 @@ const initialState: IChatInitialState = {
     fetch_type: null,
     is_request_pending: false,
   },
+  notifications: [],
   default_users: [],
   default_groups: [],
   recommended_groups: [],
@@ -375,6 +477,9 @@ const chatSlice = createSlice({
     updateActiveGroup: (state, action: PayloadAction<IGroup | null>) => {
       state.active_group = action.payload;
     },
+    updateNotification: (state, action: PayloadAction<INotification>) => {
+      state.notifications.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserApi.fulfilled, (state, action) => {
@@ -460,6 +565,25 @@ const chatSlice = createSlice({
     builder.addCase(fetchGroupMessagesApi.fulfilled, (state, action) => {
       state.active_conversation = action.payload.conversation;
     });
+    builder.addCase(getNotificationApi.fulfilled, (state, action) => {
+      state.notifications = action.payload.notifications;
+    });
+    builder.addCase(joinGroupApi.fulfilled, (state, action) => {
+      if (action.payload.notification_id) {
+        state.notifications = state.notifications.filter(
+          (notification) => notification.id !== action.payload.notification_id
+        );
+      }
+      state.default_groups.push(action.payload.group);
+      state.recommended_groups = state.recommended_groups.filter(
+        (group) => group.id !== action.payload.group.id
+      );
+    });
+    builder.addCase(removeNotificationApi.fulfilled, (state, action) => {
+      state.notifications = state.notifications.filter(
+        (notification) => notification.id !== action.payload.notification_id
+      );
+    });
   },
 });
 
@@ -489,6 +613,8 @@ export const active_group = (state: RootState) => state.chat.active_group;
 export const recommended_groups = (state: RootState) =>
   state.chat.recommended_groups;
 
+export const notifications = (state: RootState) => state.chat.notifications;
+
 export const {
   resetChat,
   updatePage,
@@ -504,4 +630,5 @@ export const {
   updateShowMemoryGameSnackbar,
   updateShowChat,
   updateActiveGroup,
+  updateNotification,
 } = chatSlice.actions;

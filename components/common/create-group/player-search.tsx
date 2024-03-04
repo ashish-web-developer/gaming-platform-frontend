@@ -27,9 +27,12 @@ import {
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
+  // state
   fetched_user_result,
   is_request_pending,
   fetchUserApi,
+  // action
+  updateFetchUserResult,
 } from "@/store/slice/chat.slice";
 
 // hooks
@@ -38,7 +41,10 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 // helpers
 import { fetchOnScroll } from "@/helpers/chat.helper";
 
-const UserProfile: FC<{ user: IUsersWithConversation }> = ({ user }) => {
+const UserProfile: FC<{
+  user: IUsersWithConversation;
+  updateGroupUserIds: (id: number, action: "remove" | "add") => void;
+}> = ({ user, updateGroupUserIds }) => {
   const avatar_url = useAvatarUrl(user);
   const checkbox_input_id = useId();
   return (
@@ -61,6 +67,13 @@ const UserProfile: FC<{ user: IUsersWithConversation }> = ({ user }) => {
         <StyledCheckBox
           id={`profile-checkbox-${checkbox_input_id}`}
           type="checkbox"
+          onChange={(event) => {
+            if (event.target.checked) {
+              updateGroupUserIds(user.id, "add");
+            } else {
+              updateGroupUserIds(user.id, "remove");
+            }
+          }}
         />
         <StyledCheckBoxLabel htmlFor={`profile-checkbox-${checkbox_input_id}`}>
           <StyledLabelImage
@@ -75,10 +88,12 @@ const UserProfile: FC<{ user: IUsersWithConversation }> = ({ user }) => {
   );
 };
 
-const PlayerSearch: ForwardRefRenderFunction<HTMLInputElement> = (
-  _,
-  search_input_ref
-) => {
+const PlayerSearch: ForwardRefRenderFunction<
+  HTMLInputElement,
+  {
+    updateGroupUserIds: (id: number, type: "add" | "remove") => void;
+  }
+> = ({ updateGroupUserIds }, search_input_ref) => {
   const dispatch = useAppDispatch();
   const _fetched_user_result = useAppSelector(fetched_user_result);
   const _user = useAppSelector(user);
@@ -114,11 +129,30 @@ const PlayerSearch: ForwardRefRenderFunction<HTMLInputElement> = (
         ref={container_ref}
       >
         {_fetched_user_result.map((user) => {
-          return <UserProfile key={user.id} user={user} />;
+          return (
+            <UserProfile
+              updateGroupUserIds={updateGroupUserIds}
+              key={user.id}
+              user={user}
+            />
+          );
         })}
       </StyledProfileListWrapper>
       <StyledBottomContainer>
-        <StyledInviteCta>Invite</StyledInviteCta>
+        <StyledInviteCta
+          onClick={(event) => {
+            event.stopPropagation();
+            if (
+              typeof search_input_ref !== "function" &&
+              search_input_ref?.current
+            ) {
+              search_input_ref.current.value = "";
+            }
+            dispatch(updateFetchUserResult([]));
+          }}
+        >
+          Invite
+        </StyledInviteCta>
       </StyledBottomContainer>
     </StyledPlayerSearchWrapper>
   );
