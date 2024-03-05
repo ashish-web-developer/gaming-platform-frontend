@@ -303,10 +303,10 @@ export const getNotificationApi = createAsyncThunk<
   INotificationResponse,
   undefined,
   IThunkApiConfig
->("api/chat/get-notification", async (_, { rejectWithValue }) => {
+>("api/notification/get-notification", async (_, { rejectWithValue }) => {
   try {
     const response: AxiosResponse<INotificationResponse> = await Axios.get(
-      "/chat/get-notification"
+      "/notification/get-notification"
     );
     return response.data;
   } catch (error: any) {
@@ -320,11 +320,11 @@ export const removeNotificationApi = createAsyncThunk<
   IRemoveNotificationPayload,
   IThunkApiConfig
 >(
-  "api/chat/remove-notification",
+  "api/notification/remove-notification",
   async ({ notification_id }, { rejectWithValue }) => {
     try {
       const response: AxiosResponse<IRemoveNotificationResponse> =
-        await Axios.post("/chat/remove-notification", {
+        await Axios.post("/notification/remove-notification", {
           notification_id,
         });
       return {

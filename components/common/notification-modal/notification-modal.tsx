@@ -107,6 +107,11 @@ const NotificationModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           }}
         >
           Invite
+          {Boolean(group_invite.length) && (
+            <StyledNotificationCount $mode={_mode}>
+              {group_invite.length}
+            </StyledNotificationCount>
+          )}
         </StyledTabCta>
       </StyledTabWrapper>
       <StyledNotificationContentWrapper>
