@@ -21,7 +21,11 @@ import {
   StyledCheckBox,
   StyledBottomContainer,
   StyledInviteCta,
+  StyledGroupAvatar,
 } from "@/styles/components/common/create-group/player-search.style";
+
+// local components
+import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -43,7 +47,10 @@ import { fetchOnScroll } from "@/helpers/chat.helper";
 
 const UserProfile: FC<{
   user: IUsersWithConversation;
-  updateGroupUserIds: (id: number, action: "remove" | "add") => void;
+  updateGroupUserIds: (
+    player: IUsersWithConversation,
+    action: "remove" | "add"
+  ) => void;
 }> = ({ user, updateGroupUserIds }) => {
   const avatar_url = useAvatarUrl(user);
   const checkbox_input_id = useId();
@@ -69,9 +76,9 @@ const UserProfile: FC<{
           type="checkbox"
           onChange={(event) => {
             if (event.target.checked) {
-              updateGroupUserIds(user.id, "add");
+              updateGroupUserIds(user, "add");
             } else {
-              updateGroupUserIds(user.id, "remove");
+              updateGroupUserIds(user, "remove");
             }
           }}
         />
@@ -91,9 +98,13 @@ const UserProfile: FC<{
 const PlayerSearch: ForwardRefRenderFunction<
   HTMLInputElement,
   {
-    updateGroupUserIds: (id: number, type: "add" | "remove") => void;
+    group_user: Array<IUsersWithConversation>;
+    updateGroupUserIds: (
+      player: IUsersWithConversation,
+      type: "add" | "remove"
+    ) => void;
   }
-> = ({ updateGroupUserIds }, search_input_ref) => {
+> = ({ group_user, updateGroupUserIds }, search_input_ref) => {
   const dispatch = useAppDispatch();
   const _fetched_user_result = useAppSelector(fetched_user_result);
   const _user = useAppSelector(user);
@@ -102,7 +113,14 @@ const PlayerSearch: ForwardRefRenderFunction<
   const _is_request_pending = useAppSelector(is_request_pending);
   return (
     <StyledPlayerSearchWrapper>
-      <StyledHeader>Players</StyledHeader>
+      <StyledHeader>
+        Players
+        <StyledGroupAvatar>
+          {group_user.map((user) => {
+            return <ChatAvatar user={user} />;
+          })}
+        </StyledGroupAvatar>
+      </StyledHeader>
       <StyledProfileListWrapper
         onScroll={() =>
           fetchOnScroll({

@@ -5,6 +5,7 @@ import memoryGameReducer from "@/store/slice/memory-game.slice";
 import chatReducer from "@/store/slice/chat.slice";
 import commonReducer from "@/store/slice/common.slice";
 import gameReducer from "@/store/slice/game.slice";
+import notificationReducer from "@/store/slice/notification.slice";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     memoryGame: memoryGameReducer,
     chat: chatReducer,
     game: gameReducer,
+    notification: notificationReducer,
   },
 });
 

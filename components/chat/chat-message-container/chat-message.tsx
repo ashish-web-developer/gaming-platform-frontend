@@ -25,7 +25,7 @@ import { updateView } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // helpers
-import { readableFormatDate } from "@/helpers/common";
+import { readableFormatDate } from "@/helpers/common.helper";
 
 const ChatMessage = forwardRef<
   HTMLDivElement,

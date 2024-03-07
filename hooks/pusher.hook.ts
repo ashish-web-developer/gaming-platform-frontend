@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 //types
 import { User } from "@/types/user";
-import { INotification } from "@/types/store/slice/chat";
+import { type INotification } from "@/types/store/slice/notification";
 // helpers
 import { PusherAxios } from "@/helpers/axios";
 
@@ -11,12 +11,11 @@ import Pusher from "pusher-js";
 //redux
 import { useAppSelector, useAppDispatch } from "./redux.hook";
 import { user } from "@/store/slice/user.slice";
+import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
 import {
-  active_user,
-  updateIsTyping,
-  updateNotification,
   getNotificationApi,
-} from "@/store/slice/chat.slice";
+  updateNotification,
+} from "@/store/slice/notification.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import {
   updateIsGamingUserIn,
@@ -122,6 +121,12 @@ function useNotificationChannel() {
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const echo = useEcho();
+  const notification_audio_ref = useRef<HTMLAudioElement | null>(null);
+  useEffect(() => {
+    notification_audio_ref.current = new Audio(
+      "/common/notification/audio/notification.mp3"
+    );
+  }, []);
   useEffect(() => {
     if (_user && echo) {
       const subscription = echo
@@ -136,6 +141,7 @@ function useNotificationChannel() {
            * type from notification
            */
           dispatch(getNotificationApi());
+          notification_audio_ref.current?.play();
         });
     }
     return () => {

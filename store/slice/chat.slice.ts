@@ -23,12 +23,10 @@ import type {
   IGetGroupRecommendationResponse,
   ICreateGroupPayload,
   ICreateGroupResponse,
-  INotificationResponse,
-  IRemoveNotificationPayload,
-  IRemoveNotificationResponse,
+  IJoinRequestPayload,
+  IJoinRequestResponse,
   ISendMessagePayload,
   ISendMessageResponse,
-  INotification,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
@@ -111,14 +109,14 @@ export const fetchGroupMessagesApi = createAsyncThunk<
   {
     state: RootState;
   }
->("api/chat/get-group-messages", async (_, { getState, rejectWithValue }) => {
+>("api/group/get-group-messages", async (_, { getState, rejectWithValue }) => {
   try {
     const state = getState();
     const response: AxiosResponse<{
       success: boolean;
       error: any;
       conversation: IConversation[];
-    }> = await Axios.post("/chat/get-group-messages", {
+    }> = await Axios.post("/group/get-group-messages", {
       group_id: state.chat.active_group?.id,
     });
     return response.data;
@@ -170,8 +168,8 @@ export const getGroupsApi = createAsyncThunk<
   IThunkApiConfig
 >("api/chat/get-group", async (_, { rejectWithValue, dispatch }) => {
   try {
-    const response: AxiosResponse<IGetGroupResponse> = await Axios.post(
-      "/chat/get-group"
+    const response: AxiosResponse<IGetGroupResponse> = await Axios.get(
+      "/group/get-group"
     );
     return response.data;
   } catch (error: any) {
@@ -183,15 +181,18 @@ export const getGroupRecommendationApi = createAsyncThunk<
   IGetGroupRecommendationResponse,
   undefined,
   IThunkApiConfig
->("api/chat/group-recommendation", async (_, { getState, rejectWithValue }) => {
-  try {
-    const response: AxiosResponse<IGetGroupRecommendationResponse> =
-      await Axios.get("/chat/group-recommendation");
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
+>(
+  "api/group/group-recommendation",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<IGetGroupRecommendationResponse> =
+        await Axios.get("/group/group-recommendation");
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
   }
-});
+);
 export const joinGroupApi = createAsyncThunk<
   IJoinGroupResponse & {
     notification_id?: string;
@@ -199,11 +200,11 @@ export const joinGroupApi = createAsyncThunk<
   IJoinGroupPayload,
   IThunkApiConfig
 >(
-  "api/chat/join-group",
+  "api/group/join-group",
   async ({ notification_id, group_id }, { rejectWithValue }) => {
     try {
       const response: AxiosResponse<IJoinGroupResponse> = await Axios.post(
-        "/chat/join-group",
+        "/group/join-group",
         {
           notification_id,
           group_id,
@@ -222,6 +223,29 @@ export const joinGroupApi = createAsyncThunk<
     }
   }
 );
+
+export const joinGroupRequestApi = createAsyncThunk<
+  IJoinRequestResponse & {
+    group_id: number;
+  },
+  IJoinRequestPayload,
+  IThunkApiConfig
+>("api/group/join-request", async ({ group_id }, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<IJoinRequestResponse> = await Axios.post(
+      "/group/join-request",
+      {
+        group_id,
+      }
+    );
+    return {
+      ...response.data,
+      group_id,
+    };
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
 
 export const acceptInvitationApi = createAsyncThunk<
   IAcceptInvitationApiResponse,
@@ -299,44 +323,6 @@ export const createGroupApi = createAsyncThunk<
   }
 );
 
-export const getNotificationApi = createAsyncThunk<
-  INotificationResponse,
-  undefined,
-  IThunkApiConfig
->("api/notification/get-notification", async (_, { rejectWithValue }) => {
-  try {
-    const response: AxiosResponse<INotificationResponse> = await Axios.get(
-      "/notification/get-notification"
-    );
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
-  }
-});
-export const removeNotificationApi = createAsyncThunk<
-  IRemoveNotificationResponse & {
-    notification_id: string;
-  },
-  IRemoveNotificationPayload,
-  IThunkApiConfig
->(
-  "api/notification/remove-notification",
-  async ({ notification_id }, { rejectWithValue }) => {
-    try {
-      const response: AxiosResponse<IRemoveNotificationResponse> =
-        await Axios.post("/notification/remove-notification", {
-          notification_id,
-        });
-      return {
-        ...response.data,
-        notification_id,
-      };
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
-    }
-  }
-);
-
 const initialState: IChatInitialState = {
   is_typing: false,
   fetch_user: {
@@ -345,7 +331,6 @@ const initialState: IChatInitialState = {
     fetch_type: null,
     is_request_pending: false,
   },
-  notifications: [],
   default_users: [],
   default_groups: [],
   recommended_groups: [],
@@ -477,9 +462,6 @@ const chatSlice = createSlice({
     updateActiveGroup: (state, action: PayloadAction<IGroup | null>) => {
       state.active_group = action.payload;
     },
-    updateNotification: (state, action: PayloadAction<INotification>) => {
-      state.notifications.push(action.payload);
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserApi.fulfilled, (state, action) => {
@@ -565,24 +547,16 @@ const chatSlice = createSlice({
     builder.addCase(fetchGroupMessagesApi.fulfilled, (state, action) => {
       state.active_conversation = action.payload.conversation;
     });
-    builder.addCase(getNotificationApi.fulfilled, (state, action) => {
-      state.notifications = action.payload.notifications;
-    });
     builder.addCase(joinGroupApi.fulfilled, (state, action) => {
-      if (action.payload.notification_id) {
-        state.notifications = state.notifications.filter(
-          (notification) => notification.id !== action.payload.notification_id
-        );
-      }
       state.default_groups.push(action.payload.group);
       state.recommended_groups = state.recommended_groups.filter(
         (group) => group.id !== action.payload.group.id
       );
     });
-    builder.addCase(removeNotificationApi.fulfilled, (state, action) => {
-      state.notifications = state.notifications.filter(
-        (notification) => notification.id !== action.payload.notification_id
-      );
+    builder.addCase(joinGroupRequestApi.fulfilled, (state, action) => {
+      state.recommended_groups = state.recommended_groups.filter((group) => {
+        return group.id !== action.payload.group_id;
+      });
     });
   },
 });
@@ -613,8 +587,6 @@ export const active_group = (state: RootState) => state.chat.active_group;
 export const recommended_groups = (state: RootState) =>
   state.chat.recommended_groups;
 
-export const notifications = (state: RootState) => state.chat.notifications;
-
 export const {
   resetChat,
   updatePage,
@@ -630,5 +602,4 @@ export const {
   updateShowMemoryGameSnackbar,
   updateShowChat,
   updateActiveGroup,
-  updateNotification,
 } = chatSlice.actions;

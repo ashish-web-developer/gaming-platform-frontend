@@ -14,11 +14,20 @@ const StyledPlayerSearchWrapper = styled.div`
 `;
 
 const StyledHeader = styled.div`
-  padding: 0.875rem;
+  padding: 0 0.875rem;
+  height: 55px;
   border-bottom: 2px solid ${({ theme }) => theme.palette.primary.dark};
   color: ${({ theme }) => theme.palette.primary.dark};
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.875rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const StyledGroupAvatar = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const StyledProfileListWrapper = styled.div`
@@ -26,7 +35,7 @@ const StyledProfileListWrapper = styled.div`
   flex-direction: column;
   gap: 12px;
   padding: 0.875rem;
-  height: calc(100% - 100px);
+  height: calc(100% - 105px);
   overflow: scroll;
 `;
 
@@ -125,6 +134,7 @@ const StyledInviteCta = styled.button`
 export {
   StyledPlayerSearchWrapper,
   StyledHeader,
+  StyledGroupAvatar,
   StyledProfileListWrapper,
   StyledProfileContainer,
   StyledProfileWrapper,

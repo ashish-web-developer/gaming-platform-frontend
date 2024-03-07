@@ -2,7 +2,6 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-
 const token = cookies.get("token");
 
 const Axios = axios.create({

@@ -33,7 +33,7 @@ import {
   updateActiveUser,
   // api
   fetchGroupMessagesApi,
-  joinGroupApi,
+  joinGroupRequestApi,
 } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 
@@ -101,11 +101,7 @@ const ChatGroup: FC<
           {show_follow_cta && (
             <StyledFollowCta
               onClick={() => {
-                dispatch(
-                  joinGroupApi({
-                    group_id: id,
-                  })
-                );
+                dispatch(joinGroupRequestApi({ group_id: id }));
               }}
             >
               Follow

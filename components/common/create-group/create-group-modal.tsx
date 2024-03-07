@@ -2,6 +2,7 @@ import { useId, useRef, useState, forwardRef } from "react";
 // types
 import type { ForwardRefRenderFunction, FC } from "react";
 import type { Theme } from "@/theme/chat.theme";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -15,11 +16,16 @@ import {
   StyledLabel,
   StyledInput,
   StyledBottomCtaWrapper,
+  StyledTagWrapper,
+  StyledUserTag,
+  StyledAvatarWrapper,
+  StyledAvatarUsername,
   StyledCreateCta,
 } from "@/styles/components/common/create-group/create-group-modal.style";
 
 // local components
 import PlayerSearch from "@/components/common/create-group/player-search";
+import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
 
 // theme
 import { useTheme } from "styled-components";
@@ -77,7 +83,9 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
   const search_input_ref = useRef<HTMLInputElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
   const group_name_input_ref = useRef<HTMLInputElement>(null);
-  const [group_user_ids, setGroupUserIds] = useState<Array<number>>([]);
+  const [group_users, setGroupUsers] = useState<Array<IUsersWithConversation>>(
+    []
+  );
 
   useOutsideClickHandler({
     modal_ref: container_ref,
@@ -142,6 +150,18 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           }}
         />
       </StyledInputGroup>
+      <StyledTagWrapper>
+        {group_users.map((user) => {
+          return (
+            <StyledUserTag>
+              <StyledAvatarWrapper>
+                <ChatAvatar user={user} />
+              </StyledAvatarWrapper>
+              <StyledAvatarUsername>{user.name}</StyledAvatarUsername>
+            </StyledUserTag>
+          );
+        })}
+      </StyledTagWrapper>
       <StyledBottomCtaWrapper>
         <StyledCreateCta
           onClick={() => {
@@ -149,14 +169,14 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
               dispatch(
                 createGroupApi({
                   group_name: group_name_input_ref.current.value,
-                  user_ids: group_user_ids,
+                  user_ids: group_users.map((user) => user.id),
                 })
               );
               dispatch(updateShowCreateGroupDrownDown(false));
             }
           }}
           disabled={
-            !group_user_ids.length || !group_name_input_ref?.current?.value
+            !group_users.length || !group_name_input_ref?.current?.value
           }
         >
           Create
@@ -164,16 +184,15 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
       </StyledBottomCtaWrapper>
       {Boolean(_fetched_user_result.length) && _fetch_type == "group" && (
         <PlayerSearch
-          updateGroupUserIds={(id, action) => {
+          group_user={group_users}
+          updateGroupUserIds={(player, action) => {
             if (action == "add") {
-              setGroupUserIds((prev) => [...prev, id]);
+              setGroupUsers((prev) => [...prev, player]);
             } else {
-              setGroupUserIds((prev) => {
-                const index = prev.indexOf(id);
-                if (index !== -1) {
-                  return [...prev.slice(0, index), ...prev.slice(index + 1)];
-                }
-                return prev;
+              setGroupUsers((prev) => {
+                return prev.filter((user) => {
+                  return user.id !== player.id;
+                });
               });
             }
           }}

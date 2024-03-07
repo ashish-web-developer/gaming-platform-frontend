@@ -50,22 +50,6 @@ type IGroup = {
   updated_at: string;
 };
 
-interface INotificationDataType {
-  group?: IGroup;
-  message: string;
-}
-
-type INotification = {
-  id: string;
-  type: "info" | "group-invite";
-  notifiable_type: string;
-  notifiable_id: number;
-  data: INotificationDataType;
-  read_at: string;
-  created_at: string;
-  updated_at: string;
-};
-
 type IChatInitialState = {
   is_typing: boolean;
   fetch_user: {
@@ -80,7 +64,6 @@ type IChatInitialState = {
   active_user: IUsersWithConversation | null;
   active_group: IGroup | null;
   active_conversation: IConversation[];
-  notifications: INotification[];
   send_message: {
     is_request_pending: boolean;
   };
@@ -164,21 +147,11 @@ type IJoinGroupResponse = IBaseResponse & {
   group: IGroup;
 };
 
-/**
- * ====== NOTIFICATION API ======
- */
-
-type INotificationResponse = IBaseResponse & {
-  notifications: INotification[];
+type IJoinRequestPayload = {
+  group_id: number;
 };
 
-type IRemoveNotificationPayload = {
-  notification_id: string;
-};
-
-type IRemoveNotificationResponse = IBaseResponse & {
-  message?: string;
-};
+type IJoinRequestResponse = IBaseResponse;
 
 /**
  * ==== SEND MESSAGE API =====
@@ -200,7 +173,6 @@ export {
   IUserGroup,
   IJoinGroupPayload,
   IJoinGroupResponse,
-  INotification,
   IFetchUserPayload,
   IFetchUserResponse,
   IFetchDefaultUserResponse,
@@ -215,9 +187,8 @@ export {
   IGetGroupRecommendationResponse,
   ICreateGroupPayload,
   ICreateGroupResponse,
-  INotificationResponse,
-  IRemoveNotificationPayload,
-  IRemoveNotificationResponse,
+  IJoinRequestPayload,
+  IJoinRequestResponse,
   ISendMessagePayload,
   ISendMessageResponse,
 };

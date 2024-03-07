@@ -17,7 +17,7 @@ import {
 } from "@/styles/components/common/notification-modal/notification-modal.style";
 
 // local components
-import CreateGroupNotification from "@/components/common/notification-modal/create-group-notification";
+import Notification from "@/components/common/notification-modal/notification";
 
 // theme
 import { useTheme } from "styled-components";
@@ -25,7 +25,7 @@ import { useTheme } from "styled-components";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { mode, updateShowNotification } from "@/store/slice/common.slice";
-import { notifications } from "@/store/slice/chat.slice";
+import { notifications } from "@/store/slice/notification.slice";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -61,8 +61,11 @@ const NotificationModal: ForwardRefRenderFunction<HTMLButtonElement> = (
   const group_invite = _notifications.filter(
     (notification) => notification.type == "group-invite"
   );
+  const group_join_request = _notifications.filter(
+    (notification) => notification.type == "group-join-request"
+  );
   const container_ref = useRef<HTMLDivElement>(null);
-  const [active_tab, setActiveTab] = useState<"tab1" | "tab2">("tab1");
+  const [active_tab, setActiveTab] = useState<"tab1" | "tab2" | "tab3">("tab1");
 
   useOutsideClickHandler({
     modal_ref: container_ref,
@@ -113,29 +116,39 @@ const NotificationModal: ForwardRefRenderFunction<HTMLButtonElement> = (
             </StyledNotificationCount>
           )}
         </StyledTabCta>
+        <StyledTabCta
+          $active={active_tab == "tab3"}
+          onClick={() => {
+            setActiveTab("tab3");
+          }}
+        >
+          Request
+          {Boolean(group_join_request.length) && (
+            <StyledNotificationCount $mode={_mode}>
+              {group_join_request.length}
+            </StyledNotificationCount>
+          )}
+        </StyledTabCta>
       </StyledTabWrapper>
       <StyledNotificationContentWrapper>
         {active_tab == "tab1" && (
           <StyledNotificationContent>
             {info_notifications.map((notification) => {
-              return (
-                <CreateGroupNotification
-                  key={notification.id}
-                  {...notification}
-                />
-              );
+              return <Notification key={notification.id} {...notification} />;
             })}
           </StyledNotificationContent>
         )}
         {active_tab == "tab2" && (
           <StyledNotificationContent>
             {group_invite.map((notification) => {
-              return (
-                <CreateGroupNotification
-                  key={notification.id}
-                  {...notification}
-                />
-              );
+              return <Notification key={notification.id} {...notification} />;
+            })}
+          </StyledNotificationContent>
+        )}
+        {active_tab == "tab3" && (
+          <StyledNotificationContent>
+            {group_join_request.map((notification) => {
+              return <Notification key={notification.id} {...notification} />;
             })}
           </StyledNotificationContent>
         )}

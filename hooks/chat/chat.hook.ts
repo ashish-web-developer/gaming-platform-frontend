@@ -12,8 +12,8 @@ import {
   fetchDefaultUser,
   getGroupsApi,
   getGroupRecommendationApi,
-  getNotificationApi,
 } from "@/store/slice/chat.slice";
+import { getNotificationApi } from "@/store/slice/notification.slice";
 import { user } from "@/store/slice/user.slice";
 
 /**

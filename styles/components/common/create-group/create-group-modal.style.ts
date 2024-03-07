@@ -74,6 +74,32 @@ const StyledInput = styled.input<{
       props.$mode == "dark" ? "rgba(162, 242, 99, 0.6)" : "rgba(0, 0, 0, 0.6)"};
   }
 `;
+const StyledTagWrapper = styled.div`
+  display: flex;
+  margin-top: 1rem;
+  gap: 8px;
+  flex-wrap: wrap;
+`;
+const StyledUserTag = styled.div`
+  height: 35px;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  backgroud: ${({ theme }) => theme.palette.primary.main};
+  border-radius: 25px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 2.2rem;
+  padding-right: 1rem;
+`;
+const StyledAvatarWrapper = styled.span`
+  position: absolute;
+  left: 0.5px;
+`;
+const StyledAvatarUsername = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 0.875rem;
+  color: ${({ theme }) => theme.palette.primary.dark};
+`;
 
 const StyledBottomCtaWrapper = styled.div`
   display: flex;
@@ -105,6 +131,10 @@ export {
   StyledInputGroup,
   StyledLabel,
   StyledInput,
+  StyledTagWrapper,
+  StyledUserTag,
+  StyledAvatarWrapper,
+  StyledAvatarUsername,
   StyledBottomCtaWrapper,
   StyledCreateCta,
 };

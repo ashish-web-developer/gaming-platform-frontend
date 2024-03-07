@@ -32,7 +32,7 @@ import {
 } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 // helpers
-import { getTimeDifference } from "@/helpers/common";
+import { getTimeDifference } from "@/helpers/common.helper";
 
 interface IProps {
   user: IUsersWithConversation;

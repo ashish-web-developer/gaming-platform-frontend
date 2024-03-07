@@ -11,7 +11,7 @@ const StyledNotificationWrapper = styled.div`
   top: calc(100% + 1rem);
   right: 250px;
   z-index: 2;
-  overflow:hidden;
+  overflow: hidden;
 `;
 
 const StyledNotificationHeader = styled.div`
@@ -60,7 +60,7 @@ const StyledTabCta = styled.button<{
 `;
 
 const StyledNotificationCount = styled.span<{
-  $mode:"light"|"dark"
+  $mode: "light" | "dark";
 }>`
   display: flex;
   align-items: center;
@@ -71,13 +71,16 @@ const StyledNotificationCount = styled.span<{
   font-size: 0.75rem;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   border-radius: 4px;
-  background:${(props)=>props.$mode == "dark"?props.theme.palette.secondary.dark:props.theme.palette.primary.light};
+  background: ${(props) =>
+    props.$mode == "dark"
+      ? props.theme.palette.secondary.dark
+      : props.theme.palette.primary.light};
   color: #000;
 `;
 const StyledNotificationContentWrapper = styled.div`
   width: 100%;
   height: calc(100% - 100px);
-  overflow:scroll;
+  overflow: scroll;
 `;
 const StyledNotificationContent = styled.div`
   width: 100%;

@@ -17,6 +17,7 @@ const StyledUserAvatar = styled.span`
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   border-radius: 50%;
   flex-shrink: 0;
+  overflow: hidden;
 `;
 
 const StyledAvatarImage = styled(Image)`
@@ -64,6 +65,14 @@ const StyledInfoNotification = styled.div`
   padding: 0.5rem 1rem;
 `;
 
+const StyledNotificationDate = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 12px;
+  color: ${({ theme }) => theme.palette.primary.dark};
+  display: flex;
+  justify-content: flex-end;
+`;
+
 export {
   StyledGroupNotificationWrapper,
   StyledUserAvatar,
@@ -73,4 +82,5 @@ export {
   StyledCtaWrapper,
   StyledCta,
   StyledInfoNotification,
+  StyledNotificationDate,
 };
