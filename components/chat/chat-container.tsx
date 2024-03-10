@@ -47,6 +47,7 @@ import {
   active_group,
   updateDefaultGroupLatestConversation,
   updateDefaultGroup,
+  updateGroupsUsers,
 } from "@/store/slice/group.slice";
 import {
   show_profile_upload_modal,
@@ -56,7 +57,7 @@ import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
-import { useDefault, useFirstUserConversation } from "@/hooks/chat/chat.hook";
+import { useDefault, useDefaultConversation } from "@/hooks/chat/chat.hook";
 import {
   usePrivateChannel,
   usePresenceChannel,
@@ -75,7 +76,7 @@ const ChatContainer: FC = () => {
   const _show_memory_game_snackbar = useAppSelector(show_memory_game_snackbar);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   useDefault();
-  useFirstUserConversation();
+  useDefaultConversation();
   useNotificationChannel();
   usePrivateChannel(`chat.${_user.id}`, [
     {
@@ -131,6 +132,12 @@ const ChatContainer: FC = () => {
       event: "Group.GroupAccessGiven",
       callback: (data: { group: IGroup }) => {
         dispatch(updateDefaultGroup(data.group));
+      },
+    },
+    {
+      event: "Group.GroupJoinedEvent",
+      callback: (data: { group: IGroup }) => {
+        dispatch(updateGroupsUsers(data.group));
       },
     },
   ]);

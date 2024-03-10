@@ -2,7 +2,6 @@
 import { IBaseResponse } from "@/types/store/slice/common";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
-
 type IUserGroup = {
   id: number;
   user_id: number;
@@ -24,12 +23,12 @@ type IGroup = {
   updated_at: string;
 };
 
-
 type IGroupInitialState = {
   default_groups: IGroup[];
   recommended_groups: IGroup[];
   active_group: IGroup | null;
-}
+  is_active_user_exist: boolean;
+};
 
 type IGroupCreationApiPayload = {
   user_ids: Array<number>;
@@ -37,7 +36,7 @@ type IGroupCreationApiPayload = {
 };
 type IGroupCreationApiResponse = IBaseResponse & {
   message: string;
-  group:IGroup;
+  group: IGroup;
 };
 
 /**
@@ -65,26 +64,26 @@ type IJoinRequestPayload = {
 type IJoinRequestResponse = IBaseResponse;
 
 type IGroupAccessApiPayload = {
-  user_id:number;
-  group_id:number;
-  notification_id?:string;
-}
+  user_id: number;
+  group_id: number;
+  notification_id?: string;
+};
 type IGroupAccessApiResponse = {
-  success:boolean;
-  message:string;
-}
+  success: boolean;
+  message: string;
+};
 export default IGroupInitialState;
 export {
-    IUserGroup,
-    IGroup,
-    IGetGroupsResponse,
-    IGetGroupRecommendationResponse,
-    IJoinGroupPayload,
-    IJoinGroupResponse,
-    IJoinRequestPayload,
-    IJoinRequestResponse,
-    IGroupCreationApiPayload,
-    IGroupCreationApiResponse,
-    IGroupAccessApiPayload,
-    IGroupAccessApiResponse
-}
+  IUserGroup,
+  IGroup,
+  IGetGroupsResponse,
+  IGetGroupRecommendationResponse,
+  IJoinGroupPayload,
+  IJoinGroupResponse,
+  IJoinRequestPayload,
+  IJoinRequestResponse,
+  IGroupCreationApiPayload,
+  IGroupCreationApiResponse,
+  IGroupAccessApiPayload,
+  IGroupAccessApiResponse,
+};

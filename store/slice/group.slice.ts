@@ -21,7 +21,7 @@ import type {
 import type { AxiosResponse } from "axios";
 
 // thunk api
-import { sendMessageApi } from "@/store/slice/chat.slice";
+import { sendMessageApi, fetchDefaultUser } from "@/store/slice/chat.slice";
 
 // helpers
 import { Axios } from "@/helpers/axios";
@@ -196,6 +196,7 @@ const initialState: IGroupInitialState = {
   default_groups: [],
   recommended_groups: [],
   active_group: null,
+  is_active_user_exist: true,
 };
 const groupSlice = createSlice({
   name: "group",
@@ -221,10 +222,21 @@ const groupSlice = createSlice({
     updateDefaultGroup: (state, action: PayloadAction<IGroup>) => {
       state.default_groups.push(action.payload);
     },
+    updateGroupsUsers: (state, action: PayloadAction<IGroup>) => {
+      state.default_groups = state.default_groups.map((group) => {
+        if (group.id == action.payload.id) {
+          return action.payload;
+        }
+        return group;
+      });
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getGroupsApi.fulfilled, (state, action) => {
       state.default_groups = action.payload.groups;
+      if (!state.is_active_user_exist) {
+        state.active_group = action.payload.groups[0];
+      }
     });
     builder.addCase(getGroupRecommendationApi.fulfilled, (state, action) => {
       state.recommended_groups = action.payload.groups;
@@ -256,6 +268,13 @@ const groupSlice = createSlice({
     builder.addCase(createGroupApi.fulfilled, (state, action) => {
       state.default_groups.push(action.payload.group);
     });
+    builder.addCase(fetchDefaultUser.fulfilled, (state, action) => {
+      if (action.payload.users.length) {
+        state.is_active_user_exist = true;
+      } else {
+        state.is_active_user_exist = false;
+      }
+    });
   },
 });
 
@@ -263,11 +282,13 @@ export const default_groups = (state: RootState) => state.group.default_groups;
 export const recommended_groups = (state: RootState) =>
   state.group.recommended_groups;
 export const active_group = (state: RootState) => state.group.active_group;
-
+export const is_active_user_exist = (state: RootState) =>
+  state.group.is_active_user_exist;
 export const {
   updateActiveGroup,
   updateDefaultGroupLatestConversation,
   updateDefaultGroup,
+  updateGroupsUsers,
 } = groupSlice.actions;
 
 export default groupSlice.reducer;

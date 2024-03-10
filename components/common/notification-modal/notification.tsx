@@ -27,10 +27,21 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 // helpers
 import { readableFormatDate } from "@/helpers/common.helper";
 
+const getUser = (notification: INotification) => {
+  switch (notification.type) {
+    case "group-invite":
+      return notification.data.group.admin as IUsersWithConversation;
+    case "group-join-request":
+      return notification.data.user;
+    default:
+      return null;
+  }
+};
+
 const Notification: FC<INotification> = (notification) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const avatar_url = useAvatarUrl("");
+  const avatar_url = useAvatarUrl(getUser(notification) ?? "");
   if (notification.type == "info") {
     return (
       <StyledInfoNotification>
