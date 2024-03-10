@@ -19,7 +19,7 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
-import { joinGroupApi, getGroupsApi } from "@/store/slice/chat.slice";
+import { giveGroupAccess, joinGroupApi } from "@/store/slice/group.slice";
 import { removeNotificationApi } from "@/store/slice/notification.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -27,13 +27,11 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 // helpers
 import { readableFormatDate } from "@/helpers/common.helper";
 
-const Notification: FC<INotification> = ({ type, ...notification }) => {
+const Notification: FC<INotification> = (notification) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const avatar_url = useAvatarUrl(
-    notification.data.group?.admin as IUsersWithConversation
-  );
-  if (type == "info") {
+  const avatar_url = useAvatarUrl("");
+  if (notification.type == "info") {
     return (
       <StyledInfoNotification>
         <StyledMessage $mode={_mode}>{notification.data.message}</StyledMessage>
@@ -43,7 +41,7 @@ const Notification: FC<INotification> = ({ type, ...notification }) => {
       </StyledInfoNotification>
     );
   }
-  if (type == "group-invite") {
+  if (notification.type == "group-invite") {
     return (
       <StyledGroupNotificationWrapper>
         <StyledUserAvatar>
@@ -73,12 +71,11 @@ const Notification: FC<INotification> = ({ type, ...notification }) => {
                       group_id: notification.data.group.id,
                     })
                   );
-                  dispatch(getGroupsApi());
                 }
               }}
               $show_background={true}
             >
-              Accept
+              Join
             </StyledCta>
           </StyledCtaWrapper>
           <StyledNotificationDate>
@@ -88,7 +85,7 @@ const Notification: FC<INotification> = ({ type, ...notification }) => {
       </StyledGroupNotificationWrapper>
     );
   }
-  if (type == "group-join-request") {
+  if (notification.type == "group-join-request") {
     return (
       <StyledGroupNotificationWrapper>
         <StyledUserAvatar>
@@ -113,12 +110,12 @@ const Notification: FC<INotification> = ({ type, ...notification }) => {
               onClick={() => {
                 if (notification.data.group) {
                   dispatch(
-                    joinGroupApi({
-                      notification_id: notification.id,
+                    giveGroupAccess({
+                      user_id: notification.data.user.id,
                       group_id: notification.data.group.id,
+                      notification_id: notification.id,
                     })
                   );
-                  dispatch(getGroupsApi());
                 }
               }}
               $show_background={true}

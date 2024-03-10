@@ -5,8 +5,8 @@ import type { Theme } from "@/theme/chat.theme";
 import type {
   IUsersWithConversation,
   IConversation,
-  IGroup,
 } from "@/types/store/slice/chat";
+import { IGroup } from "@/types/store/slice/group";
 // styled components
 import {
   StyledPage,
@@ -36,15 +36,18 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
   active_user,
-  active_group,
   show_memory_game_snackbar,
   // action
   updateActiveUserConversation,
   updateDefaultUserConversation,
-  updateDefaultGroupLatestConversation,
   updateConversationView,
   updateShowMemoryGameSnackbar,
 } from "@/store/slice/chat.slice";
+import {
+  active_group,
+  updateDefaultGroupLatestConversation,
+  updateDefaultGroup,
+} from "@/store/slice/group.slice";
 import {
   show_profile_upload_modal,
   updateMode,
@@ -122,6 +125,12 @@ const ChatContainer: FC = () => {
           dispatch(updateGamingUser(data.user));
           router.push("/memory-game");
         }
+      },
+    },
+    {
+      event: "Group.GroupAccessGiven",
+      callback: (data: { group: IGroup }) => {
+        dispatch(updateDefaultGroup(data.group));
       },
     },
   ]);

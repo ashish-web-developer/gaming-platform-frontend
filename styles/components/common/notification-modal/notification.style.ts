@@ -50,6 +50,7 @@ const StyledCta = styled.button<{
   padding: 4px 12px;
   border-radius: 4px;
   font-size: 12px;
+  cursor: pointer;
   ${(props) =>
     props.$show_background &&
     `

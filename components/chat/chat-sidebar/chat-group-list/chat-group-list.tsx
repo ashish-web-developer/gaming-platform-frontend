@@ -13,7 +13,7 @@ import ChatGroup from "@/components/chat/chat-sidebar/chat-group-list/chat-group
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { default_groups } from "@/store/slice/chat.slice";
+import { default_groups } from "@/store/slice/group.slice";
 
 const ChatGroupList: FC = () => {
   const _default_groups = useAppSelector(default_groups);

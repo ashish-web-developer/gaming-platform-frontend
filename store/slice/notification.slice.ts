@@ -13,7 +13,7 @@ import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type { AxiosResponse } from "axios";
 
 // api
-import { joinGroupApi } from "@/store/slice/chat.slice";
+import { joinGroupApi, giveGroupAccess } from "@/store/slice/group.slice";
 
 // helpers
 import { Axios } from "@/helpers/axios";
@@ -65,7 +65,12 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     updateNotification: (state, action: PayloadAction<INotification>) => {
-      state.notifications.push(action.payload);
+      let is_notification_exist = state.notifications.find(
+        (element) => element.id == action.payload.id
+      );
+      if (!is_notification_exist) {
+        state.notifications.unshift(action.payload);
+      }
     },
   },
   extraReducers: (builder) => {
@@ -83,6 +88,11 @@ const notificationSlice = createSlice({
           (notification) => notification.id !== action.payload.notification_id
         );
       }
+    });
+    builder.addCase(giveGroupAccess.fulfilled, (state, action) => {
+      state.notifications = state.notifications.filter((notification) => {
+        return notification.id !== action.payload.notification_id;
+      });
     });
   },
 });

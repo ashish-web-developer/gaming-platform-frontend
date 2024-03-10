@@ -25,11 +25,11 @@ import {
   active_user,
   // actions
   updateShowChat,
-  updateActiveGroup,
   updateActiveUser,
   // api
   fetchMessages,
 } from "@/store/slice/chat.slice";
+import { updateActiveGroup } from "@/store/slice/group.slice";
 import { mode } from "@/store/slice/common.slice";
 // helpers
 import { getTimeDifference } from "@/helpers/common.helper";

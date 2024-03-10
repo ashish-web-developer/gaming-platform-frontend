@@ -12,10 +12,7 @@ import Pusher from "pusher-js";
 import { useAppSelector, useAppDispatch } from "./redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
-import {
-  getNotificationApi,
-  updateNotification,
-} from "@/store/slice/notification.slice";
+import { updateNotification } from "@/store/slice/notification.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import {
   updateIsGamingUserIn,
@@ -135,12 +132,15 @@ function useNotificationChannel() {
           console.log("connected to notification channel");
         })
         .notification((notification: INotification) => {
+          if (typeof notification.data == "string") {
+            notification.data = JSON.parse(notification.data);
+          }
           /**
            * Not updating notification value directly instead of
            * calling api because getting wrong value of id and
            * type from notification
            */
-          dispatch(getNotificationApi());
+          dispatch(updateNotification(notification));
           notification_audio_ref.current?.play();
         });
     }

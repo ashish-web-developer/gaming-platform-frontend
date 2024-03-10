@@ -10,9 +10,11 @@ import {
   // api
   fetchMessages,
   fetchDefaultUser,
+} from "@/store/slice/chat.slice";
+import {
   getGroupsApi,
   getGroupRecommendationApi,
-} from "@/store/slice/chat.slice";
+} from "@/store/slice/group.slice";
 import { getNotificationApi } from "@/store/slice/notification.slice";
 import { user } from "@/store/slice/user.slice";
 

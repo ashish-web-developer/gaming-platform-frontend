@@ -1,7 +1,7 @@
 // types
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { IGroup } from "@/types/store/slice/chat";
+import { IGroup } from "@/types/store/slice/group";
 // styled components
 import {
   StyledChatGroupWrapper,
@@ -28,13 +28,13 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
   active_group,
-  // actions
+  // action
   updateActiveGroup,
-  updateActiveUser,
   // api
-  fetchGroupMessagesApi,
   joinGroupRequestApi,
-} from "@/store/slice/chat.slice";
+  fetchGroupMessagesApi,
+} from "@/store/slice/group.slice";
+import { updateActiveUser } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // hooks

@@ -44,9 +44,8 @@ import {
   // action
   updateFetchUserResult,
   updatePage,
-  // api
-  createGroupApi,
 } from "@/store/slice/chat.slice";
+import { createGroupApi } from "@/store/slice/group.slice";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -171,7 +170,11 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
                   group_name: group_name_input_ref.current.value,
                   user_ids: group_users.map((user) => user.id),
                 })
-              );
+              )
+                .unwrap()
+                .catch((error) => {
+                  console.log("value of error", error);
+                });
               dispatch(updateShowCreateGroupDrownDown(false));
             }
           }}

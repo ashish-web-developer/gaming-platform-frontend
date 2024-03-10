@@ -12,7 +12,7 @@ import {
 import ChatGroup from "@/components/chat/chat-sidebar/chat-group-list/chat-group";
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { recommended_groups } from "@/store/slice/chat.slice";
+import { recommended_groups } from "@/store/slice/group.slice";
 const GroupSuggestion: FC = () => {
   const _recommended_groups = useAppSelector(recommended_groups);
   return (

@@ -1,21 +1,43 @@
 // types
-import { IGroup } from "@/types/store/slice/chat";
+import type { IGroup } from "@/types/store/slice/group";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
-interface INotificationDataType {
-  group?: IGroup;
+type INotificationInfoDataType = {
   message: string;
-}
+};
+
+type INotificationGroupInviteDataType = {
+  message: string;
+  group: IGroup;
+};
+
+type INotificationGroupJoinRequestType = {
+  user: IUsersWithConversation;
+  group: IGroup;
+  message: string;
+};
 
 type INotification = {
   id: string;
-  type: "info" | "group-invite" | "group-join-request";
   notifiable_type: string;
   notifiable_id: number;
-  data: INotificationDataType;
   read_at: string;
   created_at: string;
   updated_at: string;
-};
+} & (
+  | {
+      type: "info";
+      data: INotificationInfoDataType;
+    }
+  | {
+      type: "group-invite";
+      data: INotificationGroupInviteDataType;
+    }
+  | {
+      type: "group-join-request";
+      data: INotificationGroupJoinRequestType;
+    }
+);
 
 type INotificationInitialState = {
   notifications: INotification[];

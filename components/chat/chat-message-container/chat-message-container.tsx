@@ -20,9 +20,9 @@ import { user } from "@/store/slice/user.slice";
 import {
   // state
   active_user,
-  active_group,
   active_conversation,
 } from "@/store/slice/chat.slice";
+import { active_group } from "@/store/slice/group.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const ChatMessageContainer: FC = () => {

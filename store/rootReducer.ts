@@ -6,6 +6,7 @@ import chatReducer from "@/store/slice/chat.slice";
 import commonReducer from "@/store/slice/common.slice";
 import gameReducer from "@/store/slice/game.slice";
 import notificationReducer from "@/store/slice/notification.slice";
+import groupReducer from "@/store/slice/group.slice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     chat: chatReducer,
     game: gameReducer,
     notification: notificationReducer,
+    group: groupReducer,
   },
 });
 

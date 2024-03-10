@@ -29,27 +29,6 @@ type IUsersWithConversation = {
   earned_points: number;
 };
 
-type IUserGroup = {
-  id: number;
-  user_id: number;
-  group_id: number;
-  user?: IUsersWithConversation;
-  created_at: string;
-  updated_at: string;
-};
-
-type IGroup = {
-  id: number;
-  group_name: string;
-  admin?: IUsersWithConversation;
-  admin_id: number;
-  user_group: IUserGroup[];
-  latest_conversation: IConversation | null;
-  group_color: string;
-  created_at: string;
-  updated_at: string;
-};
-
 type IChatInitialState = {
   is_typing: boolean;
   fetch_user: {
@@ -59,10 +38,7 @@ type IChatInitialState = {
     page: number;
   };
   default_users: IUsersWithConversation[];
-  default_groups: IGroup[];
-  recommended_groups: IGroup[];
   active_user: IUsersWithConversation | null;
-  active_group: IGroup | null;
   active_conversation: IConversation[];
   send_message: {
     is_request_pending: boolean;
@@ -124,34 +100,6 @@ type IAcceptInvitationApiResponse = {
 /**
  * ===== GROUP API =======
  */
-type IGetGroupResponse = IBaseResponse & {
-  groups: IGroup[];
-};
-
-type IGetGroupRecommendationResponse = IGetGroupResponse;
-type ICreateGroupPayload = {
-  user_ids: Array<number>;
-  group_name: string;
-};
-type ICreateGroupResponse = IBaseResponse & {
-  message: string;
-};
-
-type IJoinGroupPayload = {
-  notification_id?: string;
-  group_id: number;
-};
-
-type IJoinGroupResponse = IBaseResponse & {
-  message: string;
-  group: IGroup;
-};
-
-type IJoinRequestPayload = {
-  group_id: number;
-};
-
-type IJoinRequestResponse = IBaseResponse;
 
 /**
  * ==== SEND MESSAGE API =====
@@ -169,10 +117,6 @@ export default IChatInitialState;
 export {
   IConversation,
   IUsersWithConversation,
-  IGroup,
-  IUserGroup,
-  IJoinGroupPayload,
-  IJoinGroupResponse,
   IFetchUserPayload,
   IFetchUserResponse,
   IFetchDefaultUserResponse,
@@ -183,12 +127,8 @@ export {
   ISendInvitationApiResponse,
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
-  IGetGroupResponse,
-  IGetGroupRecommendationResponse,
   ICreateGroupPayload,
   ICreateGroupResponse,
-  IJoinRequestPayload,
-  IJoinRequestResponse,
   ISendMessagePayload,
   ISendMessageResponse,
 };
