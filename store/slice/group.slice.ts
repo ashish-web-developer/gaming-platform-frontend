@@ -17,6 +17,8 @@ import type {
   IGroupCreationApiResponse,
   IGroupAccessApiPayload,
   IGroupAccessApiResponse,
+  IFetchGroupApiPayload,
+  IFetchGroupApiResponse,
 } from "@/types/store/slice/group";
 import type { AxiosResponse } from "axios";
 
@@ -192,11 +194,44 @@ export const createGroupApi = createAsyncThunk<
   }
 );
 
+export const fetchGroupApi = createAsyncThunk<
+  IFetchGroupApiResponse,
+  IFetchGroupApiPayload,
+  IThunkApiConfig
+>(
+  "api/group/group-search",
+  async ({ query }, { rejectWithValue, getState }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IFetchGroupApiResponse> = await Axios.post(
+        "/group/group-search",
+        null,
+        {
+          params: {
+            query,
+            page: state.group.fetch_group.page,
+            skip_ids: state.group.default_groups.map((group) => group.id),
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const initialState: IGroupInitialState = {
   default_groups: [],
   recommended_groups: [],
   active_group: null,
   is_active_user_exist: true,
+  show_group_search: false,
+  fetch_group: {
+    page: 1,
+    fetched_group_results: [],
+    is_request_pending: false,
+  },
 };
 const groupSlice = createSlice({
   name: "group",
@@ -230,6 +265,15 @@ const groupSlice = createSlice({
         return group;
       });
     },
+    updateShowGroupSearch: (state, action: PayloadAction<boolean>) => {
+      state.show_group_search = action.payload;
+    },
+    updateFetchedGroupResult: (state, action: PayloadAction<IGroup[]>) => {
+      state.fetch_group.fetched_group_results = action.payload;
+    },
+    updatePage: (state, action: PayloadAction<number>) => {
+      state.fetch_group.page = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getGroupsApi.fulfilled, (state, action) => {
@@ -251,6 +295,12 @@ const groupSlice = createSlice({
       state.recommended_groups = state.recommended_groups.filter((group) => {
         return group.id !== action.payload.group_id;
       });
+      if (state.fetch_group.fetched_group_results.length) {
+        state.fetch_group.fetched_group_results =
+          state.fetch_group.fetched_group_results.filter(
+            (group) => group.id !== action.payload.group_id
+          );
+      }
     });
     builder.addCase(sendMessageApi.fulfilled, (state, action) => {
       if (action.payload.conversation.group_id) {
@@ -275,6 +325,28 @@ const groupSlice = createSlice({
         state.is_active_user_exist = false;
       }
     });
+    builder.addCase(fetchGroupApi.fulfilled, (state, action) => {
+      state.fetch_group.fetched_group_results = [
+        ...state.fetch_group.fetched_group_results,
+        ...action.payload.group.data,
+      ];
+      state.fetch_group.page = state.fetch_group.page + 1;
+      state.fetch_group.is_request_pending = false;
+    });
+    builder.addCase(fetchGroupApi.pending, (state, action) => {
+      state.fetch_group.is_request_pending = true;
+    });
+    builder.addCase(fetchGroupApi.rejected, (state, action) => {
+      state.fetch_group.is_request_pending = false;
+    });
+    builder.addCase(giveGroupAccess.fulfilled, (state, action) => {
+      state.default_groups = state.default_groups.map((group) => {
+        if (group.id == action.payload.group.id) {
+          return action.payload.group;
+        }
+        return group;
+      });
+    });
   },
 });
 
@@ -284,11 +356,20 @@ export const recommended_groups = (state: RootState) =>
 export const active_group = (state: RootState) => state.group.active_group;
 export const is_active_user_exist = (state: RootState) =>
   state.group.is_active_user_exist;
+export const show_group_search = (state: RootState) =>
+  state.group.show_group_search;
+export const is_fetch_group_request_pending = (state: RootState) =>
+  state.group.fetch_group.is_request_pending;
+export const fetched_group_results = (state: RootState) =>
+  state.group.fetch_group.fetched_group_results;
 export const {
   updateActiveGroup,
   updateDefaultGroupLatestConversation,
   updateDefaultGroup,
   updateGroupsUsers,
+  updateShowGroupSearch,
+  updateFetchedGroupResult,
+  updatePage,
 } = groupSlice.actions;
 
 export default groupSlice.reducer;

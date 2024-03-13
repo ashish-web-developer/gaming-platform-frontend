@@ -20,6 +20,7 @@ import {
   StyledUserTag,
   StyledAvatarWrapper,
   StyledAvatarUsername,
+  StyledRemoveCta,
   StyledCreateCta,
 } from "@/styles/components/common/create-group/create-group-modal.style";
 
@@ -152,11 +153,21 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
       <StyledTagWrapper>
         {group_users.map((user) => {
           return (
-            <StyledUserTag>
+            <StyledUserTag key={user.id}>
               <StyledAvatarWrapper>
                 <ChatAvatar user={user} />
               </StyledAvatarWrapper>
               <StyledAvatarUsername>{user.name}</StyledAvatarUsername>
+              <StyledRemoveCta
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setGroupUsers((prev) => {
+                    return prev.filter((_user) => _user.id !== user.id);
+                  });
+                }}
+              >
+                <CloseIcon size={12} color={theme.palette.primary.dark} />
+              </StyledRemoveCta>
             </StyledUserTag>
           );
         })}

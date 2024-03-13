@@ -129,6 +129,7 @@ const StyledInviteCta = styled.button`
   background: linear-gradient(95deg, #ffe666 8.66%, #fb3 95.1%);
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.875rem;
+  cursor: pointer;
 `;
 
 export {

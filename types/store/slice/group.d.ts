@@ -28,6 +28,12 @@ type IGroupInitialState = {
   recommended_groups: IGroup[];
   active_group: IGroup | null;
   is_active_user_exist: boolean;
+  show_group_search: boolean;
+  fetch_group: {
+    page: number;
+    fetched_group_results: IGroup[];
+    is_request_pending: boolean;
+  };
 };
 
 type IGroupCreationApiPayload = {
@@ -71,6 +77,17 @@ type IGroupAccessApiPayload = {
 type IGroupAccessApiResponse = {
   success: boolean;
   message: string;
+  group: IGroup;
+};
+
+type IFetchGroupApiPayload = {
+  query: string;
+};
+type IFetchGroupApiResponse = IBaseResponse & {
+  group: {
+    current_page: number;
+    data: Array<IGroup>;
+  };
 };
 export default IGroupInitialState;
 export {
@@ -86,4 +103,6 @@ export {
   IGroupCreationApiResponse,
   IGroupAccessApiPayload,
   IGroupAccessApiResponse,
+  IFetchGroupApiPayload,
+  IFetchGroupApiResponse,
 };

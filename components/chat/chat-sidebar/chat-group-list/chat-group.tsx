@@ -104,7 +104,7 @@ const ChatGroup: FC<
                 dispatch(joinGroupRequestApi({ group_id: id }));
               }}
             >
-              Follow
+              Join
             </StyledFollowCta>
           )}
         </StyledWrapperTop>

@@ -101,6 +101,13 @@ const StyledAvatarUsername = styled.span`
   color: ${({ theme }) => theme.palette.primary.dark};
 `;
 
+const StyledRemoveCta = styled.button`
+  cursor: pointer;
+  background: none;
+  border: none;
+  margin-left: 8px;
+`;
+
 const StyledBottomCtaWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -135,6 +142,7 @@ export {
   StyledUserTag,
   StyledAvatarWrapper,
   StyledAvatarUsername,
+  StyledRemoveCta,
   StyledBottomCtaWrapper,
   StyledCreateCta,
 };
