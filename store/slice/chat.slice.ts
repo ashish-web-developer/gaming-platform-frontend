@@ -163,31 +163,22 @@ export const sendMessageApi = createAsyncThunk<
   ISendMessageResponse,
   ISendMessagePayload,
   IThunkApiConfig
->(
-  "api/chat/send-message",
-  async ({ message }, { getState, rejectWithValue }) => {
-    try {
-      const state = getState();
-      const response: AxiosResponse<ISendMessageResponse> = await Axios.post(
-        "/chat/send-message",
-        {
-          sender_id: state.user.user.id,
-          message,
-          ...(state.group.active_group
-            ? {
-                group_id: state.group.active_group.id,
-              }
-            : {
-                receiver_id: state.chat.active_user?.id,
-              }),
-        }
-      );
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
-    }
+>("api/chat/send-message", async ({ form_data }, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<ISendMessageResponse> = await Axios.post(
+      "/chat/send-message",
+      form_data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
   }
-);
+});
 
 const initialState: IChatInitialState = {
   is_typing: false,

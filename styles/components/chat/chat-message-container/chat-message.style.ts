@@ -18,8 +18,18 @@ const StyledUserProfile = styled(Image)<{
   object-fit: cover;
 `;
 
-const StyledMessage = styled.div<{
+const StyledMessageWrapper = styled.div<{
   $order: 1 | 2;
+  $align_items: "flex-end" | "flex-start";
+}>`
+  order: ${(props) => props.$order};
+  display: flex;
+  flex-direction: column;
+  align-items: ${(props) => props.$align_items};
+  gap: 2rem;
+`;
+
+const StyledMessage = styled.div<{
   $border_color: string;
   $border_radius: string;
   $left?: number;
@@ -42,7 +52,6 @@ const StyledMessage = styled.div<{
   border-radius: ${(props) => props.$border_radius};
   border: 2px solid ${(props) => props.$border_color};
   padding: 12px 12px 12px 12px;
-  order: ${(props) => props.$order};
   position: relative;
   &::after {
     content: "${(props) => props.$content}";
@@ -72,4 +81,30 @@ const StyledMessage = styled.div<{
     }};
   }
 `;
-export { StyledMessageContent, StyledUserProfile, StyledMessage };
+
+const StyledUploadedImageContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+`;
+
+const StyledUploadedImageWrapper = styled.div`
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 16px;
+  overflow: hidden;
+`;
+const StyledUploadedImage = styled(Image)`
+  object-fit: cover;
+`;
+export {
+  StyledMessageContent,
+  StyledUserProfile,
+  StyledMessage,
+  StyledMessageWrapper,
+  StyledUploadedImageContainer,
+  StyledUploadedImageWrapper,
+  StyledUploadedImage,
+};

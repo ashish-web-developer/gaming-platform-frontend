@@ -90,6 +90,21 @@ const StyledIconCta = styled.button`
   width: 30px;
   height: 30px;
 `;
+const StyledInputLabel = styled.label`
+  width: 30px;
+  height: 30px;
+  position: relative;
+  cursor: pointer;
+`;
+const StyledUploadedImage = styled(Image)`
+  border: 2px solid #000;
+  border-radius: 6px;
+  object-fit: cover;
+`;
+
+const StyledUploadInput = styled.input`
+  display: none;
+`;
 
 const StyledIconImage = styled(Image)`
   object-fit: cover;
@@ -119,6 +134,9 @@ export {
   StyledBottomWrapper,
   StyledIconWrapper,
   StyledIconCta,
+  StyledInputLabel,
+  StyledUploadInput,
+  StyledUploadedImage,
   StyledIconImage,
   StyledSendCta,
 };

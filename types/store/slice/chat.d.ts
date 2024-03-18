@@ -10,6 +10,7 @@ type IConversation = {
   sender?: IUsersWithConversation;
   group_id?: number;
   message: string;
+  files: Array<string> | null;
   viewed: boolean;
   created_at: string;
   updated_at: string;
@@ -106,7 +107,7 @@ type IAcceptInvitationApiResponse = {
  */
 
 type ISendMessagePayload = {
-  message: string;
+  form_data: FormData;
 };
 
 type ISendMessageResponse = IBaseResponse & {

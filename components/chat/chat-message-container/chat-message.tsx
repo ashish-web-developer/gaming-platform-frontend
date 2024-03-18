@@ -11,6 +11,10 @@ import {
   StyledMessageContent,
   StyledUserProfile,
   StyledMessage,
+  StyledMessageWrapper,
+  StyledUploadedImageContainer,
+  StyledUploadedImageWrapper,
+  StyledUploadedImage,
 } from "@/styles/components/chat/chat-message-container/chat-message.style";
 // styled theme
 
@@ -84,18 +88,32 @@ const ChatMessage = forwardRef<
           alt="user-avatar"
           sizes="(max-width: 1400px) 10vw"
         />
-        <StyledMessage
-          ref={target_ref}
-          $show_double_tick={conversation.viewed}
-          $content={created_at}
-          $left={10}
-          $border_radius="20px 0px 20px 20px"
-          $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
-          $order={1}
-          $mode={_mode}
-        >
-          {conversation.message}
-        </StyledMessage>
+        <StyledMessageWrapper $align_items="flex-end" $order={1}>
+          <StyledMessage
+            ref={target_ref}
+            $show_double_tick={conversation.viewed}
+            $content={created_at}
+            $left={10}
+            $border_radius="20px 0px 20px 20px"
+            $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
+            $mode={_mode}
+          >
+            {conversation.message}
+          </StyledMessage>
+          <StyledUploadedImageContainer>
+            {conversation.files?.map((file) => {
+              return (
+                <StyledUploadedImageWrapper>
+                  <StyledUploadedImage
+                    alt="image"
+                    fill={true}
+                    src={`${process.env.NEXT_PUBLIC_API_END_POINT}${file}`}
+                  />
+                </StyledUploadedImageWrapper>
+              );
+            })}
+          </StyledUploadedImageContainer>
+        </StyledMessageWrapper>
       </StyledMessageContent>
     );
   }
@@ -110,18 +128,32 @@ const ChatMessage = forwardRef<
         alt="user-avatar"
         sizes="(max-width: 1400px) 10vw"
       />
-      <StyledMessage
-        ref={target_ref}
-        $show_double_tick={false}
-        $content={created_at}
-        $right={10}
-        $border_radius="0px 20px 20px 20px"
-        $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
-        $order={2}
-        $mode={_mode}
-      >
-        {conversation.message}
-      </StyledMessage>
+      <StyledMessageWrapper $align_items="flex-start" $order={2}>
+        <StyledMessage
+          ref={target_ref}
+          $show_double_tick={false}
+          $content={created_at}
+          $right={10}
+          $border_radius="0px 20px 20px 20px"
+          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
+          $mode={_mode}
+        >
+          {conversation.message}
+        </StyledMessage>
+        <StyledUploadedImageContainer>
+          {conversation.files?.map((file) => {
+            return (
+              <StyledUploadedImageWrapper>
+                <StyledUploadedImage
+                  alt="image"
+                  fill={true}
+                  src={`${process.env.NEXT_PUBLIC_API_END_POINT}${file}`}
+                />
+              </StyledUploadedImageWrapper>
+            );
+          })}
+        </StyledUploadedImageContainer>
+      </StyledMessageWrapper>
     </StyledMessageContent>
   );
 });
