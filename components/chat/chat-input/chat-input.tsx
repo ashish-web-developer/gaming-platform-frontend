@@ -41,6 +41,8 @@ import { active_group } from "@/store/slice/group.slice";
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useEcho } from "@/hooks/pusher.hook";
 
+import AudioMediaRecorder from "@/helpers/audio-media-recorder";
+
 const ChatInput: FC<{}> = () => {
   const dispatch = useAppDispatch();
   const echo = useEcho();
@@ -57,6 +59,7 @@ const ChatInput: FC<{}> = () => {
   const media_recoder = useRef<MediaRecorder>();
   const upload_input_id = useId();
   const upload_input_ref = useRef<HTMLInputElement>(null);
+  const audio_chunks = useRef<Blob[]>([]);
   const [uploaded_file, set_uploaded_file] = useState<
     {
       state: 0 | 1 | 2;
@@ -70,13 +73,13 @@ const ChatInput: FC<{}> = () => {
     group_id,
     receiver_id,
   }: {
-    message: string;
+    message: string | null;
     sender_id: number;
     group_id: null | number;
     receiver_id: null | number;
   }) => {
     const form_data = new FormData();
-    form_data.append("message", message);
+    message && form_data.append("message", message);
     form_data.append("sender_id", sender_id.toString());
     group_id && form_data.append("group_id", group_id.toString());
     receiver_id && form_data.append("receiver_id", receiver_id.toString());
@@ -120,18 +123,21 @@ const ChatInput: FC<{}> = () => {
               }
               if (
                 _user.id &&
-                input_ref.current?.value &&
+                (input_ref.current?.value ||
+                  upload_input_ref.current?.files?.length) &&
                 !_is_request_pending &&
                 (event.metaKey || event.ctrlKey) &&
                 event.key == "Enter"
               ) {
                 handle_form_submission({
-                  message: input_ref.current.value,
+                  message: input_ref.current ? input_ref.current.value : null,
                   sender_id: _user.id,
                   receiver_id: _active_user ? _active_user.id : null,
                   group_id: _active_group ? _active_group.id : null,
                 });
-                input_ref.current.value = "";
+                if (input_ref.current) {
+                  input_ref.current.value = "";
+                }
               }
             }}
           />
@@ -196,35 +202,16 @@ const ChatInput: FC<{}> = () => {
             />
 
             <StyledIconCta
-              onClick={(event) => {
+              onClick={async (event) => {
                 if (!media_recoder.current) {
-                  navigator.mediaDevices
-                    .getUserMedia({ audio: true })
-                    .then((stream) => {
-                      console.log(stream);
-                      media_recoder.current = new MediaRecorder(stream);
-                      const audio_chunks: Blob[] = [];
-                      media_recoder.current.addEventListener(
-                        "dataavailable",
-                        function (event) {
-                          audio_chunks.push(event.data);
-                        }
-                      );
-                      media_recoder.current.addEventListener("start", () => {
-                        console.log("audio got started");
-                      });
-                      media_recoder.current.addEventListener("stop", () => {
-                        const audio_blob = new Blob(audio_chunks);
-                        const audio_url = URL.createObjectURL(audio_blob);
-                        const audio = new Audio(audio_url);
-                        audio.play();
-                      });
-                      media_recoder.current.start();
-                    });
-                  return;
+                  const media_stream =
+                    await navigator.mediaDevices.getUserMedia({ audio: true });
+                  // const audio_media_recorder = new AudioMediaRecorder(media_stream);
+                  media_recoder.current = new MediaRecorder(media_stream);
+                  media_recoder.current.addEventListener('dataavailable',(event)=>{
+                    audio_chunks.current.push(event.data);
+                  })
                 }
-                media_recoder.current.stop();
-                media_recoder.current = undefined;
               }}
             >
               <StyledIconImage
@@ -257,14 +244,20 @@ const ChatInput: FC<{}> = () => {
           </StyledIconWrapper>
           <StyledSendCta
             onClick={() => {
-              if (input_ref.current && _user.id) {
+              if (
+                (input_ref.current?.value ||
+                  upload_input_ref.current?.files?.length) &&
+                _user.id
+              ) {
                 handle_form_submission({
-                  message: input_ref.current.value,
+                  message: input_ref.current ? input_ref.current.value : null,
                   sender_id: _user.id,
                   receiver_id: _active_user ? _active_user.id : null,
                   group_id: _active_group ? _active_group.id : null,
                 });
-                input_ref.current.value = "";
+                if (input_ref.current) {
+                  input_ref.current.value = "";
+                }
               }
             }}
             disabled={_is_request_pending}

@@ -9,7 +9,7 @@ type IConversation = {
   receiver?: IUsersWithConversation;
   sender?: IUsersWithConversation;
   group_id?: number;
-  message: string;
+  message: string | null;
   files: Array<string> | null;
   viewed: boolean;
   created_at: string;

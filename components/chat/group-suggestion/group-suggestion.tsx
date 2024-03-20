@@ -33,7 +33,6 @@ import {
 
 // helpers
 import { fetchOnScroll } from "@/helpers/chat.helper";
-import { useOutsideClickHandler } from "@/hooks/common.hook";
 
 const GroupSuggestion: FC = () => {
   const dispatch = useAppDispatch();
@@ -47,20 +46,35 @@ const GroupSuggestion: FC = () => {
   );
   const result_container_ref = useRef<HTMLDivElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
-  useOutsideClickHandler({
-    modal_ref:result_container_ref,
-    cta_ref:input_ref,
-    handler:()=>{
-      dispatch(updateShowGroupSearch(false));
-      dispatch(updateFetchedGroupResult([]));
-    }
-  })
+  // useOutsideClickHandler({
+  //   modal_ref:result_container_ref,
+  //   cta_ref:input_ref,
+  //   handler:()=>{
+  //     dispatch(updateShowGroupSearch(false));
+  //     dispatch(updateFetchedGroupResult([]));
+  //   }
+  // })
 
-  useEffect(()=>{
-    if(_show_group_search){
+  useEffect(() => {
+    const outsideClickHandler = (event: Event) => {
+      if (
+        !input_ref.current?.contains(event.target as Node) &&
+        !result_container_ref.current?.contains(event.target as Node)
+      ) {
+        dispatch(updateShowGroupSearch(false));
+        dispatch(updateFetchedGroupResult([]));
+      }
+    };
+    if (_show_group_search) {
       input_ref.current?.focus();
+      document.addEventListener("click", outsideClickHandler);
     }
-  },[_show_group_search])
+    return () => {
+      if (_show_group_search) {
+        document.removeEventListener("click", outsideClickHandler);
+      }
+    };
+  }, [_show_group_search]);
   return (
     <StyledGroupSuggestionWrapper>
       <StyledDetailsWrapper $add_padding={!_show_group_search}>
@@ -107,7 +121,6 @@ const GroupSuggestion: FC = () => {
         ref={result_container_ref}
         onScroll={() => {
           if (_show_group_search) {
-            console.log("inside function");
             fetchOnScroll({
               timeout_ref: timeout_ref,
               container_ref: result_container_ref,
@@ -115,7 +128,6 @@ const GroupSuggestion: FC = () => {
               handler: () => {
                 timeout_ref.current = setTimeout(() => {
                   if (input_ref.current) {
-                    console.log("inside handler");
                     dispatch(
                       fetchGroupApi({
                         query: input_ref.current.value,

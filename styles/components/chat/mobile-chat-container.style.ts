@@ -8,41 +8,54 @@ const StyledMobileChatContainer = styled.div`
   position: relative;
 `;
 
-const StyledMainContainer = styled.div`
+const StyledTabWrapper = styled.div`
+  height: 60px;
   width: 100%;
-  height: calc(100vh - 2 * 1.2rem - 152px);
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 16px;
   display: flex;
-  flex-direction: column;
-  gap: 30px;
+  grid-template-column: 1fr 1fr;
+  gap: 12px;
+  padding: 2px;
+  margin-top: 1rem;
 `;
 
-const StyledDivider = styled.div<{
-  $mode: "light" | "dark";
+const StyledTabCta = styled.button<{
+  $active: boolean;
 }>`
   width: 100%;
-  height: 2px;
+  height: 100%;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 1.25rem;
+  border-radius: 16px;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
   background: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.light
-      : props.theme.palette.primary.dark};
+    props.$active ? props.theme.palette.secondary.main : "#000"};
+  color: ${(props) =>
+    props.$active ? "#000" : props.theme.palette.secondary.main};
 `;
 
-const StyledBottomContainer = styled.div`
+const StyledMainContent = styled.div`
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 16px;
+  height: 300px;
   width: 100%;
-  flex-basis: 50px;
+  margin-top: 1.25rem;
+  height: calc(100% - 278px);
+`;
+
+const StyledUserList = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  height: calc(100% - 30px);
+  overflow: scroll;
+  gap: 20px;
+  padding: 1rem;
 `;
-
-const StyledInvitationCta = styled.button`
-  background: transparent;
-  border: none;
-`;
-
 export {
   StyledMobileChatContainer,
-  StyledDivider,
-  StyledMainContainer,
-  StyledBottomContainer,
-  StyledInvitationCta,
+  StyledTabWrapper,
+  StyledTabCta,
+  StyledMainContent,
+  StyledUserList,
 };

@@ -89,21 +89,24 @@ const ChatMessage = forwardRef<
           sizes="(max-width: 1400px) 10vw"
         />
         <StyledMessageWrapper $align_items="flex-end" $order={1}>
-          <StyledMessage
-            ref={target_ref}
-            $show_double_tick={conversation.viewed}
-            $content={created_at}
-            $left={10}
-            $border_radius="20px 0px 20px 20px"
-            $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
-            $mode={_mode}
-          >
-            {conversation.message}
-          </StyledMessage>
+          {conversation.message && (
+            <StyledMessage
+              ref={target_ref}
+              $show_double_tick={conversation.viewed}
+              $content={created_at}
+              $left={10}
+              $border_radius="20px 0px 20px 20px"
+              $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
+              $mode={_mode}
+            >
+              {conversation.message}
+            </StyledMessage>
+          )}
+
           <StyledUploadedImageContainer>
-            {conversation.files?.map((file) => {
+            {conversation.files?.map((file, index) => {
               return (
-                <StyledUploadedImageWrapper>
+                <StyledUploadedImageWrapper key={`uploaded-file-${index}`}>
                   <StyledUploadedImage
                     alt="image"
                     fill={true}
@@ -129,21 +132,24 @@ const ChatMessage = forwardRef<
         sizes="(max-width: 1400px) 10vw"
       />
       <StyledMessageWrapper $align_items="flex-start" $order={2}>
-        <StyledMessage
-          ref={target_ref}
-          $show_double_tick={false}
-          $content={created_at}
-          $right={10}
-          $border_radius="0px 20px 20px 20px"
-          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
-          $mode={_mode}
-        >
-          {conversation.message}
-        </StyledMessage>
+        {conversation.message && (
+          <StyledMessage
+            ref={target_ref}
+            $show_double_tick={false}
+            $content={created_at}
+            $right={10}
+            $border_radius="0px 20px 20px 20px"
+            $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
+            $mode={_mode}
+          >
+            {conversation.message}
+          </StyledMessage>
+        )}
+
         <StyledUploadedImageContainer>
-          {conversation.files?.map((file) => {
+          {conversation.files?.map((file, index) => {
             return (
-              <StyledUploadedImageWrapper>
+              <StyledUploadedImageWrapper key={`uploaded-file-${index}`}>
                 <StyledUploadedImage
                   alt="image"
                   fill={true}
