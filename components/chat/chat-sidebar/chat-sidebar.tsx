@@ -28,6 +28,7 @@ const ChatSidebar: FC = () => {
       />
       {!!_fetched_user_result.length && _fetch_type == "chat" && (
         <ChatSearchResult
+          type="user_search"
           ref={search_input_ref}
           search_container_ref={search_container_ref}
         />

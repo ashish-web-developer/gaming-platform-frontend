@@ -14,6 +14,9 @@ import {
   StyledSkeletonLoader,
 } from "@/styles/components/chat/chat-sidebar/chat-search-result.style";
 
+// local components
+import ChatGroup from "@/components/chat/chat-sidebar/chat-group-list/chat-group";
+
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
@@ -26,6 +29,13 @@ import {
   // api call
   fetchUserApi,
 } from "@/store/slice/chat.slice";
+import {
+  fetched_group_results,
+  is_fetch_group_request_pending,
+  updateFetchedGroupResult,
+  fetchGroupApi,
+} from "@/store/slice/group.slice";
+
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
@@ -34,7 +44,6 @@ import { useOutsideClickHandler } from "@/hooks/common.hook";
 
 // helpers
 import { fetchOnScroll } from "@/helpers/chat.helper";
-import handler from "pages/api/hello";
 
 type IChatResultProfileProps = {
   user: IUsersWithConversation;
@@ -90,13 +99,18 @@ const ChatSearchResult: ForwardRefRenderFunction<
   {
     handleModalClose?: () => void;
     search_container_ref: RefObject<HTMLDivElement>;
+    type: "group_search" | "user_search";
   }
-> = ({ handleModalClose, search_container_ref }, search_input_ref) => {
+> = ({ handleModalClose, search_container_ref, type }, search_input_ref) => {
   const dispatch = useAppDispatch();
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
   const _fetched_user_result = useAppSelector(fetched_user_result);
   const _is_request_pending = useAppSelector(is_request_pending);
   const scrollable_content_ref = useRef<HTMLDivElement>(null);
+  const _is_fetch_group_request_pending = useAppSelector(
+    is_fetch_group_request_pending
+  );
+  const _fetched_group_results = useAppSelector(fetched_group_results);
 
   useOutsideClickHandler({
     modal_ref: scrollable_content_ref,
@@ -105,7 +119,11 @@ const ChatSearchResult: ForwardRefRenderFunction<
       if (typeof search_input_ref !== "function" && search_input_ref?.current) {
         search_input_ref.current.value = "";
       }
-      dispatch(updateFetchUserResult([]));
+      if (type == "user_search") {
+        dispatch(updateFetchUserResult([]));
+      } else if (type == "group_search") {
+        dispatch(updateFetchedGroupResult([]));
+      }
     },
   });
 
@@ -115,19 +133,30 @@ const ChatSearchResult: ForwardRefRenderFunction<
         fetchOnScroll({
           timeout_ref: timeout_ref,
           container_ref: scrollable_content_ref,
-          is_request_pending: _is_request_pending,
+          is_request_pending:
+            type == "user_search"
+              ? _is_request_pending
+              : _is_fetch_group_request_pending,
           handler: () => {
             timeout_ref.current = setTimeout(() => {
               if (
                 typeof search_input_ref !== "function" &&
                 search_input_ref?.current
               ) {
-                dispatch(
-                  fetchUserApi({
-                    fetch_type: "chat",
-                    query: search_input_ref.current.value,
-                  })
-                );
+                if (type == "user_search") {
+                  dispatch(
+                    fetchUserApi({
+                      fetch_type: "chat",
+                      query: search_input_ref.current.value,
+                    })
+                  );
+                } else if (type == "group_search") {
+                  dispatch(
+                    fetchGroupApi({
+                      query: search_input_ref.current.value,
+                    })
+                  );
+                }
               }
             }, 300);
           },
@@ -135,17 +164,29 @@ const ChatSearchResult: ForwardRefRenderFunction<
       }
       ref={scrollable_content_ref}
     >
-      {_fetched_user_result.map((user) => {
-        return (
-          <ForwardedChatUserProfile
-            key={`result-${user.id}`}
-            user={user}
-            is_request_pending={_is_request_pending}
-            handleModalClose={handleModalClose}
-            ref={search_input_ref}
-          />
-        );
-      })}
+      {type == "user_search" &&
+        _fetched_user_result.map((user) => {
+          return (
+            <ForwardedChatUserProfile
+              key={`result-${user.id}`}
+              user={user}
+              is_request_pending={_is_request_pending}
+              handleModalClose={handleModalClose}
+              ref={search_input_ref}
+            />
+          );
+        })}
+
+      {type == "group_search" &&
+        _fetched_group_results.map((group, index) => {
+          return (
+            <ChatGroup
+              show_follow_cta={true}
+              key={`chat-group-${index}`}
+              {...group}
+            />
+          );
+        })}
     </StyledChatSearchResult>
   );
 };

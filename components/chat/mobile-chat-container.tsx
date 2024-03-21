@@ -28,7 +28,8 @@ const MobileChatContainer: FC = () => {
   const _default_groups = useAppSelector(default_groups);
   return (
     <StyledMobileChatContainer>
-      <MobileActionNav />
+      <div id="chat-search-container"></div>
+      <MobileActionNav active_tab={active_tab} />
       <MobileChatHeader />
       <StyledTabWrapper>
         <StyledTabCta

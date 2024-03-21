@@ -49,6 +49,7 @@ type IChatInitialState = {
   };
   mobile: {
     show_chat: boolean;
+    show_search_dialog: boolean;
   };
 };
 

@@ -46,14 +46,6 @@ const GroupSuggestion: FC = () => {
   );
   const result_container_ref = useRef<HTMLDivElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
-  // useOutsideClickHandler({
-  //   modal_ref:result_container_ref,
-  //   cta_ref:input_ref,
-  //   handler:()=>{
-  //     dispatch(updateShowGroupSearch(false));
-  //     dispatch(updateFetchedGroupResult([]));
-  //   }
-  // })
 
   useEffect(() => {
     const outsideClickHandler = (event: Event) => {

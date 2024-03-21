@@ -26,9 +26,6 @@ const StyledChatSearchInput = styled.input<{
   &:focus {
     outline: none;
   }
-  &::focus {
-    outline: none;
-  }
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 18px;
   }
