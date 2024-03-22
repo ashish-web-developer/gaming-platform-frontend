@@ -1,6 +1,7 @@
 // type
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { Theme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -10,22 +11,50 @@ import {
   StyledUserProfileImage,
   StyledIconCta,
   StyledChevronIcon,
+  StyledBackCta,
   StyledNotificationCta,
   StyledBellIcon,
   StyledHeaderMessage,
   StyledSpan,
 } from "@/styles/components/chat/chat-header/mobile/mobile-chat-header.style";
 
+// theme
+import { useTheme } from "styled-components";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode, updateShowMobileProfile } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
-import { show_chat } from "@/store/slice/chat.slice";
+import { show_chat, updateShowChat } from "@/store/slice/chat.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
+const BackIcon: FC<{
+  size: number;
+  color: string;
+}> = ({ size, color }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      height={size}
+      fill="none"
+      className="w-6 h-6 text-gray-800 dark:text-white"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M15 19l-7-7 7-7"
+      ></path>
+    </svg>
+  );
+};
+
 const MobileChatHeader: FC = () => {
+  const theme = useTheme() as Theme;
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
@@ -34,27 +63,38 @@ const MobileChatHeader: FC = () => {
   return (
     <StyledMobileChatHeaderContainer>
       <StyledMobileHeaderTop>
-        <StyledUserProfileImageWrapper>
-          <StyledUserProfileImage
-            $mode={_mode}
-            src={user_avatar_url}
-            width={30}
-            height={30}
-            alt="user-avatar"
-          />
-          <StyledIconCta
+        {_show_chat ? (
+          <StyledBackCta
             onClick={() => {
-              dispatch(updateShowMobileProfile(true));
+              dispatch(updateShowChat(false));
             }}
           >
-            <StyledChevronIcon
-              alt="chevron-down"
-              width={20}
-              height={20}
-              src={`/chat/chat-header/${_mode}-chevron-down.png`}
+            <BackIcon color={theme.palette.primary.dark} size={25} />
+          </StyledBackCta>
+        ) : (
+          <StyledUserProfileImageWrapper>
+            <StyledUserProfileImage
+              $mode={_mode}
+              src={user_avatar_url}
+              width={30}
+              height={30}
+              alt="user-avatar"
             />
-          </StyledIconCta>
-        </StyledUserProfileImageWrapper>
+            <StyledIconCta
+              onClick={() => {
+                dispatch(updateShowMobileProfile(true));
+              }}
+            >
+              <StyledChevronIcon
+                alt="chevron-down"
+                width={20}
+                height={20}
+                src={`/chat/chat-header/${_mode}-chevron-down.png`}
+              />
+            </StyledIconCta>
+          </StyledUserProfileImageWrapper>
+        )}
+
         <StyledNotificationCta>
           <StyledBellIcon
             alt="bell-icon"

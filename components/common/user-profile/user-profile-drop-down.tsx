@@ -34,7 +34,7 @@ import { useTheme } from "styled-components";
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useOutsideClickHandler } from "@/hooks/common.hook";
 
-const CameraIcon: FC<{
+export const CameraIcon: FC<{
   size: number;
   stroke: string;
 }> = ({ size, stroke }) => {
@@ -63,7 +63,7 @@ const CameraIcon: FC<{
   );
 };
 
-const GroupIcon: FC<{
+export const GroupIcon: FC<{
   size: number;
   stroke: string;
 }> = ({ size, stroke }) => {
@@ -86,7 +86,7 @@ const GroupIcon: FC<{
   );
 };
 
-const LogOutIcon: FC<{
+export const LogOutIcon: FC<{
   size: number;
   color: string;
   stroke: string;

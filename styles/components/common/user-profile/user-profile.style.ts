@@ -93,7 +93,7 @@ const StyledPointsTag = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 8px;
+  padding: 1rem;
 `;
 
 const StyledPointsImage = styled(Image)`
@@ -111,6 +111,7 @@ const StyledPointsText = styled.span<{
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  margin-top: 2px;
 `;
 
 const StyledUserDetailsWrapper = styled.div`
@@ -160,7 +161,7 @@ const StyledUserNameWrapper = styled.div<{
 `;
 
 const StyledUserName = styled.p`
-  color: ${({theme})=>theme.palette.primary.dark};
+  color: ${({ theme }) => theme.palette.primary.dark};
   text-align: center;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 16px;
@@ -169,6 +170,32 @@ const StyledUserName = styled.p`
   line-height: normal;
 `;
 
+const StyledCtaWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-top: 30px;
+`;
+
+const StyledIconCta = styled.button<{
+  $mode: "light" | "dark";
+}>`
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1.5px solid
+    ${(props) =>
+      props.$mode == "light"
+        ? props.theme.palette.primary.dark
+        : props.theme.palette.primary.light};
+  background: ${(props) =>
+    props.$mode == "light"
+      ? "rgba(246, 174, 45,0.4)"
+      : "rgba(162, 242, 99,0.4)"};
+`;
 export {
   StyledWrapper,
   StyledHeader,
@@ -185,4 +212,6 @@ export {
   StyledName,
   StyledUserNameWrapper,
   StyledUserName,
+  StyledCtaWrapper,
+  StyledIconCta,
 };

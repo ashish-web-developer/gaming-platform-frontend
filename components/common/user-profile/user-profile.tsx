@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
@@ -21,19 +22,30 @@ import {
   StyledName,
   StyledUserNameWrapper,
   StyledUserName,
+  StyledCtaWrapper,
+  StyledIconCta,
 } from "@/styles/components/common/user-profile/user-profile.style";
+
+// icons
+import {
+  CameraIcon,
+  GroupIcon,
+  LogOutIcon,
+} from "@/components/common/user-profile/user-profile-drop-down";
 
 // theme
 import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
+import { user, logoutUserApi, resetUser } from "@/store/slice/user.slice";
+import { resetChat } from "@/store/slice/chat.slice";
 import {
   mode,
   show_profile_upload_modal,
   updateShowMobileProfile,
   updateShowProfileUploadModal,
+  updateShowCreateGroupDrownDown,
 } from "@/store/slice/common.slice";
 
 // local components
@@ -82,6 +94,7 @@ const UploadIcon: FC<{
 };
 
 const ChatProfile: FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _mode = useAppSelector(mode);
@@ -136,7 +149,9 @@ const ChatProfile: FC = () => {
               alt="points icon"
               src="/common/user-profile/dollar.png"
             />
-            <StyledPointsText $mode={_mode}>800.00</StyledPointsText>
+            <StyledPointsText $mode={_mode}>
+              {_user.earned_points?.toFixed(2)}
+            </StyledPointsText>
           </StyledPointsTag>
         </StyledProfileWrappper>
       </StyledChatProfileContent>
@@ -146,6 +161,43 @@ const ChatProfile: FC = () => {
           <StyledUserName>@{_user.username}</StyledUserName>
         </StyledUserNameWrapper>
       </StyledUserDetailsWrapper>
+      <StyledCtaWrapper>
+        <StyledIconCta
+          $mode={_mode}
+          onClick={() => {
+            dispatch(updateShowCreateGroupDrownDown(true));
+          }}
+        >
+          <GroupIcon
+            size={20}
+            stroke={
+              _mode == "light"
+                ? theme.palette.primary.dark
+                : theme.palette.primary.light
+            }
+          />
+        </StyledIconCta>
+        <StyledIconCta
+          $mode={_mode}
+          onClick={() => {
+            dispatch(logoutUserApi());
+            router.push("/login");
+            dispatch(resetUser());
+            dispatch(resetChat());
+            dispatch(updateShowMobileProfile(false));
+          }}
+        >
+          <LogOutIcon
+            size={16}
+            color={"rgba(255,255,255,0)"}
+            stroke={
+              _mode == "light"
+                ? theme.palette.primary.dark
+                : theme.palette.primary.light
+            }
+          />
+        </StyledIconCta>
+      </StyledCtaWrapper>
     </StyledWrapper>
   );
 };

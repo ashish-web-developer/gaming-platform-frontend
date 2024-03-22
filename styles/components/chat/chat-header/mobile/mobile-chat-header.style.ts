@@ -43,6 +43,14 @@ const StyledIconCta = styled.button`
 `;
 
 const StyledChevronIcon = styled(Image)``;
+
+const StyledBackCta = styled.button`
+  width: 30px;
+  height: 30px;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  background: ${({ theme }) => theme.palette.primary.main};
+  border-radius: 50%;
+`;
 const StyledNotificationCta = styled.button`
   background: transparent;
   border: none;
@@ -70,6 +78,7 @@ export {
   StyledUserProfileImage,
   StyledIconCta,
   StyledChevronIcon,
+  StyledBackCta,
   StyledNotificationCta,
   StyledBellIcon,
   StyledHeaderMessage,
