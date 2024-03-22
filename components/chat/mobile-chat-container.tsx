@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useState } from "react";
 // types
 import type { FC } from "react";
@@ -21,11 +22,41 @@ import {
 import MobileChatHeader from "@/components/chat/chat-header/mobile/mobile-chat-header";
 import MobileActionNav from "@/components/chat/mobile-action-nav";
 import ChatUserProfile from "@/components/chat/chat-sidebar/chat-users-list/chat-user-profile";
-import ChatGroup from "@/components/chat/chat-sidebar/chat-group-list/chat-group";
-import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
-import ChatInput from "@/components/chat/chat-input/chat-input";
-import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
-import ChatProfile from "@/components/common/user-profile/user-profile";
+
+const ChatAvatar = dynamic(
+  () => import("@/components/chat/chat-sidebar/chat-group-list/chat-avatar"),
+  {
+    ssr: false,
+  }
+);
+const ChatGroup = dynamic(
+  () => import("@/components/chat/chat-sidebar/chat-group-list/chat-group"),
+  {
+    ssr: false,
+  }
+);
+
+const ChatMessageContainer = dynamic(
+  () =>
+    import("@/components/chat/chat-message-container/chat-message-container"),
+  {
+    ssr: false,
+  }
+);
+
+const ChatInput = dynamic(
+  () => import("@/components/chat/chat-input/chat-input"),
+  {
+    ssr: false,
+  }
+);
+
+const ChatProfile = dynamic(
+  () => import("@/components/common/user-profile/user-profile"),
+  {
+    ssr: false,
+  }
+);
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
