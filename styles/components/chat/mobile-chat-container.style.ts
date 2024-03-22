@@ -44,6 +44,22 @@ const StyledMainContent = styled.div`
   height: calc(100% - 278px);
 `;
 
+const StyledMessageWrapper = styled.div<{
+  type: "chat" | "group";
+}>`
+  width: 100%;
+  height: ${(props) =>
+    props.type == "group" ? "calc(100% - 300px)" : "calc(100% - 250px)"};
+  margin-top: 65px;
+  margin-top: ${(props) => (props.type == "group" ? "20px" : "65px")};
+`;
+
+const StyledChatInputWrapper = styled.div`
+  width: 100%;
+  height: 120px;
+  margin-top: 20px;
+`;
+
 const StyledUserList = styled.div`
   display: flex;
   flex-direction: column;
@@ -52,10 +68,31 @@ const StyledUserList = styled.div`
   gap: 20px;
   padding: 1rem;
 `;
+
+const StyledGroupAvatarWrapper = styled.div`
+  margin-top: 24px;
+`;
+const StyledSpan = styled.span`
+  font-size: 1.125rem;
+  color: ${({ theme }) => theme.palette.primary.dark};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+`;
+
+const StyledGroupAvatar = styled.div`
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+`;
+
 export {
   StyledMobileChatContainer,
   StyledTabWrapper,
   StyledTabCta,
   StyledMainContent,
   StyledUserList,
+  StyledMessageWrapper,
+  StyledChatInputWrapper,
+  StyledGroupAvatarWrapper,
+  StyledSpan,
+  StyledGroupAvatar,
 };

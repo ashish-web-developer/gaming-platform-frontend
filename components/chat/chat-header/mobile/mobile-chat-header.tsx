@@ -20,6 +20,7 @@ import {
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
+import { show_chat } from "@/store/slice/chat.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -29,6 +30,7 @@ const MobileChatHeader: FC = () => {
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const _show_chat = useAppSelector(show_chat);
   return (
     <StyledMobileChatHeaderContainer>
       <StyledMobileHeaderTop>
@@ -58,10 +60,12 @@ const MobileChatHeader: FC = () => {
           />
         </StyledNotificationCta>
       </StyledMobileHeaderTop>
-      <StyledHeaderMessage>
-        Welcome Gaming, <br />
-        <StyledSpan $color="#fff">Buddy</StyledSpan>
-      </StyledHeaderMessage>
+      {!_show_chat && (
+        <StyledHeaderMessage>
+          Welcome Gaming, <br />
+          <StyledSpan $color="#fff">Buddy</StyledSpan>
+        </StyledHeaderMessage>
+      )}
     </StyledMobileChatHeaderContainer>
   );
 };

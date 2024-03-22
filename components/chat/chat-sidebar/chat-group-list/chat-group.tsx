@@ -34,11 +34,12 @@ import {
   joinGroupRequestApi,
   fetchGroupMessagesApi,
 } from "@/store/slice/group.slice";
-import { updateActiveUser } from "@/store/slice/chat.slice";
+import { updateActiveUser, updateShowChat } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
+import { useIsMobile } from "@/hooks/common.hook";
 
 const ChatGroup: FC<
   IGroup & { show_follow_cta?: boolean; is_clickable?: boolean }
@@ -55,6 +56,7 @@ const ChatGroup: FC<
 }) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
+  const is_mobile = useIsMobile();
   const _active_group = useAppSelector(active_group);
   const admin_avatar_url = useAvatarUrl(admin as IUsersWithConversation);
   const is_active = _active_group?.id == id;
@@ -75,6 +77,9 @@ const ChatGroup: FC<
           );
           dispatch(updateActiveUser(null));
           dispatch(fetchGroupMessagesApi());
+          if (is_mobile) {
+            dispatch(updateShowChat(true));
+          }
         }
       }}
       $mode={_mode}

@@ -7,13 +7,13 @@ const StyledMobileActionNav = styled.div`
   position: absolute;
   left: 0px;
   top: 50%;
-  transform: translateY(-50%);
   z-index: 4;
 `;
 const StyledVectorContainer = styled.div`
   position: absolute;
   top: 0px;
   left: 0px;
+  transform: translateY(-50%);
 `;
 
 const StyledContent = styled.div`
@@ -24,9 +24,9 @@ const StyledContent = styled.div`
   padding-left: 6px;
   width: 50px;
   height: 206px;
-  background: red;
   background: transparent;
   gap: 1.5rem;
+  transform: translateY(-50%);
 `;
 
 const StyledCta = styled.button`

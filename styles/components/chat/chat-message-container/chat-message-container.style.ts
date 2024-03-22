@@ -32,6 +32,9 @@ const StyledName = styled.h5`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   color: ${({ theme }) => theme.palette.primary.dark};
   font-size: 1.25rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.125rem;
+  }
 `;
 
 const StyledMessageCount = styled.span`
@@ -55,6 +58,12 @@ const StyledChatMessageContentContainer = styled.div`
   padding: 16px 16px 40px 16px;
 `;
 
+const StyledUserProfileVectorWrapper = styled.div`
+  position: absolute;
+  transform: translateY(-50%);
+  right: 50px;
+`;
+
 export {
   StyledMessageContainer,
   StyledDetailsWrapper,
@@ -63,4 +72,5 @@ export {
   StyledMessageCount,
   StyledGroupAvatar,
   StyledChatMessageContentContainer,
+  StyledUserProfileVectorWrapper,
 };

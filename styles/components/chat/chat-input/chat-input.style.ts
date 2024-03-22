@@ -18,6 +18,9 @@ const StyledChatInputContainer = styled.div<{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 0.625rem;
+  }
 `;
 
 const StyledChatInputWrapper = styled.div`
@@ -35,6 +38,10 @@ const StyledUserProfileWrapper = styled.span`
   border: 2px solid #000;
   border-radius: 50%;
   overflow: hidden;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 35px;
+    height: 35px;
+  }
 `;
 
 const StyledEmojiCta = styled.button`
@@ -47,6 +54,9 @@ const StyledEmojiCta = styled.button`
   width: 50px;
   height: 50px;
   background: none;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width:45px;
+    height:45px;
 `;
 const StyledEmojiImage = styled(Image)`
   object-fit: cover;
@@ -66,6 +76,9 @@ const StyledChatInput = styled.input`
   padding: 0px 50px;
   &::placeholder {
     color: #000;
+  }
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    height: 45px;
   }
 `;
 
@@ -111,16 +124,18 @@ const StyledIconImage = styled(Image)`
 `;
 
 const StyledSendCta = styled.button`
-  height: 40px;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 1.2rem;
   color: #a2f263;
   background: #000;
-  padding: 0px 2rem;
+  padding: 6px 2rem;
   border: none;
   border-radius: 25px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 6px 1.8rem;
+  }
 `;
 
 export {
