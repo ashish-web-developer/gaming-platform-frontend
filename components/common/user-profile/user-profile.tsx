@@ -32,7 +32,7 @@ import { user } from "@/store/slice/user.slice";
 import {
   mode,
   show_profile_upload_modal,
-  updateShowUserProfile,
+  updateShowMobileProfile,
   updateShowProfileUploadModal,
 } from "@/store/slice/common.slice";
 
@@ -97,7 +97,7 @@ const ChatProfile: FC = () => {
       <StyledHeader>
         <StyledBackButton
           onClick={() => {
-            dispatch(updateShowUserProfile(false));
+            dispatch(updateShowMobileProfile(false));
           }}
         >
           <BackIcon size={22} color={theme.palette.primary.main} />

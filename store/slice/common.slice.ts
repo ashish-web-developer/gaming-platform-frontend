@@ -45,11 +45,13 @@ export const updateProfileApi = createAsyncThunk<
 const initialState: InitialState = {
   show_emoji: false,
   mode: "dark",
-  show_user_profile: false,
   show_profile_upload_modal: false,
   show_profile_drop_down: false,
   show_create_group_drop_down: false,
   show_notification_modal: false,
+  mobile: {
+    show_profile: false,
+  },
 };
 export const commonSlice = createSlice({
   name: "common",
@@ -60,9 +62,6 @@ export const commonSlice = createSlice({
     },
     updateMode: (state, action: PayloadAction<"dark" | "light">) => {
       state.mode = action.payload;
-    },
-    updateShowUserProfile: (state, action: PayloadAction<boolean>) => {
-      state.show_user_profile = action.payload;
     },
     updateShowProfileUploadModal: (state, action: PayloadAction<boolean>) => {
       state.show_profile_upload_modal = action.payload;
@@ -76,14 +75,15 @@ export const commonSlice = createSlice({
     updateShowNotification: (state, action: PayloadAction<boolean>) => {
       state.show_notification_modal = action.payload;
     },
+    updateShowMobileProfile: (state, action: PayloadAction<boolean>) => {
+      state.mobile.show_profile = action.payload;
+    },
   },
 });
 
 export default commonSlice.reducer;
 export const show_emoji = (state: RootState) => state.common.show_emoji;
 export const mode = (state: RootState) => state.common.mode;
-export const show_user_profile = (state: RootState) =>
-  state.common.show_user_profile;
 export const show_profile_upload_modal = (state: RootState) =>
   state.common.show_profile_upload_modal;
 export const show_profile_drop_down = (state: RootState) =>
@@ -92,12 +92,14 @@ export const show_create_group_drop_down = (state: RootState) =>
   state.common.show_create_group_drop_down;
 export const show_notification_modal = (state: RootState) =>
   state.common.show_notification_modal;
+export const show_mobile_profile = (state: RootState) =>
+  state.common.mobile.show_profile;
 export const {
   updateShowEmoji,
   updateMode,
-  updateShowUserProfile,
   updateShowProfileUploadModal,
   updateShowProfileDropDown,
   updateShowCreateGroupDrownDown,
   updateShowNotification,
+  updateShowMobileProfile,
 } = commonSlice.actions;

@@ -18,7 +18,7 @@ import {
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { mode } from "@/store/slice/common.slice";
+import { mode, updateShowMobileProfile } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
 import { show_chat } from "@/store/slice/chat.slice";
 
@@ -42,7 +42,11 @@ const MobileChatHeader: FC = () => {
             height={30}
             alt="user-avatar"
           />
-          <StyledIconCta>
+          <StyledIconCta
+            onClick={() => {
+              dispatch(updateShowMobileProfile(true));
+            }}
+          >
             <StyledChevronIcon
               alt="chevron-down"
               width={20}

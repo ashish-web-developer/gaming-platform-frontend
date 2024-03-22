@@ -25,11 +25,13 @@ import ChatGroup from "@/components/chat/chat-sidebar/chat-group-list/chat-group
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
 import ChatInput from "@/components/chat/chat-input/chat-input";
 import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
+import ChatProfile from "@/components/common/user-profile/user-profile";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { show_chat, default_users } from "@/store/slice/chat.slice";
 import { active_group, default_groups } from "@/store/slice/group.slice";
+import { show_mobile_profile } from "@/store/slice/common.slice";
 
 const MobileChatContainer: FC = () => {
   const [active_tab, set_active_tab] = useState<1 | 2>(1);
@@ -37,9 +39,11 @@ const MobileChatContainer: FC = () => {
   const _default_groups = useAppSelector(default_groups);
   const _active_group = useAppSelector(active_group);
   const _show_chat = useAppSelector(show_chat);
+  const _show_mobile_profile = useAppSelector(show_mobile_profile);
 
   return (
     <StyledMobileChatContainer>
+      {_show_mobile_profile && <ChatProfile />}
       <div id="chat-search-container"></div>
       <MobileActionNav active_tab={active_tab} />
       <MobileChatHeader />
