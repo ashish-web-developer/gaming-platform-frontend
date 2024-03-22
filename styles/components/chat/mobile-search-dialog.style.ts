@@ -1,6 +1,17 @@
 import styled from "styled-components";
 import Image from "next/image";
 
+const StyledBackDrop = styled.div`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  opacity: 0.6;
+  background: ${({ theme }) => theme.palette.primary.main};
+`;
+
 const StyledSearchDialog = styled.dialog`
   position: absolute;
   top: 191px;
@@ -57,6 +68,7 @@ const StyledImage = styled(Image)`
   object-fit: cover;
 `;
 export {
+  StyledBackDrop,
   StyledSearchDialog,
   StyledSearchInputWrapper,
   StyledSearchInput,

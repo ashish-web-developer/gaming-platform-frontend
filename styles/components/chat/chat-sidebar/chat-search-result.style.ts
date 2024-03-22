@@ -16,6 +16,9 @@ const StyledChatSearchResult = styled.div`
   margin-top: 14px;
   z-index: 2;
   background: ${({ theme }) => theme.palette.primary.main};
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    max-height: 400px;
+  }
 `;
 
 const StyledProfileContainer = styled.div<{

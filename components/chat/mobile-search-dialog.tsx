@@ -10,6 +10,7 @@ import {
   StyledSearchInput,
   StyledSearchIcon,
   StyledImage,
+  StyledBackDrop,
 } from "@/styles/components/chat/mobile-search-dialog.style";
 
 // local components
@@ -61,6 +62,7 @@ const MobileSearchDialog: ForwardRefRenderFunction<
     handler: () => {
       dispatch(updateShowSearch(false));
       dispatch(updateFetchUserResult([]));
+      dispatch(updateFetchedGroupResult([]));
     },
   });
 
@@ -71,64 +73,68 @@ const MobileSearchDialog: ForwardRefRenderFunction<
   }, [is_mounted]);
 
   return (
-    <StyledSearchDialog ref={search_dialog_ref} open={_show_search_dialog}>
-      <StyledSearchInputWrapper ref={search_container_ref}>
-        <StyledSearchInput
-          onChange={(event) => {
-            if (active_tab == 1) {
-              dispatch(updateUserSearchApiPage(1));
-              dispatch(updateFetchUserResult([]));
-              timeout_ref.current && clearInterval(timeout_ref.current);
-              if (event.target.value) {
-                timeout_ref.current = setTimeout(() => {
-                  dispatch(
-                    fetchUserApi({
-                      fetch_type: "chat",
-                      query: event.target.value,
-                    })
-                  );
-                }, 800);
+    <>
+      {_show_search_dialog && <StyledBackDrop />}
+      <StyledSearchDialog ref={search_dialog_ref} open={_show_search_dialog}>
+        <StyledSearchInputWrapper ref={search_container_ref}>
+          <StyledSearchInput
+            onChange={(event) => {
+              if (active_tab == 1) {
+                dispatch(updateUserSearchApiPage(1));
+                dispatch(updateFetchUserResult([]));
+                timeout_ref.current && clearInterval(timeout_ref.current);
+                if (event.target.value) {
+                  timeout_ref.current = setTimeout(() => {
+                    dispatch(
+                      fetchUserApi({
+                        fetch_type: "chat",
+                        query: event.target.value,
+                      })
+                    );
+                  }, 800);
+                }
+              } else if (active_tab == 2) {
+                dispatch(updateGroupSearchApiPage(1));
+                dispatch(updateFetchedGroupResult([]));
+                timeout_ref.current && clearInterval(timeout_ref.current);
+                if (event.target.value) {
+                  timeout_ref.current = setTimeout(() => {
+                    dispatch(
+                      fetchGroupApi({
+                        query: event.target.value,
+                      })
+                    );
+                  }, 800);
+                }
               }
-            } else if (active_tab == 2) {
-              dispatch(updateGroupSearchApiPage(1));
-              dispatch(updateFetchedGroupResult([]));
-              timeout_ref.current && clearInterval(timeout_ref.current);
-              if (event.target.value) {
-                timeout_ref.current = setTimeout(() => {
-                  dispatch(
-                    fetchGroupApi({
-                      query: event.target.value,
-                    })
-                  );
-                }, 800);
-              }
-            }
-          }}
-          $mode={_mode}
-          placeholder="Search Player"
-          ref={search_input_ref}
-        />
-        <StyledSearchIcon>
-          <StyledImage
-            src={"/chat/mobile-action-nav/search.png"}
-            fill={true}
-            alt="icons"
+            }}
+            $mode={_mode}
+            placeholder="Search Player"
+            ref={search_input_ref}
           />
-        </StyledSearchIcon>
-      </StyledSearchInputWrapper>
-      {(_fetched_user_result.length || _fetched_group_results.length) && (
-        <ChatSearchResult
-          type={active_tab == 1 ? "user_search" : "group_search"}
-          search_container_ref={search_container_ref}
-          ref={search_input_ref}
-          handleModalClose={() => {
-            if (search_dialog_ref.current) {
-              search_dialog_ref.current.close();
-            }
-          }}
-        />
-      )}
-    </StyledSearchDialog>
+          <StyledSearchIcon>
+            <StyledImage
+              src={"/chat/mobile-action-nav/search.png"}
+              fill={true}
+              alt="icons"
+            />
+          </StyledSearchIcon>
+        </StyledSearchInputWrapper>
+        {(Boolean(_fetched_user_result.length) ||
+          Boolean(_fetched_group_results.length)) && (
+          <ChatSearchResult
+            type={active_tab == 1 ? "user_search" : "group_search"}
+            search_container_ref={search_container_ref}
+            ref={search_input_ref}
+            handleModalClose={() => {
+              if (search_dialog_ref.current) {
+                search_dialog_ref.current.close();
+              }
+            }}
+          />
+        )}
+      </StyledSearchDialog>
+    </>
   );
 };
 
