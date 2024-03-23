@@ -42,6 +42,7 @@ import { user, logoutUserApi, resetUser } from "@/store/slice/user.slice";
 import { resetChat } from "@/store/slice/chat.slice";
 import {
   mode,
+  show_create_group_drop_down,
   show_profile_upload_modal,
   updateShowMobileProfile,
   updateShowProfileUploadModal,
@@ -50,6 +51,7 @@ import {
 
 // local components
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
+import CreateGroupModal from "@/components/common/create-group/create-group-modal";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
@@ -100,13 +102,18 @@ const ChatProfile: FC = () => {
   const _mode = useAppSelector(mode);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _user = useAppSelector(user);
+  const _show_create_group_drop_down = useAppSelector(
+    show_create_group_drop_down
+  );
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
   const upload_cta_ref = useRef<HTMLButtonElement>(null);
+  const group_ref = useRef<HTMLButtonElement>(null);
   return (
     <StyledWrapper>
       {_show_profile_upload_modal && (
         <UploadProfileModal ref={upload_cta_ref} />
       )}
+      {_show_create_group_drop_down && <CreateGroupModal ref={group_ref} />}
       <StyledHeader>
         <StyledBackButton
           onClick={() => {
@@ -163,6 +170,7 @@ const ChatProfile: FC = () => {
       </StyledUserDetailsWrapper>
       <StyledCtaWrapper>
         <StyledIconCta
+          ref={group_ref}
           $mode={_mode}
           onClick={() => {
             dispatch(updateShowCreateGroupDrownDown(true));

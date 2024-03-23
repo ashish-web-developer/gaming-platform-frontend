@@ -12,6 +12,12 @@ const StyledCreateGroupModalWrapper = styled.div`
   right: 0px;
   padding: 1.125rem;
   z-index: 2;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    top: 40%;
+    left: 50%;
+    right: auto;
+    transform: translate(-50%, -50%);
+  }
 `;
 
 const StyledHeader = styled.div`
