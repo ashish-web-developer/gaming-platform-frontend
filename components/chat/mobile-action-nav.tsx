@@ -79,6 +79,7 @@ const MobileActionNav: FC<IProps> = ({ active_tab }) => {
             src={"/chat/mobile-action-nav/moon.png"}
             fill={true}
             alt="icons"
+            sizes="(max-width: 1400px) 5vw"
           />
         </StyledCta>
         <StyledCta
@@ -92,6 +93,7 @@ const MobileActionNav: FC<IProps> = ({ active_tab }) => {
             src={"/chat/mobile-action-nav/search.png"}
             fill={true}
             alt="icons"
+            sizes="(max-width: 1400px) 5vw"
           />
         </StyledCta>
       </StyledContent>

@@ -111,6 +111,7 @@ const ChatMessage = forwardRef<
                     alt="image"
                     fill={true}
                     src={`${process.env.NEXT_PUBLIC_API_END_POINT}${file}`}
+                    sizes="(max-width: 1400px) 20vw"
                   />
                 </StyledUploadedImageWrapper>
               );
@@ -154,6 +155,7 @@ const ChatMessage = forwardRef<
                   alt="image"
                   fill={true}
                   src={`${process.env.NEXT_PUBLIC_API_END_POINT}${file}`}
+                  sizes="(max-width: 1400px) 20vw"
                 />
               </StyledUploadedImageWrapper>
             );

@@ -94,6 +94,7 @@ const ChatGroup: FC<
                 src={admin_avatar_url}
                 alt="admin-profile"
                 fill={true}
+                sizes="(max-width: 1400px) 5vw"
               />
             </StyledAdminProfile>
             <StyledUserDetails>
