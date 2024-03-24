@@ -15,6 +15,30 @@ const StyledPage = styled.div<IStyledPage>`
   justify-content: center;
 `;
 
+const StyledUploadModalWrapper = styled.div<{
+  $is_modal_open: boolean;
+}>`
+  ${(props) =>
+    props.$is_modal_open &&
+    `
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:transparent;
+    z-index:3;
+  `}
+`;
+
+const StyledBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: ${({ theme }) => theme.palette.primary.main};
+  opacity: 0.6;
+`;
+
 const StyledChatContainer = styled.div`
   width: 75rem;
   height: auto;
@@ -78,6 +102,8 @@ const StyledNotificationHeading = styled.h6<{
 
 export {
   StyledPage,
+  StyledUploadModalWrapper,
+  StyledBackdrop,
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,

@@ -11,6 +11,36 @@ const StyledWrapper = styled.div`
   background: ${({ theme }) => theme.palette.primary.main};
 `;
 
+const StyledUploadModalWrapper = styled.div`
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: 2;
+`;
+
+const StyledBackdrop = styled.div`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: ${({ theme }) => theme.palette.primary.main};
+  opacity: 0.6;
+`;
+
+const StyledUserProfileContentWrapper = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  overflow: hidden;
+`;
+
 const StyledHeader = styled.div`
   height: 100px;
   width: 100%;
@@ -198,6 +228,9 @@ const StyledIconCta = styled.button<{
 `;
 export {
   StyledWrapper,
+  StyledUploadModalWrapper,
+  StyledBackdrop,
+  StyledUserProfileContentWrapper,
   StyledHeader,
   StyledBackButton,
   StyledHeaderText,

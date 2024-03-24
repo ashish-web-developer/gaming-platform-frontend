@@ -8,6 +8,9 @@ import type { Theme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledWrapper,
+  StyledUploadModalWrapper,
+  StyledBackdrop,
+  StyledUserProfileContentWrapper,
   StyledHeader,
   StyledBackButton,
   StyledHeaderText,
@@ -95,7 +98,7 @@ const UploadIcon: FC<{
   );
 };
 
-const ChatProfile: FC = () => {
+const UserProfile: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
@@ -111,102 +114,109 @@ const ChatProfile: FC = () => {
   return (
     <StyledWrapper>
       {_show_profile_upload_modal && (
-        <UploadProfileModal ref={upload_cta_ref} />
+        <>
+          <StyledUploadModalWrapper>
+            <StyledBackdrop />
+            <UploadProfileModal ref={upload_cta_ref} />
+          </StyledUploadModalWrapper>
+        </>
       )}
       {_show_create_group_drop_down && <CreateGroupModal ref={group_ref} />}
-      <StyledHeader>
-        <StyledBackButton
-          onClick={() => {
-            dispatch(updateShowMobileProfile(false));
-          }}
-        >
-          <BackIcon size={22} color={theme.palette.primary.main} />
-        </StyledBackButton>
-        <StyledHeaderText>Gamer Profile</StyledHeaderText>
-      </StyledHeader>
-      <StyledChatProfileContent>
-        <StyledProfileWrappper $mode={_mode}>
-          <StyledUserProfile
-            sizes="(max-width: 1400px) 10vw"
-            src={user_avatar_url}
-            fill={true}
-            alt="profile"
-          />
-          <StyledUploadButton
-            ref={upload_cta_ref}
+      <StyledUserProfileContentWrapper>
+        <StyledHeader>
+          <StyledBackButton
             onClick={() => {
-              dispatch(updateShowProfileUploadModal(true));
+              dispatch(updateShowMobileProfile(false));
             }}
           >
-            <UploadIcon
-              width={30}
-              height={25}
-              color={theme.palette.primary.dark}
+            <BackIcon size={22} color={theme.palette.primary.main} />
+          </StyledBackButton>
+          <StyledHeaderText>Gamer Profile</StyledHeaderText>
+        </StyledHeader>
+        <StyledChatProfileContent>
+          <StyledProfileWrappper $mode={_mode}>
+            <StyledUserProfile
+              sizes="(max-width: 1400px) 40vw"
+              src={user_avatar_url}
+              fill={true}
+              alt="profile"
+            />
+            <StyledUploadButton
+              ref={upload_cta_ref}
+              onClick={() => {
+                dispatch(updateShowProfileUploadModal(true));
+              }}
+            >
+              <UploadIcon
+                width={30}
+                height={25}
+                color={theme.palette.primary.dark}
+                stroke={
+                  _mode == "dark"
+                    ? theme.palette.primary.main
+                    : theme.palette.primary.main
+                }
+              />
+            </StyledUploadButton>
+            <StyledPointsTag>
+              <StyledPointsImage
+                width={20}
+                height={20}
+                alt="points icon"
+                src="/common/user-profile/dollar.png"
+              />
+              <StyledPointsText $mode={_mode}>
+                {_user.earned_points?.toFixed(2)}
+              </StyledPointsText>
+            </StyledPointsTag>
+          </StyledProfileWrappper>
+        </StyledChatProfileContent>
+        <StyledUserDetailsWrapper>
+          <StyledName>{_user.name}</StyledName>
+          <StyledUserNameWrapper $mode={_mode}>
+            <StyledUserName>@{_user.username}</StyledUserName>
+          </StyledUserNameWrapper>
+        </StyledUserDetailsWrapper>
+        <StyledCtaWrapper>
+          <StyledIconCta
+            ref={group_ref}
+            $mode={_mode}
+            onClick={() => {
+              dispatch(updateShowCreateGroupDrownDown(true));
+            }}
+          >
+            <GroupIcon
+              size={20}
               stroke={
-                _mode == "dark"
-                  ? theme.palette.primary.main
-                  : theme.palette.primary.main
+                _mode == "light"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light
               }
             />
-          </StyledUploadButton>
-          <StyledPointsTag>
-            <StyledPointsImage
-              width={20}
-              height={20}
-              alt="points icon"
-              src="/common/user-profile/dollar.png"
+          </StyledIconCta>
+          <StyledIconCta
+            $mode={_mode}
+            onClick={() => {
+              dispatch(logoutUserApi());
+              router.push("/login");
+              dispatch(resetUser());
+              dispatch(resetChat());
+              dispatch(updateShowMobileProfile(false));
+            }}
+          >
+            <LogOutIcon
+              size={16}
+              color={"rgba(255,255,255,0)"}
+              stroke={
+                _mode == "light"
+                  ? theme.palette.primary.dark
+                  : theme.palette.primary.light
+              }
             />
-            <StyledPointsText $mode={_mode}>
-              {_user.earned_points?.toFixed(2)}
-            </StyledPointsText>
-          </StyledPointsTag>
-        </StyledProfileWrappper>
-      </StyledChatProfileContent>
-      <StyledUserDetailsWrapper>
-        <StyledName>{_user.name}</StyledName>
-        <StyledUserNameWrapper $mode={_mode}>
-          <StyledUserName>@{_user.username}</StyledUserName>
-        </StyledUserNameWrapper>
-      </StyledUserDetailsWrapper>
-      <StyledCtaWrapper>
-        <StyledIconCta
-          ref={group_ref}
-          $mode={_mode}
-          onClick={() => {
-            dispatch(updateShowCreateGroupDrownDown(true));
-          }}
-        >
-          <GroupIcon
-            size={20}
-            stroke={
-              _mode == "light"
-                ? theme.palette.primary.dark
-                : theme.palette.primary.light
-            }
-          />
-        </StyledIconCta>
-        <StyledIconCta
-          $mode={_mode}
-          onClick={() => {
-            dispatch(logoutUserApi());
-            router.push("/login");
-            dispatch(resetUser());
-            dispatch(resetChat());
-            dispatch(updateShowMobileProfile(false));
-          }}
-        >
-          <LogOutIcon
-            size={16}
-            color={"rgba(255,255,255,0)"}
-            stroke={
-              _mode == "light"
-                ? theme.palette.primary.dark
-                : theme.palette.primary.light
-            }
-          />
-        </StyledIconCta>
-      </StyledCtaWrapper>
+          </StyledIconCta>
+        </StyledCtaWrapper>
+      </StyledUserProfileContentWrapper>
     </StyledWrapper>
   );
 };
-export default ChatProfile;
+export default UserProfile;

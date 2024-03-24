@@ -10,6 +10,8 @@ import { IGroup } from "@/types/store/slice/group";
 // styled components
 import {
   StyledPage,
+  StyledUploadModalWrapper,
+  StyledBackdrop,
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,
@@ -50,11 +52,11 @@ import {
   updateGroupsUsers,
 } from "@/store/slice/group.slice";
 import {
+  mode,
   show_profile_upload_modal,
   updateMode,
 } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
-import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useDefault, useDefaultConversation } from "@/hooks/chat/chat.hook";
@@ -161,7 +163,12 @@ const ChatContainer: FC = () => {
   });
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
-      <div id="upload-profile-modal-container"></div>
+      <StyledUploadModalWrapper
+        $is_modal_open={_show_profile_upload_modal}
+        id="upload-profile-modal-container"
+      >
+        {_show_profile_upload_modal && <StyledBackdrop />}
+      </StyledUploadModalWrapper>
       <StyledChatContainer>
         <ChatHeader />
         <StyledChatMainContainer>
