@@ -11,7 +11,7 @@ const StyledWrapper = styled.div`
   background: ${({ theme }) => theme.palette.primary.main};
 `;
 
-const StyledUploadModalWrapper = styled.div`
+const StyledModalWrapper = styled.div`
   position: relative;
   top: 0px;
   left: 0px;
@@ -228,7 +228,7 @@ const StyledIconCta = styled.button<{
 `;
 export {
   StyledWrapper,
-  StyledUploadModalWrapper,
+  StyledModalWrapper,
   StyledBackdrop,
   StyledUserProfileContentWrapper,
   StyledHeader,

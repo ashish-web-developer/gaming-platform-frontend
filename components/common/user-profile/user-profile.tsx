@@ -8,7 +8,7 @@ import type { Theme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledWrapper,
-  StyledUploadModalWrapper,
+  StyledModalWrapper,
   StyledBackdrop,
   StyledUserProfileContentWrapper,
   StyledHeader,
@@ -31,7 +31,6 @@ import {
 
 // icons
 import {
-  CameraIcon,
   GroupIcon,
   LogOutIcon,
 } from "@/components/common/user-profile/user-profile-drop-down";
@@ -115,13 +114,18 @@ const UserProfile: FC = () => {
     <StyledWrapper>
       {_show_profile_upload_modal && (
         <>
-          <StyledUploadModalWrapper>
+          <StyledModalWrapper>
             <StyledBackdrop />
             <UploadProfileModal ref={upload_cta_ref} />
-          </StyledUploadModalWrapper>
+          </StyledModalWrapper>
         </>
       )}
-      {_show_create_group_drop_down && <CreateGroupModal ref={group_ref} />}
+      {_show_create_group_drop_down && (
+        <StyledModalWrapper>
+          <StyledBackdrop />
+          <CreateGroupModal ref={group_ref} />
+        </StyledModalWrapper>
+      )}
       <StyledUserProfileContentWrapper>
         <StyledHeader>
           <StyledBackButton
