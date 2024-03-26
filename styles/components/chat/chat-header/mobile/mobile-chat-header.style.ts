@@ -58,10 +58,15 @@ const StyledNotificationCta = styled.button`
 `;
 const StyledBellIcon = styled(Image)``;
 
-const StyledHeaderMessage = styled.h1`
+const StyledHeaderMessage = styled.h1<{
+  $mode: "light" | "dark";
+}>`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 1.5rem;
-  color: ${({ theme }) => theme.palette.primary.dark};
+  color: ${(props) =>
+    props.$mode == "light"
+      ? props.theme.palette.primary.light
+      : props.theme.palette.primary.dark};
   margin-top: 54px;
 `;
 

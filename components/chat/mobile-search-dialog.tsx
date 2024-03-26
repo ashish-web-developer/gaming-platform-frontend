@@ -114,7 +114,7 @@ const MobileSearchDialog: ForwardRefRenderFunction<
           />
           <StyledSearchIcon>
             <StyledImage
-              src={"/chat/mobile-action-nav/search.png"}
+              src={`/chat/mobile-action-nav/${_mode}-search.png`}
               fill={true}
               alt="icons"
               sizes="(max-width: 1400px) 5vw"

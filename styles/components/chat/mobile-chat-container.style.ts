@@ -22,6 +22,7 @@ const StyledTabWrapper = styled.div`
 
 const StyledTabCta = styled.button<{
   $active: boolean;
+  $mode: "light" | "dark";
 }>`
   width: 100%;
   height: 100%;
@@ -29,10 +30,32 @@ const StyledTabCta = styled.button<{
   font-size: 1.25rem;
   border-radius: 16px;
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
-  background: ${(props) =>
-    props.$active ? props.theme.palette.secondary.main : "#000"};
-  color: ${(props) =>
-    props.$active ? "#000" : props.theme.palette.secondary.main};
+  ${(props) => {
+    switch (props.$mode) {
+      case "dark":
+        return `
+          background:${
+            props.$active
+              ? props.theme.palette.secondary.main
+              : props.theme.palette.primary.main
+          };
+          color:${
+            props.$active
+              ? props.theme.palette.primary.main
+              : props.theme.palette.primary.light
+          };
+        `;
+      case "light":
+        return `
+          background:${
+            props.$active
+              ? props.theme.palette.secondary.main
+              : props.theme.palette.primary.main
+          };
+          color:${props.theme.palette.primary.dark};
+        `;
+    }
+  }}
 `;
 
 const StyledMainContent = styled.div`

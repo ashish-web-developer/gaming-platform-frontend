@@ -105,9 +105,17 @@ const MobileChatHeader: FC = () => {
         </StyledNotificationCta>
       </StyledMobileHeaderTop>
       {!_show_chat && (
-        <StyledHeaderMessage>
+        <StyledHeaderMessage $mode={_mode}>
           Welcome Gaming, <br />
-          <StyledSpan $color="#fff">Buddy</StyledSpan>
+          <StyledSpan
+            $color={
+              _mode == "light"
+                ? theme.palette.primary.dark
+                : theme.palette.primary.light
+            }
+          >
+            Buddy
+          </StyledSpan>
         </StyledHeaderMessage>
       )}
     </StyledMobileChatHeaderContainer>

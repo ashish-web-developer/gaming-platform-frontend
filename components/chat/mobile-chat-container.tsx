@@ -62,9 +62,10 @@ const UserProfile = dynamic(
 import { useAppSelector } from "@/hooks/redux.hook";
 import { show_chat, default_users } from "@/store/slice/chat.slice";
 import { active_group, default_groups } from "@/store/slice/group.slice";
-import { show_mobile_profile } from "@/store/slice/common.slice";
+import { mode, show_mobile_profile } from "@/store/slice/common.slice";
 
 const MobileChatContainer: FC = () => {
+  const _mode = useAppSelector(mode);
   const [active_tab, set_active_tab] = useState<1 | 2>(1);
   const _default_users = useAppSelector(default_users);
   const _default_groups = useAppSelector(default_groups);
@@ -82,6 +83,7 @@ const MobileChatContainer: FC = () => {
         <>
           <StyledTabWrapper>
             <StyledTabCta
+              $mode={_mode}
               $active={active_tab == 1}
               onClick={() => {
                 set_active_tab(1);
@@ -90,6 +92,7 @@ const MobileChatContainer: FC = () => {
               Recent
             </StyledTabCta>
             <StyledTabCta
+              $mode={_mode}
               $active={active_tab == 2}
               onClick={() => {
                 set_active_tab(2);
