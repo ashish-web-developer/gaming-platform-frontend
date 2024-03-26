@@ -1,11 +1,19 @@
 import styled from "styled-components";
 
-const StyledMobileChatContainer = styled.div`
+const StyledMobileChatContainer = styled.div<{
+  $mode: "light" | "dark";
+}>`
   width: 100vw;
   height: 100vh;
   background: ${({ theme }) => theme.palette.primary.main};
   padding: 1.2rem;
   position: relative;
+  ${(props) =>
+    props.$mode == "light" &&
+    `
+    background:url("/chat/mobile-background.jpg");
+    background-size:cover;
+  `}
 `;
 
 const StyledTabWrapper = styled.div`

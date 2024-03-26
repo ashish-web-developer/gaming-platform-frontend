@@ -12,6 +12,16 @@ const StyledNotificationWrapper = styled.div`
   right: 250px;
   z-index: 2;
   overflow: hidden;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    right: auto;
+    border: none;
+    border-radius: 0px;
+    padding: 1.25rem;
+  }
 `;
 
 const StyledNotificationHeader = styled.div`
@@ -25,6 +35,9 @@ const StyledNotificationHeaderTitle = styled.h5`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.875rem;
   color: ${({ theme }) => theme.palette.primary.dark};
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.5rem;
+  }
 `;
 
 const StyledIconCta = styled.button`
@@ -41,6 +54,10 @@ const StyledTabWrapper = styled.div`
   align-items: center;
   gap: 1rem;
   padding: 0 1rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    height: 60px;
+    margin-top: 0.9rem;
+  }
 `;
 const StyledTabCta = styled.button<{
   $active: boolean;
@@ -57,6 +74,10 @@ const StyledTabCta = styled.button<{
   display: flex;
   align-items: center;
   gap: 6px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 4px 10px;
+    font-size: 1.125rem;
+  }
 `;
 
 const StyledNotificationCount = styled.span<{

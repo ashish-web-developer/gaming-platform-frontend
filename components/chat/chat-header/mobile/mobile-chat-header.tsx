@@ -22,7 +22,11 @@ import {
 import { useTheme } from "styled-components";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { mode, updateShowMobileProfile } from "@/store/slice/common.slice";
+import {
+  mode,
+  updateShowMobileProfile,
+  updateShowNotification,
+} from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
 import { show_chat, updateShowChat } from "@/store/slice/chat.slice";
 
@@ -95,7 +99,11 @@ const MobileChatHeader: FC = () => {
           </StyledUserProfileImageWrapper>
         )}
 
-        <StyledNotificationCta>
+        <StyledNotificationCta
+          onClick={() => {
+            dispatch(updateShowNotification(true));
+          }}
+        >
           <StyledBellIcon
             alt="bell-icon"
             src="/chat/chat-header/bell.png"

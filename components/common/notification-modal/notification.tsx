@@ -56,7 +56,12 @@ const Notification: FC<INotification> = (notification) => {
     return (
       <StyledGroupNotificationWrapper>
         <StyledUserAvatar>
-          <StyledAvatarImage src={avatar_url} fill={true} alt="avatar" />
+          <StyledAvatarImage
+            sizes="(max-width: 1400px) 5vw"
+            src={avatar_url}
+            fill={true}
+            alt="avatar"
+          />
         </StyledUserAvatar>
         <StyledGroupNotificationContent>
           <StyledMessage $mode={_mode}>
@@ -100,7 +105,12 @@ const Notification: FC<INotification> = (notification) => {
     return (
       <StyledGroupNotificationWrapper>
         <StyledUserAvatar>
-          <StyledAvatarImage src={avatar_url} fill={true} alt="avatar" />
+          <StyledAvatarImage
+            sizes="(max-width: 1400px) 5vw"
+            src={avatar_url}
+            fill={true}
+            alt="avatar"
+          />
         </StyledUserAvatar>
         <StyledGroupNotificationContent>
           <StyledMessage $mode={_mode}>

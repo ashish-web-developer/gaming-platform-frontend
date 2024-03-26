@@ -18,6 +18,11 @@ const StyledUserAvatar = styled.span`
   border-radius: 50%;
   flex-shrink: 0;
   overflow: hidden;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 45px;
+    height: 45px;
+    border-radius: 6px;
+  }
 `;
 
 const StyledAvatarImage = styled(Image)`
@@ -34,11 +39,17 @@ const StyledMessage = styled.div<{
   color: ${(props) => (props.$mode == "light" ? "#000" : "#fff")};
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.875rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1rem;
+  }
 `;
 const StyledCtaWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    gap: 1.125rem;
+  }
 `;
 const StyledCta = styled.button<{
   $show_background: boolean;
@@ -57,6 +68,10 @@ const StyledCta = styled.button<{
         background:#fff;
         color:#000;
     `}
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 4px 16px;
+    font-size: 0.85rem;
+  }
 `;
 
 const StyledInfoNotification = styled.div`
@@ -72,6 +87,9 @@ const StyledNotificationDate = styled.span`
   color: ${({ theme }) => theme.palette.primary.dark};
   display: flex;
   justify-content: flex-end;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 0.875rem;
+  }
 `;
 
 export {

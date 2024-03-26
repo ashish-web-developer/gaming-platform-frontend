@@ -47,10 +47,10 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 
-const NotificationModal: ForwardRefRenderFunction<HTMLButtonElement> = (
-  _,
-  cta_ref
-) => {
+const NotificationModal: ForwardRefRenderFunction<
+  HTMLButtonElement,
+  { is_mobile?: boolean }
+> = ({ is_mobile }, cta_ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _mode = useAppSelector(mode);
@@ -71,6 +71,7 @@ const NotificationModal: ForwardRefRenderFunction<HTMLButtonElement> = (
     modal_ref: container_ref,
     cta_ref: typeof cta_ref !== "function" ? cta_ref : null,
     handler: () => {
+      if (is_mobile) return;
       dispatch(updateShowNotification(false));
     },
   });
@@ -79,14 +80,17 @@ const NotificationModal: ForwardRefRenderFunction<HTMLButtonElement> = (
     <StyledNotificationWrapper ref={container_ref}>
       <StyledNotificationHeader>
         <StyledNotificationHeaderTitle>
-          Notification
+          Notifications
         </StyledNotificationHeaderTitle>
         <StyledIconCta
           onClick={() => {
             dispatch(updateShowNotification(false));
           }}
         >
-          <CloseIcon size={14} color={theme.palette.primary.dark} />
+          <CloseIcon
+            size={is_mobile ? 24 : 14}
+            color={theme.palette.primary.dark}
+          />
         </StyledIconCta>
       </StyledNotificationHeader>
       <StyledTabWrapper>

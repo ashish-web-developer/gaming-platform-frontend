@@ -45,6 +45,7 @@ import {
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
 import React from "react";
+import dynamic from "next/dynamic";
 
 const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();

@@ -58,11 +58,25 @@ const UserProfile = dynamic(
   }
 );
 
+const NotificationModal = dynamic(
+  () => import("@/components/common/notification-modal/notification-modal"),
+  {
+    ssr: false,
+  }
+);
+
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { show_chat, default_users } from "@/store/slice/chat.slice";
 import { active_group, default_groups } from "@/store/slice/group.slice";
-import { mode, show_mobile_profile } from "@/store/slice/common.slice";
+import {
+  mode,
+  show_mobile_profile,
+  show_notification_modal,
+} from "@/store/slice/common.slice";
+
+// hooks
+import { useIsMobile } from "@/hooks/common.hook";
 
 const MobileChatContainer: FC = () => {
   const _mode = useAppSelector(mode);
@@ -72,10 +86,13 @@ const MobileChatContainer: FC = () => {
   const _active_group = useAppSelector(active_group);
   const _show_chat = useAppSelector(show_chat);
   const _show_mobile_profile = useAppSelector(show_mobile_profile);
+  const _show_notification_modal = useAppSelector(show_notification_modal);
+  const is_mobile = useIsMobile();
 
   return (
-    <StyledMobileChatContainer>
+    <StyledMobileChatContainer $mode={_mode}>
       {_show_mobile_profile && <UserProfile />}
+      {_show_notification_modal && <NotificationModal is_mobile={is_mobile} />}
       <div id="chat-search-container"></div>
       <MobileActionNav active_tab={active_tab} />
       <MobileChatHeader />
