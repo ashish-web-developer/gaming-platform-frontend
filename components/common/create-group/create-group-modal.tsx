@@ -106,6 +106,7 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
         <StyledIconButton
           onClick={() => {
             dispatch(updateShowCreateGroupDrownDown(false));
+            dispatch(updateFetchUserResult([]));
           }}
         >
           <CloseIcon color={theme.palette.primary.dark} size={16} />

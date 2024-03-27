@@ -57,6 +57,7 @@ const StyledAdminProfile = styled.div`
   border: 2px solid #000;
   border-radius: 6px;
   position: relative;
+  overflow: hidden;
 `;
 
 const StyledAdminProfileImage = styled(Image)`

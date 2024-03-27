@@ -81,25 +81,6 @@ const StyledGroupSuggestionContainer = styled.div`
   overflow: hidden;
 `;
 
-const StyledNotificationContainer = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-const StyledNotificationHeading = styled.h6<{
-  $mode: "light" | "dark";
-}>`
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.light
-      : props.theme.palette.primary.dark};
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-decoration-line: underline;
-`;
-
 export {
   StyledPage,
   StyledUploadModalWrapper,
@@ -110,6 +91,4 @@ export {
   StyledMessageWrapper,
   StyledChatInputWrapper,
   StyledGroupSuggestionContainer,
-  StyledNotificationContainer,
-  StyledNotificationHeading,
 };
