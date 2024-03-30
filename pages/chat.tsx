@@ -53,15 +53,11 @@ import {
 import { useIsMobile } from "@/hooks/common.hook";
 import { useDefault, useDefaultConversation } from "@/hooks/chat/chat.hook";
 
-
-
-
-
 interface IProps {
-  is_mobile:boolean;
+  is_mobile: boolean;
 }
 
-const ChatPage:FC<IProps> = ({is_mobile}) => {
+const ChatPage: FC<IProps> = ({ is_mobile }) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const client_is_mobile = useIsMobile();
@@ -156,19 +152,23 @@ const ChatPage:FC<IProps> = ({is_mobile}) => {
 
   return (
     <ThemeProvider theme={_mode == "light" ? lightTheme : darkTheme}>
-      {is_mobile || client_is_mobile ? <MobileChatContainer /> : <ChatContainer />}
+      {is_mobile || client_is_mobile ? (
+        <MobileChatContainer />
+      ) : (
+        <ChatContainer />
+      )}
     </ThemeProvider>
   );
 };
 
-export const getServerSideProps:GetServerSideProps = async (context) =>{
-  const user_agent = context.req.headers['user-agent'];
-  const is_mobile = /Mobi|Android/i.test(user_agent as string)
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const user_agent = context.req.headers["user-agent"];
+  const is_mobile = /Mobi|Android/i.test(user_agent as string);
   return {
-    props:{
-      is_mobile
-    }
-  }
-}
+    props: {
+      is_mobile,
+    },
+  };
+};
 
 export default ChatPage;
