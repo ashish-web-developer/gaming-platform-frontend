@@ -29,6 +29,7 @@ import {
 } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
 import { show_chat, updateShowChat } from "@/store/slice/chat.slice";
+import { notifications } from "@/store/slice/notification.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -60,6 +61,10 @@ const BackIcon: FC<{
 const MobileChatHeader: FC = () => {
   const theme = useTheme() as Theme;
   const dispatch = useAppDispatch();
+  const _notifications = useAppSelector(notifications);
+  const unread_notifications_count = _notifications.filter(
+    (notification) => notification.read_at == null
+  ).length;
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
@@ -100,6 +105,7 @@ const MobileChatHeader: FC = () => {
         )}
 
         <StyledNotificationCta
+          $notification_count={unread_notifications_count}
           onClick={() => {
             dispatch(updateShowNotification(true));
           }}

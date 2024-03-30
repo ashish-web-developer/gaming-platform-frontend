@@ -68,6 +68,7 @@ const StyledUserDetails = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  gap: 4px;
 `;
 
 const StyledFollowCta = styled.button`
@@ -98,12 +99,14 @@ const StyledWrapperBottom = styled.div`
 const StyledGroupName = styled.h5`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 14px;
+  line-height: 1;
 `;
 
 const StyledGroupCreationDate = styled.span`
   color: #40434e;
   font-size: 10px;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
+  line-height: 1;
 `;
 
 const StyledGroupAvatar = styled.div`

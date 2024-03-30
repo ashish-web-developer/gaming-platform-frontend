@@ -8,6 +8,8 @@ import type {
   INotificationResponse,
   IRemoveNotificationPayload,
   IRemoveNotificationResponse,
+  IMarkNotificationAsReadApiPayload,
+  IMarkNotificationAsReadApiResponse,
 } from "@/types/store/slice/notification";
 import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type { AxiosResponse } from "axios";
@@ -57,6 +59,25 @@ export const removeNotificationApi = createAsyncThunk<
   }
 );
 
+export const markNotificationAsReadApi = createAsyncThunk<
+  IMarkNotificationAsReadApiResponse,
+  IMarkNotificationAsReadApiPayload,
+  IThunkApiConfig
+>(
+  "api/notification/mark-as-read",
+  async ({ notification_id }, { rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<IMarkNotificationAsReadApiResponse> =
+        await Axios.post("/notification/mark-as-read", {
+          notification_id,
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const initialState: INotificationInitialState = {
   notifications: [],
 };
@@ -92,6 +113,14 @@ const notificationSlice = createSlice({
     builder.addCase(giveGroupAccess.fulfilled, (state, action) => {
       state.notifications = state.notifications.filter((notification) => {
         return notification.id !== action.payload.notification_id;
+      });
+    });
+    builder.addCase(markNotificationAsReadApi.fulfilled, (state, action) => {
+      state.notifications = state.notifications.map((notification) => {
+        if (notification.id == action.payload.notification.id) {
+          return action.payload.notification;
+        }
+        return notification;
       });
     });
   },

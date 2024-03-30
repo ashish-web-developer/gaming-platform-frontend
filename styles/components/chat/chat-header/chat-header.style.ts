@@ -57,10 +57,37 @@ const StyledIconCta = styled.button`
 
 const StyledChevronIcon = styled(Image)``;
 
-const StyledNotificationCta = styled.button`
+const StyledNotificationCta = styled.button<{
+  $notification_count: number;
+}>`
   background: transparent;
-  border: none;
   cursor: pointer;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  height: 40px;
+  width: 40px;
+  border-radius: 6px;
+  position: relative;
+  ${(props) =>
+    Boolean(props.$notification_count) &&
+    `
+      &::after {
+        content:"${String(props.$notification_count).padStart(2, "0")}" ;
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        background: ${props.theme.palette.primary.main};
+        top: 0px;
+        right: 0px;
+        transform: translate(50%, -50%);
+        border: 2px solid ${props.theme.palette.primary.dark};
+        color: ${props.theme.palette.primary.dark};
+        font-family: ${props.theme.fontFamily.lobster};
+      }
+  `}
 `;
 
 const StyledBellIcon = styled(Image)``;

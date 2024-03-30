@@ -51,8 +51,8 @@ const ChatInput = dynamic(
   }
 );
 
-const UserProfile = dynamic(
-  () => import("@/components/common/user-profile/user-profile"),
+const MobileUserProfile = dynamic(
+  () => import("@/components/common/user-profile/mobile/mobile-user-profile"),
   {
     ssr: false,
   }
@@ -91,7 +91,7 @@ const MobileChatContainer: FC = () => {
 
   return (
     <StyledMobileChatContainer $mode={_mode}>
-      {_show_mobile_profile && <UserProfile />}
+      {_show_mobile_profile && <MobileUserProfile />}
       {_show_notification_modal && <NotificationModal is_mobile={is_mobile} />}
       <div id="chat-search-container"></div>
       <MobileActionNav active_tab={active_tab} />

@@ -27,7 +27,7 @@ import {
   StyledUserName,
   StyledCtaWrapper,
   StyledIconCta,
-} from "@/styles/components/common/user-profile/user-profile.style";
+} from "@/styles/components/common/user-profile/mobile/mobile-user-profile.style";
 
 // icons
 import {
@@ -97,7 +97,7 @@ const UploadIcon: FC<{
   );
 };
 
-const UserProfile: FC = () => {
+const MobileUserProfile: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
@@ -223,4 +223,4 @@ const UserProfile: FC = () => {
     </StyledWrapper>
   );
 };
-export default UserProfile;
+export default MobileUserProfile;

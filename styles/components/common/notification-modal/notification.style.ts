@@ -41,6 +41,7 @@ const StyledMessage = styled.div<{
   font-size: 0.875rem;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 1rem;
+    line-height: 1.25rem;
   }
 `;
 const StyledCtaWrapper = styled.div`

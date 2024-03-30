@@ -1,6 +1,5 @@
 // types
 import type { FC } from "react";
-import type { Theme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledPage,

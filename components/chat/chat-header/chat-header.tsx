@@ -41,14 +41,16 @@ import {
   updateShowNotification,
 } from "@/store/slice/common.slice";
 
+import { notifications } from "@/store/slice/notification.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
 import React from "react";
-import dynamic from "next/dynamic";
 
 const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();
+  const _notifications = useAppSelector(notifications);
+  const unread_notifications_count = _notifications.filter((notification)=>notification.read_at == null).length;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const _show_profile_drop_down = useAppSelector(show_profile_drop_down);
   const _show_create_group_drop_down = useAppSelector(
@@ -76,6 +78,7 @@ const ChatHeader: FC = () => {
         </StyledWelcomeText>
         <StyledRightContainer>
           <StyledNotificationCta
+            $notification_count={unread_notifications_count}
             onClick={() => {
               dispatch(updateShowNotification(!_show_notification_modal));
             }}

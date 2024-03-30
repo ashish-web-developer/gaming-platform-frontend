@@ -59,12 +59,14 @@ const NotificationModal: ForwardRefRenderFunction<
     (notification) => notification.type == "info"
   );
   const group_invite = _notifications.filter(
-    (notification) => notification.type == "group-invite"
+    (notification) =>
+      notification.type == "group-invite" && !notification.read_at
   );
   const group_join_request = _notifications.filter(
     (notification) => notification.type == "group-join-request"
   );
   const container_ref = useRef<HTMLDivElement>(null);
+  const content_ref = useRef<HTMLDivElement>(null);
   const [active_tab, setActiveTab] = useState<"tab1" | "tab2" | "tab3">("tab1");
 
   useOutsideClickHandler({
@@ -134,25 +136,43 @@ const NotificationModal: ForwardRefRenderFunction<
           )}
         </StyledTabCta>
       </StyledTabWrapper>
-      <StyledNotificationContentWrapper>
+      <StyledNotificationContentWrapper ref={content_ref}>
         {active_tab == "tab1" && (
           <StyledNotificationContent>
             {info_notifications.map((notification) => {
-              return <Notification key={notification.id} {...notification} />;
+              return (
+                <Notification
+                  ref={content_ref}
+                  key={notification.id}
+                  {...notification}
+                />
+              );
             })}
           </StyledNotificationContent>
         )}
         {active_tab == "tab2" && (
           <StyledNotificationContent>
             {group_invite.map((notification) => {
-              return <Notification key={notification.id} {...notification} />;
+              return (
+                <Notification
+                  ref={content_ref}
+                  key={notification.id}
+                  {...notification}
+                />
+              );
             })}
           </StyledNotificationContent>
         )}
         {active_tab == "tab3" && (
           <StyledNotificationContent>
             {group_join_request.map((notification) => {
-              return <Notification key={notification.id} {...notification} />;
+              return (
+                <Notification
+                  ref={content_ref}
+                  key={notification.id}
+                  {...notification}
+                />
+              );
             })}
           </StyledNotificationContent>
         )}

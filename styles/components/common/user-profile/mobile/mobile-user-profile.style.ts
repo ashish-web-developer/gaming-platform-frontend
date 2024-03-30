@@ -150,6 +150,7 @@ const StyledUserDetailsWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  margin-top: 1rem;
 `;
 
 const StyledName = styled.h3`

@@ -53,6 +53,7 @@ const StyledUserImage = styled(Image)`
 const StyledUserDetails = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 2px;
 `;
 
 const StyledUserName = styled.span`
@@ -61,7 +62,6 @@ const StyledUserName = styled.span`
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: normal;
 `;
 
 const StyledUserMessage = styled.span`

@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 
 // types
+import type { FC } from "react";
+import type { GetServerSideProps } from "next";
 import type {
   IUsersWithConversation,
   IConversation,
@@ -51,14 +53,22 @@ import {
 import { useIsMobile } from "@/hooks/common.hook";
 import { useDefault, useDefaultConversation } from "@/hooks/chat/chat.hook";
 
-const ChatPage = () => {
+
+
+
+
+interface IProps {
+  is_mobile:boolean;
+}
+
+const ChatPage:FC<IProps> = ({is_mobile}) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const client_is_mobile = useIsMobile();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
   const _active_group = useAppSelector(active_group);
   const _mode = useAppSelector(mode);
-  const is_mobile = useIsMobile();
   useDefault();
   useDefaultConversation();
   useNotificationChannel();
@@ -146,9 +156,19 @@ const ChatPage = () => {
 
   return (
     <ThemeProvider theme={_mode == "light" ? lightTheme : darkTheme}>
-      {is_mobile ? <MobileChatContainer /> : <ChatContainer />}
+      {is_mobile || client_is_mobile ? <MobileChatContainer /> : <ChatContainer />}
     </ThemeProvider>
   );
 };
+
+export const getServerSideProps:GetServerSideProps = async (context) =>{
+  const user_agent = context.req.headers['user-agent'];
+  const is_mobile = /Mobi|Android/i.test(user_agent as string)
+  return {
+    props:{
+      is_mobile
+    }
+  }
+}
 
 export default ChatPage;
