@@ -62,23 +62,27 @@ const StyledNotificationCta = styled.button<{
   width: 40px;
   border-radius: 6px;
   position: relative;
-  &::after {
-    content: "${(props) => String(props.$notification_count).padStart(2, "0")}";
-    position: absolute;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 25px;
-    width: 25px;
-    border-radius: 50%;
-    background: ${({ theme }) => theme.palette.primary.main};
-    top: 0px;
-    right: 0px;
-    transform: translate(50%, -50%);
-    border: 2px solid ${({ theme }) => theme.palette.primary.dark};
-    color: ${({ theme }) => theme.palette.primary.dark};
-    font-family: ${({ theme }) => theme.fontFamily.lobster};
-  }
+  ${(props) =>
+    Boolean(props.$notification_count) &&
+    `
+      &::after {
+        content:"${String(props.$notification_count).padStart(2, "0")}" ;
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        background: ${props.theme.palette.primary.main};
+        top: 0px;
+        right: 0px;
+        transform: translate(50%, -50%);
+        border: 2px solid ${props.theme.palette.primary.dark};
+        color: ${props.theme.palette.primary.dark};
+        font-family: ${props.theme.fontFamily.lobster};
+      }
+  `}
 `;
 const StyledBellIcon = styled(Image)``;
 
