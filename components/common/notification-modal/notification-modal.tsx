@@ -58,13 +58,22 @@ const NotificationModal: ForwardRefRenderFunction<
   const info_notifications = _notifications.filter(
     (notification) => notification.type == "info"
   );
+  const unread_info_notifications_count = info_notifications.filter(
+    (notification) => !Boolean(notification.read_at)
+  ).length;
   const group_invite = _notifications.filter(
     (notification) =>
       notification.type == "group-invite" && !notification.read_at
   );
+  const unread_group_invite_count = group_invite.filter(
+    (notification) => !Boolean(notification.read_at)
+  ).length;
   const group_join_request = _notifications.filter(
     (notification) => notification.type == "group-join-request"
   );
+  const unread_group_join_request_count = group_join_request.filter(
+    (notification) => !Boolean(notification.read_at)
+  ).length;
   const container_ref = useRef<HTMLDivElement>(null);
   const content_ref = useRef<HTMLDivElement>(null);
   const [active_tab, setActiveTab] = useState<"tab1" | "tab2" | "tab3">("tab1");
@@ -103,9 +112,9 @@ const NotificationModal: ForwardRefRenderFunction<
           }}
         >
           Inbox
-          {Boolean(info_notifications.length) && (
+          {Boolean(unread_info_notifications_count) && (
             <StyledNotificationCount $mode={_mode}>
-              {info_notifications.length}
+              {unread_info_notifications_count}
             </StyledNotificationCount>
           )}
         </StyledTabCta>
@@ -116,9 +125,9 @@ const NotificationModal: ForwardRefRenderFunction<
           }}
         >
           Invite
-          {Boolean(group_invite.length) && (
+          {Boolean(unread_group_invite_count) && (
             <StyledNotificationCount $mode={_mode}>
-              {group_invite.length}
+              {unread_group_invite_count}
             </StyledNotificationCount>
           )}
         </StyledTabCta>
@@ -129,9 +138,9 @@ const NotificationModal: ForwardRefRenderFunction<
           }}
         >
           Request
-          {Boolean(group_join_request.length) && (
+          {Boolean(unread_group_join_request_count) && (
             <StyledNotificationCount $mode={_mode}>
-              {group_join_request.length}
+              {unread_group_join_request_count}
             </StyledNotificationCount>
           )}
         </StyledTabCta>

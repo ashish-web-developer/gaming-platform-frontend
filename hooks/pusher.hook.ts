@@ -123,6 +123,7 @@ function useNotificationChannel() {
     notification_audio_ref.current = new Audio(
       "/common/notification/audio/notification.mp3"
     );
+    notification_audio_ref.current.play();
   }, []);
   useEffect(() => {
     if (_user && echo) {
