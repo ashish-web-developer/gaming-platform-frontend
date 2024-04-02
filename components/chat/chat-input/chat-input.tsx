@@ -38,7 +38,7 @@ import {
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
-import { updateRoomId } from "@/store/slice/game.slice";
+import { udpateIsProposalSender, updateRoomId } from "@/store/slice/game.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -234,6 +234,7 @@ const ChatInput: FC<{}> = () => {
               onClick={() => {
                 const room_id = uuidv4();
                 dispatch(updateRoomId(room_id));
+                dispatch(udpateIsProposalSender(true));
                 dispatch(
                   sendInvitationApi({
                     game: "cognimatch",
