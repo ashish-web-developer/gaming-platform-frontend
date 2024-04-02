@@ -44,9 +44,6 @@ type IChatInitialState = {
   send_message: {
     is_request_pending: boolean;
   };
-  game_snackbar: {
-    show_memory_game_snackbar: boolean;
-  };
   mobile: {
     show_chat: boolean;
     show_search_dialog: boolean;
@@ -132,8 +129,6 @@ export {
   ISendInvitationApiResponse,
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
-  ICreateGroupPayload,
-  ICreateGroupResponse,
   ISendMessagePayload,
   ISendMessageResponse,
 };

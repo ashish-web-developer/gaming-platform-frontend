@@ -33,7 +33,7 @@ import {
   updateActiveUserConversation,
   updateDefaultUserConversation,
   updateConversationView,
-  updateShowMemoryGameSnackbar,
+  updateInviteDialog,
 } from "@/store/slice/chat.slice";
 
 import {
@@ -94,31 +94,6 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
       },
     },
     {
-      event: "PlayGameInvitationEvent",
-      callback: (data: {
-        game: string;
-        receiver_id: number;
-        room_id: string;
-        user: IUsersWithConversation;
-      }) => {
-        dispatch(updateGamingUser(data.user));
-        dispatch(updateRoomId(data.room_id));
-        dispatch(updateShowMemoryGameSnackbar(true));
-      },
-    },
-    {
-      event: "AcceptGameInvitationEvent",
-      callback: (data: {
-        user: IUsersWithConversation;
-        is_accepted: boolean;
-      }) => {
-        if (data.is_accepted) {
-          dispatch(updateGamingUser(data.user));
-          router.push("/memory-game");
-        }
-      },
-    },
-    {
       event: "Group.GroupAccessGiven",
       callback: (data: { group: IGroup }) => {
         dispatch(updateDefaultGroup(data.group));
@@ -128,6 +103,36 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
       event: "Group.GroupJoinedEvent",
       callback: (data: { group: IGroup }) => {
         dispatch(updateGroupsUsers(data.group));
+      },
+    },
+    {
+      event: "Game.PlayGameInvitationEvent",
+      callback: (data: {
+        receiver_id: number;
+        user: IUsersWithConversation;
+        game: "cognimatch";
+        room_id: string;
+      }) => {
+        dispatch(
+          updateInviteDialog({
+            modal_type: "cognimatch",
+            is_open: true,
+          })
+        );
+        dispatch(updateRoomId(data.room_id));
+        dispatch(updateGamingUser(data.user));
+      },
+    },
+    {
+      event: "Game.AcceptGameInvitationEvent",
+      callback: (data: {
+        is_accepted: boolean;
+        user: IUsersWithConversation;
+      }) => {
+        if (data.is_accepted) {
+          dispatch(updateGamingUser(data.user));
+          router.push("/memory-game");
+        }
       },
     },
   ]);

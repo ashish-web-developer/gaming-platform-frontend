@@ -38,12 +38,16 @@ import {
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
+import { updateRoomId } from "@/store/slice/game.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useEcho } from "@/hooks/pusher.hook";
 
 import AudioMediaRecorder from "@/helpers/audio-media-recorder";
+
+// helpers
+import { v4 as uuidv4 } from "uuid";
 
 const ChatInput: FC<{}> = () => {
   const dispatch = useAppDispatch();
@@ -228,6 +232,8 @@ const ChatInput: FC<{}> = () => {
             </StyledIconCta>
             <StyledIconCta
               onClick={() => {
+                const room_id = uuidv4();
+                dispatch(updateRoomId(room_id));
                 dispatch(
                   sendInvitationApi({
                     game: "cognimatch",

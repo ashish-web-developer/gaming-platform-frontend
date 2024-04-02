@@ -194,15 +194,12 @@ const initialState: IChatInitialState = {
   send_message: {
     is_request_pending: false,
   },
-  game_snackbar: {
-    show_memory_game_snackbar: false,
-  },
   mobile: {
     show_chat: false,
     show_search_dialog: false,
   },
   invites_dialog: {
-    show_cognimatch_invite_dialog: true,
+    show_cognimatch_invite_dialog: false,
   },
 };
 
@@ -296,9 +293,6 @@ const chatSlice = createSlice({
     },
     updateIsTyping: (state, action: PayloadAction<boolean>) => {
       state.is_typing = action.payload;
-    },
-    updateShowMemoryGameSnackbar: (state, action: PayloadAction<boolean>) => {
-      state.game_snackbar.show_memory_game_snackbar = action.payload;
     },
     updateShowChat: (state, action: PayloadAction<boolean>) => {
       state.mobile.show_chat = action.payload;
@@ -406,8 +400,6 @@ export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
 
 export const is_typing = (state: RootState) => state.chat.is_typing;
-export const show_memory_game_snackbar = (state: RootState) =>
-  state.chat.game_snackbar.show_memory_game_snackbar;
 export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
 
 export const show_search_dialog = (state: RootState) =>
@@ -426,7 +418,6 @@ export const {
   updateDefaultUserConversation,
   updateConversationView,
   updateIsTyping,
-  updateShowMemoryGameSnackbar,
   updateShowChat,
   updateShowSearch,
   updateInviteDialog,

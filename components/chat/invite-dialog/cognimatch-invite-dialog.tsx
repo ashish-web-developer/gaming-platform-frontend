@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
@@ -23,7 +24,9 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   show_cognimatch_invite_dialog,
   updateInviteDialog,
+  acceptInvitationApi,
 } from "@/store/slice/chat.slice";
+import { updateRoomId, updateGamingUser } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
@@ -109,6 +112,7 @@ const PlayButtonVector: FC = () => {
 };
 
 const CogniMatchInviteDialog: FC = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const theme = useTheme() as Theme;
@@ -123,7 +127,22 @@ const CogniMatchInviteDialog: FC = () => {
       open={_show_cognimatch_invite_dialog}
       ref={dialog_ref}
     >
-      <StyledPlayButton>
+      <StyledPlayButton
+        onClick={() => {
+          dispatch(
+            acceptInvitationApi({
+              is_accepted: true,
+            })
+          );
+          dispatch(
+            updateInviteDialog({
+              modal_type: "cognimatch",
+              is_open: false,
+            })
+          );
+          router.push("/memory-game");
+        }}
+      >
         <PlayButtonVector />
       </StyledPlayButton>
       <StyledCloseCta
@@ -134,6 +153,8 @@ const CogniMatchInviteDialog: FC = () => {
               is_open: false,
             })
           );
+          dispatch(updateRoomId(null));
+          dispatch(updateGamingUser(null));
         }}
       >
         <CloseIcon size={16} color={"#000"} />

@@ -158,6 +158,8 @@ import {
   updateScore,
   updateLiveStreamChatList,
   updateInfoSnackbar,
+  updateIsGamingUserIn,
+  updateIsGamingUserLeaving,
 } from "@/store/slice/memory-game.slice";
 import {
   room_id,
@@ -266,6 +268,89 @@ const MemoryGame: FC = () => {
   //     },
   //   },
   // ]);
+  usePresenceChannel<IUsersWithConversation | null>({
+    channel: `game.${_room_id}`,
+    handler: (user_ids, event, gaming_user) => {
+      const isUserInChannel = Array.isArray(user_ids)
+        ? user_ids.some((user_id) => user_id.id === _gaming_user?.id)
+        : user_ids.id === _gaming_user?.id;
+      if (event == "leaving" && isUserInChannel) {
+        dispatch(updateIsGamingUserLeaving(isUserInChannel));
+        dispatch(updateIsGamingUserIn(!isUserInChannel));
+        return;
+      }
+      dispatch(updateIsGamingUserIn(isUserInChannel));
+    },
+    events: [
+      {
+        event: "CardListDataEvent",
+        callback: (data) => {
+          dispatch(updateCardList(data.card_list));
+        },
+      },
+
+      {
+        event: "MemoryGameEvent",
+        callback: (data) => {
+          dispatch(
+            updateCardState({ id: data.card_id, flipped: data.flipped })
+          );
+          sound_ref.current.flip_sound?.play();
+        },
+      },
+      {
+        event: "UpdatePlayerTurnEvent",
+        callback: (data) => {
+          dispatch(updatePlayerTurnId(data.player_turn_id));
+        },
+      },
+      {
+        event: "UpdateLastFlippedCard",
+        callback: (data) => {
+          dispatch(updateLastFlippedCard(data.card_id));
+        },
+      },
+      {
+        event: "UpdateTimerStartCountEvent",
+        callback: (data) => {
+          dispatch(updateTimerStartCount(data.start_timer_count));
+        },
+      },
+      {
+        event: "UpdateMemoryGameScore",
+        callback: (data) => {
+          dispatch(updateScore(data.score));
+        },
+      },
+      {
+        event: "LiveChatStreamEvent",
+        callback: (data: { user: IUsersWithConversation; message: string }) => {
+          dispatch(
+            updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
+          );
+          if (data.user.id !== _user.id) {
+            dispatch(
+              updateInfoSnackbar({
+                name: data.user.name,
+                message: data.message,
+                show_snacbar: true,
+              })
+            );
+            setTimeout(() => {
+              dispatch(
+                updateInfoSnackbar({
+                  name: "",
+                  message: "",
+                  show_snacbar: false,
+                })
+              );
+            }, 3000);
+          }
+        },
+      },
+    ],
+    dependency: _gaming_user,
+  });
 
   useEffect(() => {
     if (_is_gaming_user_in && _is_proposal_sender) {
