@@ -45,6 +45,14 @@ const StyledCogniMatchInviteDialog = styled.dialog<{
         `;
       }
     }}
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width:100%;
+    height:100%;
+    border-radius: 25px 25px 0px 0px;
+    &::after{
+      height:260px;
+    }
+  }
 `;
 
 const StyledMainContent = styled.div`
@@ -56,6 +64,9 @@ const StyledMainContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    bottom: 140px;
+  }
 `;
 
 const StyledMainText = styled.h2`
@@ -63,6 +74,10 @@ const StyledMainText = styled.h2`
   font-size: 2rem;
   color: #fff;
   text-shadow: 0px 4px 4px #000;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 2.5rem;
+    line-height: 1.5;
+  }
 `;
 
 const StyledTextSpan = styled.span<{
@@ -81,6 +96,9 @@ const StyledSubtitle = styled.p<{
   font-size: 1rem;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   text-align: center;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.125rem;
+  }
 `;
 
 const StyledVsText = styled.h6<{
@@ -96,6 +114,11 @@ const StyledVsText = styled.h6<{
   right: 20px;
   bottom: 18px;
   z-index: 2;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.25rem;
+    right: 24px;
+    bottom: 20px;
+  }
 `;
 
 const StyledPlayButton = styled.button`

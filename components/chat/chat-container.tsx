@@ -18,8 +18,8 @@ import {
 import ChatHeader from "@/components/chat/chat-header/chat-header";
 import ChatSidebar from "@/components/chat/chat-sidebar/chat-sidebar";
 import ChatMessageContainer from "@/components/chat/chat-message-container/chat-message-container";
-import ChatInput from "@/components/chat/chat-input/chat-input";
 import GroupSuggestion from "@/components/chat/group-suggestion/group-suggestion";
+import ChatInput from "@/components/chat/chat-input/chat-input";
 
 const CogniMatchInviteDialog = dynamic(
   () => import("@/components/chat/invite-dialog/cognimatch-invite-dialog"),

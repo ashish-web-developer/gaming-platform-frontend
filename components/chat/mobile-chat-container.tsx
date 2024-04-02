@@ -16,6 +16,7 @@ import {
   StyledGroupAvatarWrapper,
   StyledSpan,
   StyledGroupAvatar,
+  StyledCogniMatchInviteDialogWrapper,
 } from "@/styles/components/chat/mobile-chat-container.style";
 
 // local components
@@ -65,9 +66,20 @@ const NotificationModal = dynamic(
   }
 );
 
+const CogniMatchInviteDialog = dynamic(
+  () => import("@/components/chat/invite-dialog/cognimatch-invite-dialog"),
+  {
+    ssr: false,
+  }
+);
+
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { show_chat, default_users } from "@/store/slice/chat.slice";
+import {
+  show_chat,
+  default_users,
+  show_cognimatch_invite_dialog,
+} from "@/store/slice/chat.slice";
 import { active_group, default_groups } from "@/store/slice/group.slice";
 import {
   mode,
@@ -87,10 +99,19 @@ const MobileChatContainer: FC = () => {
   const _show_chat = useAppSelector(show_chat);
   const _show_mobile_profile = useAppSelector(show_mobile_profile);
   const _show_notification_modal = useAppSelector(show_notification_modal);
+  const _show_cognimatch_invite_dialog = useAppSelector(
+    show_cognimatch_invite_dialog
+  );
   const is_mobile = useIsMobile();
 
   return (
     <StyledMobileChatContainer $mode={_mode}>
+      {_show_cognimatch_invite_dialog && (
+        <StyledCogniMatchInviteDialogWrapper>
+          <CogniMatchInviteDialog />
+        </StyledCogniMatchInviteDialogWrapper>
+      )}
+
       {_show_mobile_profile && <MobileUserProfile />}
       {_show_notification_modal && <NotificationModal is_mobile={is_mobile} />}
       <div id="chat-search-container"></div>
