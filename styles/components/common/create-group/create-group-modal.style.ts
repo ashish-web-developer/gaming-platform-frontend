@@ -28,6 +28,7 @@ const StyledHeader = styled.div`
 const StyledTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 6px;
 `;
 const StyledHeaderMainText = styled.h3`
   font-size: 1.125rem;
@@ -36,7 +37,7 @@ const StyledHeaderMainText = styled.h3`
 `;
 
 const StyledHeaderSubtitle = styled.p`
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   color: ${({ theme }) => theme.palette.secondary.dark};
 `;

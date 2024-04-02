@@ -51,6 +51,9 @@ type IChatInitialState = {
     show_chat: boolean;
     show_search_dialog: boolean;
   };
+  invites_dialog: {
+    show_cognimatch_invite_dialog: boolean;
+  };
 };
 
 type IFetchUserPayload = {

@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
 // styled components
@@ -20,11 +21,19 @@ import ChatMessageContainer from "@/components/chat/chat-message-container/chat-
 import ChatInput from "@/components/chat/chat-input/chat-input";
 import GroupSuggestion from "@/components/chat/group-suggestion/group-suggestion";
 
+const CogniMatchInviteDialog = dynamic(
+  () => import("@/components/chat/invite-dialog/cognimatch-invite-dialog"),
+  {
+    ssr: false,
+  }
+);
+
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
   active_user,
+  show_cognimatch_invite_dialog,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
 import { mode, show_profile_upload_modal } from "@/store/slice/common.slice";
@@ -34,8 +43,12 @@ const ChatContainer: FC = () => {
   const _active_user = useAppSelector(active_user);
   const _active_group = useAppSelector(active_group);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
+  const _show_cognimatch_invite_dialog = useAppSelector(
+    show_cognimatch_invite_dialog
+  );
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
+      {_show_cognimatch_invite_dialog && <CogniMatchInviteDialog />}
       <StyledUploadModalWrapper
         $is_modal_open={_show_profile_upload_modal}
         id="upload-profile-modal-container"

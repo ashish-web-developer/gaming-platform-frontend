@@ -135,6 +135,8 @@ const StyledSendCta = styled.button`
   cursor: pointer;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: 6px 1.8rem;
+    font-size: 1rem;
+    padding: 8px 2rem;
   }
 `;
 

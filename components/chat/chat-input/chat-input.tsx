@@ -33,7 +33,9 @@ import {
   is_request_pending,
   is_typing,
   active_user,
+  // api
   sendMessageApi,
+  sendInvitationApi,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
 
@@ -208,9 +210,12 @@ const ChatInput: FC<{}> = () => {
                     await navigator.mediaDevices.getUserMedia({ audio: true });
                   // const audio_media_recorder = new AudioMediaRecorder(media_stream);
                   media_recoder.current = new MediaRecorder(media_stream);
-                  media_recoder.current.addEventListener('dataavailable',(event)=>{
-                    audio_chunks.current.push(event.data);
-                  })
+                  media_recoder.current.addEventListener(
+                    "dataavailable",
+                    (event) => {
+                      audio_chunks.current.push(event.data);
+                    }
+                  );
                 }
               }}
             >
@@ -221,7 +226,15 @@ const ChatInput: FC<{}> = () => {
                 sizes="(max-width: 1400px) 5vw"
               />
             </StyledIconCta>
-            <StyledIconCta>
+            <StyledIconCta
+              onClick={() => {
+                dispatch(
+                  sendInvitationApi({
+                    game: "cognimatch",
+                  })
+                );
+              }}
+            >
               <StyledIconImage
                 fill={true}
                 alt="icon"

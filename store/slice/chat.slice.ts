@@ -201,6 +201,9 @@ const initialState: IChatInitialState = {
     show_chat: false,
     show_search_dialog: false,
   },
+  invites_dialog: {
+    show_cognimatch_invite_dialog: true,
+  },
 };
 
 const chatSlice = createSlice({
@@ -303,6 +306,16 @@ const chatSlice = createSlice({
     updateShowSearch: (state, action: PayloadAction<boolean>) => {
       state.mobile.show_search_dialog = action.payload;
     },
+    updateInviteDialog: (
+      state,
+      action: PayloadAction<{
+        modal_type: "cognimatch";
+        is_open: boolean;
+      }>
+    ) => {
+      state.invites_dialog[`show_${action.payload.modal_type}_invite_dialog`] =
+        action.payload.is_open;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserApi.fulfilled, (state, action) => {
@@ -399,6 +412,8 @@ export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
 
 export const show_search_dialog = (state: RootState) =>
   state.chat.mobile.show_search_dialog;
+export const show_cognimatch_invite_dialog = (state: RootState) =>
+  state.chat.invites_dialog.show_cognimatch_invite_dialog;
 
 export const {
   resetChat,
@@ -414,4 +429,5 @@ export const {
   updateShowMemoryGameSnackbar,
   updateShowChat,
   updateShowSearch,
+  updateInviteDialog,
 } = chatSlice.actions;
