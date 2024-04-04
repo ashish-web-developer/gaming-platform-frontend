@@ -190,6 +190,7 @@ const initialState: IChatInitialState = {
   },
   default_users: [],
   active_user: null,
+  active_user_status: false,
   active_conversation: [],
   send_message: {
     is_request_pending: false,
@@ -310,6 +311,9 @@ const chatSlice = createSlice({
       state.invites_dialog[`show_${action.payload.modal_type}_invite_dialog`] =
         action.payload.is_open;
     },
+    updateActiveUserStatus: (state, action: PayloadAction<boolean>) => {
+      state.active_user_status = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchUserApi.fulfilled, (state, action) => {
@@ -406,7 +410,8 @@ export const show_search_dialog = (state: RootState) =>
   state.chat.mobile.show_search_dialog;
 export const show_cognimatch_invite_dialog = (state: RootState) =>
   state.chat.invites_dialog.show_cognimatch_invite_dialog;
-
+export const active_user_status = (state: RootState) =>
+  state.chat.active_user_status;
 export const {
   resetChat,
   updatePage,
@@ -421,4 +426,5 @@ export const {
   updateShowChat,
   updateShowSearch,
   updateInviteDialog,
+  updateActiveUserStatus,
 } = chatSlice.actions;
