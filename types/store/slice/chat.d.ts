@@ -22,6 +22,7 @@ type IUsersWithConversation = {
   email: string;
   admin: 1 | 0;
   email_verified_at: string;
+  last_seen:string;
   created_at: string;
   updated_at: string;
   latest_conversation?: IConversation;

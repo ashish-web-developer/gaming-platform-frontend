@@ -14,6 +14,12 @@ export type Theme = {
       main: string;
       dark: string;
     };
+    info: {
+      main: string;
+    };
+    warning: {
+      main: string;
+    };
   };
   breakpoints: IBreakpoints;
   fontFamily: {
@@ -31,6 +37,12 @@ export const darkTheme: Theme = {
     secondary: {
       main: "#FFF3F0",
       dark: "#AFA2FF",
+    },
+    info: {
+      main: "#A2F263",
+    },
+    warning: {
+      main: "#F42C04",
     },
   },
   breakpoints: {
@@ -52,6 +64,12 @@ export const lightTheme: Theme = {
     secondary: {
       main: "#FFF3F0",
       dark: "#AFA2FF",
+    },
+    info: {
+      main: "#A2F263",
+    },
+    warning: {
+      main: "#F42C04",
     },
   },
   breakpoints: {

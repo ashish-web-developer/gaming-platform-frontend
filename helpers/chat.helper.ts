@@ -27,5 +27,13 @@ const fetchOnScroll = ({
     handler();
   }
 };
+const getUserStatus = (last_seen: string | null) => {
+  if (!last_seen) return false;
+  const last_seen_date = new Date(last_seen);
+  const current_date = new Date();
+  const difference =
+    (current_date.getTime() - last_seen_date.getTime()) / (1000 * 60);
+  return difference < 1;
+};
 
-export { fetchOnScroll };
+export { fetchOnScroll, getUserStatus };
