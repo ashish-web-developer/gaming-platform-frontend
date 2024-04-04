@@ -1,11 +1,16 @@
 // types
+import { IBaseResponse } from "@/types/store/slice/common";
 import type { User } from "@/types/user";
 
 type IConversation = {
   id: number;
   sender_id: number;
   receiver_id: number;
-  message: string;
+  receiver?: IUsersWithConversation;
+  sender?: IUsersWithConversation;
+  group_id?: number;
+  message: string | null;
+  files: Array<string> | null;
   viewed: boolean;
   created_at: string;
   updated_at: string;
@@ -17,38 +22,44 @@ type IUsersWithConversation = {
   email: string;
   admin: 1 | 0;
   email_verified_at: string;
+  last_seen:string;
   created_at: string;
   updated_at: string;
   latest_conversation?: IConversation;
   not_viewed: number;
   avatar_url: string;
+  earned_points: number;
 };
 
 type IChatInitialState = {
-  search_input_value: string;
   is_typing: boolean;
   fetch_user: {
     is_request_pending: boolean;
     fetched_user_result: IUsersWithConversation[];
+    fetch_type: "chat" | "group" | null;
     page: number;
   };
   default_users: IUsersWithConversation[];
   active_user: IUsersWithConversation | null;
-  active_user_conversation: IConversation[];
+  active_conversation: IConversation[];
   send_message: {
     is_request_pending: boolean;
   };
-  game_snackbar: {
-    show_memory_game_snackbar: boolean;
-  };
   mobile: {
     show_chat: boolean;
+    show_search_dialog: boolean;
   };
-  show_emoji: boolean;
+  invites_dialog: {
+    show_cognimatch_invite_dialog: boolean;
+  };
 };
 
-type IFetchUserResponse = {
-  success: boolean;
+type IFetchUserPayload = {
+  fetch_type: "chat" | "group";
+  query: string;
+};
+
+type IFetchUserResponse = IBaseResponse & {
   user_data: {
     current_page: number;
     data: Array<IUsersWithConversation>;
@@ -63,14 +74,6 @@ type IFetchDefaultUserResponse = {
 type IFetchMessagesResponse = {
   success: boolean;
   conversation: IConversation[];
-};
-
-type ISendMessageRequest = {
-  message: string;
-};
-type ISendMessageResponse = {
-  success: boolean;
-  conversation: IConversation;
 };
 
 type IUpdateViewRequest = {
@@ -97,19 +100,36 @@ type IAcceptInvitationApiResponse = {
   message: string;
 };
 
+/**
+ * ===== GROUP API =======
+ */
+
+/**
+ * ==== SEND MESSAGE API =====
+ */
+
+type ISendMessagePayload = {
+  form_data: FormData;
+};
+
+type ISendMessageResponse = IBaseResponse & {
+  conversation: IConversation;
+};
+
 export default IChatInitialState;
 export {
-  IFetchUserResponse,
-  IFetchDefaultUserResponse,
   IConversation,
   IUsersWithConversation,
+  IFetchUserPayload,
+  IFetchUserResponse,
+  IFetchDefaultUserResponse,
   IFetchMessagesResponse,
-  ISendMessageRequest,
-  ISendMessageResponse,
   IUpdateViewRequest,
   IUpdateViewResponse,
   ISendInvitationApiRequest,
   ISendInvitationApiResponse,
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
+  ISendMessagePayload,
+  ISendMessageResponse,
 };

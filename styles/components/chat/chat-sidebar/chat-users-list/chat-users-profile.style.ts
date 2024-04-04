@@ -16,6 +16,9 @@ const StyledUsersProfile = styled.div<{
   gap: 15px;
   border: 2px solid ${(props) => props.$border_color};
   position: relative;
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
   &::after {
     content: "${(props) => props.$time}";
     position: absolute;
@@ -42,6 +45,29 @@ const StyledUsersProfile = styled.div<{
   }
 `;
 
+const StyledProfileImageWrapper = styled.div<{
+  $status: boolean;
+}>`
+  width: 40px;
+  height: 40px;
+  position: relative;
+  z-index: 1;
+  &::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 10px;
+    height: 10px;
+    background: ${(props) =>
+      props.$status
+        ? props.theme.palette.info.main
+        : props.theme.palette.warning.main};
+    border: 2px solid #000;
+    border-radius: 50%;
+    z-index: 2;
+  }
+`;
 const StyledUserImage = styled(Image)`
   border: 2px solid #000;
   border-radius: 8px;
@@ -50,6 +76,7 @@ const StyledUserImage = styled(Image)`
 const StyledUserDetails = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 2px;
 `;
 
 const StyledUserName = styled.span`
@@ -58,7 +85,6 @@ const StyledUserName = styled.span`
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: normal;
 `;
 
 const StyledUserMessage = styled.span`
@@ -75,6 +101,7 @@ const StyledUserMessage = styled.span`
 `;
 export {
   StyledUsersProfile,
+  StyledProfileImageWrapper,
   StyledUserImage,
   StyledUserDetails,
   StyledUserName,

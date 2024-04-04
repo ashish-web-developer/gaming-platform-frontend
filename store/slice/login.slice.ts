@@ -1,106 +1,105 @@
-import { 
-    createSlice, 
-    PayloadAction,
-    createAsyncThunk
-} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { updateUser } from "@/store/slice/user.slice";
 
 // Types
-import type { LoginInitialState ,} from "@/types/redux";
+import type { LoginInitialState } from "@/types/redux";
 import type { User } from "@/types/user";
 import type { RootState } from "../rootReducer";
 
 // Axios
 import { Axios } from "@/helpers/axios";
 
-
 // Cookie
-import Cookies from "universal-cookie"
-
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
 type LoginResponse = {
-    success:boolean,
-    user:User,
-    token:string
-}
+  success: boolean;
+  user: User;
+  token: string;
+};
 type RegisterArgs = {
-    name:string,
-    username:string,
-    email:string,
-    password:string,
-}
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+};
 
 type LoginArgs = {
-    username?:string,
-    email?:string,
-    password:string,
-}
+  username?: string;
+  email?: string;
+  password: string;
+};
 
-export const signUpHandler = createAsyncThunk<LoginResponse,RegisterArgs>(
-    "api/register",
-    async ({name,username,email,password},{rejectWithValue,dispatch})=>{
-        try{
-            const res = await Axios.post("/register",{
-                name,
-                username,
-                email,
-                password
-            })
-            cookies.set("token",res.data.token);
-            dispatch(updateUser(res.data.user));
-            return res.data;
-        }catch(error:any){
-            return rejectWithValue(error?.response?.data)
-        }
+export const signUpHandler = createAsyncThunk<LoginResponse, RegisterArgs>(
+  "api/register",
+  async (
+    { name, username, email, password },
+    { rejectWithValue, dispatch }
+  ) => {
+    try {
+      const res = await Axios.post("/register", {
+        name,
+        username,
+        email,
+        password,
+      });
+      cookies.set("token", res.data.token);
+      dispatch(updateUser(res.data.user));
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
     }
-) 
+  }
+);
 
-export const loginHandler = createAsyncThunk<LoginResponse,LoginArgs>(
-    "api/register",
-    async ({username,email,password},{rejectWithValue,dispatch})=>{
-        try{
-            const res = await Axios.post("/login",{
-                username,
-                email,
-                password
-            })
-            cookies.set("token",res.data.token);
-            dispatch(updateUser(res.data.user));
-            return res.data;
-        }catch(error:any){
-            return rejectWithValue(error?.response?.data)
-        }
+export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
+  "api/register",
+  async ({ username, email, password }, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await Axios.post("/login", {
+        username,
+        email,
+        password,
+      });
+      cookies.set("token", res.data.token, {
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+      });
+      dispatch(updateUser(res.data.user));
+      return res.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
     }
-) 
+  }
+);
 
-const initialState:LoginInitialState = {
-    showModal:true,
-    showLogin:false,
-    showPassword:false,
-}
+const initialState: LoginInitialState = {
+  showModal: true,
+  showLogin: false,
+  showPassword: false,
+};
 
 export const loginSlice = createSlice({
-    name:"login",
-    initialState,
-    reducers:{
-        toggleModal:(state,action:PayloadAction<boolean>)=>{
-            state.showModal = action.payload;
-        },
-        updateShowLogin:(state,action:PayloadAction<boolean>)=>{
-            state.showLogin = action.payload
-        },
-        updateShowPassword:(state,action:PayloadAction<boolean>)=>{
-            state.showPassword = action.payload;
-        }
-    }
-})
+  name: "login",
+  initialState,
+  reducers: {
+    toggleModal: (state, action: PayloadAction<boolean>) => {
+      state.showModal = action.payload;
+    },
+    updateShowLogin: (state, action: PayloadAction<boolean>) => {
+      state.showLogin = action.payload;
+    },
+    updateShowPassword: (state, action: PayloadAction<boolean>) => {
+      state.showPassword = action.payload;
+    },
+  },
+});
 
-
-export const {toggleModal,updateShowLogin,updateShowPassword}  = loginSlice.actions;
-export const showModal = (state:RootState) => state.login.showModal;
-export const showLogin = (state:RootState) => state.login.showLogin;
-export const showPassword = (state:RootState) => state.login.showPassword
+export const { toggleModal, updateShowLogin, updateShowPassword } =
+  loginSlice.actions;
+export const showModal = (state: RootState) => state.login.showModal;
+export const showLogin = (state: RootState) => state.login.showLogin;
+export const showPassword = (state: RootState) => state.login.showPassword;
 export default loginSlice.reducer;

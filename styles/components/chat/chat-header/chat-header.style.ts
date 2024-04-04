@@ -23,111 +23,84 @@ const StyledSpan = styled.span`
 const StyledRightContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
 `;
 
-const StyledUserProfileContainer = styled.div`
+const StyledUserProfileImageWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
-`;
-
-const StyledUserImgContainer = styled.button<{
-  $mode: "light" | "dark";
-}>`
-  cursor: pointer;
-  background: ${({ theme }) => theme.palette.primary.main};
-  display: inline-block;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  ${(props) => {
-    switch (props.$mode) {
-      case "dark":
-        return `
-          border: 3px solid ${props.theme.palette.primary.light};
-        `;
-      case "light":
-        return `
-          border: 3px solid ${props.theme.palette.primary.dark};
-        `;
-    }
-  }}
-`;
-
-const StyledUserImg = styled(Image)<{
-  $mode: "light" | "dark";
-}>`
-  border-radius: 50%;
-  background: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.dark
-      : props.theme.palette.primary.light};
-`;
-
-const StyledUserData = styled.span`
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledText = styled.span<{
-  $mode: "light" | "dark";
-}>`
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.dark
-      : props.theme.palette.primary.light};
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-
-const StyledUserPointsContainer = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 4px;
-`;
-
-const StyledNotificationContainer = styled.div<{
-  $mode: "light" | "dark";
-}>`
-  width: 40px;
   height: 40px;
-  border-radius: 6px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  ${(props) => {
-    switch (props.$mode) {
-      case "dark":
-        return `
-          border: 2px solid ${props.theme.palette.primary.light};
-          background: ${props.theme.palette.primary.dark};
-        `;
-      case "light":
-        return `
-          border: 2px solid ${props.theme.palette.primary.dark};
-          background:${props.theme.palette.primary.light};
-        `;
-    }
-  }}
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 25px;
+  gap: 6px;
+  padding-right: 18px;
+  position: relative;
 `;
+
+const StyledUserProfileImage = styled(Image)<{
+  $mode: "light" | "dark";
+}>`
+  margin-left: 3px;
+  border: 2px solid
+    ${(props) =>
+      props.$mode == "dark"
+        ? props.theme.palette.primary.light
+        : props.theme.palette.primary.dark};
+  border-radius: 50%;
+`;
+
+const StyledIconCta = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+`;
+
+const StyledChevronIcon = styled(Image)``;
+
+const StyledNotificationCta = styled.button<{
+  $notification_count: number;
+}>`
+  background: transparent;
+  cursor: pointer;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  height: 40px;
+  width: 40px;
+  border-radius: 6px;
+  position: relative;
+  ${(props) =>
+    Boolean(props.$notification_count) &&
+    `
+      &::after {
+        content:"${String(props.$notification_count).padStart(2, "0")}" ;
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        background: ${props.theme.palette.primary.main};
+        top: 0px;
+        right: 0px;
+        transform: translate(50%, -50%);
+        border: 2px solid ${props.theme.palette.primary.dark};
+        color: ${props.theme.palette.primary.dark};
+        font-family: ${props.theme.fontFamily.lobster};
+      }
+  `}
+`;
+
+const StyledBellIcon = styled(Image)``;
 
 export {
   StyledChatHeader,
   StyledWelcomeText,
   StyledSpan,
   StyledRightContainer,
-  StyledUserProfileContainer,
-  StyledUserImgContainer,
-  StyledUserImg,
-  StyledUserData,
-  StyledText,
-  StyledUserPointsContainer,
-  StyledNotificationContainer,
+  StyledUserProfileImageWrapper,
+  StyledUserProfileImage,
+  StyledIconCta,
+  StyledChevronIcon,
+  StyledNotificationCta,
+  StyledBellIcon,
 };

@@ -3,7 +3,7 @@ import { adventurer } from "@dicebear/collection";
 // types
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
-const useAvatarUrl = (user: IUsersWithConversation) => {
+const useAvatarUrl = (user: IUsersWithConversation | null) => {
   if (user?.avatar_url) {
     return `${process.env.NEXT_PUBLIC_API_END_POINT}${
       user.avatar_url

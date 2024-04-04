@@ -15,8 +15,15 @@ const nextConfig = {
           protocol:"http",
           hostname:"127.0.0.1",
           port:"8000",
-          pathname:"/storage/avatar/**"
-        }
+          pathname:"/storage/**"
+        },
+        /** testing */
+        // {
+        //   protocol:"http",
+        //   hostname:"",
+        //   port:"8000",
+        //   pathname:"/storage/**"
+        // }
       ]
     }
 }

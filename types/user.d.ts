@@ -8,6 +8,7 @@ type User = {
   created_at: string | null;
   updated_at: string | null;
   avatar_url: null | string;
+  earned_points: number | null;
 };
 
 export { User };

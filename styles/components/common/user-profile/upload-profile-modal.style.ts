@@ -6,8 +6,8 @@ const StyledChatUserUploadWrapper = styled.dialog`
   max-width: 400px;
   height: 470px;
   background: ${({ theme }) => theme.palette.primary.main};
-  position: absolute;
-  z-index: 2;
+  position: relative;
+  z-index: 6;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -60%);
@@ -23,7 +23,7 @@ const StyledHeader = styled.div`
 `;
 
 const StyledHeaderMainText = styled.h6`
-  color: ${({ theme }) => theme.palette.primary.dar};
+  color: ${({ theme }) => theme.palette.primary.dark};
   text-align: center;
   font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 20px;

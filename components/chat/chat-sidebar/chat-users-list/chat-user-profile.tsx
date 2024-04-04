@@ -5,6 +5,7 @@ import type { Theme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledUsersProfile,
+  StyledProfileImageWrapper,
   StyledUserImage,
   StyledUserDetails,
   StyledUserName,
@@ -21,14 +22,19 @@ import { useIsMobile } from "@/hooks/common.hook";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
+  // state
   active_user,
+  // actions
   updateShowChat,
   updateActiveUser,
+  // api
   fetchMessages,
 } from "@/store/slice/chat.slice";
+import { updateActiveGroup } from "@/store/slice/group.slice";
 import { mode } from "@/store/slice/common.slice";
 // helpers
-import { getTimeDifference } from "@/helpers/common";
+import { getTimeDifference } from "@/helpers/common.helper";
+import { getUserStatus } from "@/helpers/chat.helper";
 
 interface IProps {
   user: IUsersWithConversation;
@@ -40,6 +46,7 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
   const _mode = useAppSelector(mode);
   const _active_user = useAppSelector(active_user);
   const is_mobile = useIsMobile();
+  const user_status = getUserStatus(user.last_seen);
   return (
     <StyledUsersProfile
       $time={getTimeDifference(user.latest_conversation?.created_at as string)}
@@ -55,18 +62,16 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
       }
       onClick={() => {
         dispatch(updateActiveUser(user));
+        dispatch(updateActiveGroup(null));
         dispatch(fetchMessages());
         if (is_mobile) {
           dispatch(updateShowChat(true));
         }
       }}
     >
-      <StyledUserImage
-        src={avatar_url}
-        alt="user-avatar"
-        width={40}
-        height={40}
-      />
+      <StyledProfileImageWrapper $status={user_status}>
+        <StyledUserImage src={avatar_url} alt="user-avatar" fill={true} />
+      </StyledProfileImageWrapper>
       <StyledUserDetails>
         <StyledUserName>{user.name}</StyledUserName>
         <StyledUserMessage>

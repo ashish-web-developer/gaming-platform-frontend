@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { createPortal } from "react-dom";
 import { useRef } from "react";
 // types
@@ -11,68 +10,66 @@ import {
   StyledWelcomeText,
   StyledSpan,
   StyledRightContainer,
-  StyledUserProfileContainer,
-  StyledUserImgContainer,
-  StyledUserImg,
-  StyledUserData,
-  StyledText,
-  StyledUserPointsContainer,
-  StyledNotificationContainer,
+  StyledUserProfileImageWrapper,
+  StyledUserProfileImage,
+  StyledIconCta,
+  StyledChevronIcon,
+  StyledNotificationCta,
+  StyledBellIcon,
 } from "@/styles/components/chat/chat-header/chat-header.style";
 
 // local components
+import Slider from "@/components/common/slider";
+import ChatUserPoint from "@/components/chat/chat-header/chat-user-point";
+import UserProfileDropDown from "@/components/common/user-profile/user-profile-drop-down";
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
+import CreateGroupModal from "@/components/common/create-group/create-group-modal";
+import NotificationModal from "@/components/common/notification-modal/notification-modal";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
+  // states
   mode,
   show_profile_upload_modal,
-  updateShowProfileUploadModal,
+  show_profile_drop_down,
+  show_create_group_drop_down,
+  show_notification_modal,
+  // actions
+  updateShowProfileDropDown,
+  updateShowNotification,
 } from "@/store/slice/common.slice";
 
+import { notifications } from "@/store/slice/notification.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
 import React from "react";
 
-const NotificationIcon: FC<{
-  width: number;
-  height: number;
-  color: string;
-}> = ({ width, height, color }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
-      fill="none"
-      viewBox="0 0 22 25"
-    >
-      <path
-        fill={color}
-        d="M10.938 25a3.124 3.124 0 003.123-3.125H7.814A3.124 3.124 0 0010.937 25zm10.517-7.31c-.944-1.014-2.709-2.539-2.709-7.534 0-3.794-2.66-6.83-6.247-7.576V1.562a1.562 1.562 0 10-3.123 0V2.58c-3.587.745-6.247 3.782-6.247 7.576 0 4.995-1.765 6.52-2.709 7.534A1.526 1.526 0 000 18.75c.005.8.634 1.563 1.567 1.563h18.74c.934 0 1.563-.762 1.568-1.563a1.524 1.524 0 00-.42-1.06z"
-      ></path>
-    </svg>
-  );
-};
-
 const ChatHeader: FC = () => {
   const dispatch = useAppDispatch();
+  const _notifications = useAppSelector(notifications);
+  const unread_notifications_count = _notifications.filter((notification)=>notification.read_at == null).length;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
+  const _show_profile_drop_down = useAppSelector(show_profile_drop_down);
+  const _show_create_group_drop_down = useAppSelector(
+    show_create_group_drop_down
+  );
+  const _show_notification_modal = useAppSelector(show_notification_modal);
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const user_avatar_ref = useRef<HTMLButtonElement>(null);
+  const chevron_cta_ref = useRef<HTMLButtonElement>(null);
+  const camera_cta_ref = useRef<HTMLButtonElement>(null);
+  const group_cta_ref = useRef<HTMLButtonElement>(null);
+  const notification_cta_ref = useRef<HTMLButtonElement>(null);
 
   return (
     <>
       {_show_profile_upload_modal &&
         createPortal(
-          <UploadProfileModal
-            ref={user_avatar_ref}
-          />,
+          <UploadProfileModal ref={camera_cta_ref} />,
           document.getElementById("upload-profile-modal-container") as Element
         )}
       <StyledChatHeader>
@@ -80,43 +77,57 @@ const ChatHeader: FC = () => {
           Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
         </StyledWelcomeText>
         <StyledRightContainer>
-          <StyledUserProfileContainer>
-            <StyledUserImgContainer
-              ref={user_avatar_ref}
-              onClick={() => {
-                dispatch(updateShowProfileUploadModal(true));
-              }}
-              $mode={_mode}
-            >
-              <StyledUserImg
-                $mode={_mode}
-                src={user_avatar_url}
-                width={40}
-                height={40}
-                alt="user-avatar"
+          <StyledNotificationCta
+            $notification_count={unread_notifications_count}
+            onClick={() => {
+              dispatch(updateShowNotification(!_show_notification_modal));
+            }}
+            ref={notification_cta_ref}
+          >
+            <StyledBellIcon
+              alt="bell-icon"
+              src="/chat/chat-header/bell.png"
+              width={25}
+              height={25}
+            />
+          </StyledNotificationCta>
+          <ChatUserPoint />
+          <Slider />
+          <StyledUserProfileImageWrapper>
+            {_show_profile_drop_down && (
+              <UserProfileDropDown
+                ref={camera_cta_ref}
+                chevron_cta_ref={chevron_cta_ref}
+                group_cta_ref={group_cta_ref}
               />
-            </StyledUserImgContainer>
-            <StyledUserData>
-              <StyledText $mode={_mode}>{_user.name}</StyledText>
-              <StyledUserPointsContainer>
-                <Image
-                  alt="money bag"
-                  src={
-                    "/chat/chat-header/" +
-                    (_mode == "light"
-                      ? "money-bag-light.png"
-                      : "money-bag-dark.png")
-                  }
-                  width={15}
-                  height={15}
-                />
-                <StyledText $mode={_mode}>300.00</StyledText>
-              </StyledUserPointsContainer>
-            </StyledUserData>
-          </StyledUserProfileContainer>
-          <StyledNotificationContainer $mode={_mode}>
-            <NotificationIcon width={22} height={25} color="#000" />
-          </StyledNotificationContainer>
+            )}
+            {_show_create_group_drop_down && (
+              <CreateGroupModal ref={group_cta_ref} />
+            )}
+            {_show_notification_modal && (
+              <NotificationModal ref={notification_cta_ref} />
+            )}
+            <StyledUserProfileImage
+              $mode={_mode}
+              src={user_avatar_url}
+              width={30}
+              height={30}
+              alt="user-avatar"
+            />
+            <StyledIconCta
+              ref={chevron_cta_ref}
+              onClick={() => {
+                dispatch(updateShowProfileDropDown(!_show_profile_drop_down));
+              }}
+            >
+              <StyledChevronIcon
+                alt="chevron-down"
+                width={20}
+                height={20}
+                src={`/chat/chat-header/${_mode}-chevron-down.png`}
+              />
+            </StyledIconCta>
+          </StyledUserProfileImageWrapper>
         </StyledRightContainer>
       </StyledChatHeader>
     </>

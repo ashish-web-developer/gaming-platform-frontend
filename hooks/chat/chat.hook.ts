@@ -4,37 +4,53 @@ import type { RefObject } from "react";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
-  show_emoji,
+  // state
   active_user,
-  updateShowEmoji,
+  // action
+  // api
   fetchMessages,
   fetchDefaultUser,
 } from "@/store/slice/chat.slice";
+import {
+  active_group,
+  getGroupsApi,
+  getGroupRecommendationApi,
+  fetchGroupMessagesApi,
+} from "@/store/slice/group.slice";
+import { getNotificationApi } from "@/store/slice/notification.slice";
 import { user } from "@/store/slice/user.slice";
 
 /**
  * To fetch default user
  */
-const useDefaultUser = () => {
+const useDefault = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchDefaultUser());
+    dispatch(getGroupsApi());
+    dispatch(getGroupRecommendationApi());
+    dispatch(getNotificationApi());
   }, []);
 };
 
 /**
  * To fetch the conversation for first user
  */
-const useFirstUserConversation = () => {
+const useDefaultConversation = () => {
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
   const _active_user = useAppSelector(active_user);
+  const _active_group = useAppSelector(active_group);
   const _active_user_defined = !!_active_user;
+
   useEffect(() => {
     if (_active_user_defined && _user.id) {
       dispatch(fetchMessages());
     }
-  }, [_active_user_defined, _user.id]);
+    if (_active_group) {
+      dispatch(fetchGroupMessagesApi());
+    }
+  }, [_active_user_defined, _user.id, _active_group]);
 };
 
 /**
@@ -71,4 +87,4 @@ const useMessageView = ({
   }, [_user, options]);
 };
 
-export { useDefaultUser, useMessageView, useFirstUserConversation };
+export { useDefault, useMessageView, useDefaultConversation };

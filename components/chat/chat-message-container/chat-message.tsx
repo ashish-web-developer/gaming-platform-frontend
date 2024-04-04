@@ -11,6 +11,10 @@ import {
   StyledMessageContent,
   StyledUserProfile,
   StyledMessage,
+  StyledMessageWrapper,
+  StyledUploadedImageContainer,
+  StyledUploadedImageWrapper,
+  StyledUploadedImage,
 } from "@/styles/components/chat/chat-message-container/chat-message.style";
 // styled theme
 
@@ -25,23 +29,24 @@ import { updateView } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // helpers
-import { readableFormatDate } from "@/helpers/common";
+import { readableFormatDate } from "@/helpers/common.helper";
 
 const ChatMessage = forwardRef<
   HTMLDivElement,
   {
     conversation: IConversation;
     user: User;
-    active_user: IUsersWithConversation;
   }
->(({ conversation, user, active_user }, root_ref) => {
+>(({ conversation, user }, root_ref) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const is_mobile = useIsMobile();
   const target_ref = useRef<HTMLDivElement>(null);
   const created_at = readableFormatDate(conversation.created_at);
   const user_avatar_url = useAvatarUrl(user as IUsersWithConversation);
-  const active_user_avatar_url = useAvatarUrl(active_user);
+  const sender_avatar_url = useAvatarUrl(
+    conversation.sender as IUsersWithConversation
+  );
   const intersection_observer_options = useMemo(() => {
     return is_mobile
       ? {
@@ -71,33 +76,6 @@ const ChatMessage = forwardRef<
     },
     options: intersection_observer_options,
   });
-
-  if (conversation.receiver_id == user.id) {
-    return (
-      <StyledMessageContent $justifyContent="flex-start">
-        <StyledUserProfile
-          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
-          $order={1}
-          src={active_user_avatar_url}
-          width={40}
-          height={40}
-          alt="user-avatar"
-        />
-        <StyledMessage
-          ref={target_ref}
-          $show_double_tick={false}
-          $content={created_at}
-          $right={10}
-          $border_radius="0px 20px 20px 20px"
-          $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
-          $order={2}
-          $mode={_mode}
-        >
-          {conversation.message}
-        </StyledMessage>
-      </StyledMessageContent>
-    );
-  }
   if (conversation.sender_id == user.id) {
     return (
       <StyledMessageContent $justifyContent="flex-end">
@@ -108,22 +86,84 @@ const ChatMessage = forwardRef<
           width={40}
           height={40}
           alt="user-avatar"
+          sizes="(max-width: 1400px) 10vw"
         />
-        <StyledMessage
-          ref={target_ref}
-          $show_double_tick={conversation.viewed}
-          $content={created_at}
-          $left={10}
-          $border_radius="20px 0px 20px 20px"
-          $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
-          $order={1}
-          $mode={_mode}
-        >
-          {conversation.message}
-        </StyledMessage>
+        <StyledMessageWrapper $align_items="flex-end" $order={1}>
+          {conversation.message && (
+            <StyledMessage
+              ref={target_ref}
+              $show_double_tick={conversation.viewed}
+              $content={created_at}
+              $left={10}
+              $border_radius="20px 0px 20px 20px"
+              $border_color={_mode == "dark" ? "#AFA2FF" : "#EE964B"}
+              $mode={_mode}
+            >
+              {conversation.message}
+            </StyledMessage>
+          )}
+
+          <StyledUploadedImageContainer>
+            {conversation.files?.map((file, index) => {
+              return (
+                <StyledUploadedImageWrapper key={`uploaded-file-${index}`}>
+                  <StyledUploadedImage
+                    alt="image"
+                    fill={true}
+                    src={`${process.env.NEXT_PUBLIC_API_END_POINT}${file}`}
+                    sizes="(max-width: 1400px) 20vw"
+                  />
+                </StyledUploadedImageWrapper>
+              );
+            })}
+          </StyledUploadedImageContainer>
+        </StyledMessageWrapper>
       </StyledMessageContent>
     );
   }
+  return (
+    <StyledMessageContent $justifyContent="flex-start">
+      <StyledUserProfile
+        $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
+        $order={1}
+        src={sender_avatar_url}
+        width={40}
+        height={40}
+        alt="user-avatar"
+        sizes="(max-width: 1400px) 10vw"
+      />
+      <StyledMessageWrapper $align_items="flex-start" $order={2}>
+        {conversation.message && (
+          <StyledMessage
+            ref={target_ref}
+            $show_double_tick={false}
+            $content={created_at}
+            $right={10}
+            $border_radius="0px 20px 20px 20px"
+            $border_color={_mode == "dark" ? "#E7E08B" : "#000000"}
+            $mode={_mode}
+          >
+            {conversation.message}
+          </StyledMessage>
+        )}
+
+        <StyledUploadedImageContainer>
+          {conversation.files?.map((file, index) => {
+            return (
+              <StyledUploadedImageWrapper key={`uploaded-file-${index}`}>
+                <StyledUploadedImage
+                  alt="image"
+                  fill={true}
+                  src={`${process.env.NEXT_PUBLIC_API_END_POINT}${file}`}
+                  sizes="(max-width: 1400px) 20vw"
+                />
+              </StyledUploadedImageWrapper>
+            );
+          })}
+        </StyledUploadedImageContainer>
+      </StyledMessageWrapper>
+    </StyledMessageContent>
+  );
 });
 
 export default ChatMessage;

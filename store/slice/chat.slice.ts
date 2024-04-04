@@ -1,53 +1,67 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // types
-import { PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 import type IChatInitialState from "@/types/store/slice/chat";
+import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type {
-  IFetchUserResponse,
-  IFetchDefaultUserResponse,
-  IUsersWithConversation,
-  IFetchMessagesResponse,
-  ISendMessageRequest,
-  ISendMessageResponse,
   IConversation,
+  IUsersWithConversation,
+  IFetchUserResponse,
+  IFetchUserPayload,
+  IFetchDefaultUserResponse,
+  IFetchMessagesResponse,
   IUpdateViewRequest,
   IUpdateViewResponse,
   ISendInvitationApiRequest,
   ISendInvitationApiResponse,
   IAcceptInvitationApiRequest,
   IAcceptInvitationApiResponse,
+  ISendMessagePayload,
+  ISendMessageResponse,
 } from "@/types/store/slice/chat";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
 
+// thunk api
+import { fetchGroupMessagesApi } from "@/store/slice/group.slice";
+
 // helpers
 import { Axios } from "@/helpers/axios";
 
-// api calls
-export const fetchUser = createAsyncThunk<
-  IFetchUserResponse,
-  undefined,
+/**
+ * ========================= API ===========================
+ */
+export const fetchUserApi = createAsyncThunk<
+  IFetchUserResponse & {
+    fetch_type: "chat" | "group";
+  },
+  IFetchUserPayload,
   { state: RootState }
->("api/chat/search-user", async (_, { getState, rejectWithValue }) => {
-  try {
-    const state = getState();
-    const response: AxiosResponse<IFetchUserResponse> = await Axios.post(
-      "/chat/search-user",
-      null,
-      {
-        params: {
-          query: state.chat.search_input_value,
-          page: state.chat.fetch_user.page,
-          skip_id: state.chat.default_users.map(({ id }) => id),
-        },
-      }
-    );
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
+>(
+  "api/chat/search-user",
+  async ({ fetch_type, query }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IFetchUserResponse> = await Axios.post(
+        "/chat/search-user",
+        null,
+        {
+          params: {
+            query,
+            page: state.chat.fetch_user.page,
+            skip_id: state.chat.default_users.map(({ id }) => id),
+          },
+        }
+      );
+      return { fetch_type, ...response.data };
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
   }
-});
-
+);
+/**
+ * User to whom conversation have been made
+ */
 export const fetchDefaultUser = createAsyncThunk<
   IFetchDefaultUserResponse,
   undefined,
@@ -62,6 +76,10 @@ export const fetchDefaultUser = createAsyncThunk<
     return rejectWithValue(error?.response?.data);
   }
 });
+
+/**
+ * Fetches messsages related to certain user
+ */
 
 export const fetchMessages = createAsyncThunk<
   IFetchMessagesResponse,
@@ -141,50 +159,47 @@ export const acceptInvitationApi = createAsyncThunk<
   }
 );
 
-export const sendMessage = createAsyncThunk<
+export const sendMessageApi = createAsyncThunk<
   ISendMessageResponse,
-  ISendMessageRequest,
-  { state: RootState }
->(
-  "api/chat/send-message",
-  async ({ message }, { getState, rejectWithValue }) => {
-    try {
-      const state = getState();
-      const response: AxiosResponse<ISendMessageResponse> = await Axios.post(
-        "/chat/send-message",
-        {
-          sender_id: state.user.user.id,
-          receiver_id: state.chat.active_user?.id,
-          message,
-        }
-      );
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
-    }
+  ISendMessagePayload,
+  IThunkApiConfig
+>("api/chat/send-message", async ({ form_data }, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<ISendMessageResponse> = await Axios.post(
+      "/chat/send-message",
+      form_data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
   }
-);
+});
 
 const initialState: IChatInitialState = {
-  search_input_value: "",
   is_typing: false,
   fetch_user: {
     page: 1,
     fetched_user_result: [],
+    fetch_type: null,
     is_request_pending: false,
   },
   default_users: [],
   active_user: null,
-  active_user_conversation: [],
+  active_conversation: [],
   send_message: {
     is_request_pending: false,
   },
-  show_emoji: false,
-  game_snackbar: {
-    show_memory_game_snackbar: false,
-  },
   mobile: {
     show_chat: false,
+    show_search_dialog: false,
+  },
+  invites_dialog: {
+    show_cognimatch_invite_dialog: false,
   },
 };
 
@@ -192,9 +207,7 @@ const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
-    updateSearchInputValue: (state, action: PayloadAction<string>) => {
-      state.search_input_value = action.payload;
-    },
+    resetChat: () => initialState,
     updatePage: (state, action: PayloadAction<number>) => {
       state.fetch_user.page = action.payload;
     },
@@ -204,6 +217,7 @@ const chatSlice = createSlice({
     ) => {
       if (!action.payload.length) {
         state.fetch_user.fetched_user_result = [];
+        state.fetch_user.fetch_type = null;
       } else {
         state.fetch_user.fetched_user_result = [
           ...state.fetch_user.fetched_user_result,
@@ -226,14 +240,11 @@ const chatSlice = createSlice({
     ) => {
       state.active_user = action.payload;
     },
-    updateShowEmoji: (state, action: PayloadAction<boolean>) => {
-      state.show_emoji = action.payload;
-    },
     updateActiveUserConversation: (
       state,
       action: PayloadAction<IConversation>
     ) => {
-      state.active_user_conversation.push(action.payload);
+      state.active_conversation.push(action.payload);
     },
     updateDefaultUserConversation: (
       state,
@@ -266,7 +277,7 @@ const chatSlice = createSlice({
     },
     updateConversationView: (state, action: PayloadAction<IConversation>) => {
       const updatedConversation = action.payload;
-      const updatedConversations = state.active_user_conversation.map(
+      const updatedConversations = state.active_conversation.map(
         (conversation) => {
           if (conversation.id === updatedConversation.id) {
             return updatedConversation;
@@ -277,29 +288,40 @@ const chatSlice = createSlice({
 
       return {
         ...state,
-        active_user_conversation: updatedConversations,
+        active_conversation: updatedConversations,
       };
     },
     updateIsTyping: (state, action: PayloadAction<boolean>) => {
       state.is_typing = action.payload;
     },
-    updateShowMemoryGameSnackbar: (state, action: PayloadAction<boolean>) => {
-      state.game_snackbar.show_memory_game_snackbar = action.payload;
-    },
     updateShowChat: (state, action: PayloadAction<boolean>) => {
       state.mobile.show_chat = action.payload;
     },
+    updateShowSearch: (state, action: PayloadAction<boolean>) => {
+      state.mobile.show_search_dialog = action.payload;
+    },
+    updateInviteDialog: (
+      state,
+      action: PayloadAction<{
+        modal_type: "cognimatch";
+        is_open: boolean;
+      }>
+    ) => {
+      state.invites_dialog[`show_${action.payload.modal_type}_invite_dialog`] =
+        action.payload.is_open;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUser.fulfilled, (state, action) => {
+    builder.addCase(fetchUserApi.fulfilled, (state, action) => {
       state.fetch_user.fetched_user_result = [
         ...state.fetch_user.fetched_user_result,
         ...action.payload.user_data.data,
       ];
       state.fetch_user.page = state.fetch_user.page + 1;
       state.fetch_user.is_request_pending = false;
+      state.fetch_user.fetch_type = action.payload.fetch_type;
     });
-    builder.addCase(fetchUser.pending, (state, action) => {
+    builder.addCase(fetchUserApi.pending, (state, action) => {
       state.fetch_user.is_request_pending = true;
     });
     builder.addCase(fetchDefaultUser.fulfilled, (state, action) => {
@@ -309,32 +331,34 @@ const chatSlice = createSlice({
       }
     });
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
-      state.active_user_conversation = action.payload.conversation;
+      state.active_conversation = action.payload.conversation;
     });
-    builder.addCase(sendMessage.fulfilled, (state, action) => {
-      state.active_user_conversation.push(action.payload.conversation);
+    builder.addCase(sendMessageApi.fulfilled, (state, action) => {
+      state.active_conversation.push(action.payload.conversation);
       state.send_message.is_request_pending = false;
-      state.default_users = state.default_users.map((user) => {
-        if (user.id == action.payload.conversation.receiver_id) {
-          {
-            return {
-              ...user,
-              latest_conversation: action.payload.conversation,
-            };
+      if (!action.payload.conversation.group_id) {
+        state.default_users = state.default_users.map((user) => {
+          if (user.id == action.payload.conversation.receiver_id) {
+            {
+              return {
+                ...user,
+                latest_conversation: action.payload.conversation,
+              };
+            }
           }
-        }
-        return user;
-      });
+          return user;
+        });
+      }
     });
-    builder.addCase(sendMessage.pending, (state, action) => {
+    builder.addCase(sendMessageApi.pending, (state, action) => {
       state.send_message.is_request_pending = true;
     });
-    builder.addCase(sendMessage.rejected, (state, action) => {
+    builder.addCase(sendMessageApi.rejected, (state, action) => {
       state.send_message.is_request_pending = false;
     });
     builder.addCase(updateView.fulfilled, (state, action) => {
       const updated_conversation = action.payload.conversation;
-      state.active_user_conversation = state.active_user_conversation.map(
+      state.active_conversation = state.active_conversation.map(
         (conversation) => {
           if (conversation.id == updated_conversation.id) {
             return updated_conversation;
@@ -352,43 +376,49 @@ const chatSlice = createSlice({
         return user;
       });
     });
+    builder.addCase(fetchGroupMessagesApi.fulfilled, (state, action) => {
+      state.active_conversation = action.payload.conversation;
+    });
   },
 });
 
 export default chatSlice.reducer;
-export const search_input_value = (state: RootState) =>
-  state.chat.search_input_value;
 export const page = (state: RootState) => state.chat.fetch_user.page;
 export const fetched_user_result = (state: RootState) =>
   state.chat.fetch_user.fetched_user_result;
+export const fetch_type = (state: RootState) =>
+  state.chat.fetch_user.fetch_type;
 export const is_request_pending = (state: RootState) =>
   state.chat.fetch_user.is_request_pending;
 export const default_users = (state: RootState) => state.chat.default_users;
 
 export const active_user = (state: RootState) => state.chat.active_user;
 
-export const active_user_conversation = (state: RootState) =>
-  state.chat.active_user_conversation;
+export const active_conversation = (state: RootState) =>
+  state.chat.active_conversation;
 export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
-export const show_emoji = (state: RootState) => state.chat.show_emoji;
 
 export const is_typing = (state: RootState) => state.chat.is_typing;
-export const show_memory_game_snackbar = (state: RootState) =>
-  state.chat.game_snackbar.show_memory_game_snackbar;
 export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
+
+export const show_search_dialog = (state: RootState) =>
+  state.chat.mobile.show_search_dialog;
+export const show_cognimatch_invite_dialog = (state: RootState) =>
+  state.chat.invites_dialog.show_cognimatch_invite_dialog;
+
 export const {
-  updateSearchInputValue,
+  resetChat,
   updatePage,
   updateFetchUserResult,
   updateIsRequestPending,
   updateDefaultUser,
   updateActiveUser,
-  updateShowEmoji,
   updateActiveUserConversation,
   updateDefaultUserConversation,
   updateConversationView,
   updateIsTyping,
-  updateShowMemoryGameSnackbar,
   updateShowChat,
+  updateShowSearch,
+  updateInviteDialog,
 } = chatSlice.actions;

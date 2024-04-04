@@ -30,6 +30,7 @@ import {
   // state
   show_profile_upload_modal,
   // actions
+  updateShowProfileDropDown,
   updateShowProfileUploadModal,
   // apis
   updateProfileApi,
@@ -40,7 +41,7 @@ import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 
 // hooks
-import { useOutsideClickHandler } from "@/hooks/common.hook";
+import { useOutsideClickHandler, useIsMounted } from "@/hooks/common.hook";
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -77,7 +78,7 @@ const CropIcon: FC<{ color: string; size: number }> = ({ color, size }) => {
 
 const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
   {},
-  cta_ref
+  camera_cta_ref
 ) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
@@ -94,10 +95,11 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
   const file_input_ref = useRef<HTMLInputElement>(null);
   const uploaded_image_ref = useRef<HTMLImageElement>(null);
   const cropper_ref = useRef<Cropper | null>(null);
+  const is_mount = useIsMounted();
   useOutsideClickHandler({
     modal_ref: modal_ref,
-    cta_ref: cta_ref,
-    callback: () => {
+    cta_ref: camera_cta_ref,
+    handler: () => {
       dispatch(updateShowProfileUploadModal(false));
     },
   });
@@ -128,6 +130,18 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
       cropper_ref.current = null;
     }
   }, [cropper_active]);
+
+  /**
+   * setting profile_drown_down value to false here
+   * because if we set it in the event handler of the
+   * camera cta, then we won't we have to have access
+   * camera_cta_ref
+   */
+  useEffect(() => {
+    if (is_mount) {
+      dispatch(updateShowProfileDropDown(false));
+    }
+  }, [is_mount]);
 
   return (
     <StyledChatUserUploadWrapper
@@ -171,6 +185,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             type="file"
             id="upload-file"
             name="profile"
+            multiple = {false}
             accept=".jpg,.png"
             onChange={(event) => {
               if (event.target.files) {

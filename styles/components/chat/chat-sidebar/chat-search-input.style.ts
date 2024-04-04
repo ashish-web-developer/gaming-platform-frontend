@@ -26,9 +26,6 @@ const StyledChatSearchInput = styled.input<{
   &:focus {
     outline: none;
   }
-  &::focus {
-    outline: none;
-  }
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 18px;
   }
@@ -57,7 +54,7 @@ const StyledChatSearchInput = styled.input<{
 `;
 const StyledInputIcon = styled(Image)`
   position: absolute;
-  z-index: 2;
+  z-index: 1;
   right: 18px;
   top: 50%;
   transform: translateY(-50%);

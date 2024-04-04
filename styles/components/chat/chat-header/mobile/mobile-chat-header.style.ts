@@ -1,159 +1,119 @@
 import styled from "styled-components";
 import Image from "next/image";
 
-const StyledMobileHeaderContainer = styled.div`
+const StyledMobileChatHeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 30px;
 `;
-const StyledMobileHeader = styled.div`
+
+const StyledMobileHeaderTop = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
 `;
 
-const StyledMobileChatSearchIcon = styled.button`
-  background: ${({ theme }) => theme.palette.primary.main};
-  border: none;
-  margin: 0px;
-  padding: 0px;
-`;
-
-const StyledHamBurgerIcon = styled.button<{
-  $mode: "light" | "dark";
-}>`
-  display: inline-block;
-  width: 30px;
-  height: 3px;
-  background: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.dark
-      : props.theme.palette.primary.light};
+const StyledUserProfileImageWrapper = styled.div`
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 25px;
+  gap: 6px;
+  padding-right: 18px;
   position: relative;
-  top: 10px;
-  cursor: pointer;
-  border: none;
-  &::before {
-    content: "";
-    width: 25px;
-    height: 3px;
-    position: absolute;
-    right: 0px;
-    top: 10px;
-    background: ${(props) =>
-      props.$mode == "light"
-        ? props.theme.palette.primary.dark
-        : props.theme.palette.primary.light};
-  }
 `;
 
-const StyledWelcomingText = styled.h1<{
+const StyledUserProfileImage = styled(Image)<{
   $mode: "light" | "dark";
 }>`
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  text-align: center;
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.dark
-      : props.theme.palette.primary.light};
-  font-size: 30px;
+  margin-left: 3px;
+  border: 2px solid
+    ${(props) =>
+      props.$mode == "dark"
+        ? props.theme.palette.primary.light
+        : props.theme.palette.primary.dark};
+  border-radius: 50%;
 `;
-const StyledWelcomingSpan = styled.span<{
-  $mode: "light" | "dark";
-}>`
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.light
-      : props.theme.palette.primary.dark};
+
+const StyledIconCta = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
 `;
+
+const StyledChevronIcon = styled(Image)``;
 
 const StyledBackCta = styled.button`
-  width: 60px;
-  height: 60px;
-  background: ${({ theme }) => theme.palette.primary.dark};
-  border: none;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledChatUserProfile = styled.div<{
-  $mode: "light" | "dark";
-}>`
-  height: 50px;
-  width: auto;
-  border-radius: 25px;
-  background: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.dark
-      : props.theme.palette.primary.main};
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 4px;
-  gap: 12px;
-  padding-right: 24px;
+  width: 30px;
+  height: 30px;
   border: 2px solid ${({ theme }) => theme.palette.primary.dark};
-  box-shadow: ${(props) =>
-    props.$mode == "light"
-      ? "0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-      : "0px 4px 4px 0px rgba(255, 255, 255, 0.25)"};
+  background: ${({ theme }) => theme.palette.primary.main};
+  border-radius: 50%;
 `;
 
-const StyledAvatar = styled(Image)`
-  display: inline-block;
-  border-radius: 40px;
-  border: 2px solid #fff;
+const StyledNotificationCta = styled.button<{
+  $notification_count: number;
+}>`
+  background: transparent;
+  cursor: pointer;
+  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  height: 40px;
+  width: 40px;
+  border-radius: 6px;
+  position: relative;
+  ${(props) =>
+    Boolean(props.$notification_count) &&
+    `
+      &::after {
+        content:"${String(props.$notification_count).padStart(2, "0")}" ;
+        position: absolute;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+        background: ${props.theme.palette.primary.main};
+        top: 0px;
+        right: 0px;
+        transform: translate(50%, -50%);
+        border: 2px solid ${props.theme.palette.primary.dark};
+        color: ${props.theme.palette.primary.dark};
+        font-family: ${props.theme.fontFamily.lobster};
+      }
+  `}
 `;
+const StyledBellIcon = styled(Image)``;
 
-const StyledUserDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-`;
-
-const StyledUserName = styled.span<{
+const StyledHeaderMessage = styled.h1<{
   $mode: "light" | "dark";
 }>`
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.main
-      : props.theme.palette.primary.light};
   font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-
-const StyledMessageCount = styled.span<{
-  $mode: "light" | "dark";
-}>`
+  font-size: 1.5rem;
   color: ${(props) =>
     props.$mode == "light"
       ? props.theme.palette.primary.light
       : props.theme.palette.primary.dark};
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  margin-top: 54px;
+`;
+
+const StyledSpan = styled.span<{
+  $color: string;
+}>`
+  color: ${(props) => props.$color};
 `;
 
 export {
-  StyledMobileHeaderContainer,
-  StyledMobileHeader,
-  StyledMobileChatSearchIcon,
-  StyledHamBurgerIcon,
-  StyledWelcomingText,
-  StyledWelcomingSpan,
+  StyledMobileChatHeaderContainer,
+  StyledMobileHeaderTop,
+  StyledUserProfileImageWrapper,
+  StyledUserProfileImage,
+  StyledIconCta,
+  StyledChevronIcon,
   StyledBackCta,
-  StyledChatUserProfile,
-  StyledAvatar,
-  StyledUserDetails,
-  StyledUserName,
-  StyledMessageCount,
+  StyledNotificationCta,
+  StyledBellIcon,
+  StyledHeaderMessage,
+  StyledSpan,
 };

@@ -1,8 +1,6 @@
 import dynamic from "next/dynamic";
-import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
 import type { ITheme } from "@/theme/memory-game.theme";
 
 // local components
@@ -139,54 +137,28 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   // state
-  show_help_tooltip,
   show_game_board,
-  is_gaming_user_in,
   score,
   show_chat_streaming_modal,
   info_snackbar,
   show_leaving_snackbar,
-  // api call
-  getCards,
-  updateScoreEvent,
   // action
   updateShowHelpTooltip,
-  updateCardList,
-  updateCardState,
-  updatePlayerTurnId,
-  updateLastFlippedCard,
-  updateScore,
-  updateLiveStreamChatList,
-  updateInfoSnackbar,
 } from "@/store/slice/memory-game.slice";
-import {
-  room_id,
-  is_proposal_sender,
-  gaming_user,
-  updateTimerStartCountEvent,
-  updateTimerStartCount,
-} from "@/store/slice/game.slice";
+import { gaming_user } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // icons
 import HelpIcon from "@/components/memory-game/icons/help";
 
 // hooks
-import { usePresenceChannel } from "@/hooks/pusher.hook";
 import { useIsMobile } from "@/hooks/common.hook";
-
-// package
-import { v4 as uuidv4 } from "uuid";
 
 const MemoryGame: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _show_help_tooltip = useAppSelector(show_help_tooltip);
   const _show_game_board = useAppSelector(show_game_board);
-  const _room_id = useAppSelector(room_id);
-  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
-  const _is_proposal_sender = useAppSelector(is_proposal_sender);
   const _gaming_user = useAppSelector(gaming_user);
   const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
@@ -195,103 +167,6 @@ const MemoryGame: FC = () => {
   const _show_chat_streaming_modal = useAppSelector(show_chat_streaming_modal);
   const _info_snackbar = useAppSelector(info_snackbar);
   const _show_leaving_snackbar = useAppSelector(show_leaving_snackbar);
-  const sound_ref = useRef<{
-    flip_sound: HTMLAudioElement | null;
-  }>({
-    flip_sound: null,
-  });
-
-  usePresenceChannel(`game.${_room_id}`, [
-    {
-      event: "CardListDataEvent",
-      callback: (data) => {
-        dispatch(updateCardList(data.card_list));
-      },
-    },
-    {
-      event: "MemoryGameEvent",
-      callback: (data) => {
-        dispatch(updateCardState({ id: data.card_id, flipped: data.flipped }));
-        sound_ref.current.flip_sound?.play();
-      },
-    },
-    {
-      event: "UpdatePlayerTurnEvent",
-      callback: (data) => {
-        dispatch(updatePlayerTurnId(data.player_turn_id));
-      },
-    },
-    {
-      event: "UpdateLastFlippedCard",
-      callback: (data) => {
-        dispatch(updateLastFlippedCard(data.card_id));
-      },
-    },
-    {
-      event: "UpdateTimerStartCountEvent",
-      callback: (data) => {
-        dispatch(updateTimerStartCount(data.start_timer_count));
-      },
-    },
-    {
-      event: "UpdateMemoryGameScore",
-      callback: (data) => {
-        dispatch(updateScore(data.score));
-      },
-    },
-    {
-      event: "LiveChatStreamEvent",
-      callback: (data: { user: IUsersWithConversation; message: string }) => {
-        dispatch(
-          updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
-        );
-        if (data.user.id !== _user.id) {
-          dispatch(
-            updateInfoSnackbar({
-              name: data.user.name,
-              message: data.message,
-              show_snacbar: true,
-            })
-          );
-          setTimeout(() => {
-            dispatch(
-              updateInfoSnackbar({
-                name: "",
-                message: "",
-                show_snacbar: false,
-              })
-            );
-          }, 3000);
-        }
-      },
-    },
-  ]);
-
-  useEffect(() => {
-    if (_is_gaming_user_in && _is_proposal_sender) {
-      dispatch(getCards());
-      dispatch(
-        updateTimerStartCountEvent({ timer_count: new Date().getTime() })
-      );
-      dispatch(
-        updateScoreEvent({
-          score: {
-            [_gaming_user?.id as number]: 0,
-            [_user.id as number]: 0,
-          },
-        })
-      );
-      dispatch(updatePlayerTurnId(_user.id));
-    }
-  }, [_is_proposal_sender, _is_gaming_user_in]);
-
-  useEffect(() => {
-    if (!sound_ref.current.flip_sound) {
-      sound_ref.current.flip_sound = new Audio(
-        "/memory-game/game-board/card/audio/flip-card-sound.mp3"
-      );
-    }
-  }, []);
 
   return (
     <StyledPage>

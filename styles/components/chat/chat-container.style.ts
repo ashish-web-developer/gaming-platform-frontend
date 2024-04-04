@@ -15,13 +15,28 @@ const StyledPage = styled.div<IStyledPage>`
   justify-content: center;
 `;
 
-const StyledThemeTogglerIcon = styled.button`
-  background: transparent;
-  border: none;
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
-  cursor: pointer;
+const StyledUploadModalWrapper = styled.div<{
+  $is_modal_open: boolean;
+}>`
+  ${(props) =>
+    props.$is_modal_open &&
+    `
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:transparent;
+    z-index:3;
+  `}
+`;
+
+const StyledBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: ${({ theme }) => theme.palette.primary.main};
+  opacity: 0.6;
 `;
 
 const StyledChatContainer = styled.div`
@@ -32,7 +47,7 @@ const StyledChatContainer = styled.div`
 const StyledChatMainContainer = styled.div`
   margin-top: 40px;
   display: grid;
-  grid-template-columns: 320px 440px 1fr;
+  grid-template-columns: 320px minmax(465px, 1fr) 320px;
   height: calc(100vh - 200px);
   gap: 40px;
 `;
@@ -41,61 +56,39 @@ const StyledChatMainContentContainer = styled.div<{
   $mode: "light" | "dark";
 }>`
   width: 100%;
-  min-height: 100%;
-  border-left: 2px solid
-    ${(props) =>
-      props.$mode == "light"
-        ? props.theme.palette.primary.light
-        : props.theme.palette.primary.dark};
-  padding-left: 40px;
+  display: grid;
+  grid-template-rows: 1fr 140px;
+  gap: 24px;
+  min-height: 0;
+  min-width: 0;
 `;
 
-const StyledChatMainContent = styled.div`
+const StyledMessageWrapper = styled.div`
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  overflow: scroll; /* NEW */
 `;
 
-const StyledMessageContainer = styled.div`
-  width: 100%;
-  max-height: calc(100% - 60px);
-  flex-grow: 1;
-`;
-
-const StyledMessageInputContainer = styled.div`
-  width: 100%;
-  flex-basis: 60px;
-`;
-
-const StyledNotificationContainer = styled.div`
+const StyledChatInputWrapper = styled.div`
   width: 100%;
   height: 100%;
+  position: relative;
 `;
-const StyledNotificationHeading = styled.h6<{
-  $mode: "light" | "dark";
-}>`
-  color: ${(props) =>
-    props.$mode == "light"
-      ? props.theme.palette.primary.light
-      : props.theme.palette.primary.dark};
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  text-decoration-line: underline;
+
+const StyledGroupSuggestionContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 `;
 
 export {
   StyledPage,
+  StyledUploadModalWrapper,
+  StyledBackdrop,
   StyledChatContainer,
   StyledChatMainContainer,
   StyledChatMainContentContainer,
-  StyledChatMainContent,
-  StyledMessageContainer,
-  StyledMessageInputContainer,
-  StyledThemeTogglerIcon,
-  StyledNotificationContainer,
-  StyledNotificationHeading,
+  StyledMessageWrapper,
+  StyledChatInputWrapper,
+  StyledGroupSuggestionContainer,
 };
