@@ -34,6 +34,7 @@ import {
   updateDefaultUserConversation,
   updateConversationView,
   updateInviteDialog,
+  updateActiveUserStatus,
 } from "@/store/slice/chat.slice";
 
 import {
@@ -161,19 +162,52 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
     ],
   });
 
-  usePresenceChannel({
+  /**
+   * To handle the active user status
+   */
+  usePresenceChannel<IUsersWithConversation | null>({
     channel: _active_user ? `user-status.${_active_user.id}` : null,
-    handler: (user_ids) => {
-      console.log("value of user_ids", user_ids);
+    handler: (user_ids, type, active_user) => {
+      switch (type) {
+        case "here":
+          dispatch(
+            updateActiveUserStatus(
+              Array.isArray(user_ids)
+                ? user_ids.some((user) => user.id == active_user?.id)
+                : user_ids.id == active_user?.id
+            )
+          );
+          return;
+        case "joining":
+          dispatch(
+            updateActiveUserStatus(
+              Array.isArray(user_ids)
+                ? user_ids.some((user) => user.id == active_user?.id)
+                : user_ids.id == active_user?.id
+            )
+          );
+          return;
+        case "leaving":
+          dispatch(
+            updateActiveUserStatus(
+              !(Array.isArray(user_ids)
+                ? user_ids.some((user) => user.id == active_user?.id)
+                : user_ids.id == active_user?.id)
+            )
+          );
+          return;
+      }
     },
     events: [],
+    dependency: _active_user,
   });
 
+  /**
+   * To send the user status to active user
+   */
   usePresenceChannel({
     channel: _user ? `user-status.${_user.id}` : null,
-    handler: (user_ids) => {
-      console.log("value of user_ids", user_ids);
-    },
+    handler: (user_ids) => {},
     events: [],
   });
   return (

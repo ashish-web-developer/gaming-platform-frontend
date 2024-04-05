@@ -26,6 +26,7 @@ import {
   // state
   active_user,
   active_conversation,
+  active_user_status,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -82,6 +83,7 @@ const ChatMessageContainer: FC = () => {
   const _active_user = useAppSelector(active_user);
   const _active_group = useAppSelector(active_group);
   const _active_conversation = useAppSelector(active_conversation);
+  const _active_user_status = useAppSelector(active_user_status);
   const root_ref = useRef<HTMLDivElement>(null);
   const is_mobile = useIsMobile();
   if (_active_group) {
@@ -134,7 +136,7 @@ const ChatMessageContainer: FC = () => {
     return (
       <StyledMessageContainer>
         {is_mobile && (
-          <StyledUserProfileVectorWrapper>
+          <StyledUserProfileVectorWrapper $status={_active_user_status}>
             <UserProfileVector user={_active_user as IUsersWithConversation} />
           </StyledUserProfileVectorWrapper>
         )}
@@ -143,7 +145,9 @@ const ChatMessageContainer: FC = () => {
             <StyledName>{_active_user.name}</StyledName>
             <StyledMessageCount>(24 messages)</StyledMessageCount>
           </StyledWrapper>
-          {!is_mobile && <ChatAvatar user={_active_user} />}
+          {!is_mobile && (
+            <ChatAvatar status={_active_user_status} user={_active_user} />
+          )}
         </StyledDetailsWrapper>
         <StyledChatMessageContentContainer ref={root_ref}>
           {_active_conversation.map((conversation) => (

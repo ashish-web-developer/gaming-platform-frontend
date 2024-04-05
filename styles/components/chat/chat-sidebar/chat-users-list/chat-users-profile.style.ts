@@ -45,28 +45,11 @@ const StyledUsersProfile = styled.div<{
   }
 `;
 
-const StyledProfileImageWrapper = styled.div<{
-  $status: boolean;
-}>`
+const StyledProfileImageWrapper = styled.div`
   width: 40px;
   height: 40px;
   position: relative;
   z-index: 1;
-  &::after {
-    content: "";
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 10px;
-    height: 10px;
-    background: ${(props) =>
-      props.$status
-        ? props.theme.palette.info.main
-        : props.theme.palette.warning.main};
-    border: 2px solid #000;
-    border-radius: 50%;
-    z-index: 2;
-  }
 `;
 const StyledUserImage = styled(Image)`
   border: 2px solid #000;
