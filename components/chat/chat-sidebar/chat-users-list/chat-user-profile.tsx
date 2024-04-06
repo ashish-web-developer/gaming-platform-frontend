@@ -69,7 +69,7 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
         }
       }}
     >
-      <StyledProfileImageWrapper $status={user_status}>
+      <StyledProfileImageWrapper>
         <StyledUserImage src={avatar_url} alt="user-avatar" fill={true} />
       </StyledProfileImageWrapper>
       <StyledUserDetails>

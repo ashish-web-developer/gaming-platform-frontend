@@ -58,10 +58,31 @@ const StyledChatMessageContentContainer = styled.div`
   padding: 16px 16px 40px 16px;
 `;
 
-const StyledUserProfileVectorWrapper = styled.div`
+const StyledUserProfileVectorWrapper = styled.div<{
+  $status?: boolean;
+}>`
   position: absolute;
   transform: translateY(-50%);
   right: 50px;
+  ${(props) =>
+    props.$status !== undefined &&
+    `
+      &::after{
+        content:"";
+        position:absolute;
+        width:12px;
+        height:12px;
+        border:2px solid #000;
+        border-radius:50%;
+        top:0px;
+        right:10px;
+        background:${
+          props.$status
+            ? props.theme.palette.info.main
+            : props.theme.palette.warning.main
+        };
+      }
+  `}
 `;
 
 export {

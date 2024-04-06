@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import Image from "next/image";
 
-const StyledAvatarWrapper = styled.span<{
+type IStyledAvatarWrapper = {
   $show_left_count: boolean;
-}>`
+  $status?: boolean;
+};
+
+const StyledAvatarWrapper = styled.span<IStyledAvatarWrapper>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -12,8 +15,26 @@ const StyledAvatarWrapper = styled.span<{
   border-radius: 50%;
   position: relative;
   border: 2px solid #000;
-  overflow: hidden;
   background: #fff;
+  ${(props) =>
+    props.$status !== undefined &&
+    `
+      &::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        top:-2px;
+        right:-2px;
+        border:2px solid #000;
+        border-radius:50%;
+        background: ${
+          props.$status
+            ? props.theme.palette.info.main
+            : props.theme.palette.warning.main
+        };
+        position: absolute;
+      }
+  `}
   &:not(:first-of-type) {
     margin-left: -18px;
   }
@@ -34,6 +55,7 @@ const StyledAvatarWrapper = styled.span<{
 
 const StyledAvatarImage = styled(Image)`
   object-fit: cover;
+  overflow: hidden;
 `;
 
 const StyledLeftCount = styled.span`

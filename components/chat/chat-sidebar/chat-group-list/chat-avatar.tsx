@@ -15,10 +15,14 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 const ChatAvatar: FC<{
   user: IUsersWithConversation;
   left_count?: number; // no of avatars left in avatar group
-}> = ({ user, left_count }) => {
+  status?: boolean;
+}> = ({ user, left_count, status }) => {
   const avatar_url = useAvatarUrl(user);
   return (
-    <StyledAvatarWrapper $show_left_count={Boolean(left_count)}>
+    <StyledAvatarWrapper
+      $show_left_count={Boolean(left_count)}
+      $status={status}
+    >
       <StyledAvatarImage
         sizes="(max-width: 1400px) 10vw"
         alt="avatar"

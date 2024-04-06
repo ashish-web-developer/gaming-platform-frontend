@@ -22,7 +22,7 @@ type IUsersWithConversation = {
   email: string;
   admin: 1 | 0;
   email_verified_at: string;
-  last_seen:string;
+  last_seen: string;
   created_at: string;
   updated_at: string;
   latest_conversation?: IConversation;
@@ -41,6 +41,7 @@ type IChatInitialState = {
   };
   default_users: IUsersWithConversation[];
   active_user: IUsersWithConversation | null;
+  active_user_status: boolean;
   active_conversation: IConversation[];
   send_message: {
     is_request_pending: boolean;

@@ -34,6 +34,7 @@ import {
   updateDefaultUserConversation,
   updateConversationView,
   updateInviteDialog,
+  updateActiveUserStatus,
 } from "@/store/slice/chat.slice";
 
 import {
@@ -68,79 +69,86 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
   useDefault();
   useDefaultConversation();
   useNotificationChannel();
-  usePrivateChannel(`chat.${_user.id}`, [
-    {
-      event: "Chat.ChatEvent",
-      callback: (data: {
-        user: IUsersWithConversation;
-        conversation: IConversation;
-      }) => {
-        dispatch(updateDefaultUserConversation(data));
-        if (data.user.id == _active_user?.id) {
-          console.log("value of conversation", data.conversation);
-          dispatch(updateActiveUserConversation(data.conversation));
-        }
+  /**
+   * To handle personal chat
+   */
+  usePrivateChannel({
+    channel: _user.id ? `chat.${_user.id}` : null,
+    events: [
+      {
+        event: "Chat.ChatEvent",
+        callback: (data: {
+          user: IUsersWithConversation;
+          conversation: IConversation;
+        }) => {
+          dispatch(updateDefaultUserConversation(data));
+          if (data.user.id == _active_user?.id) {
+            console.log("value of conversation", data.conversation);
+            dispatch(updateActiveUserConversation(data.conversation));
+          }
+        },
       },
-    },
-    {
-      event: "Chat.ChatViewEvent",
-      callback: (data: {
-        user: IUsersWithConversation;
-        conversation: IConversation;
-      }) => {
-        if (data.user.id == _active_user?.id) {
-          dispatch(updateConversationView(data.conversation));
-        }
+      {
+        event: "Chat.ChatViewEvent",
+        callback: (data: {
+          user: IUsersWithConversation;
+          conversation: IConversation;
+        }) => {
+          if (data.user.id == _active_user?.id) {
+            dispatch(updateConversationView(data.conversation));
+          }
+        },
       },
-    },
-    {
-      event: "Group.GroupAccessGiven",
-      callback: (data: { group: IGroup }) => {
-        dispatch(updateDefaultGroup(data.group));
+      {
+        event: "Group.GroupAccessGiven",
+        callback: (data: { group: IGroup }) => {
+          dispatch(updateDefaultGroup(data.group));
+        },
       },
-    },
-    {
-      event: "Group.GroupJoinedEvent",
-      callback: (data: { group: IGroup }) => {
-        dispatch(updateGroupsUsers(data.group));
+      {
+        event: "Group.GroupJoinedEvent",
+        callback: (data: { group: IGroup }) => {
+          dispatch(updateGroupsUsers(data.group));
+        },
       },
-    },
-    {
-      event: "Game.PlayGameInvitationEvent",
-      callback: (data: {
-        receiver_id: number;
-        user: IUsersWithConversation;
-        game: "cognimatch";
-        room_id: string;
-      }) => {
-        dispatch(
-          updateInviteDialog({
-            modal_type: "cognimatch",
-            is_open: true,
-          })
-        );
-        dispatch(updateRoomId(data.room_id));
-        dispatch(updateGamingUser(data.user));
-      },
-    },
-    {
-      event: "Game.AcceptGameInvitationEvent",
-      callback: (data: {
-        is_accepted: boolean;
-        user: IUsersWithConversation;
-      }) => {
-        if (data.is_accepted) {
+      {
+        event: "Game.PlayGameInvitationEvent",
+        callback: (data: {
+          receiver_id: number;
+          user: IUsersWithConversation;
+          game: "cognimatch";
+          room_id: string;
+        }) => {
+          dispatch(
+            updateInviteDialog({
+              modal_type: "cognimatch",
+              is_open: true,
+            })
+          );
+          dispatch(updateRoomId(data.room_id));
           dispatch(updateGamingUser(data.user));
-          router.push("/memory-game");
-        }
+        },
       },
-    },
-  ]);
+      {
+        event: "Game.AcceptGameInvitationEvent",
+        callback: (data: {
+          is_accepted: boolean;
+          user: IUsersWithConversation;
+        }) => {
+          if (data.is_accepted) {
+            dispatch(updateGamingUser(data.user));
+            router.push("/memory-game");
+          }
+        },
+      },
+    ],
+  });
+  /**
+   * To handle group chat
+   */
   usePresenceChannel<IGroup | null>({
-    channel: `group-chat.${_active_group?.id}`,
-    handler: (user_ids, type, active_group) => {
-      console.log("user connected", user_ids, type);
-    },
+    channel: _active_group ? `group-chat.${_active_group?.id}` : null,
+    handler: (user_ids, type) => {},
     events: [
       {
         event: "Chat.GroupChatEvent",
@@ -152,9 +160,56 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
         },
       },
     ],
-    dependency: _active_group,
   });
 
+  /**
+   * To handle the active user status
+   */
+  usePresenceChannel<IUsersWithConversation | null>({
+    channel: _active_user ? `user-status.${_active_user.id}` : null,
+    handler: (user_ids, type, active_user) => {
+      switch (type) {
+        case "here":
+          dispatch(
+            updateActiveUserStatus(
+              Array.isArray(user_ids)
+                ? user_ids.some((user) => user.id == active_user?.id)
+                : user_ids.id == active_user?.id
+            )
+          );
+          return;
+        case "joining":
+          dispatch(
+            updateActiveUserStatus(
+              Array.isArray(user_ids)
+                ? user_ids.some((user) => user.id == active_user?.id)
+                : user_ids.id == active_user?.id
+            )
+          );
+          return;
+        case "leaving":
+          dispatch(
+            updateActiveUserStatus(
+              !(Array.isArray(user_ids)
+                ? user_ids.some((user) => user.id == active_user?.id)
+                : user_ids.id == active_user?.id)
+            )
+          );
+          return;
+      }
+    },
+    events: [],
+    dependency: _active_user,
+  });
+
+  /**
+   * To send the user status to active user
+   */
+  usePresenceChannel({
+    channel: _user ? `user-status.${_user.id}` : null,
+    handler: (user_ids) => {},
+    events: [],
+  });
   return (
     <ThemeProvider theme={_mode == "light" ? lightTheme : darkTheme}>
       {is_mobile || client_is_mobile ? (
