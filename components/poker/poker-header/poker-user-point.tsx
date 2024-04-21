@@ -1,5 +1,6 @@
 // types
 import type { FC } from "react";
+import type { ITheme } from "@/theme/poker.theme";
 
 // styled components
 import {
@@ -8,7 +9,10 @@ import {
   StyledSpan,
   StyledDepositCta,
   StyledAddIcon,
-} from "@/styles/components/chat/chat-header/chat-user-point.style";
+} from "@/styles/components/poker/poker-header/poker-user-point.style";
+
+// theme
+import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -39,7 +43,8 @@ const AddSvgIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
     </svg>
   );
 };
-const ChatUserPoint: FC = () => {
+const PokerUserPoint: FC = () => {
+  const theme = useTheme() as ITheme;
   const _user = useAppSelector(user);
   const _mode = useAppSelector(mode);
   return (
@@ -52,10 +57,10 @@ const ChatUserPoint: FC = () => {
       />
       <StyledSpan $mode={_mode}>{_user.earned_points?.toFixed(2)}</StyledSpan>
       <StyledDepositCta>
-        <AddSvgIcon size={20} color={"#000"} />
+        <AddSvgIcon size={20} color={theme.palette.secondary.main} />
         Deposit
       </StyledDepositCta>
     </StyledUserPointWrapper>
   );
 };
-export default ChatUserPoint;
+export default PokerUserPoint;
