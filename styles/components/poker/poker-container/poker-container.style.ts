@@ -12,6 +12,8 @@ const StyledContainer = styled.div`
   width: 75rem;
   height: 100%;
   padding: 40px 0px;
+  display: flex;
+  flex-direction: column;
 `;
 
 export { StyledPage, StyledContainer };

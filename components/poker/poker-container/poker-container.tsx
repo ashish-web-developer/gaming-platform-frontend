@@ -9,12 +9,14 @@ import {
 
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
+import PokerTable from "@/components/poker/poker-table/poker-table";
 
 const PokerContainer: FC = () => {
   return (
     <StyledPage>
       <StyledContainer>
         <PokerHeader />
+        <PokerTable />
       </StyledContainer>
     </StyledPage>
   );
