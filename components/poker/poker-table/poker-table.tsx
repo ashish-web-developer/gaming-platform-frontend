@@ -11,6 +11,7 @@ import {
 
 // local components
 import PokerTableVector from "@/components/poker/poker-table/poker-table-vector";
+import PokerPlayer from "@/components/poker/poker-player/poker-player";
 
 const PokerTable: FC = () => {
   return (
@@ -23,6 +24,9 @@ const PokerTable: FC = () => {
         />
       </StyledTableDealerProfile>
       <StyledPokerVectorWrapper>
+        <PokerPlayer align="left" />
+        <PokerPlayer align="right" />
+        <PokerPlayer align="down" />
         <PokerTableVector width={900} height={500} />
       </StyledPokerVectorWrapper>
     </StyledPokerTableWrapper>
