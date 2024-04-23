@@ -6,7 +6,6 @@ const StyledPokerPlayer = styled.div<{
 }>`
   position: absolute;
   display: flex;
-  align-items: center;
   gap: 20px;
   ${(props) => {
     switch (props.$align) {
@@ -39,12 +38,24 @@ const StyledPokerPlayerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  align-items: center;
 `;
 const StyledPokerPlayerProfile = styled.div`
   width: 100px;
   height: 100px;
   border: 4px solid #fff;
   border-radius: 50%;
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: ${({ theme }) => theme.palette.status.main};
+    right: 6px;
+    border-radius: 50%;
+    border: 2px solid #000;
+  }
 `;
 const StyledPokerPlayerProfileImage = styled(Image)`
   object-fit: contain;

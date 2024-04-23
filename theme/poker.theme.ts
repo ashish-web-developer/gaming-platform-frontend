@@ -15,6 +15,9 @@ export type ITheme = {
     info: {
       main: string;
     };
+    status: {
+      main: string;
+    };
   };
   fontFamily: {
     rubik_glitch: string;
@@ -33,6 +36,9 @@ export const Theme: ITheme = {
     },
     info: {
       main: "#fff",
+    },
+    status: {
+      main: "#90E39A",
     },
   },
   fontFamily: {
