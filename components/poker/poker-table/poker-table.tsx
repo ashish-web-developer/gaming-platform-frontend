@@ -1,5 +1,5 @@
 // types
-import type { FC } from "react";
+import { type FC } from "react";
 
 // styled components
 import {
@@ -13,7 +13,12 @@ import {
 import PokerTableVector from "@/components/poker/poker-table/poker-table-vector";
 import PokerPlayer from "@/components/poker/poker-player/poker-player";
 
+// hooks
+import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
+
 const PokerTable: FC = () => {
+  const height = usePokerTableHeight();
+
   return (
     <StyledPokerTableWrapper>
       <StyledTableDealerProfile>
@@ -27,7 +32,7 @@ const PokerTable: FC = () => {
         <PokerPlayer align="left" />
         <PokerPlayer align="right" />
         <PokerPlayer align="down" />
-        <PokerTableVector width={900} height={500} />
+        <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
     </StyledPokerTableWrapper>
   );
