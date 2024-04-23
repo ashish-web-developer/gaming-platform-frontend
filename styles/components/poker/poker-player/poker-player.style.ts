@@ -94,6 +94,47 @@ const StyledBetChipsWrapper = styled.div<{
     }
   }}
 `;
+const StyledPokerChipsWrapper = styled.div<{
+  $align: "left" | "right" | "down";
+}>`
+  position: relative;
+  width: 50px;
+  height: 50px;
+  &::after {
+    content: "D";
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    background: #000;
+    font-family: ${({ theme }) => theme.fontFamily.lobster};
+    font-size: 1.5rem;
+    color: ${({ theme }) => theme.palette.status.main};
+    ${(props) => {
+      switch (props.$align) {
+        case "left":
+          return `
+          transform:translateY(-100%);
+          bottom:20px;
+        `;
+        case "right":
+          return `
+          transform:translateY(-100%);
+          bottom:20px;
+        `;
+        case "down":
+          return `
+          transform:translateX(-100%);
+          right:20px;
+        `;
+      }
+    }}
+  }
+`;
 const StyledPokerChipsImage = styled(Image)``;
 
 const StyledBetChips = styled.span`
@@ -113,6 +154,7 @@ export {
   StyledPokerPlayerProfileImage,
   StyledTotalChips,
   StyledBetChipsWrapper,
+  StyledPokerChipsWrapper,
   StyledPokerChipsImage,
   StyledBetChips,
 };

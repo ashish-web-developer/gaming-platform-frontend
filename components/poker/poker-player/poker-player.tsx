@@ -9,6 +9,7 @@ import {
   StyledPokerPlayerProfileImage,
   StyledTotalChips,
   StyledBetChipsWrapper,
+  StyledPokerChipsWrapper,
   StyledPokerChipsImage,
   StyledBetChips,
 } from "@/styles/components/poker/poker-player/poker-player.style";
@@ -25,12 +26,13 @@ const PokerPlayer: FC<{
         <StyledTotalChips>$ 987,5000</StyledTotalChips>
       </StyledPokerPlayerWrapper>
       <StyledBetChipsWrapper $align={align}>
-        <StyledPokerChipsImage
-          src={"/poker/poker-player/poker-chip.png"}
-          width={50}
-          height={50}
-          alt="chip"
-        />
+        <StyledPokerChipsWrapper $align = {align}>
+          <StyledPokerChipsImage
+            src={"/poker/poker-player/poker-chip.png"}
+            fill = {true}
+            alt="chip"
+          />
+        </StyledPokerChipsWrapper>
         <StyledBetChips>$ 6000.00</StyledBetChips>
       </StyledBetChipsWrapper>
     </StyledPokerPlayer>
