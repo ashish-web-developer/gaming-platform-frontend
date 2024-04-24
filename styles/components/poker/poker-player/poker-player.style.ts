@@ -124,29 +124,13 @@ const StyledPokerChipsWrapper = styled.div<{
         font-family: ${props.theme.fontFamily.lobster};
         font-size: 1.5rem;
         color: ${props.theme.palette.status.main};
-
-        ${
-          props.$align === "left" &&
-          `
-          transform:translateY(-100%);
-          bottom:20px;
-        `
-        }
-        ${
-          props.$align === "right" &&
-          `
-
-          transform:translateY(-100%);
-          bottom:20px;
-        `
-        }
-        ${
-          props.$align === "down" &&
-          `
-          transform:translateX(-100%);
-          right:20px;
-        `
-        }
+        bottom:${
+          props.$align == "left" || props.$align == "right" ? "20px" : "unset"
+        };
+        transform:${
+          props.$align == "down" ? "translateX(-100%)" : "translateY(-100%)"
+        };
+        right:${props.$align == "down" ? "20px" : "unset"};
       }
     `}
 `;
