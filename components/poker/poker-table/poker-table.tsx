@@ -29,9 +29,9 @@ const PokerTable: FC = () => {
         />
       </StyledTableDealerProfile>
       <StyledPokerVectorWrapper>
-        <PokerPlayer align="left" />
+        <PokerPlayer align="left" is_dealer={true} />
         <PokerPlayer align="right" />
-        <PokerPlayer align="down" />
+        <PokerPlayer align="down" show_action_cta={true} />
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
     </StyledPokerTableWrapper>

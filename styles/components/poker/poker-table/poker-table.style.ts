@@ -21,6 +21,7 @@ const StyledTableDealerProfile = styled.div`
   border: 4px solid ${({ theme }) => theme.palette.secondary.main};
   position: absolute;
   top: -80px;
+  overflow: hidden;
 `;
 const StyledTableDealerProfileImage = styled(Image)`
   object-fit: contain;
