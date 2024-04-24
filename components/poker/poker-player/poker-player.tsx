@@ -31,7 +31,7 @@ const PokerPlayer: FC<{
         <StyledTotalChips>$ 987,5000</StyledTotalChips>
       </StyledPokerPlayerWrapper>
       <StyledBetChipsWrapper $align={align}>
-        <StyledPokerChipsWrapper $align={align}>
+        <StyledPokerChipsWrapper $align={align} $is_dealer={is_dealer}>
           <StyledPokerChipsImage
             src={"/poker/poker-player/poker-chip.png"}
             fill={true}
