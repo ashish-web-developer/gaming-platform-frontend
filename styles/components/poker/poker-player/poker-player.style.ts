@@ -147,32 +147,6 @@ const StyledBetChips = styled.span`
   border-radius: 0.625rem;
 `;
 
-const StyledActionCtaWrapper = styled.div`
-  position: relative;
-  width: 250px;
-  height: 125px;
-  z-index: -1;
-`;
-const StyledActionCtaCircle = styled.div`
-  width: 250px;
-  height: 125px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 125px 125px 0px 0px;
-  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  position: absolute;
-  bottom: -48px;
-`;
-const StyledActionCtaInnerCircle = styled.div`
-  width: 125px;
-  height: 62.5px;
-  border-radius: 62.5px 62.5px 0px 0px;
-  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-  background: ${({ theme }) => theme.palette.primary.light};
-`;
-
 export {
   StyledPokerPlayer,
   StyledPokerPlayerWrapper,
@@ -183,7 +157,4 @@ export {
   StyledPokerChipsWrapper,
   StyledPokerChipsImage,
   StyledBetChips,
-  StyledActionCtaWrapper,
-  StyledActionCtaCircle,
-  StyledActionCtaInnerCircle,
 };

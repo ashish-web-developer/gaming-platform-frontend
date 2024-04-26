@@ -1,7 +1,7 @@
 // types
 import type { FC } from "react";
 
-// local components
+// styled components
 import {
   StyledPokerPlayer,
   StyledPokerPlayerWrapper,
@@ -12,10 +12,10 @@ import {
   StyledPokerChipsWrapper,
   StyledPokerChipsImage,
   StyledBetChips,
-  StyledActionCtaWrapper,
-  StyledActionCtaCircle,
-  StyledActionCtaInnerCircle,
 } from "@/styles/components/poker/poker-player/poker-player.style";
+
+// local components
+import PokerActionCta from "@/components/poker/poker-player/poker-action-cta";
 
 const PokerPlayer: FC<{
   align: "left" | "right" | "down";
@@ -41,11 +41,7 @@ const PokerPlayer: FC<{
         {!show_action_cta ? (
           <StyledBetChips>$ 6000.00</StyledBetChips>
         ) : (
-          <StyledActionCtaWrapper>
-            <StyledActionCtaCircle>
-              <StyledActionCtaInnerCircle></StyledActionCtaInnerCircle>
-            </StyledActionCtaCircle>
-          </StyledActionCtaWrapper>
+          <PokerActionCta />
         )}
       </StyledBetChipsWrapper>
     </StyledPokerPlayer>
