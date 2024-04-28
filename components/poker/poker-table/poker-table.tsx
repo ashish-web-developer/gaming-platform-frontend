@@ -18,7 +18,6 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 // hooks
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
-
 const PokerTable: FC = () => {
   const height = usePokerTableHeight();
 
@@ -39,7 +38,7 @@ const PokerTable: FC = () => {
       </StyledPokerVectorWrapper>
       <StyledTableCardWrapper>
         {new Array(5).fill(0).map(() => {
-          return <PokerCard suit={"club"} rank={"4"} />;
+          return <PokerCard suit={"diamond"} rank={"4"} />;
         })}
       </StyledTableCardWrapper>
     </StyledPokerTableWrapper>

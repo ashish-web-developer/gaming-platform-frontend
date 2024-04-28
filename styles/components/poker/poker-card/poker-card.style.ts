@@ -73,10 +73,21 @@ const StyledCard = styled.span`
   font-size: 0.625rem;
   color: ${({ theme }) => theme.palette.secondary.main};
 `;
+const StyledCardName = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-20deg);
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 0.625rem;
+  color: ${({ theme }) => theme.palette.secondary.main};
+  text-align: center;
+`;
 
 export {
   StyledPokerCardWrapper,
   StyledPokerContentContainer,
   StyledCardTypeWrapper,
   StyledCard,
+  StyledCardName,
 };

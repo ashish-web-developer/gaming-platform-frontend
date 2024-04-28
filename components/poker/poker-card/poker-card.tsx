@@ -10,6 +10,7 @@ import {
   StyledPokerContentContainer,
   StyledCardTypeWrapper,
   StyledCard,
+  StyledCardName,
 } from "@/styles/components/poker/poker-card/poker-card.style";
 
 // theme
@@ -17,6 +18,9 @@ import { useTheme } from "styled-components";
 
 // local components
 import PokerSuit from "@/components/poker/poker-card/poker-suit";
+
+// helpers
+import { getCardRankInWord } from "@/helpers/poker/poker.helper";
 
 const PokerCard: FC<{
   suit: ICardSuit;
@@ -52,6 +56,11 @@ const PokerCard: FC<{
               stroke_color={theme.palette.secondary.main}
             />
           </StyledCardTypeWrapper>
+          {rank !== "K" && rank !== "Q" && rank !== "J" && (
+            <StyledCardName>
+              {getCardRankInWord(rank)} of {suit}
+            </StyledCardName>
+          )}
         </StyledPokerContentContainer>
       )}
     </StyledPokerCardWrapper>
