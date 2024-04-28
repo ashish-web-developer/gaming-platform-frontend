@@ -27,9 +27,18 @@ const StyledTableDealerProfileImage = styled(Image)`
   object-fit: contain;
 `;
 
+const StyledTableCardWrapper = styled.div`
+  position: absolute;
+  top: 150px;
+  display: flex;
+  gap: 14px;
+`;
+
+
 export {
   StyledPokerTableWrapper,
   StyledPokerVectorWrapper,
   StyledTableDealerProfile,
   StyledTableDealerProfileImage,
+  StyledTableCardWrapper,
 };
