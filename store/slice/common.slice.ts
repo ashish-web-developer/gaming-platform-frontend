@@ -81,7 +81,10 @@ export const commonSlice = createSlice({
   },
 });
 
+// reducer
 export default commonSlice.reducer;
+
+// selector
 export const show_emoji = (state: RootState) => state.common.show_emoji;
 export const mode = (state: RootState) => state.common.mode;
 export const show_profile_upload_modal = (state: RootState) =>
@@ -94,6 +97,8 @@ export const show_notification_modal = (state: RootState) =>
   state.common.show_notification_modal;
 export const show_mobile_profile = (state: RootState) =>
   state.common.mobile.show_profile;
+
+// action creator
 export const {
   updateShowEmoji,
   updateMode,

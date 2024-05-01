@@ -386,7 +386,10 @@ const chatSlice = createSlice({
   },
 });
 
+// reducer
 export default chatSlice.reducer;
+
+// selectors
 export const page = (state: RootState) => state.chat.fetch_user.page;
 export const fetched_user_result = (state: RootState) =>
   state.chat.fetch_user.fetched_user_result;
@@ -412,6 +415,8 @@ export const show_cognimatch_invite_dialog = (state: RootState) =>
   state.chat.invites_dialog.show_cognimatch_invite_dialog;
 export const active_user_status = (state: RootState) =>
   state.chat.active_user_status;
+
+// action creator
 export const {
   resetChat,
   updatePage,

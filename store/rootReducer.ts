@@ -7,6 +7,7 @@ import commonReducer from "@/store/slice/common.slice";
 import gameReducer from "@/store/slice/game.slice";
 import notificationReducer from "@/store/slice/notification.slice";
 import groupReducer from "@/store/slice/group.slice";
+import pokerReducer from "@/store/slice/poker/poker.slice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     game: gameReducer,
     notification: notificationReducer,
     group: groupReducer,
+    poker: pokerReducer,
   },
 });
 
