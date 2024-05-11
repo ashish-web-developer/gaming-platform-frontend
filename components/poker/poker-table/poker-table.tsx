@@ -37,8 +37,10 @@ const PokerTable: FC = () => {
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
       <StyledTableCardWrapper>
-        {new Array(5).fill(0).map(() => {
-          return <PokerCard suit={"diamond"} rank={"J"} />;
+        {new Array(5).fill(0).map((el, index) => {
+          return (
+            <PokerCard key={`card-${index}`} suit={"diamond"} rank={"J"} />
+          );
         })}
       </StyledTableCardWrapper>
     </StyledPokerTableWrapper>
