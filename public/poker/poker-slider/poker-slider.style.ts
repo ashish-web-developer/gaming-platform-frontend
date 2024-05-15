@@ -20,11 +20,33 @@ const StyledSliderTrack = styled.div`
   background: ${({ theme }) => theme.palette.primary.main};
   border-top: 1rem solid ${({ theme }) => theme.palette.secondary.main};
 `;
-const StyledSliderThumb = styled.div`
-  bottom: 12px;
+const StyledSliderThumb = styled.div<{
+  $content: string;
+}>`
   left: -110px;
+  bottom: -12px;
   cursor: pointer;
   position: absolute;
 `;
+const StyledSliderThumbContent = styled.span`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 1.125rem;
+  color: ${({ theme }) => theme.palette.secondary.main};
+  display: flex;
+  justify-content: flex-start;
+  padding-left: 16px;
+  align-items: center;
+`;
 
-export { StyledPokerSlider, StyledSliderTrack, StyledSliderThumb };
+export {
+  StyledPokerSlider,
+  StyledSliderTrack,
+  StyledSliderThumb,
+  StyledSliderThumbContent,
+};

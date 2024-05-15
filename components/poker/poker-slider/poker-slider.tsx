@@ -7,38 +7,61 @@ import {
   StyledPokerSlider,
   StyledSliderTrack,
   StyledSliderThumb,
+  StyledSliderThumbContent,
 } from "@/public/poker/poker-slider/poker-slider.style";
 
 const PokerSlider: FC = () => {
+  const slider_ref = useRef<HTMLDivElement>(null);
   const slider_thumb_ref = useRef<HTMLDivElement>(null);
   const slider_track_ref = useRef<HTMLDivElement>(null);
+  const slider_content_ref = useRef<HTMLSpanElement>(null);
   const [is_dragging, set_is_dragging] = useState<boolean>(false);
   const [start_y, set_start_y] = useState(0);
 
-  return (
-    <StyledPokerSlider
-      onMouseMove={(event) => {
-        if (is_dragging) {
-          let y = event.pageY - start_y;
-          if (slider_thumb_ref.current && slider_track_ref.current) {
-            slider_thumb_ref.current.style.top = `${y}px`;
-            slider_track_ref.current.style.height = `calc(100% - ${y}px)`;
-          }
+  useEffect(() => {
+    const onMouseMoveHandler = (event: MouseEvent) => {
+      if (is_dragging) {
+        let y = event.pageY - start_y;
+        if (
+          slider_thumb_ref.current &&
+          slider_track_ref.current &&
+          slider_ref.current &&
+          slider_content_ref.current &&
+          y < slider_ref.current.clientHeight - 16 &&
+          y > 0
+        ) {
+          slider_thumb_ref.current.style.top = `${y - 12}px`;
+          slider_thumb_ref.current.style.bottom = "auto";
+          slider_track_ref.current.style.height = `calc(100% - ${y}px)`;
         }
-      }}
-    >
+      }
+    };
+    const onMouseUpHandler = (event: MouseEvent) => {
+      set_is_dragging(false);
+    };
+    document.addEventListener("mousemove", onMouseMoveHandler);
+    document.addEventListener("mouseup", onMouseUpHandler);
+    return () => {
+      document.removeEventListener("mousemove", onMouseMoveHandler);
+      document.removeEventListener("mouseup", onMouseUpHandler);
+    };
+  }, [is_dragging]);
+  return (
+    <StyledPokerSlider ref={slider_ref}>
       <StyledSliderTrack ref={slider_track_ref}></StyledSliderTrack>
       <StyledSliderThumb
+        $content="0M"
         ref={slider_thumb_ref}
         onMouseDown={(event) => {
+          event.stopPropagation();
           set_is_dragging(true);
           slider_thumb_ref.current &&
             set_start_y(event.pageY - slider_thumb_ref.current?.offsetTop);
         }}
-        onMouseUp={(event) => {
-          set_is_dragging(false);
-        }}
       >
+        <StyledSliderThumbContent ref={slider_content_ref}>
+          2.4M
+        </StyledSliderThumbContent>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="91"
