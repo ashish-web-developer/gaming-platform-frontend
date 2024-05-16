@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const StyledPokerSlider = styled.div`
+const StyledPokerSliderWrapper = styled.div`
   position: absolute;
   top: 50%;
   right: 40px;
@@ -10,11 +10,16 @@ const StyledPokerSlider = styled.div`
   background: ${({ theme }) => theme.palette.primary.main};
   border: 1rem solid ${({ theme }) => theme.palette.secondary.main};
   border-radius: 12px;
+  padding: 40px 0px;
+`;
+const StyledPokerSlider = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
   justify-content: space-between;
-  padding: 40px 0px;
 `;
 
 const StyledSliderTrack = styled.div`
@@ -62,10 +67,11 @@ const StyledSliderTickWithValue = styled.span`
 `;
 
 export {
-  StyledPokerSlider,
+  StyledPokerSliderWrapper,
   StyledSliderTrack,
   StyledSliderThumb,
   StyledSliderThumbContent,
   StyledSliderTick,
   StyledSliderTickWithValue,
+  StyledPokerSlider,
 };

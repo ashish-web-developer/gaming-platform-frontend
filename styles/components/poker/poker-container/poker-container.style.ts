@@ -7,6 +7,7 @@ const StyledPage = styled.div`
   background-size: cover;
   display: flex;
   justify-content: center;
+  user-select: none;
 `;
 const StyledContainer = styled.div`
   width: 75rem;
