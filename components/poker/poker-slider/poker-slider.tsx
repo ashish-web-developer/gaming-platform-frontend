@@ -8,7 +8,13 @@ import {
   StyledSliderTrack,
   StyledSliderThumb,
   StyledSliderThumbContent,
+  StyledSliderTick,
+  StyledSliderTickWithValue,
 } from "@/public/poker/poker-slider/poker-slider.style";
+
+// redux
+import { useAppSelector } from "@/hooks/redux.hook";
+import { poker_chips } from "@/store/slice/poker/poker.slice";
 
 const PokerSlider: FC = () => {
   const slider_ref = useRef<HTMLDivElement>(null);
@@ -17,6 +23,9 @@ const PokerSlider: FC = () => {
   const slider_content_ref = useRef<HTMLSpanElement>(null);
   const [is_dragging, set_is_dragging] = useState<boolean>(false);
   const [start_y, set_start_y] = useState(0);
+
+  // poker chips
+  const _poker_chips = useAppSelector(poker_chips);
 
   useEffect(() => {
     const onMouseMoveHandler = (event: MouseEvent) => {
@@ -48,6 +57,24 @@ const PokerSlider: FC = () => {
   }, [is_dragging]);
   return (
     <StyledPokerSlider ref={slider_ref}>
+      {[1, 2, 3, 4].map((val) => {
+        val = (val * _poker_chips) / 4 / 1000;
+        const text = val < 1 ? `${val * 1000}K` : `${val}M`;
+        return (
+          <>
+            <StyledSliderTickWithValue key={`tick-${val}`}>
+              {text}
+            </StyledSliderTickWithValue>
+            {val < 4 && (
+              <>
+                <StyledSliderTick />
+                <StyledSliderTick />
+                <StyledSliderTick />
+              </>
+            )}
+          </>
+        );
+      })}
       <StyledSliderTrack ref={slider_track_ref}></StyledSliderTrack>
       <StyledSliderThumb
         $content="0M"

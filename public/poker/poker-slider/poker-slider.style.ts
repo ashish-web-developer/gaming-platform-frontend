@@ -10,6 +10,11 @@ const StyledPokerSlider = styled.div`
   background: ${({ theme }) => theme.palette.primary.main};
   border: 1rem solid ${({ theme }) => theme.palette.secondary.main};
   border-radius: 12px;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: space-between;
+  padding: 40px 0px;
 `;
 
 const StyledSliderTrack = styled.div`
@@ -19,6 +24,7 @@ const StyledSliderTrack = styled.div`
   height: 0px;
   background: ${({ theme }) => theme.palette.primary.main};
   border-top: 1rem solid ${({ theme }) => theme.palette.secondary.main};
+  background: transparent;
 `;
 const StyledSliderThumb = styled.div<{
   $content: string;
@@ -44,9 +50,22 @@ const StyledSliderThumbContent = styled.span`
   align-items: center;
 `;
 
+const StyledSliderTick = styled.span`
+  display: inline-block;
+  width: 24px;
+  border: 2px solid #fff;
+`;
+const StyledSliderTickWithValue = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 1.5rem;
+  color: ${({ theme }) => theme.palette.secondary.main};
+`;
+
 export {
   StyledPokerSlider,
   StyledSliderTrack,
   StyledSliderThumb,
   StyledSliderThumbContent,
+  StyledSliderTick,
+  StyledSliderTickWithValue,
 };
