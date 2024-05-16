@@ -27,6 +27,7 @@ const PokerSlider: FC = () => {
 
   // poker chips
   const _poker_chips = useAppSelector(poker_chips);
+  const [current_slider_value, set_current_slider_value] = useState(0);
 
   useEffect(() => {
     const onMouseMoveHandler = (event: MouseEvent) => {
@@ -43,6 +44,11 @@ const PokerSlider: FC = () => {
           slider_thumb_ref.current.style.top = `${y - 12}px`;
           slider_thumb_ref.current.style.bottom = "auto";
           slider_track_ref.current.style.height = `calc(100% - ${y}px)`;
+          set_current_slider_value(
+            ((slider_ref.current.clientHeight - y) /
+              slider_ref.current.clientHeight) *
+              _poker_chips
+          );
         }
       }
     };
@@ -88,7 +94,7 @@ const PokerSlider: FC = () => {
           }}
         >
           <StyledSliderThumbContent ref={slider_content_ref}>
-            2.4M
+            {(current_slider_value / 1000).toFixed(1)}M
           </StyledSliderThumbContent>
           <svg
             xmlns="http://www.w3.org/2000/svg"
