@@ -7,7 +7,14 @@ import {
   StyledVectorWrapper,
 } from "@/styles/components/poker/poker-player/poker-action-cta.style";
 
+// redux
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import { updateShowPokerSlider } from "@/store/slice/poker/poker.slice";
+import { show_poker_slider } from "@/store/slice/poker/poker.slice";
+
 const PokerActionCta = () => {
+  const dispatch = useAppDispatch();
+  const _show_poker_slider = useAppSelector(show_poker_slider);
   return (
     <StyledPokerActionCta>
       <StyledVectorWrapper>
@@ -27,6 +34,7 @@ const PokerActionCta = () => {
             strokeWidth="4"
             d="M.753 108.753A125 125 0 0163.253.5l31.25 54.126a62.501 62.501 0 00-31.25 54.127H.753z"
             mask="url(#path-1-inside-1_123_99)"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               console.log("card get folded");
             }}
@@ -50,6 +58,7 @@ const PokerActionCta = () => {
             strokeWidth="4"
             d="M.253 17.5a125 125 0 01125 0l-31.25 54.127a62.5 62.5 0 00-62.5 0L.253 17.5z"
             mask="url(#path-1-inside-1_123_100)"
+            style={{ cursor: "pointer" }}
             onClick={() => {
               console.log("checked");
             }}
@@ -73,8 +82,9 @@ const PokerActionCta = () => {
             strokeWidth="4"
             d="M31.253.5a125 125 0 0162.5 108.253h-62.5A62.499 62.499 0 00.003 54.627L31.253.5z"
             mask="url(#path-1-inside-1_123_102)"
+            style={{ cursor: "pointer" }}
             onClick={() => {
-              console.log("Raised");
+              dispatch(updateShowPokerSlider(!_show_poker_slider));
             }}
           ></path>
         </svg>

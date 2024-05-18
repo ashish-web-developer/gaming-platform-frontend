@@ -20,4 +20,7 @@ const StyledVectorWrapper = styled.div<{
   bottom: ${(props) => props.$bottom ?? "auto"};
 `;
 
-export { StyledPokerActionCta, StyledVectorWrapper };
+export {
+  StyledPokerActionCta,
+  StyledVectorWrapper,
+};
