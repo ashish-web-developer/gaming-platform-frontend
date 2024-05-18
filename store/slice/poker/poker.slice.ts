@@ -6,7 +6,8 @@ import type { RootState } from "@/store/rootReducer";
 
 const initialState: IPokerInitialState = {
   show_poker_slider: true,
-  poker_chips: 1000,
+  poker_chips: 2000,
+  slider_val: 0,
 };
 
 const pokerSlice = createSlice({
@@ -15,6 +16,9 @@ const pokerSlice = createSlice({
   reducers: {
     updatePokerChips: (state, action: PayloadAction<number>) => {
       state.poker_chips = action.payload;
+    },
+    updateSliderVal: (state, action: PayloadAction<number>) => {
+      state.slider_val = action.payload;
     },
   },
 });
@@ -26,5 +30,6 @@ export default pokerSlice.reducer;
 export const show_poker_slider = (state: RootState) =>
   state.poker.show_poker_slider;
 export const poker_chips = (state: RootState) => state.poker.poker_chips;
+export const slider_val = (state: RootState) => state.poker.slider_val;
 // action creaters
-export const { updatePokerChips } = pokerSlice.actions;
+export const { updatePokerChips, updateSliderVal } = pokerSlice.actions;

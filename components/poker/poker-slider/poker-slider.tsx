@@ -14,10 +14,15 @@ import {
 } from "@/public/poker/poker-slider/poker-slider.style";
 
 // redux
-import { useAppSelector } from "@/hooks/redux.hook";
-import { poker_chips } from "@/store/slice/poker/poker.slice";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import {
+  poker_chips,
+  slider_val,
+  updateSliderVal,
+} from "@/store/slice/poker/poker.slice";
 
 const PokerSlider: FC = () => {
+  const dispatch = useAppDispatch();
   const slider_ref = useRef<HTMLDivElement>(null);
   const slider_thumb_ref = useRef<HTMLDivElement>(null);
   const slider_track_ref = useRef<HTMLDivElement>(null);
@@ -27,7 +32,9 @@ const PokerSlider: FC = () => {
 
   // poker chips
   const _poker_chips = useAppSelector(poker_chips);
-  const [current_slider_value, set_current_slider_value] = useState(0);
+
+  // slider val
+  const _slider_val = useAppSelector(slider_val);
 
   useEffect(() => {
     const onMouseMoveHandler = (event: MouseEvent) => {
@@ -44,10 +51,12 @@ const PokerSlider: FC = () => {
           slider_thumb_ref.current.style.top = `${y - 12}px`;
           slider_thumb_ref.current.style.bottom = "auto";
           slider_track_ref.current.style.height = `calc(100% - ${y}px)`;
-          set_current_slider_value(
-            ((slider_ref.current.clientHeight - y) /
-              slider_ref.current.clientHeight) *
-              _poker_chips
+          dispatch(
+            updateSliderVal(
+              ((slider_ref.current.clientHeight - y) /
+                slider_ref.current.clientHeight) *
+                _poker_chips
+            )
           );
         }
       }
@@ -94,7 +103,7 @@ const PokerSlider: FC = () => {
           }}
         >
           <StyledSliderThumbContent ref={slider_content_ref}>
-            {(current_slider_value / 1000).toFixed(1)}M
+            {(_slider_val / 1000).toFixed(1)}M
           </StyledSliderThumbContent>
           <svg
             xmlns="http://www.w3.org/2000/svg"
