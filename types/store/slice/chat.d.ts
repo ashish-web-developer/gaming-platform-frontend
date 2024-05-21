@@ -52,6 +52,7 @@ type IChatInitialState = {
   };
   invites_dialog: {
     show_cognimatch_invite_dialog: boolean;
+    show_poker_invite_dialog: boolean;
   };
 };
 
