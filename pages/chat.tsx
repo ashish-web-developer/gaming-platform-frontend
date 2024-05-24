@@ -116,17 +116,19 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
         callback: (data: {
           receiver_id: number;
           user: IUsersWithConversation;
-          game: "cognimatch";
+          game: "cognimatch" | "poker";
           room_id: string;
         }) => {
           dispatch(
             updateInviteDialog({
-              modal_type: "cognimatch",
+              modal_type: data.game,
               is_open: true,
             })
           );
           dispatch(updateRoomId(data.room_id));
-          dispatch(updateGamingUser(data.user));
+          if (data.game == "cognimatch") {
+            dispatch(updateGamingUser(data.user));
+          }
         },
       },
       {

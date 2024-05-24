@@ -9,7 +9,28 @@ import { ThemeProvider } from "styled-components";
 // theme
 import { Theme } from "@/theme/poker.theme";
 
+// redux
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { room_id } from "@/store/slice/game.slice";
+import { updateActiveGamingUser } from "@/store/slice/poker/poker.slice";
+
+// hooks
+import { usePresenceChannel } from "@/hooks/pusher.hook";
+import { IUsersWithConversation } from "@/types/store/slice/chat";
+
 const PokerPage: NextPage = () => {
+  const dispatch = useAppDispatch();
+  const _room_id = useAppSelector(room_id);
+  usePresenceChannel<
+    undefined,
+    { user: IUsersWithConversation }[] | { user: IUsersWithConversation }
+  >({
+    channel: `poker.${_room_id}`,
+    events: [],
+    handler: (users, type) => {
+      dispatch(updateActiveGamingUser({ users, type }));
+    },
+  });
   return (
     <ThemeProvider theme={Theme}>
       <PokerContainer />

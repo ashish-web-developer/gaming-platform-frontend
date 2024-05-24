@@ -1,4 +1,5 @@
 import { useRef, useId, useState } from "react";
+import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -50,6 +51,7 @@ import AudioMediaRecorder from "@/helpers/audio-media-recorder";
 import { v4 as uuidv4 } from "uuid";
 
 const ChatInput: FC<{}> = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const echo = useEcho();
   const _mode = useAppSelector(mode);
@@ -235,11 +237,20 @@ const ChatInput: FC<{}> = () => {
                 const room_id = uuidv4();
                 dispatch(updateRoomId(room_id));
                 dispatch(udpateIsProposalSender(true));
-                dispatch(
-                  sendInvitationApi({
-                    game: "cognimatch",
-                  })
-                );
+                if (_active_group) {
+                  dispatch(
+                    sendInvitationApi({
+                      game: "poker",
+                    })
+                  );
+                  router.push("/poker");
+                } else {
+                  dispatch(
+                    sendInvitationApi({
+                      game: "cognimatch",
+                    })
+                  );
+                }
               }}
             >
               <StyledIconImage

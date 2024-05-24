@@ -114,6 +114,11 @@ const StyledVsText = styled.h6<{
   right: 20px;
   bottom: 18px;
   z-index: 2;
+  width:200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 1.25rem;
     right: 24px;

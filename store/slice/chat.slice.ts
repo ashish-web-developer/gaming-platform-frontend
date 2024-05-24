@@ -128,7 +128,13 @@ export const sendInvitationApi = createAsyncThunk<
     const state = getState();
     const response: AxiosResponse<ISendInvitationApiResponse> =
       await Axios.post("game/game-invitation", {
-        receiver_id: state.chat.active_user?.id,
+        receiver_ids: state.chat.active_user
+          ? [state.chat.active_user.id]
+          : state.group.active_group?.user_group
+              .filter(
+                (_user_group) => _user_group.user_id !== state.user.user.id
+              )
+              .map((_user_group) => _user_group.user_id),
         game,
         room_id: state.game.room_id,
       });

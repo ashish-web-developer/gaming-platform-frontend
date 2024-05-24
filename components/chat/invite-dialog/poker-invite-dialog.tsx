@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { useRouter } from "next/router";
 
 // type
 import type { FC } from "react";
@@ -31,6 +32,7 @@ import {
   show_poker_invite_dialog,
   updateInviteDialog,
 } from "@/store/slice/chat.slice";
+import { updateRoomId } from "@/store/slice/game.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -53,6 +55,7 @@ const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 };
 
 const PokerInviteDialog: FC = () => {
+  const router = useRouter();
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _show_poker_invite_dialog = useAppSelector(show_poker_invite_dialog);
@@ -74,7 +77,7 @@ const PokerInviteDialog: FC = () => {
         </StyledPokerCardWrapper>
         <StyledPlayButton
           onClick={() => {
-            console.log("clicked");
+            router.push("/poker");
           }}
         >
           <PlayButtonVector stroke_color={theme.palette.secondary.main} />
@@ -87,6 +90,7 @@ const PokerInviteDialog: FC = () => {
                 is_open: false,
               })
             );
+            dispatch(updateRoomId(null));
           }}
         >
           <CloseIcon size={is_mobile ? 20 : 16} color={"#fff"} />
