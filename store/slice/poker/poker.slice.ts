@@ -29,9 +29,7 @@ const pokerSlice = createSlice({
       state,
       action: PayloadAction<{
         type: "here" | "joining" | "leaving";
-        users:
-          | { user: IUsersWithConversation }[]
-          | { user: IUsersWithConversation };
+        users: IUsersWithConversation[] | IUsersWithConversation;
       }>
     ) => {
       switch (action.payload.type) {
@@ -39,17 +37,17 @@ const pokerSlice = createSlice({
           if (Array.isArray(action.payload.users)) {
             const users = action.payload.users
               .filter(
-                ({ user }) =>
+                (user) =>
                   !state.active_gaming_user.some(
                     (active_user) => active_user.id == user.id
                   )
               )
-              .map(({ user }) => user);
+              .map((user) => user);
             state.active_gaming_user = [...state.active_gaming_user, ...users];
           } else {
             state.active_gaming_user = [
               ...state.active_gaming_user,
-              action.payload.users.user,
+              action.payload.users,
             ];
           }
           return;
@@ -57,15 +55,15 @@ const pokerSlice = createSlice({
           if (Array.isArray(action.payload.users)) {
             const users = action.payload.users
               .filter(
-                ({ user }) =>
+                (user) =>
                   !state.active_gaming_user.some(
                     (active_user) => active_user.id == user.id
                   )
               )
-              .map(({ user }) => user);
+              .map((user) => user);
             state.active_gaming_user = [...state.active_gaming_user, ...users];
           } else {
-            const { user } = action.payload.users;
+            const user = action.payload.users;
             if (
               !state.active_gaming_user.some(
                 (active_user) => active_user.id == user.id
@@ -79,13 +77,12 @@ const pokerSlice = createSlice({
           if (Array.isArray(action.payload.users)) {
             const { users } = action.payload;
             state.active_gaming_user = state.active_gaming_user.filter(
-              (active_user) =>
-                !users.some(({ user }) => active_user.id == user.id)
+              (active_user) => !users.some((user) => active_user.id == user.id)
             );
           } else {
             const { users } = action.payload;
             state.active_gaming_user = state.active_gaming_user.filter(
-              (active_user) => active_user.id !== users.user.id
+              (active_user) => active_user.id !== users.id
             );
           }
           return;

@@ -28,7 +28,13 @@ const PokerPage: NextPage = () => {
     channel: `poker.${_room_id}`,
     events: [],
     handler: (users, type) => {
-      dispatch(updateActiveGamingUser({ users, type }));
+      if (Array.isArray(users)) {
+        const _users = users.map(({ user }) => user);
+        dispatch(updateActiveGamingUser({ users: _users, type }));
+      } else {
+        const _user = users.user;
+        dispatch(updateActiveGamingUser({ users: _user, type }));
+      }
     },
   });
   return (
