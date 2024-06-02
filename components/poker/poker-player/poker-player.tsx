@@ -1,10 +1,12 @@
 // types
 import type { FC } from "react";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
   StyledPokerPlayer,
   StyledPokerPlayerWrapper,
+  StyledPokerPlayerProfileWrapper,
   StyledPokerPlayerProfile,
   StyledPokerPlayerProfileImage,
   StyledTotalChips,
@@ -17,18 +19,33 @@ import {
 // local components
 import PokerActionCta from "@/components/poker/poker-player/poker-action-cta";
 
+// hooks
+import { useAvatarUrl } from "@/hooks/profile.hook";
+
 const PokerPlayer: FC<{
   align: "left" | "right" | "down";
   show_action_cta?: boolean;
   is_dealer?: boolean;
-}> = ({ align, show_action_cta = false, is_dealer = false }) => {
+  user: IUsersWithConversation | undefined;
+}> = ({ align, show_action_cta = false, is_dealer = false, user }) => {
+  const avatar_url = useAvatarUrl(user ?? null);
   return (
     <StyledPokerPlayer $show_action_cta={show_action_cta} $align={align}>
       <StyledPokerPlayerWrapper>
-        <StyledPokerPlayerProfile>
-          {/* <StyledPokerPlayerProfileImage /> */}
-        </StyledPokerPlayerProfile>
-        <StyledTotalChips>$ 987,5000</StyledTotalChips>
+        <StyledPokerPlayerProfileWrapper $is_active={Boolean(user)}>
+          <StyledPokerPlayerProfile>
+            {user && (
+              <StyledPokerPlayerProfileImage
+                src={avatar_url}
+                alt="user"
+                fill={true}
+              />
+            )}
+          </StyledPokerPlayerProfile>
+        </StyledPokerPlayerProfileWrapper>
+        <StyledTotalChips>
+          {user ? `$ ${user.earned_points}` : "Waiting...."}
+        </StyledTotalChips>
       </StyledPokerPlayerWrapper>
       <StyledBetChipsWrapper $align={align}>
         <StyledPokerChipsWrapper $align={align} $is_dealer={is_dealer}>

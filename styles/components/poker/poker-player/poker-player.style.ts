@@ -45,10 +45,11 @@ const StyledPokerPlayerWrapper = styled.div`
   gap: 10px;
   align-items: center;
 `;
-const StyledPokerPlayerProfile = styled.div`
+const StyledPokerPlayerProfileWrapper = styled.div<{
+  $is_active: boolean;
+}>`
   width: 100px;
   height: 100px;
-  border: 4px solid #fff;
   border-radius: 50%;
   position: relative;
   &::after {
@@ -56,14 +57,26 @@ const StyledPokerPlayerProfile = styled.div`
     position: absolute;
     width: 16px;
     height: 16px;
-    background: ${({ theme }) => theme.palette.status.main};
+    background: ${(props) =>
+      props.$is_active
+        ? props.theme.palette.success.main
+        : props.theme.palette.warning.main};
     right: 6px;
+    top: 6px;
     border-radius: 50%;
     border: 2px solid #000;
   }
 `;
+const StyledPokerPlayerProfile = styled.div`
+  width: 100%;
+  height: 100%;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+`;
 const StyledPokerPlayerProfileImage = styled(Image)`
-  object-fit: contain;
+  object-fit: cover;
 `;
 
 const StyledTotalChips = styled.span`
@@ -123,7 +136,7 @@ const StyledPokerChipsWrapper = styled.div<{
         background: #000;
         font-family: ${props.theme.fontFamily.lobster};
         font-size: 1.5rem;
-        color: ${props.theme.palette.status.main};
+        color: ${props.theme.palette.success.main};
         bottom:${
           props.$align == "left" || props.$align == "right" ? "20px" : "unset"
         };
@@ -150,6 +163,7 @@ const StyledBetChips = styled.span`
 export {
   StyledPokerPlayer,
   StyledPokerPlayerWrapper,
+  StyledPokerPlayerProfileWrapper,
   StyledPokerPlayerProfile,
   StyledPokerPlayerProfileImage,
   StyledTotalChips,

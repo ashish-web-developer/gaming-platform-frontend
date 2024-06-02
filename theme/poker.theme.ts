@@ -15,7 +15,10 @@ export type ITheme = {
     info: {
       main: string;
     };
-    status: {
+    success: {
+      main: string;
+    };
+    warning: {
       main: string;
     };
   };
@@ -37,8 +40,11 @@ export const Theme: ITheme = {
     info: {
       main: "#fff",
     },
-    status: {
+    success: {
       main: "#90E39A",
+    },
+    warning: {
+      main: "#ff1b1c",
     },
   },
   fontFamily: {

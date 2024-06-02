@@ -22,9 +22,10 @@ const StyledUserProfile = styled.div`
   height: 60px;
   border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  overflow:hidden;
 `;
 const StyledUserProfileImage = styled(Image)`
-  object-fit: contain;
+  object-fit: cover;
 `;
 export {
   StyledPokerHeader,

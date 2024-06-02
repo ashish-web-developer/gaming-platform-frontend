@@ -1,6 +1,6 @@
 // types
 import { type FC } from "react";
-
+import { IUsersWithConversation } from "@/types/store/slice/chat";
 // styled components
 import {
   StyledPokerTableWrapper,
@@ -15,10 +15,18 @@ import PokerTableVector from "@/components/poker/poker-table/poker-table-vector"
 import PokerPlayer from "@/components/poker/poker-player/poker-player";
 import PokerCard from "@/components/poker/poker-card/poker-card";
 
+// redux
+import { useAppSelector } from "@/hooks/redux.hook";
+import { active_gaming_user } from "@/store/slice/poker/poker.slice";
+import { user } from "@/store/slice/user.slice";
 // hooks
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
 const PokerTable: FC = () => {
+  const _user = useAppSelector(user) as IUsersWithConversation;
+  const [_active_user_1, _active_user_2] = useAppSelector(
+    active_gaming_user
+  ).filter((user) => user.id !== _user.id);
   const height = usePokerTableHeight();
 
   return (
@@ -31,9 +39,9 @@ const PokerTable: FC = () => {
         />
       </StyledTableDealerProfile>
       <StyledPokerVectorWrapper>
-        <PokerPlayer align="left" is_dealer={true} />
-        <PokerPlayer align="right" />
-        <PokerPlayer align="down" show_action_cta={true} />
+        <PokerPlayer user={_active_user_2} align="left" is_dealer={true} />
+        <PokerPlayer user={_active_user_1} align="right" />
+        <PokerPlayer user={_user} align="down" show_action_cta={true} />
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
       <StyledTableCardWrapper>
