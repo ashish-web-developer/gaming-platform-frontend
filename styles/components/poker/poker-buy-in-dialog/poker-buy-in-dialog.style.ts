@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledBackdrop = styled.div`
   position: fixed;
@@ -9,10 +10,20 @@ const StyledBackdrop = styled.div`
   background: ${({ theme }) => theme.palette.primary.main};
   opacity: 0.8;
 `;
+const StyledDialogImageWrapper = styled.div`
+  width: 145px;
+  height: 180px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+`;
+
+const StyledDialogImage = styled(Image)`
+  object-fit: cover;
+`;
 
 const StyledPokerBuyInDialog = styled.dialog`
   width: 500px;
-  height: 250px;
   background: ${({ theme }) => theme.palette.primary.main};
   border: 2px solid ${({ theme }) => theme.palette.secondary.main};
   border-radius: 25px;
@@ -23,7 +34,7 @@ const StyledPokerBuyInDialog = styled.dialog`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0px;
+  padding: 20px 0px 30px 0px;
 `;
 
 const StyledMainText = styled.h4`
@@ -44,48 +55,6 @@ const StyledBuyInAmount = styled.div`
   margin-top: 1rem;
 `;
 
-// const StyledBuyInSlider = styled.input.attrs({
-//   type: "range",
-// })`
-//   /* removing default appearance */
-//   -webkit-appearance: none;
-//   appearance: none;
-//   /* creating a custom design */
-//   margin-top: 1.5rem;
-//   width: 250px;
-//   cursor: pointer;
-//   outline: none;
-//   background: ${({ theme }) => theme.palette.primary.main};
-//   &::-webkit-slider-runnable-track {
-//     background: ${({ theme }) => theme.palette.primary.light};
-//     border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-//     border-radius: 10px;
-//     height: 16px;
-//   }
-//   &::-webkit-slider-thumb {
-//     -webkit-appearance: none;
-//     appearance: none;
-//     width: 20px;
-//     height: 20px;
-//     background: ${({ theme }) => theme.palette.secondary.main};
-//     border-radius: 50%;
-//   }
-//   &::-moz-range-track {
-//     background: ${({ theme }) => theme.palette.primary.light};
-//     border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-//     border-radius: 10px;
-//     height: 16px;
-//   }
-
-//   &::-moz-range-thumb {
-//     -webkit-appearance: none;
-//     appearance: none;
-//     width: 20px;
-//     height: 20px;
-//     background: ${({ theme }) => theme.palette.secondary.main};
-//     border-radius: 50%;
-//   }
-// `;
 const StyledBuyInSlider = styled.input.attrs({
   type: "range",
 })`
@@ -129,10 +98,46 @@ const StyledBuyInSlider = styled.input.attrs({
   }
 `;
 
+const StyledBlindsContainer = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+const StyledBlindsHeader = styled.span`
+  font-size: 1.25rem;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  color: ${({ theme }) => theme.palette.secondary.main};
+`;
+const StyledBlindsAmount = styled.span`
+  font-size: 1rem;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  color: #fff;
+`;
+
+const StyledBuyInCta = styled.button`
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 1rem;
+  color: #fff;
+  padding: 8px 28px;
+  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  border-radius: 8px;
+  background: ${({ theme }) => theme.palette.primary.main};
+  position: absolute;
+  bottom: 0px;
+  transform: translateY(50%);
+`;
+
 export {
-  StyledPokerBuyInDialog,
   StyledBackdrop,
+  StyledPokerBuyInDialog,
+  StyledDialogImageWrapper,
+  StyledDialogImage,
   StyledMainText,
   StyledBuyInAmount,
   StyledBuyInSlider,
+  StyledBlindsContainer,
+  StyledBlindsHeader,
+  StyledBlindsAmount,
+  StyledBuyInCta,
 };

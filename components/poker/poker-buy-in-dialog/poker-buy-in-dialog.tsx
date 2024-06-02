@@ -4,9 +4,15 @@ import type { FC } from "react";
 import {
   StyledBackdrop,
   StyledPokerBuyInDialog,
+  StyledDialogImageWrapper,
+  StyledDialogImage,
   StyledMainText,
   StyledBuyInAmount,
   StyledBuyInSlider,
+  StyledBlindsContainer,
+  StyledBlindsHeader,
+  StyledBlindsAmount,
+  StyledBuyInCta,
 } from "@/styles/components/poker/poker-buy-in-dialog/poker-buy-in-dialog.style";
 
 // redux
@@ -25,6 +31,13 @@ const PokerBuyInDialog: FC = () => {
     <>
       {_show_buy_in_modal && <StyledBackdrop />}
       <StyledPokerBuyInDialog open={_show_buy_in_modal}>
+        <StyledDialogImageWrapper>
+          <StyledDialogImage
+            src={"/poker/poker-buy-in-dialog/michael.png"}
+            alt="michael"
+            fill={true}
+          />
+        </StyledDialogImageWrapper>
         <StyledMainText>
           Texas Hold’em <br /> Showdown
         </StyledMainText>
@@ -36,6 +49,11 @@ const PokerBuyInDialog: FC = () => {
             dispatch(updatePokerBuyInAmount(event.target.value));
           }}
         />
+        <StyledBlindsContainer>
+          <StyledBlindsHeader>Blinds</StyledBlindsHeader>
+          <StyledBlindsAmount>$ 50 / $ 100</StyledBlindsAmount>
+        </StyledBlindsContainer>
+        <StyledBuyInCta>Buy In</StyledBuyInCta>
       </StyledPokerBuyInDialog>
     </>
   );
