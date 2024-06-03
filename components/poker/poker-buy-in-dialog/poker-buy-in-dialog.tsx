@@ -23,6 +23,7 @@ import {
   show_buy_in_modal,
   poker_buy_in_amount,
   updatePokerBuyInAmount,
+  updateShowBuyInModal,
 } from "@/store/slice/poker/poker.slice";
 
 const PokerBuyInDialog: FC = () => {
@@ -65,7 +66,13 @@ const PokerBuyInDialog: FC = () => {
             <StyledBlindsAmount>$ 50 / $ 100</StyledBlindsAmount>
           </StyledBlindsAmountWrapper>
         </StyledBlindsContainer>
-        <StyledBuyInCta>Buy In</StyledBuyInCta>
+        <StyledBuyInCta
+          onClick={() => {
+            dispatch(updateShowBuyInModal(false));
+          }}
+        >
+          Buy In
+        </StyledBuyInCta>
       </StyledPokerBuyInDialog>
     </>
   );

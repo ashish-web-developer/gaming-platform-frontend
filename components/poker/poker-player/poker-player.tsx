@@ -27,7 +27,14 @@ const PokerPlayer: FC<{
   show_action_cta?: boolean;
   is_dealer?: boolean;
   user: IUsersWithConversation | undefined;
-}> = ({ align, show_action_cta = false, is_dealer = false, user }) => {
+  buy_in_amount: number;
+}> = ({
+  align,
+  show_action_cta = false,
+  is_dealer = false,
+  user,
+  buy_in_amount,
+}) => {
   const avatar_url = useAvatarUrl(user ?? null);
   return (
     <StyledPokerPlayer $show_action_cta={show_action_cta} $align={align}>
@@ -44,7 +51,9 @@ const PokerPlayer: FC<{
           </StyledPokerPlayerProfile>
         </StyledPokerPlayerProfileWrapper>
         <StyledTotalChips>
-          {user ? `$ ${user.earned_points}` : "Waiting...."}
+          {Boolean(buy_in_amount)
+            ? `$ ${(buy_in_amount * 1000).toLocaleString()}`
+            : "Waiting..."}
         </StyledTotalChips>
       </StyledPokerPlayerWrapper>
       <StyledBetChipsWrapper $align={align}>

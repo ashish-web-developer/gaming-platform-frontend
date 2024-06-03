@@ -16,7 +16,6 @@ const StyledAvatarWrapper = styled.span<IStyledAvatarWrapper>`
   position: relative;
   border: 2px solid #000;
   background: #fff;
-  overflow: hidden;
   ${(props) =>
     props.$status !== undefined &&
     `

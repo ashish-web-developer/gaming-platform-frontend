@@ -16,7 +16,7 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  poker_chips,
+  poker_buy_in_amount,
   slider_val,
   updateSliderVal,
 } from "@/store/slice/poker/poker.slice";
@@ -31,7 +31,7 @@ const PokerSlider: FC = () => {
   const [start_y, set_start_y] = useState(0);
 
   // poker chips
-  const _poker_chips = useAppSelector(poker_chips);
+  const _poker_buy_in_amount = useAppSelector(poker_buy_in_amount);
 
   // slider val
   const _slider_val = useAppSelector(slider_val);
@@ -55,7 +55,7 @@ const PokerSlider: FC = () => {
             updateSliderVal(
               ((slider_ref.current.clientHeight - y) /
                 slider_ref.current.clientHeight) *
-                _poker_chips
+                _poker_buy_in_amount
             )
           );
         }
@@ -75,7 +75,7 @@ const PokerSlider: FC = () => {
     <StyledPokerSliderWrapper>
       <StyledPokerSlider ref={slider_ref}>
         {[1, 2, 3, 4].map((val) => {
-          const val_in_millions = (val * _poker_chips) / 4 / 1000;
+          const val_in_millions = (val * _poker_buy_in_amount) / 4 / 1000;
           const text =
             val < 1 ? `${val_in_millions * 1000}K` : `${val_in_millions}M`;
           return (

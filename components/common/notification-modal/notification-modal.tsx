@@ -62,8 +62,7 @@ const NotificationModal: ForwardRefRenderFunction<
     (notification) => !Boolean(notification.read_at)
   ).length;
   const group_invite = _notifications.filter(
-    (notification) =>
-      notification.type == "group-invite" && !notification.read_at
+    (notification) => notification.type == "group-invite"
   );
   const unread_group_invite_count = group_invite.filter(
     (notification) => !Boolean(notification.read_at)

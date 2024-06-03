@@ -7,7 +7,7 @@ import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const initialState: IPokerInitialState = {
   show_poker_slider: false,
-  poker_chips: 2000,
+  poker_chips: 0,
   slider_val: 0,
   active_gaming_user: [],
   show_buy_in_modal: true,

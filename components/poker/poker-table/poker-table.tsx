@@ -17,13 +17,17 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { active_gaming_user } from "@/store/slice/poker/poker.slice";
+import {
+  active_gaming_user,
+  poker_buy_in_amount,
+} from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 // hooks
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
 const PokerTable: FC = () => {
   const _user = useAppSelector(user) as IUsersWithConversation;
+  const _poker_buy_in_amount = useAppSelector(poker_buy_in_amount);
   const [_active_user_1, _active_user_2] = useAppSelector(
     active_gaming_user
   ).filter((user) => user.id !== _user.id);
@@ -39,9 +43,19 @@ const PokerTable: FC = () => {
         />
       </StyledTableDealerProfile>
       <StyledPokerVectorWrapper>
-        <PokerPlayer user={_active_user_2} align="left" is_dealer={true} />
-        <PokerPlayer user={_active_user_1} align="right" />
-        <PokerPlayer user={_user} align="down" show_action_cta={true} />
+        <PokerPlayer
+          buy_in_amount={0}
+          user={_active_user_2}
+          align="left"
+          is_dealer={true}
+        />
+        <PokerPlayer buy_in_amount={0} user={_active_user_1} align="right" />
+        <PokerPlayer
+          buy_in_amount={_poker_buy_in_amount}
+          user={_user}
+          align="down"
+          show_action_cta={true}
+        />
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
       <StyledTableCardWrapper>

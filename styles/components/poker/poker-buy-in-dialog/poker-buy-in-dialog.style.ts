@@ -136,6 +136,7 @@ const StyledBuyInCta = styled.button`
   position: absolute;
   bottom: 0px;
   transform: translateY(50%);
+  cursor: pointer;
 `;
 
 export {
