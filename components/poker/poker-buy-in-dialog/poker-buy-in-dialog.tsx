@@ -45,8 +45,10 @@ const PokerBuyInDialog: FC = () => {
         <StyledBuyInSlider
           min="40"
           max="300"
+          value={_poker_buy_in_amount}
           onInput={(event) => {
-            dispatch(updatePokerBuyInAmount(event.target.value));
+            const range_input_element = event.target as HTMLInputElement;
+            dispatch(updatePokerBuyInAmount(Number(range_input_element.value)));
           }}
         />
         <StyledBlindsContainer>

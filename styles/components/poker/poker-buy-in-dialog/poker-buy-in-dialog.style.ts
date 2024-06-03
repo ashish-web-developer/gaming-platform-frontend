@@ -60,6 +60,8 @@ const StyledBuyInSlider = styled.input.attrs({
 })`
   --track-height: 16px;
   --thumb-size: 20px;
+  position: relative;
+  z-index: 3;
   margin-top: 1.5rem;
   -webkit-appearance: none;
   appearance: none;
