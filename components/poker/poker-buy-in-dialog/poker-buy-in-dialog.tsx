@@ -11,6 +11,8 @@ import {
   StyledBuyInSlider,
   StyledBlindsContainer,
   StyledBlindsHeader,
+  StyledBlindsAmountWrapper,
+  StyledChipsImage,
   StyledBlindsAmount,
   StyledBuyInCta,
 } from "@/styles/components/poker/poker-buy-in-dialog/poker-buy-in-dialog.style";
@@ -53,7 +55,15 @@ const PokerBuyInDialog: FC = () => {
         />
         <StyledBlindsContainer>
           <StyledBlindsHeader>Blinds</StyledBlindsHeader>
-          <StyledBlindsAmount>$ 50 / $ 100</StyledBlindsAmount>
+          <StyledBlindsAmountWrapper>
+            <StyledChipsImage
+              src="/poker/poker-player/poker-chip.png"
+              alt="chip"
+              width={20}
+              height={20}
+            />
+            <StyledBlindsAmount>$ 50 / $ 100</StyledBlindsAmount>
+          </StyledBlindsAmountWrapper>
         </StyledBlindsContainer>
         <StyledBuyInCta>Buy In</StyledBuyInCta>
       </StyledPokerBuyInDialog>

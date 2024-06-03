@@ -111,6 +111,14 @@ const StyledBlindsHeader = styled.span`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   color: ${({ theme }) => theme.palette.secondary.main};
 `;
+
+const StyledBlindsAmountWrapper = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+`;
+const StyledChipsImage = styled(Image)``;
+
 const StyledBlindsAmount = styled.span`
   font-size: 1rem;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
@@ -140,6 +148,8 @@ export {
   StyledBuyInSlider,
   StyledBlindsContainer,
   StyledBlindsHeader,
+  StyledBlindsAmountWrapper,
+  StyledChipsImage,
   StyledBlindsAmount,
   StyledBuyInCta,
 };
