@@ -1,6 +1,5 @@
 // types
 import { type FC } from "react";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
 // styled components
 import {
   StyledPokerTableWrapper,
@@ -26,11 +25,16 @@ import { user } from "@/store/slice/user.slice";
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
 const PokerTable: FC = () => {
-  const _user = useAppSelector(user) as IUsersWithConversation;
   const _poker_buy_in_amount = useAppSelector(poker_buy_in_amount);
+  const { id: _user_id } = useAppSelector(user);
   const [_active_user_1, _active_user_2] = useAppSelector(
     active_gaming_user
-  ).filter((user) => user.id !== _user.id);
+  ).filter((user) => {
+    return user.id !== _user_id;
+  });
+  const [_user] = useAppSelector(active_gaming_user).filter((user) => {
+    return user.id == _user_id;
+  });
   const height = usePokerTableHeight();
 
   return (
@@ -44,14 +48,18 @@ const PokerTable: FC = () => {
       </StyledTableDealerProfile>
       <StyledPokerVectorWrapper>
         <PokerPlayer
-          buy_in_amount={0}
+          buy_in_amount={_active_user_2?.buy_in_amount ?? 0}
           user={_active_user_2}
           align="left"
           is_dealer={true}
         />
-        <PokerPlayer buy_in_amount={0} user={_active_user_1} align="right" />
         <PokerPlayer
-          buy_in_amount={_poker_buy_in_amount}
+          buy_in_amount={_active_user_1?.buy_in_amount ?? 0}
+          user={_active_user_1}
+          align="right"
+        />
+        <PokerPlayer
+          buy_in_amount={_user?.buy_in_amount ?? 0}
           user={_user}
           align="down"
           show_action_cta={true}

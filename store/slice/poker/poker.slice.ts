@@ -1,9 +1,39 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // types
+import { IThunkApiConfig } from "@/types/store/slice/common";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type IPokerInitialState from "@/types/store/slice/poker/poker";
 import type { RootState } from "@/store/rootReducer";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
+import {
+  IAcceptInvitationApiRequest,
+  IUsersWithConversation,
+} from "@/types/store/slice/chat";
+import { AxiosResponse } from "axios";
+import type { IActiveGamingUser } from "@/types/store/slice/poker/poker";
+
+// helpers
+import { Axios } from "@/helpers/axios";
+
+export const updateBuyInAmountApi = createAsyncThunk<
+  { success: boolean },
+  undefined,
+  IThunkApiConfig
+>("api/update-buy-in-amount", async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<{ success: boolean }> = await Axios.post(
+      "/poker/buy-in-amount",
+      {
+        room_id: state.game.room_id,
+        user_id: state.user.user.id,
+        buy_in_amount: state.poker.poker_buy_in_amount,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
 
 const initialState: IPokerInitialState = {
   show_poker_slider: false,
@@ -31,7 +61,7 @@ const pokerSlice = createSlice({
       state,
       action: PayloadAction<{
         type: "here" | "joining" | "leaving";
-        users: IUsersWithConversation[] | IUsersWithConversation;
+        users: IActiveGamingUser[] | IActiveGamingUser;
       }>
     ) => {
       switch (action.payload.type) {
@@ -90,6 +120,22 @@ const pokerSlice = createSlice({
           return;
       }
     },
+    updateBuyInAmount: (
+      state,
+      action: PayloadAction<{ user_id: number; buy_in_amount: number }>
+    ) => {
+      state.active_gaming_user = state.active_gaming_user.map((user) => {
+        if (user.id == action.payload.user_id) {
+          return {
+            ...user,
+            buy_in_amount: action.payload.buy_in_amount,
+          };
+        }
+        return {
+          ...user,
+        };
+      });
+    },
     updateShowBuyInModal: (state, action: PayloadAction<boolean>) => {
       state.show_buy_in_modal = action.payload;
     },
@@ -121,4 +167,5 @@ export const {
   updateActiveGamingUser,
   updateShowBuyInModal,
   updatePokerBuyInAmount,
+  updateBuyInAmount,
 } = pokerSlice.actions;
