@@ -41,7 +41,8 @@ const initialState: IPokerInitialState = {
   slider_val: 0,
   active_gaming_user: [],
   show_buy_in_modal: true,
-  poker_buy_in_amount: 40,
+  poker_buy_in_amount: 200, // it's 20 times the big blind
+  small_blind: 5,
 };
 
 const pokerSlice = createSlice({
@@ -159,6 +160,7 @@ export const show_buy_in_modal = (state: RootState) =>
   state.poker.show_buy_in_modal;
 export const poker_buy_in_amount = (state: RootState) =>
   state.poker.poker_buy_in_amount;
+export const small_blind = (state: RootState) => state.poker.small_blind;
 // action creaters
 export const {
   updatePokerChips,

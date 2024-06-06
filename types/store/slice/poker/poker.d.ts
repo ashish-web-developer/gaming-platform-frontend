@@ -9,6 +9,7 @@ type IPokerInitialState = {
   active_gaming_user: IActiveGamingUser[];
   show_buy_in_modal: boolean;
   poker_buy_in_amount: number; // It will be stored in k
+  small_blind: number; // It will be stored in k
 };
 export { IActiveGamingUser };
 export default IPokerInitialState;
