@@ -40,12 +40,11 @@ import {
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
 import { udpateIsProposalSender, updateRoomId } from "@/store/slice/game.slice";
+import { createPokerRoomApi } from "@/store/slice/poker/poker.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useEcho } from "@/hooks/pusher.hook";
-
-import AudioMediaRecorder from "@/helpers/audio-media-recorder";
 
 // helpers
 import { v4 as uuidv4 } from "uuid";
@@ -238,6 +237,7 @@ const ChatInput: FC<{}> = () => {
                 dispatch(updateRoomId(room_id));
                 dispatch(udpateIsProposalSender(true));
                 if (_active_group) {
+                  dispatch(createPokerRoomApi({ room_id, small_blind: 5 }));
                   dispatch(
                     sendInvitationApi({
                       game: "poker",

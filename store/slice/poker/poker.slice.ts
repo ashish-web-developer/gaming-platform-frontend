@@ -1,18 +1,44 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // types
-import { IThunkApiConfig } from "@/types/store/slice/common";
+import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type IPokerInitialState from "@/types/store/slice/poker/poker";
 import type { RootState } from "@/store/rootReducer";
-import {
-  IAcceptInvitationApiRequest,
-  IUsersWithConversation,
-} from "@/types/store/slice/chat";
-import { AxiosResponse } from "axios";
-import type { IActiveGamingUser } from "@/types/store/slice/poker/poker";
+import type { AxiosResponse } from "axios";
+import type {
+  IActiveGamingUser,
+  ICreatePokerRoomApiRequest,
+  ICreatePokerRoomApiResponse,
+  IGetPokerRoomInfoResponse,
+} from "@/types/store/slice/poker/poker";
 
 // helpers
 import { Axios } from "@/helpers/axios";
+
+/**
+ * ========================= API ===========================
+ */
+
+export const createPokerRoomApi = createAsyncThunk<
+  ICreatePokerRoomApiResponse,
+  ICreatePokerRoomApiRequest,
+  IThunkApiConfig
+>(
+  "api/create-poker-room",
+  async ({ room_id, small_blind }, { rejectWithValue, getState }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<ICreatePokerRoomApiResponse> =
+        await Axios.post("poker/create-poker-room", {
+          room_id,
+          small_blind,
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 
 export const updateBuyInAmountApi = createAsyncThunk<
   { success: boolean },
@@ -27,6 +53,25 @@ export const updateBuyInAmountApi = createAsyncThunk<
         room_id: state.game.room_id,
         user_id: state.user.user.id,
         buy_in_amount: state.poker.poker_buy_in_amount,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const getPokerRoomInfoApi = createAsyncThunk<
+  IGetPokerRoomInfoResponse,
+  undefined,
+  IThunkApiConfig
+>("api/poker-room-info", async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IGetPokerRoomInfoResponse> = await Axios.post(
+      "/poker/poker-room-info",
+      {
+        room_id: state.game.room_id,
       }
     );
     return response.data;
@@ -143,6 +188,11 @@ const pokerSlice = createSlice({
     updatePokerBuyInAmount: (state, action: PayloadAction<number>) => {
       state.poker_buy_in_amount = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getPokerRoomInfoApi.fulfilled, (state, action) => {
+      state.small_blind = action.payload.poker_room.small_blind;
+    });
   },
 });
 

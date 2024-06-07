@@ -31,7 +31,7 @@ const PokerPage: NextPage = () => {
     channel: `game.${_room_id}`,
     events: [
       {
-        event: "Game.Poker.PokerBuyInAmount",
+        event: "Game.Poker.PokerBuyInAmountEvent",
         callback: (data: { user_id: number; buy_in_amount: number }) => {
           dispatch(updateBuyInAmount(data));
         },

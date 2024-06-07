@@ -33,6 +33,7 @@ import {
   updateInviteDialog,
 } from "@/store/slice/chat.slice";
 import { updateRoomId } from "@/store/slice/game.slice";
+import { getPokerRoomInfoApi } from "@/store/slice/poker/poker.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -78,6 +79,7 @@ const PokerInviteDialog: FC = () => {
         <StyledPlayButton
           onClick={() => {
             router.push("/poker");
+            dispatch(getPokerRoomInfoApi());
           }}
         >
           <PlayButtonVector stroke_color={theme.palette.secondary.main} />
