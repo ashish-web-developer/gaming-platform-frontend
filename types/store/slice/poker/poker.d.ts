@@ -12,11 +12,16 @@ type IPokerInitialState = {
   show_buy_in_modal: boolean;
   poker_buy_in_amount: number; // It will be stored in k
   small_blind: number; // It will be stored in k
+  chips_in_pot: number; // It will bee stored in k
 };
 
 type IPokerRoom = {
   room_id: string;
   small_blind: number;
+  chips_in_pot: number;
+  seat_available: 0 | 1 | 2 | 3;
+  created_at: string;
+  updated_at: string;
 };
 /**
  * ==== POKER ROOM CREATION API =====
@@ -24,16 +29,51 @@ type IPokerRoom = {
 type ICreatePokerRoomApiResponse = IBaseResponse & {
   poker_room: IPokerRoom;
 };
-type ICreatePokerRoomApiRequest = IPokerRoom;
+type ICreatePokerRoomApiRequest = {
+  room_id: string;
+  small_blind: number;
+  chips_in_pot: number;
+};
 
 /**
  * ==== GET POKER ROOM INFO API =====
  */
 type IGetPokerRoomInfoResponse = ICreatePokerRoomApiResponse;
+
+/**
+ * ==== JOIN POKER ROOM API =====
+ */
+type IJoinPokerRoomApiRequest = {
+  seat_number: 1 | 2 | 3;
+  total_chips_left: number;
+};
+
+type IJoinPokerRoomApiResponse = IBaseResponse & {
+  room_id: string;
+  player_id: number;
+  is_active: boolean;
+  active_type: "check" | "call" | "raise" | "fold" | null;
+  seat_number: 1 | 2 | 3;
+  total_chips_left: number;
+};
+
+/**
+ * ==== UPDATE SEAT AVAILABLE API =====
+ */
+type IUpdateSeatAvailableRequest = {
+  seat_available: 0 | 1 | 2 | 3;
+};
+type IUpdateSeatAvailableResponse = IBaseResponse & {
+  poker_room: IPokerRoom;
+};
 export {
   IActiveGamingUser,
   ICreatePokerRoomApiResponse,
   ICreatePokerRoomApiRequest,
   IGetPokerRoomInfoResponse,
+  IJoinPokerRoomApiRequest,
+  IJoinPokerRoomApiResponse,
+  IUpdateSeatAvailableRequest,
+  IUpdateSeatAvailableResponse,
 };
 export default IPokerInitialState;

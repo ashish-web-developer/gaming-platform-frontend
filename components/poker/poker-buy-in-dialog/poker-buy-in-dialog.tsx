@@ -20,17 +20,22 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
+  active_gaming_user,
   show_buy_in_modal,
   small_blind,
   poker_buy_in_amount,
   updatePokerBuyInAmount,
   updateShowBuyInModal,
   updateBuyInAmountApi,
+  getPokerRoomInfoApi,
+  joinPokerRoomApi,
+  updateSeatAvailableApi,
 } from "@/store/slice/poker/poker.slice";
 import { user, updateEarnedPoints } from "@/store/slice/user.slice";
 
 const PokerBuyInDialog: FC = () => {
   const dispatch = useAppDispatch();
+  const _active_gaming_user = useAppSelector(active_gaming_user);
   const _user = useAppSelector(user);
   const _poker_buy_in_amount = useAppSelector(poker_buy_in_amount);
   const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
@@ -76,13 +81,7 @@ const PokerBuyInDialog: FC = () => {
         <StyledBuyInCta
           onClick={() => {
             dispatch(updateBuyInAmountApi());
-            // if (_user.earned_points) {
-            //   dispatch(
-            //     updateEarnedPoints(
-            //       _user.earned_points - _poker_buy_in_amount * 1000
-            //     )
-            //   );
-            // }
+            dispatch(getPokerRoomInfoApi());
             dispatch(updateShowBuyInModal(false));
           }}
         >

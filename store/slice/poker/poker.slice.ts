@@ -10,6 +10,10 @@ import type {
   ICreatePokerRoomApiRequest,
   ICreatePokerRoomApiResponse,
   IGetPokerRoomInfoResponse,
+  IJoinPokerRoomApiRequest,
+  IJoinPokerRoomApiResponse,
+  IUpdateSeatAvailableRequest,
+  IUpdateSeatAvailableResponse,
 } from "@/types/store/slice/poker/poker";
 
 // helpers
@@ -25,13 +29,13 @@ export const createPokerRoomApi = createAsyncThunk<
   IThunkApiConfig
 >(
   "api/create-poker-room",
-  async ({ room_id, small_blind }, { rejectWithValue, getState }) => {
+  async ({ room_id, small_blind, chips_in_pot }, { rejectWithValue }) => {
     try {
-      const state = getState();
       const response: AxiosResponse<ICreatePokerRoomApiResponse> =
         await Axios.post("poker/create-poker-room", {
           room_id,
           small_blind,
+          chips_in_pot,
         });
       return response.data;
     } catch (error: any) {
@@ -61,11 +65,53 @@ export const updateBuyInAmountApi = createAsyncThunk<
   }
 });
 
+export const joinPokerRoomApi = createAsyncThunk<
+  IJoinPokerRoomApiResponse,
+  IJoinPokerRoomApiRequest,
+  IThunkApiConfig
+>(
+  "api/poker/join-poker-room",
+  async ({ seat_number, total_chips_left }, { rejectWithValue, getState }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IJoinPokerRoomApiResponse> =
+        await Axios.post("/poker/join-poker-room", {
+          room_id: state.game.room_id,
+          seat_number,
+          total_chips_left,
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const updateSeatAvailableApi = createAsyncThunk<
+  IUpdateSeatAvailableResponse,
+  IUpdateSeatAvailableRequest,
+  IThunkApiConfig
+>(
+  "api/poker/update-seat-available",
+  async ({ seat_available }, { rejectWithValue, getState }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IUpdateSeatAvailableResponse> =
+        await Axios.post("/poker/update-seat-available", {
+          room_id: state.game.room_id,
+          seat_available,
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
 export const getPokerRoomInfoApi = createAsyncThunk<
   IGetPokerRoomInfoResponse,
   undefined,
   IThunkApiConfig
->("api/poker-room-info", async (_, { rejectWithValue, getState }) => {
+>("api/poker-room-info", async (_, { rejectWithValue, getState, dispatch }) => {
   try {
     const state = getState();
     const response: AxiosResponse<IGetPokerRoomInfoResponse> = await Axios.post(
@@ -74,6 +120,20 @@ export const getPokerRoomInfoApi = createAsyncThunk<
         room_id: state.game.room_id,
       }
     );
+    if (response.data.poker_room.seat_available !== 0) {
+      dispatch(
+        joinPokerRoomApi({
+          seat_number: response.data.poker_room.seat_available,
+          total_chips_left: state.poker.poker_buy_in_amount,
+        })
+      );
+      dispatch(
+        updateSeatAvailableApi({
+          seat_available: ((response.data.poker_room.seat_available + 1) %
+            4) as 0 | 1 | 2 | 3,
+        })
+      );
+    }
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error?.response?.data);
@@ -88,6 +148,7 @@ const initialState: IPokerInitialState = {
   show_buy_in_modal: true,
   poker_buy_in_amount: 200, // it's 20 times the big blind
   small_blind: 5,
+  chips_in_pot: 0,
 };
 
 const pokerSlice = createSlice({
@@ -192,6 +253,7 @@ const pokerSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getPokerRoomInfoApi.fulfilled, (state, action) => {
       state.small_blind = action.payload.poker_room.small_blind;
+      state.chips_in_pot = action.payload.poker_room.chips_in_pot;
     });
   },
 });

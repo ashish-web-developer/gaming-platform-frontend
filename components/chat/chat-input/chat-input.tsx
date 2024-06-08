@@ -237,7 +237,13 @@ const ChatInput: FC<{}> = () => {
                 dispatch(updateRoomId(room_id));
                 dispatch(udpateIsProposalSender(true));
                 if (_active_group) {
-                  dispatch(createPokerRoomApi({ room_id, small_blind: 5 }));
+                  dispatch(
+                    createPokerRoomApi({
+                      room_id,
+                      small_blind: 5,
+                      chips_in_pot: 0,
+                    })
+                  );
                   dispatch(
                     sendInvitationApi({
                       game: "poker",
