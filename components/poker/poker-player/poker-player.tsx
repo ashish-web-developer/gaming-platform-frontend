@@ -1,6 +1,6 @@
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 
 // styled components
 import {
@@ -26,22 +26,15 @@ const PokerPlayer: FC<{
   align: "left" | "right" | "down";
   show_action_cta?: boolean;
   is_dealer?: boolean;
-  user: IUsersWithConversation | undefined;
-  buy_in_amount: number;
-}> = ({
-  align,
-  show_action_cta = false,
-  is_dealer = false,
-  user,
-  buy_in_amount,
-}) => {
-  const avatar_url = useAvatarUrl(user ?? null);
+  poker_player: IPokerPlayer | undefined;
+}> = ({ align, show_action_cta = false, is_dealer = false, poker_player }) => {
+  const avatar_url = useAvatarUrl(poker_player?.user ?? null);
   return (
     <StyledPokerPlayer $show_action_cta={show_action_cta} $align={align}>
       <StyledPokerPlayerWrapper>
-        <StyledPokerPlayerProfileWrapper $is_active={Boolean(user)}>
+        <StyledPokerPlayerProfileWrapper $is_active={Boolean(poker_player)}>
           <StyledPokerPlayerProfile>
-            {user && (
+            {poker_player && (
               <StyledPokerPlayerProfileImage
                 src={avatar_url}
                 alt="user"
@@ -51,8 +44,10 @@ const PokerPlayer: FC<{
           </StyledPokerPlayerProfile>
         </StyledPokerPlayerProfileWrapper>
         <StyledTotalChips>
-          {Boolean(buy_in_amount)
-            ? `$ ${(buy_in_amount * 1000).toLocaleString()}`
+          {Boolean(poker_player?.total_chips_left)
+            ? `$ ${(
+                poker_player?.total_chips_left ?? 0 * 1000
+              ).toLocaleString()}`
             : "Waiting..."}
         </StyledTotalChips>
       </StyledPokerPlayerWrapper>

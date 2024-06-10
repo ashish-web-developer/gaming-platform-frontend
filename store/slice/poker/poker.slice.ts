@@ -6,9 +6,10 @@ import type IPokerInitialState from "@/types/store/slice/poker/poker";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
 import type {
-  IActiveGamingUser,
+  IPokerPlayer,
   ICreatePokerRoomApiRequest,
   ICreatePokerRoomApiResponse,
+  IGetPokerResponseInfoRequest,
   IGetPokerRoomInfoResponse,
   IJoinPokerRoomApiRequest,
   IJoinPokerRoomApiResponse,
@@ -43,27 +44,6 @@ export const createPokerRoomApi = createAsyncThunk<
     }
   }
 );
-
-export const updateBuyInAmountApi = createAsyncThunk<
-  { success: boolean },
-  undefined,
-  IThunkApiConfig
->("api/update-buy-in-amount", async (_, { rejectWithValue, getState }) => {
-  try {
-    const state = getState();
-    const response: AxiosResponse<{ success: boolean }> = await Axios.post(
-      "/poker/buy-in-amount",
-      {
-        room_id: state.game.room_id,
-        user_id: state.user.user.id,
-        buy_in_amount: state.poker.poker_buy_in_amount,
-      }
-    );
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
-  }
-});
 
 export const joinPokerRoomApi = createAsyncThunk<
   IJoinPokerRoomApiResponse,
@@ -109,44 +89,44 @@ export const updateSeatAvailableApi = createAsyncThunk<
 );
 export const getPokerRoomInfoApi = createAsyncThunk<
   IGetPokerRoomInfoResponse,
-  undefined,
+  IGetPokerResponseInfoRequest,
   IThunkApiConfig
->("api/poker-room-info", async (_, { rejectWithValue, getState, dispatch }) => {
-  try {
-    const state = getState();
-    const response: AxiosResponse<IGetPokerRoomInfoResponse> = await Axios.post(
-      "/poker/poker-room-info",
-      {
-        room_id: state.game.room_id,
+>(
+  "api/poker-room-info",
+  async ({ poker_buy_in_amount }, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IGetPokerRoomInfoResponse> =
+        await Axios.post("/poker/poker-room-info", {
+          room_id: state.game.room_id,
+        });
+      if (response.data.poker_room.seat_available !== 0) {
+        dispatch(
+          joinPokerRoomApi({
+            seat_number: response.data.poker_room.seat_available,
+            total_chips_left: poker_buy_in_amount,
+          })
+        );
+        dispatch(
+          updateSeatAvailableApi({
+            seat_available: ((response.data.poker_room.seat_available + 1) %
+              4) as 0 | 1 | 2 | 3,
+          })
+        );
       }
-    );
-    if (response.data.poker_room.seat_available !== 0) {
-      dispatch(
-        joinPokerRoomApi({
-          seat_number: response.data.poker_room.seat_available,
-          total_chips_left: state.poker.poker_buy_in_amount,
-        })
-      );
-      dispatch(
-        updateSeatAvailableApi({
-          seat_available: ((response.data.poker_room.seat_available + 1) %
-            4) as 0 | 1 | 2 | 3,
-        })
-      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
     }
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
   }
-});
+);
 
 const initialState: IPokerInitialState = {
   show_poker_slider: false,
   poker_chips: 0,
   slider_val: 0,
-  active_gaming_user: [],
+  active_poker_players: [],
   show_buy_in_modal: true,
-  poker_buy_in_amount: 200, // it's 20 times the big blind
   small_blind: 5,
   chips_in_pot: 0,
 };
@@ -164,96 +144,172 @@ const pokerSlice = createSlice({
     updateSliderVal: (state, action: PayloadAction<number>) => {
       state.slider_val = action.payload;
     },
-    updateActiveGamingUser: (
+    updateActivePokerPlayer: (
       state,
       action: PayloadAction<{
         type: "here" | "joining" | "leaving";
-        users: IActiveGamingUser[] | IActiveGamingUser;
+        poker_players: IPokerPlayer | IPokerPlayer[];
       }>
     ) => {
       switch (action.payload.type) {
         case "here":
-          if (Array.isArray(action.payload.users)) {
-            const users = action.payload.users
-              .filter(
-                (user) =>
-                  !state.active_gaming_user.some(
-                    (active_user) => active_user.id == user.id
-                  )
-              )
-              .map((user) => user);
-            state.active_gaming_user = [...state.active_gaming_user, ...users];
+          if (Array.isArray(action.payload.poker_players)) {
+            const poker_players = action.payload.poker_players.filter(
+              (poker_player) =>
+                !state.active_poker_players.some(
+                  (active_poker_player) =>
+                    active_poker_player.id == poker_player.id
+                )
+            );
+            state.active_poker_players = [
+              ...state.active_poker_players,
+              ...poker_players,
+            ];
           } else {
-            state.active_gaming_user = [
-              ...state.active_gaming_user,
-              action.payload.users,
+            state.active_poker_players = [
+              ...state.active_poker_players,
+              action.payload.poker_players,
             ];
           }
           return;
         case "joining":
-          if (Array.isArray(action.payload.users)) {
-            const users = action.payload.users
-              .filter(
-                (user) =>
-                  !state.active_gaming_user.some(
-                    (active_user) => active_user.id == user.id
-                  )
-              )
-              .map((user) => user);
-            state.active_gaming_user = [...state.active_gaming_user, ...users];
+          if (Array.isArray(action.payload.poker_players)) {
+            const poker_players = action.payload.poker_players.filter(
+              (poker_player) =>
+                !state.active_poker_players.some(
+                  (active_poker_player) =>
+                    active_poker_player.id == poker_player.id
+                )
+            );
+            state.active_poker_players = [
+              ...state.active_poker_players,
+              ...poker_players,
+            ];
           } else {
-            const user = action.payload.users;
+            const poker_player = action.payload.poker_players;
             if (
-              !state.active_gaming_user.some(
-                (active_user) => active_user.id == user.id
+              !state.active_poker_players.some(
+                (active_poker_player) =>
+                  active_poker_player.id == poker_player.id
               )
             ) {
-              state.active_gaming_user = [...state.active_gaming_user, user];
+              state.active_poker_players = [
+                ...state.active_poker_players,
+                poker_player,
+              ];
             }
           }
           return;
         case "leaving":
-          if (Array.isArray(action.payload.users)) {
-            const { users } = action.payload;
-            state.active_gaming_user = state.active_gaming_user.filter(
-              (active_user) => !users.some((user) => active_user.id == user.id)
+          if (Array.isArray(action.payload.poker_players)) {
+            const { poker_players } = action.payload;
+            state.active_poker_players = state.active_poker_players.filter(
+              (active_poker_player) =>
+                !poker_players.some(
+                  (poker_player) => active_poker_player.id == poker_player.id
+                )
             );
           } else {
-            const { users } = action.payload;
-            state.active_gaming_user = state.active_gaming_user.filter(
-              (active_user) => active_user.id !== users.id
+            const { poker_players } = action.payload;
+            state.active_poker_players = state.active_poker_players.filter(
+              (active_poker_player) =>
+                active_poker_player.id !== poker_players.id
             );
           }
           return;
       }
     },
-    updateBuyInAmount: (
-      state,
-      action: PayloadAction<{ user_id: number; buy_in_amount: number }>
-    ) => {
-      state.active_gaming_user = state.active_gaming_user.map((user) => {
-        if (user.id == action.payload.user_id) {
-          return {
-            ...user,
-            buy_in_amount: action.payload.buy_in_amount,
-          };
-        }
-        return {
-          ...user,
-        };
-      });
-    },
+    // updateActiveGamingUser: (
+    //   state,
+    //   action: PayloadAction<{
+    //     type: "here" | "joining" | "leaving";
+    //     users: IActiveGamingUser[] | IActiveGamingUser;
+    //   }>
+    // ) => {
+    //   switch (action.payload.type) {
+    //     case "here":
+    //       if (Array.isArray(action.payload.users)) {
+    //         const users = action.payload.users
+    //           .filter(
+    //             (user) =>
+    //               !state.active_gaming_user.some(
+    //                 (active_user) => active_user.id == user.id
+    //               )
+    //           )
+    //           .map((user) => user);
+    //         state.active_gaming_user = [...state.active_gaming_user, ...users];
+    //       } else {
+    //         state.active_gaming_user = [
+    //           ...state.active_gaming_user,
+    //           action.payload.users,
+    //         ];
+    //       }
+    //       return;
+    //     case "joining":
+    //       if (Array.isArray(action.payload.users)) {
+    //         const users = action.payload.users
+    //           .filter(
+    //             (user) =>
+    //               !state.active_gaming_user.some(
+    //                 (active_user) => active_user.id == user.id
+    //               )
+    //           )
+    //           .map((user) => user);
+    //         state.active_gaming_user = [...state.active_gaming_user, ...users];
+    //       } else {
+    //         const user = action.payload.users;
+    //         if (
+    //           !state.active_gaming_user.some(
+    //             (active_user) => active_user.id == user.id
+    //           )
+    //         ) {
+    //           state.active_gaming_user = [...state.active_gaming_user, user];
+    //         }
+    //       }
+    //       return;
+    //     case "leaving":
+    //       if (Array.isArray(action.payload.users)) {
+    //         const { users } = action.payload;
+    //         state.active_gaming_user = state.active_gaming_user.filter(
+    //           (active_user) => !users.some((user) => active_user.id == user.id)
+    //         );
+    //       } else {
+    //         const { users } = action.payload;
+    //         state.active_gaming_user = state.active_gaming_user.filter(
+    //           (active_user) => active_user.id !== users.id
+    //         );
+    //       }
+    //       return;
+    //   }
+    // },
+    // updateBuyInAmount: (
+    //   state,
+    //   action: PayloadAction<{ user_id: number; buy_in_amount: number }>
+    // ) => {
+    //   state.active_gaming_user = state.active_gaming_user.map((user) => {
+    //     if (user.id == action.payload.user_id) {
+    //       return {
+    //         ...user,
+    //         buy_in_amount: action.payload.buy_in_amount,
+    //       };
+    //     }
+    //     return {
+    //       ...user,
+    //     };
+    //   });
+    // },
     updateShowBuyInModal: (state, action: PayloadAction<boolean>) => {
       state.show_buy_in_modal = action.payload;
-    },
-    updatePokerBuyInAmount: (state, action: PayloadAction<number>) => {
-      state.poker_buy_in_amount = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(getPokerRoomInfoApi.fulfilled, (state, action) => {
       state.small_blind = action.payload.poker_room.small_blind;
       state.chips_in_pot = action.payload.poker_room.chips_in_pot;
+      state.active_poker_players = [
+        ...state.active_poker_players,
+        ...action.payload.poker_room.poker_player,
+      ];
     });
   },
 });
@@ -266,20 +322,16 @@ export const show_poker_slider = (state: RootState) =>
   state.poker.show_poker_slider;
 export const poker_chips = (state: RootState) => state.poker.poker_chips;
 export const slider_val = (state: RootState) => state.poker.slider_val;
-export const active_gaming_user = (state: RootState) =>
-  state.poker.active_gaming_user;
+export const active_poker_players = (state: RootState) =>
+  state.poker.active_poker_players;
 export const show_buy_in_modal = (state: RootState) =>
   state.poker.show_buy_in_modal;
-export const poker_buy_in_amount = (state: RootState) =>
-  state.poker.poker_buy_in_amount;
 export const small_blind = (state: RootState) => state.poker.small_blind;
 // action creaters
 export const {
   updatePokerChips,
   updateSliderVal,
   updateShowPokerSlider,
-  updateActiveGamingUser,
   updateShowBuyInModal,
-  updatePokerBuyInAmount,
-  updateBuyInAmount,
+  updateActivePokerPlayer,
 } = pokerSlice.actions;

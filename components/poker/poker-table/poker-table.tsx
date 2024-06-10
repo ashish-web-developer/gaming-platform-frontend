@@ -16,26 +16,22 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import {
-  active_gaming_user,
-  poker_buy_in_amount,
-} from "@/store/slice/poker/poker.slice";
+import { active_poker_players } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 // hooks
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
+// helpers
+import { getPlayerPosition } from "@/helpers/poker/poker.helper";
+
 const PokerTable: FC = () => {
-  const _poker_buy_in_amount = useAppSelector(poker_buy_in_amount);
   const { id: _user_id } = useAppSelector(user);
-  const [_active_user_1, _active_user_2] = useAppSelector(
-    active_gaming_user
-  ).filter((user) => {
-    return user.id !== _user_id;
-  });
-  const [_user] = useAppSelector(active_gaming_user).filter((user) => {
-    return user.id == _user_id;
-  });
   const height = usePokerTableHeight();
+  const [poker_player] = useAppSelector(active_poker_players).filter(
+    (player) => player.player_id == _user_id
+  );
+  const authicated_player_position = poker_player?.seat_number;
+  const _active_poker_players = useAppSelector(active_poker_players);
 
   return (
     <StyledPokerTableWrapper>
@@ -47,23 +43,26 @@ const PokerTable: FC = () => {
         />
       </StyledTableDealerProfile>
       <StyledPokerVectorWrapper>
-        <PokerPlayer
-          buy_in_amount={_active_user_2?.buy_in_amount ?? 0}
-          user={_active_user_2}
-          align="left"
-          is_dealer={true}
-        />
-        <PokerPlayer
-          buy_in_amount={_active_user_1?.buy_in_amount ?? 0}
-          user={_active_user_1}
-          align="right"
-        />
-        <PokerPlayer
-          buy_in_amount={_user?.buy_in_amount ?? 0}
-          user={_user}
-          align="down"
-          show_action_cta={true}
-        />
+        {poker_player &&
+          _active_poker_players.map((player) => {
+            const player_position = getPlayerPosition(
+              authicated_player_position,
+              player
+            );
+            return (
+              <PokerPlayer
+                key={player.id}
+                align={player_position}
+                show_action_cta={
+                  player.seat_number == authicated_player_position
+                    ? true
+                    : false
+                }
+                is_dealer={false}
+                poker_player={player}
+              />
+            );
+          })}
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
       <StyledTableCardWrapper>

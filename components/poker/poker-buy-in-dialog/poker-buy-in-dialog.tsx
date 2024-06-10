@@ -1,3 +1,4 @@
+import { useState } from "react";
 // types
 import type { FC } from "react";
 // styled components
@@ -20,24 +21,17 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  active_gaming_user,
   show_buy_in_modal,
   small_blind,
-  poker_buy_in_amount,
-  updatePokerBuyInAmount,
   updateShowBuyInModal,
-  updateBuyInAmountApi,
   getPokerRoomInfoApi,
-  joinPokerRoomApi,
-  updateSeatAvailableApi,
 } from "@/store/slice/poker/poker.slice";
 import { user, updateEarnedPoints } from "@/store/slice/user.slice";
 
 const PokerBuyInDialog: FC = () => {
   const dispatch = useAppDispatch();
-  const _active_gaming_user = useAppSelector(active_gaming_user);
+  const [poker_buy_in_amount, set_poker_buy_in_amount] = useState<number>(200);
   const _user = useAppSelector(user);
-  const _poker_buy_in_amount = useAppSelector(poker_buy_in_amount);
   const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
   const _small_blind = useAppSelector(small_blind);
   return (
@@ -54,14 +48,14 @@ const PokerBuyInDialog: FC = () => {
         <StyledMainText>
           Texas Hold’em <br /> Showdown
         </StyledMainText>
-        <StyledBuyInAmount>$ {_poker_buy_in_amount * 1000}</StyledBuyInAmount>
+        <StyledBuyInAmount>$ {poker_buy_in_amount * 1000}</StyledBuyInAmount>
         <StyledBuyInSlider
+          value={poker_buy_in_amount}
           min={_small_blind * 2 * 20} // minimum buy_in_amount is 20 times the big blind
           max={_small_blind * 2 * 50} // maximum buy_in_amount is 50 times the big blind
-          value={_poker_buy_in_amount}
           onInput={(event) => {
             const range_input_element = event.target as HTMLInputElement;
-            dispatch(updatePokerBuyInAmount(Number(range_input_element.value)));
+            set_poker_buy_in_amount(Number(range_input_element.value));
           }}
         />
         <StyledBlindsContainer>
@@ -80,8 +74,11 @@ const PokerBuyInDialog: FC = () => {
         </StyledBlindsContainer>
         <StyledBuyInCta
           onClick={() => {
-            dispatch(updateBuyInAmountApi());
-            dispatch(getPokerRoomInfoApi());
+            dispatch(
+              getPokerRoomInfoApi({
+                poker_buy_in_amount,
+              })
+            );
             dispatch(updateShowBuyInModal(false));
           }}
         >

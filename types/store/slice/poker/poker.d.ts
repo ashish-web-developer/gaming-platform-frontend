@@ -4,13 +4,26 @@ import { IBaseResponse } from "@/types/store/slice/common";
 type IActiveGamingUser = IUsersWithConversation & {
   buy_in_amount?: number;
 };
+type ISeatType = 1 | 2 | 3;
+
+type IPokerPlayer = {
+  id: number;
+  player_id: number;
+  room_id: string;
+  action_type: "check" | "call" | "raise" | "fold" | null;
+  is_active: boolean;
+  seat_number: ISeatType;
+  total_chips_left: number;
+  user: IUsersWithConversation;
+  created_at: string;
+  updated_at: string;
+};
 type IPokerInitialState = {
   show_poker_slider: boolean;
   poker_chips: number; // It will be stored in k
   slider_val: number;
-  active_gaming_user: IActiveGamingUser[];
+  active_poker_players: IPokerPlayer[];
   show_buy_in_modal: boolean;
-  poker_buy_in_amount: number; // It will be stored in k
   small_blind: number; // It will be stored in k
   chips_in_pot: number; // It will bee stored in k
 };
@@ -20,6 +33,7 @@ type IPokerRoom = {
   small_blind: number;
   chips_in_pot: number;
   seat_available: 0 | 1 | 2 | 3;
+  poker_player: IPokerPlayer[];
   created_at: string;
   updated_at: string;
 };
@@ -39,6 +53,10 @@ type ICreatePokerRoomApiRequest = {
  * ==== GET POKER ROOM INFO API =====
  */
 type IGetPokerRoomInfoResponse = ICreatePokerRoomApiResponse;
+
+type IGetPokerResponseInfoRequest = {
+  poker_buy_in_amount: number;
+};
 
 /**
  * ==== JOIN POKER ROOM API =====
@@ -67,10 +85,11 @@ type IUpdateSeatAvailableResponse = IBaseResponse & {
   poker_room: IPokerRoom;
 };
 export {
-  IActiveGamingUser,
+  IPokerPlayer,
   ICreatePokerRoomApiResponse,
   ICreatePokerRoomApiRequest,
   IGetPokerRoomInfoResponse,
+  IGetPokerResponseInfoRequest,
   IJoinPokerRoomApiRequest,
   IJoinPokerRoomApiResponse,
   IUpdateSeatAvailableRequest,
