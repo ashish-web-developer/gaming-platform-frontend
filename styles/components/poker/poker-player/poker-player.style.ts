@@ -144,6 +144,7 @@ const StyledPokerChipsWrapper = styled.div<{
           props.$align == "down" ? "translateX(-100%)" : "translateY(-100%)"
         };
         right:${props.$align == "down" ? "20px" : "unset"};
+        z-index:6;
       }
     `}
 `;

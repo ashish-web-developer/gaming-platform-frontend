@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { IPokerPlayer, IPokerRoom } from "@/types/store/slice/poker/poker";
 
 // local components
 import PokerContainer from "@/components/poker/poker-container/poker-container";
@@ -17,7 +16,9 @@ import { room_id } from "@/store/slice/game.slice";
 import {
   show_buy_in_modal,
   updateActivePokerPlayer,
+  updateIsDealer,
 } from "@/store/slice/poker/poker.slice";
+import { user } from "@/store/slice/user.slice";
 
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
@@ -25,6 +26,7 @@ import { usePresenceChannel } from "@/hooks/pusher.hook";
 const JoinPokerChannel = () => {
   const dispatch = useAppDispatch();
   const _room_id = useAppSelector(room_id);
+  const _user = useAppSelector(user);
   usePresenceChannel<
     undefined,
     { poker_player: IPokerPlayer }[] | { poker_player: IPokerPlayer }
@@ -32,9 +34,11 @@ const JoinPokerChannel = () => {
     channel: `poker.${_room_id}`,
     events: [
       {
-        event: "Game.Poker.PokerBuyInAmountEvent",
-        callback: (data: { user_id: number; buy_in_amount: number }) => {
-          // dispatch(updateBuyInAmount(data));
+        event: "Game.Poker.UpdateDealerEvent",
+        callback: (data: { poker_room: IPokerRoom }) => {
+          if (_user?.id) {
+            dispatch(updateIsDealer(_user.id == data.poker_room.dealer_id));
+          }
         },
       },
     ],

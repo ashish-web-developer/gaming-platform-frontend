@@ -20,6 +20,7 @@ type IPokerPlayer = {
 };
 type IPokerInitialState = {
   show_poker_slider: boolean;
+  is_dealer: boolean;
   poker_chips: number; // It will be stored in k
   slider_val: number;
   active_poker_players: IPokerPlayer[];
@@ -33,6 +34,7 @@ type IPokerRoom = {
   small_blind: number;
   chips_in_pot: number;
   seat_available: 0 | 1 | 2 | 3;
+  dealer_id: number;
   poker_player: IPokerPlayer[];
   created_at: string;
   updated_at: string;
@@ -84,8 +86,17 @@ type IUpdateSeatAvailableRequest = {
 type IUpdateSeatAvailableResponse = IBaseResponse & {
   poker_room: IPokerRoom;
 };
+
+/**
+ * ==== UPDATE DEALER API =====
+ */
+type IUpdateDealerApiResponse = IBaseResponse & {
+  message?: string;
+};
+
 export {
   IPokerPlayer,
+  IPokerRoom,
   ICreatePokerRoomApiResponse,
   ICreatePokerRoomApiRequest,
   IGetPokerRoomInfoResponse,
@@ -94,5 +105,6 @@ export {
   IJoinPokerRoomApiResponse,
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
+  IUpdateDealerApiResponse,
 };
 export default IPokerInitialState;

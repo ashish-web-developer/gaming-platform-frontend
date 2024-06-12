@@ -58,7 +58,6 @@ const PokerTable: FC = () => {
                     ? true
                     : false
                 }
-                is_dealer={false}
                 poker_player={player}
               />
             );
