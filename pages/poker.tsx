@@ -16,7 +16,7 @@ import { room_id } from "@/store/slice/game.slice";
 import {
   show_buy_in_modal,
   updateActivePokerPlayer,
-  updateIsDealer,
+  updateDealerId,
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 
@@ -37,7 +37,7 @@ const JoinPokerChannel = () => {
         event: "Game.Poker.UpdateDealerEvent",
         callback: (data: { poker_room: IPokerRoom }) => {
           if (_user?.id) {
-            dispatch(updateIsDealer(_user.id == data.poker_room.dealer_id));
+            dispatch(updateDealerId(data.poker_room.dealer_id));
           }
         },
       },

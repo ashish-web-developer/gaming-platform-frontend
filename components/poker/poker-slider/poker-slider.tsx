@@ -16,10 +16,11 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  poker_buy_in_amount,
+  active_poker_players,
   slider_val,
   updateSliderVal,
 } from "@/store/slice/poker/poker.slice";
+import { user } from "@/store/slice/user.slice";
 
 const PokerSlider: FC = () => {
   const dispatch = useAppDispatch();
@@ -29,9 +30,12 @@ const PokerSlider: FC = () => {
   const slider_content_ref = useRef<HTMLSpanElement>(null);
   const [is_dragging, set_is_dragging] = useState<boolean>(false);
   const [start_y, set_start_y] = useState(0);
+  const { id: user_id } = useAppSelector(user);
 
   // poker chips
-  const _poker_buy_in_amount = useAppSelector(poker_buy_in_amount);
+  const auth_player = useAppSelector(active_poker_players).filter(
+    (player) => player.player_id == user_id
+  )[0];
 
   // slider val
   const _slider_val = useAppSelector(slider_val);
@@ -55,7 +59,7 @@ const PokerSlider: FC = () => {
             updateSliderVal(
               ((slider_ref.current.clientHeight - y) /
                 slider_ref.current.clientHeight) *
-                _poker_buy_in_amount
+                auth_player.total_chips_left
             )
           );
         }
@@ -75,7 +79,8 @@ const PokerSlider: FC = () => {
     <StyledPokerSliderWrapper>
       <StyledPokerSlider ref={slider_ref}>
         {[1, 2, 3, 4].map((val) => {
-          const val_in_millions = (val * _poker_buy_in_amount) / 4 / 1000;
+          const val_in_millions =
+            (val * auth_player.total_chips_left) / 4 / 1000;
           const text =
             val < 1 ? `${val_in_millions * 1000}K` : `${val_in_millions}M`;
           return (

@@ -20,7 +20,7 @@ type IPokerPlayer = {
 };
 type IPokerInitialState = {
   show_poker_slider: boolean;
-  is_dealer: boolean;
+  dealer_id: number | null;
   poker_chips: number; // It will be stored in k
   slider_val: number;
   active_poker_players: IPokerPlayer[];

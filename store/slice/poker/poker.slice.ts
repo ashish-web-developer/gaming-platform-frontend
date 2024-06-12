@@ -140,7 +140,7 @@ export const updateDealerApi = createAsyncThunk<
 
 const initialState: IPokerInitialState = {
   show_poker_slider: false,
-  is_dealer: false,
+  dealer_id: null,
   poker_chips: 0,
   slider_val: 0,
   active_poker_players: [],
@@ -240,8 +240,8 @@ const pokerSlice = createSlice({
     updateShowBuyInModal: (state, action: PayloadAction<boolean>) => {
       state.show_buy_in_modal = action.payload;
     },
-    updateIsDealer: (state, action: PayloadAction<boolean>) => {
-      state.is_dealer = action.payload;
+    updateDealerId: (state, action: PayloadAction<number>) => {
+      state.dealer_id = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -252,9 +252,10 @@ const pokerSlice = createSlice({
         ...state.active_poker_players,
         ...action.payload.poker_room.poker_player,
       ];
+      state.dealer_id = action.payload.poker_room.dealer_id;
     });
     builder.addCase(createPokerRoomApi.fulfilled, (state, action) => {
-      state.is_dealer = true;
+      state.dealer_id = action.payload.poker_room.dealer_id;
     });
   },
 });
@@ -272,7 +273,7 @@ export const active_poker_players = (state: RootState) =>
 export const show_buy_in_modal = (state: RootState) =>
   state.poker.show_buy_in_modal;
 export const small_blind = (state: RootState) => state.poker.small_blind;
-export const is_dealer = (state: RootState) => state.poker.is_dealer;
+export const dealer_id = (state: RootState) => state.poker.dealer_id;
 // action creaters
 export const {
   updatePokerChips,
@@ -280,5 +281,5 @@ export const {
   updateShowPokerSlider,
   updateShowBuyInModal,
   updateActivePokerPlayer,
-  updateIsDealer,
+  updateDealerId,
 } = pokerSlice.actions;

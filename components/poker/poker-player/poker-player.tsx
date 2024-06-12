@@ -20,8 +20,7 @@ import {
 import PokerActionCta from "@/components/poker/poker-player/poker-action-cta";
 
 // redux
-import { is_dealer } from "@/store/slice/poker/poker.slice";
-import { user } from "@/store/slice/user.slice";
+import { dealer_id } from "@/store/slice/poker/poker.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -32,9 +31,8 @@ const PokerPlayer: FC<{
   show_action_cta?: boolean;
   poker_player: IPokerPlayer | undefined;
 }> = ({ align, show_action_cta = false, poker_player }) => {
-  const _is_dealer = useAppSelector(is_dealer);
+  const _dealer_id = useAppSelector(dealer_id);
   const avatar_url = useAvatarUrl(poker_player?.user ?? null);
-  const _user = useAppSelector(user);
   return (
     <StyledPokerPlayer $show_action_cta={show_action_cta} $align={align}>
       <StyledPokerPlayerWrapper>
@@ -60,7 +58,7 @@ const PokerPlayer: FC<{
       <StyledBetChipsWrapper $align={align}>
         <StyledPokerChipsWrapper
           $align={align}
-          $is_dealer={_is_dealer && _user.id == poker_player?.player_id}
+          $is_dealer={poker_player?.player_id == _dealer_id}
         >
           <StyledPokerChipsImage
             src={"/poker/poker-player/poker-chip.png"}
