@@ -17,6 +17,7 @@ import {
   show_buy_in_modal,
   updateActivePokerPlayer,
   updateDealerId,
+  updateBetterId,
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 
@@ -39,6 +40,12 @@ const JoinPokerChannel = () => {
           if (_user?.id) {
             dispatch(updateDealerId(data.poker_room.dealer_id));
           }
+        },
+      },
+      {
+        event: "Game.Poker.UpdateBetterTurnEvent",
+        callback: (data: { better_id: number }) => {
+          dispatch(updateBetterId(data.better_id));
         },
       },
     ],

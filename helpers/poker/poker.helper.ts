@@ -62,7 +62,6 @@ const getPlayerPosition = (
       3: 1,
     },
   };
-  console.log("value of position", auth_player_position);
   return alignment[position_map[auth_player_position][player.seat_number]];
 };
 export { getCardRankInWord, getPlayerPosition };
