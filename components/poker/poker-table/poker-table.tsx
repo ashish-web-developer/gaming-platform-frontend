@@ -17,7 +17,7 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import {
-  better_id,
+  bettor_id,
   active_poker_players,
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
@@ -35,7 +35,7 @@ const PokerTable: FC = () => {
   );
   const authicated_player_position = poker_player?.seat_number;
   const _active_poker_players = useAppSelector(active_poker_players);
-  const _better_id = useAppSelector(better_id);
+  const _bettor_id = useAppSelector(bettor_id);
 
   return (
     <StyledPokerTableWrapper>
@@ -58,7 +58,7 @@ const PokerTable: FC = () => {
                 key={player.id}
                 align={player_position}
                 show_action_cta={
-                  _better_id == _user_id && _better_id == player.player_id
+                  _bettor_id == _user_id && _bettor_id == player.player_id
                     ? true
                     : false
                 }

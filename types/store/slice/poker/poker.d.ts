@@ -27,7 +27,7 @@ type IPokerInitialState = {
   show_buy_in_modal: boolean;
   small_blind: number; // It will be stored in k
   chips_in_pot: number; // It will bee stored in k
-  better_id:number|null;
+  bettor_id: number | null;
 };
 
 type IPokerRoom = {

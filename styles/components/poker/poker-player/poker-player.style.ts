@@ -1,5 +1,14 @@
 import Image from "next/image";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const rotate = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
 
 const StyledPokerPlayer = styled.div<{
   $align: "left" | "right" | "down";
@@ -47,11 +56,19 @@ const StyledPokerPlayerWrapper = styled.div`
 `;
 const StyledPokerPlayerProfileWrapper = styled.div<{
   $is_active: boolean;
+  $is_bettor: boolean;
 }>`
   width: 100px;
   height: 100px;
   border-radius: 50%;
   position: relative;
+  background: ${(props) =>
+    props.$is_bettor
+      ? "linear-gradient(to right, #ffed65 25%, #59ffa0 100%)"
+      : "#fff"};
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &::after {
     content: "";
     position: absolute;
@@ -67,13 +84,15 @@ const StyledPokerPlayerProfileWrapper = styled.div<{
     border: 2px solid #000;
   }
 `;
-const StyledPokerPlayerProfile = styled.div`
-  width: 100%;
-  height: 100%;
-  border: 4px solid #fff;
+const StyledPokerPlayerProfile = styled.div<{
+  $is_bettor: boolean;
+}>`
+  width: ${(props) => (props.$is_bettor ? "86px" : "90px")};
+  height: ${(props) => (props.$is_bettor ? "86px" : "90px")};
   border-radius: 50%;
   position: relative;
   overflow: hidden;
+  background: ${({ theme }) => theme.palette.primary.main};
 `;
 const StyledPokerPlayerProfileImage = styled(Image)`
   object-fit: cover;
