@@ -36,6 +36,29 @@ const StyledPokerPlayerSeatWrapper = styled.div<{
         `;
     }
   }}
+  ${(props) =>
+    props.$is_dealer &&
+    `
+    &::after{
+      content:"D";
+      position:absolute;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:${props.theme.palette.primary.main};
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      border:4px solid #fff;
+      font-family:${props.theme.fontFamily.lobster};
+      font-size:1.5rem;
+      color:${props.theme.palette.success.main};
+      bottom:${
+        props.$align == "left" || props.$align == "right" ? "80px" : "unset"
+      };
+      right:${props.$align == "down" ? "80px" : "unset"};
+    }
+  `}
 `;
 
 const StyledPokerChipsImage = styled(Image)``;

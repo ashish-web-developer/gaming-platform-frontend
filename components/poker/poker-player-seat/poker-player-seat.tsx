@@ -15,7 +15,6 @@ import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import { dealer_id, bettor_id } from "@/store/slice/poker/poker.slice";
 
 // hooks
-import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useAppSelector } from "@/hooks/redux.hook";
 
 const PokerPlayerSeat: FC<{
@@ -24,9 +23,9 @@ const PokerPlayerSeat: FC<{
   poker_player: IPokerPlayer | undefined;
 }> = ({ align, show_action_cta = false, poker_player }) => {
   const _dealer_id = useAppSelector(dealer_id);
-  const avatar_url = useAvatarUrl(poker_player?.user ?? null);
   const _bettor_id = useAppSelector(bettor_id);
   const is_bettor = poker_player?.player_id == _bettor_id;
+  console.log("value of is_dealer", _dealer_id == poker_player?.player_id);
   return (
     <>
       <StyledPokerPlayerSeatWrapper
