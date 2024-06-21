@@ -85,8 +85,14 @@ const StyledPokerPlayerWrapper = styled.div<{
   }}
 `;
 
+const StyledPokerActionCtaWrapper = styled.div`
+  position: absolute;
+  bottom: 16px;
+`;
+
 export {
   StyledPokerPlayerSeatWrapper,
   StyledPokerPlayerWrapper,
   StyledPokerChipsImage,
+  StyledPokerActionCtaWrapper,
 };

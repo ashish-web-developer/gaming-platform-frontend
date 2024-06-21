@@ -1,11 +1,9 @@
 import styled from "styled-components";
 
 const StyledPokerActionCta = styled.div`
-  z-index: 4;
   position: relative;
   width: 255px;
   height: 125px;
-  left: 0px;
 `;
 const StyledVectorWrapper = styled.div<{
   $left?: string;

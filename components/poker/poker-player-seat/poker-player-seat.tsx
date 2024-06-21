@@ -6,10 +6,12 @@ import {
   StyledPokerPlayerSeatWrapper,
   StyledPokerChipsImage,
   StyledPokerPlayerWrapper,
+  StyledPokerActionCtaWrapper,
 } from "@/styles/components/poker/poker-player-seat/poker-player-seat.style";
 
 // local components
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
+import PokerActionCta from "@/components/poker/poker-player-seat/poker-action-cta";
 
 // redux
 import { dealer_id, bettor_id } from "@/store/slice/poker/poker.slice";
@@ -44,6 +46,11 @@ const PokerPlayerSeat: FC<{
           fill={true}
           alt="chip"
         />
+        {show_action_cta && (
+          <StyledPokerActionCtaWrapper>
+            <PokerActionCta />
+          </StyledPokerActionCtaWrapper>
+        )}
       </StyledPokerPlayerSeatWrapper>
     </>
   );
