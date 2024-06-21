@@ -67,6 +67,10 @@ const StyledPokerPlayerWrapper = styled.div<{
   $align: "left" | "right" | "down";
 }>`
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
   ${(props) => {
     switch (props.$align) {
       case "left":
@@ -85,14 +89,56 @@ const StyledPokerPlayerWrapper = styled.div<{
   }}
 `;
 
+const StyledPokerPlayerBuyInAmount = styled.span`
+  color: #fff;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  padding: 10px 16px;
+  font-size: 1rem;
+  white-space: nowrap;
+  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  border-radius: 10px;
+  background: rgba(245, 213, 71, 0.2);
+`;
+
 const StyledPokerActionCtaWrapper = styled.div`
   position: absolute;
   bottom: 16px;
 `;
+const StyledBettedAmount = styled.div<{
+  $align: "left" | "right" | "down";
+}>`
+  position: absolute;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  color: #fff;
+  font-size: 1.125rem;
+  padding: 4px 16px;
+  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  background: rgba(245, 213, 71, 0.2);
+  white-space: nowrap;
+  border-radius: 10px;
+  ${(props) => {
+    switch (props.$align) {
+      case "left":
+        return `
+          left:72px;
+        `;
+      case "right":
+        return `
+          right:72px;
+        `;
+      case "down":
+        return `
+          bottom:72px;
+        `;
+    }
+  }}
+`;
 
 export {
   StyledPokerPlayerSeatWrapper,
+  StyledPokerPlayerBuyInAmount,
   StyledPokerPlayerWrapper,
   StyledPokerChipsImage,
   StyledPokerActionCtaWrapper,
+  StyledBettedAmount,
 };

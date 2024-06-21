@@ -4,9 +4,11 @@ import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 // styled components
 import {
   StyledPokerPlayerSeatWrapper,
+  StyledPokerPlayerBuyInAmount,
   StyledPokerChipsImage,
   StyledPokerPlayerWrapper,
   StyledPokerActionCtaWrapper,
+  StyledBettedAmount,
 } from "@/styles/components/poker/poker-player-seat/poker-player-seat.style";
 
 // local components
@@ -40,6 +42,9 @@ const PokerPlayerSeat: FC<{
             is_bettor={is_bettor}
             is_active={Boolean(poker_player)}
           />
+          <StyledPokerPlayerBuyInAmount>
+            $ {((poker_player?.total_chips_left ?? 0) * 1000).toFixed(2)}
+          </StyledPokerPlayerBuyInAmount>
         </StyledPokerPlayerWrapper>
         <StyledPokerChipsImage
           src={"/poker/poker-player/poker-chip.png"}
@@ -51,6 +56,7 @@ const PokerPlayerSeat: FC<{
             <PokerActionCta />
           </StyledPokerActionCtaWrapper>
         )}
+        {/* <StyledBettedAmount $align={align}>$ 600</StyledBettedAmount> */}
       </StyledPokerPlayerSeatWrapper>
     </>
   );
