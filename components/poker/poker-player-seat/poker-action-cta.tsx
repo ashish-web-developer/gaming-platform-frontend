@@ -5,7 +5,7 @@ import type { FC } from "react";
 import {
   StyledPokerActionCta,
   StyledVectorWrapper,
-} from "@/styles/components/poker/poker-player/poker-action-cta.style";
+} from "@/styles/components/poker/poker-player-seat/poker-action-cta.style";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";

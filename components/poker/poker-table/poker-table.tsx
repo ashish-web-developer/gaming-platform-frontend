@@ -11,7 +11,7 @@ import {
 
 // local components
 import PokerTableVector from "@/components/poker/poker-table/poker-table-vector";
-import PokerPlayer from "@/components/poker/poker-player/poker-player";
+import PokerPlayerSeat from "@/components/poker/poker-player-seat/poker-player-seat";
 import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
@@ -54,7 +54,7 @@ const PokerTable: FC = () => {
               player
             );
             return (
-              <PokerPlayer
+              <PokerPlayerSeat
                 key={player.id}
                 align={player_position}
                 show_action_cta={
