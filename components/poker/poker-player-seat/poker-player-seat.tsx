@@ -29,7 +29,6 @@ const PokerPlayerSeat: FC<{
   const _dealer_id = useAppSelector(dealer_id);
   const _bettor_id = useAppSelector(bettor_id);
   const is_bettor = poker_player?.player_id == _bettor_id;
-  console.log("value of is_dealer", _dealer_id == poker_player?.player_id);
   return (
     <>
       <StyledPokerPlayerSeatWrapper
@@ -56,7 +55,11 @@ const PokerPlayerSeat: FC<{
             <PokerActionCta />
           </StyledPokerActionCtaWrapper>
         )}
-        {/* <StyledBettedAmount $align={align}>$ 600</StyledBettedAmount> */}
+        {!show_action_cta && poker_player?.current_betted_amount && (
+          <StyledBettedAmount $align={align}>
+            $ {(poker_player?.current_betted_amount ?? 0) * 1000}
+          </StyledBettedAmount>
+        )}
       </StyledPokerPlayerSeatWrapper>
     </>
   );

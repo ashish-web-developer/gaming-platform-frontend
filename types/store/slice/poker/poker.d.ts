@@ -13,6 +13,7 @@ type IPokerPlayer = {
   action_type: "check" | "call" | "raise" | "fold" | null;
   is_active: boolean;
   seat_number: ISeatType;
+  current_betted_amount: number | null;
   total_chips_left: number;
   user: IUsersWithConversation;
   created_at: string;

@@ -247,6 +247,14 @@ const pokerSlice = createSlice({
     updateBettorId: (state, action: PayloadAction<number>) => {
       state.bettor_id = action.payload;
     },
+    updatePlayerData: (state, action: PayloadAction<IPokerPlayer>) => {
+      state.active_poker_players = state.active_poker_players.map((player) => {
+        if (player.player_id == action.payload.player_id) {
+          return action.payload;
+        }
+        return player;
+      });
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getPokerRoomInfoApi.fulfilled, (state, action) => {
@@ -288,4 +296,5 @@ export const {
   updateActivePokerPlayer,
   updateDealerId,
   updateBettorId,
+  updatePlayerData,
 } = pokerSlice.actions;
