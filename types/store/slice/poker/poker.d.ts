@@ -37,6 +37,7 @@ type IPokerRoom = {
   chips_in_pot: number;
   seat_available: 0 | 1 | 2 | 3;
   dealer_id: number;
+  bettor_id: number | null;
   poker_player: IPokerPlayer[];
   created_at: string;
   updated_at: string;

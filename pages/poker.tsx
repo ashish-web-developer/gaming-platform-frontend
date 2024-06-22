@@ -17,8 +17,8 @@ import {
   show_buy_in_modal,
   updateActivePokerPlayer,
   updateDealerId,
-  updateBettorId,
   updatePlayerData,
+  updateRoomDetails,
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 
@@ -44,15 +44,14 @@ const JoinPokerChannel = () => {
         },
       },
       {
-        event: "Game.Poker.UpdateBettorTurnEvent",
-        callback: (data: { bettor_id: number }) => {
-          dispatch(updateBettorId(data.bettor_id));
+        event: "Game.Poker.UpdatePokerRoomDataEvent",
+        callback: (data: { poker_room: IPokerRoom }) => {
+          dispatch(updateRoomDetails(data.poker_room));
         },
       },
       {
         event: "Game.Poker.UpdatePokerPlayerDataEvent",
         callback: (data: { player: IPokerPlayer }) => {
-          console.log(data);
           dispatch(updatePlayerData(data.player));
         },
       },

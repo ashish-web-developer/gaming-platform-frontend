@@ -16,6 +16,7 @@ import type {
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
   IUpdateDealerApiResponse,
+  IPokerRoom,
 } from "@/types/store/slice/poker/poker";
 
 // helpers
@@ -244,9 +245,6 @@ const pokerSlice = createSlice({
     updateDealerId: (state, action: PayloadAction<number>) => {
       state.dealer_id = action.payload;
     },
-    updateBettorId: (state, action: PayloadAction<number>) => {
-      state.bettor_id = action.payload;
-    },
     updatePlayerData: (state, action: PayloadAction<IPokerPlayer>) => {
       state.active_poker_players = state.active_poker_players.map((player) => {
         if (player.player_id == action.payload.player_id) {
@@ -254,6 +252,11 @@ const pokerSlice = createSlice({
         }
         return player;
       });
+    },
+    updateRoomDetails: (state, action: PayloadAction<IPokerRoom>) => {
+      state.bettor_id = action.payload.bettor_id;
+      state.dealer_id = action.payload.dealer_id;
+      state.chips_in_pot = action.payload.chips_in_pot;
     },
   },
   extraReducers: (builder) => {
@@ -295,6 +298,6 @@ export const {
   updateShowBuyInModal,
   updateActivePokerPlayer,
   updateDealerId,
-  updateBettorId,
   updatePlayerData,
+  updateRoomDetails,
 } = pokerSlice.actions;
