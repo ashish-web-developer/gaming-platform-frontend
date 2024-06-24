@@ -290,6 +290,7 @@ export const show_buy_in_modal = (state: RootState) =>
 export const small_blind = (state: RootState) => state.poker.small_blind;
 export const dealer_id = (state: RootState) => state.poker.dealer_id;
 export const bettor_id = (state: RootState) => state.poker.bettor_id;
+export const chips_in_pot = (state: RootState) => state.poker.chips_in_pot;
 // action creaters
 export const {
   updatePokerChips,

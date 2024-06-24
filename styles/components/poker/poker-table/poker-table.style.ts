@@ -29,11 +29,27 @@ const StyledTableDealerProfileImage = styled(Image)`
 
 const StyledTableCardWrapper = styled.div`
   position: absolute;
-  top: 150px;
+  top: 220px;
   display: flex;
   gap: 14px;
 `;
 
+const StyledChipsInPotWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
+  font-size: 1.125rem;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 25px;
+  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  background: rgba(245, 213, 71, 0.2);
+  top: 140px;
+`;
+
+const StyledPokerChipsImage = styled(Image)``;
 
 export {
   StyledPokerTableWrapper,
@@ -41,4 +57,6 @@ export {
   StyledTableDealerProfile,
   StyledTableDealerProfileImage,
   StyledTableCardWrapper,
+  StyledChipsInPotWrapper,
+  StyledPokerChipsImage,
 };

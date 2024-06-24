@@ -7,6 +7,8 @@ import {
   StyledTableDealerProfile,
   StyledTableDealerProfileImage,
   StyledTableCardWrapper,
+  StyledChipsInPotWrapper,
+  StyledPokerChipsImage,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
 // local components
@@ -19,6 +21,7 @@ import { useAppSelector } from "@/hooks/redux.hook";
 import {
   bettor_id,
   active_poker_players,
+  chips_in_pot,
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 // hooks
@@ -28,6 +31,7 @@ import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 import { getPlayerPosition } from "@/helpers/poker/poker.helper";
 
 const PokerTable: FC = () => {
+  const _chips_in_pot = useAppSelector(chips_in_pot);
   const { id: _user_id } = useAppSelector(user);
   const height = usePokerTableHeight();
   const [poker_player] = useAppSelector(active_poker_players).filter(
@@ -68,6 +72,17 @@ const PokerTable: FC = () => {
           })}
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
+      {Boolean(_chips_in_pot) && (
+        <StyledChipsInPotWrapper>
+          <StyledPokerChipsImage
+            src={"/poker/poker-player/poker-chip.png"}
+            alt="chip"
+            width={25}
+            height={25}
+          />
+          $ {(_chips_in_pot * 1000).toFixed(2)}
+        </StyledChipsInPotWrapper>
+      )}
       <StyledTableCardWrapper>
         {new Array(5).fill(0).map((el, index) => {
           return (
