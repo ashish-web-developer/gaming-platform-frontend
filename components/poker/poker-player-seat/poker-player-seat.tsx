@@ -14,6 +14,7 @@ import {
 // local components
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerActionCta from "@/components/poker/poker-player-seat/poker-action-cta";
+import PokerSlider from "@/components/poker/poker-slider/poker-slider";
 
 // redux
 import { dealer_id, bettor_id } from "@/store/slice/poker/poker.slice";
@@ -25,7 +26,8 @@ const PokerPlayerSeat: FC<{
   align: "left" | "right" | "down";
   show_action_cta?: boolean;
   poker_player: IPokerPlayer | undefined;
-}> = ({ align, show_action_cta = false, poker_player }) => {
+  show_poker_slider: boolean;
+}> = ({ align, show_action_cta = false, poker_player, show_poker_slider }) => {
   const _dealer_id = useAppSelector(dealer_id);
   const _bettor_id = useAppSelector(bettor_id);
   const is_bettor = poker_player?.player_id == _bettor_id;
@@ -55,11 +57,14 @@ const PokerPlayerSeat: FC<{
             <PokerActionCta />
           </StyledPokerActionCtaWrapper>
         )}
-        {!show_action_cta && poker_player?.current_betted_amount && (
-          <StyledBettedAmount $align={align}>
-            $ {(poker_player?.current_betted_amount ?? 0) * 1000}
-          </StyledBettedAmount>
-        )}
+        {show_poker_slider && <PokerSlider step_count={6} />}
+        {!show_action_cta &&
+          !show_poker_slider &&
+          poker_player?.current_betted_amount && (
+            <StyledBettedAmount $align={align}>
+              $ {(poker_player?.current_betted_amount ?? 0) * 1000}
+            </StyledBettedAmount>
+          )}
       </StyledPokerPlayerSeatWrapper>
     </>
   );

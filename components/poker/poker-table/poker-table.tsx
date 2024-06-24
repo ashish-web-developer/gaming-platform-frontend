@@ -22,6 +22,7 @@ import {
   bettor_id,
   active_poker_players,
   chips_in_pot,
+  show_poker_slider,
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 // hooks
@@ -40,6 +41,7 @@ const PokerTable: FC = () => {
   const authicated_player_position = poker_player?.seat_number;
   const _active_poker_players = useAppSelector(active_poker_players);
   const _bettor_id = useAppSelector(bettor_id);
+  const _show_poker_slider = useAppSelector(show_poker_slider);
 
   return (
     <StyledPokerTableWrapper>
@@ -62,7 +64,16 @@ const PokerTable: FC = () => {
                 key={player.id}
                 align={player_position}
                 show_action_cta={
-                  _bettor_id == _user_id && _bettor_id == player.player_id
+                  !_show_poker_slider &&
+                  _bettor_id == _user_id &&
+                  _bettor_id == player.player_id
+                    ? true
+                    : false
+                }
+                show_poker_slider={
+                  _show_poker_slider &&
+                  _bettor_id == _user_id &&
+                  _bettor_id == player.player_id
                     ? true
                     : false
                 }

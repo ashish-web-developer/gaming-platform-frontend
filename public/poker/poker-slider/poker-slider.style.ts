@@ -1,77 +1,63 @@
 import styled from "styled-components";
 
-const StyledPokerSliderWrapper = styled.div`
+const StyledSliderWrapper = styled.div`
   position: absolute;
-  top: 50%;
-  right: 40px;
-  transform: translateY(-50%);
-  height: 650px;
-  width: 120px;
-  background: ${({ theme }) => theme.palette.primary.main};
-  border: 1rem solid ${({ theme }) => theme.palette.secondary.main};
-  border-radius: 12px;
-  padding: 40px 0px;
-`;
-const StyledPokerSlider = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
+  top: -60px;
+  width: 450px;
+  height: 50px;
+  border-radius: 30px;
+  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  background: rgba(245, 213, 71, 0.2);
   display: flex;
-  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StyledSlider = styled.div`
+  width: 400px;
+  height: 12px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  background: #f5d547;
+  display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-const StyledSliderTrack = styled.div`
-  position: absolute;
-  bottom: 0px;
-  width: 100%;
-  height: 0px;
-  background: ${({ theme }) => theme.palette.primary.main};
-  border-top: 1rem solid ${({ theme }) => theme.palette.secondary.main};
-  background: transparent;
-`;
-const StyledSliderThumb = styled.div<{
-  $content: string;
+const StyledTick = styled.span<{
+  $is_active: boolean;
 }>`
-  left: -110px;
-  bottom: -12px;
-  cursor: pointer;
-  position: absolute;
-`;
-const StyledSliderThumbContent = styled.span`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  bottom: 0px;
-  width: 100%;
-  height: 100%;
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 1.125rem;
-  color: ${({ theme }) => theme.palette.secondary.main};
-  display: flex;
-  justify-content: flex-start;
-  padding-left: 16px;
-  align-items: center;
-`;
-
-const StyledSliderTick = styled.span`
   display: inline-block;
-  width: 24px;
-  border: 2px solid #fff;
-`;
-const StyledSliderTickWithValue = styled.span`
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme.palette.secondary.main};
+  width: ${(props) => (props.$is_active ? "25px" : "20px")};
+  height: ${(props) => (props.$is_active ? "25px" : "20px")};
+  border-radius: 50%;
+  border: 2px solid #000;
+  background: ${(props) =>
+    props.$is_active ? "#fff" : props.theme.palette.success.main};
+  position: relative;
+  ${(props) => {
+    return (
+      props.$is_active &&
+      `
+      &::after{
+        content:"$ 20k";
+        position:absolute;
+        display:inline-block;
+        padding:6px 16px;
+        border:2px solid ${props.theme.palette.secondary.main};
+        border-radius:30px;
+        background:rgba(245, 213, 71,0.2);
+        top:-60px;
+        font-family:${props.theme.fontFamily.lobster};
+        font-size:1rem;
+        color:#fff;
+        left:50%;
+        transform:translateX(-50%);
+        white-space:nowrap;
+      }
+    `
+    );
+  }}
 `;
 
-export {
-  StyledPokerSliderWrapper,
-  StyledSliderTrack,
-  StyledSliderThumb,
-  StyledSliderThumbContent,
-  StyledSliderTick,
-  StyledSliderTickWithValue,
-  StyledPokerSlider,
-};
+export { StyledSliderWrapper, StyledSlider, StyledTick };
