@@ -57,7 +57,11 @@ const PokerPlayerSeat: FC<{
             <PokerActionCta />
           </StyledPokerActionCtaWrapper>
         )}
-        {show_poker_slider && <PokerSlider step_count={6} />}
+        {show_poker_slider && (
+          <PokerSlider
+            total_chips_count={poker_player?.total_chips_left as number}
+          />
+        )}
         {!show_action_cta &&
           !show_poker_slider &&
           poker_player?.current_betted_amount && (

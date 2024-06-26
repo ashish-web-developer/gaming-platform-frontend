@@ -53,6 +53,7 @@ const PokerBuyInDialog: FC = () => {
           value={poker_buy_in_amount}
           min={_small_blind * 2 * 20} // minimum buy_in_amount is 20 times the big blind
           max={_small_blind * 2 * 50} // maximum buy_in_amount is 50 times the big blind
+          step={_small_blind * 2} // multiple of big blind
           onInput={(event) => {
             const range_input_element = event.target as HTMLInputElement;
             set_poker_buy_in_amount(Number(range_input_element.value));
