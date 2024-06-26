@@ -144,7 +144,6 @@ const initialState: IPokerInitialState = {
   dealer_id: null,
   bettor_id: null,
   poker_chips: 0,
-  slider_val: 0,
   active_poker_players: [],
   show_buy_in_modal: true,
   small_blind: 5,
@@ -160,9 +159,6 @@ const pokerSlice = createSlice({
     },
     updatePokerChips: (state, action: PayloadAction<number>) => {
       state.poker_chips = action.payload;
-    },
-    updateSliderVal: (state, action: PayloadAction<number>) => {
-      state.slider_val = action.payload;
     },
     updateActivePokerPlayer: (
       state,
@@ -282,7 +278,6 @@ export default pokerSlice.reducer;
 export const show_poker_slider = (state: RootState) =>
   state.poker.show_poker_slider;
 export const poker_chips = (state: RootState) => state.poker.poker_chips;
-export const slider_val = (state: RootState) => state.poker.slider_val;
 export const active_poker_players = (state: RootState) =>
   state.poker.active_poker_players;
 export const show_buy_in_modal = (state: RootState) =>
@@ -294,7 +289,6 @@ export const chips_in_pot = (state: RootState) => state.poker.chips_in_pot;
 // action creaters
 export const {
   updatePokerChips,
-  updateSliderVal,
   updateShowPokerSlider,
   updateShowBuyInModal,
   updateActivePokerPlayer,
