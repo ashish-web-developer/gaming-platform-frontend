@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 // types
 import { type FC } from "react";
 // styled components
@@ -42,6 +43,8 @@ const PokerTable: FC = () => {
   const _active_poker_players = useAppSelector(active_poker_players);
   const _bettor_id = useAppSelector(bettor_id);
   const _show_poker_slider = useAppSelector(show_poker_slider);
+  const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
+
 
   return (
     <StyledPokerTableWrapper>
@@ -64,7 +67,7 @@ const PokerTable: FC = () => {
                 key={player.id}
                 align={player_position}
                 show_action_cta={
-                  !_show_poker_slider &&
+                  show_action_cta &&
                   _bettor_id == _user_id &&
                   _bettor_id == player.player_id
                     ? true
@@ -78,6 +81,7 @@ const PokerTable: FC = () => {
                     : false
                 }
                 poker_player={player}
+                toggle_action_cta={(show: boolean) => set_show_action_cta(show)}
               />
             );
           })}

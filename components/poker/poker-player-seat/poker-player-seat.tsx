@@ -1,3 +1,5 @@
+import { useRef } from "react";
+// types
 import type { FC } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 
@@ -27,7 +29,15 @@ const PokerPlayerSeat: FC<{
   show_action_cta?: boolean;
   poker_player: IPokerPlayer | undefined;
   show_poker_slider: boolean;
-}> = ({ align, show_action_cta = false, poker_player, show_poker_slider }) => {
+  toggle_action_cta: (show:boolean) => void;
+}> = ({
+  align,
+  show_action_cta = false,
+  poker_player,
+  show_poker_slider,
+  toggle_action_cta,
+}) => {
+  const raise_cta_ref = useRef<HTMLDivElement>(null);
   const _dealer_id = useAppSelector(dealer_id);
   const _bettor_id = useAppSelector(bettor_id);
   const is_bettor = poker_player?.player_id == _bettor_id;
@@ -54,12 +64,14 @@ const PokerPlayerSeat: FC<{
         />
         {show_action_cta && (
           <StyledPokerActionCtaWrapper>
-            <PokerActionCta />
+            <PokerActionCta ref={raise_cta_ref} />
           </StyledPokerActionCtaWrapper>
         )}
         {show_poker_slider && (
           <PokerSlider
             total_chips_count={poker_player?.total_chips_left as number}
+            ref={raise_cta_ref}
+            toggle_action_cta={toggle_action_cta}
           />
         )}
         {!show_action_cta &&

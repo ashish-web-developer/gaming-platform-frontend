@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // types
+import { IBaseResponse } from "@/types/store/slice/common";
 import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type IPokerInitialState from "@/types/store/slice/poker/poker";
@@ -17,6 +18,7 @@ import type {
   IUpdateSeatAvailableResponse,
   IUpdateDealerApiResponse,
   IPokerRoom,
+  ITriggerActionApiRequest,
 } from "@/types/store/slice/poker/poker";
 
 // helpers
@@ -139,6 +141,33 @@ export const updateDealerApi = createAsyncThunk<
   }
 });
 
+export const triggerActionApi = createAsyncThunk<
+  IBaseResponse,
+  ITriggerActionApiRequest,
+  IThunkApiConfig
+>(
+  "api/poker/trigger-action",
+  async (
+    { action_type, current_betted_amount },
+    { getState, rejectWithValue }
+  ) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IBaseResponse> = await Axios.post(
+        "/poker/trigger-action",
+        {
+          room_id: state.game.room_id,
+          action_type,
+          current_betted_amount,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
 const initialState: IPokerInitialState = {
   show_poker_slider: false,
   dealer_id: null,
@@ -146,6 +175,7 @@ const initialState: IPokerInitialState = {
   poker_chips: 0,
   active_poker_players: [],
   show_buy_in_modal: true,
+  min_amount_to_be_betted: null,
   small_blind: 5,
   chips_in_pot: 0,
 };
@@ -253,6 +283,7 @@ const pokerSlice = createSlice({
       state.bettor_id = action.payload.bettor_id;
       state.dealer_id = action.payload.dealer_id;
       state.chips_in_pot = action.payload.chips_in_pot;
+      state.min_amount_to_be_betted = action.payload.min_amount_to_be_betted;
     },
   },
   extraReducers: (builder) => {
@@ -286,6 +317,8 @@ export const small_blind = (state: RootState) => state.poker.small_blind;
 export const dealer_id = (state: RootState) => state.poker.dealer_id;
 export const bettor_id = (state: RootState) => state.poker.bettor_id;
 export const chips_in_pot = (state: RootState) => state.poker.chips_in_pot;
+export const min_amount_to_be_betted = (state: RootState) =>
+  state.poker.min_amount_to_be_betted;
 // action creaters
 export const {
   updatePokerChips,

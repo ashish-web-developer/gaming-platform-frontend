@@ -26,6 +26,7 @@ type IPokerInitialState = {
   active_poker_players: IPokerPlayer[];
   show_buy_in_modal: boolean;
   small_blind: number; // It will be stored in k
+  min_amount_to_be_betted: number | null; // It will stored in k
   chips_in_pot: number; // It will bee stored in k
   bettor_id: number | null;
 };
@@ -35,6 +36,7 @@ type IPokerRoom = {
   small_blind: number;
   chips_in_pot: number;
   seat_available: 0 | 1 | 2 | 3;
+  min_amount_to_be_betted: number;
   dealer_id: number;
   bettor_id: number | null;
   poker_player: IPokerPlayer[];
@@ -96,6 +98,14 @@ type IUpdateDealerApiResponse = IBaseResponse & {
   message?: string;
 };
 
+/**
+ * ==== TRIGGER ACTION API =====
+ */
+type ITriggerActionApiRequest = {
+  action_type: "fold" | "check" | "raise";
+  current_betted_amount: number;
+};
+
 export {
   IPokerPlayer,
   IPokerRoom,
@@ -108,5 +118,6 @@ export {
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
   IUpdateDealerApiResponse,
+  ITriggerActionApiRequest,
 };
 export default IPokerInitialState;
