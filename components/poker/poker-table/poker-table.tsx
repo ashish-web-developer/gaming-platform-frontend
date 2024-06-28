@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // types
 import { type FC } from "react";
 // styled components
@@ -33,18 +33,27 @@ import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 import { getPlayerPosition } from "@/helpers/poker/poker.helper";
 
 const PokerTable: FC = () => {
+  const _active_poker_players = useAppSelector(active_poker_players);
   const _chips_in_pot = useAppSelector(chips_in_pot);
+  const total_chips_betted = _active_poker_players.reduce(
+    (accumulator, player) => {
+      if (player.current_betted_amount) {
+        return accumulator + player.current_betted_amount;
+      }
+      return accumulator;
+    },
+    0
+  );
   const { id: _user_id } = useAppSelector(user);
   const height = usePokerTableHeight();
   const [poker_player] = useAppSelector(active_poker_players).filter(
     (player) => player.player_id == _user_id
   );
   const authicated_player_position = poker_player?.seat_number;
-  const _active_poker_players = useAppSelector(active_poker_players);
   const _bettor_id = useAppSelector(bettor_id);
   const _show_poker_slider = useAppSelector(show_poker_slider);
   const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
-
+  console.log("value of total chips left", total_chips_betted, _chips_in_pot);
 
   return (
     <StyledPokerTableWrapper>
@@ -87,7 +96,7 @@ const PokerTable: FC = () => {
           })}
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
-      {Boolean(_chips_in_pot) && (
+      {(Boolean(_chips_in_pot) || Boolean(total_chips_betted)) && (
         <StyledChipsInPotWrapper>
           <StyledPokerChipsImage
             src={"/poker/poker-player/poker-chip.png"}
@@ -95,7 +104,10 @@ const PokerTable: FC = () => {
             width={25}
             height={25}
           />
-          $ {(_chips_in_pot * 1000).toFixed(2)}
+          ${" "}
+          {(
+            (_chips_in_pot == 0 ? total_chips_betted : _chips_in_pot) * 1000
+          ).toFixed(2)}
         </StyledChipsInPotWrapper>
       )}
       <StyledTableCardWrapper>

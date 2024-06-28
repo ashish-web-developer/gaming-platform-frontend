@@ -15,8 +15,9 @@ import {
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   small_blind,
-  updateShowPokerSlider,
   min_amount_to_be_betted,
+  updateShowPokerSlider,
+  triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
 
 // hooks
@@ -71,7 +72,7 @@ const PokerSlider: ForwardRefRenderFunction<
           type="range"
           min={_min_amount_to_be_betted as number}
           max={total_chips_count}
-          step={_small_blind}
+          step={_small_blind * 2}
           value={slider_val}
           onInput={(event) => {
             const range_input_element = event.target as HTMLInputElement;
@@ -91,6 +92,12 @@ const PokerSlider: ForwardRefRenderFunction<
         onClick={() => {
           dispatch(updateShowPokerSlider(false));
           toggle_action_cta(true);
+          dispatch(
+            triggerActionApi({
+              action_type: "raise",
+              current_betted_amount: slider_val,
+            })
+          );
         }}
       >
         Confirm

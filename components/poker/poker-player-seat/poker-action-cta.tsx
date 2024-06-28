@@ -9,14 +9,19 @@ import {
 } from "@/styles/components/poker/poker-player-seat/poker-action-cta.style";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux.hook";
-import { updateShowPokerSlider } from "@/store/slice/poker/poker.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import {
+  min_amount_to_be_betted,
+  updateShowPokerSlider,
+  triggerActionApi,
+} from "@/store/slice/poker/poker.slice";
 
 const PokerActionCta: ForwardRefRenderFunction<HTMLDivElement> = (
   {},
   raise_cta_ref
 ) => {
   const dispatch = useAppDispatch();
+  const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
   return (
     <>
       <StyledPokerActionCta>
@@ -24,7 +29,19 @@ const PokerActionCta: ForwardRefRenderFunction<HTMLDivElement> = (
          * =============== FOLD =================
          */}
         <StyledVectorWrapper>
-          <StyledVectorWrapper $cursor="pointer" $left="20px" $bottom="20px">
+          <StyledVectorWrapper
+            $cursor="pointer"
+            $left="20px"
+            $bottom="20px"
+            onClick={() => {
+              dispatch(
+                triggerActionApi({
+                  action_type: "fold",
+                  current_betted_amount: null,
+                })
+              );
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="45"
@@ -70,7 +87,19 @@ const PokerActionCta: ForwardRefRenderFunction<HTMLDivElement> = (
          * =============== CHECK =================
          */}
         <StyledVectorWrapper $left="64px" $top="-18px">
-          <StyledVectorWrapper $cursor="pointer" $left="35px" $bottom="22px">
+          <StyledVectorWrapper
+            $cursor="pointer"
+            $left="35px"
+            $bottom="22px"
+            onClick={() => {
+              dispatch(
+                triggerActionApi({
+                  action_type: "check",
+                  current_betted_amount: _min_amount_to_be_betted as number,
+                })
+              );
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="58"
@@ -109,9 +138,6 @@ const PokerActionCta: ForwardRefRenderFunction<HTMLDivElement> = (
               d="M.253 17.5a125 125 0 01125 0l-31.25 54.127a62.5 62.5 0 00-62.5 0L.253 17.5z"
               mask="url(#path-1-inside-1_123_100)"
               style={{ cursor: "pointer" }}
-              onClick={() => {
-                console.log("checked");
-              }}
             ></path>
           </svg>
         </StyledVectorWrapper>
@@ -174,7 +200,6 @@ const PokerActionCta: ForwardRefRenderFunction<HTMLDivElement> = (
               strokeWidth="4"
               d="M31.253.5a125 125 0 0162.5 108.253h-62.5A62.499 62.499 0 00.003 54.627L31.253.5z"
               mask="url(#path-1-inside-1_123_102)"
-              style={{ cursor: "pointer" }}
             ></path>
           </svg>
         </StyledVectorWrapper>
