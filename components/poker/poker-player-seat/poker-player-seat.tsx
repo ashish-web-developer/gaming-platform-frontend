@@ -29,7 +29,7 @@ const PokerPlayerSeat: FC<{
   show_action_cta?: boolean;
   poker_player: IPokerPlayer | undefined;
   show_poker_slider: boolean;
-  toggle_action_cta: (show:boolean) => void;
+  toggle_action_cta: (show: boolean) => void;
 }> = ({
   align,
   show_action_cta = false,
@@ -58,6 +58,7 @@ const PokerPlayerSeat: FC<{
           </StyledPokerPlayerBuyInAmount>
         </StyledPokerPlayerWrapper>
         <StyledPokerChipsImage
+          $is_folded={poker_player?.action_type == "fold"}
           src={"/poker/poker-player/poker-chip.png"}
           fill={true}
           alt="chip"

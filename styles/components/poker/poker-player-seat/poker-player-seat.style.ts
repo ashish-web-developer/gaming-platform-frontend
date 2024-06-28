@@ -61,7 +61,11 @@ const StyledPokerPlayerSeatWrapper = styled.div<{
   `}
 `;
 
-const StyledPokerChipsImage = styled(Image)``;
+const StyledPokerChipsImage = styled(Image)<{
+  $is_folded: boolean;
+}>`
+  opacity: ${(props) => (props.$is_folded ? "0.6" : "1")};
+`;
 
 const StyledPokerPlayerWrapper = styled.div<{
   $align: "left" | "right" | "down";
