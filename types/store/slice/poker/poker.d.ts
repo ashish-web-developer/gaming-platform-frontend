@@ -1,5 +1,6 @@
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import { IBaseResponse } from "@/types/store/slice/common";
+import type { IBaseResponse } from "@/types/store/slice/common";
+import type { IDeckType } from "@/types/store/slice/poker";
 
 type IActiveGamingUser = IUsersWithConversation & {
   buy_in_amount?: number;
@@ -13,6 +14,7 @@ type IPokerPlayer = {
   action_type: "check" | "call" | "raise" | "fold" | null;
   is_active: boolean;
   seat_number: ISeatType;
+  hand: IDeckType | null;
   current_betted_amount: number | null;
   total_chips_left: number;
   user: IUsersWithConversation;

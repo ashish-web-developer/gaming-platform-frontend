@@ -49,6 +49,25 @@ export const createPokerRoomApi = createAsyncThunk<
   }
 );
 
+export const dealHandApi = createAsyncThunk<
+  IBaseResponse,
+  undefined,
+  IThunkApiConfig
+>("api/deal-hand", async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IBaseResponse> = await Axios.post(
+      "poker/deal-hand",
+      {
+        room_id: state.game.room_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
 export const joinPokerRoomApi = createAsyncThunk<
   IJoinPokerRoomApiResponse,
   IJoinPokerRoomApiRequest,

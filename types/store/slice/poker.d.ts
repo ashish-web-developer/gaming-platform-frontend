@@ -13,4 +13,6 @@ type ICardRank =
   | "3"
   | "2"
   | "A";
-export { ICardSuit, ICardRank };
+
+type IDeckType = Array<{ suit: ICardSuit; rank: ICardRank }>;
+export { ICardSuit, ICardRank, IDeckType };

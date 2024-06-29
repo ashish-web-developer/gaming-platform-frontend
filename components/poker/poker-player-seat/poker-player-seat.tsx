@@ -9,6 +9,8 @@ import {
   StyledPokerPlayerBuyInAmount,
   StyledPokerChipsImage,
   StyledPokerPlayerWrapper,
+  StyledCardContainer,
+  StyledCardWrapper,
   StyledPokerActionCtaWrapper,
   StyledBettedAmount,
 } from "@/styles/components/poker/poker-player-seat/poker-player-seat.style";
@@ -17,8 +19,10 @@ import {
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerActionCta from "@/components/poker/poker-player-seat/poker-action-cta";
 import PokerSlider from "@/components/poker/poker-slider/poker-slider";
+import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
+import { user } from "@/store/slice/user.slice";
 import { dealer_id, bettor_id } from "@/store/slice/poker/poker.slice";
 
 // hooks
@@ -37,6 +41,7 @@ const PokerPlayerSeat: FC<{
   show_poker_slider,
   toggle_action_cta,
 }) => {
+  const { id: user_id } = useAppSelector(user);
   const raise_cta_ref = useRef<HTMLDivElement>(null);
   const _dealer_id = useAppSelector(dealer_id);
   const _bettor_id = useAppSelector(bettor_id);
@@ -48,6 +53,17 @@ const PokerPlayerSeat: FC<{
         $is_dealer={poker_player?.player_id == _dealer_id}
       >
         <StyledPokerPlayerWrapper $align={align}>
+          {poker_player?.player_id == user_id && (
+            <StyledCardContainer>
+              {poker_player?.hand?.map((hand, index) => {
+                return (
+                  <StyledCardWrapper $rotate={index == 0 ? "-10deg" : "10deg"}>
+                    <PokerCard suit={hand.suit} rank={hand.rank} />;
+                  </StyledCardWrapper>
+                );
+              })}
+            </StyledCardContainer>
+          )}
           <PokerPlayer
             player={poker_player as IPokerPlayer}
             is_bettor={is_bettor}

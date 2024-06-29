@@ -93,7 +93,27 @@ const StyledPokerPlayerWrapper = styled.div<{
   }}
 `;
 
+const StyledCardContainer = styled.div`
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  transform: rotate(-30deg);
+  left: -34px;
+  bottom: 4px;
+`;
+const StyledCardWrapper = styled.div<{
+  $rotate: string;
+}>`
+  transform: rotate(${(props) => props.$rotate});
+  margin-right: -40px;
+  &:last-child {
+    margin-right: 0px;
+  }
+`;
+
 const StyledPokerPlayerBuyInAmount = styled.span`
+  position: relative;
+  z-index: 3;
   color: #fff;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   padding: 10px 16px;
@@ -142,6 +162,8 @@ export {
   StyledPokerPlayerSeatWrapper,
   StyledPokerPlayerBuyInAmount,
   StyledPokerPlayerWrapper,
+  StyledCardContainer,
+  StyledCardWrapper,
   StyledPokerChipsImage,
   StyledPokerActionCtaWrapper,
   StyledBettedAmount,
