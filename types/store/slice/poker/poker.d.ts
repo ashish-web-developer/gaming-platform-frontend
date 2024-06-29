@@ -14,7 +14,7 @@ type IPokerPlayer = {
   action_type: "check" | "call" | "raise" | "fold" | null;
   is_active: boolean;
   seat_number: ISeatType;
-  hand: IDeckType | null;
+  hole_cards: IDeckType | null;
   current_betted_amount: number | null;
   total_chips_left: number;
   user: IUsersWithConversation;
