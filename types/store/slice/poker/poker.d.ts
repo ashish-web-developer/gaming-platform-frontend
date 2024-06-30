@@ -26,6 +26,7 @@ type IPokerInitialState = {
   dealer_id: number | null;
   poker_chips: number; // It will be stored in k
   active_poker_players: IPokerPlayer[];
+  community_cards: IDeckType | null;
   show_buy_in_modal: boolean;
   small_blind: number; // It will be stored in k
   min_amount_to_be_betted: number | null; // It will stored in k
@@ -38,7 +39,9 @@ type IPokerRoom = {
   small_blind: number;
   chips_in_pot: number;
   seat_available: 0 | 1 | 2 | 3;
+  no_of_players_betted: number;
   min_amount_to_be_betted: number;
+  community_cards: IDeckType;
   dealer_id: number;
   bettor_id: number | null;
   poker_player: IPokerPlayer[];

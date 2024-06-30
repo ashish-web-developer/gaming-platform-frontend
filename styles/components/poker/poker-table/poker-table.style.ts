@@ -34,6 +34,14 @@ const StyledTableCardWrapper = styled.div`
   gap: 14px;
 `;
 
+const StyledBorderedCard = styled.div`
+  width: 60px;
+  height: 90px;
+  border: 2px dashed ${({ theme }) => theme.palette.secondary.main};
+  border-radius: 6px;
+  background: transparent;
+`;
+
 const StyledChipsInPotWrapper = styled.div`
   position: absolute;
   display: flex;
@@ -57,6 +65,7 @@ export {
   StyledTableDealerProfile,
   StyledTableDealerProfileImage,
   StyledTableCardWrapper,
+  StyledBorderedCard,
   StyledChipsInPotWrapper,
   StyledPokerChipsImage,
 };

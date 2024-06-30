@@ -193,6 +193,7 @@ const initialState: IPokerInitialState = {
   bettor_id: null,
   poker_chips: 0,
   active_poker_players: [],
+  community_cards: [],
   show_buy_in_modal: true,
   min_amount_to_be_betted: null,
   small_blind: 5,
@@ -303,6 +304,7 @@ const pokerSlice = createSlice({
       state.dealer_id = action.payload.dealer_id;
       state.chips_in_pot = action.payload.chips_in_pot;
       state.min_amount_to_be_betted = action.payload.min_amount_to_be_betted;
+      state.community_cards = action.payload.community_cards;
     },
   },
   extraReducers: (builder) => {
@@ -338,6 +340,8 @@ export const bettor_id = (state: RootState) => state.poker.bettor_id;
 export const chips_in_pot = (state: RootState) => state.poker.chips_in_pot;
 export const min_amount_to_be_betted = (state: RootState) =>
   state.poker.min_amount_to_be_betted;
+export const community_cards = (state: RootState) =>
+  state.poker.community_cards;
 // action creaters
 export const {
   updatePokerChips,

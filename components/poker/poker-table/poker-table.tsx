@@ -10,6 +10,7 @@ import {
   StyledTableCardWrapper,
   StyledChipsInPotWrapper,
   StyledPokerChipsImage,
+  StyledBorderedCard,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
 // local components
@@ -24,6 +25,7 @@ import {
   active_poker_players,
   chips_in_pot,
   show_poker_slider,
+  community_cards,
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 // hooks
@@ -34,6 +36,8 @@ import { getPlayerPosition } from "@/helpers/poker/poker.helper";
 
 const PokerTable: FC = () => {
   const _active_poker_players = useAppSelector(active_poker_players);
+  const _community_cards = useAppSelector(community_cards);
+  const no_of_community_cards = _community_cards?.length ?? 0;
   const _chips_in_pot = useAppSelector(chips_in_pot);
   const total_chips_betted = _active_poker_players.reduce(
     (accumulator, player) => {
@@ -53,7 +57,6 @@ const PokerTable: FC = () => {
   const _bettor_id = useAppSelector(bettor_id);
   const _show_poker_slider = useAppSelector(show_poker_slider);
   const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
-  console.log("value of total chips left", total_chips_betted, _chips_in_pot);
 
   return (
     <StyledPokerTableWrapper>
@@ -111,10 +114,14 @@ const PokerTable: FC = () => {
         </StyledChipsInPotWrapper>
       )}
       <StyledTableCardWrapper>
-        {new Array(5).fill(0).map((el, index) => {
-          return (
-            <PokerCard key={`card-${index}`} suit={"diamond"} rank={"J"} />
-          );
+        {[
+          ...(_community_cards ? [..._community_cards] : []),
+          ...new Array(5 - no_of_community_cards).fill(null),
+        ]?.map((card) => {
+          if (card) {
+            return <PokerCard suit={card.suit} rank={card.rank} />;
+          }
+          return <StyledBorderedCard />;
         })}
       </StyledTableCardWrapper>
     </StyledPokerTableWrapper>

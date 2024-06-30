@@ -2,15 +2,12 @@ import styled from "styled-components";
 // types
 import type { ICardRank } from "@/types/store/slice/poker";
 
-const StyledPokerCardWrapper = styled.div<{
-  $show_card: boolean;
-}>`
+const StyledPokerCardWrapper = styled.div`
   width: 60px;
   height: 90px;
-  border: 2px ${(props) => (props.$show_card ? "solid" : "dashed")}
-    ${({ theme }) => theme.palette.secondary.main};
+  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
   border-radius: 6px;
-  background: ${(props) => (props.$show_card ? "#000" : "transparent")};
+  background: #000;
   overflow: hidden;
 `;
 
