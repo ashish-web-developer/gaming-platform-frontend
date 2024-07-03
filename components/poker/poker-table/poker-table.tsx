@@ -32,7 +32,8 @@ import { user } from "@/store/slice/user.slice";
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
 // helpers
-import { getPlayerPosition } from "@/helpers/poker/poker.helper";
+import { getPlayerPosition, Hand } from "@/helpers/poker/poker.helper";
+import { IDeckType } from "@/types/store/slice/poker";
 
 const PokerTable: FC = () => {
   const _active_poker_players = useAppSelector(active_poker_players);
@@ -50,13 +51,25 @@ const PokerTable: FC = () => {
   );
   const { id: _user_id } = useAppSelector(user);
   const height = usePokerTableHeight();
-  const [poker_player] = useAppSelector(active_poker_players).filter(
+  const [poker_player] = _active_poker_players.filter(
     (player) => player.player_id == _user_id
   );
   const authicated_player_position = poker_player?.seat_number;
   const _bettor_id = useAppSelector(bettor_id);
   const _show_poker_slider = useAppSelector(show_poker_slider);
   const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
+  const all_players_cards_ranking =
+    _community_cards?.length == 5
+      ? _active_poker_players
+          .map((player) => {
+            return new Hand(
+              player.hole_cards as IDeckType,
+              _community_cards
+            ).handRanking();
+          })
+          .sort((a, b) => b.rank - a.rank)
+      : null;
+  console.log(all_players_cards_ranking);
 
   return (
     <StyledPokerTableWrapper>
@@ -117,11 +130,17 @@ const PokerTable: FC = () => {
         {[
           ...(_community_cards ? [..._community_cards] : []),
           ...new Array(5 - no_of_community_cards).fill(null),
-        ]?.map((card) => {
+        ]?.map((card, index) => {
           if (card) {
-            return <PokerCard suit={card.suit} rank={card.rank} />;
+            return (
+              <PokerCard
+                key={`card-${index}`}
+                suit={card.suit}
+                rank={card.rank}
+              />
+            );
           }
-          return <StyledBorderedCard />;
+          return <StyledBorderedCard key={`bordered-card-${index}`} />;
         })}
       </StyledTableCardWrapper>
     </StyledPokerTableWrapper>
