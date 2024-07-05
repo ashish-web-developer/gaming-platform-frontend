@@ -32,8 +32,7 @@ import { user } from "@/store/slice/user.slice";
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
 // helpers
-import { getPlayerPosition, Hand } from "@/helpers/poker/poker.helper";
-import { IDeckType } from "@/types/store/slice/poker";
+import { getPlayerPosition } from "@/helpers/poker/poker.helper";
 
 const PokerTable: FC = () => {
   const _active_poker_players = useAppSelector(active_poker_players);
@@ -58,18 +57,6 @@ const PokerTable: FC = () => {
   const _bettor_id = useAppSelector(bettor_id);
   const _show_poker_slider = useAppSelector(show_poker_slider);
   const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
-  const all_players_cards_ranking =
-    _community_cards?.length == 5
-      ? _active_poker_players
-          .map((player) => {
-            return new Hand(
-              player.hole_cards as IDeckType,
-              _community_cards
-            ).handRanking();
-          })
-          .sort((a, b) => b.rank - a.rank)
-      : null;
-  console.log(all_players_cards_ranking);
 
   return (
     <StyledPokerTableWrapper>
