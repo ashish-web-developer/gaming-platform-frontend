@@ -57,7 +57,10 @@ const PokerPlayerSeat: FC<{
             <StyledCardContainer>
               {poker_player?.hole_cards?.map((hole_card, index) => {
                 return (
-                  <StyledCardWrapper $rotate={index == 0 ? "-10deg" : "10deg"}>
+                  <StyledCardWrapper
+                    key={`card-${index}`}
+                    $rotate={index == 0 ? "-10deg" : "10deg"}
+                  >
                     <PokerCard suit={hole_card.suit} rank={hole_card.rank} />;
                   </StyledCardWrapper>
                 );

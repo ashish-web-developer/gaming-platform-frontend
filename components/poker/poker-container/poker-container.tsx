@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
@@ -36,11 +36,17 @@ const PokerContainer: FC = () => {
   const { id: user_id } = useAppSelector(user);
   const _dealer_id = useAppSelector(dealer_id);
   const no_of_players_playing = useAppSelector(active_poker_players).length;
+  const timeout_ref = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     if (no_of_players_playing == 3 && user_id == _dealer_id) {
-      dispatch(dealHandApi());
+      timeout_ref.current = setTimeout(() => {
+        dispatch(dealHandApi());
+      }, 2000);
     }
+    return () => {
+      timeout_ref.current && clearTimeout(timeout_ref.current);
+    };
   }, [no_of_players_playing, user_id, _dealer_id]);
   return (
     <StyledPage>

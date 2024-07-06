@@ -76,7 +76,7 @@ const PokerTable: FC = () => {
             );
             return (
               <PokerPlayerSeat
-                key={player.id}
+                key={`player-${player.player_id}`}
                 align={player_position}
                 show_action_cta={
                   show_action_cta &&
