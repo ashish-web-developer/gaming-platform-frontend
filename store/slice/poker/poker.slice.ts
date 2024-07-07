@@ -16,7 +16,6 @@ import type {
   IJoinPokerRoomApiResponse,
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
-  IUpdateDealerApiResponse,
   IPokerRoom,
   ITriggerActionApiRequest,
 } from "@/types/store/slice/poker/poker";
@@ -143,22 +142,6 @@ export const getPokerRoomInfoApi = createAsyncThunk<
     }
   }
 );
-
-export const updateDealerApi = createAsyncThunk<
-  IUpdateDealerApiResponse,
-  undefined,
-  IThunkApiConfig
->("api/poker/update-dealer", async (_, { rejectWithValue, getState }) => {
-  try {
-    const state = getState();
-    const response = await Axios.post("/poker/update-dealer", {
-      room_id: state.game.room_id,
-    });
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
-  }
-});
 
 export const triggerActionApi = createAsyncThunk<
   IBaseResponse,

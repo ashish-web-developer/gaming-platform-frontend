@@ -97,13 +97,6 @@ type IUpdateSeatAvailableResponse = IBaseResponse & {
 };
 
 /**
- * ==== UPDATE DEALER API =====
- */
-type IUpdateDealerApiResponse = IBaseResponse & {
-  message?: string;
-};
-
-/**
  * ==== TRIGGER ACTION API =====
  */
 type ITriggerActionApiRequest = {
@@ -122,7 +115,6 @@ export {
   IJoinPokerRoomApiResponse,
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
-  IUpdateDealerApiResponse,
   ITriggerActionApiRequest,
 };
 export default IPokerInitialState;
