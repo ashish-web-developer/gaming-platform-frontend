@@ -100,7 +100,7 @@ type IUpdateSeatAvailableResponse = IBaseResponse & {
  * ==== TRIGGER ACTION API =====
  */
 type ITriggerActionApiRequest = {
-  action_type: "fold" | "check" | "raise";
+  action_type: "fold" | "check" | "call" | "raise";
   current_betted_amount: number | null;
 };
 
