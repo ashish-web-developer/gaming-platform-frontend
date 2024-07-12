@@ -2,40 +2,16 @@ import Image from "next/image";
 import styled from "styled-components";
 
 const StyledPokerPlayerSeatWrapper = styled.div<{
-  $align: "left" | "right" | "down";
+  $seat_number: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   $is_dealer: boolean;
 }>`
-  position: absolute;
   width: 50px;
   height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  ${(props) => {
-    switch (props.$align) {
-      case "left":
-        return `
-          top: 50%;
-          left:0px;
-          flex-direction:row;
-          transform: translate(-36%, -50%);
-        `;
-      case "right":
-        return `
-          flex-direction:row-reverse;
-          top:50%;
-          right:0px;
-          transform: translate(36%, -50%);
-        `;
-      case "down":
-        return `
-          flex-direction:column-reverse;
-          bottom: 0px;
-          left:50%;
-          transform:translate(-50%,30%);
-        `;
-    }
-  }}
+  position: relative;
+
   ${(props) =>
     props.$is_dealer &&
     `
@@ -53,10 +29,8 @@ const StyledPokerPlayerSeatWrapper = styled.div<{
       font-family:${props.theme.fontFamily.lobster};
       font-size:1.5rem;
       color:${props.theme.palette.success.main};
-      bottom:${
-        props.$align == "left" || props.$align == "right" ? "80px" : "unset"
-      };
-      right:${props.$align == "down" ? "80px" : "unset"};
+      bottom:${[0, 1, 5, 6].includes(props.$seat_number) ? "80px" : "unset"};
+      right:${[2, 3, 4].includes(props.$seat_number) ? "80px" : "unset"};
     }
   `}
 `;
@@ -68,7 +42,7 @@ const StyledPokerChipsImage = styled(Image)<{
 `;
 
 const StyledPokerPlayerWrapper = styled.div<{
-  $align: "left" | "right" | "down";
+  $seat_number: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }>`
   position: absolute;
   display: flex;
@@ -76,18 +50,22 @@ const StyledPokerPlayerWrapper = styled.div<{
   align-items: center;
   gap: 16px;
   ${(props) => {
-    switch (props.$align) {
-      case "left":
+    switch (props.$seat_number) {
+      case 0:
+      case 1:
         return `
-        transform:translateX(-100%);
+          transform:translateX(-100%);
         `;
-      case "right":
+      case 2:
+      case 3:
+      case 4:
         return `
-        transform:translateX(100%);
+          transform:translateY(90%);
         `;
-      case "down":
+      case 5:
+      case 6:
         return `
-        transform:translateY(100%);
+          transform:translateX(100%);
         `;
     }
   }}
@@ -129,7 +107,7 @@ const StyledPokerActionCtaWrapper = styled.div`
   bottom: 16px;
 `;
 const StyledBettedAmount = styled.div<{
-  $align: "left" | "right" | "down";
+  $seat_number: 0 | 1 | 2 | 3 | 4 | 5 | 6;
 }>`
   position: absolute;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
@@ -141,18 +119,22 @@ const StyledBettedAmount = styled.div<{
   white-space: nowrap;
   border-radius: 10px;
   ${(props) => {
-    switch (props.$align) {
-      case "left":
+    switch (props.$seat_number) {
+      case 0:
+      case 1:
         return `
-          left:72px;
+          transform:translateX(100%);
         `;
-      case "right":
+      case 2:
+      case 3:
+      case 4:
         return `
-          right:72px;
+          transform:translateY(-200%);
         `;
-      case "down":
+      case 5:
+      case 6:
         return `
-          bottom:72px;
+          transform:translateX(-100%);
         `;
     }
   }}

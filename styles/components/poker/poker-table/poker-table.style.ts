@@ -13,6 +13,38 @@ const StyledPokerVectorWrapper = styled.div`
   position: absolute;
   top: 0px;
 `;
+const StyledLeftPlayerWrapper = styled.div`
+  width: 200px;
+  height: 100%;
+  position: absolute;
+  transform: translateX(-46%);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-evenly;
+  align-items:center;
+`;
+const StyledRightPlayerWrapper = styled.div`
+  width: 200px;
+  height: 100%;
+  position: absolute;
+  right:0px;
+  transform: translateX(46%);
+  display:flex;
+  flex-direction:column-reverse;
+  justify-content:space-evenly;
+  align-items:center;
+`
+
+const StyledBottomPlayerWrapper = styled.div`
+  width:100%;
+  height:200px;
+  position:absolute;
+  bottom:0px;
+  transform:translateY(45%);
+  display:flex;
+  justify-content:space-evenly;
+  align-items:center;
+`
 
 const StyledTableDealerProfile = styled.div`
   width: 150px;
@@ -62,6 +94,9 @@ const StyledPokerChipsImage = styled(Image)``;
 export {
   StyledPokerTableWrapper,
   StyledPokerVectorWrapper,
+  StyledLeftPlayerWrapper,
+  StyledRightPlayerWrapper,
+  StyledBottomPlayerWrapper,
   StyledTableDealerProfile,
   StyledTableDealerProfileImage,
   StyledTableCardWrapper,

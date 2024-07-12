@@ -1,7 +1,7 @@
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
 
 // styled components
 import {
@@ -29,13 +29,13 @@ import { dealer_id, bettor_id } from "@/store/slice/poker/poker.slice";
 import { useAppSelector } from "@/hooks/redux.hook";
 
 const PokerPlayerSeat: FC<{
-  align: "left" | "right" | "down";
+  seat_number: ISeatType;
   show_action_cta?: boolean;
   poker_player: IPokerPlayer | undefined;
   show_poker_slider: boolean;
   toggle_action_cta: (show: boolean) => void;
 }> = ({
-  align,
+  seat_number,
   show_action_cta = false,
   poker_player,
   show_poker_slider,
@@ -49,10 +49,10 @@ const PokerPlayerSeat: FC<{
   return (
     <>
       <StyledPokerPlayerSeatWrapper
-        $align={align}
+        $seat_number={seat_number}
         $is_dealer={poker_player?.player_id == _dealer_id}
       >
-        <StyledPokerPlayerWrapper $align={align}>
+        <StyledPokerPlayerWrapper $seat_number={seat_number}>
           {poker_player?.player_id == user_id && (
             <StyledCardContainer>
               {poker_player?.hole_cards?.map((hole_card, index) => {
@@ -94,10 +94,11 @@ const PokerPlayerSeat: FC<{
             toggle_action_cta={toggle_action_cta}
           />
         )}
+
         {!show_action_cta &&
           !show_poker_slider &&
           poker_player?.current_betted_amount && (
-            <StyledBettedAmount $align={align}>
+            <StyledBettedAmount $seat_number={seat_number}>
               $ {(poker_player?.current_betted_amount ?? 0) * 1000}
             </StyledBettedAmount>
           )}

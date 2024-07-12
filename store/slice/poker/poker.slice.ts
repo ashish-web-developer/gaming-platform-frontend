@@ -7,6 +7,7 @@ import type IPokerInitialState from "@/types/store/slice/poker/poker";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
 import type {
+  ISeatType,
   IPokerPlayer,
   ICreatePokerRoomApiRequest,
   ICreatePokerRoomApiResponse,
@@ -122,17 +123,19 @@ export const getPokerRoomInfoApi = createAsyncThunk<
         await Axios.post("/poker/poker-room-info", {
           room_id: state.game.room_id,
         });
-      if (response.data.poker_room.seat_available !== 0) {
+      if (response.data.poker_room.seat_available !== null) {
         dispatch(
           joinPokerRoomApi({
             seat_number: response.data.poker_room.seat_available,
             total_chips_left: poker_buy_in_amount,
           })
         );
+        let seat_available = ((response.data.poker_room.seat_available + 1) %
+          7) as ISeatType | null;
+        seat_available = seat_available == 0 ? null : seat_available;
         dispatch(
           updateSeatAvailableApi({
-            seat_available: ((response.data.poker_room.seat_available + 1) %
-              4) as 0 | 1 | 2 | 3,
+            seat_available,
           })
         );
       }

@@ -5,7 +5,7 @@ import type { IDeckType } from "@/types/store/slice/poker";
 type IActiveGamingUser = IUsersWithConversation & {
   buy_in_amount?: number;
 };
-type ISeatType = 1 | 2 | 3;
+type ISeatType = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
 type IPokerPlayer = {
   id: number;
@@ -18,6 +18,7 @@ type IPokerPlayer = {
   current_betted_amount: number | null;
   total_chips_left: number;
   user: IUsersWithConversation;
+  seat_index?: ISeatType;
   created_at: string;
   updated_at: string;
 };
@@ -38,7 +39,7 @@ type IPokerRoom = {
   room_id: string;
   small_blind: number;
   chips_in_pot: number;
-  seat_available: 0 | 1 | 2 | 3;
+  seat_available: ISeatType | null;
   no_of_players_betted: number;
   min_amount_to_be_betted: number;
   community_cards: IDeckType;
@@ -73,7 +74,7 @@ type IGetPokerResponseInfoRequest = {
  * ==== JOIN POKER ROOM API =====
  */
 type IJoinPokerRoomApiRequest = {
-  seat_number: 1 | 2 | 3;
+  seat_number: ISeatType;
   total_chips_left: number;
 };
 
@@ -82,7 +83,7 @@ type IJoinPokerRoomApiResponse = IBaseResponse & {
   player_id: number;
   is_active: boolean;
   active_type: "check" | "call" | "raise" | "fold" | null;
-  seat_number: 1 | 2 | 3;
+  seat_number: ISeatType;
   total_chips_left: number;
 };
 
@@ -90,7 +91,7 @@ type IJoinPokerRoomApiResponse = IBaseResponse & {
  * ==== UPDATE SEAT AVAILABLE API =====
  */
 type IUpdateSeatAvailableRequest = {
-  seat_available: 0 | 1 | 2 | 3;
+  seat_available: ISeatType | null;
 };
 type IUpdateSeatAvailableResponse = IBaseResponse & {
   poker_room: IPokerRoom;
@@ -105,6 +106,7 @@ type ITriggerActionApiRequest = {
 };
 
 export {
+  ISeatType,
   IPokerPlayer,
   IPokerRoom,
   ICreatePokerRoomApiResponse,

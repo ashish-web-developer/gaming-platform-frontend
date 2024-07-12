@@ -39,7 +39,7 @@ const PokerContainer: FC = () => {
   const timeout_ref = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (no_of_players_playing == 3 && user_id == _dealer_id) {
+    if (no_of_players_playing == 7 && user_id == _dealer_id) {
       timeout_ref.current = setTimeout(() => {
         dispatch(dealHandApi());
       }, 2000);
