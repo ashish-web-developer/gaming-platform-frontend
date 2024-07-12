@@ -34,6 +34,4 @@ const getCardRankInWord = (rank: ICardRank) => {
   }
 };
 
-
-
-export { getCardRankInWord};
+export { getCardRankInWord };
