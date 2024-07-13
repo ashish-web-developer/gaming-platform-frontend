@@ -34,11 +34,13 @@ const PokerPlayerSeat: FC<{
   poker_player: IPokerPlayer | undefined;
   show_poker_slider: boolean;
   toggle_action_cta: (show: boolean) => void;
+  show_current_betted_amount?: boolean;
 }> = ({
   seat_number,
   show_action_cta = false,
   poker_player,
   show_poker_slider,
+  show_current_betted_amount = true,
   toggle_action_cta,
 }) => {
   const { id: user_id } = useAppSelector(user);
@@ -95,7 +97,8 @@ const PokerPlayerSeat: FC<{
           />
         )}
 
-        {!show_action_cta &&
+        {show_current_betted_amount &&
+          !show_action_cta &&
           !show_poker_slider &&
           poker_player?.current_betted_amount && (
             <StyledBettedAmount $seat_number={seat_number}>

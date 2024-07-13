@@ -3,8 +3,8 @@ import styled from "styled-components";
 import type { ICardRank } from "@/types/store/slice/poker";
 
 const StyledPokerCardWrapper = styled.div`
-  width: 60px;
-  height: 90px;
+  width: 64px;
+  height: 96px;
   border: 2px solid ${({ theme }) => theme.palette.secondary.main};
   border-radius: 6px;
   background: #000;
@@ -63,11 +63,11 @@ const StyledCardTypeWrapper = styled.div<{
   display: flex;
   flex-direction: ${(props) => props.$flex_direction};
   align-items: center;
-  gap: 2px;
+  gap: 0px;
 `;
 const StyledCard = styled.span`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 0.625rem;
+  font-size: 0.75rem;
   color: ${({ theme }) => theme.palette.secondary.main};
 `;
 const StyledCardName = styled.span`

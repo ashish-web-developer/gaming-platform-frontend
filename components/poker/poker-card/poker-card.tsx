@@ -30,23 +30,23 @@ const PokerCard: FC<{
   return (
     <StyledPokerCardWrapper>
       <StyledPokerContentContainer $rank={rank}>
-        <StyledCardTypeWrapper $left="6px" $top="6px" $flex_direction="column">
+        <StyledCardTypeWrapper $left="4px" $top="4px" $flex_direction="column">
           <StyledCard>{rank}</StyledCard>
           <PokerSuit
             suit={suit}
-            fill={theme.palette.primary.main}
+            fill={theme.palette.secondary.main}
             stroke_color={theme.palette.secondary.main}
           />
         </StyledCardTypeWrapper>
         <StyledCardTypeWrapper
-          $right="6px"
-          $bottom="6px"
+          $right="4px"
+          $bottom="4px"
           $flex_direction="column-reverse"
         >
           <StyledCard>{rank}</StyledCard>
           <PokerSuit
             suit={suit}
-            fill={theme.palette.primary.main}
+            fill={theme.palette.secondary.main}
             stroke_color={theme.palette.secondary.main}
           />
         </StyledCardTypeWrapper>

@@ -67,8 +67,8 @@ const StyledTableCardWrapper = styled.div`
 `;
 
 const StyledBorderedCard = styled.div`
-  width: 60px;
-  height: 90px;
+  width: 62px;
+  height: 94px;
   border: 2px dashed ${({ theme }) => theme.palette.secondary.main};
   border-radius: 6px;
   background: transparent;

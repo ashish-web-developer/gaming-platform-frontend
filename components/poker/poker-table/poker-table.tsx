@@ -140,6 +140,7 @@ const PokerTable: FC = () => {
                     : false
                 }
                 toggle_action_cta={(show: boolean) => set_show_action_cta(show)}
+                show_current_betted_amount={!_show_poker_slider}
                 key={`player-${player.player_id}`}
               />
             );
