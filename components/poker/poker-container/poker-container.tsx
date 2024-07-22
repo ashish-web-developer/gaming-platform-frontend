@@ -7,6 +7,10 @@ import type { FC } from "react";
 import {
   StyledPage,
   StyledContainer,
+  StyledMobileLogoWrapper,
+  StyledMobileLogo,
+  StyledGirlImageWrapper,
+  StyledGirlImage,
 } from "@/styles/components/poker/poker-container/poker-container.style";
 
 const PokerBuyInDialog = dynamic(
@@ -19,6 +23,8 @@ const PokerBuyInDialog = dynamic(
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
 import PokerTable from "@/components/poker/poker-table/poker-table";
+import PokerBuyInDrawer from "@/components/poker/poker-buy-in-dialog/mobile/poker-buy-in-drawer";
+import MobilePokerTable from "@/components/poker/poker-table/mobile/mobile-poker-table";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -30,8 +36,12 @@ import {
 } from "@/store/slice/poker/poker.slice";
 import { user } from "@/store/slice/user.slice";
 
+// hooks
+import { useIsMobile } from "@/hooks/common.hook";
+
 const PokerContainer: FC = () => {
   const dispatch = useAppDispatch();
+  const is_mobile = useIsMobile();
   const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
   const { id: user_id } = useAppSelector(user);
   const _dealer_id = useAppSelector(dealer_id);
@@ -50,11 +60,35 @@ const PokerContainer: FC = () => {
   }, [no_of_players_playing, user_id, _dealer_id]);
   return (
     <StyledPage>
-      <StyledContainer>
-        <PokerHeader />
-        <PokerTable />
-        {_show_buy_in_modal && <PokerBuyInDialog />}
-      </StyledContainer>
+      {is_mobile ? (
+        <>
+          {_show_buy_in_modal ? (
+            <>
+              <PokerBuyInDrawer />
+              <StyledMobileLogoWrapper>
+                <StyledMobileLogo>
+                  Texas Hold'em <br /> Showdown
+                </StyledMobileLogo>
+                <StyledGirlImageWrapper>
+                  <StyledGirlImage
+                    alt="girl-image"
+                    fill={true}
+                    src={"/poker/girl.png"}
+                  />
+                </StyledGirlImageWrapper>
+              </StyledMobileLogoWrapper>
+            </>
+          ) : (
+            <MobilePokerTable />
+          )}
+        </>
+      ) : (
+        <StyledContainer>
+          <PokerHeader />
+          <PokerTable />
+          {_show_buy_in_modal && <PokerBuyInDialog />}
+        </StyledContainer>
+      )}
     </StyledPage>
   );
 };

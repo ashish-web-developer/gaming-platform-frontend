@@ -86,7 +86,10 @@ const PokerPlayerSeat: FC<{
         />
         {show_action_cta && (
           <StyledPokerActionCtaWrapper>
-            <PokerActionCta ref={raise_cta_ref} />
+            <PokerActionCta
+              current_betted_amount={poker_player?.current_betted_amount ?? 0}
+              ref={raise_cta_ref}
+            />
           </StyledPokerActionCtaWrapper>
         )}
         {show_poker_slider && (
