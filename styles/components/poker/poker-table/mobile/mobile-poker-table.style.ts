@@ -77,7 +77,8 @@ const StyledBottomPlayerWrapper = styled.div`
   transform: translateY(45%);
   display: flex;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: flex-start;
+  bottom: -17px;
 `;
 export {
   StyledPokerMobileTableWrapper,

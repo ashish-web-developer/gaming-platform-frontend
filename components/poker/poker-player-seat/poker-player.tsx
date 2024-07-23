@@ -16,10 +16,15 @@ const PokerPlayer: FC<{
   player: IPokerPlayer;
   is_bettor: boolean;
   is_active: boolean;
-}> = ({ player, is_bettor, is_active }) => {
+  is_dealer: boolean;
+}> = ({ player, is_bettor, is_active, is_dealer }) => {
   const avatar_url = useAvatarUrl(player.user ?? null);
   return (
-    <StyledPokerPlayerWrapper $is_bettor={is_bettor} $is_active={is_active}>
+    <StyledPokerPlayerWrapper
+      $is_dealer={is_dealer}
+      $is_bettor={is_bettor}
+      $is_active={is_active}
+    >
       <StyledPokerPlayer $is_bettor={is_bettor}>
         <StyledUserProfileImage
           fill={true}

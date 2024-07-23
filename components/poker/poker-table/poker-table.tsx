@@ -1,7 +1,7 @@
-import { useState } from "react";
 // types
-import { type FC } from "react";
-import type { ISeatType } from "@/types/store/slice/poker/poker";
+import type { FC, Dispatch, SetStateAction } from "react";
+import type { IDeckType } from "@/types/store/slice/poker";
+import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
 // styled components
 import {
   StyledPokerTableWrapper,
@@ -17,84 +17,46 @@ import {
   StyledBorderedCard,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
+// hoc
+import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
+
 // local components
 import PokerTableVector from "@/components/poker/poker-table/poker-table-vector";
 import PokerPlayerSeat from "@/components/poker/poker-player-seat/poker-player-seat";
 import PokerCard from "@/components/poker/poker-card/poker-card";
 
-// redux
-import { useAppSelector } from "@/hooks/redux.hook";
-import {
-  bettor_id,
-  active_poker_players,
-  chips_in_pot,
-  show_poker_slider,
-  community_cards,
-} from "@/store/slice/poker/poker.slice";
-import { user } from "@/store/slice/user.slice";
 // hooks
 import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
 
-const PokerTable: FC = () => {
-  let _active_poker_players = useAppSelector(active_poker_players);
-  /**
-   * Sorting array in descending order on the
-   * on the basis of seat number
-   */
-  _active_poker_players = [..._active_poker_players].sort(
-    (a, b) => b.seat_number - a.seat_number
-  );
-  const { id: user_id } = useAppSelector(user);
-
-  const auth_player_index = _active_poker_players.findIndex(
-    (player) => player.player_id == user_id
-  );
-
-  /**
-   * rotating array such that
-   * seat index of auth player
-   * be at 3 index
-   */
-  _active_poker_players = _active_poker_players
-    .slice(-(3 - auth_player_index))
-    .concat(_active_poker_players.slice(0, -(3 - auth_player_index)))
-    .map((player, index) => {
-      return {
-        ...player,
-        seat_index: index as ISeatType,
-      };
-    });
-
-  /**
-   * Deciding what to be kept on left, right and bottom
-   * of the table on the basis of seat_index
-   */
-  const left_poker_players = _active_poker_players.filter((player) =>
-    [0, 1].includes(player.seat_index as number)
-  );
-  const bottom_poker_players = _active_poker_players.filter((player) =>
-    [2, 3, 4].includes(player.seat_index as number)
-  );
-  const right_poker_players = _active_poker_players.filter((player) =>
-    [5, 6].includes(player.seat_index as number)
-  );
-  const _community_cards = useAppSelector(community_cards);
-  const no_of_community_cards = _community_cards?.length ?? 0;
-  const _chips_in_pot = useAppSelector(chips_in_pot);
-  const total_chips_betted = _active_poker_players.reduce(
-    (accumulator, player) => {
-      if (player.current_betted_amount) {
-        return accumulator + player.current_betted_amount;
-      }
-      return accumulator;
-    },
-    0
-  );
+type IProps = {
+  left_poker_players: IPokerPlayer[];
+  right_poker_players: IPokerPlayer[];
+  bottom_poker_players: IPokerPlayer[];
+  community_cards: IDeckType | null;
+  chips_in_pot: number;
+  total_chips_betted: number;
+  show_poker_slider: boolean;
+  bettor_id: number | null;
+  show_action_cta: boolean;
+  set_show_action_cta: Dispatch<SetStateAction<boolean>>;
+  no_of_community_cards: number;
+  user_id: number | null;
+};
+const PokerTable: FC<IProps> = ({
+  left_poker_players,
+  right_poker_players,
+  bottom_poker_players,
+  community_cards,
+  chips_in_pot,
+  total_chips_betted,
+  show_poker_slider,
+  bettor_id,
+  show_action_cta,
+  set_show_action_cta,
+  no_of_community_cards,
+  user_id,
+}) => {
   const height = usePokerTableHeight();
-  const _bettor_id = useAppSelector(bettor_id);
-  const _show_poker_slider = useAppSelector(show_poker_slider);
-  const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
-
   return (
     <StyledPokerTableWrapper>
       <StyledTableDealerProfile>
@@ -127,20 +89,20 @@ const PokerTable: FC = () => {
                 poker_player={player}
                 show_action_cta={
                   show_action_cta &&
-                  _bettor_id == user_id &&
-                  _bettor_id == player.player_id
+                  bettor_id == user_id &&
+                  bettor_id == player.player_id
                     ? true
                     : false
                 }
                 show_poker_slider={
-                  _show_poker_slider &&
-                  _bettor_id == user_id &&
-                  _bettor_id == player.player_id
+                  show_poker_slider &&
+                  bettor_id == user_id &&
+                  bettor_id == player.player_id
                     ? true
                     : false
                 }
                 toggle_action_cta={(show: boolean) => set_show_action_cta(show)}
-                show_current_betted_amount={!_show_poker_slider}
+                show_current_betted_amount={!show_poker_slider}
                 key={`player-${player.player_id}`}
               />
             );
@@ -163,7 +125,7 @@ const PokerTable: FC = () => {
         <PokerTableVector width={900} height={height} />
       </StyledPokerVectorWrapper>
 
-      {(Boolean(_chips_in_pot) || Boolean(total_chips_betted)) && (
+      {(Boolean(chips_in_pot) || Boolean(total_chips_betted)) && (
         <StyledChipsInPotWrapper>
           <StyledPokerChipsImage
             src={"/poker/poker-player/poker-chip.png"}
@@ -173,13 +135,13 @@ const PokerTable: FC = () => {
           />
           ${" "}
           {(
-            (_chips_in_pot == 0 ? total_chips_betted : _chips_in_pot) * 1000
+            (chips_in_pot == 0 ? total_chips_betted : chips_in_pot) * 1000
           ).toFixed(2)}
         </StyledChipsInPotWrapper>
       )}
       <StyledTableCardWrapper>
         {[
-          ...(_community_cards ? [..._community_cards] : []),
+          ...(community_cards ? [...community_cards] : []),
           ...new Array(5 - no_of_community_cards).fill(null),
         ]?.map((card, index) => {
           if (card) {
@@ -198,4 +160,4 @@ const PokerTable: FC = () => {
   );
 };
 
-export default PokerTable;
+export default withPokerTableFunctionality(PokerTable, false);

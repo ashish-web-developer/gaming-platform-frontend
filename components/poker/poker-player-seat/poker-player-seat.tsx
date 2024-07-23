@@ -73,6 +73,7 @@ const PokerPlayerSeat: FC<{
             player={poker_player as IPokerPlayer}
             is_bettor={is_bettor}
             is_active={Boolean(poker_player)}
+            is_dealer={poker_player?.player_id == _dealer_id}
           />
           <StyledPokerPlayerBuyInAmount>
             $ {((poker_player?.total_chips_left ?? 0) * 1000).toFixed(2)}
