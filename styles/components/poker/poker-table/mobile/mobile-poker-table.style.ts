@@ -34,16 +34,16 @@ const StyledChipsInPotWrapper = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 0.875rem;
   color: #fff;
-  padding: 6px 16px;
+  padding: 4px 12px;
   border-radius: 25px;
   border: 2px solid ${({ theme }) => theme.palette.secondary.main};
   background: rgba(245, 213, 71, 0.2);
   left: 50%;
-  top: 80px;
+  top: 70px;
   transform: translate(-50%);
 `;
 
@@ -82,6 +82,23 @@ const StyledBottomPlayerWrapper = styled.div`
   align-items: flex-start;
   bottom: -17px;
 `;
+
+const StyledTableCardWrapper = styled.div`
+  position: absolute;
+  top: 190px;
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+`;
+
+const StyledBorderedCard = styled.div`
+  width: 40px;
+  height: 60px;
+  border: 1.5px dashed ${({ theme }) => theme.palette.secondary.main};
+  border-radius: 4px;
+  background: transparent;
+`;
 export {
   StyledPokerMobileTableWrapper,
   StyledPokerTableWrapper,
@@ -92,4 +109,6 @@ export {
   StyledLeftPlayerWrapper,
   StyledRightPlayerWrapper,
   StyledBottomPlayerWrapper,
+  StyledTableCardWrapper,
+  StyledBorderedCard,
 };

@@ -9,6 +9,7 @@ import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functional
 import MobilePokerTableVector from "@/components/poker/poker-table/mobile/mobile-poker-table-vector";
 import MobilePokerPlayerSeat from "@/components/poker/poker-player-seat/mobile/mobile-poker-player-seat";
 import MobilePokerActionCta from "@/components/poker/poker-player-seat/mobile/mobile-poker-action-cta";
+import MobilePokerCard from "@/components/poker/poker-card/mobile/mobile-poker-card";
 
 // styled components
 import {
@@ -21,6 +22,8 @@ import {
   StyledLeftPlayerWrapper,
   StyledRightPlayerWrapper,
   StyledBottomPlayerWrapper,
+  StyledTableCardWrapper,
+  StyledBorderedCard,
 } from "@/styles/components/poker/poker-table/mobile/mobile-poker-table.style";
 
 type IProps = {
@@ -95,16 +98,36 @@ const MobilePokerTable: FC<IProps> = ({
             fill={true}
           />
         </StyledTableDealerProfile>
-        <StyledChipsInPotWrapper>
-          <StyledPokerChipsImage
-            src={"/poker/poker-player/poker-chip.png"}
-            alt="chip"
-            width={15}
-            height={15}
-          />
-          800k
-        </StyledChipsInPotWrapper>
+
+        {(Boolean(chips_in_pot) || Boolean(total_chips_betted)) && (
+          <StyledChipsInPotWrapper>
+            <StyledPokerChipsImage
+              src={"/poker/poker-player/poker-chip.png"}
+              alt="chip"
+              width={15}
+              height={15}
+            />
+            $ {chips_in_pot == 0 ? total_chips_betted : chips_in_pot}K
+          </StyledChipsInPotWrapper>
+        )}
         <MobilePokerTableVector />
+        <StyledTableCardWrapper>
+          {[
+            ...(community_cards ? [...community_cards] : []),
+            ...new Array(5 - no_of_community_cards).fill(null),
+          ]?.map((card, index) => {
+            if (card) {
+              return (
+                <MobilePokerCard
+                  key={`card-${index}`}
+                  suit={card.suit}
+                  rank={card.rank}
+                />
+              );
+            }
+            return <StyledBorderedCard key={`bordered-card-${index}`} />;
+          })}
+        </StyledTableCardWrapper>
       </StyledPokerTableWrapper>
       <MobilePokerActionCta />
     </StyledPokerMobileTableWrapper>

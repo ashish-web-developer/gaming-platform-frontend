@@ -73,8 +73,8 @@ const StyledPokerPlayer = styled.div<{
   background: ${({ theme }) => theme.palette.primary.main};
   border-radius: 50%;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 55px;
-    height: 55px;
+    width: ${(props) => (props.$is_bettor ? "50px" : "52px")};
+    height: ${(props) => (props.$is_bettor ? "50px" : "52px")};
   }
 `;
 

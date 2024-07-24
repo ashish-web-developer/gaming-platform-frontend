@@ -36,6 +36,7 @@ const PokerCard: FC<{
             suit={suit}
             fill={theme.palette.secondary.main}
             stroke_color={theme.palette.secondary.main}
+            is_mobile={false}
           />
         </StyledCardTypeWrapper>
         <StyledCardTypeWrapper
@@ -48,6 +49,7 @@ const PokerCard: FC<{
             suit={suit}
             fill={theme.palette.secondary.main}
             stroke_color={theme.palette.secondary.main}
+            is_mobile={false}
           />
         </StyledCardTypeWrapper>
         {rank !== "K" && rank !== "Q" && rank !== "J" && (
