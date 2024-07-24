@@ -1,10 +1,51 @@
 import styled from "styled-components";
+// types
+import type { ISeatType } from "@/types/store/slice/poker/poker";
 
-const StyledPokerPlayerSeatWrapper = styled.div`
+const StyledPokerPlayerSeatWrapper = styled.div<{
+  $seat_number: ISeatType;
+  $betted_amount: number;
+}>`
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  position: relative;
+  &::after {
+    content: "${(props) =>
+      props.$betted_amount !== 0 ? `$ ${props.$betted_amount}K` : ""}";
+    position: absolute;
+    display: ${(props) => (props.$betted_amount ? "inline-block" : "none")};
+    background: ${({ theme }) => theme.palette.primary.main};
+    border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+    font-family: ${({ theme }) => theme.fontFamily.lobster};
+    font-size: 12px;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 16px;
+    ${(props) => {
+      switch (props.$seat_number) {
+        case 0:
+        case 1:
+        case 2:
+          return `
+            top: 20px;
+            right: -50px;
+          `;
+        case 3:
+          return `
+            top:-40px;
+          `;
+        case 4:
+        case 5:
+        case 6:
+          return `
+            top: 20px;
+            left:-50px;
+          `;
+      }
+    }}
+  }
 `;
 
 const StyledPokerPlayerBuyInAmount = styled.span`

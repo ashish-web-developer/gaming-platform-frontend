@@ -8,6 +8,7 @@ import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functional
 // local components
 import MobilePokerTableVector from "@/components/poker/poker-table/mobile/mobile-poker-table-vector";
 import MobilePokerPlayerSeat from "@/components/poker/poker-player-seat/mobile/mobile-poker-player-seat";
+import MobilePokerActionCta from "@/components/poker/poker-player-seat/mobile/mobile-poker-action-cta";
 
 // styled components
 import {
@@ -51,7 +52,6 @@ const MobilePokerTable: FC<IProps> = ({
   no_of_community_cards,
   user_id,
 }) => {
-  console.log(left_poker_players);
   return (
     <StyledPokerMobileTableWrapper>
       <StyledPokerTableWrapper>
@@ -106,6 +106,7 @@ const MobilePokerTable: FC<IProps> = ({
         </StyledChipsInPotWrapper>
         <MobilePokerTableVector />
       </StyledPokerTableWrapper>
+      <MobilePokerActionCta />
     </StyledPokerMobileTableWrapper>
   );
 };

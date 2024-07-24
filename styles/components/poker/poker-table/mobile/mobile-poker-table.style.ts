@@ -5,6 +5,8 @@ const StyledPokerMobileTableWrapper = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const StyledPokerTableWrapper = styled.div`

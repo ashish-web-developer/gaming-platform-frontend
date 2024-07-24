@@ -1,8 +1,11 @@
 import Image from "next/image";
 import styled from "styled-components";
 
+// types
+import type { ISeatType } from "@/types/store/slice/poker/poker";
+
 const StyledPokerPlayerSeatWrapper = styled.div<{
-  $seat_number: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  $seat_number: ISeatType;
   $is_dealer: boolean;
 }>`
   width: 50px;
@@ -42,7 +45,7 @@ const StyledPokerChipsImage = styled(Image)<{
 `;
 
 const StyledPokerPlayerWrapper = styled.div<{
-  $seat_number: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  $seat_number: ISeatType;
 }>`
   position: absolute;
   display: flex;
@@ -107,7 +110,7 @@ const StyledPokerActionCtaWrapper = styled.div`
   bottom: 16px;
 `;
 const StyledBettedAmount = styled.div<{
-  $seat_number: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  $seat_number: ISeatType;
 }>`
   position: absolute;
   font-family: ${({ theme }) => theme.fontFamily.lobster};

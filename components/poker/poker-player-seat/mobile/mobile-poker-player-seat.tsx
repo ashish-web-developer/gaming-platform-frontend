@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
 
 // styled components
 import {
@@ -23,7 +23,10 @@ const MobilePokerPlayerSeat: FC<IProps> = ({ poker_player, is_active }) => {
   const _dealer_id = useAppSelector(dealer_id);
   const is_bettor = poker_player?.player_id == _bettor_id;
   return (
-    <StyledPokerPlayerSeatWrapper>
+    <StyledPokerPlayerSeatWrapper
+      $seat_number={poker_player.seat_index as ISeatType}
+      $betted_amount={poker_player?.current_betted_amount ?? 0}
+    >
       <PokerPlayer
         player={poker_player}
         is_bettor={is_bettor}
@@ -31,7 +34,7 @@ const MobilePokerPlayerSeat: FC<IProps> = ({ poker_player, is_active }) => {
         is_dealer={poker_player?.player_id == _dealer_id}
       />
       <StyledPokerPlayerBuyInAmount>
-        $ {((poker_player?.total_chips_left ?? 0)).toFixed(2)} K
+        $ {(poker_player?.total_chips_left ?? 0).toFixed(2)} K
       </StyledPokerPlayerBuyInAmount>
     </StyledPokerPlayerSeatWrapper>
   );

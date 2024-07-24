@@ -10,6 +10,7 @@ const StyledPage = styled.div`
   justify-content: center;
   user-select: none;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    display: block;
     background: url("/poker/mobile-background.jpg");
     background-size: cover;
   }
