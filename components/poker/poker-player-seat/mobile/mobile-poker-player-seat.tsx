@@ -5,13 +5,17 @@ import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
 import {
   StyledPokerPlayerSeatWrapper,
   StyledPokerPlayerBuyInAmount,
+  StyledCardContainer,
+  StyledCardWrapper,
 } from "@/styles/components/poker/poker-player-seat/mobile/mobile-poker-player-seat.style";
 
 // local components
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
+import MobilePokerCard from "@/components/poker/poker-card/mobile/mobile-poker-card";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
+import { user } from "@/store/slice/user.slice";
 import { bettor_id, dealer_id } from "@/store/slice/poker/poker.slice";
 
 type IProps = {
@@ -19,6 +23,7 @@ type IProps = {
   is_active: boolean;
 };
 const MobilePokerPlayerSeat: FC<IProps> = ({ poker_player, is_active }) => {
+  const { id: user_id } = useAppSelector(user);
   const _bettor_id = useAppSelector(bettor_id);
   const _dealer_id = useAppSelector(dealer_id);
   const is_bettor = poker_player?.player_id == _bettor_id;
@@ -27,6 +32,20 @@ const MobilePokerPlayerSeat: FC<IProps> = ({ poker_player, is_active }) => {
       $seat_number={poker_player.seat_index as ISeatType}
       $betted_amount={poker_player?.current_betted_amount ?? 0}
     >
+      {poker_player?.player_id == user_id && (
+        <StyledCardContainer>
+          {poker_player?.hole_cards?.map((hole_card, index) => {
+            return (
+              <StyledCardWrapper
+                key={`card-${index}`}
+                $rotate={index == 0 ? "-10deg" : "10deg"}
+              >
+                <MobilePokerCard suit={hole_card.suit} rank={hole_card.rank} />;
+              </StyledCardWrapper>
+            );
+          })}
+        </StyledCardContainer>
+      )}
       <PokerPlayer
         player={poker_player}
         is_bettor={is_bettor}

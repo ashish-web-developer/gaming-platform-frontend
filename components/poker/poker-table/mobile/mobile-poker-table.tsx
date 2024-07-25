@@ -129,7 +129,7 @@ const MobilePokerTable: FC<IProps> = ({
           })}
         </StyledTableCardWrapper>
       </StyledPokerTableWrapper>
-      <MobilePokerActionCta />
+      {user_id == bettor_id && <MobilePokerActionCta />}
     </StyledPokerMobileTableWrapper>
   );
 };

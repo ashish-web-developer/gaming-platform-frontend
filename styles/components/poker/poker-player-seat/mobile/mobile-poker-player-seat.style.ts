@@ -61,4 +61,27 @@ const StyledPokerPlayerBuyInAmount = styled.span`
   background: ${({ theme }) => theme.palette.primary.light};
 `;
 
-export { StyledPokerPlayerSeatWrapper, StyledPokerPlayerBuyInAmount };
+const StyledCardContainer = styled.div`
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  transform: rotate(25deg);
+  right: -10px;
+  bottom: 4px;
+`;
+
+const StyledCardWrapper = styled.div<{
+  $rotate: string;
+}>`
+  transform: rotate(${(props) => props.$rotate});
+  margin-right: -16px;
+  &:last-child {
+    margin-right: 0px;
+  }
+`;
+export {
+  StyledPokerPlayerSeatWrapper,
+  StyledPokerPlayerBuyInAmount,
+  StyledCardContainer,
+  StyledCardWrapper,
+};
