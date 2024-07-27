@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
-const StyledSliderWrapper = styled.div`
+const StyledContainer = styled.div`
   position: absolute;
   top: -60px;
   display: flex;
 `;
 
-const StyledSliderContainer = styled.div`
+const StyledRangeSliderWrapper = styled.div`
   width: 500px;
   height: 50px;
   border-radius: 30px 0px 0px 30px;
@@ -14,8 +14,26 @@ const StyledSliderContainer = styled.div`
   border-right-width: 0px;
   background: rgba(245, 213, 71, 0.2);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+`;
+
+const StyledRangeSlider = styled.div`
+  width: 450px;
+  & > .slider > .rangeslider {
+    & > .rangeslider__fill {
+      background: ${({ theme }) => theme.palette.secondary.main};
+    }
+    & > .rangeslider__handle {
+      width: 25px;
+      height: 25px;
+      border: 2px solid ${({ theme }) => theme.palette.primary.main};
+      background: #fff;
+      &::after {
+        display: none;
+      }
+    }
+  }
 `;
 
 const StyledSliderConfirmCta = styled.button`
@@ -30,9 +48,11 @@ const StyledSliderConfirmCta = styled.button`
   cursor: pointer;
 `;
 
-const StyledRangeSliderValue = styled.span`
+const StyledRangeSliderValue = styled.span<{
+  $left: number;
+}>`
   position: absolute;
-  left: 0px;
+  left: ${(props) => props.$left}px;
   top: -50px;
   display: inline-block;
   padding: 6px 16px;
@@ -44,56 +64,10 @@ const StyledRangeSliderValue = styled.span`
   white-space: nowrap;
 `;
 
-const StyledRangeSliderInput = styled.input.attrs({
-  type: "range",
-})`
-  --track-height: 16px;
-  --thumb-size: 25px;
-  position: relative;
-  z-index: 3;
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
-  cursor: pointer;
-  width: 450px;
-  &::-webkit-slider-runnable-track {
-    background: ${({ theme }) => theme.palette.secondary.main};
-    border: 2px solid ${({ theme }) => theme.palette.primary.main};
-    border-radius: 10px;
-    height: var(--track-height);
-  }
-  &::-moz-range-track {
-    background: ${({ theme }) => theme.palette.secondary.main};
-    border: 2px solid ${({ theme }) => theme.palette.primary.main};
-    border-radius: 10px;
-    height: var(--track-height);
-  }
-  &::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
-    appearance: none;
-    width: var(--thumb-size);
-    height: var(--thumb-size);
-    background: #fff;
-    border: 2px solid ${({ theme }) => theme.palette.primary.main};
-    border-radius: 50%;
-    margin-top: -6px;
-  }
-  &::-moz-range-thumb {
-    -webkit-appearance: none; /* Override default look */
-    appearance: none;
-    width: var(--thumb-size);
-    height: var(--thumb-size);
-    background: #fff;
-    border: 2px solid ${({ theme }) => theme.palette.primary.main};
-    border-radius: 50%;
-    margin-top: -6px;
-  }
-`;
-
 export {
-  StyledSliderWrapper,
-  StyledSliderContainer,
+  StyledContainer,
+  StyledRangeSliderWrapper,
+  StyledRangeSlider,
   StyledSliderConfirmCta,
-  StyledRangeSliderInput,
   StyledRangeSliderValue,
 };

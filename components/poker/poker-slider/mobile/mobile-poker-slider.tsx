@@ -1,6 +1,6 @@
+import { useState, useRef, forwardRef, useEffect } from "react";
 // types
-import type { FC } from "react";
-import { useState, useEffect, useRef } from "react";
+import type { ForwardRefRenderFunction } from "react";
 
 // styled components
 import {
@@ -25,19 +25,42 @@ import {
 
 type IProps = {
   total_chips_count: number;
+  toggle_action_cta: (show: boolean) => void;
 };
 
-const MobilePokerSlider: FC<IProps> = ({ total_chips_count }) => {
+const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
+  { total_chips_count, toggle_action_cta },
+  raise_cta_ref
+) => {
   const dispatch = useAppDispatch();
   const _small_blind = useAppSelector(small_blind);
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
-  const thumb_right_position = useRef<number>(0);
+  const [thumb_left_position, set_thumb_left_position] = useState(0);
   const [slider_val, set_slider_val] = useState(
     _min_amount_to_be_betted as number
   );
   const [show_confirm_tooltip, set_show_confirm_tooltip] =
     useState<boolean>(false);
+  const slider_container_ref = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    toggle_action_cta(false);
+    const handle_outside_click = (event: MouseEvent) => {
+      if (
+        raise_cta_ref &&
+        typeof raise_cta_ref !== "function" &&
+        !raise_cta_ref.current?.contains(event.target as Node) &&
+        !slider_container_ref.current?.contains(event.target as Node)
+      ) {
+        dispatch(updateShowPokerSlider(false));
+        toggle_action_cta(true);
+      }
+    };
+    document.addEventListener("click", handle_outside_click);
+    return () => {
+      document.removeEventListener("click", handle_outside_click);
+    };
+  }, []);
   return (
     <>
       <StyledRangeSliderWrapper>
@@ -52,12 +75,12 @@ const MobilePokerSlider: FC<IProps> = ({ total_chips_count }) => {
                 })
               );
             }}
-            $left={thumb_right_position.current}
+            $left={thumb_left_position}
           >
             Confirm
           </StyledConfirmCta>
         )}
-        <div className="slider custom-labels">
+        <div ref={slider_container_ref} className="slider custom-labels">
           <Slider
             min={_min_amount_to_be_betted as number}
             max={total_chips_count}
@@ -75,8 +98,15 @@ const MobilePokerSlider: FC<IProps> = ({ total_chips_count }) => {
               const slider_thumb_element = document.getElementsByClassName(
                 "rangeslider__handle"
               )[0];
-              const { left } = slider_thumb_element.getBoundingClientRect();
-              thumb_right_position.current = left;
+              const { left: thumb_left_position } =
+                slider_thumb_element.getBoundingClientRect();
+              if (slider_container_ref.current) {
+                const { left: slider_left_position } =
+                  slider_container_ref.current.getBoundingClientRect();
+                set_thumb_left_position(
+                  thumb_left_position - (slider_left_position - 50)
+                );
+              }
             }}
             tooltip={false}
           />
@@ -86,4 +116,4 @@ const MobilePokerSlider: FC<IProps> = ({ total_chips_count }) => {
   );
 };
 
-export default MobilePokerSlider;
+export default forwardRef(MobilePokerSlider);

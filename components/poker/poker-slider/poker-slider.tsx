@@ -1,15 +1,21 @@
-import { useState, useRef, useEffect, forwardRef } from "react";
+import { useState, useRef, forwardRef, useEffect } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 
 // styled components
 import {
-  StyledSliderWrapper,
-  StyledSliderContainer,
+  StyledContainer,
+  StyledRangeSliderWrapper,
+  StyledRangeSlider,
   StyledSliderConfirmCta,
-  StyledRangeSliderInput,
   StyledRangeSliderValue,
 } from "@/public/poker/poker-slider/poker-slider.style";
+
+// external components
+import Slider from "react-rangeslider";
+
+// external css
+import "react-rangeslider/lib/index.css";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -20,9 +26,6 @@ import {
   triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
 
-// hooks
-import { useIsMounted } from "@/hooks/common.hook";
-
 const PokerSlider: ForwardRefRenderFunction<
   HTMLDivElement,
   {
@@ -31,63 +34,67 @@ const PokerSlider: ForwardRefRenderFunction<
   }
 > = ({ total_chips_count, toggle_action_cta }, raise_cta_ref) => {
   const dispatch = useAppDispatch();
-  const is_mounted = useIsMounted();
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
-  const [slider_val, set_slider_val] = useState<number>(0);
+  const [slider_val, set_slider_val] = useState<number>(
+    _min_amount_to_be_betted as number
+  );
+  const [thumb_left_position, set_thumb_left_position] = useState(0);
   const _small_blind = useAppSelector(small_blind);
+  const slider_container_ref = useRef<HTMLDivElement>(null);
   const slider_wrapper_ref = useRef<HTMLDivElement>(null);
-  const slider_val_ref = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    set_slider_val(_min_amount_to_be_betted as number);
-  }, [_min_amount_to_be_betted]);
-  useEffect(() => {
-    const outsideClickHandler = (event: MouseEvent) => {
+    toggle_action_cta(false);
+    const handle_outside_click = (event: MouseEvent) => {
       if (
         raise_cta_ref &&
         typeof raise_cta_ref !== "function" &&
         !raise_cta_ref.current?.contains(event.target as Node) &&
-        !slider_wrapper_ref.current?.contains(event.target as Node)
+        !slider_container_ref.current?.contains(event.target as Node)
       ) {
         dispatch(updateShowPokerSlider(false));
         toggle_action_cta(true);
       }
     };
-    document.addEventListener("click", outsideClickHandler);
+    document.addEventListener("click", handle_outside_click);
     return () => {
-      document.removeEventListener("click", outsideClickHandler);
+      document.removeEventListener("click", handle_outside_click);
     };
   }, []);
 
-  useEffect(() => {
-    toggle_action_cta(false);
-  }, [is_mounted]);
   return (
-    <StyledSliderWrapper ref={slider_wrapper_ref}>
-      <StyledSliderContainer>
-        <StyledRangeSliderValue ref={slider_val_ref}>
-          $ {slider_val}k
-        </StyledRangeSliderValue>
-        <StyledRangeSliderInput
-          type="range"
-          min={_min_amount_to_be_betted as number}
-          max={total_chips_count}
-          step={_small_blind * 2}
-          value={slider_val}
-          onInput={(event) => {
-            const range_input_element = event.target as HTMLInputElement;
-            const value = Number(range_input_element.value);
-            set_slider_val(value);
-            if (slider_val_ref.current && _min_amount_to_be_betted) {
-              const bubble_width = slider_val_ref.current.offsetWidth;
-              slider_val_ref.current.style.left = `${
-                (value / total_chips_count) * range_input_element.offsetWidth -
-                bubble_width / 2
-              }px`;
-            }
-          }}
-        />
-      </StyledSliderContainer>
+    <StyledContainer ref={slider_container_ref}>
+      <StyledRangeSliderValue $left={thumb_left_position}>
+        $ {slider_val}K
+      </StyledRangeSliderValue>
+      <StyledRangeSliderWrapper ref={slider_wrapper_ref}>
+        <StyledRangeSlider>
+          <div className="slider custom-labels">
+            <Slider
+              min={_min_amount_to_be_betted as number}
+              max={total_chips_count}
+              value={slider_val}
+              step={_small_blind * 2}
+              onChange={(value) => {
+                set_slider_val(value);
+                const slider_thumb_element = document.getElementsByClassName(
+                  "rangeslider__handle"
+                )[0];
+                const { left: slider_left } =
+                  slider_thumb_element.getBoundingClientRect();
+                if (slider_wrapper_ref.current) {
+                  const { left: slider_wrapper_left } =
+                    slider_wrapper_ref.current?.getBoundingClientRect();
+                  set_thumb_left_position(
+                    slider_left - (slider_wrapper_left + 30)
+                  );
+                }
+              }}
+              tooltip={false}
+            />
+          </div>
+        </StyledRangeSlider>
+      </StyledRangeSliderWrapper>
       <StyledSliderConfirmCta
         onClick={() => {
           dispatch(updateShowPokerSlider(false));
@@ -102,7 +109,7 @@ const PokerSlider: ForwardRefRenderFunction<
       >
         Confirm
       </StyledSliderConfirmCta>
-    </StyledSliderWrapper>
+    </StyledContainer>
   );
 };
 export default forwardRef(PokerSlider);

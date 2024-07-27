@@ -1,8 +1,8 @@
+import { useEffect, useRef } from "react";
 // types
-
 import type { FC, Dispatch, SetStateAction } from "react";
 import type { IDeckType } from "@/types/store/slice/poker";
-import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
+import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 // hoc
 import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
 // local components
@@ -60,9 +60,11 @@ const MobilePokerTable: FC<IProps> = ({
   no_of_community_cards,
   user_id,
 }) => {
+  const raise_cta_ref = useRef<HTMLButtonElement>(null);
   const auth_player = useAppSelector(active_poker_players).filter(
     (player) => player.player_id == user_id
   )[0];
+
   return (
     <StyledPokerMobileTableWrapper>
       <StyledPokerTableWrapper>
@@ -137,9 +139,15 @@ const MobilePokerTable: FC<IProps> = ({
           })}
         </StyledTableCardWrapper>
       </StyledPokerTableWrapper>
-      {user_id == bettor_id && !show_poker_slider && <MobilePokerActionCta />}
+      {show_action_cta && user_id == bettor_id && (
+        <MobilePokerActionCta ref={raise_cta_ref} />
+      )}
       {show_poker_slider && auth_player?.total_chips_left && (
-        <MobilePokerSlider total_chips_count={auth_player.total_chips_left} />
+        <MobilePokerSlider
+          total_chips_count={auth_player.total_chips_left}
+          toggle_action_cta={(show) => set_show_action_cta(show)}
+          ref={raise_cta_ref}
+        />
       )}
     </StyledPokerMobileTableWrapper>
   );

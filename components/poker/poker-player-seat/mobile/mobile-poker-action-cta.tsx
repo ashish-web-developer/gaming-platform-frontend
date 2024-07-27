@@ -1,4 +1,6 @@
-import type { FC } from "react";
+import { forwardRef } from "react";
+// types
+import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/poker.theme";
 
 // styled components
@@ -20,7 +22,10 @@ import {
   updateShowPokerSlider,
 } from "@/store/slice/poker/poker.slice";
 
-const MobilePokerActionCta: FC = () => {
+const MobilePokerActionCta: ForwardRefRenderFunction<HTMLButtonElement> = (
+  {},
+  ref
+) => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const { id: user_id } = useAppSelector(user);
@@ -79,6 +84,7 @@ const MobilePokerActionCta: FC = () => {
       )}
 
       <StyledActionCta
+        ref={ref}
         onClick={() => {
           dispatch(updateShowPokerSlider(true));
         }}
@@ -89,4 +95,4 @@ const MobilePokerActionCta: FC = () => {
     </StyledPokerActionCtaWrapper>
   );
 };
-export default MobilePokerActionCta;
+export default forwardRef(MobilePokerActionCta);
