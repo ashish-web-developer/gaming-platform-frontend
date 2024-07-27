@@ -10,6 +10,7 @@ import MobilePokerTableVector from "@/components/poker/poker-table/mobile/mobile
 import MobilePokerPlayerSeat from "@/components/poker/poker-player-seat/mobile/mobile-poker-player-seat";
 import MobilePokerActionCta from "@/components/poker/poker-player-seat/mobile/mobile-poker-action-cta";
 import MobilePokerCard from "@/components/poker/poker-card/mobile/mobile-poker-card";
+import MobilePokerSlider from "@/components/poker/poker-slider/mobile/mobile-poker-slider";
 
 // styled components
 import {
@@ -25,6 +26,10 @@ import {
   StyledTableCardWrapper,
   StyledBorderedCard,
 } from "@/styles/components/poker/poker-table/mobile/mobile-poker-table.style";
+
+// redux
+import { useAppSelector } from "@/hooks/redux.hook";
+import { active_poker_players } from "@/store/slice/poker/poker.slice";
 
 type IProps = {
   left_poker_players: IPokerPlayer[];
@@ -55,6 +60,9 @@ const MobilePokerTable: FC<IProps> = ({
   no_of_community_cards,
   user_id,
 }) => {
+  const auth_player = useAppSelector(active_poker_players).filter(
+    (player) => player.player_id == user_id
+  )[0];
   return (
     <StyledPokerMobileTableWrapper>
       <StyledPokerTableWrapper>
@@ -129,7 +137,10 @@ const MobilePokerTable: FC<IProps> = ({
           })}
         </StyledTableCardWrapper>
       </StyledPokerTableWrapper>
-      {user_id == bettor_id && <MobilePokerActionCta />}
+      {user_id == bettor_id && !show_poker_slider && <MobilePokerActionCta />}
+      {show_poker_slider && auth_player?.total_chips_left && (
+        <MobilePokerSlider total_chips_count={auth_player.total_chips_left} />
+      )}
     </StyledPokerMobileTableWrapper>
   );
 };

@@ -17,6 +17,7 @@ import {
   min_amount_to_be_betted,
   small_blind,
   triggerActionApi,
+  updateShowPokerSlider,
 } from "@/store/slice/poker/poker.slice";
 
 const MobilePokerActionCta: FC = () => {
@@ -77,7 +78,12 @@ const MobilePokerActionCta: FC = () => {
         </StyledActionCta>
       )}
 
-      <StyledActionCta $color={theme.palette.success.main}>
+      <StyledActionCta
+        onClick={() => {
+          dispatch(updateShowPokerSlider(true));
+        }}
+        $color={theme.palette.success.main}
+      >
         Raise
       </StyledActionCta>
     </StyledPokerActionCtaWrapper>
