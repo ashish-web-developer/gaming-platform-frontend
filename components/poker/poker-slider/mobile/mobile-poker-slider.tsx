@@ -68,6 +68,7 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
           <StyledConfirmCta
             onClick={() => {
               dispatch(updateShowPokerSlider(false));
+              toggle_action_cta(true);
               dispatch(
                 triggerActionApi({
                   action_type: "raise",
