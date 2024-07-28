@@ -13,18 +13,28 @@ import {
   StyledGirlImage,
 } from "@/styles/components/poker/poker-container/poker-container.style";
 
+// local components
+import PokerHeader from "@/components/poker/poker-header/poker-header";
+import PokerTable from "@/components/poker/poker-table/poker-table";
+const MobilePokerTable = dynamic(
+  () => import("@/components/poker/poker-table/mobile/mobile-poker-table"),
+  {
+    ssr: false,
+  }
+);
 const PokerBuyInDialog = dynamic(
   () => import("@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog"),
   {
     ssr: false,
   }
 );
-
-// local components
-import PokerHeader from "@/components/poker/poker-header/poker-header";
-import PokerTable from "@/components/poker/poker-table/poker-table";
-import PokerBuyInDrawer from "@/components/poker/poker-buy-in-dialog/mobile/poker-buy-in-drawer";
-import MobilePokerTable from "@/components/poker/poker-table/mobile/mobile-poker-table";
+const PokerBuyInDrawer = dynamic(
+  () =>
+    import("@/components/poker/poker-buy-in-dialog/mobile/poker-buy-in-drawer"),
+  {
+    ssr: false,
+  }
+);
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";

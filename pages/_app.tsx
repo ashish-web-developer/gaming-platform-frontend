@@ -6,17 +6,21 @@ import { Provider } from "react-redux";
 import store from "@/store/rootReducer";
 
 // Provider
-import CsrfTokenProvider from "@/providers/CsrfTokenProvider";
 import UserProvider from "@/providers/UserProvider";
+
+// Axios
+import axios from "axios";
+
+if (typeof window !== "undefined") {
+  axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}/sanctum/csrf-cookie`);
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <CsrfTokenProvider>
-        <UserProvider>
-          <Component {...pageProps} />
-        </UserProvider>
-      </CsrfTokenProvider>
+      <UserProvider>
+        <Component {...pageProps} />
+      </UserProvider>
     </Provider>
   );
 }
