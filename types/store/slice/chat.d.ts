@@ -2,6 +2,13 @@
 import { IBaseResponse } from "@/types/store/slice/common";
 import type { User } from "@/types/user";
 
+type IUser_ids =
+  | {
+      id: number;
+    }[]
+  | {
+      id: number;
+    };
 type IConversation = {
   id: number;
   sender_id: number;
@@ -120,6 +127,7 @@ type ISendMessageResponse = IBaseResponse & {
 
 export default IChatInitialState;
 export {
+  IUser_ids,
   IConversation,
   IUsersWithConversation,
   IFetchUserPayload,

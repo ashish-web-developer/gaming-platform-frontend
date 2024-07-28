@@ -17,13 +17,6 @@ import { updateNotification } from "@/store/slice/notification.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
-type User_ids =
-  | {
-      id: number;
-    }[]
-  | {
-      id: number;
-    };
 
 function useEcho(): Echo | null {
   const [echo, setEcho] = useState<null | Echo>(null);
