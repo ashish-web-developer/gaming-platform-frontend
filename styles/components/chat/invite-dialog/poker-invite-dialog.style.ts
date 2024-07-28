@@ -31,9 +31,6 @@ const StyledPokerInviteDialog = styled.dialog<{
     width: 100%;
     height: 100%;
     border-radius: 25px 25px 0px 0px;
-    &::after {
-      height: 260px;
-    }
   }
 `;
 const StyledPokerInviteDialogContent = styled.div`
@@ -87,7 +84,8 @@ const StyledMainContent = styled.div`
   flex-direction: column;
   align-items: center;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    bottom: 140px;
+    bottom: 80px;
+    gap: 6px;
   }
 `;
 const StyledMainText = styled.h2`
@@ -97,8 +95,7 @@ const StyledMainText = styled.h2`
   text-shadow: 0px 2px 2px #000;
   text-align: center;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 2.5rem;
-    line-height: 1.5;
+    font-size: 2rem;
   }
 `;
 
@@ -118,6 +115,9 @@ const StyledProposalSenderName = styled.span`
   transform: rotate(90deg);
   bottom: 55%;
   right: -40px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 1.125rem;
+  }
 `;
 export {
   StyledPokerInviteDialog,
