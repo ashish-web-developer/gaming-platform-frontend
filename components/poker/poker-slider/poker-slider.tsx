@@ -42,6 +42,7 @@ const PokerSlider: ForwardRefRenderFunction<
   const _small_blind = useAppSelector(small_blind);
   const slider_container_ref = useRef<HTMLDivElement>(null);
   const slider_wrapper_ref = useRef<HTMLDivElement>(null);
+  const slider_ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     toggle_action_cta(false);
@@ -56,9 +57,23 @@ const PokerSlider: ForwardRefRenderFunction<
         toggle_action_cta(true);
       }
     };
+    const handleSliderClick = (event: MouseEvent) => {
+      const slider_thumb_element = document.getElementsByClassName(
+        "rangeslider__handle"
+      )[0];
+      const { left: slider_left } =
+        slider_thumb_element.getBoundingClientRect();
+      if (slider_wrapper_ref.current) {
+        const { left: slider_wrapper_left } =
+          slider_wrapper_ref.current?.getBoundingClientRect();
+        set_thumb_left_position(slider_left - (slider_wrapper_left + 30));
+      }
+    };
+    slider_ref.current?.addEventListener("click", handleSliderClick);
     document.addEventListener("click", handle_outside_click);
     return () => {
       document.removeEventListener("click", handle_outside_click);
+      slider_ref.current?.removeEventListener("click", handleSliderClick);
     };
   }, []);
 
@@ -69,7 +84,7 @@ const PokerSlider: ForwardRefRenderFunction<
       </StyledRangeSliderValue>
       <StyledRangeSliderWrapper ref={slider_wrapper_ref}>
         <StyledRangeSlider>
-          <div className="slider custom-labels">
+          <div ref={slider_ref} className="slider custom-labels">
             <Slider
               min={_min_amount_to_be_betted as number}
               max={total_chips_count}

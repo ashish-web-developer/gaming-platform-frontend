@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/poker.theme";
@@ -28,6 +28,7 @@ const MobilePokerActionCta: ForwardRefRenderFunction<HTMLButtonElement> = (
 ) => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
+  const [is_action_triggered, set_is_action_triggered] = useState(false);
   const { id: user_id } = useAppSelector(user);
   const _small_blind = useAppSelector(small_blind);
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
@@ -38,61 +39,66 @@ const MobilePokerActionCta: ForwardRefRenderFunction<HTMLButtonElement> = (
     )[0].current_betted_amount ?? 0;
 
   return (
-    <StyledPokerActionCtaWrapper>
-      <StyledActionCta
-        onClick={() => {
-          dispatch(
-            triggerActionApi({
-              action_type: "fold",
-              current_betted_amount: null,
-            })
-          );
-        }}
-        $color={theme.palette.warning.main}
-      >
-        Fold
-      </StyledActionCta>
-      {is_call ? (
+    !is_action_triggered && (
+      <StyledPokerActionCtaWrapper>
         <StyledActionCta
           onClick={() => {
             dispatch(
               triggerActionApi({
-                action_type: "call",
-                current_betted_amount: _min_amount_to_be_betted as number,
+                action_type: "fold",
+                current_betted_amount: null,
               })
             );
+            set_is_action_triggered(true);
           }}
-          $color={"#fff"}
+          $color={theme.palette.warning.main}
         >
-          Call $ ${(_min_amount_to_be_betted as number) - current_betted_amount}{" "}
-          K
+          Fold
         </StyledActionCta>
-      ) : (
-        <StyledActionCta
-          onClick={() => {
-            dispatch(
-              triggerActionApi({
-                action_type: "check",
-                current_betted_amount: _min_amount_to_be_betted as number,
-              })
-            );
-          }}
-          $color={"#fff"}
-        >
-          Check
-        </StyledActionCta>
-      )}
+        {is_call ? (
+          <StyledActionCta
+            onClick={() => {
+              dispatch(
+                triggerActionApi({
+                  action_type: "call",
+                  current_betted_amount: _min_amount_to_be_betted as number,
+                })
+              );
+              set_is_action_triggered(true);
+            }}
+            $color={"#fff"}
+          >
+            Call $ $
+            {(_min_amount_to_be_betted as number) - current_betted_amount} K
+          </StyledActionCta>
+        ) : (
+          <StyledActionCta
+            onClick={() => {
+              dispatch(
+                triggerActionApi({
+                  action_type: "check",
+                  current_betted_amount: _min_amount_to_be_betted as number,
+                })
+              );
+              set_is_action_triggered(true);
+            }}
+            $color={"#fff"}
+          >
+            Check
+          </StyledActionCta>
+        )}
 
-      <StyledActionCta
-        ref={ref}
-        onClick={() => {
-          dispatch(updateShowPokerSlider(true));
-        }}
-        $color={theme.palette.success.main}
-      >
-        Raise
-      </StyledActionCta>
-    </StyledPokerActionCtaWrapper>
+        <StyledActionCta
+          ref={ref}
+          onClick={() => {
+            dispatch(updateShowPokerSlider(true));
+          }}
+          $color={theme.palette.success.main}
+        >
+          Raise
+        </StyledActionCta>
+      </StyledPokerActionCtaWrapper>
+    )
   );
 };
 export default forwardRef(MobilePokerActionCta);

@@ -27,11 +27,6 @@ const StyledPokerInviteDialog = styled.dialog<{
     background-size: contain;
     background-position: center;
   }
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 100%;
-    height: 100%;
-    border-radius: 25px 25px 0px 0px;
-  }
 `;
 const StyledPokerInviteDialogContent = styled.div`
   width: 100%;
@@ -83,10 +78,6 @@ const StyledMainContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    bottom: 80px;
-    gap: 6px;
-  }
 `;
 const StyledMainText = styled.h2`
   font-family: ${({ theme }) => theme.fontFamily.rubik_glitch};
@@ -94,9 +85,6 @@ const StyledMainText = styled.h2`
   color: ${({ theme }) => theme.palette.secondary.main};
   text-shadow: 0px 2px 2px #000;
   text-align: center;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 2rem;
-  }
 `;
 
 const StyledSubtitle = styled.p`
@@ -104,9 +92,6 @@ const StyledSubtitle = styled.p`
   font-size: 1rem;
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   text-align: center;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 1.125rem;
-  }
 `;
 const StyledProposalSenderName = styled.span`
   position: absolute;
@@ -115,9 +100,6 @@ const StyledProposalSenderName = styled.span`
   transform: rotate(90deg);
   bottom: 55%;
   right: -40px;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: 1.125rem;
-  }
 `;
 export {
   StyledPokerInviteDialog,

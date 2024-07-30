@@ -117,9 +117,7 @@ const MobileChatContainer: FC = () => {
     <StyledMobileChatContainer $mode={_mode}>
       {_show_poker_invite_dialog && (
         <ThemeProvider theme={Theme}>
-          <StyledInviteDialogWrapper>
-            <PokerInviteDialog />
-          </StyledInviteDialogWrapper>
+          <PokerInviteDialog />
         </ThemeProvider>
       )}
 
