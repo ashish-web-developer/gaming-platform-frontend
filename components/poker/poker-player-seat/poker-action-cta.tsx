@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/poker.theme";
@@ -32,11 +32,12 @@ const PokerActionCta: ForwardRefRenderFunction<
 > = ({ current_betted_amount }, raise_cta_ref) => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
+  const [is_action_triggered, set_is_action_triggered] = useState(false);
   const _small_blind = useAppSelector(small_blind);
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
   const is_call = (_min_amount_to_be_betted as number) > _small_blind * 2;
   return (
-    <>
+    !is_action_triggered && (
       <StyledPokerActionCta>
         {/**
          * =============== FOLD =================
@@ -53,6 +54,7 @@ const PokerActionCta: ForwardRefRenderFunction<
                   current_betted_amount: null,
                 })
               );
+              set_is_action_triggered(true);
             }}
           >
             <svg
@@ -111,6 +113,7 @@ const PokerActionCta: ForwardRefRenderFunction<
                   current_betted_amount: _min_amount_to_be_betted as number,
                 })
               );
+              set_is_action_triggered(true);
             }}
           >
             {is_call && (
@@ -257,7 +260,7 @@ const PokerActionCta: ForwardRefRenderFunction<
           </svg>
         </StyledVectorWrapper>
       </StyledPokerActionCta>
-    </>
+    )
   );
 };
 export default forwardRef(PokerActionCta);
