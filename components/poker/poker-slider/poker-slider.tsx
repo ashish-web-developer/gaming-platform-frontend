@@ -1,6 +1,7 @@
 import { useState, useRef, forwardRef, useEffect } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
+import type { ITheme } from "@/theme/poker.theme";
 
 // styled components
 import {
@@ -9,7 +10,14 @@ import {
   StyledRangeSlider,
   StyledSliderConfirmCta,
   StyledRangeSliderValue,
+  StyledPolygonVectorWrapper,
 } from "@/public/poker/poker-slider/poker-slider.style";
+
+// theme
+import { useTheme } from "styled-components";
+
+// local components
+import UpsideDownTriangle from "@/components/common/upside-down-triagnle";
 
 // external components
 import Slider from "react-rangeslider";
@@ -33,6 +41,7 @@ const PokerSlider: ForwardRefRenderFunction<
     toggle_action_cta: (show: boolean) => void;
   }
 > = ({ total_chips_count, toggle_action_cta }, raise_cta_ref) => {
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
   const [slider_val, set_slider_val] = useState<number>(
@@ -81,6 +90,13 @@ const PokerSlider: ForwardRefRenderFunction<
     <StyledContainer ref={slider_container_ref}>
       <StyledRangeSliderValue $left={thumb_left_position}>
         $ {slider_val}K
+        <StyledPolygonVectorWrapper>
+          <UpsideDownTriangle
+            size={20}
+            color={"rgba(245, 213, 71, 0.2)"}
+            stroke={theme.palette.secondary.main}
+          />
+        </StyledPolygonVectorWrapper>
       </StyledRangeSliderValue>
       <StyledRangeSliderWrapper ref={slider_wrapper_ref}>
         <StyledRangeSlider>

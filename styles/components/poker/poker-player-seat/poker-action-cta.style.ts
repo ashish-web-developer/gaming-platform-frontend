@@ -34,6 +34,19 @@ const StyledTooltip = styled.span`
   border-radius: 30px;
   z-index: 2;
   display: none;
+  bottom: 10px;
+  left: -30px;
 `;
 
-export { StyledPokerActionCta, StyledVectorWrapper, StyledTooltip };
+const StyledPolygonVectorWrapper = styled.span`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -28px;
+`;
+export {
+  StyledPokerActionCta,
+  StyledVectorWrapper,
+  StyledTooltip,
+  StyledPolygonVectorWrapper,
+};

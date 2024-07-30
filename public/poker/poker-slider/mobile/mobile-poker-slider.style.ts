@@ -32,7 +32,7 @@ const StyledConfirmCta = styled.button<{
 }>`
   position: absolute;
   left: ${(props) => props.$left - 65}px;
-  top: -40px;
+  top: -50px;
   display: inline-block;
   padding: 6px 16px;
   border-radius: 25px;
@@ -44,4 +44,15 @@ const StyledConfirmCta = styled.button<{
   font-size: 0.875rem;
 `;
 
-export { StyledRangeSliderWrapper, StyledConfirmCta };
+const StyledPolygonVectorWrapper = styled.span`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -27px;
+`;
+
+export {
+  StyledRangeSliderWrapper,
+  StyledConfirmCta,
+  StyledPolygonVectorWrapper,
+};

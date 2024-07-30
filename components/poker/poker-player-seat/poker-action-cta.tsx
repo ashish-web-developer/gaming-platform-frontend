@@ -1,13 +1,21 @@
 import { forwardRef } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
+import type { ITheme } from "@/theme/poker.theme";
 
 // styled components
 import {
   StyledPokerActionCta,
   StyledVectorWrapper,
   StyledTooltip,
+  StyledPolygonVectorWrapper,
 } from "@/styles/components/poker/poker-player-seat/poker-action-cta.style";
+
+// theme
+import { useTheme } from "styled-components";
+
+// local components
+import UpsideDownTriangle from "@/components/common/upside-down-triagnle";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
@@ -22,6 +30,7 @@ const PokerActionCta: ForwardRefRenderFunction<
   HTMLDivElement,
   { current_betted_amount: number }
 > = ({ current_betted_amount }, raise_cta_ref) => {
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _small_blind = useAppSelector(small_blind);
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
@@ -108,6 +117,13 @@ const PokerActionCta: ForwardRefRenderFunction<
               <StyledTooltip>
                 Call $ $
                 {(_min_amount_to_be_betted as number) - current_betted_amount} K
+                <StyledPolygonVectorWrapper>
+                  <UpsideDownTriangle
+                    size={20}
+                    color={theme.palette.primary.main}
+                    stroke={theme.palette.secondary.main}
+                  />
+                </StyledPolygonVectorWrapper>
               </StyledTooltip>
             )}
             {is_call ? (

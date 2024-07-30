@@ -1,12 +1,20 @@
 import { useState, useRef, forwardRef, useEffect } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
+import type { ITheme } from "@/theme/poker.theme";
 
 // styled components
 import {
   StyledRangeSliderWrapper,
   StyledConfirmCta,
+  StyledPolygonVectorWrapper,
 } from "@/public/poker/poker-slider/mobile/mobile-poker-slider.style";
+
+// theme
+import { useTheme } from "styled-components";
+
+// local components
+import UpsideDownTriangle from "@/components/common/upside-down-triagnle";
 
 // external components
 import Slider from "react-rangeslider";
@@ -32,6 +40,7 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
   { total_chips_count, toggle_action_cta },
   raise_cta_ref
 ) => {
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _small_blind = useAppSelector(small_blind);
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
@@ -67,7 +76,7 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
         const { left: slider_left_position } =
           slider_ref.current.getBoundingClientRect();
         set_thumb_left_position(
-          thumb_left_position - (slider_left_position - 50)
+          thumb_left_position - (slider_left_position - 47)
         );
       }
     };
@@ -96,6 +105,13 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
             $left={thumb_left_position}
           >
             Confirm
+            <StyledPolygonVectorWrapper>
+              <UpsideDownTriangle
+                size={20}
+                color={theme.palette.primary.main}
+                stroke={theme.palette.secondary.main}
+              />
+            </StyledPolygonVectorWrapper>
           </StyledConfirmCta>
         )}
         <div ref={slider_ref} className="slider custom-labels">
@@ -122,7 +138,7 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
                 const { left: slider_left_position } =
                   slider_ref.current.getBoundingClientRect();
                 set_thumb_left_position(
-                  thumb_left_position - (slider_left_position - 50)
+                  thumb_left_position - (slider_left_position - 47)
                 );
               }
             }}

@@ -53,7 +53,7 @@ const StyledRangeSliderValue = styled.span<{
 }>`
   position: absolute;
   left: ${(props) => props.$left}px;
-  top: -50px;
+  top: -58px;
   display: inline-block;
   padding: 6px 16px;
   border-radius: 25px;
@@ -64,10 +64,17 @@ const StyledRangeSliderValue = styled.span<{
   white-space: nowrap;
 `;
 
+const StyledPolygonVectorWrapper = styled.span`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -29px;
+`;
 export {
   StyledContainer,
   StyledRangeSliderWrapper,
   StyledRangeSlider,
   StyledSliderConfirmCta,
   StyledRangeSliderValue,
+  StyledPolygonVectorWrapper,
 };
