@@ -38,16 +38,17 @@ const StyledPokerBuyInDialog = styled.dialog`
 `;
 
 const StyledMainText = styled.h4`
-  font-family: ${({ theme }) => theme.fontFamily.rubik_glitch};
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
   color: ${({ theme }) => theme.palette.secondary.main};
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   text-align: center;
+  line-height: 1.5;
 `;
 
 const StyledBuyInAmount = styled.div`
-  font-family: ${({ theme }) => theme.fontFamily.rubik_glitch};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   color: #fff;
-  font-size: 0.875rem;
+  font-size: 1rem;
   padding: 8px 20px;
   background: ${({ theme }) => theme.palette.primary.light};
   border-radius: 30px;

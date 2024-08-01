@@ -14,7 +14,7 @@ import {
   StyledChipsImage,
   StyledBlindsAmount,
   StyledBuyInCta,
-} from "@/styles/components/poker/poker-buy-in-dialog/mobile/poker-by-in-drawer.style";
+} from "@/styles/components/poker/poker-buy-in-dialog/mobile/poker-buy-in-drawer.style";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";

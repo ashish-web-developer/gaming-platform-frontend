@@ -17,13 +17,14 @@ const StyledPokerDrawerWrapper = styled.div`
 
 const StyledLogoText = styled.h3`
   font-size: 1.6rem;
-  font-family: ${({ theme }) => theme.fontFamily.rubik_glitch};
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
   color: ${({ theme }) => theme.palette.secondary.main};
   text-align: center;
+  line-height:1.2;
 `;
 
 const StyledBuyInAmount = styled.div`
-  font-family: ${({ theme }) => theme.fontFamily.rubik_glitch};
+  font-family: ${({ theme }) => theme.fontFamily.lobster};
   color: #fff;
   font-size: 1rem;
   padding: 10px 20px;

@@ -24,8 +24,8 @@ export type ITheme = {
   };
   breakpoints: IBreakpoints;
   fontFamily: {
-    rubik_glitch: string;
     lobster: string;
+    bangers: string;
   };
 };
 
@@ -50,7 +50,7 @@ export const Theme: ITheme = {
   },
   breakpoints: { ...Breakpoints },
   fontFamily: {
-    rubik_glitch: "Rubik Glitch",
     lobster: "'Lobster',sans-serif",
+    bangers: "Bangers",
   },
 };

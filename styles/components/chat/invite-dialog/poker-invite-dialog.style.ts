@@ -80,11 +80,12 @@ const StyledMainContent = styled.div`
   align-items: center;
 `;
 const StyledMainText = styled.h2`
-  font-family: ${({ theme }) => theme.fontFamily.rubik_glitch};
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1.5rem;
   color: ${({ theme }) => theme.palette.secondary.main};
   text-shadow: 0px 2px 2px #000;
   text-align: center;
+  line-height:1.2;
 `;
 
 const StyledSubtitle = styled.p`

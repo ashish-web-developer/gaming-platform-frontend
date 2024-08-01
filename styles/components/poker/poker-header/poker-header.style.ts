@@ -6,10 +6,11 @@ const StyledPokerHeader = styled.div`
   justify-content: space-between;
 `;
 const StyledLogo = styled.h1`
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: ${({ theme }) => theme.palette.secondary.main};
-  font-family: ${({ theme }) => theme.fontFamily.rubik_glitch};
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
   letter-spacing: 1px;
+  line-height:1.5;
 `;
 const StyledRightContainer = styled.div`
   display: flex;
@@ -22,7 +23,7 @@ const StyledUserProfile = styled.div`
   height: 60px;
   border-radius: 50%;
   border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-  overflow:hidden;
+  overflow: hidden;
 `;
 const StyledUserProfileImage = styled(Image)`
   object-fit: cover;
