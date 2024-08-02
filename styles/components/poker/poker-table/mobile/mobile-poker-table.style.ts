@@ -14,6 +14,12 @@ const StyledPokerTableWrapper = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -55%);
+  @media (max-height: 850px) {
+    transform: translate(-50%, -52%);
+  }
+  @media (max-height: 700px) {
+    transform: translate(-50%, -50%);
+  }
 `;
 
 const StyledTableDealerProfile = styled.div`

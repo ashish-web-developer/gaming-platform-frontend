@@ -26,18 +26,31 @@ const StyledContainer = styled.div`
 const StyledGirlImageWrapper = styled.div`
   width: 100%;
   height: 800px;
-  position: absolute;
+  position: fixed;
   bottom: 0px;
+  @media (max-height: 800px) {
+    height: 750px;
+  }
+  @media (max-height: 750px) {
+    height: 630px;
+  }
 `;
 const StyledGirlImage = styled(Image)`
   object-fit: contain;
 `;
 
 const StyledMobileLogoWrapper = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  height: 200px;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 60px;
+  width:100%;
+  @media (max-height: 900px) {
+    top:40px;
+  }
+  @media (max-height: 750px) {
+    top:30px;
+  }
 `;
 const StyledMobileLogo = styled.h2`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
@@ -53,6 +66,9 @@ const StyledMobileLogo = styled.h2`
     0px -2px 0 ${({ theme }) => theme.palette.warning.main},
     0px 2px 0 ${({ theme }) => theme.palette.warning.main};
   transform: rotate(-6deg);
+  @media (max-width: ${({ theme }) => theme.breakpoints.xxs}) {
+    font-size: 1.875rem;
+  }
 `;
 
 export {

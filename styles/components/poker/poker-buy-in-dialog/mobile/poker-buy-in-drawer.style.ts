@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Image from "next/image";
 
 const StyledPokerDrawerWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100%;
   bottom: 0px;
   z-index: 4;
@@ -20,7 +20,7 @@ const StyledLogoText = styled.h3`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   color: ${({ theme }) => theme.palette.secondary.main};
   text-align: center;
-  line-height:1.2;
+  line-height: 1.2;
 `;
 
 const StyledBuyInAmount = styled.div`
@@ -80,7 +80,7 @@ const StyledBuyInSlider = styled.input.attrs({
 `;
 
 const StyledBlindsContainer = styled.div`
-  margin-top: 1.75rem;
+  margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;

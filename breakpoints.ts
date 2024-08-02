@@ -1,4 +1,5 @@
 export type IBreakpoints = {
+  xxs: string;
   xs: string;
   sm: string;
   md: string;
@@ -8,6 +9,7 @@ export type IBreakpoints = {
 };
 
 const Breakpoints: IBreakpoints = {
+  xxs: "375px",
   xs: "400px", // for small screen mobile
   sm: "600px", // for mobile screen
   md: "900px", // for tablets

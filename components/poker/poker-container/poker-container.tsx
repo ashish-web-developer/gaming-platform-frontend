@@ -79,14 +79,14 @@ const PokerContainer: FC = () => {
                 <StyledMobileLogo>
                   Texas Hold'em <br /> Showdown
                 </StyledMobileLogo>
-                <StyledGirlImageWrapper>
-                  <StyledGirlImage
-                    alt="girl-image"
-                    fill={true}
-                    src={"/poker/girl.png"}
-                  />
-                </StyledGirlImageWrapper>
               </StyledMobileLogoWrapper>
+              <StyledGirlImageWrapper>
+                <StyledGirlImage
+                  alt="girl-image"
+                  fill={true}
+                  src={"/poker/girl.png"}
+                />
+              </StyledGirlImageWrapper>
             </>
           ) : (
             <MobilePokerTable />
