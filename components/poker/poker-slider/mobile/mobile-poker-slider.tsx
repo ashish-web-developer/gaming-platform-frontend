@@ -65,26 +65,9 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
         toggle_action_cta(true);
       }
     };
-    const handleSliderClick = (event: MouseEvent) => {
-      const slider_thumb_element = document.getElementsByClassName(
-        "rangeslider__handle"
-      )[0];
-      const { left: thumb_left_position } =
-        slider_thumb_element.getBoundingClientRect();
-
-      if (slider_ref.current) {
-        const { left: slider_left_position } =
-          slider_ref.current.getBoundingClientRect();
-        set_thumb_left_position(
-          thumb_left_position - (slider_left_position - 47)
-        );
-      }
-    };
-    slider_ref.current?.addEventListener("click", handleSliderClick);
     document.addEventListener("click", handle_outside_click);
     return () => {
       document.removeEventListener("click", handle_outside_click);
-      slider_ref.current?.removeEventListener("click", handleSliderClick);
     };
   }, []);
   return (
@@ -114,7 +97,25 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
             </StyledPolygonVectorWrapper>
           </StyledConfirmCta>
         )}
-        <div ref={slider_ref} className="slider custom-labels">
+        <div
+          ref={slider_ref}
+          onClick={() => {
+            const slider_thumb_element = document.getElementsByClassName(
+              "rangeslider__handle"
+            )[0];
+            const { left: thumb_left_position } =
+              slider_thumb_element.getBoundingClientRect();
+
+            if (slider_ref.current) {
+              const { left: slider_left_position } =
+                slider_ref.current.getBoundingClientRect();
+              set_thumb_left_position(
+                thumb_left_position - (slider_left_position - 47)
+              );
+            }
+          }}
+          className="slider custom-labels"
+        >
           <Slider
             min={_min_amount_to_be_betted as number}
             max={total_chips_count}

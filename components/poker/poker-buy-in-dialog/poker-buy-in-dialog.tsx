@@ -26,12 +26,10 @@ import {
   updateShowBuyInModal,
   getPokerRoomInfoApi,
 } from "@/store/slice/poker/poker.slice";
-import { user, updateEarnedPoints } from "@/store/slice/user.slice";
 
 const PokerBuyInDialog: FC = () => {
   const dispatch = useAppDispatch();
   const [poker_buy_in_amount, set_poker_buy_in_amount] = useState<number>(200);
-  const _user = useAppSelector(user);
   const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
   const _small_blind = useAppSelector(small_blind);
   return (
