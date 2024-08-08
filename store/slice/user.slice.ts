@@ -59,13 +59,16 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    resetUser: () => initialState,
     updateUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
-    resetUser: () => initialState,
+    updateEarnedPoints: (state, action: PayloadAction<number>) => {
+      state.user.earned_points = action.payload;
+    },
   },
 });
 
-export const { updateUser, resetUser } = userSlice.actions;
+export const { updateUser, resetUser, updateEarnedPoints } = userSlice.actions;
 export const user = (state: RootState) => state.user.user;
 export default userSlice.reducer;

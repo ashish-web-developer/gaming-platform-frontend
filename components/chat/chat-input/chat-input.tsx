@@ -1,4 +1,5 @@
 import { useRef, useId, useState } from "react";
+import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -39,17 +40,17 @@ import {
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
 import { udpateIsProposalSender, updateRoomId } from "@/store/slice/game.slice";
+import { createPokerRoomApi } from "@/store/slice/poker/poker.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useEcho } from "@/hooks/pusher.hook";
 
-import AudioMediaRecorder from "@/helpers/audio-media-recorder";
-
 // helpers
 import { v4 as uuidv4 } from "uuid";
 
 const ChatInput: FC<{}> = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const echo = useEcho();
   const _mode = useAppSelector(mode);
@@ -235,11 +236,27 @@ const ChatInput: FC<{}> = () => {
                 const room_id = uuidv4();
                 dispatch(updateRoomId(room_id));
                 dispatch(udpateIsProposalSender(true));
-                dispatch(
-                  sendInvitationApi({
-                    game: "cognimatch",
-                  })
-                );
+                if (_active_group) {
+                  dispatch(
+                    createPokerRoomApi({
+                      room_id,
+                      small_blind: 5,
+                      chips_in_pot: 0,
+                    })
+                  );
+                  dispatch(
+                    sendInvitationApi({
+                      game: "poker",
+                    })
+                  );
+                  router.push("/poker");
+                } else {
+                  dispatch(
+                    sendInvitationApi({
+                      game: "cognimatch",
+                    })
+                  );
+                }
               }}
             >
               <StyledIconImage

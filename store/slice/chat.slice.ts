@@ -126,12 +126,35 @@ export const sendInvitationApi = createAsyncThunk<
 >("api/game/invitation", async ({ game }, { getState, rejectWithValue }) => {
   try {
     const state = getState();
+    if (state.chat.active_user) {
+      const response: AxiosResponse<ISendInvitationApiResponse> =
+        await Axios.post("game/game-invitation", {
+          receiver_ids: [state.chat.active_user.id],
+          game,
+          room_id: state.game.room_id,
+        });
+
+      return response.data;
+    }
     const response: AxiosResponse<ISendInvitationApiResponse> =
       await Axios.post("game/game-invitation", {
-        receiver_id: state.chat.active_user?.id,
+        receiver_ids: state.group.active_group
+          ? [
+              ...state.group.active_group?.user_group
+                .filter(
+                  (_user_group) => _user_group.user_id !== state.user.user.id
+                )
+                .map((_user_group) => _user_group.user_id),
+              ...(state.group.active_group.admin &&
+              state.user.user.id !== state.group.active_group.admin.id
+                ? [state.group.active_group.admin.id]
+                : []),
+            ]
+          : [],
         game,
         room_id: state.game.room_id,
       });
+
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error?.response?.data);
@@ -201,6 +224,7 @@ const initialState: IChatInitialState = {
   },
   invites_dialog: {
     show_cognimatch_invite_dialog: false,
+    show_poker_invite_dialog: false,
   },
 };
 
@@ -304,7 +328,7 @@ const chatSlice = createSlice({
     updateInviteDialog: (
       state,
       action: PayloadAction<{
-        modal_type: "cognimatch";
+        modal_type: "cognimatch" | "poker";
         is_open: boolean;
       }>
     ) => {
@@ -386,7 +410,10 @@ const chatSlice = createSlice({
   },
 });
 
+// reducer
 export default chatSlice.reducer;
+
+// selectors
 export const page = (state: RootState) => state.chat.fetch_user.page;
 export const fetched_user_result = (state: RootState) =>
   state.chat.fetch_user.fetched_user_result;
@@ -410,8 +437,12 @@ export const show_search_dialog = (state: RootState) =>
   state.chat.mobile.show_search_dialog;
 export const show_cognimatch_invite_dialog = (state: RootState) =>
   state.chat.invites_dialog.show_cognimatch_invite_dialog;
+export const show_poker_invite_dialog = (state: RootState) =>
+  state.chat.invites_dialog.show_poker_invite_dialog;
 export const active_user_status = (state: RootState) =>
   state.chat.active_user_status;
+
+// action creator
 export const {
   resetChat,
   updatePage,

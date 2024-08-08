@@ -5,7 +5,7 @@ import type {
   IUpdateTimerStartCountEventResponse,
   IUpdateTimerStartCountEventRequest,
   ILiveStreamChatApiResponse,
-  ILiveStreamChatApiRequest
+  ILiveStreamChatApiRequest,
 } from "@/types/store/slice/game";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
@@ -64,12 +64,12 @@ export const liveStreamChatApi = createAsyncThunk<
   { state: RootState }
 >(
   "game/update-timer-start-count",
-  async ({message}, { getState, rejectWithValue }) => {
+  async ({ message }, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const response = await Axios.post("/game/live-stream-chat", {
         room_id: state.game.room_id,
-        message
+        message,
       });
       return response.data;
     } catch (error) {
@@ -77,8 +77,6 @@ export const liveStreamChatApi = createAsyncThunk<
     }
   }
 );
-
-
 
 const initialState: InitialState = {
   gaming_user: null,
@@ -92,7 +90,7 @@ const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    resetGame:()=>initialState, 
+    resetGame: () => initialState,
     updateGamingUser: (
       state,
       action: PayloadAction<IUsersWithConversation | null>
@@ -113,8 +111,10 @@ const gameSlice = createSlice({
     },
   },
 });
-
+// reducer
 export default gameSlice.reducer;
+
+// selector
 export const gaming_user = (state: RootState) => state.game.gaming_user;
 export const room_id = (state: RootState) => state.game.room_id;
 export const show_denied_snackbar = (state: RootState) =>
@@ -125,6 +125,8 @@ export const is_proposal_sender = (state: RootState) =>
   state.game.is_proposal_sender;
 export const timer_start_count = (state: RootState) =>
   state.game.timer_start_count;
+
+// action creator
 export const {
   resetGame,
   updateGamingUser,

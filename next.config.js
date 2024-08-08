@@ -2,30 +2,30 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  compiler:{
-    styledComponents:true
+  compiler: {
+    styledComponents: true,
   },
   // edited
-  eslint:{
-    ignoreDuringBuilds:true
+  eslint: {
+    ignoreDuringBuilds: true,
   },
-  images:{
-      remotePatterns:[
-        {
-          protocol:"http",
-          hostname:"127.0.0.1",
-          port:"8000",
-          pathname:"/storage/**"
-        },
-        /** testing */
-        // {
-        //   protocol:"http",
-        //   hostname:"",
-        //   port:"8000",
-        //   pathname:"/storage/**"
-        // }
-      ]
-    }
-}
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "8000",
+        pathname: "/storage/**",
+      },
+      /** testing */
+      // {
+      //   protocol: "http",
+      //   hostname: "192.168.204.216",
+      //   port: "8000",
+      //   pathname: "/storage/**",
+      // },
+    ],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

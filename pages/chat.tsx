@@ -5,10 +5,11 @@ import { useRouter } from "next/router";
 import type { FC } from "react";
 import type { GetServerSideProps } from "next";
 import type {
+  IUser_ids,
   IUsersWithConversation,
   IConversation,
 } from "@/types/store/slice/chat";
-import { IGroup } from "@/types/store/slice/group";
+import type { IGroup } from "@/types/store/slice/group";
 
 // local components
 import ChatContainer from "@/components/chat/chat-container";
@@ -116,17 +117,19 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
         callback: (data: {
           receiver_id: number;
           user: IUsersWithConversation;
-          game: "cognimatch";
+          game: "cognimatch" | "poker";
           room_id: string;
         }) => {
           dispatch(
             updateInviteDialog({
-              modal_type: "cognimatch",
+              modal_type: data.game,
               is_open: true,
             })
           );
           dispatch(updateRoomId(data.room_id));
-          dispatch(updateGamingUser(data.user));
+          if (data.game == "cognimatch") {
+            dispatch(updateGamingUser(data.user));
+          }
         },
       },
       {
@@ -146,7 +149,7 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
   /**
    * To handle group chat
    */
-  usePresenceChannel<IGroup | null>({
+  usePresenceChannel<undefined, IGroup | null>({
     channel: _active_group ? `group-chat.${_active_group?.id}` : null,
     handler: (user_ids, type) => {},
     events: [
@@ -165,7 +168,7 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
   /**
    * To handle the active user status
    */
-  usePresenceChannel<IUsersWithConversation | null>({
+  usePresenceChannel<IUsersWithConversation | null, IUser_ids>({
     channel: _active_user ? `user-status.${_active_user.id}` : null,
     handler: (user_ids, type, active_user) => {
       switch (type) {

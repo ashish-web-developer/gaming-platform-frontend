@@ -17,13 +17,6 @@ import { updateNotification } from "@/store/slice/notification.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
-type User_ids =
-  | {
-      id: number;
-    }[]
-  | {
-      id: number;
-    };
 
 function useEcho(): Echo | null {
   const [echo, setEcho] = useState<null | Echo>(null);
@@ -58,7 +51,6 @@ function useEcho(): Echo | null {
   }, []);
   return echo;
 }
-
 
 function useNotificationChannel() {
   const dispatch = useAppDispatch();
@@ -121,7 +113,7 @@ const usePrivateChannel = ({ channel, events }: IPrivateChannelParams) => {
       }
     };
     if (echo && channel) {
-      console.log("value of channel",channel);
+      console.log("value of channel", channel);
       subscription.current = echo
         .private(channel)
         .subscribed(() => {
@@ -149,40 +141,35 @@ const usePrivateChannel = ({ channel, events }: IPrivateChannelParams) => {
   }, [echo, channel, _active_user]);
 };
 
-
-interface IPresenceChannelParams<Type = any> {
+interface IPresenceChannelParams<Type, IUserType> {
   channel: string | null;
   events: {
     event: string;
     callback: (data: any) => void;
   }[];
   handler: (
-    user_ids: User_ids,
+    user_ids: IUserType,
     type: "here" | "joining" | "leaving",
     dependency?: Type
   ) => void;
   dependency?: Type;
 }
 
-const usePresenceChannel = <Type>({
+const usePresenceChannel = <Type, IUserType>({
   channel,
   events,
   handler,
   dependency,
-}: IPresenceChannelParams<Type>) => {
+}: IPresenceChannelParams<Type, IUserType>) => {
   const echo = useEcho();
   const subscription = useRef<PresenceChannel>();
   useEffect(() => {
     if (echo && channel) {
       subscription.current = echo
         .join(channel)
-        .here((user_ids: User_ids) => handler(user_ids, "here", dependency))
-        .joining((user_ids: User_ids) =>
-          handler(user_ids, "joining", dependency)
-        )
-        .leaving((user_ids: User_ids) =>
-          handler(user_ids, "leaving", dependency)
-        );
+        .here((user: IUserType) => handler(user, "here", dependency))
+        .joining((user: IUserType) => handler(user, "joining", dependency))
+        .leaving((user: IUserType) => handler(user, "leaving", dependency));
       events.forEach(({ event, callback }) => {
         subscription.current?.listen(event, callback);
       });

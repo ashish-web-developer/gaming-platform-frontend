@@ -4,6 +4,12 @@ import { useState } from "react";
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
+// theme
+import { Theme } from "@/theme/poker.theme";
+
+// theme provider
+import { ThemeProvider } from "styled-components";
+
 // local components
 import {
   StyledMobileChatContainer,
@@ -16,13 +22,14 @@ import {
   StyledGroupAvatarWrapper,
   StyledSpan,
   StyledGroupAvatar,
-  StyledCogniMatchInviteDialogWrapper,
+  StyledInviteDialogWrapper,
 } from "@/styles/components/chat/mobile-chat-container.style";
 
 // local components
 import MobileChatHeader from "@/components/chat/chat-header/mobile/mobile-chat-header";
 import MobileActionNav from "@/components/chat/mobile-action-nav";
 import ChatUserProfile from "@/components/chat/chat-sidebar/chat-users-list/chat-user-profile";
+import PokerInviteDialog from "@/components/chat/invite-dialog/poker-invite-dialog";
 
 const ChatAvatar = dynamic(
   () => import("@/components/chat/chat-sidebar/chat-group-list/chat-avatar"),
@@ -79,6 +86,7 @@ import {
   show_chat,
   default_users,
   show_cognimatch_invite_dialog,
+  show_poker_invite_dialog,
 } from "@/store/slice/chat.slice";
 import { active_group, default_groups } from "@/store/slice/group.slice";
 import {
@@ -102,14 +110,21 @@ const MobileChatContainer: FC = () => {
   const _show_cognimatch_invite_dialog = useAppSelector(
     show_cognimatch_invite_dialog
   );
+  const _show_poker_invite_dialog = useAppSelector(show_poker_invite_dialog);
   const is_mobile = useIsMobile();
 
   return (
     <StyledMobileChatContainer $mode={_mode}>
+      {_show_poker_invite_dialog && (
+        <ThemeProvider theme={Theme}>
+          <PokerInviteDialog />
+        </ThemeProvider>
+      )}
+
       {_show_cognimatch_invite_dialog && (
-        <StyledCogniMatchInviteDialogWrapper>
+        <StyledInviteDialogWrapper>
           <CogniMatchInviteDialog />
-        </StyledCogniMatchInviteDialogWrapper>
+        </StyledInviteDialogWrapper>
       )}
 
       {_show_mobile_profile && <MobileUserProfile />}

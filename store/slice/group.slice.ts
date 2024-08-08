@@ -349,7 +349,10 @@ const groupSlice = createSlice({
     });
   },
 });
+// reducer
+export default groupSlice.reducer;
 
+// selectors
 export const default_groups = (state: RootState) => state.group.default_groups;
 export const recommended_groups = (state: RootState) =>
   state.group.recommended_groups;
@@ -362,6 +365,8 @@ export const is_fetch_group_request_pending = (state: RootState) =>
   state.group.fetch_group.is_request_pending;
 export const fetched_group_results = (state: RootState) =>
   state.group.fetch_group.fetched_group_results;
+
+// action creator
 export const {
   updateActiveGroup,
   updateDefaultGroupLatestConversation,
@@ -371,5 +376,3 @@ export const {
   updateFetchedGroupResult,
   updatePage,
 } = groupSlice.actions;
-
-export default groupSlice.reducer;

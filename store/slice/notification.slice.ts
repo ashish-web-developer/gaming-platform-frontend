@@ -126,9 +126,11 @@ const notificationSlice = createSlice({
   },
 });
 
+// reducer
 export default notificationSlice.reducer;
 
+// selector
 export const notifications = (state: RootState) =>
   state.notification.notifications;
-
+// action creator
 export const { updateNotification } = notificationSlice.actions;

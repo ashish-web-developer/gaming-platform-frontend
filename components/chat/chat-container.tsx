@@ -21,8 +21,19 @@ import ChatMessageContainer from "@/components/chat/chat-message-container/chat-
 import GroupSuggestion from "@/components/chat/group-suggestion/group-suggestion";
 import ChatInput from "@/components/chat/chat-input/chat-input";
 
+// theme
+import { Theme } from "@/theme/poker.theme";
+// theme provider
+import { ThemeProvider } from "styled-components";
+
 const CogniMatchInviteDialog = dynamic(
   () => import("@/components/chat/invite-dialog/cognimatch-invite-dialog"),
+  {
+    ssr: false,
+  }
+);
+const PokerInviteDialog = dynamic(
+  () => import("@/components/chat/invite-dialog/poker-invite-dialog"),
   {
     ssr: false,
   }
@@ -34,6 +45,7 @@ import {
   // state
   active_user,
   show_cognimatch_invite_dialog,
+  show_poker_invite_dialog,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
 import { mode, show_profile_upload_modal } from "@/store/slice/common.slice";
@@ -46,9 +58,15 @@ const ChatContainer: FC = () => {
   const _show_cognimatch_invite_dialog = useAppSelector(
     show_cognimatch_invite_dialog
   );
+  const _show_poker_invite_dialog = useAppSelector(show_poker_invite_dialog);
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
       {_show_cognimatch_invite_dialog && <CogniMatchInviteDialog />}
+      {_show_poker_invite_dialog && (
+        <ThemeProvider theme={Theme}>
+          <PokerInviteDialog />
+        </ThemeProvider>
+      )}
       <StyledUploadModalWrapper
         $is_modal_open={_show_profile_upload_modal}
         id="upload-profile-modal-container"

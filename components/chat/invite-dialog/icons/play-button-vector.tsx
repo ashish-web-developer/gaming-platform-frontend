@@ -11,7 +11,7 @@ import { mode } from "@/store/slice/common.slice";
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
 
-const PlayButtonVector: FC = () => {
+const PlayButtonVector: FC<{ stroke_color?: string }> = ({ stroke_color }) => {
   const theme = useTheme() as Theme;
   const _mode = useAppSelector(mode);
   const is_mobile = useIsMobile();
@@ -89,7 +89,9 @@ const PlayButtonVector: FC = () => {
         <path
           fill="#000"
           stroke={
-            _mode == "dark"
+            stroke_color
+              ? stroke_color
+              : _mode == "dark"
               ? theme.palette.primary.dark
               : theme.palette.primary.light
           }

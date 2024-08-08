@@ -51,3 +51,12 @@
         url("/fonts/poppins/poppins-extrabold-webfont.woff") format("woff");
     font-display:swap;
 }
+
+@font-face {
+    font-family:"Bangers";
+    font-style:normal;
+    font-weight:400;
+    src: url("/fonts/bangers/bangers-regular-webfont.woff2") format("woff2"),
+        url("/fonts/bangers/bangers-regular-webfont.woff") format("woff");
+    font-display: swap;
+}

@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 
 // types
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { IUser_ids } from "@/types/store/slice/chat";
 
 // local components
 import MemoryGame from "@/components/memory-game/memory-game";
@@ -75,7 +76,7 @@ const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
     flip_sound: null,
   });
 
-  usePresenceChannel<IUsersWithConversation | null>({
+  usePresenceChannel<IUsersWithConversation | null, IUser_ids>({
     channel: `game.${_room_id}`,
     handler: (user_ids, event, gaming_user) => {
       const isUserInChannel = Array.isArray(user_ids)

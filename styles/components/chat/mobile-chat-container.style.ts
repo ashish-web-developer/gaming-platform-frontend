@@ -115,7 +115,7 @@ const StyledGroupAvatar = styled.div`
   align-items: center;
 `;
 
-const StyledCogniMatchInviteDialogWrapper = styled.div`
+const StyledInviteDialogWrapper = styled.div`
   width: 100%;
   padding-bottom: 100%;
   position: absolute;
@@ -133,5 +133,5 @@ export {
   StyledGroupAvatarWrapper,
   StyledSpan,
   StyledGroupAvatar,
-  StyledCogniMatchInviteDialogWrapper,
+  StyledInviteDialogWrapper,
 };
