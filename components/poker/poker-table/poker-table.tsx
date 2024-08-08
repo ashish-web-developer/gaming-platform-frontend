@@ -69,55 +69,94 @@ const PokerTable: FC<IProps> = ({
       <StyledPokerVectorWrapper>
         <StyledLeftPlayerWrapper>
           {left_poker_players.map((player) => {
+            if (player.player_id) {
+              return (
+                <PokerPlayerSeat
+                  seat_number={player.seat_index as ISeatType}
+                  poker_player={player}
+                  show_poker_slider={false}
+                  show_action_cta={false}
+                  toggle_action_cta={(show: boolean) =>
+                    set_show_action_cta(show)
+                  }
+                  key={`player-${player.player_id}`}
+                />
+              );
+            }
             return (
-              <PokerPlayerSeat
-                seat_number={player.seat_index as ISeatType}
-                poker_player={player}
-                show_poker_slider={false}
-                show_action_cta={false}
-                toggle_action_cta={(show: boolean) => set_show_action_cta(show)}
-                key={`player-${player.player_id}`}
+              <StyledPokerChipsImage
+                src={"/poker/poker-player/poker-chip.png"}
+                alt="chips-image"
+                width={50}
+                height={50}
+                key={`seat-${player.seat_index}`}
               />
             );
           })}
         </StyledLeftPlayerWrapper>
         <StyledBottomPlayerWrapper>
           {bottom_poker_players.map((player) => {
+            if (player.player_id) {
+              return (
+                <PokerPlayerSeat
+                  seat_number={player.seat_index as ISeatType}
+                  poker_player={player}
+                  show_action_cta={
+                    show_action_cta &&
+                    bettor_id == user_id &&
+                    bettor_id == player.player_id
+                      ? true
+                      : false
+                  }
+                  show_poker_slider={
+                    show_poker_slider &&
+                    bettor_id == user_id &&
+                    bettor_id == player.player_id
+                      ? true
+                      : false
+                  }
+                  toggle_action_cta={(show: boolean) =>
+                    set_show_action_cta(show)
+                  }
+                  show_current_betted_amount={!show_poker_slider}
+                  key={`player-${player.player_id}`}
+                />
+              );
+            }
             return (
-              <PokerPlayerSeat
-                seat_number={player.seat_index as ISeatType}
-                poker_player={player}
-                show_action_cta={
-                  show_action_cta &&
-                  bettor_id == user_id &&
-                  bettor_id == player.player_id
-                    ? true
-                    : false
-                }
-                show_poker_slider={
-                  show_poker_slider &&
-                  bettor_id == user_id &&
-                  bettor_id == player.player_id
-                    ? true
-                    : false
-                }
-                toggle_action_cta={(show: boolean) => set_show_action_cta(show)}
-                show_current_betted_amount={!show_poker_slider}
-                key={`player-${player.player_id}`}
+              <StyledPokerChipsImage
+                src={"/poker/poker-player/poker-chip.png"}
+                alt="chips-image"
+                width={50}
+                height={50}
+                key={`seat-${player.seat_index}`}
               />
             );
           })}
         </StyledBottomPlayerWrapper>
         <StyledRightPlayerWrapper>
           {right_poker_players.map((player) => {
+            if (player.player_id) {
+              return (
+                <PokerPlayerSeat
+                  seat_number={player.seat_index as ISeatType}
+                  poker_player={player}
+                  show_poker_slider={false}
+                  show_action_cta={false}
+                  toggle_action_cta={(show: boolean) =>
+                    set_show_action_cta(show)
+                  }
+                  key={`player-${player.player_id}`}
+                />
+              );
+            }
             return (
-              <PokerPlayerSeat
-                seat_number={player.seat_index as ISeatType}
-                poker_player={player}
-                show_poker_slider={false}
-                show_action_cta={false}
-                toggle_action_cta={(show: boolean) => set_show_action_cta(show)}
-                key={`player-${player.player_id}`}
+              <StyledPokerChipsImage
+                src={"/poker/poker-player/poker-chip.png"}
+                alt="chips-image"
+                width={50}
+                height={50}
+                key={`seat-${player.seat_index}`}
               />
             );
           })}

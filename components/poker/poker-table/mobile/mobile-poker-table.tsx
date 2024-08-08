@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 // types
 import type { FC, Dispatch, SetStateAction } from "react";
 import type { IDeckType } from "@/types/store/slice/poker";
@@ -70,33 +70,69 @@ const MobilePokerTable: FC<IProps> = ({
       <StyledPokerTableWrapper>
         <StyledLeftPlayerWrapper>
           {left_poker_players.map((player) => {
+            if (player.player_id) {
+              return (
+                <MobilePokerPlayerSeat
+                  key={`player-${player.player_id}`}
+                  poker_player={player}
+                  is_active={false}
+                />
+              );
+            }
             return (
-              <MobilePokerPlayerSeat
-                key={`player-${player.player_id}`}
-                poker_player={player}
-                is_active={false}
+              <StyledPokerChipsImage
+                src={"/poker/poker-player/poker-chip.png"}
+                alt="chip"
+                width={25}
+                height={25}
+                key={`seat-${player.seat_index}`}
               />
             );
           })}
         </StyledLeftPlayerWrapper>
         <StyledRightPlayerWrapper>
           {right_poker_players.map((player) => {
+            if (player.player_id) {
+              return (
+                <MobilePokerPlayerSeat
+                  key={`player-${player.player_id}`}
+                  poker_player={player}
+                  is_active={false}
+                />
+              );
+            }
             return (
-              <MobilePokerPlayerSeat
-                key={`player-${player.player_id}`}
-                poker_player={player}
-                is_active={false}
+              <StyledPokerChipsImage
+                src={"/poker/poker-player/poker-chip.png"}
+                alt="chip"
+                width={25}
+                height={25}
+                key={`seat-${player.seat_index}`}
               />
             );
           })}
         </StyledRightPlayerWrapper>
         <StyledBottomPlayerWrapper>
           {bottom_poker_players.map((player) => {
+            if (player.player_id) {
+              return (
+                <MobilePokerPlayerSeat
+                  key={`player-${player.player_id}`}
+                  poker_player={player}
+                  is_active={false}
+                />
+              );
+            }
             return (
-              <MobilePokerPlayerSeat
-                key={`player-${player.player_id}`}
-                poker_player={player}
-                is_active={false}
+              <StyledPokerChipsImage
+                style = {{
+                  marginTop:"17px"
+                }}
+                src={"/poker/poker-player/poker-chip.png"}
+                alt="chip"
+                width={25}
+                height={25}
+                key={`seat-${player.seat_index}`}
               />
             );
           })}

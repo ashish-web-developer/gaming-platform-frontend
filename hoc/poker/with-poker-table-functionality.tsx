@@ -35,6 +35,7 @@ const withPokerTableFunctionality = (
 ) => {
   const EnhancedComponent = () => {
     let _active_poker_players = useAppSelector(active_poker_players);
+
     /**
      * Sorting array in descending order on the
      * on the basis of seat number
@@ -42,6 +43,18 @@ const withPokerTableFunctionality = (
     _active_poker_players = [..._active_poker_players].sort(
       (a, b) => b.seat_number - a.seat_number
     );
+
+    _active_poker_players = [
+      ..._active_poker_players,
+      ...new Array(7 - _active_poker_players.length).fill(null),
+    ].map((player, index) => {
+      if (player) {
+        return player;
+      }
+      return {
+        seat_number: index,
+      };
+    });
     const { id: user_id } = useAppSelector(user);
 
     const auth_player_index = _active_poker_players.findIndex(
