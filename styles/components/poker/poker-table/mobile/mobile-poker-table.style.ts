@@ -104,6 +104,10 @@ const StyledBorderedCard = styled.div`
   border: 1.5px dashed ${({ theme }) => theme.palette.secondary.main};
   border-radius: 4px;
   background: transparent;
+  @media (max-height: 850px) {
+    width: 36px;
+    height: 54px;
+  }
 `;
 export {
   StyledPokerMobileTableWrapper,

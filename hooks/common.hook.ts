@@ -29,6 +29,21 @@ const useIsMounted = () => {
   return is_mounted;
 };
 
+const useClientHeight = () => {
+  const [client_height, set_client_height] = useState<number>(600);
+  useEffect(() => {
+    set_client_height(document.documentElement.clientHeight);
+    const handleResize = () => {
+      set_client_height(document.documentElement.clientHeight);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  return client_height;
+};
+
 /**
  * To handle handle outside click
  */
@@ -59,4 +74,4 @@ const useOutsideClickHandler = ({
     };
   }, []);
 };
-export { useIsMobile, useIsMounted, useOutsideClickHandler };
+export { useIsMobile, useIsMounted, useOutsideClickHandler, useClientHeight };
