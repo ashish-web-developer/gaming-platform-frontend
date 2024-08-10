@@ -11,6 +11,10 @@ const StyledPokerCardWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media (max-height: 850px) {
+    width: 36px;
+    height: 54px;
+  }
 `;
 
 const StyledPokerCardRank = styled.span<{

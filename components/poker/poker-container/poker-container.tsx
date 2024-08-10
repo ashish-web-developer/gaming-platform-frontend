@@ -51,6 +51,7 @@ import { useIsMobile } from "@/hooks/common.hook";
 
 const PokerContainer: FC = () => {
   const dispatch = useAppDispatch();
+  const container_ref = useRef<HTMLDivElement>(null);
   const is_mobile = useIsMobile();
   const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
   const { id: user_id } = useAppSelector(user);
@@ -93,7 +94,7 @@ const PokerContainer: FC = () => {
           )}
         </>
       ) : (
-        <StyledContainer>
+        <StyledContainer ref={container_ref}>
           <PokerHeader />
           <PokerTable />
           {_show_buy_in_modal && <PokerBuyInDialog />}

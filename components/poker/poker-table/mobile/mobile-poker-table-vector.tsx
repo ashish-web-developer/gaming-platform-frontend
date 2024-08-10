@@ -2,18 +2,12 @@ import { useEffect, useState } from "react";
 // types
 import type { FC } from "react";
 
-const MobilePokerTableVector: FC = () => {
-  const [client_height, set_client_height] = useState<number>(600);
+// hooks
+import { useClientHeight } from "@/hooks/common.hook";
 
-  useEffect(() => {
-    const handleResize = () => {
-      set_client_height(document.documentElement.clientHeight);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+const MobilePokerTableVector: FC = () => {
+  const client_height = useClientHeight();
+
   if (client_height < 700) {
     return (
       <svg

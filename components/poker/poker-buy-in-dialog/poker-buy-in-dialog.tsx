@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 // types
 import type { FC } from "react";
 // styled components
@@ -27,15 +27,41 @@ import {
   getPokerRoomInfoApi,
 } from "@/store/slice/poker/poker.slice";
 
+// gsap
+import gsap from "gsap";
+
 const PokerBuyInDialog: FC = () => {
   const dispatch = useAppDispatch();
+  const dialog_ref = useRef<HTMLDialogElement>(null);
   const [poker_buy_in_amount, set_poker_buy_in_amount] = useState<number>(200);
   const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
   const _small_blind = useAppSelector(small_blind);
+  const gsap_context = useRef<gsap.Context>();
+
+  useEffect(() => {
+    gsap_context.current = gsap.context(() => {
+      gsap.fromTo(
+        dialog_ref.current,
+        {
+          opacity: 0,
+          scale: 0.5,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          ease: "bounce",
+          duration: 1,
+        }
+      );
+    });
+    return () => {
+      gsap_context.current?.revert();
+    };
+  }, []);
   return (
     <>
       {_show_buy_in_modal && <StyledBackdrop />}
-      <StyledPokerBuyInDialog open={_show_buy_in_modal}>
+      <StyledPokerBuyInDialog ref={dialog_ref}>
         <StyledDialogImageWrapper>
           <StyledDialogImage
             src={"/poker/poker-buy-in-dialog/michael.png"}
