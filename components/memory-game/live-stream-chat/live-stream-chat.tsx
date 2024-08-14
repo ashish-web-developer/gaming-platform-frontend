@@ -11,8 +11,6 @@ import {
   StyledHeader,
   StyledMainText,
   StyledBannerAvatarContainer,
-  StyledBannerGirlContainer,
-  StyledBannerGirlImage,
   StyledBannerTextPatternContainer,
   StyledPlayButtonContainer,
   StyledAvatarGroup,
@@ -41,11 +39,13 @@ import { gaming_user } from "@/store/slice/game.slice";
 import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 import {
-  live_stream_chat_list,
   show_live_stream_chat,
   updateShowLiveSteamChat,
 } from "@/store/slice/memory-game.slice";
-import { liveStreamChatApi } from "@/store/slice/game.slice";
+import {
+  live_stream_chat_list,
+  liveStreamChatApi,
+} from "@/store/slice/cognimatch.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
@@ -120,9 +120,6 @@ const LiveStreamBanner: FC<{
             </StyledAvatar>
           </StyledAvatarGroup>
         </StyledBannerAvatarContainer>
-        {/* <StyledBannerGirlContainer>
-          <StyledBannerGirlImage alt = {"girl"} fill = {true} src = "/memory-game/live-stream-chat/banner-girl.png"/>
-        </StyledBannerGirlContainer> */}
         <StyledBannerTextPatternContainer>
           <TextPattern
             onClick={() => {
@@ -213,7 +210,7 @@ const LiveStreamChat: FC = () => {
               </StyledMessageText>
             </StyledMessage>
             {_live_stream_chat_list.map((chat) => {
-              return <Message {...chat} />;
+              return <Message key={chat.id} {...chat} />;
             })}
           </StyledMessageContainer>
           <StyledInputContainer>

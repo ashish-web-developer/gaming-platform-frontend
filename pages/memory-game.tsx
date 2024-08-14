@@ -17,25 +17,13 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { room_id } from "@/store/slice/game.slice";
 import {
-  is_gaming_user_in,
-  updateGameRules,
-  updateCardList,
-  updateCardState,
-  updatePlayerTurnId,
-  updateLastFlippedCard,
-  updateScore,
-  updateLiveStreamChatList,
-  updateInfoSnackbar,
-  updateIsGamingUserIn,
-  updateIsGamingUserLeaving,
-  updateScoreEvent,
-  // api
-} from "@/store/slice/memory-game.slice";
-import {
   active_cognimatch_players,
   updateActiveCogniMatchPlayers,
   updateCognimatchRoomData,
   updatePlayersCountApi,
+  updateLiveStreamChat,
+  updateInfoSnackbar,
+  updateGameRules,
 } from "@/store/slice/cognimatch.slice";
 import { mode } from "@/store/slice/common.slice";
 
@@ -89,71 +77,33 @@ const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
           dispatch(updateCognimatchRoomData(data.cognimatch_room));
         },
       },
-      // {
-      //   event: "CardListDataEvent",
-      //   callback: (data) => {
-      //     dispatch(updateCardList(data.card_list));
-      //   },
-      // },
-      // {
-      //   event: "MemoryGameEvent",
-      //   callback: (data) => {
-      //     dispatch(
-      //       updateCardState({ id: data.card_id, flipped: data.flipped })
-      //     );
-      //     sound_ref.current.flip_sound?.play();
-      //   },
-      // },
-      // {
-      //   event: "UpdatePlayerTurnEvent",
-      //   callback: (data) => {
-      //     dispatch(updatePlayerTurnId(data.player_turn_id));
-      //   },
-      // },
-      // {
-      //   event: "UpdateLastFlippedCard",
-      //   callback: (data) => {
-      //     dispatch(updateLastFlippedCard(data.card_id));
-      //   },
-      // },
-      // {
-      //   event: "UpdateTimerStartCountEvent",
-      //   callback: (data) => {
-      //     dispatch(updateTimerStartCount(data.start_timer_count));
-      //   },
-      // },
-      // {
-      //   event: "UpdateMemoryGameScore",
-      //   callback: (data) => {
-      //     dispatch(updateScore(data.score));
-      //   },
-      // },
-      // {
-      //   event: "LiveChatStreamEvent",
-      //   callback: (data: { user: IUsersWithConversation; message: string }) => {
-      //     dispatch(
-      //       updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
-      //     );
-      //     if (data.user.id !== _user.id) {
-      //       dispatch(
-      //         updateInfoSnackbar({
-      //           name: data.user.name,
-      //           message: data.message,
-      //           show_snacbar: true,
-      //         })
-      //       );
-      //       setTimeout(() => {
-      //         dispatch(
-      //           updateInfoSnackbar({
-      //             name: "",
-      //             message: "",
-      //             show_snacbar: false,
-      //           })
-      //         );
-      //       }, 3000);
-      //     }
-      //   },
-      // },
+      {
+        event: "Cognimatch.LiveChatStreamEvent",
+        callback: (data: { user: IUsersWithConversation; message: string }) => {
+          console.log("value of data", data);
+          dispatch(
+            updateLiveStreamChat({ ...data, viewed: false, id: uuidv4() })
+          );
+          if (data.user.id !== _user.id) {
+            dispatch(
+              updateInfoSnackbar({
+                name: data.user.name,
+                message: data.message,
+                show_snacbar: true,
+              })
+            );
+            setTimeout(() => {
+              dispatch(
+                updateInfoSnackbar({
+                  name: "",
+                  message: "",
+                  show_snacbar: false,
+                })
+              );
+            }, 3000);
+          }
+        },
+      },
     ],
     handler: (players, type) => {
       if (Array.isArray(players)) {

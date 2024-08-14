@@ -138,12 +138,15 @@ import { user } from "@/store/slice/user.slice";
 import {
   // state
   show_chat_streaming_modal,
-  info_snackbar,
   show_leaving_snackbar,
   // action
   updateShowHelpTooltip,
 } from "@/store/slice/memory-game.slice";
-import { score, show_cognimatch_board } from "@/store/slice/cognimatch.slice";
+import {
+  score,
+  show_cognimatch_board,
+  info_snackbar,
+} from "@/store/slice/cognimatch.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 

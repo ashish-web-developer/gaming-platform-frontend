@@ -13,6 +13,12 @@ type ICard = {
 type IScore = {
   [key: number]: number;
 };
+type ILiveStreamChat = {
+  id: string;
+  message: string;
+  viewed: boolean;
+  user: IUsersWithConversation;
+};
 type ICogniMatchInitialState = {
   active_cognimatch_players: IUsersWithConversation[];
   deck: ICard[];
@@ -20,6 +26,14 @@ type ICogniMatchInitialState = {
   score: IScore;
   timer_start_count: number;
   show_cognimatch_board: boolean;
+  live_stream_chat_list: ILiveStreamChat[];
+  game_rules_list: [string, string][];
+  help_tooltip_text: [string, string] | null;
+  info_snackbar: {
+    show_info_snackbar: boolean;
+    message: string;
+    name: string;
+  };
 };
 
 type ICognimatchRoom = {
@@ -67,6 +81,13 @@ type IUpdateTimerStartTimeApiRequest = {
   next_player_turn_id: number;
 };
 
+/**
+ * ==== LIVE STREAM CHAT API ====
+ */
+type ILiveStreamChatApiRequest = {
+  message: string;
+};
+type ILiveStreamChatApiResponse = IBaseResponse & ILiveStreamChatApiRequest;
 export {
   ICogniMatchInitialState,
   ICognimatchRoom,
@@ -77,4 +98,7 @@ export {
   IUpdatePlayersCountApiRequest,
   IFlipCardApiRequest,
   IFlipCardApiResponse,
+  ILiveStreamChat,
+  ILiveStreamChatApiRequest,
+  ILiveStreamChatApiResponse,
 };

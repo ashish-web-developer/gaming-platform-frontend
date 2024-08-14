@@ -14,6 +14,9 @@ import {
   IUpdatePlayersCountApiRequest,
   IFlipCardApiRequest,
   IFlipCardApiResponse,
+  ILiveStreamChat,
+  ILiveStreamChatApiRequest,
+  ILiveStreamChatApiResponse,
 } from "@/types/store/slice/cognimatch";
 import type {
   IThunkApiConfig,
@@ -106,6 +109,25 @@ export const updatePlayersCountApi = createAsyncThunk<
   }
 );
 
+export const liveStreamChatApi = createAsyncThunk<
+  ILiveStreamChatApiResponse,
+  ILiveStreamChatApiRequest,
+  { state: RootState }
+>(
+  "api/live-stream-chat",
+  async ({ message }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response = await Axios.post("/cognimatch/live-stream-chat", {
+        room_id: state.game.room_id,
+        message,
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
 export const flipCardApi = createAsyncThunk<
   IFlipCardApiResponse,
   IFlipCardApiRequest,
@@ -132,6 +154,14 @@ const initialState: ICogniMatchInitialState = {
   score: {},
   timer_start_count: 0,
   show_cognimatch_board: false,
+  game_rules_list: [],
+  live_stream_chat_list: [],
+  help_tooltip_text: null,
+  info_snackbar: {
+    show_info_snackbar: false,
+    message: "",
+    name: "",
+  },
 };
 export const cognimatchSlice = createSlice({
   name: "cognimatch",
@@ -161,6 +191,25 @@ export const cognimatchSlice = createSlice({
     },
     updateShowCognimatchBoard: (state, action: PayloadAction<boolean>) => {
       state.show_cognimatch_board = action.payload;
+    },
+    updateLiveStreamChat: (state, action: PayloadAction<ILiveStreamChat>) => {
+      state.live_stream_chat_list.push(action.payload);
+    },
+    updateInfoSnackbar: (
+      state,
+      action: PayloadAction<{
+        show_snacbar: boolean;
+        message: string;
+        name: string;
+      }>
+    ) => {
+      state.info_snackbar.show_info_snackbar = action.payload.show_snacbar;
+      state.info_snackbar.message = action.payload.message;
+      state.info_snackbar.name = action.payload.name;
+    },
+    updateGameRules: (state, action: PayloadAction<[string, string][]>) => {
+      state.game_rules_list = action.payload;
+      state.help_tooltip_text = action.payload[0];
     },
     updateActiveCogniMatchPlayers: (
       state,
@@ -271,9 +320,16 @@ export const timer_start_count = (state: RootState) =>
   state.cognimatch.timer_start_count;
 export const show_cognimatch_board = (state: RootState) =>
   state.cognimatch.show_cognimatch_board;
+export const live_stream_chat_list = (state: RootState) =>
+  state.cognimatch.live_stream_chat_list;
+export const info_snackbar = (state: RootState) =>
+  state.cognimatch.info_snackbar;
 export const {
   updateActiveCogniMatchPlayers,
   updateShowCognimatchBoard,
   updateCognimatchRoomData,
   flipCardUp,
+  updateLiveStreamChat,
+  updateInfoSnackbar,
+  updateGameRules,
 } = cognimatchSlice.actions;
