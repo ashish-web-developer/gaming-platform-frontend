@@ -81,7 +81,7 @@ export const updateScoreEvent = createAsyncThunk<
   }
 );
 
-export const getCards = createAsyncThunk<
+export const getCardsApi = createAsyncThunk<
   IGetCardsResponse,
   undefined,
   { state: RootState }
@@ -95,6 +95,7 @@ export const getCards = createAsyncThunk<
 });
 
 const initialState: InitialState = {
+  active_cognimatch_players: [],
   game_complexity: 18,
   player_turn_id: null,
   card_list: [],
@@ -283,4 +284,6 @@ export const show_leaving_snackbar = (state: RootState) =>
   state.memoryGame.show_leaving_snackbar;
 export const show_live_stream_chat = (state: RootState) =>
   state.memoryGame.show_live_stream_chat;
+export const active_cognimatch_players = (state: RootState) =>
+  state.memoryGame.active_cognimatch_players;
 export default memoryGameSlice.reducer;

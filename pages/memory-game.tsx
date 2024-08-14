@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 
 // types
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { IUser_ids } from "@/types/store/slice/chat";
+import type { ICognimatchRoom } from "@/types/store/slice/cognimatch";
 
 // local components
 import MemoryGame from "@/components/memory-game/memory-game";
@@ -15,13 +15,7 @@ import path from "path";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import {
-  room_id,
-  gaming_user,
-  is_proposal_sender,
-  updateTimerStartCount,
-  updateTimerStartCountEvent,
-} from "@/store/slice/game.slice";
+import { room_id } from "@/store/slice/game.slice";
 import {
   is_gaming_user_in,
   updateGameRules,
@@ -35,10 +29,14 @@ import {
   updateIsGamingUserIn,
   updateIsGamingUserLeaving,
   updateScoreEvent,
-
   // api
-  getCards,
 } from "@/store/slice/memory-game.slice";
+import {
+  active_cognimatch_players,
+  updateActiveCogniMatchPlayers,
+  updateCognimatchRoomData,
+  updatePlayersCountApi,
+} from "@/store/slice/cognimatch.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // theme provider
@@ -67,125 +65,132 @@ const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
     useState<MutableSpeechUtterance | null>(null);
   const _room_id = useAppSelector(room_id);
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
-  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
-  const _is_proposal_sender = useAppSelector(is_proposal_sender);
+  const { id: user_id } = _user;
+  const _active_cognimatch_players = useAppSelector(active_cognimatch_players);
+  const opponent_player = _active_cognimatch_players.filter(
+    (player) => player.id !== user_id
+  )[0];
   const sound_ref = useRef<{
     flip_sound: HTMLAudioElement | null;
   }>({
     flip_sound: null,
   });
 
-  usePresenceChannel<IUsersWithConversation | null, IUser_ids>({
-    channel: `game.${_room_id}`,
-    handler: (user_ids, event, gaming_user) => {
-      const isUserInChannel = Array.isArray(user_ids)
-        ? user_ids.some((user_id) => user_id.id === _gaming_user?.id)
-        : user_ids.id === _gaming_user?.id;
-      if (event == "leaving" && isUserInChannel) {
-        dispatch(updateIsGamingUserLeaving(isUserInChannel));
-        dispatch(updateIsGamingUserIn(!isUserInChannel));
-        return;
-      }
-      dispatch(updateIsGamingUserIn(isUserInChannel));
-    },
+  usePresenceChannel<
+    IUsersWithConversation | null,
+    | { cognimatch_player: IUsersWithConversation }[]
+    | { cognimatch_player: IUsersWithConversation }
+  >({
+    channel: `cognimatch.${_room_id}`,
     events: [
       {
-        event: "CardListDataEvent",
-        callback: (data) => {
-          dispatch(updateCardList(data.card_list));
+        event: "Cognimatch.UpdateCognimatchRoomDataEvent",
+        callback: (data: { cognimatch_room: ICognimatchRoom }) => {
+          dispatch(updateCognimatchRoomData(data.cognimatch_room));
         },
       },
-
-      {
-        event: "MemoryGameEvent",
-        callback: (data) => {
-          dispatch(
-            updateCardState({ id: data.card_id, flipped: data.flipped })
-          );
-          sound_ref.current.flip_sound?.play();
-        },
-      },
-      {
-        event: "UpdatePlayerTurnEvent",
-        callback: (data) => {
-          dispatch(updatePlayerTurnId(data.player_turn_id));
-        },
-      },
-      {
-        event: "UpdateLastFlippedCard",
-        callback: (data) => {
-          dispatch(updateLastFlippedCard(data.card_id));
-        },
-      },
-      {
-        event: "UpdateTimerStartCountEvent",
-        callback: (data) => {
-          dispatch(updateTimerStartCount(data.start_timer_count));
-        },
-      },
-      {
-        event: "UpdateMemoryGameScore",
-        callback: (data) => {
-          dispatch(updateScore(data.score));
-        },
-      },
-      {
-        event: "LiveChatStreamEvent",
-        callback: (data: { user: IUsersWithConversation; message: string }) => {
-          dispatch(
-            updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
-          );
-          if (data.user.id !== _user.id) {
-            dispatch(
-              updateInfoSnackbar({
-                name: data.user.name,
-                message: data.message,
-                show_snacbar: true,
-              })
-            );
-            setTimeout(() => {
-              dispatch(
-                updateInfoSnackbar({
-                  name: "",
-                  message: "",
-                  show_snacbar: false,
-                })
-              );
-            }, 3000);
-          }
-        },
-      },
+      // {
+      //   event: "CardListDataEvent",
+      //   callback: (data) => {
+      //     dispatch(updateCardList(data.card_list));
+      //   },
+      // },
+      // {
+      //   event: "MemoryGameEvent",
+      //   callback: (data) => {
+      //     dispatch(
+      //       updateCardState({ id: data.card_id, flipped: data.flipped })
+      //     );
+      //     sound_ref.current.flip_sound?.play();
+      //   },
+      // },
+      // {
+      //   event: "UpdatePlayerTurnEvent",
+      //   callback: (data) => {
+      //     dispatch(updatePlayerTurnId(data.player_turn_id));
+      //   },
+      // },
+      // {
+      //   event: "UpdateLastFlippedCard",
+      //   callback: (data) => {
+      //     dispatch(updateLastFlippedCard(data.card_id));
+      //   },
+      // },
+      // {
+      //   event: "UpdateTimerStartCountEvent",
+      //   callback: (data) => {
+      //     dispatch(updateTimerStartCount(data.start_timer_count));
+      //   },
+      // },
+      // {
+      //   event: "UpdateMemoryGameScore",
+      //   callback: (data) => {
+      //     dispatch(updateScore(data.score));
+      //   },
+      // },
+      // {
+      //   event: "LiveChatStreamEvent",
+      //   callback: (data: { user: IUsersWithConversation; message: string }) => {
+      //     dispatch(
+      //       updateLiveStreamChatList({ ...data, viewed: false, id: uuidv4() })
+      //     );
+      //     if (data.user.id !== _user.id) {
+      //       dispatch(
+      //         updateInfoSnackbar({
+      //           name: data.user.name,
+      //           message: data.message,
+      //           show_snacbar: true,
+      //         })
+      //       );
+      //       setTimeout(() => {
+      //         dispatch(
+      //           updateInfoSnackbar({
+      //             name: "",
+      //             message: "",
+      //             show_snacbar: false,
+      //           })
+      //         );
+      //       }, 3000);
+      //     }
+      //   },
+      // },
     ],
-    dependency: _gaming_user,
+    handler: (players, type) => {
+      if (Array.isArray(players)) {
+        const cognimatch_players = players.map(
+          (_player) => _player.cognimatch_player
+        );
+        dispatch(
+          updateActiveCogniMatchPlayers({
+            cognimatch_players: cognimatch_players,
+            type,
+          })
+        );
+      } else {
+        const cognimatch_player = players.cognimatch_player;
+        dispatch(
+          updateActiveCogniMatchPlayers({
+            cognimatch_players: { ...cognimatch_player },
+            type,
+          })
+        );
+      }
+    },
   });
 
   useEffect(() => {
     dispatch(updateGameRules(rules));
+    dispatch(updatePlayersCountApi({ type: "add" }));
     setSpeechUttrance(new MutableSpeechUtterance());
     if (!sound_ref.current.flip_sound) {
       sound_ref.current.flip_sound = new Audio(
         "/memory-game/game-board/card/audio/flip-card-sound.mp3"
       );
     }
+    return () => {
+      dispatch(updatePlayersCountApi({ type: "remove" }));
+    };
   }, []);
-  useEffect(() => {
-    if (_is_gaming_user_in && _is_proposal_sender) {
-      dispatch(getCards());
-      dispatch(
-        updateTimerStartCountEvent({ timer_count: new Date().getTime() })
-      );
-      dispatch(
-        updateScoreEvent({
-          score: {
-            [_gaming_user?.id as number]: 0,
-            [_user.id as number]: 0,
-          },
-        })
-      );
-      dispatch(updatePlayerTurnId(_user.id));
-    }
-  }, [_is_proposal_sender, _is_gaming_user_in]);
 
   return (
     <>

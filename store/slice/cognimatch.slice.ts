@@ -1,0 +1,279 @@
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
+// types
+import type { RootState } from "../rootReducer";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import {
+  ICogniMatchInitialState,
+  ICognimatchRoom,
+  ICreateCognimatchRoomApiRequest,
+  ICreateCognimatchRoomApiResponse,
+  IGetCognimatchRoomInfoApiResponse,
+  IUpdateTimerStartTimeApiRequest,
+  IUpdatePlayersCountApiRequest,
+  IFlipCardApiRequest,
+  IFlipCardApiResponse,
+} from "@/types/store/slice/cognimatch";
+import type {
+  IThunkApiConfig,
+  IBaseResponse,
+} from "@/types/store/slice/common";
+import type { AxiosResponse } from "axios";
+
+// helpers
+import { Axios } from "@/helpers/axios";
+export const createCognimatchRoomApi = createAsyncThunk<
+  ICreateCognimatchRoomApiResponse,
+  ICreateCognimatchRoomApiRequest,
+  IThunkApiConfig
+>(
+  "api/create-cognimatch-room",
+  async ({ room_id, players_id }, { rejectWithValue }) => {
+    try {
+      const response: AxiosResponse<ICreateCognimatchRoomApiResponse> =
+        await Axios.post("/cognimatch/create-cognimatch-room", {
+          room_id,
+          players_id,
+        });
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const getCognimatchRoomInfoApi = createAsyncThunk<
+  IGetCognimatchRoomInfoApiResponse,
+  undefined,
+  IThunkApiConfig
+>("api/cognimatch-room-info", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IGetCognimatchRoomInfoApiResponse> =
+      await Axios.post("/cognimatch/cognimatch-room-info", {
+        room_id: state.game.room_id,
+      });
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+
+export const updateTimerStartTimeApi = createAsyncThunk<
+  IBaseResponse,
+  IUpdateTimerStartTimeApiRequest,
+  IThunkApiConfig
+>(
+  "api/update-timer-start-time",
+  async ({ next_player_turn_id }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IBaseResponse> = await Axios.patch(
+        "/cognimatch/update-timer-start-time",
+        {
+          room_id: state.game.room_id,
+          next_player_turn_id,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const updatePlayersCountApi = createAsyncThunk<
+  IBaseResponse,
+  IUpdatePlayersCountApiRequest,
+  IThunkApiConfig
+>(
+  "api/update-players-count",
+  async ({ type }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const response: AxiosResponse<IBaseResponse> = await Axios.patch(
+        "/cognimatch/update-players-count",
+        {
+          room_id: state.game.room_id,
+          type,
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
+    }
+  }
+);
+
+export const flipCardApi = createAsyncThunk<
+  IFlipCardApiResponse,
+  IFlipCardApiRequest,
+  IThunkApiConfig
+>("api/flip-card", async ({ card_id }, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IFlipCardApiResponse> = await Axios.patch(
+      "/cognimatch/flip-card",
+      {
+        room_id: state.game.room_id,
+        card_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
+const initialState: ICogniMatchInitialState = {
+  active_cognimatch_players: [],
+  deck: [],
+  player_turn_id: null,
+  score: {},
+  timer_start_count: 0,
+  show_cognimatch_board: false,
+};
+export const cognimatchSlice = createSlice({
+  name: "cognimatch",
+  initialState,
+  reducers: {
+    updateCognimatchRoomData: (
+      state,
+      action: PayloadAction<ICognimatchRoom>
+    ) => {
+      state.deck = action.payload.deck;
+      state.player_turn_id = action.payload.player_turn_id;
+      state.score = action.payload.score;
+      state.timer_start_count = new Date(
+        `${action.payload.timer_start_time}  UTC (+00:00)`
+      ).getTime();
+    },
+    flipCardUp: (state, action: PayloadAction<{ card_id: string }>) => {
+      state.deck = state.deck.map((card) => {
+        if (card.id == action.payload.card_id) {
+          return {
+            ...card,
+            flipped: true,
+          };
+        }
+        return card;
+      });
+    },
+    updateShowCognimatchBoard: (state, action: PayloadAction<boolean>) => {
+      state.show_cognimatch_board = action.payload;
+    },
+    updateActiveCogniMatchPlayers: (
+      state,
+      action: PayloadAction<{
+        type: "here" | "joining" | "leaving";
+        cognimatch_players: IUsersWithConversation | IUsersWithConversation[];
+      }>
+    ) => {
+      switch (action.payload.type) {
+        case "here":
+          if (Array.isArray(action.payload.cognimatch_players)) {
+            const cognimatch_players = action.payload.cognimatch_players.filter(
+              (poker_player) =>
+                !state.active_cognimatch_players.some(
+                  (active_poker_player) =>
+                    active_poker_player.id == poker_player.id
+                )
+            );
+            state.active_cognimatch_players = [
+              ...state.active_cognimatch_players,
+              ...cognimatch_players,
+            ];
+          } else {
+            state.active_cognimatch_players = [
+              ...state.active_cognimatch_players,
+              action.payload.cognimatch_players,
+            ];
+          }
+          if (state.active_cognimatch_players.length == 2) {
+            state.show_cognimatch_board = true;
+          }
+          return;
+        case "joining":
+          if (Array.isArray(action.payload.cognimatch_players)) {
+            const cognimatch_players = action.payload.cognimatch_players.filter(
+              (poker_player) =>
+                !state.active_cognimatch_players.some(
+                  (active_poker_player) =>
+                    active_poker_player.id == poker_player.id
+                )
+            );
+            state.active_cognimatch_players = [
+              ...state.active_cognimatch_players,
+              ...cognimatch_players,
+            ];
+          } else {
+            const poker_player = action.payload.cognimatch_players;
+            if (
+              !state.active_cognimatch_players.some(
+                (active_poker_player) =>
+                  active_poker_player.id == poker_player.id
+              )
+            ) {
+              state.active_cognimatch_players = [
+                ...state.active_cognimatch_players,
+                poker_player,
+              ];
+            }
+          }
+          if (state.active_cognimatch_players.length == 2) {
+            state.show_cognimatch_board = true;
+          }
+          return;
+        case "leaving":
+          if (Array.isArray(action.payload.cognimatch_players)) {
+            const { cognimatch_players } = action.payload;
+            state.active_cognimatch_players =
+              state.active_cognimatch_players.filter(
+                (active_poker_player) =>
+                  !cognimatch_players.some(
+                    (poker_player) => active_poker_player.id == poker_player.id
+                  )
+              );
+          } else {
+            const { cognimatch_players } = action.payload;
+            state.active_cognimatch_players =
+              state.active_cognimatch_players.filter(
+                (active_poker_player) =>
+                  active_poker_player.id !== cognimatch_players.id
+              );
+          }
+          return;
+      }
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(createCognimatchRoomApi.fulfilled, (state, action) => {
+      state.deck = action.payload.cognimatch_room.deck;
+      state.player_turn_id = action.payload.cognimatch_room.player_turn_id;
+      state.score = action.payload.cognimatch_room.score;
+    });
+    builder.addCase(getCognimatchRoomInfoApi.fulfilled, (state, action) => {
+      state.deck = action.payload.cognimatch_room.deck;
+      state.player_turn_id = action.payload.cognimatch_room.player_turn_id;
+      state.score = action.payload.cognimatch_room.score;
+    });
+  },
+});
+
+export default cognimatchSlice.reducer;
+export const active_cognimatch_players = (state: RootState) =>
+  state.cognimatch.active_cognimatch_players;
+export const score = (state: RootState) => state.cognimatch.score;
+export const player_turn_id = (state: RootState) =>
+  state.cognimatch.player_turn_id;
+export const deck = (state: RootState) => state.cognimatch.deck;
+export const timer_start_count = (state: RootState) =>
+  state.cognimatch.timer_start_count;
+export const show_cognimatch_board = (state: RootState) =>
+  state.cognimatch.show_cognimatch_board;
+export const {
+  updateActiveCogniMatchPlayers,
+  updateShowCognimatchBoard,
+  updateCognimatchRoomData,
+  flipCardUp,
+} = cognimatchSlice.actions;

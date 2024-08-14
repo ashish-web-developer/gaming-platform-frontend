@@ -14,8 +14,6 @@ import type {
   IUpdateViewResponse,
   ISendInvitationApiRequest,
   ISendInvitationApiResponse,
-  IAcceptInvitationApiRequest,
-  IAcceptInvitationApiResponse,
   ISendMessagePayload,
   ISendMessageResponse,
 } from "@/types/store/slice/chat";
@@ -161,26 +159,6 @@ export const sendInvitationApi = createAsyncThunk<
   }
 });
 
-export const acceptInvitationApi = createAsyncThunk<
-  IAcceptInvitationApiResponse,
-  IAcceptInvitationApiRequest,
-  { state: RootState }
->(
-  "api/game/accept-invitation",
-  async ({ is_accepted }, { getState, rejectWithValue }) => {
-    try {
-      const state = getState();
-      const response: AxiosResponse<IAcceptInvitationApiResponse> =
-        await Axios.post("game/accept-invitation", {
-          receiver_id: state.game.gaming_user?.id,
-          is_accepted,
-        });
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
-    }
-  }
-);
 
 export const sendMessageApi = createAsyncThunk<
   ISendMessageResponse,

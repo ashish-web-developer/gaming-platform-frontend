@@ -1,10 +1,9 @@
-import { forwardRef, useEffect, useId, useRef } from "react";
+import { forwardRef, useId } from "react";
+import { unwrapResult } from "@reduxjs/toolkit";
 // types
 import type { ICard } from "@/types/store/slice/memory-game";
 import type { FC } from "react";
-import type { User } from "@/types/user";
 import type { ForwardRefRenderFunction } from "react";
-import type { Score } from "@/types/store/slice/memory-game";
 // styled components
 import {
   StyledCard,
@@ -22,19 +21,12 @@ import {
 import { getCardName } from "@/helpers/memory-game/game";
 
 // redux
-import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import { useAppDispatch } from "@/hooks/redux.hook";
 import {
-  memoryGameCardEvent,
-  updateLastFlippedCardEvent,
-  card_list,
-  updateScoreEvent,
-} from "@/store/slice/memory-game.slice";
-import {
-  // states
-  score,
-  last_flipped_card_id,
-} from "@/store/slice/memory-game.slice";
-import { updatePlayerTurnEvent } from "@/store/slice/game.slice";
+  flipCardApi,
+  updateTimerStartTimeApi,
+  flipCardUp,
+} from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -115,11 +107,13 @@ const CardPattern: FC<{ size: number | string; image: string }> = ({
 
 interface IProps extends ICard {
   is_clickable: boolean;
-  user: User;
+  user_id: number;
   player_turn_id: number;
+  opponent_player_id: number;
 }
 interface IForwardedRef {
   card_match_sound: HTMLAudioElement | null;
+  flip_sound: HTMLAudioElement | null;
 }
 
 const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
@@ -130,103 +124,42 @@ const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
     flipped,
     id,
     is_clickable,
-    user,
+    user_id,
     card_image,
     player_turn_id,
+    opponent_player_id,
   },
-  ref
+  sound_ref
 ) => {
   const is_mobile = useIsMobile();
-  const _card_list = useAppSelector(card_list);
   const dispatch = useAppDispatch();
-  const _last_flipped_card_id = useAppSelector(last_flipped_card_id);
-  const _last_flipped_card = _card_list.filter(
-    (card) => card.id == _last_flipped_card_id
-  )[0];
-  const _score = useAppSelector(score) as Score;
   const getCardColor: any = () => {
     if (flipped) {
       return cardColor == "red" ? "#D62839" : "#090302";
     }
     return "#000";
   };
-  const timeout_ref = useRef<NodeJS.Timeout>();
-
-  useEffect(() => {
-    console.log("component got rerender");
-    return () => {
-      console.log("unmount");
-      clearTimeout(timeout_ref.current);
-    };
-  }, []);
   return (
     <StyledCard
-      $filter={player_turn_id == user.id ? false : true}
-      onClick={() => {
-        if (is_clickable) {
-          // To flip the card for both user;
-          dispatch(
-            memoryGameCardEvent({
-              card_id: id,
-              flipped: true,
-            })
-          );
-          /**
-           * Here we are checking if two card
-           * are not matching or not
-           * if two card matches then we
-           * then we update the score
-           * else we flip down the
-           * both card
-           */
-          if (_last_flipped_card) {
-            if (
-              _last_flipped_card.card == card &&
-              _last_flipped_card.cardColor == cardColor &&
-              _last_flipped_card.suit == suit
-            ) {
-              dispatch(
-                updateScoreEvent({
-                  score: {
-                    ..._score,
-                    [user.id as number]: _score[user.id as number] + 1,
-                  },
-                })
-              );
-              typeof ref !== "function"
-                ? ref?.current?.card_match_sound?.play()
-                : null;
-            } else {
-              timeout_ref.current = setTimeout(() => {
-                dispatch(
-                  memoryGameCardEvent({
-                    card_id: _last_flipped_card_id as string,
-                    flipped: false,
-                  })
-                );
-                dispatch(
-                  memoryGameCardEvent({
-                    card_id: id,
-                    flipped: false,
-                  })
-                );
-              }, 2000);
-            }
-            dispatch(updatePlayerTurnEvent());
+      $filter={player_turn_id == user_id ? false : true}
+      onClick={async () => {
+        if (
+          is_clickable &&
+          typeof sound_ref !== "function" &&
+          sound_ref?.current
+        ) {
+          dispatch(flipCardUp({ card_id: id }));
+          sound_ref.current.flip_sound?.play();
+          const result_action = await dispatch(flipCardApi({ card_id: id }));
+          const response = unwrapResult(result_action);
+          response.card_matched && sound_ref.current.card_match_sound?.play();
+          if (!response.last_flipped_card) {
+            dispatch(
+              updateTimerStartTimeApi({
+                next_player_turn_id: opponent_player_id,
+              })
+            );
           }
-          /**
-           * last_flipped_card_id state is used to track
-           * the last flipped card, once one card has been
-           * flipped then next time we match the first card
-           * to the second card and check if it's a match
-           * or not, then we set it to null for both
-           * user
-           */
-          dispatch(
-            updateLastFlippedCardEvent({
-              card_id: _last_flipped_card_id ? null : id,
-            })
-          );
         }
       }}
       $showBackground={!flipped}

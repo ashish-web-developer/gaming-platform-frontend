@@ -28,14 +28,13 @@ import withTimer from "@/hoc/memory-game/with-timer";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { card_list, player_turn_id } from "@/store/slice/memory-game.slice";
 import { user } from "@/store/slice/user.slice";
 
-import { gaming_user } from "@/store/slice/game.slice";
 import {
-  // state
-  is_gaming_user_in,
-} from "@/store/slice/memory-game.slice";
+  active_cognimatch_players,
+  player_turn_id,
+  deck,
+} from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -44,16 +43,16 @@ import { IUsersWithConversation } from "@/types/store/slice/chat";
 const MobileGameBoard: FC<{
   timer_count: number;
 }> = ({ timer_count }) => {
-  const _card_list = useAppSelector(card_list);
+  const _deck = useAppSelector(deck);
   const _player_turn_id = useAppSelector(player_turn_id);
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
+  const { id: user_id } = _user;
+  const opponent_player = useAppSelector(active_cognimatch_players).filter(
+    (player) => player.id !== user_id
+  )[0];
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const gaming_user_avatar_url = useAvatarUrl(
-    _gaming_user as IUsersWithConversation
-  );
+  const opponent_player_avatar_url = useAvatarUrl(opponent_player);
 
-  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   const soundRef = useRef<{
     flip_sound: HTMLAudioElement | null;
     card_match_sound: HTMLAudioElement | null;
@@ -79,7 +78,7 @@ const MobileGameBoard: FC<{
         <StyledGameBoardContent>
           <StyledTimer>{String(timer_count).padStart(2, "0")}</StyledTimer>
           <StyledCardContainer>
-            {_card_list.map((card, index) => {
+            {_deck.map((card, index) => {
               return (
                 <Card
                   suit={card.suit}
@@ -89,10 +88,11 @@ const MobileGameBoard: FC<{
                   id={card.id}
                   key={index}
                   is_clickable={_player_turn_id == _user.id}
-                  user={_user}
+                  user_id={user_id as number}
                   card_image={card.card_image}
                   player_turn_id={_player_turn_id as number}
                   ref={soundRef}
+                  opponent_player_id={opponent_player.id}
                 />
               );
             })}
@@ -120,11 +120,11 @@ const MobileGameBoard: FC<{
               <StyledAvatar
                 $size="40px"
                 $border="3px solid #fff"
-                $online={_is_gaming_user_in}
+                $online={Boolean(opponent_player)}
               >
                 <StyledImage
                   sizes="(max-width: 1400px) 10vw"
-                  src={gaming_user_avatar_url}
+                  src={opponent_player_avatar_url}
                   fill={true}
                   alt="user-avatar"
                 />

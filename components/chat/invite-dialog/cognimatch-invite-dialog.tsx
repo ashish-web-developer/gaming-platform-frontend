@@ -28,12 +28,12 @@ import { user } from "@/store/slice/user.slice";
 import {
   show_cognimatch_invite_dialog,
   updateInviteDialog,
-  acceptInvitationApi,
 } from "@/store/slice/chat.slice";
+import { getCognimatchRoomInfoApi } from "@/store/slice/cognimatch.slice";
 import {
+  room_id,
   gaming_user,
   updateRoomId,
-  updateGamingUser,
 } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 // hooks
@@ -61,6 +61,7 @@ const CogniMatchInviteDialog: FC = () => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const theme = useTheme() as Theme;
+  const _room_id = useAppSelector(room_id);
   const _show_cognimatch_invite_dialog = useAppSelector(
     show_cognimatch_invite_dialog
   );
@@ -77,17 +78,7 @@ const CogniMatchInviteDialog: FC = () => {
     >
       <StyledPlayButton
         onClick={() => {
-          dispatch(
-            acceptInvitationApi({
-              is_accepted: true,
-            })
-          );
-          dispatch(
-            updateInviteDialog({
-              modal_type: "cognimatch",
-              is_open: false,
-            })
-          );
+          dispatch(getCognimatchRoomInfoApi());
           router.push("/memory-game");
         }}
       >
@@ -102,7 +93,6 @@ const CogniMatchInviteDialog: FC = () => {
             })
           );
           dispatch(updateRoomId(null));
-          dispatch(updateGamingUser(null));
         }}
       >
         <CloseIcon size={is_mobile ? 20 : 16} color={"#000"} />

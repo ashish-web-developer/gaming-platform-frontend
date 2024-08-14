@@ -1,5 +1,4 @@
 // types
-import type { Score } from "@/types/store/slice/memory-game";
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
 // styled components
@@ -21,8 +20,10 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
-import { is_gaming_user_in, score } from "@/store/slice/memory-game.slice";
+import {
+  active_cognimatch_players,
+  score,
+} from "@/store/slice/cognimatch.slice";
 
 const Scores: FC<{ children: number }> = ({ children }) => {
   return (
@@ -42,13 +43,15 @@ const Scores: FC<{ children: number }> = ({ children }) => {
 
 const ScoreBoard = () => {
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
+  const { id: user_id } = _user;
+  const _active_cognimatch_players = useAppSelector(active_cognimatch_players);
+  const opponent_player = _active_cognimatch_players.filter(
+    (player) => player.id !== user_id
+  )[0];
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const gaming_user_avatar_url = useAvatarUrl(
-    _gaming_user as IUsersWithConversation
-  );
-  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
-  const _score = useAppSelector(score) as Score;
+  const gaming_user_avatar_url = useAvatarUrl(opponent_player);
+  const is_gaming_user_in = _active_cognimatch_players.length == 2;
+  const _score = useAppSelector(score);
   return (
     <StyledScoreBoard
       initial={{
@@ -81,11 +84,11 @@ const ScoreBoard = () => {
             height={50}
           />
           <Scores>
-            {_gaming_user ? _score[_gaming_user.id as number] : 0}
+            {opponent_player ? _score[opponent_player.id as number] : 0}
           </Scores>
         </StyledScoreContainer>
         <StyledProfileContainer>
-          <StyledAvatar $size="40px" $online={_is_gaming_user_in}>
+          <StyledAvatar $size="40px" $online={is_gaming_user_in}>
             <StyledImage
               sizes="(max-width: 1400px) 10vw"
               src={gaming_user_avatar_url}
@@ -93,7 +96,9 @@ const ScoreBoard = () => {
               alt="user-avatar"
             />
           </StyledAvatar>
-          <StyledUserName>{_gaming_user?.name?.split(" ")[0]}</StyledUserName>
+          <StyledUserName>
+            {opponent_player?.name?.split(" ")[0]}
+          </StyledUserName>
         </StyledProfileContainer>
       </StyledContentContainer>
     </StyledScoreBoard>

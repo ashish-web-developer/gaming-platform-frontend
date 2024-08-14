@@ -16,48 +16,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 // helpers
 import { Axios } from "@/helpers/axios";
 
-export const updatePlayerTurnEvent = createAsyncThunk<
-  IUpdatePlayerTurnResponse,
-  undefined,
-  { state: RootState }
->(
-  "game/update-player-turn-event",
-  async (_, { getState, rejectWithValue, dispatch }) => {
-    try {
-      const state = getState();
-      const response = await Axios.post("/game/update-player-turn", {
-        room_id: state.game.room_id,
-        player_turn_id: state.game.gaming_user?.id,
-      });
-      dispatch(
-        updateTimerStartCountEvent({ timer_count: new Date().getTime() })
-      );
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-export const updateTimerStartCountEvent = createAsyncThunk<
-  IUpdateTimerStartCountEventResponse,
-  IUpdateTimerStartCountEventRequest,
-  { state: RootState }
->(
-  "game/update-timer-start-count",
-  async ({ timer_count }, { getState, rejectWithValue }) => {
-    try {
-      const state = getState();
-      const response = await Axios.post("/game/update-timer-start-count", {
-        room_id: state.game.room_id,
-        timer_start_count: timer_count,
-      });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error);
-    }
-  }
-);
-
 export const liveStreamChatApi = createAsyncThunk<
   ILiveStreamChatApiResponse,
   ILiveStreamChatApiRequest,
@@ -102,9 +60,6 @@ const gameSlice = createSlice({
     },
     updateShowDeniedSnackbar: (state, action: PayloadAction<boolean>) => {
       state.show_denied_snackbar = action.payload;
-    },
-    udpateIsProposalSender: (state, action: PayloadAction<boolean>) => {
-      state.is_proposal_sender = action.payload;
     },
     updateTimerStartCount: (state, action: PayloadAction<number | null>) => {
       state.timer_start_count = action.payload;

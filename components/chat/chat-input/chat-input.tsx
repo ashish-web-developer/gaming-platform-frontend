@@ -39,8 +39,9 @@ import {
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
-import { udpateIsProposalSender, updateRoomId } from "@/store/slice/game.slice";
+import { updateRoomId } from "@/store/slice/game.slice";
 import { createPokerRoomApi } from "@/store/slice/poker/poker.slice";
+import { createCognimatchRoomApi } from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -235,7 +236,6 @@ const ChatInput: FC<{}> = () => {
               onClick={() => {
                 const room_id = uuidv4();
                 dispatch(updateRoomId(room_id));
-                dispatch(udpateIsProposalSender(true));
                 if (_active_group) {
                   dispatch(
                     createPokerRoomApi({
@@ -252,10 +252,20 @@ const ChatInput: FC<{}> = () => {
                   router.push("/poker");
                 } else {
                   dispatch(
+                    createCognimatchRoomApi({
+                      room_id,
+                      players_id: [
+                        _user.id as number,
+                        _active_user?.id as number,
+                      ],
+                    })
+                  );
+                  dispatch(
                     sendInvitationApi({
                       game: "cognimatch",
                     })
                   );
+                  router.push("/memory-game");
                 }
               }}
             >

@@ -47,6 +47,7 @@ type ICard = {
 };
 
 type InitialState = {
+  active_cognimatch_players: IUsersWithConversation[];
   score: null | Score;
   game_complexity: number;
   player_turn_id: number | null;

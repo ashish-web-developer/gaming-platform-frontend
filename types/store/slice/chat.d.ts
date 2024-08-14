@@ -101,13 +101,6 @@ type ISendInvitationApiResponse = {
   success: boolean;
   message: string;
 };
-type IAcceptInvitationApiRequest = {
-  is_accepted: boolean;
-};
-type IAcceptInvitationApiResponse = {
-  success: boolean;
-  message: string;
-};
 
 /**
  * ===== GROUP API =======
@@ -138,8 +131,6 @@ export {
   IUpdateViewResponse,
   ISendInvitationApiRequest,
   ISendInvitationApiResponse,
-  IAcceptInvitationApiRequest,
-  IAcceptInvitationApiResponse,
   ISendMessagePayload,
   ISendMessageResponse,
 };

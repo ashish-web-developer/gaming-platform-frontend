@@ -137,14 +137,13 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   // state
-  show_game_board,
-  score,
   show_chat_streaming_modal,
   info_snackbar,
   show_leaving_snackbar,
   // action
   updateShowHelpTooltip,
 } from "@/store/slice/memory-game.slice";
+import { score, show_cognimatch_board } from "@/store/slice/cognimatch.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 
@@ -158,7 +157,7 @@ const MemoryGame: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _show_game_board = useAppSelector(show_game_board);
+  const _show_cognimatch_board = useAppSelector(show_cognimatch_board);
   const _gaming_user = useAppSelector(gaming_user);
   const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
@@ -208,7 +207,7 @@ const MemoryGame: FC = () => {
           )}
         <StyledContentContainer>
           {is_mobile ? <MobileNav /> : <Nav />}
-          {!_show_game_board && (
+          {!_show_cognimatch_board && (
             <>
               {is_mobile ? (
                 <StyledMainText $mode={_mode}>
@@ -224,10 +223,10 @@ const MemoryGame: FC = () => {
             </>
           )}
           <StyledGrid
-            $paddingTop={_show_game_board && !is_mobile ? "70px" : null}
+            $paddingTop={_show_cognimatch_board && !is_mobile ? "70px" : null}
           >
             <StyledLeftContainer>
-              {!_show_game_board && (
+              {!_show_cognimatch_board && (
                 <>
                   {is_mobile ? (
                     <>
@@ -242,7 +241,7 @@ const MemoryGame: FC = () => {
                   )}
                 </>
               )}
-              {_show_game_board &&
+              {_show_cognimatch_board &&
                 (_score_list?.reduce(
                   (acc, currentValue) => acc + currentValue,
                   0
