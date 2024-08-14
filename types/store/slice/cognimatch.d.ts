@@ -27,12 +27,17 @@ type ICogniMatchInitialState = {
   timer_start_count: number;
   show_cognimatch_board: boolean;
   live_stream_chat_list: ILiveStreamChat[];
-  game_rules_list: [string, string][];
-  help_tooltip_text: [string, string] | null;
   info_snackbar: {
     show_info_snackbar: boolean;
     message: string;
     name: string;
+  };
+  help_tooltip: {
+    game_rules_list: [string, string][];
+    tooltip_text: [string, string] | null;
+    show_tooltip: boolean;
+    current_rule_index: number;
+    play_audio: boolean;
   };
 };
 

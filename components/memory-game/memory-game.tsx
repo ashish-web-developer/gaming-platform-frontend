@@ -140,12 +140,12 @@ import {
   show_chat_streaming_modal,
   show_leaving_snackbar,
   // action
-  updateShowHelpTooltip,
 } from "@/store/slice/memory-game.slice";
 import {
   score,
   show_cognimatch_board,
   info_snackbar,
+  updateShowHelpTooltip,
 } from "@/store/slice/cognimatch.slice";
 import { gaming_user } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";

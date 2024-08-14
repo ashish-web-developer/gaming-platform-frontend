@@ -87,6 +87,5 @@ export const {
   updateGamingUser,
   updateRoomId,
   updateShowDeniedSnackbar,
-  udpateIsProposalSender,
   updateTimerStartCount,
 } = gameSlice.actions;

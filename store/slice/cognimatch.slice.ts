@@ -154,13 +154,18 @@ const initialState: ICogniMatchInitialState = {
   score: {},
   timer_start_count: 0,
   show_cognimatch_board: false,
-  game_rules_list: [],
   live_stream_chat_list: [],
-  help_tooltip_text: null,
   info_snackbar: {
     show_info_snackbar: false,
     message: "",
     name: "",
+  },
+  help_tooltip: {
+    game_rules_list: [],
+    tooltip_text: null,
+    show_tooltip: false,
+    current_rule_index: 0,
+    play_audio: true,
   },
 };
 export const cognimatchSlice = createSlice({
@@ -208,8 +213,19 @@ export const cognimatchSlice = createSlice({
       state.info_snackbar.name = action.payload.name;
     },
     updateGameRules: (state, action: PayloadAction<[string, string][]>) => {
-      state.game_rules_list = action.payload;
-      state.help_tooltip_text = action.payload[0];
+      state.help_tooltip.game_rules_list = action.payload;
+      state.help_tooltip.tooltip_text = action.payload[0];
+    },
+    updateShowHelpTooltip: (state, action: PayloadAction<boolean>) => {
+      state.help_tooltip.show_tooltip = action.payload;
+    },
+    updatePlayHelpTooltipAudio: (state, action: PayloadAction<boolean>) => {
+      state.help_tooltip.play_audio = action.payload;
+    },
+    updateCurrentRuleIndex: (state, action: PayloadAction<number>) => {
+      state.help_tooltip.current_rule_index = action.payload;
+      state.help_tooltip.tooltip_text =
+        state.help_tooltip.game_rules_list[action.payload];
     },
     updateActiveCogniMatchPlayers: (
       state,
@@ -324,6 +340,7 @@ export const live_stream_chat_list = (state: RootState) =>
   state.cognimatch.live_stream_chat_list;
 export const info_snackbar = (state: RootState) =>
   state.cognimatch.info_snackbar;
+export const help_tooltip = (state: RootState) => state.cognimatch.help_tooltip;
 export const {
   updateActiveCogniMatchPlayers,
   updateShowCognimatchBoard,
@@ -332,4 +349,7 @@ export const {
   updateLiveStreamChat,
   updateInfoSnackbar,
   updateGameRules,
+  updateShowHelpTooltip,
+  updatePlayHelpTooltipAudio,
+  updateCurrentRuleIndex,
 } = cognimatchSlice.actions;

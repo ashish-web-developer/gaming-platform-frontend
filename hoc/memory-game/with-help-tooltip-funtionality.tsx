@@ -5,14 +5,11 @@ import type { ComponentType } from "react";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  play_audio,
-  show_help_tooltip,
-  help_tooltip_text,
-  current_rule_index,
-  updateCurrentRuleIndex,
+  help_tooltip,
+  updatePlayHelpTooltipAudio,
   updateShowHelpTooltip,
-  updatePlayAudio,
-} from "@/store/slice/memory-game.slice";
+  updateCurrentRuleIndex,
+} from "@/store/slice/cognimatch.slice";
 
 // context
 import { UttranceContext } from "context";
@@ -33,20 +30,18 @@ const withHelpTooltipFunctionality = (
   return function EnhancedComponent() {
     const dispatch = useAppDispatch();
     const SpeechUttrance = useContext(UttranceContext);
-    const _play_audio = useAppSelector(play_audio);
-    const _show_help_tooltip = useAppSelector(show_help_tooltip);
-    const _help_tooltip_text = useAppSelector(help_tooltip_text);
-    const _current_rule_index = useAppSelector(current_rule_index);
+    const { play_audio, show_tooltip, tooltip_text, current_rule_index } =
+      useAppSelector(help_tooltip);
     const voiceRef = useRef<{ voice: SpeechSynthesisVoice[] }>({
       voice: [],
     });
 
     const handlePlayAudio = () => {
-      dispatch(updatePlayAudio(!_play_audio));
+      dispatch(updatePlayHelpTooltipAudio(!play_audio));
     };
 
     const closeHelpTooltip = () => {
-      dispatch(updatePlayAudio(true));
+      dispatch(updatePlayHelpTooltipAudio(true));
       dispatch(updateShowHelpTooltip(false));
       dispatch(updateCurrentRuleIndex(0));
     };
@@ -57,20 +52,15 @@ const withHelpTooltipFunctionality = (
 
     useEffect(() => {
       const handleEnd = () => {
-        if (_current_rule_index < 7) {
-          dispatch(updateCurrentRuleIndex(_current_rule_index + 1));
+        if (current_rule_index < 7) {
+          dispatch(updateCurrentRuleIndex(current_rule_index + 1));
           return;
         }
         dispatch(updateShowHelpTooltip(false));
         dispatch(updateCurrentRuleIndex(0));
       };
-      if (
-        _show_help_tooltip &&
-        _help_tooltip_text &&
-        SpeechUttrance &&
-        _play_audio
-      ) {
-        SpeechUttrance.text = _help_tooltip_text[1];
+      if (show_tooltip && tooltip_text && SpeechUttrance && play_audio) {
+        SpeechUttrance.text = tooltip_text[1];
         if (typeof voiceRef !== "function" && voiceRef?.current) {
           SpeechUttrance.uttrance.voice = voiceRef.current.voice.filter(
             (voice) => voice.voiceURI.includes("Female")
@@ -83,7 +73,7 @@ const withHelpTooltipFunctionality = (
         SpeechUttrance?.uttrance.removeEventListener("end", handleEnd);
         speechSynthesis.cancel();
       };
-    }, [_show_help_tooltip, _current_rule_index, _play_audio, SpeechUttrance]);
+    }, [show_tooltip, current_rule_index, play_audio, SpeechUttrance]);
 
     useEffect(() => {
       const updateVoices = () => {
@@ -98,13 +88,13 @@ const withHelpTooltipFunctionality = (
         );
       };
     }, []);
-    if (_show_help_tooltip) {
+    if (show_tooltip) {
       return (
         <BaseComponent
-          is_open={_show_help_tooltip}
-          play_audio={_play_audio}
-          help_tooltip_text={_help_tooltip_text}
-          current_rule_index={_current_rule_index}
+          is_open={show_tooltip}
+          play_audio={play_audio}
+          help_tooltip_text={tooltip_text}
+          current_rule_index={current_rule_index}
           updateRuleIndex={updateRuleIndex}
           closeHelpTooltip={closeHelpTooltip}
           handlePlayAudio={handlePlayAudio}
