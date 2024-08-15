@@ -29,10 +29,10 @@ import { useTheme } from "styled-components";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   live_stream_chat_list,
+  liveStreamChatApi,
   updateShowChatStreamingModal,
   updateLiveSteamMessageView,
-} from "@/store/slice/memory-game.slice";
-import { liveStreamChatApi } from "@/store/slice/game.slice";
+} from "@/store/slice/cognimatch.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // hooks

@@ -137,7 +137,6 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   // state
-  show_chat_streaming_modal,
   show_leaving_snackbar,
   // action
 } from "@/store/slice/memory-game.slice";
@@ -145,6 +144,7 @@ import {
   score,
   show_cognimatch_board,
   info_snackbar,
+  show_chat_streaming_modal,
   updateShowHelpTooltip,
 } from "@/store/slice/cognimatch.slice";
 import { gaming_user } from "@/store/slice/game.slice";

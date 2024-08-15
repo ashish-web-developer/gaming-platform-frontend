@@ -27,6 +27,7 @@ type ICogniMatchInitialState = {
   timer_start_count: number;
   show_cognimatch_board: boolean;
   live_stream_chat_list: ILiveStreamChat[];
+  show_chat_streaming_modal: boolean;
   info_snackbar: {
     show_info_snackbar: boolean;
     message: string;
