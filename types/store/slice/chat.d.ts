@@ -95,6 +95,7 @@ type IUpdateViewResponse = {
 
 type ISendInvitationApiRequest = {
   game: string;
+  room_id: string;
 };
 
 type ISendInvitationApiResponse = {

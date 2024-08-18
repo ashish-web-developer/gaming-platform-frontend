@@ -20,14 +20,20 @@ type ILiveStreamChat = {
   user: IUsersWithConversation;
 };
 type ICogniMatchInitialState = {
+  cognimatch_room_id: string | null;
   active_cognimatch_players: IUsersWithConversation[];
   deck: ICard[];
   player_turn_id: number | null;
   score: IScore;
   timer_start_count: number;
   show_cognimatch_board: boolean;
-  live_stream_chat_list: ILiveStreamChat[];
-  show_chat_streaming_modal: boolean;
+  live_stream_chat: {
+    show_chats: boolean;
+    chat_list: ILiveStreamChat[];
+    mobile: {
+      show_chat_modal: boolean;
+    };
+  };
   info_snackbar: {
     show_info_snackbar: boolean;
     message: string;

@@ -32,7 +32,7 @@ import {
   show_poker_invite_dialog,
   updateInviteDialog,
 } from "@/store/slice/chat.slice";
-import { updateRoomId } from "@/store/slice/game.slice";
+import { updatePokerRoomId } from "@/store/slice/poker/poker.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -90,7 +90,7 @@ const PokerInviteDialog: FC = () => {
                 is_open: false,
               })
             );
-            dispatch(updateRoomId(null));
+            dispatch(updatePokerRoomId(null));
           }}
         >
           <CloseIcon size={is_mobile ? 20 : 16} color={"#fff"} />

@@ -14,9 +14,6 @@ import { useAppSelector, useAppDispatch } from "./redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
 import { updateNotification } from "@/store/slice/notification.slice";
-import { gaming_user } from "@/store/slice/game.slice";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
-
 
 function useEcho(): Echo | null {
   const [echo, setEcho] = useState<null | Echo>(null);

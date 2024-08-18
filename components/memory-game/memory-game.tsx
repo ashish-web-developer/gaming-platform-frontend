@@ -136,18 +136,12 @@ import { Tooltip } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
-  // state
-  show_leaving_snackbar,
-  // action
-} from "@/store/slice/memory-game.slice";
-import {
   score,
   show_cognimatch_board,
   info_snackbar,
-  show_chat_streaming_modal,
+  live_stream_chat,
   updateShowHelpTooltip,
 } from "@/store/slice/cognimatch.slice";
-import { gaming_user } from "@/store/slice/game.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // icons
@@ -161,18 +155,16 @@ const MemoryGame: FC = () => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const _show_cognimatch_board = useAppSelector(show_cognimatch_board);
-  const _gaming_user = useAppSelector(gaming_user);
   const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
-  const _show_chat_streaming_modal = useAppSelector(show_chat_streaming_modal);
-  const _info_snackbar = useAppSelector(info_snackbar);
-  const _show_leaving_snackbar = useAppSelector(show_leaving_snackbar);
+  const show_mobile_stream_modal =
+    useAppSelector(live_stream_chat).mobile.show_chat_modal;
 
   return (
     <StyledPage>
-      {is_mobile && _show_chat_streaming_modal && <MobileLiveStreamChat />}
+      {is_mobile && show_mobile_stream_modal && <MobileLiveStreamChat />}
       {is_mobile && <MobileHelpTooltip />}
       <StyledContainer $mode={_mode}>
         {!is_mobile && <HelpTooltip />}
@@ -191,7 +183,8 @@ const MemoryGame: FC = () => {
         </StyledHelpCtaContainer>
         <StyledBackgroundCircleOne $mode={_mode} />
         <StyledBackgroundCircleTwo $mode={_mode} />
-        {(_show_leaving_snackbar || _info_snackbar.show_info_snackbar) &&
+        {/** handle leaving opponent player */}
+        {/* {(_show_leaving_snackbar || _info_snackbar.show_info_snackbar) &&
           is_mobile && (
             <StyledInfoSnackbarContainer>
               <InfoSnackbar
@@ -207,7 +200,7 @@ const MemoryGame: FC = () => {
                   : "👋 I am leaving the game"}
               </InfoSnackbar>
             </StyledInfoSnackbarContainer>
-          )}
+          )} */}
         <StyledContentContainer>
           {is_mobile ? <MobileNav /> : <Nav />}
           {!_show_cognimatch_board && (
@@ -264,7 +257,8 @@ const MemoryGame: FC = () => {
                 <LiveStreamChat />
               )}
 
-              {(_show_leaving_snackbar ||
+              {/** This is snackbar handle leaving case */}
+              {/* {(_show_leaving_snackbar ||
                 _info_snackbar.show_info_snackbar) && (
                 <StyledInfoSnackbarContainer>
                   <InfoSnackbar
@@ -280,7 +274,7 @@ const MemoryGame: FC = () => {
                       : "👋 I am leaving the game"}
                   </InfoSnackbar>
                 </StyledInfoSnackbarContainer>
-              )}
+              )} */}
             </StyledRightContainer>
           </StyledGrid>
         </StyledContentContainer>

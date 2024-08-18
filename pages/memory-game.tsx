@@ -15,7 +15,7 @@ import path from "path";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { room_id } from "@/store/slice/game.slice";
+import { cognimatch_room_id } from "@/store/slice/cognimatch.slice";
 import {
   active_cognimatch_players,
   updateActiveCogniMatchPlayers,
@@ -51,13 +51,8 @@ const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
   const _mode = useAppSelector(mode);
   const [speechUttrance, setSpeechUttrance] =
     useState<MutableSpeechUtterance | null>(null);
-  const _room_id = useAppSelector(room_id);
+  const room_id = useAppSelector(cognimatch_room_id);
   const _user = useAppSelector(user);
-  const { id: user_id } = _user;
-  const _active_cognimatch_players = useAppSelector(active_cognimatch_players);
-  const opponent_player = _active_cognimatch_players.filter(
-    (player) => player.id !== user_id
-  )[0];
   const sound_ref = useRef<{
     flip_sound: HTMLAudioElement | null;
   }>({
@@ -69,7 +64,7 @@ const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
     | { cognimatch_player: IUsersWithConversation }[]
     | { cognimatch_player: IUsersWithConversation }
   >({
-    channel: `cognimatch.${_room_id}`,
+    channel: `cognimatch.${room_id}`,
     events: [
       {
         event: "Cognimatch.UpdateCognimatchRoomDataEvent",

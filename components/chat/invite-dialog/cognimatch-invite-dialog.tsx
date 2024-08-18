@@ -29,12 +29,10 @@ import {
   show_cognimatch_invite_dialog,
   updateInviteDialog,
 } from "@/store/slice/chat.slice";
-import { getCognimatchRoomInfoApi } from "@/store/slice/cognimatch.slice";
 import {
-  room_id,
-  gaming_user,
-  updateRoomId,
-} from "@/store/slice/game.slice";
+  updateCognimatchRoomId,
+  getCognimatchRoomInfoApi,
+} from "@/store/slice/cognimatch.slice";
 import { mode } from "@/store/slice/common.slice";
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -61,12 +59,10 @@ const CogniMatchInviteDialog: FC = () => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const theme = useTheme() as Theme;
-  const _room_id = useAppSelector(room_id);
   const _show_cognimatch_invite_dialog = useAppSelector(
     show_cognimatch_invite_dialog
   );
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
   const dialog_ref = useRef<HTMLDialogElement>(null);
   const is_mobile = useIsMobile();
 
@@ -92,7 +88,7 @@ const CogniMatchInviteDialog: FC = () => {
               is_open: false,
             })
           );
-          dispatch(updateRoomId(null));
+          dispatch(updateCognimatchRoomId(null));
         }}
       >
         <CloseIcon size={is_mobile ? 20 : 16} color={"#000"} />
@@ -117,7 +113,6 @@ const CogniMatchInviteDialog: FC = () => {
       </StyledMainContent>
       <StyledVsText $mode={_mode}>
         {_user.name} <StyledTextSpan $color="#F42C04">v\s</StyledTextSpan>{" "}
-        {_gaming_user?.name}
       </StyledVsText>
     </StyledCogniMatchInviteDialog>
   );

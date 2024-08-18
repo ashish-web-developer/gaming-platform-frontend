@@ -94,43 +94,6 @@ const StyledBannerPara = styled.p`
   line-height: 22px;
 `;
 
-const StyledAvatarGroup = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-const StyledAvatar = styled.div<{
-  $size: string;
-  $border: string;
-  $online: boolean;
-}>`
-  width: ${(props) => props.$size};
-  height: ${(props) => props.$size};
-  border: ${(props) => props.$border};
-  border-radius: 50%;
-  position: relative;
-  &:not(:first-child) {
-    margin-left: -10px;
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
-    border: 2px solid ${(props) => props.theme.palette.primary.dark};
-    top: -5px;
-    right: 3px;
-  }
-`;
-
-const StyledImage = styled(Image)`
-  object-fit: cover;
-  border-radius: 50%;
-`;
-
 export {
   StyledBanner,
   StyledWelcomeBannerPatternContainer,
@@ -140,8 +103,5 @@ export {
   StyledMainBannerHeader,
   StyledSpan,
   StyledBannerPara,
-  StyledAvatarGroup,
-  StyledAvatar,
-  StyledImage,
   StyledBannerImage,
 };

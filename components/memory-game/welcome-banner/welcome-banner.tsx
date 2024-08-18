@@ -13,9 +13,6 @@ import {
   StyledMainBannerHeader,
   StyledSpan,
   StyledBannerPara,
-  StyledAvatarGroup,
-  StyledAvatar,
-  StyledImage,
   StyledBannerImage,
 } from "@/styles/components/memory-game/welcome-banner/welcome-banner.style";
 
@@ -24,17 +21,6 @@ import { useTheme } from "styled-components";
 
 // local components
 import WelcomeBannerPattern from "@/components/memory-game/welcome-banner/welcome-banner-pattern";
-
-// redux
-
-import { useAppSelector } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
-import {
-  // state
-  is_gaming_user_in,
-} from "@/store/slice/memory-game.slice";
-import { mode } from "@/store/slice/common.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -58,14 +44,6 @@ const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 
 const WelcomeBanner: FC = () => {
   const theme = useTheme() as ITheme;
-  const _mode = useAppSelector(mode);
-  const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const gaming_user_avatar_url = useAvatarUrl(
-    _gaming_user as IUsersWithConversation
-  );
-  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
 
   return (
     <>
@@ -91,32 +69,6 @@ const WelcomeBanner: FC = () => {
               boost your cognitive skills. Flip cards, match pairs, and enhance
               your memory in a fun and challenging way. Perfect for all ages!
             </StyledBannerPara>
-            <StyledAvatarGroup>
-              <StyledAvatar
-                $size="40px"
-                $border="3px solid #000"
-                $online={true}
-              >
-                <StyledImage
-                  alt="user-avatar"
-                  src={user_avatar_url}
-                  fill={true}
-                  sizes="(max-width: 1400px) 10vw"
-                />
-              </StyledAvatar>
-              <StyledAvatar
-                $size="40px"
-                $online={_is_gaming_user_in}
-                $border="3px solid #000"
-              >
-                <StyledImage
-                  alt="user-avatar"
-                  src={gaming_user_avatar_url}
-                  fill={true}
-                  sizes="(max-width: 1400px) 10vw"
-                />
-              </StyledAvatar>
-            </StyledAvatarGroup>
           </StyledWelcomeBannerContent>
         </StyledWelcomeBannerPatternContainer>
         <StyledBannerImage />

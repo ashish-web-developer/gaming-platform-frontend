@@ -12,7 +12,7 @@ import { Theme } from "@/theme/poker.theme";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { room_id } from "@/store/slice/game.slice";
+import { poker_room_id } from "@/store/slice/poker/poker.slice";
 import {
   show_buy_in_modal,
   updateActivePokerPlayer,
@@ -27,13 +27,13 @@ import { usePresenceChannel } from "@/hooks/pusher.hook";
 
 const JoinPokerChannel = () => {
   const dispatch = useAppDispatch();
-  const _room_id = useAppSelector(room_id);
+  const room_id = useAppSelector(poker_room_id);
   const _user = useAppSelector(user);
   usePresenceChannel<
     undefined,
     { poker_player: IPokerPlayer }[] | { poker_player: IPokerPlayer }
   >({
-    channel: `poker.${_room_id}`,
+    channel: `poker.${room_id}`,
     events: [
       {
         event: "Game.Poker.UpdateDealerEvent",

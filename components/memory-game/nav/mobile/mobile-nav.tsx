@@ -23,12 +23,11 @@ import { mode, updateMode } from "@/store/slice/common.slice";
 import { user } from "@/store/slice/user.slice";
 import {
   active_cognimatch_players,
+  live_stream_chat,
   resetCognimatch,
-  live_stream_chat_list,
   updateShowHelpTooltip,
-  updateShowChatStreamingModal,
+  updateShowLiveSteamChat,
 } from "@/store/slice/cognimatch.slice";
-import { resetGame } from "@/store/slice/game.slice";
 
 const MobileNav: FC = () => {
   const router = useRouter();
@@ -38,8 +37,8 @@ const MobileNav: FC = () => {
   const opponent_player = useAppSelector(active_cognimatch_players).filter(
     (player) => player.id !== user_id
   )[0];
-  const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
-  const live_stream_opponent_player_chat = _live_stream_chat_list.filter(
+  const _live_stream_chat = useAppSelector(live_stream_chat);
+  const live_stream_opponent_player_chat = _live_stream_chat.chat_list.filter(
     (chat) => chat.user.id == opponent_player?.id && !chat.viewed
   );
   return (
@@ -47,7 +46,6 @@ const MobileNav: FC = () => {
       <StyledNav>
         <StyledIconButton
           onClick={() => {
-            dispatch(resetGame());
             dispatch(resetCognimatch());
             router.push("/");
           }}
@@ -60,7 +58,9 @@ const MobileNav: FC = () => {
               ? String(live_stream_opponent_player_chat.length).padStart(2, "0")
               : ""
           }`}
-          onClick={() => dispatch(updateShowChatStreamingModal(true))}
+          onClick={() =>
+            dispatch(updateShowLiveSteamChat({ show: true, is_modal: true }))
+          }
         >
           <ChatIcon width={30} height={24} color="#FFF" />
         </StyledChatButton>

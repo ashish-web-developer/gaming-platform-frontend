@@ -97,46 +97,6 @@ const StyledContent = styled.p`
   font-weight: 600;
 `;
 
-const StyledAvatarGroup = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-`;
-
-const StyledAvatar = styled.div<{
-  $size: string;
-  $border: string;
-  $online: boolean;
-}>`
-  width: ${(props) => props.$size};
-  height: ${(props) => props.$size};
-  border: 3px solid ${(props) => props.$border};
-  border-radius: 50%;
-  position: relative;
-  &:not(:first-child) {
-    margin-left: -10px;
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    border: 2px solid ${({ theme }) => theme.palette.primary.dark};
-    border-radius: 50%;
-    background: ${(props) => (props.$online ? "#16C172" : "#F42C04")};
-    top: -5px;
-    right: 3px;
-  }
-`;
-
-const StyledImage = styled(Image)`
-  object-fit: cover;
-  border-radius: 50%;
-`;
-
 export {
   StyledContainer,
   StyledDottedContainer,
@@ -145,7 +105,4 @@ export {
   StyledSpan,
   StyledStarContainer,
   StyledContent,
-  StyledAvatarGroup,
-  StyledAvatar,
-  StyledImage,
 };

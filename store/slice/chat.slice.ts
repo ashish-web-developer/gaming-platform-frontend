@@ -121,44 +121,46 @@ export const sendInvitationApi = createAsyncThunk<
   ISendInvitationApiResponse,
   ISendInvitationApiRequest,
   { state: RootState }
->("api/game/invitation", async ({ game }, { getState, rejectWithValue }) => {
-  try {
-    const state = getState();
-    if (state.chat.active_user) {
+>(
+  "api/game/invitation",
+  async ({ game, room_id }, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      if (state.chat.active_user) {
+        const response: AxiosResponse<ISendInvitationApiResponse> =
+          await Axios.post("game/game-invitation", {
+            receiver_ids: [state.chat.active_user.id],
+            game,
+            room_id,
+          });
+
+        return response.data;
+      }
       const response: AxiosResponse<ISendInvitationApiResponse> =
         await Axios.post("game/game-invitation", {
-          receiver_ids: [state.chat.active_user.id],
+          receiver_ids: state.group.active_group
+            ? [
+                ...state.group.active_group?.user_group
+                  .filter(
+                    (_user_group) => _user_group.user_id !== state.user.user.id
+                  )
+                  .map((_user_group) => _user_group.user_id),
+                ...(state.group.active_group.admin &&
+                state.user.user.id !== state.group.active_group.admin.id
+                  ? [state.group.active_group.admin.id]
+                  : []),
+              ]
+            : [],
           game,
-          room_id: state.game.room_id,
+          room_id,
         });
 
       return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error?.response?.data);
     }
-    const response: AxiosResponse<ISendInvitationApiResponse> =
-      await Axios.post("game/game-invitation", {
-        receiver_ids: state.group.active_group
-          ? [
-              ...state.group.active_group?.user_group
-                .filter(
-                  (_user_group) => _user_group.user_id !== state.user.user.id
-                )
-                .map((_user_group) => _user_group.user_id),
-              ...(state.group.active_group.admin &&
-              state.user.user.id !== state.group.active_group.admin.id
-                ? [state.group.active_group.admin.id]
-                : []),
-            ]
-          : [],
-        game,
-        room_id: state.game.room_id,
-      });
-
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
   }
-});
-
+);
 
 export const sendMessageApi = createAsyncThunk<
   ISendMessageResponse,

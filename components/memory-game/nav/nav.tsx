@@ -18,10 +18,8 @@ import MoonIcon from "@/components/memory-game/nav/icons/moon";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
-import { resetGame } from "@/store/slice/game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
-
-import { resetMemoryGame } from "@/store/slice/memory-game.slice";
+import { resetCognimatch } from "@/store/slice/cognimatch.slice";
 
 const Nav: FC = () => {
   const theme = useTheme() as ITheme;
@@ -32,8 +30,7 @@ const Nav: FC = () => {
     <StyledNav>
       <StyledIconButton
         onClick={() => {
-          dispatch(resetGame());
-          dispatch(resetMemoryGame());
+          dispatch(resetCognimatch());
           router.push("/chat");
         }}
       >
@@ -41,8 +38,7 @@ const Nav: FC = () => {
       </StyledIconButton>
       <StyledIconButton
         onClick={() => {
-          dispatch(resetGame());
-          dispatch(resetMemoryGame());
+          dispatch(resetCognimatch());
           router.push("/");
         }}
       >

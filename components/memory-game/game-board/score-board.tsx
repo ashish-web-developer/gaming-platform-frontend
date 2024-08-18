@@ -49,8 +49,7 @@ const ScoreBoard = () => {
     (player) => player.id !== user_id
   )[0];
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const gaming_user_avatar_url = useAvatarUrl(opponent_player);
-  const is_gaming_user_in = _active_cognimatch_players.length == 2;
+  const opponent_player_avatar_url = useAvatarUrl(opponent_player);
   const _score = useAppSelector(score);
   return (
     <StyledScoreBoard
@@ -88,10 +87,10 @@ const ScoreBoard = () => {
           </Scores>
         </StyledScoreContainer>
         <StyledProfileContainer>
-          <StyledAvatar $size="40px" $online={is_gaming_user_in}>
+          <StyledAvatar $size="40px" $online={Boolean(opponent_player)}>
             <StyledImage
               sizes="(max-width: 1400px) 10vw"
-              src={gaming_user_avatar_url}
+              src={opponent_player_avatar_url}
               fill={true}
               alt="user-avatar"
             />

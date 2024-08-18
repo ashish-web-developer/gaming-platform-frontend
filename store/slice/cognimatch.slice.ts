@@ -55,7 +55,7 @@ export const getCognimatchRoomInfoApi = createAsyncThunk<
     const state = getState();
     const response: AxiosResponse<IGetCognimatchRoomInfoApiResponse> =
       await Axios.post("/cognimatch/cognimatch-room-info", {
-        room_id: state.game.room_id,
+        room_id: state.cognimatch.cognimatch_room_id,
       });
     return response.data;
   } catch (error: any) {
@@ -75,7 +75,7 @@ export const updateTimerStartTimeApi = createAsyncThunk<
       const response: AxiosResponse<IBaseResponse> = await Axios.patch(
         "/cognimatch/update-timer-start-time",
         {
-          room_id: state.game.room_id,
+          room_id: state.cognimatch.cognimatch_room_id,
           next_player_turn_id,
         }
       );
@@ -98,7 +98,7 @@ export const updatePlayersCountApi = createAsyncThunk<
       const response: AxiosResponse<IBaseResponse> = await Axios.patch(
         "/cognimatch/update-players-count",
         {
-          room_id: state.game.room_id,
+          room_id: state.cognimatch.cognimatch_room_id,
           type,
         }
       );
@@ -119,7 +119,7 @@ export const liveStreamChatApi = createAsyncThunk<
     try {
       const state = getState();
       const response = await Axios.post("/cognimatch/live-stream-chat", {
-        room_id: state.game.room_id,
+        room_id: state.cognimatch.cognimatch_room_id,
         message,
       });
       return response.data;
@@ -138,7 +138,7 @@ export const flipCardApi = createAsyncThunk<
     const response: AxiosResponse<IFlipCardApiResponse> = await Axios.patch(
       "/cognimatch/flip-card",
       {
-        room_id: state.game.room_id,
+        room_id: state.cognimatch.cognimatch_room_id,
         card_id,
       }
     );
@@ -148,14 +148,20 @@ export const flipCardApi = createAsyncThunk<
   }
 });
 const initialState: ICogniMatchInitialState = {
+  cognimatch_room_id: null,
   active_cognimatch_players: [],
   deck: [],
   player_turn_id: null,
   score: {},
   timer_start_count: 0,
   show_cognimatch_board: false,
-  live_stream_chat_list: [],
-  show_chat_streaming_modal: false,
+  live_stream_chat: {
+    show_chats: false,
+    chat_list: [],
+    mobile: {
+      show_chat_modal: false,
+    },
+  },
   info_snackbar: {
     show_info_snackbar: false,
     message: "",
@@ -174,6 +180,9 @@ export const cognimatchSlice = createSlice({
   initialState,
   reducers: {
     resetCognimatch: () => initialState,
+    updateCognimatchRoomId: (state, action: PayloadAction<string | null>) => {
+      state.cognimatch_room_id = action.payload;
+    },
     updateCognimatchRoomData: (
       state,
       action: PayloadAction<ICognimatchRoom>
@@ -199,8 +208,32 @@ export const cognimatchSlice = createSlice({
     updateShowCognimatchBoard: (state, action: PayloadAction<boolean>) => {
       state.show_cognimatch_board = action.payload;
     },
+    updateShowLiveSteamChat: (
+      state,
+      action: PayloadAction<{ show: boolean; is_modal: boolean }>
+    ) => {
+      state.live_stream_chat.show_chats = action.payload.show;
+      state.live_stream_chat.mobile.show_chat_modal = action.payload.is_modal;
+    },
     updateLiveStreamChat: (state, action: PayloadAction<ILiveStreamChat>) => {
-      state.live_stream_chat_list.push(action.payload);
+      state.live_stream_chat.chat_list.push(action.payload);
+    },
+
+    updateLiveSteamMessageView: (
+      state,
+      action: PayloadAction<{ id: string; viewed: boolean }>
+    ) => {
+      state.live_stream_chat.chat_list = state.live_stream_chat.chat_list.map(
+        (chat) => {
+          if (chat.id == action.payload.id) {
+            return {
+              ...chat,
+              viewed: true,
+            };
+          }
+          return chat;
+        }
+      );
     },
     updateInfoSnackbar: (
       state,
@@ -228,23 +261,6 @@ export const cognimatchSlice = createSlice({
       state.help_tooltip.current_rule_index = action.payload;
       state.help_tooltip.tooltip_text =
         state.help_tooltip.game_rules_list[action.payload];
-    },
-    updateShowChatStreamingModal: (state, action: PayloadAction<boolean>) => {
-      state.show_chat_streaming_modal = action.payload;
-    },
-    updateLiveSteamMessageView: (
-      state,
-      action: PayloadAction<{ id: string; viewed: boolean }>
-    ) => {
-      state.live_stream_chat_list = state.live_stream_chat_list.map((chat) => {
-        if (chat.id == action.payload.id) {
-          return {
-            ...chat,
-            viewed: true,
-          };
-        }
-        return chat;
-      });
     },
     updateActiveCogniMatchPlayers: (
       state,
@@ -332,11 +348,13 @@ export const cognimatchSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(createCognimatchRoomApi.fulfilled, (state, action) => {
+      state.cognimatch_room_id = action.payload.cognimatch_room.room_id;
       state.deck = action.payload.cognimatch_room.deck;
       state.player_turn_id = action.payload.cognimatch_room.player_turn_id;
       state.score = action.payload.cognimatch_room.score;
     });
     builder.addCase(getCognimatchRoomInfoApi.fulfilled, (state, action) => {
+      state.cognimatch_room_id = action.payload.cognimatch_room.room_id;
       state.deck = action.payload.cognimatch_room.deck;
       state.player_turn_id = action.payload.cognimatch_room.player_turn_id;
       state.score = action.payload.cognimatch_room.score;
@@ -345,6 +363,8 @@ export const cognimatchSlice = createSlice({
 });
 
 export default cognimatchSlice.reducer;
+export const cognimatch_room_id = (state: RootState) =>
+  state.cognimatch.cognimatch_room_id;
 export const active_cognimatch_players = (state: RootState) =>
   state.cognimatch.active_cognimatch_players;
 export const score = (state: RootState) => state.cognimatch.score;
@@ -355,15 +375,14 @@ export const timer_start_count = (state: RootState) =>
   state.cognimatch.timer_start_count;
 export const show_cognimatch_board = (state: RootState) =>
   state.cognimatch.show_cognimatch_board;
-export const live_stream_chat_list = (state: RootState) =>
-  state.cognimatch.live_stream_chat_list;
+export const live_stream_chat = (state: RootState) =>
+  state.cognimatch.live_stream_chat;
 export const info_snackbar = (state: RootState) =>
   state.cognimatch.info_snackbar;
 export const help_tooltip = (state: RootState) => state.cognimatch.help_tooltip;
-export const show_chat_streaming_modal = (state: RootState) =>
-  state.cognimatch.show_chat_streaming_modal;
 export const {
   resetCognimatch,
+  updateCognimatchRoomId,
   updateActiveCogniMatchPlayers,
   updateShowCognimatchBoard,
   updateCognimatchRoomData,
@@ -374,6 +393,6 @@ export const {
   updateShowHelpTooltip,
   updatePlayHelpTooltipAudio,
   updateCurrentRuleIndex,
-  updateShowChatStreamingModal,
-  updateLiveSteamMessageView
+  updateLiveSteamMessageView,
+  updateShowLiveSteamChat,
 } = cognimatchSlice.actions;

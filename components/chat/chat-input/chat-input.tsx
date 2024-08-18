@@ -39,7 +39,6 @@ import {
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
 import { active_group } from "@/store/slice/group.slice";
-import { updateRoomId } from "@/store/slice/game.slice";
 import { createPokerRoomApi } from "@/store/slice/poker/poker.slice";
 import { createCognimatchRoomApi } from "@/store/slice/cognimatch.slice";
 
@@ -235,7 +234,6 @@ const ChatInput: FC<{}> = () => {
             <StyledIconCta
               onClick={() => {
                 const room_id = uuidv4();
-                dispatch(updateRoomId(room_id));
                 if (_active_group) {
                   dispatch(
                     createPokerRoomApi({
@@ -247,6 +245,7 @@ const ChatInput: FC<{}> = () => {
                   dispatch(
                     sendInvitationApi({
                       game: "poker",
+                      room_id,
                     })
                   );
                   router.push("/poker");
@@ -263,6 +262,7 @@ const ChatInput: FC<{}> = () => {
                   dispatch(
                     sendInvitationApi({
                       game: "cognimatch",
+                      room_id,
                     })
                   );
                   router.push("/memory-game");
