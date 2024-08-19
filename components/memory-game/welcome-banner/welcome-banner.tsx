@@ -1,7 +1,6 @@
 // types
 import { type FC } from "react";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { ITheme } from "@/theme/memory-game.theme";
+import type { ITheme } from "@/theme/cognimatch.theme";
 
 // styled components
 import {

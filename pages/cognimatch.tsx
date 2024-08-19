@@ -31,7 +31,7 @@ import { mode } from "@/store/slice/common.slice";
 import { ThemeProvider } from "styled-components";
 
 // theme
-import { lightTheme, darkTheme } from "@/theme/memory-game.theme";
+import { lightTheme, darkTheme } from "@/theme/cognimatch.theme";
 
 import { UttranceContext } from "context";
 
@@ -46,7 +46,7 @@ interface Props {
   files: string[];
   rules: [string, string][];
 }
-const MemoryGamePage: NextPage<Props> = ({ files, rules }) => {
+const CognimatchPage: NextPage<Props> = ({ files, rules }) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const [speechUttrance, setSpeechUttrance] =
@@ -178,4 +178,4 @@ export async function getStaticProps() {
     };
   }
 }
-export default MemoryGamePage;
+export default CognimatchPage;

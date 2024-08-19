@@ -101,6 +101,7 @@ type ILiveStreamChatApiRequest = {
 };
 type ILiveStreamChatApiResponse = IBaseResponse & ILiveStreamChatApiRequest;
 export {
+  ICard,
   ICogniMatchInitialState,
   ICognimatchRoom,
   ICreateCognimatchRoomApiRequest,

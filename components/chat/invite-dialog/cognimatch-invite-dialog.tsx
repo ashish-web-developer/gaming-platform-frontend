@@ -75,7 +75,7 @@ const CogniMatchInviteDialog: FC = () => {
       <StyledPlayButton
         onClick={() => {
           dispatch(getCognimatchRoomInfoApi());
-          router.push("/memory-game");
+          router.push("/cognimatch");
         }}
       >
         <PlayButtonVector />

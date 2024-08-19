@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
-import type { ITheme } from "@/theme/memory-game.theme";
+import type { ITheme } from "@/theme/cognimatch.theme";
 
 // local components
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";

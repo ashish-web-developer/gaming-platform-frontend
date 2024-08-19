@@ -265,7 +265,7 @@ const ChatInput: FC<{}> = () => {
                       room_id,
                     })
                   );
-                  router.push("/memory-game");
+                  router.push("/cognimatch");
                 }
               }}
             >

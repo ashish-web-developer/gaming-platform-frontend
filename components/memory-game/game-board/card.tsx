@@ -1,7 +1,7 @@
 import { forwardRef, useId } from "react";
 import { unwrapResult } from "@reduxjs/toolkit";
 // types
-import type { ICard } from "@/types/store/slice/memory-game";
+import type { ICard } from "@/types/store/slice/cognimatch";
 import type { FC } from "react";
 import type { ForwardRefRenderFunction } from "react";
 // styled components
@@ -16,9 +16,6 @@ import {
   StyledCardPattern,
   StyledCardContent,
 } from "@/styles/components/memory-game/game-board/card.style";
-
-// helpers
-import { getCardName } from "@/helpers/memory-game/game";
 
 // redux
 import { useAppDispatch } from "@/hooks/redux.hook";
@@ -177,7 +174,7 @@ const Card: ForwardRefRenderFunction<IForwardedRef, IProps> = (
               <span style={{ fontSize: "7px", marginTop: "-4px" }}>{suit}</span>
             </StyledCardNumber>
             <StyledCardName $color={getCardColor}>
-              {getCardName({ suit, card })}
+              {/* {getCardName({ suit, card })} */}
             </StyledCardName>
           </>
         </StyledBorder>
