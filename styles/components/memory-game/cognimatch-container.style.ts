@@ -4,10 +4,6 @@ type IStyledBackgroundCircle = {
   $mode: "dark" | "light";
 };
 
-type IStyledGrid = {
-  $paddingTop: string | null;
-};
-
 const StyledPage = styled.div`
   background: ${({ theme }) => theme.palette.primary.main} !important;
   background-repeat: no-repeat;
@@ -28,9 +24,6 @@ const StyledContainer = styled.div<{
   background-size: cover;
   overflow: hidden;
   position: relative;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    overflow: auto;
-  }
 `;
 
 const StyledContentContainer = styled.div`
@@ -39,20 +32,14 @@ const StyledContentContainer = styled.div`
   margin: auto;
   padding: 34px 0px;
   position: relative;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
 `;
 
-const StyledGrid = styled.div<IStyledGrid>`
+const StyledGrid = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
   gap: 20px;
-  padding-top: ${(props) => props.$paddingTop ?? 0};
+  padding-top: 70px;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     width: 90%;
   }
@@ -61,19 +48,11 @@ const StyledGrid = styled.div<IStyledGrid>`
 const StyledLeftContainer = styled.div`
   width: 60%;
   flex-grow: 1;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    position: relative;
-    height: 100%;
-    z-index: 5;
-  }
 `;
 
 const StyledRightContainer = styled.div`
   width: 40%;
   flex-grow: 1;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    display: none;
-  }
 `;
 
 const StyledBackgroundCircleOne = styled.div<IStyledBackgroundCircle>`
@@ -88,11 +67,6 @@ const StyledBackgroundCircleOne = styled.div<IStyledBackgroundCircle>`
   transform: translate(40%, 40%);
   filter: blur(500px);
   z-index: 1;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 615px;
-    height: 615px;
-    position: fixed;
-  }
 `;
 
 const StyledBackgroundCircleTwo = styled.div<IStyledBackgroundCircle>`
@@ -107,9 +81,6 @@ const StyledBackgroundCircleTwo = styled.div<IStyledBackgroundCircle>`
   transform: translate(-40%, -40%);
   filter: blur(500px);
   z-index: 1;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    display: none;
-  }
 `;
 
 const StyledMainText = styled.div<{
@@ -127,10 +98,6 @@ const StyledMainText = styled.div<{
   line-height: normal;
   text-transform: capitalize;
   z-index: 2;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 90%;
-    font-size: 20px;
-  }
 `;
 
 const StyledInfoSnackbarContainer = styled.div`
@@ -157,9 +124,6 @@ const StyledHelpCtaContainer = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 2;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    display: none;
-  }
 `;
 
 const StyledHelpCta = styled.button`

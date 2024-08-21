@@ -6,7 +6,8 @@ import type { IUsersWithConversation } from "@/types/store/slice/chat";
 import type { ICognimatchRoom } from "@/types/store/slice/cognimatch";
 
 // local components
-import MemoryGame from "@/components/memory-game/memory-game";
+import CognimatchContainer from "@/components/memory-game/cognimatch-container";
+import MobileCognimatchContainer from "@/components/memory-game/mobile-cognimatch-container";
 
 // files readers
 import fs from "fs";
@@ -17,7 +18,6 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import { cognimatch_room_id } from "@/store/slice/cognimatch.slice";
 import {
-  active_cognimatch_players,
   updateActiveCogniMatchPlayers,
   updateCognimatchRoomData,
   updatePlayersCountApi,
@@ -37,6 +37,7 @@ import { UttranceContext } from "context";
 
 // hook
 import { usePresenceChannel } from "@/hooks/pusher.hook";
+import { useIsMobile } from "@/hooks/common.hook";
 
 // helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
@@ -58,6 +59,7 @@ const CognimatchPage: NextPage<Props> = ({ files, rules }) => {
   }>({
     flip_sound: null,
   });
+  const is_mobile = useIsMobile();
 
   usePresenceChannel<
     IUsersWithConversation | null,
@@ -75,7 +77,6 @@ const CognimatchPage: NextPage<Props> = ({ files, rules }) => {
       {
         event: "Cognimatch.LiveChatStreamEvent",
         callback: (data: { user: IUsersWithConversation; message: string }) => {
-          console.log("value of data", data);
           dispatch(
             updateLiveStreamChat({ ...data, viewed: false, id: uuidv4() })
           );
@@ -141,7 +142,7 @@ const CognimatchPage: NextPage<Props> = ({ files, rules }) => {
     <>
       <UttranceContext.Provider value={speechUttrance}>
         <ThemeProvider theme={_mode == "dark" ? darkTheme : lightTheme}>
-          <MemoryGame />
+          {is_mobile ? <MobileCognimatchContainer /> : <CognimatchContainer />}
         </ThemeProvider>
       </UttranceContext.Provider>
     </>

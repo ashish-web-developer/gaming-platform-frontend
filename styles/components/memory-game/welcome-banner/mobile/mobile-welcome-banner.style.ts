@@ -17,7 +17,6 @@ const StyledDottedContainer = styled.div<{
   $mode: "light" | "dark";
 }>`
   width: 98%;
-  height: 240px;
   border: 2px dashed
     ${(props) =>
       props.$mode == "light"
@@ -27,9 +26,8 @@ const StyledDottedContainer = styled.div<{
   margin-top: 1.5rem;
 `;
 
-const StyledWelcomeBannerContainer = styled(motion.div)`
+const StyledWelcomeBannerContainer = styled.div`
   width: 100%;
-  height: 240px;
   border: 4px solid ${({ theme }) => theme.palette.primary.light};
   border-radius: 25px;
   position: relative;
@@ -64,7 +62,7 @@ const StyledMainText = styled.div<{
 }>`
   font-family: ${({ theme }) => theme.fontFamily.poppins};
   color: ${({ theme }) => theme.palette.primary.light};
-  font-size: 12px;
+  font-size: 0.875rem;
   font-weight: 800;
   position: absolute;
   transform: rotate(${(props) => props.$rotate ?? "0deg"});
@@ -85,16 +83,20 @@ const StyledStarContainer = styled.span`
   position: absolute;
   bottom: 16px;
   left: 50px;
+  gap: 8px;
 `;
 
 const StyledContent = styled.p`
-  margin-top: 30px;
+  padding: 32px 0px 40px 0px;
   color: ${({ theme }) => theme.palette.primary.light};
   font-family: ${({ theme }) => theme.fontFamily.poppins};
-  font-size: 15px;
+  font-size: 1rem;
   text-transform: capitalize;
   width: 75%;
   font-weight: 600;
+  @media (max-width: ${({ theme }) => theme.breakpoints.xxs}) {
+    font-size: 15px;
+  }
 `;
 
 export {

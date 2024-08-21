@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/cognimatch.theme";
@@ -12,6 +13,7 @@ import {
   StyledStarContainer,
   StyledContent,
 } from "@/styles/components/memory-game/welcome-banner/mobile/mobile-welcome-banner.style";
+import Star from "@/components/memory-game/welcome-banner/icons/star";
 
 // styled theme
 import { useTheme } from "styled-components";
@@ -20,40 +22,62 @@ import { useTheme } from "styled-components";
 import { useAppSelector } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 
-const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
-      fill="none"
-      viewBox="0 0 20 20"
-    >
-      <path
-        fill={color}
-        d="M8.962.752L11.8 7.44l7.238-.633-5.484 4.766 2.84 6.688-6.229-3.742-5.483 4.767 1.634-7.08L.09 8.466l7.238-.633L8.962.752z"
-      ></path>
-    </svg>
-  );
-};
+// gsap
+import gsap from "gsap";
 
 const MobileWelcomeBanner: FC = () => {
   const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
+  const welcome_banner_ref = useRef<HTMLDivElement>(null);
+  const stars_ref = useRef<Map<string, SVGSVGElement>>();
+  const stars = [
+    {
+      id: "star_1",
+      color: "#080F0F",
+    },
+    {
+      id: "star_2",
+      color: "#FFFFFF",
+    },
+    {
+      id: "star_3",
+      color: "#16C172",
+    },
+  ];
+  const get_stars_map = () => {
+    if (!stars_ref.current) {
+      stars_ref.current = new Map();
+    }
+    return stars_ref.current;
+  };
+
+  useEffect(() => {
+    console.log(stars_ref);
+    const gsap_context = gsap.context(() => {
+      gsap.to(welcome_banner_ref.current, {
+        rotate: -5,
+        duration: 0.5,
+        ease: "power4.out",
+      });
+      stars_ref.current?.forEach((element) => {
+        gsap.from(element, {
+          duration: 0.5,
+          ease: "power4.out",
+          attr: {
+            width: 30,
+            height: 30,
+          },
+        });
+      });
+    });
+    return () => {
+      gsap_context.revert();
+    };
+  }, []);
   return (
     <StyledContainer>
       <StyledDottedContainer $mode={_mode}>
-        <StyledWelcomeBannerContainer
-          animate={{
-            rotate: -5,
-            transition: {
-              duration: 0.5,
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-            },
-          }}
-        >
+        <StyledWelcomeBannerContainer ref={welcome_banner_ref}>
           <StyledMainText $rotate={"90deg"} $bottom="20%" $left={"-20px"}>
             Cogni
             <StyledSpan $color={theme.palette.primary.dark}>Match</StyledSpan>
@@ -62,11 +86,24 @@ const MobileWelcomeBanner: FC = () => {
             Cogni
             <StyledSpan $color={theme.palette.primary.dark}>Match</StyledSpan>
           </StyledMainText>
-
           <StyledStarContainer>
-            <StarIcon size={20} color={"#080F0F"} />
-            <StarIcon size={20} color={"#FFFFFF"} />
-            <StarIcon size={20} color={"#16C172"} />
+            {stars.map(({ id, color }) => {
+              return (
+                <Star
+                  ref={(node) => {
+                    const stars_map = get_stars_map();
+                    if (node) {
+                      stars_map.set(id, node);
+                    } else {
+                      stars_map.delete(id);
+                    }
+                  }}
+                  key={id}
+                  size={20}
+                  color={color}
+                />
+              );
+            })}
           </StyledStarContainer>
 
           <StyledContent>
