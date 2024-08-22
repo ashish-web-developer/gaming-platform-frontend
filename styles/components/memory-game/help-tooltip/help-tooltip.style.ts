@@ -1,8 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
-import { motion } from "framer-motion";
 
-const StyledHelpTooltipContainer = styled(motion.div)`
+const StyledHelpTooltipContainer = styled.div`
   position: absolute;
   right: 0px;
   bottom: 0px;

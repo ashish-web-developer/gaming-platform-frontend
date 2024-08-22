@@ -27,7 +27,7 @@ export const darkTheme: ITheme = {
   palette: {
     primary: {
       main: "#080F0F",
-      contrast: "#D62839",
+      contrast: "#F42C04",
       dark: "#080F0F",
       light: "#FFFFFF",
     },

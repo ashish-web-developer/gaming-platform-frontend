@@ -29,9 +29,7 @@ const MobileTimerBanner: FC<{ count_down: number }> = ({ count_down }) => {
             Starting in <br />
             <StyledTextSpan $color="#16C172">{count_down} sec</StyledTextSpan>
           </StyledMainText>
-          <StyledVsContainer>
-            {_user.name} <StyledTextSpan $color="#FF2400">V/s</StyledTextSpan>{" "}
-          </StyledVsContainer>
+          
         </StyledTimerBannerContent>
       </StyledTimerBanner>
     </StyledTimerBannerContainer>
