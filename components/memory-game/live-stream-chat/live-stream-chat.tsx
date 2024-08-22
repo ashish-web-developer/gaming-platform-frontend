@@ -2,8 +2,7 @@ import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { User } from "@/types/user";
-import type { ITheme } from "@/theme/memory-game.theme";
+import type { ITheme } from "@/theme/cognimatch.theme";
 // styled components
 import {
   StyledContainer,
@@ -11,8 +10,6 @@ import {
   StyledHeader,
   StyledMainText,
   StyledBannerAvatarContainer,
-  StyledBannerGirlContainer,
-  StyledBannerGirlImage,
   StyledBannerTextPatternContainer,
   StyledPlayButtonContainer,
   StyledAvatarGroup,
@@ -37,15 +34,14 @@ import PlayButtonPattern from "@/components/memory-game/live-stream-chat/play-bu
 import { useTheme } from "styled-components";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { gaming_user } from "@/store/slice/game.slice";
 import { user } from "@/store/slice/user.slice";
 import { mode } from "@/store/slice/common.slice";
 import {
-  live_stream_chat_list,
-  show_live_stream_chat,
+  active_cognimatch_players,
+  live_stream_chat,
   updateShowLiveSteamChat,
-} from "@/store/slice/memory-game.slice";
-import { liveStreamChatApi } from "@/store/slice/game.slice";
+  liveStreamChatApi,
+} from "@/store/slice/cognimatch.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
@@ -92,10 +88,8 @@ import React from "react";
 
 const LiveStreamBanner: FC<{
   user_avatar_url: string;
-  gaming_user_avatar_url: string;
-  user: User;
-  gaming_user: IUsersWithConversation;
-}> = ({ user_avatar_url, gaming_user_avatar_url, user, gaming_user }) => {
+  opponent_player_avatar_url: string;
+}> = ({ user_avatar_url, opponent_player_avatar_url }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
@@ -114,19 +108,18 @@ const LiveStreamBanner: FC<{
             <StyledAvatar $size={"40px"} $border={`2px solid #fff`}>
               <StyledAvatarImage
                 fill={true}
-                src={gaming_user_avatar_url}
+                src={opponent_player_avatar_url}
                 alt="user-avatar"
               />
             </StyledAvatar>
           </StyledAvatarGroup>
         </StyledBannerAvatarContainer>
-        {/* <StyledBannerGirlContainer>
-          <StyledBannerGirlImage alt = {"girl"} fill = {true} src = "/memory-game/live-stream-chat/banner-girl.png"/>
-        </StyledBannerGirlContainer> */}
         <StyledBannerTextPatternContainer>
           <TextPattern
             onClick={() => {
-              dispatch(updateShowLiveSteamChat(true));
+              dispatch(
+                updateShowLiveSteamChat({ show: true, is_modal: false })
+              );
             }}
           >
             👉 Tap into your memory skills, chat with fellow gamers, and win
@@ -136,7 +129,9 @@ const LiveStreamBanner: FC<{
         <StyledPlayButtonContainer>
           <PlayButtonPattern
             on_click={() => {
-              dispatch(updateShowLiveSteamChat(true));
+              dispatch(
+                updateShowLiveSteamChat({ show: true, is_modal: false })
+              );
             }}
           >
             Chat Now
@@ -151,21 +146,21 @@ const LiveStreamChat: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
+  const { id: user_id } = _user;
+  const opponent_player = useAppSelector(active_cognimatch_players).filter(
+    (player) => player.id !== user_id
+  )[0];
   const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const gaming_user_avatar_url = useAvatarUrl(
-    _gaming_user as IUsersWithConversation
+  const opponent_player_avatar_url = useAvatarUrl(
+    opponent_player as IUsersWithConversation
   );
-  const _show_live_stream_chat = useAppSelector(show_live_stream_chat);
-  const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
+  const _live_stream_chat = useAppSelector(live_stream_chat);
   const input_ref = useRef<HTMLInputElement>(null);
-  if (!_live_stream_chat_list.length && !_show_live_stream_chat) {
+  if (!_live_stream_chat.chat_list.length && !_live_stream_chat.show_chats) {
     return (
       <LiveStreamBanner
         user_avatar_url={user_avatar_url}
-        gaming_user_avatar_url={gaming_user_avatar_url}
-        user={_user}
-        gaming_user={_gaming_user as IUsersWithConversation}
+        opponent_player_avatar_url={opponent_player_avatar_url}
       />
     );
   }
@@ -184,7 +179,7 @@ const LiveStreamChat: FC = () => {
             </StyledAvatar>
             <StyledAvatar $size={"40px"} $border={`2px solid #fff`}>
               <StyledAvatarImage
-                src={gaming_user_avatar_url}
+                src={opponent_player_avatar_url}
                 fill={true}
                 alt="user-avatar"
               />
@@ -212,8 +207,8 @@ const LiveStreamChat: FC = () => {
                 begin! 🌈🎮
               </StyledMessageText>
             </StyledMessage>
-            {_live_stream_chat_list.map((chat) => {
-              return <Message {...chat} />;
+            {_live_stream_chat.chat_list.map((chat) => {
+              return <Message key={chat.id} {...chat} />;
             })}
           </StyledMessageContainer>
           <StyledInputContainer>

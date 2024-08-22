@@ -18,29 +18,31 @@ import MobileScoreBoardBackground from "@/components/memory-game/game-board/mobi
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
-import { score } from "@/store/slice/memory-game.slice";
+import {
+  active_cognimatch_players,
+  score,
+} from "@/store/slice/cognimatch.slice";
 
 const MobileScoreBoard: FC = forwardRef<HTMLDivElement>((props, ref) => {
-  const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
+  const { id: user_id, name } = useAppSelector(user);
+  const { id: opponent_player_id, name: oppenent_player_name } = useAppSelector(
+    active_cognimatch_players
+  ).filter((player) => player.id !== user_id)[0];
   const _score = useAppSelector(score) as Score;
   return (
     <StyledScoreBoardContainer ref={ref}>
       <MobileScoreBoardBackground />
       <StyledScoreBoardContent>
         <StyledScoreContainer $alignItems={"flex-start"}>
-          <StyledUserName>{_user.name?.split(" ")[0]}</StyledUserName>
+          <StyledUserName>{name?.split(" ")[0]}</StyledUserName>
           <StyledScore>
-            {String(_score[_user.id as number]).padStart(2, "0")}
+            {String(_score[user_id as number]).padStart(2, "0")}
           </StyledScore>
         </StyledScoreContainer>
         <StyledScoreContainer $alignItems={"flex-end"}>
-          <StyledUserName>{_gaming_user?.name?.split(" ")[0]}</StyledUserName>
+          <StyledUserName>{oppenent_player_name?.split(" ")[0]}</StyledUserName>
           <StyledScore>
-            {String(
-              _gaming_user ? _score[_gaming_user.id as number] : 0
-            ).padStart(2, "0")}
+            {String(_score[opponent_player_id]).padStart(2, "0")}
           </StyledScore>
         </StyledScoreContainer>
       </StyledScoreBoardContent>

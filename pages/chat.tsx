@@ -1,5 +1,4 @@
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 
 // types
 import type { FC } from "react";
@@ -43,13 +42,14 @@ import {
   usePresenceChannel,
   useNotificationChannel,
 } from "@/hooks/pusher.hook";
-import { updateGamingUser, updateRoomId } from "@/store/slice/game.slice";
 import {
   active_group,
   updateDefaultGroupLatestConversation,
   updateDefaultGroup,
   updateGroupsUsers,
 } from "@/store/slice/group.slice";
+import { updatePokerRoomId } from "@/store/slice/poker/poker.slice";
+import { updateCognimatchRoomId } from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -60,7 +60,6 @@ interface IProps {
 }
 
 const ChatPage: FC<IProps> = ({ is_mobile }) => {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const client_is_mobile = useIsMobile();
   const _user = useAppSelector(user);
@@ -84,7 +83,6 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
         }) => {
           dispatch(updateDefaultUserConversation(data));
           if (data.user.id == _active_user?.id) {
-            console.log("value of conversation", data.conversation);
             dispatch(updateActiveUserConversation(data.conversation));
           }
         },
@@ -126,21 +124,10 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
               is_open: true,
             })
           );
-          dispatch(updateRoomId(data.room_id));
           if (data.game == "cognimatch") {
-            dispatch(updateGamingUser(data.user));
-          }
-        },
-      },
-      {
-        event: "Game.AcceptGameInvitationEvent",
-        callback: (data: {
-          is_accepted: boolean;
-          user: IUsersWithConversation;
-        }) => {
-          if (data.is_accepted) {
-            dispatch(updateGamingUser(data.user));
-            router.push("/memory-game");
+            dispatch(updateCognimatchRoomId(data.room_id));
+          } else if (data.game == "poker") {
+            dispatch(updatePokerRoomId(data.room_id));
           }
         },
       },

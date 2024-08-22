@@ -17,11 +17,9 @@ import withCountDown from "@/hoc/memory-game/with-count-down";
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
 
 const MobileTimerBanner: FC<{ count_down: number }> = ({ count_down }) => {
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
   return (
     <StyledTimerBannerContainer>
       <StyledTimerBanner>
@@ -33,7 +31,6 @@ const MobileTimerBanner: FC<{ count_down: number }> = ({ count_down }) => {
           </StyledMainText>
           <StyledVsContainer>
             {_user.name} <StyledTextSpan $color="#FF2400">V/s</StyledTextSpan>{" "}
-            {_gaming_user?.name}
           </StyledVsContainer>
         </StyledTimerBannerContent>
       </StyledTimerBanner>

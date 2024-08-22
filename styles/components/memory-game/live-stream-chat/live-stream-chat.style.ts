@@ -56,19 +56,6 @@ const StyledBannerAvatarContainer = styled.div`
   top: 10px;
 `;
 
-const StyledBannerGirlContainer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translate(-50%);
-  width: 418px;
-  height: 472px;
-`;
-
-const StyledBannerGirlImage = styled(Image)`
-  object-fit: cover;
-`;
-
 const StyledBannerTextPatternContainer = styled.div`
   display: inline;
   position: absolute;
@@ -223,8 +210,6 @@ export {
   StyledHeader,
   StyledMainText,
   StyledBannerAvatarContainer,
-  StyledBannerGirlContainer,
-  StyledBannerGirlImage,
   StyledBannerTextPatternContainer,
   StyledPlayButtonContainer,
   StyledAvatarGroup,

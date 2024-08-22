@@ -19,33 +19,34 @@ import MoonIcon from "@/components/memory-game/nav/icons/moon";
 
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
-import {
-  // state
-  live_stream_chat_list,
-  // actions
-  updateShowChatStreamingModal,
-  resetMemoryGame,
-  updateShowHelpTooltip,
-} from "@/store/slice/memory-game.slice";
 import { mode, updateMode } from "@/store/slice/common.slice";
-import { gaming_user, resetGame } from "@/store/slice/game.slice";
+import { user } from "@/store/slice/user.slice";
+import {
+  active_cognimatch_players,
+  live_stream_chat,
+  resetCognimatch,
+  updateShowHelpTooltip,
+  updateShowLiveSteamChat,
+} from "@/store/slice/cognimatch.slice";
 
 const MobileNav: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _gaming_user = useAppSelector(gaming_user);
-  const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
-  const _live_stream_gaming_user_chat = _live_stream_chat_list.filter(
-    (chat) => chat.user.id == _gaming_user?.id && !chat.viewed
+  const { id: user_id } = useAppSelector(user);
+  const opponent_player = useAppSelector(active_cognimatch_players).filter(
+    (player) => player.id !== user_id
+  )[0];
+  const _live_stream_chat = useAppSelector(live_stream_chat);
+  const live_stream_opponent_player_chat = _live_stream_chat.chat_list.filter(
+    (chat) => chat.user.id == opponent_player?.id && !chat.viewed
   );
   return (
     <StyledNavContainer>
       <StyledNav>
         <StyledIconButton
           onClick={() => {
-            dispatch(resetGame());
-            dispatch(resetMemoryGame());
+            dispatch(resetCognimatch());
             router.push("/");
           }}
         >
@@ -53,11 +54,13 @@ const MobileNav: FC = () => {
         </StyledIconButton>
         <StyledChatButton
           $content={`${
-            _live_stream_gaming_user_chat.length
-              ? String(_live_stream_gaming_user_chat.length).padStart(2, "0")
+            live_stream_opponent_player_chat.length
+              ? String(live_stream_opponent_player_chat.length).padStart(2, "0")
               : ""
           }`}
-          onClick={() => dispatch(updateShowChatStreamingModal(true))}
+          onClick={() =>
+            dispatch(updateShowLiveSteamChat({ show: true, is_modal: true }))
+          }
         >
           <ChatIcon width={30} height={24} color="#FFF" />
         </StyledChatButton>

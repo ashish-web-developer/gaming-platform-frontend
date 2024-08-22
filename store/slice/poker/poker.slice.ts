@@ -59,7 +59,7 @@ export const dealHandApi = createAsyncThunk<
     const response: AxiosResponse<IBaseResponse> = await Axios.post(
       "poker/deal-hand",
       {
-        room_id: state.game.room_id,
+        room_id: state.poker.poker_room_id,
       }
     );
     return response.data;
@@ -79,7 +79,7 @@ export const joinPokerRoomApi = createAsyncThunk<
       const state = getState();
       const response: AxiosResponse<IJoinPokerRoomApiResponse> =
         await Axios.post("/poker/join-poker-room", {
-          room_id: state.game.room_id,
+          room_id: state.poker.poker_room_id,
           seat_number,
           total_chips_left,
         });
@@ -101,7 +101,7 @@ export const updateSeatAvailableApi = createAsyncThunk<
       const state = getState();
       const response: AxiosResponse<IUpdateSeatAvailableResponse> =
         await Axios.post("/poker/update-seat-available", {
-          room_id: state.game.room_id,
+          room_id: state.poker.poker_room_id,
           seat_available,
         });
       return response.data;
@@ -121,7 +121,7 @@ export const getPokerRoomInfoApi = createAsyncThunk<
       const state = getState();
       const response: AxiosResponse<IGetPokerRoomInfoResponse> =
         await Axios.post("/poker/poker-room-info", {
-          room_id: state.game.room_id,
+          room_id: state.poker.poker_room_id,
         });
       if (response.data.poker_room.seat_available !== null) {
         dispatch(
@@ -161,7 +161,7 @@ export const triggerActionApi = createAsyncThunk<
       const response: AxiosResponse<IBaseResponse> = await Axios.post(
         "/poker/trigger-action",
         {
-          room_id: state.game.room_id,
+          room_id: state.poker.poker_room_id,
           action_type,
           current_betted_amount,
         }
@@ -174,6 +174,7 @@ export const triggerActionApi = createAsyncThunk<
 );
 
 const initialState: IPokerInitialState = {
+  poker_room_id: null,
   show_poker_slider: false,
   dealer_id: null,
   bettor_id: null,
@@ -190,6 +191,9 @@ const pokerSlice = createSlice({
   name: "poker",
   initialState,
   reducers: {
+    updatePokerRoomId: (state, action: PayloadAction<string | null>) => {
+      state.poker_room_id = action.payload;
+    },
     updateShowPokerSlider: (state, action: PayloadAction<boolean>) => {
       state.show_poker_slider = action.payload;
     },
@@ -304,6 +308,7 @@ const pokerSlice = createSlice({
       state.dealer_id = action.payload.poker_room.dealer_id;
     });
     builder.addCase(createPokerRoomApi.fulfilled, (state, action) => {
+      state.poker_room_id = action.payload.poker_room.room_id;
       state.dealer_id = action.payload.poker_room.dealer_id;
     });
   },
@@ -313,6 +318,7 @@ const pokerSlice = createSlice({
 export default pokerSlice.reducer;
 
 // selector
+export const poker_room_id = (state: RootState) => state.poker.poker_room_id;
 export const show_poker_slider = (state: RootState) =>
   state.poker.show_poker_slider;
 export const poker_chips = (state: RootState) => state.poker.poker_chips;
@@ -330,6 +336,7 @@ export const community_cards = (state: RootState) =>
   state.poker.community_cards;
 // action creaters
 export const {
+  updatePokerRoomId,
   updatePokerChips,
   updateShowPokerSlider,
   updateShowBuyInModal,

@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
-import type { ITheme } from "@/theme/memory-game.theme";
+import type { ITheme } from "@/theme/cognimatch.theme";
 
 // local components
 import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
@@ -136,16 +136,12 @@ import { Tooltip } from "@mui/material";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
-  // state
-  show_game_board,
   score,
-  show_chat_streaming_modal,
+  show_cognimatch_board,
   info_snackbar,
-  show_leaving_snackbar,
-  // action
+  live_stream_chat,
   updateShowHelpTooltip,
-} from "@/store/slice/memory-game.slice";
-import { gaming_user } from "@/store/slice/game.slice";
+} from "@/store/slice/cognimatch.slice";
 import { mode } from "@/store/slice/common.slice";
 
 // icons
@@ -158,19 +154,17 @@ const MemoryGame: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _show_game_board = useAppSelector(show_game_board);
-  const _gaming_user = useAppSelector(gaming_user);
+  const _show_cognimatch_board = useAppSelector(show_cognimatch_board);
   const is_mobile = useIsMobile();
   const _user = useAppSelector(user);
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
-  const _show_chat_streaming_modal = useAppSelector(show_chat_streaming_modal);
-  const _info_snackbar = useAppSelector(info_snackbar);
-  const _show_leaving_snackbar = useAppSelector(show_leaving_snackbar);
+  const show_mobile_stream_modal =
+    useAppSelector(live_stream_chat).mobile.show_chat_modal;
 
   return (
     <StyledPage>
-      {is_mobile && _show_chat_streaming_modal && <MobileLiveStreamChat />}
+      {is_mobile && show_mobile_stream_modal && <MobileLiveStreamChat />}
       {is_mobile && <MobileHelpTooltip />}
       <StyledContainer $mode={_mode}>
         {!is_mobile && <HelpTooltip />}
@@ -189,7 +183,8 @@ const MemoryGame: FC = () => {
         </StyledHelpCtaContainer>
         <StyledBackgroundCircleOne $mode={_mode} />
         <StyledBackgroundCircleTwo $mode={_mode} />
-        {(_show_leaving_snackbar || _info_snackbar.show_info_snackbar) &&
+        {/** handle leaving opponent player */}
+        {/* {(_show_leaving_snackbar || _info_snackbar.show_info_snackbar) &&
           is_mobile && (
             <StyledInfoSnackbarContainer>
               <InfoSnackbar
@@ -205,10 +200,10 @@ const MemoryGame: FC = () => {
                   : "👋 I am leaving the game"}
               </InfoSnackbar>
             </StyledInfoSnackbarContainer>
-          )}
+          )} */}
         <StyledContentContainer>
           {is_mobile ? <MobileNav /> : <Nav />}
-          {!_show_game_board && (
+          {!_show_cognimatch_board && (
             <>
               {is_mobile ? (
                 <StyledMainText $mode={_mode}>
@@ -224,10 +219,10 @@ const MemoryGame: FC = () => {
             </>
           )}
           <StyledGrid
-            $paddingTop={_show_game_board && !is_mobile ? "70px" : null}
+            $paddingTop={_show_cognimatch_board && !is_mobile ? "70px" : null}
           >
             <StyledLeftContainer>
-              {!_show_game_board && (
+              {!_show_cognimatch_board && (
                 <>
                   {is_mobile ? (
                     <>
@@ -242,7 +237,7 @@ const MemoryGame: FC = () => {
                   )}
                 </>
               )}
-              {_show_game_board &&
+              {_show_cognimatch_board &&
                 (_score_list?.reduce(
                   (acc, currentValue) => acc + currentValue,
                   0
@@ -262,7 +257,8 @@ const MemoryGame: FC = () => {
                 <LiveStreamChat />
               )}
 
-              {(_show_leaving_snackbar ||
+              {/** This is snackbar handle leaving case */}
+              {/* {(_show_leaving_snackbar ||
                 _info_snackbar.show_info_snackbar) && (
                 <StyledInfoSnackbarContainer>
                   <InfoSnackbar
@@ -278,7 +274,7 @@ const MemoryGame: FC = () => {
                       : "👋 I am leaving the game"}
                   </InfoSnackbar>
                 </StyledInfoSnackbarContainer>
-              )}
+              )} */}
             </StyledRightContainer>
           </StyledGrid>
         </StyledContentContainer>

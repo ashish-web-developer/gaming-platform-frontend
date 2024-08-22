@@ -1,7 +1,6 @@
 // types
 import type { FC } from "react";
-import type { ITheme } from "@/theme/memory-game.theme";
-
+import type { ITheme } from "@/theme/cognimatch.theme";
 // theme
 import { useTheme } from "styled-components";
 
@@ -25,9 +24,11 @@ import {
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { score } from "@/store/slice/memory-game.slice";
+import {
+  active_cognimatch_players,
+  score,
+} from "@/store/slice/cognimatch.slice";
 import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
 
 const CrownIcon: FC = () => {
   return (
@@ -91,26 +92,22 @@ const ScoreBoard: FC = () => {
   const theme = useTheme() as ITheme;
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
-  const _max_score_user_id =
-    _score &&
-    _score_list &&
-    Object.entries(_score).filter(([key, value]) => {
-      if (value == Math.max(..._score_list)) {
-        return true;
-      }
-    })[0][0];
-  const _min_score_user_id =
-    _score &&
-    _score_list &&
-    Object.entries(_score).filter(([key, value]) => {
-      if (value == Math.min(..._score_list)) {
-        return true;
-      }
-    })[0][0];
+  const max_score = Math.max(...Object.values(_score));
+  const min_score = Math.min(...Object.values(_score));
+  const max_score_user_id = Object.keys(_score).find(
+    (user_id) => _score[user_id as any] == max_score
+  );
+  const min_score_user_id = Object.keys(_score).find(
+    (user_id) => _score[user_id as any] == min_score
+  );
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
-  const winner = _user.id == _max_score_user_id ? _user : _gaming_user;
-  const loser = _user.id == _min_score_user_id ? _user : _gaming_user;
+  const { id: user_id } = _user;
+  const opponent_player = useAppSelector(active_cognimatch_players).filter(
+    (player) => player.id !== user_id
+  )[0];
+  const winner =
+    user_id == (max_score_user_id as any) ? _user : opponent_player;
+  const loser = user_id == (min_score_user_id as any) ? _user : opponent_player;
   return (
     <StyledScoreBoardContainer>
       <StyledTrofyBannerContainer>

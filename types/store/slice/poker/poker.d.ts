@@ -23,6 +23,7 @@ type IPokerPlayer = {
   updated_at: string;
 };
 type IPokerInitialState = {
+  poker_room_id:string|null;
   show_poker_slider: boolean;
   dealer_id: number | null;
   poker_chips: number; // It will be stored in k

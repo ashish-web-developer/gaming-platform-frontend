@@ -1,7 +1,6 @@
 // types
 import type { FC } from "react";
-import type { ITheme } from "@/theme/memory-game.theme";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { ITheme } from "@/theme/cognimatch.theme";
 
 // styled components
 import {
@@ -12,9 +11,6 @@ import {
   StyledSpan,
   StyledStarContainer,
   StyledContent,
-  StyledAvatarGroup,
-  StyledAvatar,
-  StyledImage,
 } from "@/styles/components/memory-game/welcome-banner/mobile/mobile-welcome-banner.style";
 
 // styled theme
@@ -22,16 +18,7 @@ import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
-import {
-  // state
-  is_gaming_user_in,
-} from "@/store/slice/memory-game.slice";
 import { mode } from "@/store/slice/common.slice";
-
-// helpers hooks
-import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -53,13 +40,6 @@ const StarIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 const MobileWelcomeBanner: FC = () => {
   const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
-  const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
-  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const gaming_user_avatar_url = useAvatarUrl(
-    _gaming_user as IUsersWithConversation
-  );
-  const _is_gaming_user_in = useAppSelector(is_gaming_user_in);
   return (
     <StyledContainer>
       <StyledDottedContainer $mode={_mode}>
@@ -89,32 +69,6 @@ const MobileWelcomeBanner: FC = () => {
             <StarIcon size={20} color={"#16C172"} />
           </StyledStarContainer>
 
-          <StyledAvatarGroup>
-            <StyledAvatar
-              $size="40px"
-              $border={theme.palette.primary.light}
-              $online={true}
-            >
-              <StyledImage
-                fill={true}
-                alt="user-avatar"
-                src={user_avatar_url}
-                sizes="(max-width: 1400px) 10vw"
-              />
-            </StyledAvatar>
-            <StyledAvatar
-              $size="40px"
-              $border={theme.palette.primary.light}
-              $online={_is_gaming_user_in}
-            >
-              <StyledImage
-                fill={true}
-                alt="user-avatar"
-                src={gaming_user_avatar_url}
-                sizes="(max-width: 1400px) 10vw"
-              />
-            </StyledAvatar>
-          </StyledAvatarGroup>
           <StyledContent>
             &ldquo;CogniMatch&rdquo; is a captivating memory game designed to
             boost your cognitive skills. Flip cards, match pairs, and enhance

@@ -1,7 +1,7 @@
 import { forwardRef, useRef } from "react";
 // types
 import type { FC } from "react";
-import type { ITheme } from "@/theme/memory-game.theme";
+import type { ITheme } from "@/theme/cognimatch.theme";
 
 // styled components
 import {
@@ -28,11 +28,11 @@ import { useTheme } from "styled-components";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
-  live_stream_chat_list,
-  updateShowChatStreamingModal,
+  live_stream_chat,
+  liveStreamChatApi,
+  updateShowLiveSteamChat,
   updateLiveSteamMessageView,
-} from "@/store/slice/memory-game.slice";
-import { liveStreamChatApi } from "@/store/slice/game.slice";
+} from "@/store/slice/cognimatch.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // hooks
@@ -115,7 +115,7 @@ const Message = forwardRef<
 const LiveStreamChat: FC = () => {
   const dispatch = useAppDispatch();
   const input_ref = useRef<HTMLInputElement>(null);
-  const _live_stream_chat_list = useAppSelector(live_stream_chat_list);
+  const _live_stream_chat = useAppSelector(live_stream_chat);
   const theme = useTheme() as ITheme;
   const container_ref = useRef<HTMLDivElement>(null);
   return (
@@ -124,13 +124,15 @@ const LiveStreamChat: FC = () => {
       <StyledHeader>
         <StyledMainText>Live Chat</StyledMainText>
         <StyledCloseIcon
-          onClick={() => dispatch(updateShowChatStreamingModal(false))}
+          onClick={() =>
+            dispatch(updateShowLiveSteamChat({ show: true, is_modal: false }))
+          }
         >
           <CloseIcon size={15} color="#fff" />
         </StyledCloseIcon>
       </StyledHeader>
       <StyledMessagesContainer>
-        {_live_stream_chat_list.map((chat, index) => {
+        {_live_stream_chat.chat_list.map((chat, index) => {
           return <Message key={index} ref={container_ref} {...chat} />;
         })}
       </StyledMessagesContainer>

@@ -6,14 +6,10 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
 import {
   player_turn_id,
-  last_flipped_card_id,
-  memoryGameCardEvent,
-  updateLastFlippedCardEvent,
-} from "@/store/slice/memory-game.slice";
-import {
+  active_cognimatch_players,
   timer_start_count,
-  updatePlayerTurnEvent,
-} from "@/store/slice/game.slice";
+  updateTimerStartTimeApi,
+} from "@/store/slice/cognimatch.slice";
 
 type IBaseProps = {
   timer_count: number;
@@ -22,47 +18,46 @@ const withTimer = (BaseComponent: ComponentType<IBaseProps>) => {
   const EnhancedComponent = () => {
     const dispatch = useAppDispatch();
     const [timer_count, set_timer_count] = useState(0);
-    const _user = useAppSelector(user);
+    const { id: user_id } = useAppSelector(user);
     const _player_turn_id = useAppSelector(player_turn_id);
+    const opponent_player_id = useAppSelector(active_cognimatch_players).filter(
+      (player) => player.id !== _player_turn_id
+    )[0]?.id;
     const _timer_start_count = useAppSelector(timer_start_count);
-    const _last_flipped_card_id = useAppSelector(last_flipped_card_id);
+    const [is_timer_api_triggered, set_is_timer_api_triggered] =
+      useState(false);
 
     useEffect(() => {
-      const updateCountDown = () => {
-        const target_time = (_timer_start_count as number) + 30000;
+      const updateTimer = () => {
+        const target_time = _timer_start_count + 33000; // keeping timer of 30 seconds;
         const time_remaining = target_time - new Date().getTime();
-        if (time_remaining <= 0) {
-          if (_player_turn_id == _user.id) {
-            dispatch(updatePlayerTurnEvent());
-            /**
-             * if user have flipped up only one card
-             * in 30 sec then flip down that card
-             * again
-             */
-            if (_last_flipped_card_id) {
-              dispatch(
-                memoryGameCardEvent({
-                  card_id: _last_flipped_card_id,
-                  flipped: false,
-                })
-              );
-              dispatch(
-                updateLastFlippedCardEvent({
-                  card_id: null,
-                })
-              );
-            }
-          }
-        } else {
+        if (
+          time_remaining < 1000 &&
+          _player_turn_id == user_id &&
+          !is_timer_api_triggered
+        ) {
+          /**
+           * if there is no remaining time
+           * we are updating the turn for the
+           * opponent player
+           */
+          dispatch(
+            updateTimerStartTimeApi({ next_player_turn_id: opponent_player_id })
+          );
+          set_is_timer_api_triggered(true);
+        } else if (time_remaining >= 0) {
           const seconds = Math.floor((time_remaining / 1000) % 60);
           set_timer_count(seconds);
         }
       };
-      const timer = setInterval(updateCountDown, 1000);
+      const timer = setInterval(updateTimer, 1000);
       return () => {
         clearInterval(timer);
       };
-    }, [_timer_start_count, _last_flipped_card_id]);
+    }, [_timer_start_count, opponent_player_id, is_timer_api_triggered]);
+    useEffect(() => {
+      set_is_timer_api_triggered(false);
+    }, [_timer_start_count]);
     return <BaseComponent timer_count={timer_count} />;
   };
   return EnhancedComponent;

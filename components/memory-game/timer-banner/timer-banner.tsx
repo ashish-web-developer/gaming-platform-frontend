@@ -1,6 +1,6 @@
 // types
 import type { FC } from "react";
-import type { ITheme } from "@/theme/memory-game.theme";
+import type { ITheme } from "@/theme/cognimatch.theme";
 
 // styled components
 import {
@@ -28,7 +28,6 @@ import { useTheme } from "styled-components";
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { user } from "@/store/slice/user.slice";
-import { gaming_user } from "@/store/slice/game.slice";
 
 const PatternOne: FC<{ color: string }> = ({ color }) => {
   return (
@@ -69,7 +68,6 @@ const TimerBanner: FC<{
 }> = ({ count_down }) => {
   const theme = useTheme() as ITheme;
   const _user = useAppSelector(user);
-  const _gaming_user = useAppSelector(gaming_user);
   return (
     <StyledContainer>
       <StyledPatternContainer>
@@ -96,7 +94,7 @@ const TimerBanner: FC<{
             <StyledVersusText>
               {_user.name?.split(" ")[0]}{" "}
               <span style={{ color: theme.palette.primary.contrast }}>v/s</span>{" "}
-              {_gaming_user?.name?.split(" ")[0]}
+              {/* {_gaming_user?.name?.split(" ")[0]} */}
             </StyledVersusText>
             <StyledVersusImage
               width={40}

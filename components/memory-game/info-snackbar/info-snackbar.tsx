@@ -17,7 +17,8 @@ import InfoSnackbarCountdown from "@/components/memory-game/info-snackbar/info-s
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { gaming_user } from "@/store/slice/game.slice";
+import { user } from "@/store/slice/user.slice";
+import { active_cognimatch_players } from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -27,16 +28,17 @@ const InfoSnackbar: FC<{
   children: string;
   show_count_down: boolean;
 }> = ({ receiver_name, children, show_count_down }) => {
-  const _gaming_user = useAppSelector(gaming_user);
-  const gaming_user_avatar_url = useAvatarUrl(
-    _gaming_user as IUsersWithConversation
-  );
+  const { id: user_id } = useAppSelector(user);
+  const opponent_player = useAppSelector(active_cognimatch_players).filter(
+    (player) => player.id !== user_id
+  )[0];
+  const opponent_player_avatar_url = useAvatarUrl(opponent_player);
   return (
     <>
       <StyledSnackbarContainer>
         <StyledUserAvatar>
           <StyledAvatarImage
-            src={gaming_user_avatar_url}
+            src={opponent_player_avatar_url}
             fill={true}
             alt="user-avatar"
           />

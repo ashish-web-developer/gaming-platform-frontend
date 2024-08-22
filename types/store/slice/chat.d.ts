@@ -95,16 +95,10 @@ type IUpdateViewResponse = {
 
 type ISendInvitationApiRequest = {
   game: string;
+  room_id: string;
 };
 
 type ISendInvitationApiResponse = {
-  success: boolean;
-  message: string;
-};
-type IAcceptInvitationApiRequest = {
-  is_accepted: boolean;
-};
-type IAcceptInvitationApiResponse = {
   success: boolean;
   message: string;
 };
@@ -138,8 +132,6 @@ export {
   IUpdateViewResponse,
   ISendInvitationApiRequest,
   ISendInvitationApiResponse,
-  IAcceptInvitationApiRequest,
-  IAcceptInvitationApiResponse,
   ISendMessagePayload,
   ISendMessageResponse,
 };

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 // types
-import type { ITheme } from "@/theme/memory-game.theme";
+import type { ITheme } from "@/theme/cognimatch.theme";
 import type { FC } from "react";
 // styled components
 import {

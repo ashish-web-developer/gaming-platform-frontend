@@ -16,28 +16,36 @@ import Timer from "@/components/memory-game/game-board/timer";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import {
-  card_list,
-  player_turn_id,
-  game_complexity,
-} from "@/store/slice/memory-game.slice";
 import { user } from "@/store/slice/user.slice";
+import {
+  deck,
+  player_turn_id,
+  active_cognimatch_players,
+} from "@/store/slice/cognimatch.slice";
 
 const GameBoard = () => {
-  const _card_list = useAppSelector(card_list);
-  const _user = useAppSelector(user);
+  const _deck = useAppSelector(deck);
+  const { id: user_id } = useAppSelector(user);
   const _player_turn_id = useAppSelector(player_turn_id);
-  const _game_comlexity = useAppSelector(game_complexity);
+  const opponent_player_id = useAppSelector(active_cognimatch_players).filter(
+    (player) => player.id !== user_id
+  )[0]?.id;
   const soundRef = useRef<{
     card_match_sound: HTMLAudioElement | null;
+    flip_sound: HTMLAudioElement | null;
   }>({
     card_match_sound: null,
+    flip_sound: null,
   });
-  if (!soundRef.current.card_match_sound) {
+  if (!soundRef.current.card_match_sound || !soundRef.current.flip_sound) {
     soundRef.current.card_match_sound = new Audio(
       "/memory-game/game-board/card/audio/congratulation-sound.mp3"
     );
+    soundRef.current.flip_sound = new Audio(
+      "/memory-game/game-board/card/audio/flip-card-sound.mp3"
+    );
   }
+
   return (
     <StyledGameBoardContainer
       initial={{
@@ -56,7 +64,7 @@ const GameBoard = () => {
         </StyledTimeBoardContainer>
       </StyledTopBoardContainer>
       <StyledBottomGameBoardContainer>
-        {_card_list.map((card, index) => {
+        {_deck.map((card, index) => {
           return (
             <Card
               suit={card.suit}
@@ -65,11 +73,12 @@ const GameBoard = () => {
               flipped={card.flipped}
               id={card.id}
               key={card.id}
-              is_clickable={_player_turn_id == _user.id && !card.flipped}
-              user={_user}
+              is_clickable={_player_turn_id == user_id && !card.flipped}
+              user_id={user_id as number}
               card_image={card.card_image}
               ref={soundRef}
               player_turn_id={_player_turn_id as number}
+              opponent_player_id={opponent_player_id}
             />
           );
         })}
