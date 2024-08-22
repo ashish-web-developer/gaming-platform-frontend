@@ -1,10 +1,4 @@
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import Image from "next/image";
-
-type IStyledMainSpan = {
-  $color: string;
-};
 
 const StyledContainer = styled.div`
   width: 100%;

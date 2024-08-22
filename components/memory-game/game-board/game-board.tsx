@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 // styled components
 import {
@@ -23,6 +23,9 @@ import {
   active_cognimatch_players,
 } from "@/store/slice/cognimatch.slice";
 
+// gsap
+import gsap from "gsap";
+
 const GameBoard = () => {
   const _deck = useAppSelector(deck);
   const { id: user_id } = useAppSelector(user);
@@ -46,15 +49,22 @@ const GameBoard = () => {
     );
   }
 
-  return (
-    <StyledGameBoardContainer
-      initial={{
+  const game_board_container_ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const gsap_context = gsap.context(() => {
+      gsap.from(game_board_container_ref.current, {
         opacity: 0,
-      }}
-      animate={{
-        opacity: 1,
-      }}
-    >
+        duration: 0.7,
+        ease: "power4.inOut",
+      });
+    });
+    return () => {
+      gsap_context.revert();
+    };
+  }, []);
+
+  return (
+    <StyledGameBoardContainer ref={game_board_container_ref}>
       <StyledTopBoardContainer>
         <StyledScoreBoardContainer>
           <ScoreBoard />

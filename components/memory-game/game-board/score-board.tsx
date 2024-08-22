@@ -26,19 +26,7 @@ import {
 } from "@/store/slice/cognimatch.slice";
 
 const Scores: FC<{ children: number }> = ({ children }) => {
-  return (
-    <StyledScore
-      key={children}
-      initial={{
-        scale: 2,
-      }}
-      animate={{
-        scale: 1,
-      }}
-    >
-      {children}
-    </StyledScore>
-  );
+  return <StyledScore key={children}>{children}</StyledScore>;
 };
 
 const ScoreBoard = () => {
@@ -52,16 +40,7 @@ const ScoreBoard = () => {
   const opponent_player_avatar_url = useAvatarUrl(opponent_player);
   const _score = useAppSelector(score);
   return (
-    <StyledScoreBoard
-      initial={{
-        x: 100,
-        scale: 2,
-      }}
-      animate={{
-        x: 0,
-        scale: 1,
-      }}
-    >
+    <StyledScoreBoard>
       <StyledContentContainer>
         <StyledProfileContainer>
           <StyledAvatar $size="40px" $online={true}>

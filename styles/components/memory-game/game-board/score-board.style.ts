@@ -1,10 +1,7 @@
 import Image from "next/image";
 import styled from "styled-components";
 
-// framer motion
-import { motion } from "framer-motion";
-
-const StyledScoreBoard = styled(motion.div)`
+const StyledScoreBoard = styled.div`
   width: 97.5%;
   height: 90%;
   border-radius: 25px;
@@ -99,7 +96,7 @@ const StyledScoreContainer = styled.div`
 `;
 const StyledBannerImage = styled(Image)``;
 
-const StyledScore = styled(motion.div)`
+const StyledScore = styled.div`
   color: #fff;
   text-align: center;
   font-family: Poppins;

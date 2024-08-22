@@ -9,11 +9,16 @@ import InfoSnackbar from "@/components/memory-game/info-snackbar/info-snackbar";
 import WelcomeBanner from "@/components/memory-game/welcome-banner/welcome-banner";
 import TimerBanner from "@/components/memory-game/timer-banner/timer-banner";
 import Nav from "@/components/memory-game/nav/nav";
-import HelpTooltip from "@/components/memory-game/help-tooltip/help-tooltip";
 import LiveStreamChat from "@/components/memory-game/live-stream-chat/live-stream-chat";
 
 const GameBoard = dynamic(
   () => import("@/components/memory-game/game-board/game-board"),
+  {
+    ssr: false,
+  }
+);
+const HelpTooltip = dynamic(
+  () => import("@/components/memory-game/help-tooltip/help-tooltip"),
   {
     ssr: false,
   }
@@ -60,6 +65,7 @@ import {
   score,
   show_cognimatch_board,
   info_snackbar,
+  help_tooltip,
   updateShowHelpTooltip,
 } from "@/store/slice/cognimatch.slice";
 import { mode } from "@/store/slice/common.slice";
@@ -68,21 +74,20 @@ import { mode } from "@/store/slice/common.slice";
 import HelpIcon from "@/components/memory-game/icons/help";
 
 // hooks
-import { useIsMobile } from "@/hooks/common.hook";
 
 const CognimatchContainer: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const _show_cognimatch_board = useAppSelector(show_cognimatch_board);
-  const is_mobile = useIsMobile();
   const { name } = useAppSelector(user);
+  const { show_tooltip } = useAppSelector(help_tooltip);
   const _score = useAppSelector(score);
   const _score_list = _score && Object.values(_score);
   return (
     <StyledPage>
       <StyledContainer $mode={_mode}>
-        <HelpTooltip />
+        {show_tooltip && <HelpTooltip />}
         <StyledHelpCtaContainer>
           <Tooltip title="Need Help?" placement="right-start">
             <StyledHelpCta

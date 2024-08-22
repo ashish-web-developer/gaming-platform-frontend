@@ -1,9 +1,6 @@
 import styled from "styled-components";
 
-// framer motion
-import { motion } from "framer-motion";
-
-const StyledGameBoardContainer = styled(motion.div)`
+const StyledGameBoardContainer = styled.div`
   width: 100%;
   height: auto;
   display: flex;

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/cognimatch.theme";
@@ -30,8 +31,8 @@ import NextIcon from "@/components/memory-game/help-tooltip/icons/next";
 import VolumeOffIcon from "@/components/memory-game/help-tooltip/icons/volume-off";
 import VolumeOnIcon from "@/components/memory-game/help-tooltip/icons/volume-on";
 
-// framer motion
-import { AnimatePresence } from "framer-motion";
+// gsap
+import gsap from "gsap";
 
 type IProps = {
   is_open: boolean;
@@ -52,72 +53,85 @@ const HelpTooltip: FC<IProps> = ({
   updateRuleIndex,
 }) => {
   const theme = useTheme() as ITheme;
+  const gsap_context_ref = useRef<gsap.Context>();
+  const help_tooltip_container_ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    gsap_context_ref.current = gsap.context((self) => {
+      gsap.from(help_tooltip_container_ref.current, {
+        x: 750,
+        duration: 0.7,
+        ease: "power4.out",
+      });
+      self.add("closeAnimation", () => {
+        return new Promise((resolve) => {
+          gsap.to(help_tooltip_container_ref.current, {
+            x: 750,
+            duration: 0.7,
+            ease: "power4.out",
+            onComplete: resolve,
+          });
+        });
+      });
+    });
+    return () => {
+      gsap_context_ref.current?.revert();
+    };
+  }, []);
 
   return (
-    <AnimatePresence>
-      {is_open && (
-        <StyledHelpTooltipContainer
-          initial={{
-            x: 750,
-          }}
-          animate={{
-            x: 0,
-          }}
-          exit={{
-            x: 750,
-          }}
-        >
-          <StyledHelpTooltipImageContainer>
-            <StyledImage
-              alt="girl"
-              fill={true}
-              src={"/memory-game/help-tooltip/help-tooltip-girl.png"}
-            />
-          </StyledHelpTooltipImageContainer>
-          <StyledToolTipContainer>
-            <StyledVolumeContainer>
-              <StyledVolumeCta onClick={handlePlayAudio}>
-                {play_audio ? (
-                  <VolumeOffIcon
-                    size={20}
-                    color={theme.palette.primary.light}
-                  />
-                ) : (
-                  <VolumeOnIcon size={20} color={theme.palette.primary.light} />
-                )}
-              </StyledVolumeCta>
-            </StyledVolumeContainer>
-            <StyledTooltip>
-              <StyledCloseIconCta onClick={closeHelpTooltip}>
-                <CloseIcon color={theme.palette.primary.light} size={33} />
-              </StyledCloseIconCta>
-              <StyledNavContainer>
-                <StyledIconCta
-                  onClick={() => {
-                    updateRuleIndex(current_rule_index - 1);
-                  }}
-                >
-                  <PrevIcon color={theme.palette.primary.light} size={33} />
-                </StyledIconCta>
-                <StyledIconCta
-                  onClick={() => {
-                    updateRuleIndex(current_rule_index + 1);
-                  }}
-                >
-                  <NextIcon color={theme.palette.primary.light} size={33} />
-                </StyledIconCta>
-              </StyledNavContainer>
-              <StyledTooltipHeader>
-                {help_tooltip_text && help_tooltip_text[0]}
-              </StyledTooltipHeader>
-              <StyledTooltipPara>
-                {help_tooltip_text && help_tooltip_text[1]}
-              </StyledTooltipPara>
-            </StyledTooltip>
-          </StyledToolTipContainer>
-        </StyledHelpTooltipContainer>
-      )}
-    </AnimatePresence>
+    <StyledHelpTooltipContainer ref={help_tooltip_container_ref}>
+      <StyledHelpTooltipImageContainer>
+        <StyledImage
+          alt="girl"
+          fill={true}
+          src={"/memory-game/help-tooltip/help-tooltip-girl.png"}
+        />
+      </StyledHelpTooltipImageContainer>
+      <StyledToolTipContainer>
+        <StyledVolumeContainer>
+          <StyledVolumeCta onClick={handlePlayAudio}>
+            {play_audio ? (
+              <VolumeOffIcon size={20} color={theme.palette.primary.light} />
+            ) : (
+              <VolumeOnIcon size={20} color={theme.palette.primary.light} />
+            )}
+          </StyledVolumeCta>
+        </StyledVolumeContainer>
+        <StyledTooltip>
+          <StyledCloseIconCta
+            onClick={async () => {
+              await gsap_context_ref.current?.closeAnimation();
+              closeHelpTooltip();
+            }}
+          >
+            <CloseIcon color={theme.palette.primary.light} size={33} />
+          </StyledCloseIconCta>
+          <StyledNavContainer>
+            <StyledIconCta
+              onClick={() => {
+                updateRuleIndex(current_rule_index - 1);
+              }}
+            >
+              <PrevIcon color={theme.palette.primary.light} size={33} />
+            </StyledIconCta>
+            <StyledIconCta
+              onClick={() => {
+                updateRuleIndex(current_rule_index + 1);
+              }}
+            >
+              <NextIcon color={theme.palette.primary.light} size={33} />
+            </StyledIconCta>
+          </StyledNavContainer>
+          <StyledTooltipHeader>
+            {help_tooltip_text && help_tooltip_text[0]}
+          </StyledTooltipHeader>
+          <StyledTooltipPara>
+            {help_tooltip_text && help_tooltip_text[1]}
+          </StyledTooltipPara>
+        </StyledTooltip>
+      </StyledToolTipContainer>
+    </StyledHelpTooltipContainer>
   );
 };
 export default withHelpTooltipFunctionality(HelpTooltip);
