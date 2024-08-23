@@ -10,11 +10,23 @@ import {
   StyledSubTitle,
   StyledGamesBannerContainer,
   StyledGamesVectorWrapper,
+  StyledGamesBannerContent,
+  StyledPokerCardWrapper,
+  StyledBannerGameLogo,
   StyledCta,
   StyledCtaTextWrapper,
   StyledGirlImageWrapper,
   StyledGirlImage,
+  StyledBannerGirlImageWrapper,
+  StyledBannerGirlImage,
 } from "@/styles/components/login/login-container.style";
+
+// theme
+import { ThemeProvider } from "styled-components";
+import { Theme } from "@/theme/poker.theme";
+
+// local components
+import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // vector
 import PokerVector from "@/components/login/vector/poker-vector";
@@ -39,9 +51,44 @@ const LoginContainer: FC = () => {
           </StyledSubTitle>
         </StyledLogoContainer>
         <StyledGamesBannerContainer>
-          <PokerVector />
-          <StyledGamesVectorWrapper>
+          <StyledGamesVectorWrapper $height="309px">
+            <PokerVector />
+            <StyledGamesBannerContent>
+              <ThemeProvider theme={Theme}>
+                <StyledPokerCardWrapper
+                  $bottom="32px"
+                  $left="100px"
+                  $rotate="-10deg"
+                >
+                  <PokerCard rank="K" suit="club" />
+                </StyledPokerCardWrapper>
+                <StyledPokerCardWrapper
+                  $top="32px"
+                  $right="50px"
+                  $rotate="15deg"
+                >
+                  <PokerCard rank="Q" suit="diamond" />
+                </StyledPokerCardWrapper>
+              </ThemeProvider>
+              <StyledBannerGirlImageWrapper>
+                <StyledBannerGirlImage
+                  src="/chat/invite-dialog/poker-background.png"
+                  fill={true}
+                  alt="banner-image"
+                />
+              </StyledBannerGirlImageWrapper>
+              <StyledBannerGameLogo>
+                Texas Hold’em <br />
+                showdown
+              </StyledBannerGameLogo>
+            </StyledGamesBannerContent>
+          </StyledGamesVectorWrapper>
+          <StyledGamesVectorWrapper
+            $height="309px"
+            $margin="60px 0px 0px -70px"
+          >
             <CognimatchVector />
+            <StyledGamesBannerContent></StyledGamesBannerContent>
           </StyledGamesVectorWrapper>
         </StyledGamesBannerContainer>
         <StyledCta>

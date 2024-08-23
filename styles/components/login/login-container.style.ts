@@ -44,11 +44,59 @@ const StyledGamesBannerContainer = styled.div`
   display: flex;
   margin-top: 4rem;
 `;
-const StyledGamesVectorWrapper = styled.div`
-  margin-top: 60px;
-  margin-left: -70px;
+const StyledGamesVectorWrapper = styled.div<{
+  $margin?: string;
+  $height: string;
+}>`
+  margin: ${(props) => props.$margin ?? "0"};
+  height: ${(props) => props.$height};
+  position: relative;
 `;
 
+const StyledGamesBannerContent = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  display: flex;
+  justify-content: center;
+`;
+
+const StyledPokerCardWrapper = styled.div<{
+  $top?: string;
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+  $rotate: string;
+}>`
+  position: absolute;
+  top: ${(props) => props.$top ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  transform: rotate(${(props) => props.$rotate});
+`;
+
+const StyledBannerGirlImageWrapper = styled.div`
+  position: relative;
+  width: 215px;
+  height: 299px;
+`;
+
+const StyledBannerGirlImage = styled(Image)`
+  object-fit: contain;
+`;
+
+const StyledBannerGameLogo = styled.h3`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 2rem;
+  color: #f5d547;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) rotate(-5deg);
+  text-align: center;
+  line-height: 1.1;
+`;
 const StyledCta = styled.button`
   position: relative;
   background: transparent;
@@ -75,7 +123,9 @@ const StyledGirlImageWrapper = styled.div`
   left: 0px;
   bottom: 0px;
 `;
-const StyledGirlImage = styled(Image)``;
+const StyledGirlImage = styled(Image)`
+  object-fit: contain;
+`;
 
 export {
   StyledPage,
@@ -85,8 +135,13 @@ export {
   StyledSubTitle,
   StyledGamesBannerContainer,
   StyledGamesVectorWrapper,
+  StyledGamesBannerContent,
+  StyledPokerCardWrapper,
+  StyledBannerGameLogo,
   StyledCta,
   StyledCtaTextWrapper,
   StyledGirlImageWrapper,
   StyledGirlImage,
+  StyledBannerGirlImageWrapper,
+  StyledBannerGirlImage,
 };
