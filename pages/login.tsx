@@ -1,32 +1,20 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
-// Components
-import LoginModal from "../components/login/login-modal";
+// local components
+import LoginContainer from "@/components/login/login-container";
 
-// styles
-import { RootContainer } from "@/styles/pages/login.style";
+// theme provider
+import { ThemeProvider } from "styled-components";
 
-// Redux
-import { user } from "@/store/slice/user.slice";
-import { useAppSelector } from "@/hooks/redux.hook";
+// theme
+import { Theme } from "@/theme/login.theme";
 
 const Login: NextPage = () => {
-  const _user = useAppSelector(user);
-  const router = useRouter();
-
-  useEffect(() => {
-    if (_user.username) {
-      router.push("/chat");
-    }
-  }, [_user]);
   return (
     <>
-      <RootContainer>
-        <LoginModal keepShowingModal={true} />
-      </RootContainer>
+      <ThemeProvider theme={Theme}>
+        <LoginContainer />
+      </ThemeProvider>
     </>
   );
 };

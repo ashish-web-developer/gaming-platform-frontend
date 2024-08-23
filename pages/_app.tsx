@@ -12,15 +12,17 @@ import UserProvider from "@/providers/UserProvider";
 import axios from "axios";
 
 if (typeof window !== "undefined") {
-  axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}/sanctum/csrf-cookie`);
+  // axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}/sanctum/csrf-cookie`);
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <UserProvider>
+      {/* <UserProvider>
         <Component {...pageProps} />
-      </UserProvider>
+      </UserProvider> */}
+
+      <Component {...pageProps} />
     </Provider>
   );
 }
