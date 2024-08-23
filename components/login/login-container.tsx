@@ -4,6 +4,8 @@ import type { FC } from "react";
 // styled components
 import {
   StyledPage,
+  StyledStripeVectorWrapper,
+  StyledStripeText,
   StyledContentContainer,
   StyledLogoContainer,
   StyledLogo,
@@ -32,10 +34,15 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 import PokerVector from "@/components/login/vector/poker-vector";
 import CognimatchVector from "@/components/login/vector/cognimatch-vector";
 import CtaVector from "@/components/login/vector/cta-vector";
+import StripeVector from "@/components/login/vector/stripe-vector";
 
 const LoginContainer: FC = () => {
   return (
     <StyledPage>
+      <StyledStripeVectorWrapper>
+        <StripeVector />
+        <StyledStripeText>Win big Prizes!</StyledStripeText>
+      </StyledStripeVectorWrapper>
       <StyledGirlImageWrapper>
         <StyledGirlImage
           fill={true}

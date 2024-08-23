@@ -13,6 +13,22 @@ const StyledPage = styled.div`
   justify-content: center;
 `;
 
+const StyledStripeVectorWrapper = styled.div`
+  position: absolute;
+  right: 0px;
+  top: 0px;
+`;
+
+const StyledStripeText = styled.h5`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 2.5rem;
+  color: #000;
+  position: absolute;
+  top: 0px;
+  transform: translateX(17%) rotate(45deg);
+  top: 50px;
+`;
+
 const StyledContentContainer = styled.div`
   width: 75rem;
   display: flex;
@@ -129,6 +145,8 @@ const StyledGirlImage = styled(Image)`
 
 export {
   StyledPage,
+  StyledStripeVectorWrapper,
+  StyledStripeText,
   StyledContentContainer,
   StyledLogoContainer,
   StyledLogo,
