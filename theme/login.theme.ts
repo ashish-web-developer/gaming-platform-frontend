@@ -9,6 +9,9 @@ export type ITheme = {
       main: string;
       light: string;
     };
+    info: {
+      main: string;
+    };
   };
   breakpoints: IBreakpoints;
   fontFamily: {
@@ -19,8 +22,11 @@ export type ITheme = {
 export const Theme: ITheme = {
   palette: {
     primary: {
-      main: "#D6FFB7",
+      main: "#000000",
       light: "#E4D9FF",
+    },
+    info: {
+      main: "#D6FFB7",
     },
   },
   breakpoints: { ...Breakpoints },

@@ -22,11 +22,15 @@ const StyledStripeVectorWrapper = styled.div`
 const StyledStripeText = styled.h5`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 2.5rem;
-  color: #000;
+  color: ${({ theme }) => theme.palette.primary.main};
   position: absolute;
   top: 0px;
   transform: translateX(17%) rotate(45deg);
   top: 50px;
+  @-moz-document url-prefix() {
+    transform: translateX(12%) rotate(45deg);
+    top: 72px;
+  }
 `;
 
 const StyledContentContainer = styled.div`
@@ -34,24 +38,38 @@ const StyledContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
-const StyledLogoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  transform: rotate(-5deg);
+const StyledLogoContainer = styled.div<{
+  $show_login: boolean;
+}>`
+  ${(props) =>
+    props.$show_login
+      ? `
+        position:absolute;
+        left:5rem;
+        top:5rem;
+    `
+      : `
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        transform: rotate(0deg);
+    `}
 `;
 
-const StyledLogo = styled.h1`
+const StyledLogo = styled.h1<{
+  $fontSize: string;
+}>`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   color: ${({ theme }) => theme.palette.primary.light};
-  font-size: 5rem;
+  font-size: ${(props) => props.$fontSize};
   line-height: 1;
 `;
 const StyledSubTitle = styled.h4`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
-  color: ${({ theme }) => theme.palette.primary.main};
+  color: ${({ theme }) => theme.palette.info.main};
   font-size: 1.25rem;
   line-height: 1;
 `;
@@ -121,6 +139,7 @@ const StyledCta = styled.button`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   color: ${({ theme }) => theme.palette.primary.light};
   cursor: pointer;
+  transform: rotate(5deg);
 `;
 const StyledCtaTextWrapper = styled.span`
   position: absolute;
@@ -130,12 +149,18 @@ const StyledCtaTextWrapper = styled.span`
   transform: translate(-50%, -65%) rotate(-6deg);
   font-size: 1.5rem;
   line-height: 1;
+  @-moz-document url-prefix() {
+    transform: translate(-50%, -55%) rotate(-6deg);
+  }
 `;
 
-const StyledGirlImageWrapper = styled.div`
+const StyledGirlImageWrapper = styled.div<{
+  $width: string;
+  $height: string;
+}>`
   position: absolute;
-  width: 587px;
-  height: 643px;
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
   left: 0px;
   bottom: 0px;
 `;
