@@ -39,15 +39,42 @@ const StyledTab = styled.button`
   }
 `;
 
+const StyledInputWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 44px 1fr 48px;
+  border: 2px solid ${({ theme }) => theme.palette.info.main};
+  border-radius: 8px;
+  overflow: hidden;
+  align-items: center;
+`;
+
 const StyledInput = styled.input`
+  width: 100%;
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1rem;
   color: ${({ theme }) => theme.palette.info.main};
   background: ${({ theme }) => theme.palette.primary.main};
-  width: 100%;
-  border-radius: 8px;
   padding: 0px 16px;
+  border: none;
   line-height: 2.75;
+`;
+
+const StyledSvgVectorWrapper = styled.span<{
+  $width: string;
+  $height: string;
+  $show_border: boolean;
+}>`
+  display: inline-flex;
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
+  justify-content: center;
+  align-items: center;
+  background: ${({ theme }) => theme.palette.primary.main};
+  ${(props) =>
+    props.$show_border &&
+    `
+      border-right:2px solid ${props.theme.palette.info.main};
+    `}
 `;
 
 const StyledSubmitCta = styled.button`
@@ -66,6 +93,8 @@ export {
   StyledWrapper,
   StyledTabWrapper,
   StyledTab,
+  StyledInputWrapper,
   StyledInput,
+  StyledSvgVectorWrapper,
   StyledSubmitCta,
 };
