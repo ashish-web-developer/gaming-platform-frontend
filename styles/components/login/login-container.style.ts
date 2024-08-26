@@ -168,6 +168,7 @@ const StyledGirlImage = styled(Image)`
   object-fit: contain;
 `;
 
+
 export {
   StyledPage,
   StyledStripeVectorWrapper,

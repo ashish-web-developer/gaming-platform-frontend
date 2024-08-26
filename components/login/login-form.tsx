@@ -13,6 +13,8 @@ import {
   StyledInput,
   StyledSvgVectorWrapper,
   StyledSubmitCta,
+  StyledPara,
+  StyledCta,
 } from "@/styles/components/login/login-form.style";
 
 // theme
@@ -26,15 +28,15 @@ import EyeIcon from "@/components/login/icons/eye-icon";
 
 const LoginForm: FC = () => {
   const theme = useTheme() as ITheme;
-  const [tab_index, set_tab_index] = useState<0 | 1>(0);
+  const [tab_index, set_tab_index] = useState<0 | 1>(1); // 0 => Signup, 1 => SignIn
   return (
     <StyledForm>
       <StyledTabWrapper>
-        <StyledTab disabled={tab_index == 0} onClick={() => {}}>
-          Sign In
-        </StyledTab>
         <StyledTab disabled={tab_index == 1} onClick={() => {}}>
           Sign Up
+        </StyledTab>
+        <StyledTab disabled={tab_index == 0} onClick={() => {}}>
+          Sign In
         </StyledTab>
       </StyledTabWrapper>
       <StyledWrapper>
@@ -76,6 +78,33 @@ const LoginForm: FC = () => {
         </StyledInputWrapper>
       </StyledWrapper>
       <StyledSubmitCta>Continue</StyledSubmitCta>
+      <StyledPara>
+        {tab_index == 0 ? (
+          <>
+            Already Have an Account?{" "}
+            <StyledCta
+              onClick={() => {
+                set_tab_index(1);
+              }}
+              $color={theme.palette.info.main}
+            >
+              Sign In
+            </StyledCta>
+          </>
+        ) : (
+          <>
+            Don’t have an account?{" "}
+            <StyledCta
+              onClick={() => {
+                set_tab_index(0);
+              }}
+              $color={theme.palette.info.main}
+            >
+              Sign Up
+            </StyledCta>
+          </>
+        )}
+      </StyledPara>
     </StyledForm>
   );
 };

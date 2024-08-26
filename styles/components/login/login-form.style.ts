@@ -88,6 +88,19 @@ const StyledSubmitCta = styled.button`
   width: 100%;
 `;
 
+const StyledPara = styled.p`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1rem;
+  color: #fff;
+  width:300px;
+  line-height:1;
+`;
+const StyledCta = styled.span<{
+  $color:string;
+}>`
+  color:${(props)=>props.$color};
+  cursor:pointer;
+`;
 export {
   StyledForm,
   StyledWrapper,
@@ -97,4 +110,6 @@ export {
   StyledInput,
   StyledSvgVectorWrapper,
   StyledSubmitCta,
+  StyledPara,
+  StyledCta
 };
