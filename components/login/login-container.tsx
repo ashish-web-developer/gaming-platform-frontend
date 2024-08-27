@@ -18,10 +18,13 @@ import {
   StyledBannerGameLogo,
   StyledCta,
   StyledCtaTextWrapper,
+  StyledInfoTooltipWrapper,
   StyledGirlImageWrapper,
   StyledGirlImage,
   StyledBannerGirlImageWrapper,
   StyledBannerGirlImage,
+  StyledInfoTooltip,
+  StyledInfoTooltipText,
 } from "@/styles/components/login/login-container.style";
 
 // theme
@@ -37,6 +40,7 @@ import PokerVector from "@/components/login/vector/poker-vector";
 import CognimatchVector from "@/components/login/vector/cognimatch-vector";
 import CtaVector from "@/components/login/vector/cta-vector";
 import StripeVector from "@/components/login/vector/stripe-vector";
+import InfoTooltipVector from "@/components/login/vector/info-tooltip-vector";
 
 // gsap
 import gsap from "gsap";
@@ -72,14 +76,22 @@ const LoginContainer: FC = () => {
           <StyledLogoContainer id="logo-container" $show_login={show_login}>
             <StyledLogo $fontSize="2rem">Fortune Realm</StyledLogo>
           </StyledLogoContainer>
-          <StyledGirlImageWrapper $width="450px" $height="465px">
-            <StyledGirlImage
-              fill={true}
-              alt="girl-image"
-              src="/login/login-girl.png"
-              sizes="(max-width: 1400px) 25vw"
-            />
-          </StyledGirlImageWrapper>
+          <StyledInfoTooltipWrapper>
+            <StyledGirlImageWrapper $width="450px" $height="465px">
+              <StyledGirlImage
+                fill={true}
+                alt="girl-image"
+                src="/login/login-girl.png"
+                sizes="(max-width: 1400px) 25vw"
+              />
+            </StyledGirlImageWrapper>
+            <StyledInfoTooltip>
+              <InfoTooltipVector />
+              <StyledInfoTooltipText>
+                Hey there! Welcome to Fortune Realm!
+              </StyledInfoTooltipText>
+            </StyledInfoTooltip>
+          </StyledInfoTooltipWrapper>
         </>
       ) : (
         <>

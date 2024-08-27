@@ -168,6 +168,30 @@ const StyledGirlImage = styled(Image)`
   object-fit: contain;
 `;
 
+const StyledInfoTooltipWrapper = styled.div`
+  border: 2px solid red;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+`;
+const StyledInfoTooltip = styled.div`
+  position: absolute;
+  bottom: 270px;
+  left: 200px;
+`;
+const StyledInfoTooltipText = styled.p`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1.25rem;
+  color: #fff;
+  width:180px;
+  line-height:1;
+  transform:rotate(-8deg);
+  top:35px;
+  left:100px;
+`;
 
 export {
   StyledPage,
@@ -184,8 +208,11 @@ export {
   StyledBannerGameLogo,
   StyledCta,
   StyledCtaTextWrapper,
+  StyledInfoTooltipWrapper,
   StyledGirlImageWrapper,
   StyledGirlImage,
   StyledBannerGirlImageWrapper,
   StyledBannerGirlImage,
+  StyledInfoTooltip,
+  StyledInfoTooltipText,
 };
