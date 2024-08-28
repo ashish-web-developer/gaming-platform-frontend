@@ -19,6 +19,17 @@ const StyledChatUserUploadWrapper = styled.dialog<{
   padding-bottom: 1.5rem;
 `;
 
+const StyledGirlImageWrapper = styled.div`
+  position: absolute;
+  width: 432px;
+  height: 243px;
+  top: -100px;
+  left: -20px;
+`;
+const StyledGirlImage = styled(Image)`
+  object-fit: contain;
+`;
+
 const StyledHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -66,6 +77,7 @@ const StyledUploadLabel = styled.label<{
   border-radius: 16px;
   position: relative;
   overflow: hidden;
+  background: ${({ theme }) => theme.palette.primary.main};
 `;
 const StyledUploadedImage = styled(Image)`
   object-fit: cover;
@@ -120,6 +132,8 @@ const StyledSaveCta = styled.button<{
 
 export {
   StyledChatUserUploadWrapper,
+  StyledGirlImageWrapper,
+  StyledGirlImage,
   StyledHeader,
   StyledHeaderMainText,
   StyledIconButton,

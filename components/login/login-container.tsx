@@ -135,6 +135,7 @@ const LoginContainer: FC = () => {
                 ref={camera_cta_ref}
                 secondary_color={theme.palette.info.main}
                 font_family={theme.fontFamily.bangers}
+                show_girl_image={true}
               />
             </StyledUploadModalWrapper>
           </>

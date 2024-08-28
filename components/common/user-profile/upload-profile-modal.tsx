@@ -7,6 +7,8 @@ import type { Theme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledChatUserUploadWrapper,
+  StyledGirlImageWrapper,
+  StyledGirlImage,
   StyledHeader,
   StyledHeaderMainText,
   StyledIconButton,
@@ -81,8 +83,12 @@ const UploadProfileModal: ForwardRefRenderFunction<
   {
     secondary_color: string;
     font_family: string;
+    show_girl_image?: boolean;
   }
-> = ({ secondary_color, font_family }, camera_cta_ref) => {
+> = (
+  { secondary_color, font_family, show_girl_image = false },
+  camera_cta_ref
+) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
@@ -153,6 +159,16 @@ const UploadProfileModal: ForwardRefRenderFunction<
       $secondary_color={secondary_color}
       $font_family={font_family}
     >
+      {show_girl_image && (
+        <StyledGirlImageWrapper>
+          <StyledGirlImage
+            fill={true}
+            alt="girl-image"
+            src="/common/user-profile/girl.png"
+          />
+        </StyledGirlImageWrapper>
+      )}
+
       <StyledHeader>
         <StyledHeaderMainText $secondary_color={secondary_color}>
           Upload File
