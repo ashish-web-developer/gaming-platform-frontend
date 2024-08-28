@@ -55,7 +55,6 @@ const StyledLogoContainer = styled.div<{
         flex-direction: column;
         align-items: center;
         gap: 16px;
-        transform: rotate(0deg);
     `}
 `;
 
@@ -66,6 +65,12 @@ const StyledLogo = styled.h1<{
   color: ${({ theme }) => theme.palette.primary.light};
   font-size: ${(props) => props.$fontSize};
   line-height: 1;
+`;
+
+const StyledLogoSpan = styled.span`
+  display: inline-block;
+  position: relative;
+  letter-spacing: 0.04em;
 `;
 const StyledSubTitle = styled.h4`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
@@ -220,6 +225,7 @@ export {
   StyledContentContainer,
   StyledLogoContainer,
   StyledLogo,
+  StyledLogoSpan,
   StyledSubTitle,
   StyledGamesBannerContainer,
   StyledGamesVectorWrapper,

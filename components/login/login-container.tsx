@@ -11,6 +11,7 @@ import {
   StyledContentContainer,
   StyledLogoContainer,
   StyledLogo,
+  StyledLogoSpan,
   StyledSubTitle,
   StyledGamesBannerContainer,
   StyledGamesVectorWrapper,
@@ -64,11 +65,18 @@ const LoginContainer: FC = () => {
 
   useEffect(() => {
     gsap_context_ref.current = gsap.context((self) => {
-      gsap.to("#logo-container", {
+      gsap.to(".logo-container", {
         rotate: -5,
-        duration: 1,
+        duration: 0.6,
+        delay: show_login ? 1 : 1.5,
         ease: "bounce",
-        delay: 1,
+      });
+      gsap.from(".logo-span", {
+        scale: 1.3,
+        duration: 0.2,
+        opacity: 0,
+        ease: "power2.inOut",
+        stagger: 0.1,
       });
       gsap.to("button", {
         rotate: 0,
@@ -85,7 +93,10 @@ const LoginContainer: FC = () => {
     <StyledPage ref={page_container_ref}>
       {show_login ? (
         <>
-          <StyledLogoContainer id="logo-container" $show_login={show_login}>
+          <StyledLogoContainer
+            className="logo-container"
+            $show_login={show_login}
+          >
             <StyledLogo $fontSize="2rem">Fortune Realm</StyledLogo>
           </StyledLogoContainer>
           <StyledInfoTooltipWrapper>
@@ -120,6 +131,7 @@ const LoginContainer: FC = () => {
               alt="girl-image"
               src="/login/girl-image.png"
               sizes="(max-width: 1400px) 30vw"
+              priority={true}
             />
           </StyledGirlImageWrapper>
         </>
@@ -141,8 +153,22 @@ const LoginContainer: FC = () => {
           </>
         ) : (
           <>
-            <StyledLogoContainer id="logo-container" $show_login={show_login}>
-              <StyledLogo $fontSize="5rem">Fortune Realm</StyledLogo>
+            <StyledLogoContainer
+              className="logo-container"
+              $show_login={show_login}
+            >
+              <StyledLogo $fontSize="5rem">
+                {"Fortune Realm".split("").map((val, index) => {
+                  return (
+                    <StyledLogoSpan
+                      key={`logo-span-${index}`}
+                      className="logo-span"
+                    >
+                      {val === " " ? "\u00A0" : val}
+                    </StyledLogoSpan>
+                  );
+                })}
+              </StyledLogo>
               <StyledSubTitle>
                 Your Ultimate Destination for Thrilling Casino Games
               </StyledSubTitle>

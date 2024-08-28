@@ -22,6 +22,7 @@ const StyledTabWrapper = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   padding: 8px;
+  scale: 1;
 `;
 
 const StyledTab = styled.button`
@@ -92,14 +93,14 @@ const StyledPara = styled.p`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1rem;
   color: #fff;
-  width:300px;
-  line-height:1;
+  width: 300px;
+  line-height: 1;
 `;
 const StyledCta = styled.span<{
-  $color:string;
+  $color: string;
 }>`
-  color:${(props)=>props.$color};
-  cursor:pointer;
+  color: ${(props) => props.$color};
+  cursor: pointer;
 `;
 export {
   StyledForm,
@@ -111,5 +112,5 @@ export {
   StyledSvgVectorWrapper,
   StyledSubmitCta,
   StyledPara,
-  StyledCta
+  StyledCta,
 };

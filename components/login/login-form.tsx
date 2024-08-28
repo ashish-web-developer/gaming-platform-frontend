@@ -1,4 +1,4 @@
-import { useState, forwardRef } from "react";
+import { useState, forwardRef, useEffect, useRef } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -30,21 +30,37 @@ import EyeIcon from "@/components/login/icons/eye-icon";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
 
+// gsap
+import gsap from "gsap";
+
 const LoginForm: ForwardRefRenderFunction<HTMLButtonElement> = (_, ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const [tab_index, set_tab_index] = useState<0 | 1>(1); // 0 => Signup, 1 => SignIn
+  const form_container_ref = useRef<HTMLFormElement>(null);
+  const gsap_context_ref = useRef<gsap.Context>();
+
+  useEffect(() => {
+    gsap_context_ref.current = gsap.context((self) => {
+      gsap.from(".wrapper", {
+        scale: 1.2,
+        opacity: 0,
+        duration: 1,
+        ease: "bounce",
+        stagger: 0.1,
+      });
+    }, form_container_ref);
+    return () => {
+      gsap_context_ref.current?.revert();
+    };
+  }, []);
   return (
-    <StyledForm>
-      <StyledTabWrapper>
-        <StyledTab disabled={tab_index == 1} onClick={() => {}}>
-          Sign Up
-        </StyledTab>
-        <StyledTab disabled={tab_index == 0} onClick={() => {}}>
-          Sign In
-        </StyledTab>
+    <StyledForm ref={form_container_ref}>
+      <StyledTabWrapper className="wrapper">
+        <StyledTab disabled={tab_index == 1}>Sign Up</StyledTab>
+        <StyledTab disabled={tab_index == 0}>Sign In</StyledTab>
       </StyledTabWrapper>
-      <StyledWrapper>
+      <StyledWrapper className="wrapper">
         <StyledInputWrapper>
           <StyledSvgVectorWrapper
             $width="44px"
@@ -71,7 +87,7 @@ const LoginForm: ForwardRefRenderFunction<HTMLButtonElement> = (_, ref) => {
           </StyledCta>
         </StyledInputWrapper>
       </StyledWrapper>
-      <StyledWrapper>
+      <StyledWrapper className="wrapper">
         <StyledInputWrapper>
           <StyledSvgVectorWrapper
             $width="44px"
@@ -92,7 +108,9 @@ const LoginForm: ForwardRefRenderFunction<HTMLButtonElement> = (_, ref) => {
           </StyledCta>
         </StyledInputWrapper>
       </StyledWrapper>
-      <StyledSubmitCta>Continue</StyledSubmitCta>
+      <StyledSubmitCta className="wrapper" type="submit">
+        Continue
+      </StyledSubmitCta>
       <StyledPara>
         {tab_index == 0 ? (
           <>
