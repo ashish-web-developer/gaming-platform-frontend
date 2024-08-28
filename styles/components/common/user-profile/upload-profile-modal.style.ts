@@ -1,18 +1,22 @@
 import Image from "next/image";
 import styled from "styled-components";
 
-const StyledChatUserUploadWrapper = styled.dialog`
+const StyledChatUserUploadWrapper = styled.dialog<{
+  $secondary_color: string;
+  $font_family: string;
+}>`
   width: 90%;
-  max-width: 400px;
-  height: 470px;
+  max-width: 300px;
   background: ${({ theme }) => theme.palette.primary.main};
   position: relative;
   z-index: 6;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -60%);
-  border-radius: 25px;
-  border: 3px solid ${({ theme }) => theme.palette.primary.dark};
+  border-radius: 16px;
+  border: 2px solid ${(props) => props.$secondary_color};
+  font-family: ${(props) => props.$font_family};
+  padding-bottom: 1.5rem;
 `;
 
 const StyledHeader = styled.div`
@@ -22,14 +26,15 @@ const StyledHeader = styled.div`
   padding: 24px;
 `;
 
-const StyledHeaderMainText = styled.h6`
-  color: ${({ theme }) => theme.palette.primary.dark};
+const StyledHeaderMainText = styled.h6<{
+  $secondary_color: string;
+}>`
+  color: ${(props) => props.$secondary_color};
   text-align: center;
-  font-family: ${({ theme }) => theme.fontFamily.poppins};
-  font-size: 20px;
+  font-size: 1.5rem;
   font-style: normal;
   font-weight: 600;
-  line-height: normal;
+  line-height: 1;
 `;
 
 const StyledIconButton = styled.button`
@@ -40,23 +45,25 @@ const StyledIconButton = styled.button`
 
 const StyledModalContent = styled.div`
   width: 100%;
-  padding: 0px 24px;
+  padding: 0px 1.5rem;
 `;
 
 const StyledUploadInputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
 `;
 
-const StyledUploadLabel = styled.label`
+const StyledUploadLabel = styled.label<{
+  $secondary_color: string;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 270px;
-  border: 3px dashed ${({ theme }) => theme.palette.primary.dark};
-  border-radius: 25px;
+  height: 245px;
+  border: 2px dashed ${(props) => props.$secondary_color};
+  border-radius: 16px;
   position: relative;
   overflow: hidden;
 `;
@@ -65,48 +72,50 @@ const StyledUploadedImage = styled(Image)`
 `;
 const StyledUploadInput = styled.input`
   width: 100%;
-  height: 270px;
   display: none;
 `;
 
 const StyledUploadBottomInfoWrapper = styled.div`
   width: 100%;
-  height: 20px;
   display: flex;
   justify-content: space-between;
 `;
 
-const StyledText = styled.p`
-  color: ${({ theme }) => theme.palette.primary.dark};
-  font-family: ${({ theme }) => theme.fontFamily.poppins};
-  font-size: 12px;
+const StyledText = styled.p<{
+  $secondary_color: string;
+}>`
+  color: ${(props) => props.$secondary_color};
+  font-size: 0.875rem;
   font-style: normal;
   font-weight: 500;
-  line-height: normal;
+  line-height: 1;
 `;
 
 const StyledCtaWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-top: 24px;
+  margin-top: 1.5rem;
 `;
 
-const StyledSaveCta = styled.button`
+const StyledSaveCta = styled.button<{
+  $secondary_color: string;
+  $font_family: string;
+}>`
   width: auto;
   height: auto;
-  border: 2px solid ${({ theme }) => theme.palette.primary.dark};
+  border: 2px solid ${(props) => props.$secondary_color};
   background: linear-gradient(95deg, #ffe666 8.66%, #fb3 95.1%);
   padding: 6px 24px;
   color: #000;
   text-align: center;
-  font-family: ${({ theme }) => theme.fontFamily.poppins};
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
-  line-height: normal;
+  line-height: 1;
   border-radius: 5px;
   cursor: pointer;
+  font-family: ${(props) => props.$font_family};
 `;
 
 export {

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, forwardRef } from "react";
 // types
-import type { FC } from "react";
+import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/login.theme";
 
 // styled components
@@ -26,7 +26,12 @@ import LockIcon from "@/components/login/icons/lock-icon";
 import CameraIcon from "@/components/login/icons/camera-icon";
 import EyeIcon from "@/components/login/icons/eye-icon";
 
-const LoginForm: FC = () => {
+// redux
+import { useAppDispatch } from "@/hooks/redux.hook";
+import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
+
+const LoginForm: ForwardRefRenderFunction<HTMLButtonElement> = (_, ref) => {
+  const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const [tab_index, set_tab_index] = useState<0 | 1>(1); // 0 => Signup, 1 => SignIn
   return (
@@ -49,13 +54,21 @@ const LoginForm: FC = () => {
             <UserProfileIcon />
           </StyledSvgVectorWrapper>
           <StyledInput type="text" placeholder="Username" />
-          <StyledSvgVectorWrapper
-            $width="48px"
-            $height="44px"
-            $show_border={false}
+          <StyledCta
+            ref={ref}
+            onClick={() => {
+              dispatch(updateShowProfileUploadModal(true));
+            }}
+            $color="transparent"
           >
-            <CameraIcon color={theme.palette.info.main} size={24} />
-          </StyledSvgVectorWrapper>
+            <StyledSvgVectorWrapper
+              $width="48px"
+              $height="44px"
+              $show_border={false}
+            >
+              <CameraIcon color={theme.palette.info.main} size={24} />
+            </StyledSvgVectorWrapper>
+          </StyledCta>
         </StyledInputWrapper>
       </StyledWrapper>
       <StyledWrapper>
@@ -68,13 +81,15 @@ const LoginForm: FC = () => {
             <LockIcon />
           </StyledSvgVectorWrapper>
           <StyledInput type="password" placeholder="Password" />
-          <StyledSvgVectorWrapper
-            $width="48px"
-            $height="44px"
-            $show_border={false}
-          >
-            <EyeIcon color={theme.palette.info.main} size={24} />
-          </StyledSvgVectorWrapper>
+          <StyledCta $color="transparent">
+            <StyledSvgVectorWrapper
+              $width="48px"
+              $height="44px"
+              $show_border={false}
+            >
+              <EyeIcon color={theme.palette.info.main} size={24} />
+            </StyledSvgVectorWrapper>
+          </StyledCta>
         </StyledInputWrapper>
       </StyledWrapper>
       <StyledSubmitCta>Continue</StyledSubmitCta>
@@ -108,4 +123,4 @@ const LoginForm: FC = () => {
     </StyledForm>
   );
 };
-export default LoginForm;
+export default forwardRef(LoginForm);

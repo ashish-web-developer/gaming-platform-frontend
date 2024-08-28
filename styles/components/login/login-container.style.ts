@@ -186,11 +186,31 @@ const StyledInfoTooltipText = styled.p`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1.25rem;
   color: #fff;
-  width:180px;
-  line-height:1;
-  transform:rotate(-8deg);
-  top:35px;
-  left:100px;
+  width: 180px;
+  line-height: 1;
+  transform: rotate(-8deg);
+  top: 35px;
+  left: 100px;
+`;
+
+const StyledSpan = styled.span<{
+  $color: string;
+}>`
+  color: ${(props) => props.$color};
+`;
+
+const StyledUploadModalWrapper = styled.div<{
+  $is_modal_open: boolean;
+}>`
+  ${(props) =>
+    props.$is_modal_open &&
+    `
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:transparent;
+    z-index:3;
+  `}
 `;
 
 export {
@@ -215,4 +235,6 @@ export {
   StyledBannerGirlImage,
   StyledInfoTooltip,
   StyledInfoTooltipText,
+  StyledSpan,
+  StyledUploadModalWrapper,
 };

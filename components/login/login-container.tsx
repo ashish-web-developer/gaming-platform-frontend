@@ -1,6 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 // types
 import type { FC } from "react";
+import type { ITheme } from "@/theme/login.theme";
 
 // styled components
 import {
@@ -25,15 +26,19 @@ import {
   StyledBannerGirlImage,
   StyledInfoTooltip,
   StyledInfoTooltipText,
+  StyledSpan,
+  StyledUploadModalWrapper,
 } from "@/styles/components/login/login-container.style";
 
 // theme
 import { ThemeProvider } from "styled-components";
 import { Theme } from "@/theme/poker.theme";
+import { useTheme } from "styled-components";
 
 // local components
 import PokerCard from "@/components/poker/poker-card/poker-card";
 import LoginForm from "@/components/login/login-form";
+import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 
 // vector
 import PokerVector from "@/components/login/vector/poker-vector";
@@ -42,10 +47,17 @@ import CtaVector from "@/components/login/vector/cta-vector";
 import StripeVector from "@/components/login/vector/stripe-vector";
 import InfoTooltipVector from "@/components/login/vector/info-tooltip-vector";
 
+// redux
+import { useAppSelector } from "@/hooks/redux.hook";
+import { show_profile_upload_modal } from "@/store/slice/common.slice";
+
 // gsap
 import gsap from "gsap";
 
 const LoginContainer: FC = () => {
+  const theme = useTheme() as ITheme;
+  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
+  const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const gsap_context_ref = useRef<gsap.Context>();
   const page_container_ref = useRef<HTMLDivElement>(null);
   const [show_login, set_show_login] = useState(false);
@@ -88,7 +100,10 @@ const LoginContainer: FC = () => {
             <StyledInfoTooltip>
               <InfoTooltipVector />
               <StyledInfoTooltipText>
-                Hey there! Welcome to Fortune Realm!
+                <StyledSpan $color={theme.palette.secondary.main}>
+                  Hey there!
+                </StyledSpan>{" "}
+                Welcome to Fortune Realm!
               </StyledInfoTooltipText>
             </StyledInfoTooltip>
           </StyledInfoTooltipWrapper>
@@ -112,7 +127,16 @@ const LoginContainer: FC = () => {
       <StyledContentContainer>
         {show_login ? (
           <>
-            <LoginForm />
+            <LoginForm ref={camera_cta_ref} />
+            <StyledUploadModalWrapper
+              $is_modal_open={_show_profile_upload_modal}
+            >
+              <UploadProfileModal
+                ref={camera_cta_ref}
+                secondary_color={theme.palette.info.main}
+                font_family={theme.fontFamily.bangers}
+              />
+            </StyledUploadModalWrapper>
           </>
         ) : (
           <>

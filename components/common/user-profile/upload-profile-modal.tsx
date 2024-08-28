@@ -76,10 +76,13 @@ const CropIcon: FC<{ color: string; size: number }> = ({ color, size }) => {
   );
 };
 
-const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
-  {},
-  camera_cta_ref
-) => {
+const UploadProfileModal: ForwardRefRenderFunction<
+  HTMLElement,
+  {
+    secondary_color: string;
+    font_family: string;
+  }
+> = ({ secondary_color, font_family }, camera_cta_ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
@@ -147,9 +150,13 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
     <StyledChatUserUploadWrapper
       ref={modal_ref}
       open={_show_profile_upload_modal}
+      $secondary_color={secondary_color}
+      $font_family={font_family}
     >
       <StyledHeader>
-        <StyledHeaderMainText>Upload File</StyledHeaderMainText>
+        <StyledHeaderMainText $secondary_color={secondary_color}>
+          Upload File
+        </StyledHeaderMainText>
         <StyledIconButton
           onClick={() => {
             dispatch(updateShowProfileUploadModal(false));
@@ -161,6 +168,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
       <StyledModalContent>
         <StyledUploadInputContainer>
           <StyledUploadLabel
+            $secondary_color={secondary_color}
             as={cropper_active ? "div" : "label"}
             htmlFor="upload-file"
           >
@@ -185,7 +193,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             type="file"
             id="upload-file"
             name="profile"
-            multiple = {false}
+            multiple={false}
             accept=".jpg,.png"
             onChange={(event) => {
               if (event.target.files) {
@@ -204,8 +212,12 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             }}
           />
           <StyledUploadBottomInfoWrapper>
-            <StyledText>Formats: png, jpeg</StyledText>
-            <StyledText>File Size: 3MB</StyledText>
+            <StyledText $secondary_color={secondary_color}>
+              Formats: png, jpeg
+            </StyledText>
+            <StyledText $secondary_color={secondary_color}>
+              File Size: 3MB
+            </StyledText>
           </StyledUploadBottomInfoWrapper>
         </StyledUploadInputContainer>
         <StyledCtaWrapper>
@@ -222,6 +234,8 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
           </span>
 
           <StyledSaveCta
+            $font_family={font_family}
+            $secondary_color={secondary_color}
             onClick={() => {
               if (
                 file_input_ref.current &&

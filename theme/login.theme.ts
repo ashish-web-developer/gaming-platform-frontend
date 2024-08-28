@@ -9,6 +9,9 @@ export type ITheme = {
       main: string;
       light: string;
     };
+    secondary: {
+      main: string;
+    };
     info: {
       main: string;
     };
@@ -24,6 +27,9 @@ export const Theme: ITheme = {
     primary: {
       main: "#000000",
       light: "#E4D9FF",
+    },
+    secondary: {
+      main: "#9747FF",
     },
     info: {
       main: "#D6FFB7",
