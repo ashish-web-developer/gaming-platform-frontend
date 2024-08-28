@@ -168,6 +168,7 @@ const StyledGirlImageWrapper = styled.div<{
   height: ${(props) => props.$height};
   left: 0px;
   bottom: 0px;
+  display: block;
 `;
 const StyledGirlImage = styled(Image)`
   object-fit: contain;

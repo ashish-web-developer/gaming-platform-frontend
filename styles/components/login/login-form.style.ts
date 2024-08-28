@@ -95,6 +95,7 @@ const StyledPara = styled.p`
   color: #fff;
   width: 300px;
   line-height: 1;
+  user-select: none;
 `;
 const StyledCta = styled.span<{
   $color: string;

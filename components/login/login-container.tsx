@@ -73,10 +73,10 @@ const LoginContainer: FC = () => {
       });
       gsap.from(".logo-span", {
         scale: 1.3,
-        duration: 0.2,
+        duration: 1,
         opacity: 0,
         ease: "power2.inOut",
-        stagger: 0.1,
+        stagger: 0,
       });
       gsap.to("button", {
         rotate: 0,
@@ -84,6 +84,27 @@ const LoginContainer: FC = () => {
         ease: "bounce",
         delay: 1,
       });
+      gsap
+        .timeline()
+        .from(".wrapper", {
+          scale: 1.2,
+          opacity: 0,
+          duration: 1,
+          ease: "bounce",
+          stagger: 0.1,
+        })
+        .from("#girl-image-wrapper", {
+          display: "none",
+          translateX: -250,
+          duration: 1,
+          ease: "expo",
+        })
+        .from("#info-tooltip", {
+          display: "none",
+          scale: 1.5,
+          duration: 1,
+          ease: "elastic.inOut",
+        });
     }, page_container_ref);
     return () => {
       gsap_context_ref.current?.revert();
@@ -100,7 +121,11 @@ const LoginContainer: FC = () => {
             <StyledLogo $fontSize="2rem">Fortune Realm</StyledLogo>
           </StyledLogoContainer>
           <StyledInfoTooltipWrapper>
-            <StyledGirlImageWrapper $width="450px" $height="465px">
+            <StyledGirlImageWrapper
+              id="girl-image-wrapper"
+              $width="450px"
+              $height="465px"
+            >
               <StyledGirlImage
                 fill={true}
                 alt="girl-image"
@@ -108,7 +133,7 @@ const LoginContainer: FC = () => {
                 sizes="(max-width: 1400px) 25vw"
               />
             </StyledGirlImageWrapper>
-            <StyledInfoTooltip>
+            <StyledInfoTooltip id="info-tooltip">
               <InfoTooltipVector />
               <StyledInfoTooltipText>
                 <StyledSpan $color={theme.palette.secondary.main}>
