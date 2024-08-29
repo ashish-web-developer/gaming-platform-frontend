@@ -112,7 +112,8 @@ const UploadProfileModal: ForwardRefRenderFunction<
   useOutsideClickHandler({
     modal_ref: modal_ref,
     cta_ref: camera_cta_ref,
-    handler: () => {
+    handler: async () => {
+      await gsap_context_ref.current?.onClose();
       dispatch(updateShowProfileUploadModal(false));
     },
   });
@@ -158,12 +159,12 @@ const UploadProfileModal: ForwardRefRenderFunction<
 
   useEffect(() => {
     if (_show_profile_upload_modal) {
-      gsap_context_ref.current = gsap.context(() => {
+      gsap_context_ref.current = gsap.context((self) => {
         gsap
           .timeline()
           .from(modal_ref.current, {
             ease: "power3.inOut",
-            scale: 1.5,
+            scale: 0.5,
             duration: 0.5,
           })
           .from("#modal-girl-image-wrraper", {
@@ -172,6 +173,17 @@ const UploadProfileModal: ForwardRefRenderFunction<
             duration: 1,
             ease: "expo.inOut",
           });
+        self.add("onClose", () => {
+          return new Promise((resolve) => {
+            gsap.to(modal_ref.current, {
+              ease: "power3.inOut",
+              scale: 0.5,
+              opacity: 0,
+              duration: 0.5,
+              onComplete: resolve,
+            });
+          });
+        });
       }, modal_ref);
     }
     return () => {
