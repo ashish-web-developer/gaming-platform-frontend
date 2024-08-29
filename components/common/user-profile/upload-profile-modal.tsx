@@ -45,6 +45,9 @@ import "cropperjs/dist/cropper.css";
 // hooks
 import { useOutsideClickHandler, useIsMounted } from "@/hooks/common.hook";
 
+// gsap
+import gsap from "gsap";
+
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
     <svg
@@ -104,6 +107,7 @@ const UploadProfileModal: ForwardRefRenderFunction<
   const file_input_ref = useRef<HTMLInputElement>(null);
   const uploaded_image_ref = useRef<HTMLImageElement>(null);
   const cropper_ref = useRef<Cropper | null>(null);
+  const gsap_context_ref = useRef<gsap.Context>();
   const is_mount = useIsMounted();
   useOutsideClickHandler({
     modal_ref: modal_ref,
@@ -152,6 +156,29 @@ const UploadProfileModal: ForwardRefRenderFunction<
     }
   }, [is_mount]);
 
+  useEffect(() => {
+    if (_show_profile_upload_modal) {
+      gsap_context_ref.current = gsap.context(() => {
+        gsap
+          .timeline()
+          .from(modal_ref.current, {
+            ease: "power3.inOut",
+            scale: 1.5,
+            duration: 0.5,
+          })
+          .from("#modal-girl-image-wrraper", {
+            opacity: 0,
+            top: 60,
+            duration: 1,
+            ease: "expo.inOut",
+          });
+      }, modal_ref);
+    }
+    return () => {
+      _show_profile_upload_modal && gsap_context_ref.current?.revert();
+    };
+  }, [_show_profile_upload_modal]);
+
   return (
     <StyledChatUserUploadWrapper
       ref={modal_ref}
@@ -160,7 +187,7 @@ const UploadProfileModal: ForwardRefRenderFunction<
       $font_family={font_family}
     >
       {show_girl_image && (
-        <StyledGirlImageWrapper>
+        <StyledGirlImageWrapper id="modal-girl-image-wrraper">
           <StyledGirlImage
             fill={true}
             alt="girl-image"

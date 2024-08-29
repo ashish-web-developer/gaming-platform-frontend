@@ -12,7 +12,7 @@ const StyledChatUserUploadWrapper = styled.dialog<{
   z-index: 6;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -60%);
+  transform: translate(-50%, -60%) perspective(800px);
   border-radius: 16px;
   border: 2px solid ${(props) => props.$secondary_color};
   font-family: ${(props) => props.$font_family};

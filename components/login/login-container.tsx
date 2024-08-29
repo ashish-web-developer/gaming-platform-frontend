@@ -84,27 +84,31 @@ const LoginContainer: FC = () => {
         ease: "bounce",
         delay: 1,
       });
-      gsap
-        .timeline()
-        .from(".wrapper", {
-          scale: 1.2,
-          opacity: 0,
-          duration: 1,
-          ease: "bounce",
-          stagger: 0.1,
-        })
-        .from("#girl-image-wrapper", {
-          display: "none",
-          translateX: -250,
-          duration: 1,
-          ease: "expo",
-        })
-        .from("#info-tooltip", {
-          display: "none",
-          scale: 1.5,
-          duration: 1,
-          ease: "elastic.inOut",
-        });
+      show_login &&
+        gsap
+          .timeline()
+          .from(".wrapper", {
+            scale: 1.2,
+            opacity: 0,
+            duration: 1,
+            ease: "bounce",
+            stagger: 0.1,
+          })
+          .from("#girl-image-wrapper", {
+            display: "none",
+            translateX: -250,
+            duration: 1,
+            ease: "expo",
+          })
+          .from("#info-tooltip", {
+            display: "none",
+            scale: 1.5,
+            duration: 1,
+            ease: "elastic.inOut",
+            onComplete: () => {
+              console.log("testing completion");
+            },
+          });
     }, page_container_ref);
     return () => {
       gsap_context_ref.current?.revert();
