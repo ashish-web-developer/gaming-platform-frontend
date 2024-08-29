@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/login.theme";
+import type { IFileState } from "@/components/common/user-profile/upload-profile-modal";
 
 // styled components
 import {
@@ -62,6 +63,10 @@ const LoginContainer: FC = () => {
   const gsap_context_ref = useRef<gsap.Context>();
   const page_container_ref = useRef<HTMLDivElement>(null);
   const [show_login, set_show_login] = useState(false);
+  const [file_state, set_file_state] = useState<IFileState>({
+    state: 0, // 0 => empty; 1 => loading; 2 => done;
+    file: "",
+  });
 
   useEffect(() => {
     gsap_context_ref.current = gsap.context((self) => {
@@ -168,11 +173,14 @@ const LoginContainer: FC = () => {
       <StyledContentContainer>
         {show_login ? (
           <>
-            <LoginForm ref={camera_cta_ref} />
+            <LoginForm file_state={file_state} ref={camera_cta_ref} />
             <StyledUploadModalWrapper
               $is_modal_open={_show_profile_upload_modal}
             >
               <UploadProfileModal
+                onClickHandler={(file_state) => {
+                  set_file_state(file_state);
+                }}
                 ref={camera_cta_ref}
                 secondary_color={theme.palette.info.main}
                 font_family={theme.fontFamily.bangers}

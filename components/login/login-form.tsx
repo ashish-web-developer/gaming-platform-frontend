@@ -2,6 +2,7 @@ import { useState, forwardRef, useEffect, useRef } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/login.theme";
+import type { IFileState } from "@/components/common/user-profile/upload-profile-modal";
 
 // styled components
 import {
@@ -12,6 +13,7 @@ import {
   StyledInputWrapper,
   StyledInput,
   StyledSvgVectorWrapper,
+  StyledImage,
   StyledSubmitCta,
   StyledPara,
   StyledCta,
@@ -30,8 +32,12 @@ import EyeIcon from "@/components/login/icons/eye-icon";
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
 
-
-const LoginForm: ForwardRefRenderFunction<HTMLButtonElement> = (_, ref) => {
+const LoginForm: ForwardRefRenderFunction<
+  HTMLButtonElement,
+  {
+    file_state: IFileState;
+  }
+> = ({ file_state }, ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const [tab_index, set_tab_index] = useState<0 | 1>(1); // 0 => Signup, 1 => SignIn
@@ -50,7 +56,15 @@ const LoginForm: ForwardRefRenderFunction<HTMLButtonElement> = (_, ref) => {
             $height="44px"
             $show_border={true}
           >
-            <UserProfileIcon />
+            {file_state.state == 2 ? (
+              <StyledImage
+                src={file_state.file as string}
+                fill={true}
+                alt="file"
+              />
+            ) : (
+              <UserProfileIcon />
+            )}
           </StyledSvgVectorWrapper>
           <StyledInput type="text" placeholder="Username" />
           <StyledCta

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledForm = styled.form`
   display: flex;
@@ -71,6 +72,7 @@ const StyledSvgVectorWrapper = styled.span<{
   justify-content: center;
   align-items: center;
   background: ${({ theme }) => theme.palette.primary.main};
+  position: relative;
   ${(props) =>
     props.$show_border &&
     `
@@ -78,6 +80,9 @@ const StyledSvgVectorWrapper = styled.span<{
     `}
 `;
 
+const StyledImage = styled(Image)`
+  object-fit: cover;
+`;
 const StyledSubmitCta = styled.button`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1rem;
@@ -103,6 +108,7 @@ const StyledCta = styled.span<{
   color: ${(props) => props.$color};
   cursor: pointer;
 `;
+
 export {
   StyledForm,
   StyledWrapper,
@@ -111,6 +117,7 @@ export {
   StyledInputWrapper,
   StyledInput,
   StyledSvgVectorWrapper,
+  StyledImage,
   StyledSubmitCta,
   StyledPara,
   StyledCta,

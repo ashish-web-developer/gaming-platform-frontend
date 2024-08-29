@@ -48,6 +48,11 @@ import { useOutsideClickHandler, useIsMounted } from "@/hooks/common.hook";
 // gsap
 import gsap from "gsap";
 
+export type IFileState = {
+  state: 0 | 1 | 2; // 0 => empty; 1 => loading; 2 => done;
+  file: string | ArrayBuffer | null;
+};
+
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
     <svg
@@ -80,25 +85,22 @@ const CropIcon: FC<{ color: string; size: number }> = ({ color, size }) => {
     </svg>
   );
 };
-
 const UploadProfileModal: ForwardRefRenderFunction<
   HTMLElement,
   {
     secondary_color: string;
     font_family: string;
     show_girl_image?: boolean;
+    onClickHandler: (file_state: IFileState) => void;
   }
 > = (
-  { secondary_color, font_family, show_girl_image = false },
+  { secondary_color, font_family, show_girl_image = false, onClickHandler },
   camera_cta_ref
 ) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as Theme;
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
-  const [file_state, setFileState] = useState<{
-    state: 0 | 1 | 2;
-    file: string | ArrayBuffer | null;
-  }>({
+  const [file_state, setFileState] = useState<IFileState>({
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
@@ -157,6 +159,10 @@ const UploadProfileModal: ForwardRefRenderFunction<
     }
   }, [is_mount]);
 
+  /**
+   * Handling all modal animation here
+   */
+
   useEffect(() => {
     if (_show_profile_upload_modal) {
       gsap_context_ref.current = gsap.context((self) => {
@@ -175,13 +181,23 @@ const UploadProfileModal: ForwardRefRenderFunction<
           });
         self.add("onClose", () => {
           return new Promise((resolve) => {
-            gsap.to(modal_ref.current, {
-              ease: "power3.inOut",
-              scale: 0.5,
-              opacity: 0,
-              duration: 0.5,
-              onComplete: resolve,
-            });
+            gsap
+              .timeline({
+                onComplete: resolve,
+              })
+              .to("#modal-girl-image-wrraper", {
+                opacity: 0,
+                top: 60,
+                duration: 1,
+                ease: "expo.inOut",
+              })
+              .to(modal_ref.current, {
+                ease: "power3.inOut",
+                scale: 0.5,
+                opacity: 0,
+                duration: 0.5,
+                onComplete: resolve,
+              });
           });
         });
       }, modal_ref);
@@ -291,15 +307,17 @@ const UploadProfileModal: ForwardRefRenderFunction<
           <StyledSaveCta
             $font_family={font_family}
             $secondary_color={secondary_color}
-            onClick={() => {
+            onClick={async () => {
               if (
                 file_input_ref.current &&
                 file_input_ref.current.files &&
                 file_input_ref.current.files[0]
               ) {
-                const form_data = new FormData();
-                form_data.append("avatar", file_input_ref.current.files[0]);
-                dispatch(updateProfileApi({ form_data: form_data }));
+                // const form_data = new FormData();
+                // form_data.append("avatar", file_input_ref.current.files[0]);
+                // dispatch(updateProfileApi({ form_data: form_data }));
+                onClickHandler(file_state);
+                await gsap_context_ref.current?.onClose();
                 dispatch(updateShowProfileUploadModal(false));
               }
             }}
