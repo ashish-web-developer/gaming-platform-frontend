@@ -99,6 +99,16 @@ const LoginForm: ForwardRefRenderFunction<
               $width="48px"
               $height="44px"
               $show_border={false}
+              onClick={(event) => {
+                const element = event.currentTarget.parentElement
+                  ?.previousSibling as HTMLInputElement;
+                const type = element.getAttribute("type");
+                if (type == "password") {
+                  element.setAttribute("type", "text");
+                } else {
+                  element.setAttribute("type", "password");
+                }
+              }}
             >
               <EyeIcon color={theme.palette.info.main} size={24} />
             </StyledSvgVectorWrapper>

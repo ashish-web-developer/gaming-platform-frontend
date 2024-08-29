@@ -111,14 +111,6 @@ const UploadProfileModal: ForwardRefRenderFunction<
   const cropper_ref = useRef<Cropper | null>(null);
   const gsap_context_ref = useRef<gsap.Context>();
   const is_mount = useIsMounted();
-  useOutsideClickHandler({
-    modal_ref: modal_ref,
-    cta_ref: camera_cta_ref,
-    handler: async () => {
-      await gsap_context_ref.current?.onClose();
-      dispatch(updateShowProfileUploadModal(false));
-    },
-  });
 
   /**
    * Not adding the cropper to uploaded_image_ref
@@ -159,11 +151,23 @@ const UploadProfileModal: ForwardRefRenderFunction<
     }
   }, [is_mount]);
 
-  /**
-   * Handling all modal animation here
-   */
-
   useEffect(() => {
+    // handling close
+    const handleClose = async (event: MouseEvent) => {
+      if (
+        modal_ref.current?.contains(event.target as Node) ||
+        (typeof camera_cta_ref !== "function" &&
+          camera_cta_ref?.current?.contains(event.target as Node))
+      ) {
+        return;
+      }
+      await gsap_context_ref.current?.onClose();
+      dispatch(updateShowProfileUploadModal(false));
+    };
+
+    /**
+     * Handling all modal animation here
+     */
     if (_show_profile_upload_modal) {
       gsap_context_ref.current = gsap.context((self) => {
         gsap
@@ -201,9 +205,17 @@ const UploadProfileModal: ForwardRefRenderFunction<
           });
         });
       }, modal_ref);
+      document.addEventListener("click", handleClose);
     }
+
+    /**
+     * Handling On Close
+     */
     return () => {
-      _show_profile_upload_modal && gsap_context_ref.current?.revert();
+      if (_show_profile_upload_modal) {
+        gsap_context_ref.current?.revert();
+        document.removeEventListener("click", handleClose);
+      }
     };
   }, [_show_profile_upload_modal]);
 

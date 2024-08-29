@@ -174,12 +174,6 @@ const StyledGirlImage = styled(Image)`
   object-fit: contain;
 `;
 
-const StyledInfoTooltipWrapper = styled.div`
-  border: 2px solid red;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-`;
 const StyledInfoTooltip = styled.div`
   position: absolute;
   bottom: 270px;
@@ -235,7 +229,6 @@ export {
   StyledBannerGameLogo,
   StyledCta,
   StyledCtaTextWrapper,
-  StyledInfoTooltipWrapper,
   StyledGirlImageWrapper,
   StyledGirlImage,
   StyledBannerGirlImageWrapper,

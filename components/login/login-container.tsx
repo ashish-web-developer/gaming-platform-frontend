@@ -21,7 +21,6 @@ import {
   StyledBannerGameLogo,
   StyledCta,
   StyledCtaTextWrapper,
-  StyledInfoTooltipWrapper,
   StyledGirlImageWrapper,
   StyledGirlImage,
   StyledBannerGirlImageWrapper,
@@ -129,29 +128,27 @@ const LoginContainer: FC = () => {
           >
             <StyledLogo $fontSize="2rem">Fortune Realm</StyledLogo>
           </StyledLogoContainer>
-          <StyledInfoTooltipWrapper>
-            <StyledGirlImageWrapper
-              id="girl-image-wrapper"
-              $width="450px"
-              $height="465px"
-            >
-              <StyledGirlImage
-                fill={true}
-                alt="girl-image"
-                src="/login/login-girl.png"
-                sizes="(max-width: 1400px) 25vw"
-              />
-            </StyledGirlImageWrapper>
-            <StyledInfoTooltip id="info-tooltip">
-              <InfoTooltipVector />
-              <StyledInfoTooltipText>
-                <StyledSpan $color={theme.palette.secondary.main}>
-                  Hey there!
-                </StyledSpan>{" "}
-                Welcome to Fortune Realm!
-              </StyledInfoTooltipText>
-            </StyledInfoTooltip>
-          </StyledInfoTooltipWrapper>
+          <StyledGirlImageWrapper
+            id="girl-image-wrapper"
+            $width="450px"
+            $height="465px"
+          >
+            <StyledGirlImage
+              fill={true}
+              alt="girl-image"
+              src="/login/login-girl.png"
+              sizes="(max-width: 1400px) 25vw"
+            />
+          </StyledGirlImageWrapper>
+          <StyledInfoTooltip id="info-tooltip">
+            <InfoTooltipVector />
+            <StyledInfoTooltipText>
+              <StyledSpan $color={theme.palette.secondary.main}>
+                Hey there!
+              </StyledSpan>{" "}
+              Welcome to Fortune Realm!
+            </StyledInfoTooltipText>
+          </StyledInfoTooltip>
         </>
       ) : (
         <>
