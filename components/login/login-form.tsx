@@ -1,4 +1,4 @@
-import { useState, forwardRef, useEffect, useRef } from "react";
+import { useState, forwardRef, useRef } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -26,7 +26,7 @@ import { useTheme } from "styled-components";
 import UserProfileIcon from "@/components/login/icons/user-profile-icon";
 import LockIcon from "@/components/login/icons/lock-icon";
 import CameraIcon from "@/components/login/icons/camera-icon";
-import EyeIcon from "@/components/login/icons/eye-icon";
+import EyeIcon, { CloseEyeIcon } from "@/components/login/icons/eye-icon";
 
 // redux
 import { useAppDispatch } from "@/hooks/redux.hook";
@@ -40,7 +40,8 @@ const LoginForm: ForwardRefRenderFunction<
 > = ({ file_state }, ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
-  const [tab_index, set_tab_index] = useState<0 | 1>(1); // 0 => Signup, 1 => SignIn
+  const [tab_index, set_tab_index] = useState<0 | 1>(0); // 0 => Signup, 1 => SignIn
+  const [show_password, set_show_password] = useState<boolean>(false);
   const form_container_ref = useRef<HTMLFormElement>(null);
 
   return (
@@ -50,7 +51,7 @@ const LoginForm: ForwardRefRenderFunction<
         <StyledTab disabled={tab_index == 0}>Sign In</StyledTab>
       </StyledTabWrapper>
       <StyledWrapper className="wrapper">
-        <StyledInputWrapper>
+        <StyledInputWrapper $grid_template_colums="44px 1fr 48px">
           <StyledSvgVectorWrapper
             $width="44px"
             $height="44px"
@@ -85,7 +86,7 @@ const LoginForm: ForwardRefRenderFunction<
         </StyledInputWrapper>
       </StyledWrapper>
       <StyledWrapper className="wrapper">
-        <StyledInputWrapper>
+        <StyledInputWrapper $grid_template_colums="44px 1fr 48px">
           <StyledSvgVectorWrapper
             $width="44px"
             $height="44px"
@@ -93,28 +94,43 @@ const LoginForm: ForwardRefRenderFunction<
           >
             <LockIcon />
           </StyledSvgVectorWrapper>
-          <StyledInput type="password" placeholder="Password" />
+          <StyledInput
+            type={show_password ? "text" : "password"}
+            placeholder="Password"
+          />
           <StyledCta $color="transparent">
             <StyledSvgVectorWrapper
               $width="48px"
               $height="44px"
               $show_border={false}
               onClick={(event) => {
-                const element = event.currentTarget.parentElement
-                  ?.previousSibling as HTMLInputElement;
-                const type = element.getAttribute("type");
-                if (type == "password") {
-                  element.setAttribute("type", "text");
-                } else {
-                  element.setAttribute("type", "password");
-                }
+                set_show_password((prev) => !prev);
               }}
             >
-              <EyeIcon color={theme.palette.info.main} size={24} />
+              {show_password ? (
+                <CloseEyeIcon color={theme.palette.info.main} size={24} />
+              ) : (
+                <EyeIcon color={theme.palette.info.main} size={24} />
+              )}
             </StyledSvgVectorWrapper>
           </StyledCta>
         </StyledInputWrapper>
       </StyledWrapper>
+      {tab_index == 0 && (
+        <StyledWrapper className="wrapper">
+          <StyledInputWrapper $grid_template_colums="44px 1fr">
+            <StyledSvgVectorWrapper
+              $width="44px"
+              $height="44px"
+              $show_border={true}
+            >
+              <LockIcon />
+            </StyledSvgVectorWrapper>
+            <StyledInput type="password" placeholder="Confirm password" />
+          </StyledInputWrapper>
+        </StyledWrapper>
+      )}
+
       <StyledSubmitCta className="wrapper" type="submit">
         Continue
       </StyledSubmitCta>

@@ -179,12 +179,14 @@ const StyledInfoTooltip = styled.div`
   bottom: 270px;
   left: 200px;
 `;
-const StyledInfoTooltipText = styled.p`
+const StyledInfoTooltipText = styled.p<{
+  $font_size: string;
+}>`
   position: absolute;
   top: 0px;
   left: 0px;
   font-family: ${({ theme }) => theme.fontFamily.bangers};
-  font-size: 1.25rem;
+  font-size: ${(props) => props.$font_size};
   color: #fff;
   width: 180px;
   line-height: 1;

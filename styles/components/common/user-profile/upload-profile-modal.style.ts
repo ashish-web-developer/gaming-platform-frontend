@@ -81,6 +81,7 @@ const StyledUploadLabel = styled.label<{
 `;
 const StyledUploadedImage = styled(Image)`
   object-fit: cover;
+  object-position: top;
 `;
 const StyledUploadInput = styled.input`
   width: 100%;

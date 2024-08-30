@@ -41,9 +41,11 @@ const StyledTab = styled.button`
   }
 `;
 
-const StyledInputWrapper = styled.div`
+const StyledInputWrapper = styled.div<{
+  $grid_template_colums: string;
+}>`
   display: grid;
-  grid-template-columns: 44px 1fr 48px;
+  grid-template-columns: ${(props) => props.$grid_template_colums};
   border: 2px solid ${({ theme }) => theme.palette.info.main};
   border-radius: 8px;
   overflow: hidden;
@@ -82,6 +84,7 @@ const StyledSvgVectorWrapper = styled.span<{
 
 const StyledImage = styled(Image)`
   object-fit: cover;
+  object-position: top;
 `;
 const StyledSubmitCta = styled.button`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
@@ -107,6 +110,7 @@ const StyledCta = styled.span<{
 }>`
   color: ${(props) => props.$color};
   cursor: pointer;
+  user-select: none;
 `;
 
 export {
