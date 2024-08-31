@@ -15,6 +15,9 @@ export type ITheme = {
     info: {
       main: string;
     };
+    error: {
+      main: string;
+    };
   };
   breakpoints: IBreakpoints;
   fontFamily: {
@@ -33,6 +36,9 @@ export const Theme: ITheme = {
     },
     info: {
       main: "#D6FFB7",
+    },
+    error: {
+      main: "#F42C04",
     },
   },
   breakpoints: { ...Breakpoints },

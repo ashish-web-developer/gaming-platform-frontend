@@ -46,7 +46,9 @@ import PokerVector from "@/components/login/vector/poker-vector";
 import CognimatchVector from "@/components/login/vector/cognimatch-vector";
 import CtaVector from "@/components/login/vector/cta-vector";
 import StripeVector from "@/components/login/vector/stripe-vector";
-import InfoTooltipVector from "@/components/login/vector/info-tooltip-vector";
+import InfoTooltipVector, {
+  ErrorInfoTooltipVector,
+} from "@/components/login/vector/info-tooltip-vector";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -79,7 +81,6 @@ const LoginContainer: FC = () => {
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
-  const synth_ref = useRef<SpeechSynthesis>();
   const [tooltip_text_index, set_tooltip_text_index] = useState<number>(0);
 
   /**
@@ -113,7 +114,7 @@ const LoginContainer: FC = () => {
               if (uttrace_context.current) {
                 uttrace_context.current.text =
                   tooltip_text_list[tooltip_text_index];
-                synth_ref.current?.speak(uttrace_context.current?.uttrance);
+                speechSynthesis.speak(uttrace_context.current?.uttrance);
               }
             },
           })
@@ -144,7 +145,7 @@ const LoginContainer: FC = () => {
           onComplete: () => {
             if (uttrace_context.current) {
               uttrace_context.current.text = tooltip_text_list[index];
-              synth_ref.current?.speak(uttrace_context.current?.uttrance);
+              speechSynthesis.speak(uttrace_context.current?.uttrance);
             }
           },
         });
@@ -168,7 +169,7 @@ const LoginContainer: FC = () => {
     }, page_container_ref);
     return () => {
       gsap_context_ref.current?.revert();
-      synth_ref.current?.cancel();
+      speechSynthesis.cancel();
     };
   }, [show_login]);
 
@@ -177,17 +178,16 @@ const LoginContainer: FC = () => {
    */
   useEffect(() => {
     uttrace_context.current = new MutableSpeechUtterance();
-    synth_ref.current = window.speechSynthesis;
-    const updateVoices = () => {
+    uttrace_context.current.rate = 1.3;
+    uttrace_context.current.voice = window.speechSynthesis
+      .getVoices()
+      .filter((voice) => voice.voiceURI.includes("Moira"))[0];
+    speechSynthesis.onvoiceschanged = () => {
       if (uttrace_context.current) {
         uttrace_context.current.voice = window.speechSynthesis
           .getVoices()
-          .filter((voice) => voice.voiceURI.includes("Female"))[0];
+          .filter((voice) => voice.voiceURI.includes("Moira"))[0];
       }
-    };
-    window.speechSynthesis.addEventListener("voiceschanged", updateVoices);
-    return () => {
-      window.speechSynthesis.removeEventListener("voiceschanged", updateVoices);
     };
   }, []);
 
@@ -220,30 +220,60 @@ const LoginContainer: FC = () => {
           >
             <StyledLogo $fontSize="2rem">Fortune Realm</StyledLogo>
           </StyledLogoContainer>
-          <StyledGirlImageWrapper
-            id="girl-image-wrapper"
-            $width="450px"
-            $height="465px"
-          >
-            <StyledGirlImage
-              fill={true}
-              alt="girl-image"
-              src="/login/login-girl.png"
-              sizes="(max-width: 1400px) 25vw"
-            />
-          </StyledGirlImageWrapper>
-          <StyledInfoTooltip id="info-tooltip">
-            <InfoTooltipVector />
-            <StyledInfoTooltipText
-              $font_size={tooltip_text_index == 0 ? "1.2rem" : "1rem"}
+          <>
+            <StyledGirlImageWrapper
+              id="girl-image-wrapper"
+              $width="450px"
+              $height="465px"
+              $left="0px"
             >
-              {/* <StyledSpan $color={theme.palette.secondary.main}>
+              <StyledGirlImage
+                fill={true}
+                alt="girl-image"
+                src="/login/login-girl.png"
+                sizes="(max-width: 1400px) 25vw"
+              />
+            </StyledGirlImageWrapper>
+
+            <StyledInfoTooltip $bottom="270px" $left="200px" id="info-tooltip">
+              <InfoTooltipVector />
+              <StyledInfoTooltipText
+                $font_size={tooltip_text_index == 0 ? "1.2rem" : "1rem"}
+                $rotate="-8deg"
+                $top="35px"
+                $left="100px"
+                $color="#fff"
+              >
+                {/* <StyledSpan $color={theme.palette.secondary.main}>
                 Hey there!
               </StyledSpan>{" "}
               Welcome to Fortune Realm! */}
-              {tooltip_text_list[tooltip_text_index]}
-            </StyledInfoTooltipText>
-          </StyledInfoTooltip>
+                {tooltip_text_list[tooltip_text_index]}
+              </StyledInfoTooltipText>
+            </StyledInfoTooltip>
+          </>
+          <>
+            <StyledGirlImageWrapper $width="518px" $height="648px" $right="0px">
+              <StyledGirlImage
+                fill={true}
+                alt="error-girl"
+                src="/login/error-info-girl.png"
+                sizes="(max-width: 1400px) 25vw"
+              />
+            </StyledGirlImageWrapper>
+            <StyledInfoTooltip $right="160px" $bottom="450px">
+              <ErrorInfoTooltipVector />
+              <StyledInfoTooltipText
+                $top="40px"
+                $left="40px"
+                $font_size="1.2rem"
+                $rotate="6deg"
+                $color={theme.palette.error.main}
+              >
+                Please Enter the 8 digit password
+              </StyledInfoTooltipText>
+            </StyledInfoTooltip>
+          </>
         </>
       ) : (
         <>

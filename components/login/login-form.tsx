@@ -1,4 +1,4 @@
-import { useState, forwardRef, useRef } from "react";
+import { useState, forwardRef, useRef, useContext } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -45,7 +45,13 @@ const LoginForm: ForwardRefRenderFunction<
   const form_container_ref = useRef<HTMLFormElement>(null);
 
   return (
-    <StyledForm ref={form_container_ref}>
+    <StyledForm
+      onFocus={() => {
+        speechSynthesis.cancel();
+        console.log("inside speech cancel");
+      }}
+      ref={form_container_ref}
+    >
       <StyledTabWrapper className="wrapper">
         <StyledTab disabled={tab_index == 1}>Sign Up</StyledTab>
         <StyledTab disabled={tab_index == 0}>Sign In</StyledTab>

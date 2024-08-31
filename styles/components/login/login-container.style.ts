@@ -162,37 +162,48 @@ const StyledCtaTextWrapper = styled.span`
 const StyledGirlImageWrapper = styled.div<{
   $width: string;
   $height: string;
+  $left?: string;
+  $right?: string;
 }>`
   position: absolute;
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
-  left: 0px;
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
   bottom: 0px;
   display: block;
 `;
+
 const StyledGirlImage = styled(Image)`
   object-fit: contain;
 `;
 
-const StyledInfoTooltip = styled.div`
+const StyledInfoTooltip = styled.div<{
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+}>`
   position: absolute;
-  bottom: 270px;
-  left: 200px;
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
 `;
 const StyledInfoTooltipText = styled.p<{
   $font_size: string;
+  $rotate: string;
+  $top: string;
+  $left: string;
+  $color: string;
 }>`
   position: absolute;
-  top: 0px;
-  left: 0px;
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: ${(props) => props.$font_size};
-  color: #fff;
+  color: ${(props) => props.$color};
   width: 180px;
   line-height: 1;
-  transform: rotate(-8deg);
-  top: 35px;
-  left: 100px;
+  transform: rotate(${(props) => props.$rotate});
+  top: ${(props) => props.$top};
+  left: ${(props) => props.$left};
 `;
 
 const StyledSpan = styled.span<{
