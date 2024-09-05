@@ -1,4 +1,4 @@
-import { useState, forwardRef, useRef, useContext } from "react";
+import { useState, forwardRef, useRef, useEffect } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -31,6 +31,10 @@ import EyeIcon, { CloseEyeIcon } from "@/components/login/icons/eye-icon";
 // redux
 import { useAppDispatch } from "@/hooks/redux.hook";
 import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
+import { verifyUserNameApi, updateIsTyping } from "@/store/slice/login.slice";
+
+// gsap
+import gsap from "gsap";
 
 const LoginForm: ForwardRefRenderFunction<
   HTMLButtonElement,
@@ -43,20 +47,34 @@ const LoginForm: ForwardRefRenderFunction<
   const [tab_index, set_tab_index] = useState<0 | 1>(0); // 0 => Signup, 1 => SignIn
   const [show_password, set_show_password] = useState<boolean>(false);
   const form_container_ref = useRef<HTMLFormElement>(null);
+  const timeout_ref = useRef<NodeJS.Timeout>();
 
+  useEffect(() => {
+    const gsap_context = gsap.context(() => {
+      gsap.from(".field-wrapper", {
+        scale: 1.2,
+        opacity: 0,
+        duration: 1,
+        ease: "bounce",
+        stagger: 0.1,
+      });
+    }, form_container_ref);
+    return () => {
+      gsap_context.revert();
+    };
+  }, []);
   return (
     <StyledForm
       onFocus={() => {
-        speechSynthesis.cancel();
-        console.log("inside speech cancel");
+        dispatch(updateIsTyping(true));
       }}
       ref={form_container_ref}
     >
-      <StyledTabWrapper className="wrapper">
+      <StyledTabWrapper className="field-wrapper">
         <StyledTab disabled={tab_index == 1}>Sign Up</StyledTab>
         <StyledTab disabled={tab_index == 0}>Sign In</StyledTab>
       </StyledTabWrapper>
-      <StyledWrapper className="wrapper">
+      <StyledWrapper className="field-wrapper">
         <StyledInputWrapper $grid_template_colums="44px 1fr 48px">
           <StyledSvgVectorWrapper
             $width="44px"
@@ -73,7 +91,21 @@ const LoginForm: ForwardRefRenderFunction<
               <UserProfileIcon />
             )}
           </StyledSvgVectorWrapper>
-          <StyledInput type="text" placeholder="Username" />
+          <StyledInput
+            onChange={(event) => {
+              timeout_ref.current && clearTimeout(timeout_ref.current);
+              timeout_ref.current = setTimeout(async () => {
+                // const result = await dispatch(
+                //   verifyUserNameApi({ username: event.target.value })
+                // );
+                // const response = unwrapResult(result);
+                // console.log("value of response",response.message.username[0]);
+                dispatch(verifyUserNameApi({ username: event.target.value }));
+              }, 1000);
+            }}
+            type="text"
+            placeholder="Username"
+          />
           <StyledCta
             ref={ref}
             onClick={() => {
@@ -91,7 +123,7 @@ const LoginForm: ForwardRefRenderFunction<
           </StyledCta>
         </StyledInputWrapper>
       </StyledWrapper>
-      <StyledWrapper className="wrapper">
+      <StyledWrapper className="field-wrapper">
         <StyledInputWrapper $grid_template_colums="44px 1fr 48px">
           <StyledSvgVectorWrapper
             $width="44px"
@@ -123,7 +155,7 @@ const LoginForm: ForwardRefRenderFunction<
         </StyledInputWrapper>
       </StyledWrapper>
       {tab_index == 0 && (
-        <StyledWrapper className="wrapper">
+        <StyledWrapper className="field-wrapper">
           <StyledInputWrapper $grid_template_colums="44px 1fr">
             <StyledSvgVectorWrapper
               $width="44px"
@@ -137,7 +169,7 @@ const LoginForm: ForwardRefRenderFunction<
         </StyledWrapper>
       )}
 
-      <StyledSubmitCta className="wrapper" type="submit">
+      <StyledSubmitCta className="field-wrapper" type="submit">
         Continue
       </StyledSubmitCta>
       <StyledPara>

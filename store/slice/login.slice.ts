@@ -1,13 +1,19 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { updateUser } from "@/store/slice/user.slice";
-
-// Types
-import type { LoginInitialState } from "@/types/redux";
+// types
+import type { IThunkApiConfig } from "@/types/store/slice/common";
+import type { RootState } from "@/store/rootReducer";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import {
+  ILoginInitialState,
+  IVerifyUserNameApiRequest,
+  IVerifyUserNameApiResponse,
+} from "@/types/store/slice/login";
 import type { User } from "@/types/user";
-import type { RootState } from "../rootReducer";
+import type { AxiosResponse, AxiosError } from "axios";
 
 // Axios
+import axios from "axios";
 import { Axios } from "@/helpers/axios";
 
 // Cookie
@@ -47,7 +53,7 @@ export const signUpHandler = createAsyncThunk<LoginResponse, RegisterArgs>(
         password,
       });
       cookies.set("token", res.data.token);
-      dispatch(updateUser(res.data.user));
+      // dispatch(updateUser(res.data.user));
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data);
@@ -67,7 +73,7 @@ export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
       cookies.set("token", res.data.token, {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       });
-      dispatch(updateUser(res.data.user));
+      // dispatch(updateUser(res.data.user));
       return res.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data);
@@ -75,31 +81,53 @@ export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
   }
 );
 
-const initialState: LoginInitialState = {
-  showModal: true,
-  showLogin: false,
-  showPassword: false,
+export const verifyUserNameApi = createAsyncThunk<
+  IVerifyUserNameApiResponse,
+  IVerifyUserNameApiRequest,
+  IThunkApiConfig
+>("api/verify-username", async ({ username }, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<IVerifyUserNameApiResponse> =
+      await Axios.post("/verify-username", {
+        username,
+      });
+    return response.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      let axios_error = error as AxiosError<IVerifyUserNameApiResponse>;
+      let error_message = axios_error.response?.data.message?.username[0];
+      return rejectWithValue(error_message);
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+const initialState: ILoginInitialState = {
+  validator_error: null,
+  is_typing: false,
 };
 
 export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    toggleModal: (state, action: PayloadAction<boolean>) => {
-      state.showModal = action.payload;
+    updateIsTyping: (state, action: PayloadAction<boolean>) => {
+      state.is_typing = action.payload;
     },
-    updateShowLogin: (state, action: PayloadAction<boolean>) => {
-      state.showLogin = action.payload;
-    },
-    updateShowPassword: (state, action: PayloadAction<boolean>) => {
-      state.showPassword = action.payload;
-    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(verifyUserNameApi.rejected, (state, action) => {
+      state.validator_error = action.payload as string;
+    });
+    builder.addCase(verifyUserNameApi.fulfilled, (state) => {
+      state.validator_error = null;
+    });
   },
 });
 
-export const { toggleModal, updateShowLogin, updateShowPassword } =
-  loginSlice.actions;
-export const showModal = (state: RootState) => state.login.showModal;
-export const showLogin = (state: RootState) => state.login.showLogin;
-export const showPassword = (state: RootState) => state.login.showPassword;
 export default loginSlice.reducer;
+export const validatorError = (state: RootState) => state.login.validator_error;
+export const isTyping = (state: RootState) => state.login.is_typing;
+
+// action  creator
+export const { updateIsTyping } = loginSlice.actions;
