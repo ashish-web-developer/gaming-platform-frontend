@@ -33,6 +33,7 @@ const useInitializeUttrance = ({ handleEnd }: { handleEnd: () => void }) => {
     };
     return () => {
       uttrance_context.current?.uttrance.removeEventListener("end", handleEnd);
+      uttrance_context.current = null;
     };
   }, []);
 };

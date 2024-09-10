@@ -103,6 +103,8 @@ export const verifyUserNameApi = createAsyncThunk<
 });
 
 const initialState: ILoginInitialState = {
+  show_validation_tooltip: false,
+  show_introduction_tooltip: true,
   validator_error: null,
   is_typing: false,
 };
@@ -114,10 +116,20 @@ export const loginSlice = createSlice({
     updateIsTyping: (state, action: PayloadAction<boolean>) => {
       state.is_typing = action.payload;
     },
+    updateShowTooltip: (
+      state,
+      action: PayloadAction<{
+        type: "validation" | "introduction";
+        show: boolean;
+      }>
+    ) => {
+      state[`show_${action.payload.type}_tooltip`] = action.payload.show;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(verifyUserNameApi.rejected, (state, action) => {
       state.validator_error = action.payload as string;
+      state.show_validation_tooltip = true;
     });
     builder.addCase(verifyUserNameApi.fulfilled, (state) => {
       state.validator_error = null;
@@ -128,6 +140,10 @@ export const loginSlice = createSlice({
 export default loginSlice.reducer;
 export const validatorError = (state: RootState) => state.login.validator_error;
 export const isTyping = (state: RootState) => state.login.is_typing;
+export const showValidationTooltip = (state: RootState) =>
+  state.login.show_validation_tooltip;
+export const showIntroductionTooltip = (state: RootState) =>
+  state.login.show_introduction_tooltip;
 
 // action  creator
-export const { updateIsTyping } = loginSlice.actions;
+export const { updateIsTyping, updateShowTooltip } = loginSlice.actions;

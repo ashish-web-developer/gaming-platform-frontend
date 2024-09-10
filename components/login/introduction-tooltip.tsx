@@ -1,6 +1,6 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useState } from "react";
 // types
-import type { FC } from "react";
+import type { FC, Dispatch, SetStateAction } from "react";
 
 // styled components
 import {
@@ -21,19 +21,28 @@ import { UttranceContext } from "context";
 import gsap from "gsap";
 
 // redux
-import { useAppSelector } from "@/hooks/redux.hook";
-import { isTyping } from "@/store/slice/login.slice";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { isTyping, updateShowTooltip } from "@/store/slice/login.slice";
+
+// hooks
+import { useInitializeUttrance } from "@/hooks/login/login.hook";
 
 const tooltip_text_list = [
   "Hey there! Welcome to Fortune Realm!",
   "Step into the ultimate casino gaming experience where excitement knows no bounds.",
   "Your journey to fortune and fun starts right here, right now!",
 ];
-const IntroductionTooltip: FC<{
-  tooltip_text_index: number;
-}> = ({ tooltip_text_index }) => {
+const IntroductionTooltip: FC = () => {
+  const dispatch = useAppDispatch();
   const is_typing = useAppSelector(isTyping);
   const uttrance_context = useContext(UttranceContext);
+  const [tooltip_text_index, set_tooltip_text_index] = useState(0);
+
+  useInitializeUttrance({
+    handleEnd: () => {
+      set_tooltip_text_index((prev) => prev + 1);
+    },
+  });
 
   /**
    * Handling tooltip animation
@@ -80,33 +89,45 @@ const IntroductionTooltip: FC<{
         });
       });
       self.add("closeTooltipAnimation", () => {
-        gsap
-          .timeline()
-          .to("#info-tooltip", {
-            display: "none",
-            scale: 0,
-            duration: 1,
-            ease: "elastic.inOut",
-          })
-          .to("#girl-image-wrapper", {
-            display: "none",
-            translateX: -300,
-            duration: 1,
-            ease: "back",
-          });
+        return new Promise((resolve) => {
+          gsap
+            .timeline({
+              onComplete: resolve,
+            })
+            .to("#info-tooltip", {
+              display: "none",
+              scale: 0,
+              duration: 1,
+              ease: "elastic.inOut",
+            })
+            .to("#girl-image-wrapper", {
+              display: "none",
+              translateX: -300,
+              duration: 1,
+              ease: "back",
+            });
+        });
       });
     });
-    if (tooltip_text_index == 0 && !is_typing) {
-      gsap_context.startTooltipAnimation();
-    } else if (
-      tooltip_text_index == 1 ||
-      (tooltip_text_index == 2 && !is_typing)
-    ) {
-      gsap_context.tooltipAnimation(tooltip_text_index);
-    } else {
-      gsap_context.closeTooltipAnimation();
-      speechSynthesis.cancel();
-    }
+    (async function () {
+      if (tooltip_text_index == 0 && !is_typing) {
+        gsap_context.startTooltipAnimation();
+      } else if (
+        (tooltip_text_index == 1 || tooltip_text_index == 2) &&
+        !is_typing
+      ) {
+        gsap_context.tooltipAnimation(tooltip_text_index);
+      } else {
+        await gsap_context.closeTooltipAnimation();
+        speechSynthesis.cancel();
+        dispatch(
+          updateShowTooltip({
+            type: "introduction",
+            show: false,
+          })
+        );
+      }
+    })();
     return () => {
       gsap_context.revert();
       speechSynthesis.cancel();

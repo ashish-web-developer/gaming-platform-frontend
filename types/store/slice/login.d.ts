@@ -1,6 +1,8 @@
 import type { IBaseResponse } from "./common";
 
 type ILoginInitialState = {
+  show_validation_tooltip: boolean;
+  show_introduction_tooltip: boolean;
   validator_error: string | null;
   is_typing: boolean;
 };

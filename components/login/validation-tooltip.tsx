@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -18,56 +18,100 @@ import { useTheme } from "styled-components";
 import { ErrorInfoTooltipVector } from "@/components/login/vector/info-tooltip-vector";
 
 // redux
-import { useAppSelector } from "@/hooks/redux.hook";
-import { validatorError } from "@/store/slice/login.slice";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { validatorError, updateShowTooltip } from "@/store/slice/login.slice";
 
 // gsap
 import gsap from "gsap";
 
+// context
+import { UttranceContext } from "context";
+
+// hooks
+import { useInitializeUttrance } from "@/hooks/login/login.hook";
+
 const ValidationTooltip: FC = () => {
   const theme = useTheme() as ITheme;
+  const dispatch = useAppDispatch();
+  const validation_error = useAppSelector(validatorError);
+  const uttrance_context = useContext(UttranceContext);
+  const gsap_context_ref = useRef<gsap.Context>();
   const validator_error = useAppSelector(validatorError);
   const container_ref = useRef<HTMLDivElement>(null);
 
+  useInitializeUttrance({
+    handleEnd: () => {
+      console.log("testing");
+    },
+  });
+
   useEffect(() => {
-    const gsap_context = gsap.context((self) => {
+    gsap_context_ref.current = gsap.context((self) => {
       self.add("showValidationTooltip", () => {
-        gsap
-          .timeline()
-          .to("#error-info-girl-image", {
-            display: "block",
-            duration: 1,
-            right: -120,
-            ease: "expo",
-          })
-          .to("#error-info-tooltip", {
-            display: "block",
-            duration: 1,
-            ease: "bounce",
-          });
+        return new Promise((resolve) => {
+          gsap
+            .timeline({
+              onComplete: resolve,
+            })
+            .to("#error-info-girl-image", {
+              display: "block",
+              duration: 1,
+              right: -120,
+              ease: "expo",
+            })
+            .to("#error-info-tooltip", {
+              display: "block",
+              duration: 1,
+              ease: "bounce",
+            });
+        });
       });
       self.add("closeValidationTooltip", () => {
-        gsap
-          .timeline()
-          .to("#error-info-girl-image", {
-            display: "none",
-            duration: 1,
-            right: -300,
-            ease: "expo",
-          })
-          .to("#error-info-tooltip", {
-            display: "none",
-            duration: 1,
-            ease: "back",
-          });
+        return new Promise((resolve) => {
+          gsap
+            .timeline({
+              onComplete: resolve,
+            })
+            .set("#error-info-tooltip", {
+              display: "none",
+              ease: "back",
+            })
+            .to("#error-info-girl-image", {
+              display: "none",
+              duration: 1,
+              right: -350,
+              ease: "expo",
+            });
+        });
       });
     }, container_ref);
-    validator_error && gsap_context.showValidationTooltip();
-    validator_error || gsap_context.closeValidationTooltip();
     return () => {
-      gsap_context.revert();
+      gsap_context_ref.current?.revert();
+      speechSynthesis.cancel();
     };
-  }, [validator_error]);
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      if (
+        uttrance_context.current &&
+        gsap_context_ref.current &&
+        validation_error
+      ) {
+        await gsap_context_ref.current.showValidationTooltip();
+        uttrance_context.current.text = validation_error as string;
+        speechSynthesis.speak(uttrance_context.current.uttrance);
+      } else {
+        await gsap_context_ref.current?.closeValidationTooltip();
+        dispatch(
+          updateShowTooltip({
+            type: "validation",
+            show: false,
+          })
+        );
+      }
+    })();
+  }, [validation_error]);
   return (
     <div ref={container_ref}>
       <StyledGirlImageWrapper
