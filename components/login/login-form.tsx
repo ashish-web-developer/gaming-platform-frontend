@@ -1,6 +1,6 @@
 import { useState, forwardRef, useRef, useEffect } from "react";
 // types
-import type { ForwardRefRenderFunction } from "react";
+import type { ForwardRefRenderFunction, ChangeEvent } from "react";
 import type { ITheme } from "@/theme/login.theme";
 import type { IFileState } from "@/components/common/user-profile/upload-profile-modal";
 
@@ -29,9 +29,17 @@ import CameraIcon from "@/components/login/icons/camera-icon";
 import EyeIcon, { CloseEyeIcon } from "@/components/login/icons/eye-icon";
 
 // redux
-import { useAppDispatch } from "@/hooks/redux.hook";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
-import { verifyUserNameApi, updateIsTyping } from "@/store/slice/login.slice";
+import {
+  validationErrorList,
+  verifyUserNameApi,
+  updateIsTyping,
+  addValidationError,
+  removeValidationError,
+  updateShowTooltip,
+  registerUserApi,
+} from "@/store/slice/login.slice";
 
 // gsap
 import gsap from "gsap";
@@ -40,15 +48,58 @@ const LoginForm: ForwardRefRenderFunction<
   HTMLButtonElement,
   {
     file_state: IFileState;
+    updateActiveField: (
+      field: "username" | "password" | "confirm_password" | null
+    ) => void;
   }
-> = ({ file_state }, ref) => {
+> = ({ file_state, updateActiveField }, ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
+  const validation_error_list = useAppSelector(validationErrorList);
   const [tab_index, set_tab_index] = useState<0 | 1>(0); // 0 => Signup, 1 => SignIn
   const [show_password, set_show_password] = useState<boolean>(false);
   const form_container_ref = useRef<HTMLFormElement>(null);
-  const timeout_ref = useRef<NodeJS.Timeout>();
+  const timeout_ref = useRef<{
+    username: NodeJS.Timeout | null;
+    confirm_password: NodeJS.Timeout | null;
+  }>({
+    username: null,
+    confirm_password: null,
+  });
+  const form_data = useRef<{
+    username: string;
+    password: string;
+    confirm_password: string;
+  }>({
+    username: "",
+    password: "",
+    confirm_password: "",
+  });
 
+  const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    form_data.current[event.target.name as keyof typeof form_data.current] =
+      event.target.value;
+  };
+  const confirmPasswordValidationHandler = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    if (form_data.current.password !== event.target.value) {
+      dispatch(
+        addValidationError({
+          error: "Password do not match.",
+          type: "confirm_password",
+        })
+      );
+      dispatch(
+        updateShowTooltip({
+          type: "validation",
+          show: true,
+        })
+      );
+    } else {
+      dispatch(removeValidationError({ type: "confirm_password" }));
+    }
+  };
   useEffect(() => {
     const gsap_context = gsap.context(() => {
       gsap.from(".field-wrapper", {
@@ -65,21 +116,48 @@ const LoginForm: ForwardRefRenderFunction<
   }, []);
   return (
     <StyledForm
-      onFocus={() => {
+      onFocus={(event) => {
         dispatch(updateIsTyping(true));
+        updateActiveField(
+          event.target.name as "username" | "password" | "confirm_password"
+        );
+      }}
+      onBlur={() => {
+        updateActiveField(null);
       }}
       ref={form_container_ref}
+      onSubmit={(event) => {
+        event.preventDefault();
+        dispatch(
+          registerUserApi({
+            username: form_data.current.username,
+            password: form_data.current.password,
+          })
+        );
+      }}
     >
       <StyledTabWrapper className="field-wrapper">
         <StyledTab disabled={tab_index == 1}>Sign Up</StyledTab>
         <StyledTab disabled={tab_index == 0}>Sign In</StyledTab>
       </StyledTabWrapper>
       <StyledWrapper className="field-wrapper">
-        <StyledInputWrapper $grid_template_colums="44px 1fr 48px">
+        <StyledInputWrapper
+          $border_color={
+            validation_error_list.some((error) => error.type == "username")
+              ? theme.palette.error.main
+              : theme.palette.info.main
+          }
+          $grid_template_colums="44px 1fr 48px"
+        >
           <StyledSvgVectorWrapper
             $width="44px"
             $height="44px"
             $show_border={true}
+            $border_color={
+              validation_error_list.some((error) => error.type == "username")
+                ? theme.palette.error.main
+                : theme.palette.info.main
+            }
           >
             {file_state.state == 2 ? (
               <StyledImage
@@ -93,18 +171,15 @@ const LoginForm: ForwardRefRenderFunction<
           </StyledSvgVectorWrapper>
           <StyledInput
             onChange={(event) => {
-              timeout_ref.current && clearTimeout(timeout_ref.current);
-              timeout_ref.current = setTimeout(async () => {
-                // const result = await dispatch(
-                //   verifyUserNameApi({ username: event.target.value })
-                // );
-                // const response = unwrapResult(result);
-                // console.log("value of response",response.message.username[0]);
+              timeout_ref.current.username &&
+                clearTimeout(timeout_ref.current.username);
+              timeout_ref.current.username = setTimeout(async () => {
                 dispatch(verifyUserNameApi({ username: event.target.value }));
               }, 1000);
             }}
             type="text"
             placeholder="Username"
+            name="username"
           />
           <StyledCta
             ref={ref}
@@ -124,17 +199,31 @@ const LoginForm: ForwardRefRenderFunction<
         </StyledInputWrapper>
       </StyledWrapper>
       <StyledWrapper className="field-wrapper">
-        <StyledInputWrapper $grid_template_colums="44px 1fr 48px">
+        <StyledInputWrapper
+          $border_color={
+            validation_error_list.some((error) => error.type == "password")
+              ? theme.palette.error.main
+              : theme.palette.info.main
+          }
+          $grid_template_colums="44px 1fr 48px"
+        >
           <StyledSvgVectorWrapper
             $width="44px"
             $height="44px"
             $show_border={true}
+            $border_color={
+              validation_error_list.some((error) => error.type == "password")
+                ? theme.palette.error.main
+                : theme.palette.info.main
+            }
           >
             <LockIcon />
           </StyledSvgVectorWrapper>
           <StyledInput
             type={show_password ? "text" : "password"}
             placeholder="Password"
+            name="password"
+            onChange={onChangeHandler}
           />
           <StyledCta $color="transparent">
             <StyledSvgVectorWrapper
@@ -156,15 +245,44 @@ const LoginForm: ForwardRefRenderFunction<
       </StyledWrapper>
       {tab_index == 0 && (
         <StyledWrapper className="field-wrapper">
-          <StyledInputWrapper $grid_template_colums="44px 1fr">
+          <StyledInputWrapper
+            $border_color={
+              validation_error_list.some(
+                (error) => error.type == "confirm_password"
+              )
+                ? theme.palette.error.main
+                : theme.palette.info.main
+            }
+            $grid_template_colums="44px 1fr"
+          >
             <StyledSvgVectorWrapper
               $width="44px"
               $height="44px"
               $show_border={true}
+              $border_color={
+                validation_error_list.some(
+                  (error) => error.type == "confirm_password"
+                )
+                  ? theme.palette.error.main
+                  : theme.palette.info.main
+              }
+              onChange={(event) => {}}
             >
               <LockIcon />
             </StyledSvgVectorWrapper>
-            <StyledInput type="password" placeholder="Confirm password" />
+            <StyledInput
+              type="password"
+              placeholder="Confirm password"
+              name="confirm_password"
+              onChange={(event) => {
+                onChangeHandler(event);
+                timeout_ref.current.confirm_password &&
+                  clearTimeout(timeout_ref.current.confirm_password);
+                timeout_ref.current.confirm_password = setTimeout(async () => {
+                  confirmPasswordValidationHandler(event);
+                }, 1000);
+              }}
+            />
           </StyledInputWrapper>
         </StyledWrapper>
       )}

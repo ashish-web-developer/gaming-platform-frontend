@@ -19,7 +19,10 @@ import { ErrorInfoTooltipVector } from "@/components/login/vector/info-tooltip-v
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { validatorError, updateShowTooltip } from "@/store/slice/login.slice";
+import {
+  validationErrorList,
+  updateShowTooltip,
+} from "@/store/slice/login.slice";
 
 // gsap
 import gsap from "gsap";
@@ -30,14 +33,18 @@ import { UttranceContext } from "context";
 // hooks
 import { useInitializeUttrance } from "@/hooks/login/login.hook";
 
-const ValidationTooltip: FC = () => {
+const ValidationTooltip: FC<{
+  active_field: "username" | "password" | "confirm_password" | null;
+}> = ({ active_field }) => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const validation_error = useAppSelector(validatorError);
   const uttrance_context = useContext(UttranceContext);
   const gsap_context_ref = useRef<gsap.Context>();
-  const validator_error = useAppSelector(validatorError);
+  const validation_error_list = useAppSelector(validationErrorList);
   const container_ref = useRef<HTMLDivElement>(null);
+  const error = validation_error_list.filter(
+    (error) => error.type == active_field
+  )[0]?.error;
 
   useInitializeUttrance({
     handleEnd: () => {
@@ -96,12 +103,14 @@ const ValidationTooltip: FC = () => {
       if (
         uttrance_context.current &&
         gsap_context_ref.current &&
-        validation_error
+        validation_error_list.length &&
+        error
       ) {
         await gsap_context_ref.current.showValidationTooltip();
-        uttrance_context.current.text = validation_error as string;
+        uttrance_context.current.text = error;
         speechSynthesis.speak(uttrance_context.current.uttrance);
       } else {
+        speechSynthesis.cancel();
         await gsap_context_ref.current?.closeValidationTooltip();
         dispatch(
           updateShowTooltip({
@@ -111,7 +120,7 @@ const ValidationTooltip: FC = () => {
         );
       }
     })();
-  }, [validation_error]);
+  }, [validation_error_list, error]);
   return (
     <div ref={container_ref}>
       <StyledGirlImageWrapper
@@ -142,7 +151,7 @@ const ValidationTooltip: FC = () => {
           $rotate="6deg"
           $color={theme.palette.error.main}
         >
-          {validator_error ?? ""}
+          {error}
         </StyledInfoTooltipText>
       </StyledInfoTooltip>
     </div>

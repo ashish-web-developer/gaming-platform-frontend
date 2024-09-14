@@ -41,6 +41,9 @@ const LoginContainer: FC = () => {
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
+  const [active_field, setActiveField] = useState<
+    "username" | "password" | "confirm_password" | null
+  >(null);
 
   return (
     <StyledPage ref={page_container_ref}>
@@ -49,11 +52,17 @@ const LoginContainer: FC = () => {
           <StyledLogo>Fortune Realm</StyledLogo>
         </StyledLogoContainer>
         {show_introduction_tooltip && <IntroductionTooltip />}
-        {show_validation_tooltip && <ValidationTooltip />}
+        {show_validation_tooltip && (
+          <ValidationTooltip active_field={active_field} />
+        )}
       </>
       <StyledContentContainer>
         <>
-          <LoginForm file_state={file_state} ref={camera_cta_ref} />
+          <LoginForm
+            updateActiveField={(field) => setActiveField(field)}
+            file_state={file_state}
+            ref={camera_cta_ref}
+          />
           <StyledUploadModalWrapper $is_modal_open={_show_profile_upload_modal}>
             <UploadProfileModal
               onClickHandler={(file_state) => {

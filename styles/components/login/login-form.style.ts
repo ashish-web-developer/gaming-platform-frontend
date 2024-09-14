@@ -43,10 +43,11 @@ const StyledTab = styled.button`
 
 const StyledInputWrapper = styled.div<{
   $grid_template_colums: string;
+  $border_color: string;
 }>`
   display: grid;
   grid-template-columns: ${(props) => props.$grid_template_colums};
-  border: 2px solid ${({ theme }) => theme.palette.info.main};
+  border: 2px solid ${(props) => props.$border_color};
   border-radius: 8px;
   overflow: hidden;
   align-items: center;
@@ -63,11 +64,20 @@ const StyledInput = styled.input`
   line-height: 2.75;
 `;
 
-const StyledSvgVectorWrapper = styled.span<{
-  $width: string;
-  $height: string;
-  $show_border: boolean;
-}>`
+const StyledSvgVectorWrapper = styled.span<
+  {
+    $width: string;
+    $height: string;
+  } & (
+    | {
+        $show_border: false;
+      }
+    | {
+        $show_border: true;
+        $border_color: string;
+      }
+  )
+>`
   display: inline-flex;
   width: ${(props) => props.$width};
   height: ${(props) => props.$height};
@@ -78,9 +88,11 @@ const StyledSvgVectorWrapper = styled.span<{
   ${(props) =>
     props.$show_border &&
     `
-      border-right:2px solid ${props.theme.palette.info.main};
+      border-right: 2px solid ${props.$border_color};
     `}
 `;
+
+export default StyledSvgVectorWrapper;
 
 const StyledImage = styled(Image)`
   object-fit: cover;
@@ -95,6 +107,7 @@ const StyledSubmitCta = styled.button`
   border: 2px solid ${({ theme }) => theme.palette.info.main};
   background: ${({ theme }) => theme.palette.primary.main};
   width: 100%;
+  cursor: pointer;
 `;
 
 const StyledPara = styled.p`

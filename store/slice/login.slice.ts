@@ -5,9 +5,13 @@ import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type { RootState } from "@/store/rootReducer";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import {
+  IValidationErrorType,
   ILoginInitialState,
   IVerifyUserNameApiRequest,
   IVerifyUserNameApiResponse,
+  IRegisterUserApiRequest,
+  IRegisterUserApiResponse,
+  IRegisterUserApiRejectValue,
 } from "@/types/store/slice/login";
 import type { User } from "@/types/user";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -26,12 +30,6 @@ type LoginResponse = {
   user: User;
   token: string;
 };
-type RegisterArgs = {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-};
 
 type LoginArgs = {
   username?: string;
@@ -39,30 +37,44 @@ type LoginArgs = {
   password: string;
 };
 
-export const signUpHandler = createAsyncThunk<LoginResponse, RegisterArgs>(
-  "api/register",
-  async (
-    { name, username, email, password },
-    { rejectWithValue, dispatch }
-  ) => {
-    try {
-      const res = await Axios.post("/register", {
-        name,
+export const registerUserApi = createAsyncThunk<
+  IRegisterUserApiResponse,
+  IRegisterUserApiRequest,
+  IThunkApiConfig<IRegisterUserApiRejectValue>
+>("api/login/register", async ({ username, password }, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<IRegisterUserApiResponse> = await Axios.post(
+      "/register",
+      {
         username,
-        email,
         password,
-      });
-      cookies.set("token", res.data.token);
-      // dispatch(updateUser(res.data.user));
-      return res.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
+      }
+    );
+    cookies.set("token", res.data.token);
+    return res.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axios_error = error as AxiosError<IRegisterUserApiResponse>;
+      const messages = axios_error.response?.data.message;
+      if (typeof messages == "object") {
+        const error: IRegisterUserApiRejectValue = [];
+        for (const [key, value] of Object.entries(messages)) {
+          error.push({
+            type: key as "password" | "username",
+            error: value[0],
+          });
+        }
+        return rejectWithValue(error);
+      } else {
+        return rejectWithValue(messages as string);
+      }
     }
+    return rejectWithValue("An unexpected error occurred");
   }
-);
+});
 
 export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
-  "api/register",
+  "api/login/register",
   async ({ username, email, password }, { rejectWithValue, dispatch }) => {
     try {
       const res = await Axios.post("/login", {
@@ -84,8 +96,14 @@ export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
 export const verifyUserNameApi = createAsyncThunk<
   IVerifyUserNameApiResponse,
   IVerifyUserNameApiRequest,
-  IThunkApiConfig
->("api/verify-username", async ({ username }, { rejectWithValue }) => {
+  IThunkApiConfig<
+    | {
+        error: string;
+        type: IValidationErrorType;
+      }
+    | string
+  >
+>("api/login/verify-username", async ({ username }, { rejectWithValue }) => {
   try {
     const response: AxiosResponse<IVerifyUserNameApiResponse> =
       await Axios.post("/verify-username", {
@@ -96,7 +114,10 @@ export const verifyUserNameApi = createAsyncThunk<
     if (axios.isAxiosError(error)) {
       let axios_error = error as AxiosError<IVerifyUserNameApiResponse>;
       let error_message = axios_error.response?.data.message?.username[0];
-      return rejectWithValue(error_message);
+      return rejectWithValue({
+        error: error_message as string,
+        type: "username",
+      });
     }
     return rejectWithValue("An unexpected error occurred");
   }
@@ -105,7 +126,7 @@ export const verifyUserNameApi = createAsyncThunk<
 const initialState: ILoginInitialState = {
   show_validation_tooltip: false,
   show_introduction_tooltip: true,
-  validator_error: null,
+  validation_error_list: [],
   is_typing: false,
 };
 
@@ -125,20 +146,58 @@ export const loginSlice = createSlice({
     ) => {
       state[`show_${action.payload.type}_tooltip`] = action.payload.show;
     },
+    addValidationError: (
+      state,
+      action: PayloadAction<{
+        error: string;
+        type: IValidationErrorType;
+      }>
+    ) => {
+      state.validation_error_list.push(action.payload);
+    },
+    removeValidationError: (
+      state,
+      action: PayloadAction<{
+        type: IValidationErrorType;
+      }>
+    ) => {
+      state.validation_error_list = state.validation_error_list.filter(
+        (error) => error.type !== action.payload.type
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(verifyUserNameApi.rejected, (state, action) => {
-      state.validator_error = action.payload as string;
-      state.show_validation_tooltip = true;
+      if (action.payload && typeof action.payload == "object") {
+        state.validation_error_list.push(action.payload);
+        state.show_validation_tooltip = true;
+      }
     });
     builder.addCase(verifyUserNameApi.fulfilled, (state) => {
-      state.validator_error = null;
+      state.validation_error_list = state.validation_error_list.filter(
+        (error) => {
+          return error.type !== "username";
+        }
+      );
+    });
+    builder.addCase(registerUserApi.rejected, (state, action) => {
+      if (action.payload && typeof action.payload == "object") {
+        state.validation_error_list = [
+          ...state.validation_error_list,
+          ...action.payload,
+        ];
+        state.show_validation_tooltip = true;
+      }
+    });
+    builder.addCase(registerUserApi.fulfilled, (state, action) => {
+      state.validation_error_list = [];
     });
   },
 });
 
 export default loginSlice.reducer;
-export const validatorError = (state: RootState) => state.login.validator_error;
+export const validationErrorList = (state: RootState) =>
+  state.login.validation_error_list;
 export const isTyping = (state: RootState) => state.login.is_typing;
 export const showValidationTooltip = (state: RootState) =>
   state.login.show_validation_tooltip;
@@ -146,4 +205,9 @@ export const showIntroductionTooltip = (state: RootState) =>
   state.login.show_introduction_tooltip;
 
 // action  creator
-export const { updateIsTyping, updateShowTooltip } = loginSlice.actions;
+export const {
+  updateIsTyping,
+  updateShowTooltip,
+  addValidationError,
+  removeValidationError,
+} = loginSlice.actions;
