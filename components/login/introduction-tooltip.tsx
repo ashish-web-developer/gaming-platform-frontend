@@ -1,6 +1,6 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState, useRef } from "react";
 // types
-import type { FC, Dispatch, SetStateAction } from "react";
+import type { FC } from "react";
 
 // styled components
 import {
@@ -14,6 +14,9 @@ import {
 // vector
 import InfoTooltipVector from "./vector/info-tooltip-vector";
 
+// provider
+import UttranceProvider from "@/providers/UttranceProvider";
+
 // context
 import { UttranceContext } from "context";
 
@@ -21,11 +24,8 @@ import { UttranceContext } from "context";
 import gsap from "gsap";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { isTyping, updateShowTooltip } from "@/store/slice/login.slice";
-
-// hooks
-import { useInitializeUttrance } from "@/hooks/login/login.hook";
+import { useAppSelector } from "@/hooks/redux.hook";
+import { isTyping } from "@/store/slice/login.slice";
 
 const tooltip_text_list = [
   "Hey there! Welcome to Fortune Realm!",
@@ -33,22 +33,16 @@ const tooltip_text_list = [
   "Your journey to fortune and fun starts right here, right now!",
 ];
 const IntroductionTooltip: FC = () => {
-  const dispatch = useAppDispatch();
   const is_typing = useAppSelector(isTyping);
   const uttrance_context = useContext(UttranceContext);
   const [tooltip_text_index, set_tooltip_text_index] = useState(0);
-
-  useInitializeUttrance({
-    handleEnd: () => {
-      set_tooltip_text_index((prev) => prev + 1);
-    },
-  });
+  const gsap_context_ref = useRef<gsap.Context>();
 
   /**
    * Handling tooltip animation
    */
   useEffect(() => {
-    const gsap_context = gsap.context((self) => {
+    gsap_context_ref.current = gsap.context((self) => {
       self.add("startTooltipAnimation", () => {
         gsap
           .timeline({
@@ -109,32 +103,36 @@ const IntroductionTooltip: FC = () => {
         });
       });
     });
+    return () => {
+      gsap_context_ref.current?.revert();
+      speechSynthesis.cancel();
+    };
+  }, []);
+
+  useEffect(() => {
     (async function () {
       if (tooltip_text_index == 0 && !is_typing) {
-        gsap_context.startTooltipAnimation();
+        gsap_context_ref.current?.startTooltipAnimation();
       } else if (
         (tooltip_text_index == 1 || tooltip_text_index == 2) &&
         !is_typing
       ) {
-        gsap_context.tooltipAnimation(tooltip_text_index);
+        gsap_context_ref.current?.tooltipAnimation(tooltip_text_index);
       } else {
-        await gsap_context.closeTooltipAnimation();
+        await gsap_context_ref.current?.closeTooltipAnimation();
         speechSynthesis.cancel();
-        dispatch(
-          updateShowTooltip({
-            type: "introduction",
-            show: false,
-          })
-        );
       }
     })();
-    return () => {
-      gsap_context.revert();
-      speechSynthesis.cancel();
-    };
   }, [tooltip_text_index, is_typing]);
   return (
     <>
+      {tooltip_text_index < 3 && (
+        <UttranceProvider
+          handleEnd={() => {
+            set_tooltip_text_index((prev) => prev + 1);
+          }}
+        />
+      )}
       <StyledGirlImageWrapper
         id="girl-image-wrapper"
         $width="450px"

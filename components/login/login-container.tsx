@@ -25,16 +25,11 @@ import ValidationTooltip from "@/components/login/validation-tooltip";
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { show_profile_upload_modal } from "@/store/slice/common.slice";
-import {
-  showValidationTooltip,
-  showIntroductionTooltip,
-} from "@/store/slice/login.slice";
+import { validationErrorList } from "@/store/slice/login.slice";
 
 const LoginContainer: FC = () => {
   const theme = useTheme() as ITheme;
   const page_container_ref = useRef(null);
-  const show_introduction_tooltip = useAppSelector(showIntroductionTooltip);
-  const show_validation_tooltip = useAppSelector(showValidationTooltip);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const [file_state, set_file_state] = useState<IFileState>({
@@ -44,6 +39,9 @@ const LoginContainer: FC = () => {
   const [active_field, setActiveField] = useState<
     "username" | "password" | "confirm_password" | null
   >(null);
+  const error = useAppSelector(validationErrorList).filter(
+    (error) => error.type == active_field
+  )[0]?.error;
 
   return (
     <StyledPage ref={page_container_ref}>
@@ -51,10 +49,8 @@ const LoginContainer: FC = () => {
         <StyledLogoContainer className="logo-container">
           <StyledLogo>Fortune Realm</StyledLogo>
         </StyledLogoContainer>
-        {show_introduction_tooltip && <IntroductionTooltip />}
-        {show_validation_tooltip && (
-          <ValidationTooltip active_field={active_field} />
-        )}
+        <IntroductionTooltip />
+        <ValidationTooltip error={error} />
       </>
       <StyledContentContainer>
         <>

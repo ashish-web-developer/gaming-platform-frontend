@@ -37,7 +37,6 @@ import {
   updateIsTyping,
   addValidationError,
   removeValidationError,
-  updateShowTooltip,
   registerUserApi,
 } from "@/store/slice/login.slice";
 
@@ -88,12 +87,6 @@ const LoginForm: ForwardRefRenderFunction<
         addValidationError({
           error: "Password do not match.",
           type: "confirm_password",
-        })
-      );
-      dispatch(
-        updateShowTooltip({
-          type: "validation",
-          show: true,
         })
       );
     } else {
@@ -287,7 +280,11 @@ const LoginForm: ForwardRefRenderFunction<
         </StyledWrapper>
       )}
 
-      <StyledSubmitCta className="field-wrapper" type="submit">
+      <StyledSubmitCta
+        disabled={!!validation_error_list.length}
+        className="field-wrapper"
+        type="submit"
+      >
         Continue
       </StyledSubmitCta>
       <StyledPara>

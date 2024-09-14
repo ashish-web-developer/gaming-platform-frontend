@@ -17,8 +17,6 @@ type IValidationErrorType =
   | "confirm_password";
 
 type ILoginInitialState = {
-  show_validation_tooltip: boolean;
-  show_introduction_tooltip: boolean;
   validation_error_list: Array<{
     error: string;
     type: IValidationErrorType;

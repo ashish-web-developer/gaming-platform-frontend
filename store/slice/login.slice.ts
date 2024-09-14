@@ -124,8 +124,6 @@ export const verifyUserNameApi = createAsyncThunk<
 });
 
 const initialState: ILoginInitialState = {
-  show_validation_tooltip: false,
-  show_introduction_tooltip: true,
   validation_error_list: [],
   is_typing: false,
 };
@@ -136,15 +134,6 @@ export const loginSlice = createSlice({
   reducers: {
     updateIsTyping: (state, action: PayloadAction<boolean>) => {
       state.is_typing = action.payload;
-    },
-    updateShowTooltip: (
-      state,
-      action: PayloadAction<{
-        type: "validation" | "introduction";
-        show: boolean;
-      }>
-    ) => {
-      state[`show_${action.payload.type}_tooltip`] = action.payload.show;
     },
     addValidationError: (
       state,
@@ -170,7 +159,6 @@ export const loginSlice = createSlice({
     builder.addCase(verifyUserNameApi.rejected, (state, action) => {
       if (action.payload && typeof action.payload == "object") {
         state.validation_error_list.push(action.payload);
-        state.show_validation_tooltip = true;
       }
     });
     builder.addCase(verifyUserNameApi.fulfilled, (state) => {
@@ -186,7 +174,6 @@ export const loginSlice = createSlice({
           ...state.validation_error_list,
           ...action.payload,
         ];
-        state.show_validation_tooltip = true;
       }
     });
     builder.addCase(registerUserApi.fulfilled, (state, action) => {
@@ -199,15 +186,7 @@ export default loginSlice.reducer;
 export const validationErrorList = (state: RootState) =>
   state.login.validation_error_list;
 export const isTyping = (state: RootState) => state.login.is_typing;
-export const showValidationTooltip = (state: RootState) =>
-  state.login.show_validation_tooltip;
-export const showIntroductionTooltip = (state: RootState) =>
-  state.login.show_introduction_tooltip;
 
 // action  creator
-export const {
-  updateIsTyping,
-  updateShowTooltip,
-  addValidationError,
-  removeValidationError,
-} = loginSlice.actions;
+export const { updateIsTyping, addValidationError, removeValidationError } =
+  loginSlice.actions;

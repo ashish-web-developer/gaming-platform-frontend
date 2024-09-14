@@ -108,6 +108,10 @@ const StyledSubmitCta = styled.button`
   background: ${({ theme }) => theme.palette.primary.main};
   width: 100%;
   cursor: pointer;
+  &:disabled {
+    color: rgb(214, 255, 183, 0.6);
+    border-color: rgb(214, 255, 183, 0.6);
+  }
 `;
 
 const StyledPara = styled.p`

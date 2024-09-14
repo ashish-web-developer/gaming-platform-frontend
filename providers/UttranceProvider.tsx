@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useEffect, useContext } from "react";
 // types
-import type { RefObject } from "react";
+import type { FC } from "react";
 
 // context
 import { UttranceContext } from "context";
@@ -8,14 +8,9 @@ import { UttranceContext } from "context";
 // helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 
-// gsap
-import gsap from "gsap";
-
-/**
- * Setting the voice of the uttrance_context
- * and handling the voice text end
- */
-const useInitializeUttrance = ({ handleEnd }: { handleEnd: () => void }) => {
+const UttranceProvider: FC<{
+  handleEnd: () => void;
+}> = ({ handleEnd }) => {
   const uttrance_context = useContext(UttranceContext);
   useEffect(() => {
     uttrance_context.current = new MutableSpeechUtterance();
@@ -32,10 +27,13 @@ const useInitializeUttrance = ({ handleEnd }: { handleEnd: () => void }) => {
       }
     };
     return () => {
+        console.log("got unmounted");
       uttrance_context.current?.uttrance.removeEventListener("end", handleEnd);
       uttrance_context.current = null;
     };
   }, []);
+
+  return null;
 };
 
-export { useInitializeUttrance };
+export default UttranceProvider;
