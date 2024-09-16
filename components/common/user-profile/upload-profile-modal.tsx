@@ -35,8 +35,8 @@ import {
   updateShowProfileDropDown,
   updateShowProfileUploadModal,
   // apis
-  updateProfileApi,
 } from "@/store/slice/common.slice";
+import { updateProfileApi } from "@/store/slice/login.slice";
 
 // helpers package
 import Cropper from "cropperjs";
@@ -91,7 +91,7 @@ const UploadProfileModal: ForwardRefRenderFunction<
     secondary_color: string;
     font_family: string;
     show_girl_image?: boolean;
-    onClickHandler: (file_state: IFileState) => void;
+    onClickHandler: (file_state: IFileState, file: File) => void;
   }
 > = (
   { secondary_color, font_family, show_girl_image = false, onClickHandler },
@@ -328,7 +328,7 @@ const UploadProfileModal: ForwardRefRenderFunction<
                 // const form_data = new FormData();
                 // form_data.append("avatar", file_input_ref.current.files[0]);
                 // dispatch(updateProfileApi({ form_data: form_data }));
-                onClickHandler(file_state);
+                onClickHandler(file_state, file_input_ref.current.files[0]);
                 await gsap_context_ref.current?.onClose();
                 dispatch(updateShowProfileUploadModal(false));
               }

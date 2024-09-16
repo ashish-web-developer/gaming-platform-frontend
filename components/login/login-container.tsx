@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useContext } from "react";
+import { useRef, useState } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -23,12 +23,16 @@ import IntroductionTooltip from "@/components/login/introduction-tooltip";
 import ValidationTooltip from "@/components/login/validation-tooltip";
 
 // redux
-import { useAppSelector } from "@/hooks/redux.hook";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { show_profile_upload_modal } from "@/store/slice/common.slice";
-import { validationErrorList } from "@/store/slice/login.slice";
+import {
+  validationErrorList,
+  updateProfileApi,
+} from "@/store/slice/login.slice";
 
 const LoginContainer: FC = () => {
   const theme = useTheme() as ITheme;
+  const dispatch = useAppDispatch();
   const page_container_ref = useRef(null);
   const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
@@ -36,12 +40,21 @@ const LoginContainer: FC = () => {
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
+  const file_ref = useRef<File>();
   const [active_field, setActiveField] = useState<
     "username" | "password" | "confirm_password" | null
   >(null);
   const error = useAppSelector(validationErrorList).filter(
     (error) => error.type == active_field
   )[0]?.error;
+
+  const updateProfile = () => {
+    if (file_ref.current) {
+      const form_data = new FormData();
+      form_data.append("avatar", file_ref.current);
+      dispatch(updateProfileApi({ form_data: form_data }));
+    }
+  };
 
   return (
     <StyledPage ref={page_container_ref}>
@@ -55,14 +68,16 @@ const LoginContainer: FC = () => {
       <StyledContentContainer>
         <>
           <LoginForm
+            updateProfile={updateProfile}
             updateActiveField={(field) => setActiveField(field)}
             file_state={file_state}
             ref={camera_cta_ref}
           />
           <StyledUploadModalWrapper $is_modal_open={_show_profile_upload_modal}>
             <UploadProfileModal
-              onClickHandler={(file_state) => {
+              onClickHandler={(file_state, file) => {
                 set_file_state(file_state);
+                file_ref.current = file;
               }}
               ref={camera_cta_ref}
               secondary_color={theme.palette.info.main}

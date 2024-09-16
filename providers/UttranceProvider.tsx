@@ -27,7 +27,6 @@ const UttranceProvider: FC<{
       }
     };
     return () => {
-        console.log("got unmounted");
       uttrance_context.current?.uttrance.removeEventListener("end", handleEnd);
       uttrance_context.current = null;
     };

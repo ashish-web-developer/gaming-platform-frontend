@@ -29,6 +29,7 @@ import CameraIcon from "@/components/login/icons/camera-icon";
 import EyeIcon, { CloseEyeIcon } from "@/components/login/icons/eye-icon";
 
 // redux
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
 import {
@@ -50,8 +51,9 @@ const LoginForm: ForwardRefRenderFunction<
     updateActiveField: (
       field: "username" | "password" | "confirm_password" | null
     ) => void;
+    updateProfile: () => void;
   }
-> = ({ file_state, updateActiveField }, ref) => {
+> = ({ file_state, updateActiveField, updateProfile }, ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const validation_error_list = useAppSelector(validationErrorList);
@@ -119,14 +121,16 @@ const LoginForm: ForwardRefRenderFunction<
         updateActiveField(null);
       }}
       ref={form_container_ref}
-      onSubmit={(event) => {
+      onSubmit={async (event) => {
         event.preventDefault();
-        dispatch(
+        const result = await dispatch(
           registerUserApi({
             username: form_data.current.username,
             password: form_data.current.password,
           })
         );
+        const response = unwrapResult(result);
+        updateProfile();
       }}
     >
       <StyledTabWrapper className="field-wrapper">
@@ -164,6 +168,7 @@ const LoginForm: ForwardRefRenderFunction<
           </StyledSvgVectorWrapper>
           <StyledInput
             onChange={(event) => {
+              onChangeHandler(event);
               timeout_ref.current.username &&
                 clearTimeout(timeout_ref.current.username);
               timeout_ref.current.username = setTimeout(async () => {

@@ -126,7 +126,7 @@ const IntroductionTooltip: FC = () => {
   }, [tooltip_text_index, is_typing]);
   return (
     <>
-      {tooltip_text_index < 3 && (
+      {tooltip_text_index < 3 && !is_typing && (
         <UttranceProvider
           handleEnd={() => {
             set_tooltip_text_index((prev) => prev + 1);

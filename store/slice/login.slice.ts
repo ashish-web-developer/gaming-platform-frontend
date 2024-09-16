@@ -12,6 +12,8 @@ import {
   IRegisterUserApiRequest,
   IRegisterUserApiResponse,
   IRegisterUserApiRejectValue,
+  IUpdateProfileApiRequest,
+  IUpdateProfileApiResponse,
 } from "@/types/store/slice/login";
 import type { User } from "@/types/user";
 import type { AxiosResponse, AxiosError } from "axios";
@@ -93,6 +95,30 @@ export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
   }
 );
 
+export const updateProfileApi = createAsyncThunk<
+  IUpdateProfileApiResponse,
+  IUpdateProfileApiRequest,
+  IThunkApiConfig<string>
+>("api/login/update-profile", async ({ form_data }, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<IUpdateProfileApiResponse> = await Axios.post(
+      "/user/update-profile",
+      form_data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
 export const verifyUserNameApi = createAsyncThunk<
   IVerifyUserNameApiResponse,
   IVerifyUserNameApiRequest,
@@ -124,6 +150,7 @@ export const verifyUserNameApi = createAsyncThunk<
 });
 
 const initialState: ILoginInitialState = {
+  user: null,
   validation_error_list: [],
   is_typing: false,
 };
@@ -177,6 +204,7 @@ export const loginSlice = createSlice({
       }
     });
     builder.addCase(registerUserApi.fulfilled, (state, action) => {
+      state.user = action.payload.user;
       state.validation_error_list = [];
     });
   },

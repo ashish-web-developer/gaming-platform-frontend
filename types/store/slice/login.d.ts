@@ -2,9 +2,9 @@ import type { IBaseResponse } from "./common";
 
 type IUser = {
   id: number;
-  name: string;
+  name?: string;
   username: string;
-  email: string;
+  email?: string;
   admin: boolean;
   email_verified_at: string;
   earned_points: number;
@@ -17,6 +17,7 @@ type IValidationErrorType =
   | "confirm_password";
 
 type ILoginInitialState = {
+  user: IUser | null;
   validation_error_list: Array<{
     error: string;
     type: IValidationErrorType;
@@ -62,6 +63,17 @@ type IRegisterUserApiRejectValue =
     }>
   | string;
 
+/**
+ * ===== UPDATE PROFILE API =======
+ */
+type IUpdateProfileApiRequest = {
+  form_data: FormData;
+};
+type IUpdateProfileApiResponse = IBaseResponse & {
+  message: string;
+  user: IUser;
+};
+
 export {
   IValidationErrorType,
   ILoginInitialState,
@@ -70,4 +82,6 @@ export {
   IRegisterUserApiRequest,
   IRegisterUserApiResponse,
   IRegisterUserApiRejectValue,
+  IUpdateProfileApiRequest,
+  IUpdateProfileApiResponse
 };
