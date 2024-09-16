@@ -29,7 +29,6 @@ import CameraIcon from "@/components/login/icons/camera-icon";
 import EyeIcon, { CloseEyeIcon } from "@/components/login/icons/eye-icon";
 
 // redux
-import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
 import {
@@ -56,6 +55,7 @@ const LoginForm: ForwardRefRenderFunction<
 > = ({ file_state, updateActiveField, updateProfile }, ref) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
+  const gsap_context_ref = useRef<gsap.Context>();
   const validation_error_list = useAppSelector(validationErrorList);
   const [tab_index, set_tab_index] = useState<0 | 1>(0); // 0 => Signup, 1 => SignIn
   const [show_password, set_show_password] = useState<boolean>(false);
@@ -67,7 +67,7 @@ const LoginForm: ForwardRefRenderFunction<
     username: null,
     confirm_password: null,
   });
-  const form_data = useRef<{
+  const [form_data, setFormData] = useState<{
     username: string;
     password: string;
     confirm_password: string;
@@ -76,15 +76,20 @@ const LoginForm: ForwardRefRenderFunction<
     password: "",
     confirm_password: "",
   });
+  const [stroke, setStroke] = useState<string>("rgba(214, 255, 183,0.6)");
 
   const onChangeHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    form_data.current[event.target.name as keyof typeof form_data.current] =
-      event.target.value;
+    setFormData((prev) => {
+      return {
+        ...prev,
+        [event.target.name as keyof typeof form_data]: event.target.value,
+      };
+    });
   };
   const confirmPasswordValidationHandler = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    if (form_data.current.password !== event.target.value) {
+    if (form_data.password !== event.target.value) {
       dispatch(
         addValidationError({
           error: "Password do not match.",
@@ -96,17 +101,30 @@ const LoginForm: ForwardRefRenderFunction<
     }
   };
   useEffect(() => {
-    const gsap_context = gsap.context(() => {
-      gsap.from(".field-wrapper", {
-        scale: 1.2,
-        opacity: 0,
-        duration: 1,
-        ease: "bounce",
-        stagger: 0.1,
-      });
+    gsap_context_ref.current = gsap.context((self) => {
+      gsap
+        .timeline({
+          onComplete: () => {
+            setTimeout(() => {
+              setStroke(theme.palette.info.main);
+              const input_elements =
+                form_container_ref.current?.querySelectorAll("input");
+              input_elements?.forEach((input) => {
+                input.disabled = false;
+              });
+            }, 1000);
+          },
+        })
+        .from(".field-wrapper", {
+          scale: 1.2,
+          opacity: 0,
+          duration: 1,
+          ease: "bounce",
+          stagger: 0.1,
+        });
     }, form_container_ref);
     return () => {
-      gsap_context.revert();
+      gsap_context_ref.current?.revert();
     };
   }, []);
   return (
@@ -123,13 +141,12 @@ const LoginForm: ForwardRefRenderFunction<
       ref={form_container_ref}
       onSubmit={async (event) => {
         event.preventDefault();
-        const result = await dispatch(
+        await dispatch(
           registerUserApi({
-            username: form_data.current.username,
-            password: form_data.current.password,
+            username: form_data.username,
+            password: form_data.password,
           })
         );
-        const response = unwrapResult(result);
         updateProfile();
       }}
     >
@@ -142,7 +159,7 @@ const LoginForm: ForwardRefRenderFunction<
           $border_color={
             validation_error_list.some((error) => error.type == "username")
               ? theme.palette.error.main
-              : theme.palette.info.main
+              : stroke
           }
           $grid_template_colums="44px 1fr 48px"
         >
@@ -153,7 +170,7 @@ const LoginForm: ForwardRefRenderFunction<
             $border_color={
               validation_error_list.some((error) => error.type == "username")
                 ? theme.palette.error.main
-                : theme.palette.info.main
+                : stroke
             }
           >
             {file_state.state == 2 ? (
@@ -163,10 +180,11 @@ const LoginForm: ForwardRefRenderFunction<
                 alt="file"
               />
             ) : (
-              <UserProfileIcon />
+              <UserProfileIcon stroke={stroke} />
             )}
           </StyledSvgVectorWrapper>
           <StyledInput
+            disabled={true}
             onChange={(event) => {
               onChangeHandler(event);
               timeout_ref.current.username &&
@@ -191,7 +209,7 @@ const LoginForm: ForwardRefRenderFunction<
               $height="44px"
               $show_border={false}
             >
-              <CameraIcon color={theme.palette.info.main} size={24} />
+              <CameraIcon color={stroke} size={24} />
             </StyledSvgVectorWrapper>
           </StyledCta>
         </StyledInputWrapper>
@@ -201,7 +219,7 @@ const LoginForm: ForwardRefRenderFunction<
           $border_color={
             validation_error_list.some((error) => error.type == "password")
               ? theme.palette.error.main
-              : theme.palette.info.main
+              : stroke
           }
           $grid_template_colums="44px 1fr 48px"
         >
@@ -212,12 +230,13 @@ const LoginForm: ForwardRefRenderFunction<
             $border_color={
               validation_error_list.some((error) => error.type == "password")
                 ? theme.palette.error.main
-                : theme.palette.info.main
+                : stroke
             }
           >
-            <LockIcon />
+            <LockIcon stroke={stroke} />
           </StyledSvgVectorWrapper>
           <StyledInput
+            disabled={true}
             type={show_password ? "text" : "password"}
             placeholder="Password"
             name="password"
@@ -233,9 +252,9 @@ const LoginForm: ForwardRefRenderFunction<
               }}
             >
               {show_password ? (
-                <CloseEyeIcon color={theme.palette.info.main} size={24} />
+                <CloseEyeIcon color={stroke} size={24} />
               ) : (
-                <EyeIcon color={theme.palette.info.main} size={24} />
+                <EyeIcon color={stroke} size={24} />
               )}
             </StyledSvgVectorWrapper>
           </StyledCta>
@@ -249,7 +268,7 @@ const LoginForm: ForwardRefRenderFunction<
                 (error) => error.type == "confirm_password"
               )
                 ? theme.palette.error.main
-                : theme.palette.info.main
+                : stroke
             }
             $grid_template_colums="44px 1fr"
           >
@@ -262,13 +281,14 @@ const LoginForm: ForwardRefRenderFunction<
                   (error) => error.type == "confirm_password"
                 )
                   ? theme.palette.error.main
-                  : theme.palette.info.main
+                  : stroke
               }
               onChange={(event) => {}}
             >
-              <LockIcon />
+              <LockIcon stroke={stroke} />
             </StyledSvgVectorWrapper>
             <StyledInput
+              disabled={true}
               type="password"
               placeholder="Confirm password"
               name="confirm_password"
@@ -286,7 +306,10 @@ const LoginForm: ForwardRefRenderFunction<
       )}
 
       <StyledSubmitCta
-        disabled={!!validation_error_list.length}
+        disabled={
+          !Object.values(form_data).every((val) => !!val) ||
+          !!validation_error_list.length
+        }
         className="field-wrapper"
         type="submit"
       >

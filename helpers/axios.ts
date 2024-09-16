@@ -25,7 +25,6 @@ const PusherAxios = axios.create({
 });
 
 Axios.interceptors.request.use(function (config) {
-  console.log("interceptor ran");
   const token = cookies.get("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;

@@ -185,7 +185,21 @@ export const loginSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(verifyUserNameApi.rejected, (state, action) => {
       if (action.payload && typeof action.payload == "object") {
-        state.validation_error_list.push(action.payload);
+        if (
+          state.validation_error_list.some((error) => error.type == "username")
+        ) {
+          state.validation_error_list.map((error) => {
+            if (error.type == "username") {
+              const payload = action.payload as {
+                error: string;
+                type: IValidationErrorType;
+              };
+              error.error = payload.error;
+            }
+          });
+        } else {
+          state.validation_error_list.push(action.payload);
+        }
       }
     });
     builder.addCase(verifyUserNameApi.fulfilled, (state) => {
@@ -196,11 +210,20 @@ export const loginSlice = createSlice({
       );
     });
     builder.addCase(registerUserApi.rejected, (state, action) => {
-      if (action.payload && typeof action.payload == "object") {
-        state.validation_error_list = [
-          ...state.validation_error_list,
-          ...action.payload,
-        ];
+      if (action.payload && Array.isArray(action.payload)) {
+        action.payload.forEach((payload_error) => {
+          if (
+            state.validation_error_list.some(
+              (error) => error.type == payload_error.type
+            )
+          ) {
+            state.validation_error_list.map((error) => {
+              error.error = payload_error.error;
+            });
+          } else {
+            state.validation_error_list.push(payload_error);
+          }
+        });
       }
     });
     builder.addCase(registerUserApi.fulfilled, (state, action) => {

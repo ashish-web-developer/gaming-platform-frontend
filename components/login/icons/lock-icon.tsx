@@ -1,6 +1,8 @@
 import type { FC } from "react";
 
-const LockIcon: FC = () => {
+const LockIcon: FC<{
+  stroke: string;
+}> = ({ stroke }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -10,7 +12,7 @@ const LockIcon: FC = () => {
       viewBox="0 0 24 32"
     >
       <path
-        stroke="#D6FFB7"
+        stroke={stroke}
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
