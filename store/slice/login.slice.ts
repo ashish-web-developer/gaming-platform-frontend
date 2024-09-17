@@ -14,8 +14,9 @@ import {
   IRegisterUserApiRejectValue,
   IUpdateProfileApiRequest,
   IUpdateProfileApiResponse,
+  ILoginUserApiRequest,
+  ILoginUserApiResponse,
 } from "@/types/store/slice/login";
-import type { User } from "@/types/user";
 import type { AxiosResponse, AxiosError } from "axios";
 
 // Axios
@@ -26,18 +27,6 @@ import { Axios } from "@/helpers/axios";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
-
-type LoginResponse = {
-  success: boolean;
-  user: User;
-  token: string;
-};
-
-type LoginArgs = {
-  username?: string;
-  email?: string;
-  password: string;
-};
 
 export const registerUserApi = createAsyncThunk<
   IRegisterUserApiResponse,
@@ -52,7 +41,9 @@ export const registerUserApi = createAsyncThunk<
         password,
       }
     );
-    cookies.set("token", res.data.token);
+    cookies.set("token", res.data.token, {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    });
     return res.data;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
@@ -75,22 +66,32 @@ export const registerUserApi = createAsyncThunk<
   }
 });
 
-export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
-  "api/login/register",
-  async ({ username, email, password }, { rejectWithValue, dispatch }) => {
+export const loginUserApi = createAsyncThunk<
+  ILoginUserApiResponse,
+  ILoginUserApiRequest,
+  IThunkApiConfig<string>
+>(
+  "api/login/login",
+  async ({ username, email, password }, { rejectWithValue }) => {
     try {
-      const res = await Axios.post("/login", {
-        username,
-        email,
-        password,
-      });
+      const res: AxiosResponse<ILoginUserApiResponse> = await Axios.post(
+        "/login",
+        {
+          username,
+          email,
+          password,
+        }
+      );
       cookies.set("token", res.data.token, {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       });
-      // dispatch(updateUser(res.data.user));
       return res.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axios_error = error as AxiosError<ILoginUserApiResponse>;
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("An unexpected error occurred");
     }
   }
 );
@@ -225,6 +226,9 @@ export const loginSlice = createSlice({
           }
         });
       }
+    });
+    builder.addCase(loginUserApi.fulfilled, (state, action) => {
+      state.user = action.payload.user;
     });
     builder.addCase(registerUserApi.fulfilled, (state, action) => {
       state.user = action.payload.user;

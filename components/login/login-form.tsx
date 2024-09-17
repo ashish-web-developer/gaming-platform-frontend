@@ -38,6 +38,7 @@ import {
   addValidationError,
   removeValidationError,
   registerUserApi,
+  loginUserApi,
 } from "@/store/slice/login.slice";
 
 // gsap
@@ -60,11 +61,15 @@ const LoginForm: ForwardRefRenderFunction<
   const [tab_index, set_tab_index] = useState<0 | 1>(0); // 0 => Signup, 1 => SignIn
   const [show_password, set_show_password] = useState<boolean>(false);
   const form_container_ref = useRef<HTMLFormElement>(null);
+  const [is_form_input_disabled, setIsFormInputDisabled] =
+    useState<boolean>(true);
   const timeout_ref = useRef<{
     username: NodeJS.Timeout | null;
+    password: NodeJS.Timeout | null;
     confirm_password: NodeJS.Timeout | null;
   }>({
     username: null,
+    password: null,
     confirm_password: null,
   });
   const [form_data, setFormData] = useState<{
@@ -89,15 +94,28 @@ const LoginForm: ForwardRefRenderFunction<
   const confirmPasswordValidationHandler = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    if (form_data.password !== event.target.value) {
+    if (
+      event.target.value &&
+      form_data[
+        event.target.name == "password" ? "confirm_password" : "password"
+      ] &&
+      event.target.value !==
+        form_data[
+          event.target.name == "password" ? "confirm_password" : "password"
+        ]
+    ) {
       dispatch(
         addValidationError({
-          error: "Password do not match.",
-          type: "confirm_password",
+          error: "password do not match",
+          type: event.target.name as "confirm_password" | "password",
         })
       );
     } else {
-      dispatch(removeValidationError({ type: "confirm_password" }));
+      dispatch(
+        removeValidationError({
+          type: event.target.name as "confirm_password" | "password",
+        })
+      );
     }
   };
   useEffect(() => {
@@ -107,11 +125,7 @@ const LoginForm: ForwardRefRenderFunction<
           onComplete: () => {
             setTimeout(() => {
               setStroke(theme.palette.info.main);
-              const input_elements =
-                form_container_ref.current?.querySelectorAll("input");
-              input_elements?.forEach((input) => {
-                input.disabled = false;
-              });
+              setIsFormInputDisabled(false);
             }, 1000);
           },
         })
@@ -141,13 +155,23 @@ const LoginForm: ForwardRefRenderFunction<
       ref={form_container_ref}
       onSubmit={async (event) => {
         event.preventDefault();
-        await dispatch(
-          registerUserApi({
-            username: form_data.username,
-            password: form_data.password,
-          })
-        );
-        updateProfile();
+        if (tab_index == 0) {
+          await dispatch(
+            registerUserApi({
+              username: form_data.username,
+              password: form_data.password,
+            })
+          );
+          updateProfile();
+        } else {
+          dispatch(
+            loginUserApi({
+              email: null,
+              username: form_data.username,
+              password: form_data.password,
+            })
+          );
+        }
       }}
     >
       <StyledTabWrapper className="field-wrapper">
@@ -161,7 +185,7 @@ const LoginForm: ForwardRefRenderFunction<
               ? theme.palette.error.main
               : stroke
           }
-          $grid_template_colums="44px 1fr 48px"
+          $grid_template_colums={tab_index == 0 ? "44px 1fr 48px" : "44px 1fr"}
         >
           <StyledSvgVectorWrapper
             $width="44px"
@@ -184,34 +208,39 @@ const LoginForm: ForwardRefRenderFunction<
             )}
           </StyledSvgVectorWrapper>
           <StyledInput
-            disabled={true}
+            disabled={is_form_input_disabled}
             onChange={(event) => {
               onChangeHandler(event);
-              timeout_ref.current.username &&
-                clearTimeout(timeout_ref.current.username);
-              timeout_ref.current.username = setTimeout(async () => {
-                dispatch(verifyUserNameApi({ username: event.target.value }));
-              }, 1000);
+              if (tab_index == 0) {
+                timeout_ref.current.username &&
+                  clearTimeout(timeout_ref.current.username);
+                timeout_ref.current.username = setTimeout(async () => {
+                  dispatch(verifyUserNameApi({ username: event.target.value }));
+                }, 1000);
+              }
             }}
             type="text"
             placeholder="Username"
             name="username"
+            value={form_data.username}
           />
-          <StyledCta
-            ref={ref}
-            onClick={() => {
-              dispatch(updateShowProfileUploadModal(true));
-            }}
-            $color="transparent"
-          >
-            <StyledSvgVectorWrapper
-              $width="48px"
-              $height="44px"
-              $show_border={false}
+          {tab_index == 0 && (
+            <StyledCta
+              ref={ref}
+              onClick={() => {
+                dispatch(updateShowProfileUploadModal(true));
+              }}
+              $color="transparent"
             >
-              <CameraIcon color={stroke} size={24} />
-            </StyledSvgVectorWrapper>
-          </StyledCta>
+              <StyledSvgVectorWrapper
+                $width="48px"
+                $height="44px"
+                $show_border={false}
+              >
+                <CameraIcon color={stroke} size={24} />
+              </StyledSvgVectorWrapper>
+            </StyledCta>
+          )}
         </StyledInputWrapper>
       </StyledWrapper>
       <StyledWrapper className="field-wrapper">
@@ -236,11 +265,19 @@ const LoginForm: ForwardRefRenderFunction<
             <LockIcon stroke={stroke} />
           </StyledSvgVectorWrapper>
           <StyledInput
-            disabled={true}
+            disabled={is_form_input_disabled}
             type={show_password ? "text" : "password"}
             placeholder="Password"
             name="password"
-            onChange={onChangeHandler}
+            onChange={(event) => {
+              onChangeHandler(event);
+              timeout_ref.current.password &&
+                clearTimeout(timeout_ref.current.password);
+              timeout_ref.current.password = setTimeout(async () => {
+                confirmPasswordValidationHandler(event);
+              }, 1000);
+            }}
+            value={form_data.password}
           />
           <StyledCta $color="transparent">
             <StyledSvgVectorWrapper
@@ -288,7 +325,7 @@ const LoginForm: ForwardRefRenderFunction<
               <LockIcon stroke={stroke} />
             </StyledSvgVectorWrapper>
             <StyledInput
-              disabled={true}
+              disabled={is_form_input_disabled}
               type="password"
               placeholder="Confirm password"
               name="confirm_password"
@@ -300,6 +337,7 @@ const LoginForm: ForwardRefRenderFunction<
                   confirmPasswordValidationHandler(event);
                 }, 1000);
               }}
+              value={form_data.confirm_password}
             />
           </StyledInputWrapper>
         </StyledWrapper>
@@ -307,8 +345,13 @@ const LoginForm: ForwardRefRenderFunction<
 
       <StyledSubmitCta
         disabled={
-          !Object.values(form_data).every((val) => !!val) ||
-          !!validation_error_list.length
+          tab_index == 0
+            ? !Object.values(form_data).every((val) => !!val) ||
+              !!validation_error_list.length
+            : !(form_data.username && form_data.password) ||
+              !!validation_error_list.filter(
+                (error) => error.type !== "confirm_password"
+              ).length
         }
         className="field-wrapper"
         type="submit"

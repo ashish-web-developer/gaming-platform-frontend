@@ -74,6 +74,22 @@ type IUpdateProfileApiResponse = IBaseResponse & {
   user: IUser;
 };
 
+/**
+ * ===== UPDATE PROFILE API =======
+ */
+
+type ILoginUserApiRequest = {
+  email: string | null;
+  username: string | null;
+  password: string;
+};
+
+type ILoginUserApiResponse = IBaseResponse & {
+  user:IUser;
+  token:string; 
+  message:string;
+}
+
 export {
   IValidationErrorType,
   ILoginInitialState,
@@ -83,5 +99,7 @@ export {
   IRegisterUserApiResponse,
   IRegisterUserApiRejectValue,
   IUpdateProfileApiRequest,
-  IUpdateProfileApiResponse
+  IUpdateProfileApiResponse,
+  ILoginUserApiRequest,
+  ILoginUserApiResponse
 };
