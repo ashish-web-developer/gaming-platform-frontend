@@ -83,8 +83,8 @@ const ValidationTooltip: FC<{
   useEffect(() => {
     (async function () {
       if (uttrance_context.current && gsap_context_ref.current && error) {
-        await gsap_context_ref.current.showValidationTooltip();
         uttrance_context.current.text = error;
+        await gsap_context_ref.current.showValidationTooltip();
         speechSynthesis.speak(uttrance_context.current.uttrance);
       } else {
         speechSynthesis.cancel();
