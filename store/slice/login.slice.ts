@@ -182,6 +182,9 @@ export const loginSlice = createSlice({
         (error) => error.type !== action.payload.type
       );
     },
+    resetValidationError: (state) => {
+      state.validation_error_list = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(verifyUserNameApi.rejected, (state, action) => {
@@ -243,5 +246,9 @@ export const validationErrorList = (state: RootState) =>
 export const isTyping = (state: RootState) => state.login.is_typing;
 
 // action  creator
-export const { updateIsTyping, addValidationError, removeValidationError } =
-  loginSlice.actions;
+export const {
+  updateIsTyping,
+  addValidationError,
+  removeValidationError,
+  resetValidationError,
+} = loginSlice.actions;

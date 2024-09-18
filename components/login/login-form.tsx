@@ -48,17 +48,21 @@ const LoginForm: ForwardRefRenderFunction<
   HTMLButtonElement,
   {
     file_state: IFileState;
+    tab_index: 0 | 1; // 0 => Signup, 1 => SignIn
+    updateTabIndex: (index: 0 | 1) => void;
     updateActiveField: (
       field: "username" | "password" | "confirm_password" | null
     ) => void;
     updateProfile: () => void;
   }
-> = ({ file_state, updateActiveField, updateProfile }, ref) => {
+> = (
+  { file_state, tab_index, updateActiveField, updateProfile, updateTabIndex },
+  ref
+) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const gsap_context_ref = useRef<gsap.Context>();
   const validation_error_list = useAppSelector(validationErrorList);
-  const [tab_index, set_tab_index] = useState<0 | 1>(0); // 0 => Signup, 1 => SignIn
   const [show_password, set_show_password] = useState<boolean>(false);
   const form_container_ref = useRef<HTMLFormElement>(null);
   const [is_form_input_disabled, setIsFormInputDisabled] =
@@ -181,6 +185,7 @@ const LoginForm: ForwardRefRenderFunction<
       <StyledWrapper className="field-wrapper">
         <StyledInputWrapper
           $border_color={
+            tab_index == 0 &&
             validation_error_list.some((error) => error.type == "username")
               ? theme.palette.error.main
               : stroke
@@ -192,6 +197,7 @@ const LoginForm: ForwardRefRenderFunction<
             $height="44px"
             $show_border={true}
             $border_color={
+              tab_index == 0 &&
               validation_error_list.some((error) => error.type == "username")
                 ? theme.palette.error.main
                 : stroke
@@ -246,6 +252,7 @@ const LoginForm: ForwardRefRenderFunction<
       <StyledWrapper className="field-wrapper">
         <StyledInputWrapper
           $border_color={
+            tab_index == 0 &&
             validation_error_list.some((error) => error.type == "password")
               ? theme.palette.error.main
               : stroke
@@ -257,6 +264,7 @@ const LoginForm: ForwardRefRenderFunction<
             $height="44px"
             $show_border={true}
             $border_color={
+              tab_index == 0 &&
               validation_error_list.some((error) => error.type == "password")
                 ? theme.palette.error.main
                 : stroke
@@ -350,7 +358,8 @@ const LoginForm: ForwardRefRenderFunction<
               !!validation_error_list.length
             : !(form_data.username && form_data.password) ||
               !!validation_error_list.filter(
-                (error) => error.type !== "confirm_password"
+                (error) =>
+                  error.type !== "confirm_password" && error.type !== "username"
               ).length
         }
         className="field-wrapper"
@@ -364,7 +373,7 @@ const LoginForm: ForwardRefRenderFunction<
             Already Have an Account?{" "}
             <StyledCta
               onClick={() => {
-                set_tab_index(1);
+                updateTabIndex(1);
               }}
               $color={theme.palette.info.main}
             >
@@ -376,7 +385,12 @@ const LoginForm: ForwardRefRenderFunction<
             Don’t have an account?{" "}
             <StyledCta
               onClick={() => {
-                set_tab_index(0);
+                updateTabIndex(0);
+                setFormData({
+                  username: "",
+                  password: "",
+                  confirm_password: "",
+                });
               }}
               $color={theme.palette.info.main}
             >

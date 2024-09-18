@@ -84,8 +84,9 @@ const ValidationTooltip: FC<{
     (async function () {
       if (uttrance_context.current && gsap_context_ref.current && error) {
         uttrance_context.current.text = error;
+        const uttrance = uttrance_context.current.uttrance;
         await gsap_context_ref.current.showValidationTooltip();
-        speechSynthesis.speak(uttrance_context.current.uttrance);
+        speechSynthesis.speak(uttrance);
       } else {
         speechSynthesis.cancel();
         await gsap_context_ref.current?.closeValidationTooltip();

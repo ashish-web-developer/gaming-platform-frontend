@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -28,6 +28,7 @@ import { show_profile_upload_modal } from "@/store/slice/common.slice";
 import {
   validationErrorList,
   updateProfileApi,
+  resetValidationError,
 } from "@/store/slice/login.slice";
 
 const LoginContainer: FC = () => {
@@ -40,6 +41,7 @@ const LoginContainer: FC = () => {
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
+  const [tab_index, setTabIndex] = useState<0 | 1>(0); // 0 => Signup, 1 => SignIn
   const file_ref = useRef<File>();
   const [active_field, setActiveField] = useState<
     "username" | "password" | "confirm_password" | null
@@ -56,6 +58,10 @@ const LoginContainer: FC = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(resetValidationError());
+  }, [tab_index]);
+
   return (
     <StyledPage ref={page_container_ref}>
       <>
@@ -68,6 +74,8 @@ const LoginContainer: FC = () => {
       <StyledContentContainer>
         <>
           <LoginForm
+            tab_index={tab_index}
+            updateTabIndex={(index) => setTabIndex(index)}
             updateProfile={updateProfile}
             updateActiveField={(field) => setActiveField(field)}
             file_state={file_state}
