@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState, forwardRef, useRef, useEffect } from "react";
 // types
 import type { ForwardRefRenderFunction, ChangeEvent } from "react";
@@ -29,6 +30,7 @@ import CameraIcon from "@/components/login/icons/camera-icon";
 import EyeIcon, { CloseEyeIcon } from "@/components/login/icons/eye-icon";
 
 // redux
+import { unwrapResult } from "@reduxjs/toolkit";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { updateShowProfileUploadModal } from "@/store/slice/common.slice";
 import {
@@ -61,6 +63,7 @@ const LoginForm: ForwardRefRenderFunction<
 ) => {
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
+  const router = useRouter();
   const gsap_context_ref = useRef<gsap.Context>();
   const validation_error_list = useAppSelector(validationErrorList);
   const [show_password, set_show_password] = useState<boolean>(false);
@@ -156,25 +159,40 @@ const LoginForm: ForwardRefRenderFunction<
       onBlur={() => {
         updateActiveField(null);
       }}
+      onChange={() => {
+        dispatch(
+          removeValidationError({
+            type: "auth_failed",
+          })
+        );
+      }}
       ref={form_container_ref}
       onSubmit={async (event) => {
         event.preventDefault();
         if (tab_index == 0) {
-          await dispatch(
+          const result = await dispatch(
             registerUserApi({
               username: form_data.username,
               password: form_data.password,
             })
           );
+          const response = unwrapResult(result);
           updateProfile();
+          if (response.success) {
+            router.push("/chat");
+          }
         } else {
-          dispatch(
+          const result = await dispatch(
             loginUserApi({
               email: null,
               username: form_data.username,
               password: form_data.password,
             })
           );
+          const response = unwrapResult(result);
+          if (response.success) {
+            router.push("/chat");
+          }
         }
       }}
     >
@@ -185,7 +203,6 @@ const LoginForm: ForwardRefRenderFunction<
       <StyledWrapper className="field-wrapper">
         <StyledInputWrapper
           $border_color={
-            tab_index == 0 &&
             validation_error_list.some((error) => error.type == "username")
               ? theme.palette.error.main
               : stroke
@@ -197,7 +214,6 @@ const LoginForm: ForwardRefRenderFunction<
             $height="44px"
             $show_border={true}
             $border_color={
-              tab_index == 0 &&
               validation_error_list.some((error) => error.type == "username")
                 ? theme.palette.error.main
                 : stroke
@@ -252,7 +268,6 @@ const LoginForm: ForwardRefRenderFunction<
       <StyledWrapper className="field-wrapper">
         <StyledInputWrapper
           $border_color={
-            tab_index == 0 &&
             validation_error_list.some((error) => error.type == "password")
               ? theme.palette.error.main
               : stroke
@@ -264,7 +279,6 @@ const LoginForm: ForwardRefRenderFunction<
             $height="44px"
             $show_border={true}
             $border_color={
-              tab_index == 0 &&
               validation_error_list.some((error) => error.type == "password")
                 ? theme.palette.error.main
                 : stroke
@@ -352,6 +366,11 @@ const LoginForm: ForwardRefRenderFunction<
       )}
 
       <StyledSubmitCta
+        $disabled_color={
+          validation_error_list.some((error) => error.type == "auth_failed")
+            ? "rgba(244, 44, 4,1)"
+            : "rgb(214, 255, 183, 0.6)"
+        }
         disabled={
           tab_index == 0
             ? !Object.values(form_data).every((val) => !!val) ||

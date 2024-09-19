@@ -14,7 +14,8 @@ type IValidationErrorType =
   | "username"
   | "email"
   | "password"
-  | "confirm_password";
+  | "confirm_password"
+  | "auth_failed";
 
 type ILoginInitialState = {
   user: IUser | null;
@@ -84,11 +85,9 @@ type ILoginUserApiRequest = {
   password: string;
 };
 
-type ILoginUserApiResponse = IBaseResponse & {
-  user:IUser;
-  token:string; 
-  message:string;
-}
+type ILoginUserApiResponse = IRegisterUserApiResponse;
+
+type ILoginUserApiRejectValue = IRegisterUserApiRejectValue;
 
 export {
   IValidationErrorType,
@@ -101,5 +100,6 @@ export {
   IUpdateProfileApiRequest,
   IUpdateProfileApiResponse,
   ILoginUserApiRequest,
-  ILoginUserApiResponse
+  ILoginUserApiResponse,
+  ILoginUserApiRejectValue,
 };

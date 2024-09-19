@@ -98,7 +98,9 @@ const StyledImage = styled(Image)`
   object-fit: cover;
   object-position: top;
 `;
-const StyledSubmitCta = styled.button`
+const StyledSubmitCta = styled.button<{
+  $disabled_color: string;
+}>`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1rem;
   line-height: 2.75;
@@ -109,8 +111,9 @@ const StyledSubmitCta = styled.button`
   width: 100%;
   cursor: pointer;
   &:disabled {
-    color: rgb(214, 255, 183, 0.6);
-    border-color: rgb(214, 255, 183, 0.6);
+    color: ${(props) => props.$disabled_color};
+    border-color: ${(props) => props.$disabled_color};
+    cursor: not-allowed;
   }
 `;
 

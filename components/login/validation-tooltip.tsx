@@ -26,6 +26,10 @@ import gsap from "gsap";
 // context
 import { UttranceContext } from "context";
 
+// redux
+import { useAppSelector } from "@/hooks/redux.hook";
+import { validationErrorList } from "@/store/slice/login.slice";
+
 const ValidationTooltip: FC<{
   error: string | undefined;
 }> = ({ error }) => {
@@ -33,6 +37,9 @@ const ValidationTooltip: FC<{
   const uttrance_context = useContext(UttranceContext);
   const gsap_context_ref = useRef<gsap.Context>();
   const container_ref = useRef<HTMLDivElement>(null);
+  const auth_failed_error = useAppSelector(validationErrorList).filter(
+    (error) => error.type == "auth_failed"
+  )[0]?.error;
 
   useEffect(() => {
     gsap_context_ref.current = gsap.context((self) => {
@@ -93,9 +100,36 @@ const ValidationTooltip: FC<{
       }
     })();
   }, [error]);
+
+  useEffect(() => {
+    console.log(
+      "value of auth failed error testing",
+      auth_failed_error,
+      gsap_context_ref,
+      uttrance_context
+    );
+    (async function () {
+      if (
+        uttrance_context.current &&
+        gsap_context_ref.current &&
+        auth_failed_error
+      ) {
+        console.log("value of auth failed error testing", auth_failed_error);
+        uttrance_context.current.text = auth_failed_error;
+        const uttrance = uttrance_context.current.uttrance;
+        await gsap_context_ref.current.showValidationTooltip();
+        speechSynthesis.speak(uttrance);
+      } else {
+        speechSynthesis.cancel();
+        await gsap_context_ref.current?.closeValidationTooltip();
+      }
+    })();
+  }, [auth_failed_error]);
   return (
     <>
-      {error && <UttranceProvider handleEnd={() => {}} />}
+      {(error || auth_failed_error) && (
+        <UttranceProvider handleEnd={() => {}} />
+      )}
       <div ref={container_ref}>
         <StyledGirlImageWrapper
           id="error-info-girl-image"
@@ -125,7 +159,7 @@ const ValidationTooltip: FC<{
             $rotate="6deg"
             $color={theme.palette.error.main}
           >
-            {error}
+            {error || auth_failed_error}
           </StyledInfoTooltipText>
         </StyledInfoTooltip>
       </div>

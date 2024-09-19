@@ -16,6 +16,7 @@ import {
   IUpdateProfileApiResponse,
   ILoginUserApiRequest,
   ILoginUserApiResponse,
+  ILoginUserApiRejectValue,
 } from "@/types/store/slice/login";
 import type { AxiosResponse, AxiosError } from "axios";
 
@@ -69,7 +70,7 @@ export const registerUserApi = createAsyncThunk<
 export const loginUserApi = createAsyncThunk<
   ILoginUserApiResponse,
   ILoginUserApiRequest,
-  IThunkApiConfig<string>
+  IThunkApiConfig<ILoginUserApiRejectValue>
 >(
   "api/login/login",
   async ({ username, email, password }, { rejectWithValue }) => {
@@ -89,7 +90,19 @@ export const loginUserApi = createAsyncThunk<
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axios_error = error as AxiosError<ILoginUserApiResponse>;
-        return rejectWithValue(error.message);
+        const messages = axios_error.response?.data.message;
+        if (typeof messages == "object") {
+          const error: ILoginUserApiRejectValue = [];
+          for (const [key, value] of Object.entries(messages)) {
+            error.push({
+              type: key as "password" | "username" | "auth_failed",
+              error: value[0],
+            });
+          }
+          return rejectWithValue(error);
+        } else {
+          return rejectWithValue(messages as string);
+        }
       }
       return rejectWithValue("An unexpected error occurred");
     }
@@ -230,12 +243,30 @@ export const loginSlice = createSlice({
         });
       }
     });
-    builder.addCase(loginUserApi.fulfilled, (state, action) => {
-      state.user = action.payload.user;
-    });
     builder.addCase(registerUserApi.fulfilled, (state, action) => {
       state.user = action.payload.user;
       state.validation_error_list = [];
+    });
+
+    builder.addCase(loginUserApi.rejected, (state, action) => {
+      if (action.payload && Array.isArray(action.payload)) {
+        action.payload.forEach((payload_error) => {
+          if (
+            state.validation_error_list.some(
+              (error) => error.type == payload_error.type
+            )
+          ) {
+            state.validation_error_list.map((error) => {
+              error.error = payload_error.error;
+            });
+          } else {
+            state.validation_error_list.push(payload_error);
+          }
+        });
+      }
+    });
+    builder.addCase(loginUserApi.fulfilled, (state, action) => {
+      state.user = action.payload.user;
     });
   },
 });
