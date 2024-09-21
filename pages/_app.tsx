@@ -18,11 +18,9 @@ if (typeof window !== "undefined") {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      {/* <UserProvider>
+      <UserProvider>
         <Component {...pageProps} />
-      </UserProvider> */}
-
-      <Component {...pageProps} />
+      </UserProvider>
     </Provider>
   );
 }

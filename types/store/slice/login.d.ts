@@ -90,6 +90,7 @@ type ILoginUserApiResponse = IRegisterUserApiResponse;
 type ILoginUserApiRejectValue = IRegisterUserApiRejectValue;
 
 export {
+  IUser,
   IValidationErrorType,
   ILoginInitialState,
   IVerifyUserNameApiRequest,

@@ -22,19 +22,6 @@ const initialState: { user: User } = {
   },
 };
 
-export const getUser = createAsyncThunk<User, undefined>(
-  "api/user",
-  async (_, { rejectWithValue, dispatch }) => {
-    try {
-      const res = await Axios.get("/user");
-      dispatch(updateUser(res.data));
-      return res.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
-    }
-  }
-);
-
 export const logoutUserApi = createAsyncThunk<
   {
     success: boolean;

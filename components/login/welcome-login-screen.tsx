@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 // types
-import type { FC, ForwardRefRenderFunction, RefObject } from "react";
+import type { FC } from "react";
 
 // styled components
 import {
@@ -37,7 +37,7 @@ import CognimatchVector from "@/components/login/vector/cognimatch-vector";
 import PokerVector from "@/components/login/vector/poker-vector";
 
 // gsap
-import gsap from "gsap";
+import gsap from "gsap-trial";
 
 const WelcomeLoginScreen: FC<{
   updateShowLogin: (show: boolean) => void;

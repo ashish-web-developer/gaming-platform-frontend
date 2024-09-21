@@ -1,9 +1,15 @@
+import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 // types
 import type { NextPage } from "next";
 
 // local components
-import LoginContainer from "@/components/login/login-container";
+const LoginContainer = dynamic(
+  () => import("@/components/login/login-container"),
+  {
+    ssr: false,
+  }
+);
 import WelcomeLoginScreen from "@/components/login/welcome-login-screen";
 
 // theme provider
@@ -20,13 +26,12 @@ import { UttranceContext } from "context";
 
 const Login: NextPage = () => {
   const [show_login, setShowLogin] = useState(false);
-  const gsap_context_ref = useRef<gsap.Context>(null);
-  const speech_uttrance_ref = useRef<MutableSpeechUtterance | null>(null);
-  const page_container_ref = useRef<HTMLDivElement>(null);
+  const uttrance_context = useRef<MutableSpeechUtterance | null>(null);
+
   return (
     <ThemeProvider theme={Theme}>
-      <UttranceContext.Provider value={speech_uttrance_ref}>
-        <div ref={page_container_ref}>
+      <UttranceContext.Provider value={uttrance_context}>
+        <div>
           {show_login ? (
             <LoginContainer />
           ) : (

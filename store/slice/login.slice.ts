@@ -5,6 +5,7 @@ import type { IThunkApiConfig } from "@/types/store/slice/common";
 import type { RootState } from "@/store/rootReducer";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import {
+  IUser,
   IValidationErrorType,
   ILoginInitialState,
   IVerifyUserNameApiRequest,
@@ -108,6 +109,22 @@ export const loginUserApi = createAsyncThunk<
     }
   }
 );
+
+export const getUserApi = createAsyncThunk<
+  IUser,
+  undefined,
+  IThunkApiConfig<string>
+>("api/user", async (_, { rejectWithValue }) => {
+  try {
+    const res = await Axios.get("/user");
+    return res.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
 
 export const updateProfileApi = createAsyncThunk<
   IUpdateProfileApiResponse,
@@ -267,6 +284,9 @@ export const loginSlice = createSlice({
     });
     builder.addCase(loginUserApi.fulfilled, (state, action) => {
       state.user = action.payload.user;
+    });
+    builder.addCase(getUserApi.fulfilled, (state, action) => {
+      state.user = action.payload;
     });
   },
 });

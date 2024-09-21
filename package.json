@@ -19,6 +19,7 @@
     "cropperjs": "^1.6.1",
     "emoji-mart": "^5.5.2",
     "gsap": "^3.12.5",
+    "gsap-trial": "^3.12.5",
     "laravel-echo": "^1.15.2",
     "next": "13.4.9",
     "pusher-js": "^8.3.0",
