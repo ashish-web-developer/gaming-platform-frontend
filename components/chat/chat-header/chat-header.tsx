@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 import { useRef } from "react";
 // types
 import { type FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { ITheme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -18,6 +18,9 @@ import {
   StyledBellIcon,
 } from "@/styles/components/chat/chat-header/chat-header.style";
 
+// theme
+import { useTheme } from "styled-components";
+
 // local components
 import Slider from "@/components/common/slider";
 import ChatUserPoint from "@/components/chat/chat-header/chat-user-point";
@@ -28,12 +31,12 @@ import NotificationModal from "@/components/common/notification-modal/notificati
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
+import { User, updateProfileApi } from "@/store/slice/login.slice";
 import {
   // states
   mode,
-  show_profile_upload_modal,
-  show_profile_drop_down,
+  showProfileUploadModal,
+  showProfileDropDown,
   show_create_group_drop_down,
   show_notification_modal,
   // actions
@@ -48,18 +51,21 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 import React from "react";
 
 const ChatHeader: FC = () => {
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const _notifications = useAppSelector(notifications);
-  const unread_notifications_count = _notifications.filter((notification)=>notification.read_at == null).length;
-  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
-  const _show_profile_drop_down = useAppSelector(show_profile_drop_down);
+  const unread_notifications_count = _notifications.filter(
+    (notification) => notification.read_at == null
+  ).length;
+  const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
+  const show_profile_drop_down = useAppSelector(showProfileDropDown);
   const _show_create_group_drop_down = useAppSelector(
     show_create_group_drop_down
   );
   const _show_notification_modal = useAppSelector(show_notification_modal);
-  const _user = useAppSelector(user);
+  const user = useAppSelector(User);
   const _mode = useAppSelector(mode);
-  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const user_avatar_url = useAvatarUrl(user);
   const chevron_cta_ref = useRef<HTMLButtonElement>(null);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const group_cta_ref = useRef<HTMLButtonElement>(null);
@@ -67,9 +73,22 @@ const ChatHeader: FC = () => {
 
   return (
     <>
-      {_show_profile_upload_modal &&
+      {show_profile_upload_modal &&
         createPortal(
-          <UploadProfileModal ref={camera_cta_ref} />,
+          <UploadProfileModal
+            ref={camera_cta_ref}
+            secondary_color={
+              _mode == "dark"
+                ? theme.palette.info.main
+                : theme.palette.primary.dark
+            }
+            font_family={theme.fontFamily.lobster}
+            onClickHandler={(file_state, file) => {
+              const form_data = new FormData();
+              form_data.append("avatar", file);
+              dispatch(updateProfileApi({ form_data }));
+            }}
+          />,
           document.getElementById("upload-profile-modal-container") as Element
         )}
       <StyledChatHeader>
@@ -94,7 +113,7 @@ const ChatHeader: FC = () => {
           <ChatUserPoint />
           <Slider />
           <StyledUserProfileImageWrapper>
-            {_show_profile_drop_down && (
+            {show_profile_drop_down && (
               <UserProfileDropDown
                 ref={camera_cta_ref}
                 chevron_cta_ref={chevron_cta_ref}
@@ -117,7 +136,7 @@ const ChatHeader: FC = () => {
             <StyledIconCta
               ref={chevron_cta_ref}
               onClick={() => {
-                dispatch(updateShowProfileDropDown(!_show_profile_drop_down));
+                dispatch(updateShowProfileDropDown(!show_profile_drop_down));
               }}
             >
               <StyledChevronIcon
