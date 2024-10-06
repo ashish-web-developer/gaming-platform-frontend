@@ -1,7 +1,6 @@
 // type
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -27,9 +26,9 @@ import {
   updateShowMobileProfile,
   updateShowNotification,
 } from "@/store/slice/common.slice";
-import { user } from "@/store/slice/user.slice";
-import { show_chat, updateShowChat } from "@/store/slice/chat.slice";
-import { notifications } from "@/store/slice/notification.slice";
+import { User } from "@/store/slice/login.slice";
+import { showChat, updateShowChat } from "@/store/slice/chat.slice";
+import { Notifications } from "@/store/slice/notification.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -59,20 +58,20 @@ const BackIcon: FC<{
 };
 
 const MobileChatHeader: FC = () => {
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const _notifications = useAppSelector(notifications);
-  const unread_notifications_count = _notifications.filter(
+  const notifications = useAppSelector(Notifications);
+  const unread_notifications_count = notifications.filter(
     (notification) => notification.read_at == null
   ).length;
-  const _user = useAppSelector(user);
+  const user = useAppSelector(User);
   const _mode = useAppSelector(mode);
-  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
-  const _show_chat = useAppSelector(show_chat);
+  const user_avatar_url = useAvatarUrl(user);
+  const show_chat = useAppSelector(showChat);
   return (
     <StyledMobileChatHeaderContainer>
       <StyledMobileHeaderTop>
-        {_show_chat ? (
+        {show_chat ? (
           <StyledBackCta
             onClick={() => {
               dispatch(updateShowChat(false));
@@ -118,7 +117,7 @@ const MobileChatHeader: FC = () => {
           />
         </StyledNotificationCta>
       </StyledMobileHeaderTop>
-      {!_show_chat && (
+      {!show_chat && (
         <StyledHeaderMessage $mode={_mode}>
           Welcome Gaming, <br />
           <StyledSpan

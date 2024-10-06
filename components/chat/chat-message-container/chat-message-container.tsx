@@ -1,7 +1,7 @@
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledMessageContainer,
@@ -21,14 +21,14 @@ import ChatMessage from "@/components/chat/chat-message-container/chat-message";
 import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 import {
   // state
-  active_user,
+  activeUser,
   active_conversation,
-  active_user_status,
+  activeUserStatus,
 } from "@/store/slice/chat.slice";
-import { active_group } from "@/store/slice/group.slice";
+import { activeGroup } from "@/store/slice/group.slice";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // hooks
@@ -38,7 +38,7 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 const UserProfileVector: FC<{
   user: IUsersWithConversation;
 }> = ({ user }) => {
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const avatar_url = useAvatarUrl(user);
   return (
     <svg
@@ -79,11 +79,11 @@ const UserProfileVector: FC<{
 };
 
 const ChatMessageContainer: FC = () => {
-  const _user = useAppSelector(user);
-  const _active_user = useAppSelector(active_user);
-  const _active_group = useAppSelector(active_group);
+  const user = useAppSelector(User);
+  const active_user = useAppSelector(activeUser);
+  const _active_group = useAppSelector(activeGroup);
   const _active_conversation = useAppSelector(active_conversation);
-  const _active_user_status = useAppSelector(active_user_status);
+  const active_user_status = useAppSelector(activeUserStatus);
   const root_ref = useRef<HTMLDivElement>(null);
   const is_mobile = useIsMobile();
   if (_active_group) {
@@ -91,7 +91,7 @@ const ChatMessageContainer: FC = () => {
       <StyledMessageContainer>
         {is_mobile && (
           <StyledUserProfileVectorWrapper>
-            <UserProfileVector user={_active_user as IUsersWithConversation} />
+            <UserProfileVector user={active_user as IUsersWithConversation} />
           </StyledUserProfileVectorWrapper>
         )}
         <StyledDetailsWrapper>
@@ -124,7 +124,7 @@ const ChatMessageContainer: FC = () => {
             <ChatMessage
               key={conversation.id}
               conversation={conversation}
-              user={_user}
+              user={user}
               ref={root_ref}
             />
           ))}
@@ -132,21 +132,21 @@ const ChatMessageContainer: FC = () => {
       </StyledMessageContainer>
     );
   }
-  if (_active_user) {
+  if (active_user) {
     return (
       <StyledMessageContainer>
         {is_mobile && (
-          <StyledUserProfileVectorWrapper $status={_active_user_status}>
-            <UserProfileVector user={_active_user as IUsersWithConversation} />
+          <StyledUserProfileVectorWrapper $status={active_user_status}>
+            <UserProfileVector user={active_user as IUsersWithConversation} />
           </StyledUserProfileVectorWrapper>
         )}
         <StyledDetailsWrapper>
           <StyledWrapper $gap="6px">
-            <StyledName>{_active_user.name}</StyledName>
+            <StyledName>{active_user.name}</StyledName>
             <StyledMessageCount>(24 messages)</StyledMessageCount>
           </StyledWrapper>
           {!is_mobile && (
-            <ChatAvatar status={_active_user_status} user={_active_user} />
+            <ChatAvatar status={active_user_status} user={active_user} />
           )}
         </StyledDetailsWrapper>
         <StyledChatMessageContentContainer ref={root_ref}>
@@ -154,7 +154,7 @@ const ChatMessageContainer: FC = () => {
             <ChatMessage
               key={conversation.id}
               conversation={conversation}
-              user={_user}
+              user={user}
               ref={root_ref}
             />
           ))}

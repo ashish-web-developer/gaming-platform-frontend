@@ -130,7 +130,7 @@ const notificationSlice = createSlice({
 export default notificationSlice.reducer;
 
 // selector
-export const notifications = (state: RootState) =>
+export const Notifications = (state: RootState) =>
   state.notification.notifications;
 // action creator
 export const { updateNotification } = notificationSlice.actions;

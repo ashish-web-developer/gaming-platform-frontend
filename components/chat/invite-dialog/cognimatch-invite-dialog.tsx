@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -24,9 +24,9 @@ import PlayButtonVector from "@/components/chat/invite-dialog/icons/play-button-
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 import {
-  show_cognimatch_invite_dialog,
+  showCognimatchInviteDialog,
   updateInviteDialog,
 } from "@/store/slice/chat.slice";
 import {
@@ -58,18 +58,18 @@ const CogniMatchInviteDialog: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const theme = useTheme() as Theme;
-  const _show_cognimatch_invite_dialog = useAppSelector(
-    show_cognimatch_invite_dialog
+  const theme = useTheme() as ITheme;
+  const show_cognimatch_invite_dialog = useAppSelector(
+    showCognimatchInviteDialog
   );
-  const _user = useAppSelector(user);
+  const user = useAppSelector(User);
   const dialog_ref = useRef<HTMLDialogElement>(null);
   const is_mobile = useIsMobile();
 
   return (
     <StyledCogniMatchInviteDialog
       $mode={_mode}
-      open={_show_cognimatch_invite_dialog}
+      open={show_cognimatch_invite_dialog}
       ref={dialog_ref}
     >
       <StyledPlayButton
@@ -112,7 +112,7 @@ const CogniMatchInviteDialog: FC = () => {
         </StyledSubtitle>
       </StyledMainContent>
       <StyledVsText $mode={_mode}>
-        {_user.name} <StyledTextSpan $color="#F42C04">v\s</StyledTextSpan>{" "}
+        {user?.name} <StyledTextSpan $color="#F42C04">v\s</StyledTextSpan>{" "}
       </StyledVsText>
     </StyledCogniMatchInviteDialog>
   );

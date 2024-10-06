@@ -1,7 +1,7 @@
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import { IGroup } from "@/types/store/slice/group";
+import type { IGroup } from "@/types/store/slice/group";
+import type { IUser } from "@/types/store/slice/login";
 // styled components
 import {
   StyledChatGroupWrapper,
@@ -27,7 +27,7 @@ import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avat
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
-  active_group,
+  activeGroup,
   // action
   updateActiveGroup,
   // api
@@ -57,9 +57,9 @@ const ChatGroup: FC<
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const is_mobile = useIsMobile();
-  const _active_group = useAppSelector(active_group);
-  const admin_avatar_url = useAvatarUrl(admin as IUsersWithConversation);
-  const is_active = _active_group?.id == id;
+  const active_group = useAppSelector(activeGroup);
+  const admin_avatar_url = useAvatarUrl(admin as IUser);
+  const is_active = active_group?.id == id;
   return (
     <StyledChatGroupWrapper
       onClick={() => {
@@ -122,7 +122,7 @@ const ChatGroup: FC<
                 <ChatAvatar
                   key={`chat-avatar-${index}`}
                   left_count={user_group.length > 3 ? user_group.length - 3 : 0}
-                  user={_user_group.user as IUsersWithConversation}
+                  user={_user_group.user as IUser}
                 />
               );
             })}

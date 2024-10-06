@@ -18,6 +18,7 @@ import {
   ILoginUserApiRequest,
   ILoginUserApiResponse,
   ILoginUserApiRejectValue,
+  ILogoutUserApiResponse,
 } from "@/types/store/slice/login";
 import type { AxiosResponse, AxiosError } from "axios";
 
@@ -109,6 +110,24 @@ export const loginUserApi = createAsyncThunk<
     }
   }
 );
+
+export const logoutUserApi = createAsyncThunk<
+  ILogoutUserApiResponse,
+  undefined,
+  IThunkApiConfig<string>
+>("api/logout", async (_, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<ILogoutUserApiResponse> = await Axios.post(
+      "/logout"
+    );
+    return res.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
 
 export const getUserApi = createAsyncThunk<
   IUser,
@@ -288,10 +307,16 @@ export const loginSlice = createSlice({
     builder.addCase(getUserApi.fulfilled, (state, action) => {
       state.user = action.payload;
     });
+    builder.addCase(logoutUserApi.fulfilled, (state) => {
+      state.user = null;
+    });
   },
 });
 
 export default loginSlice.reducer;
+
+// selectors
+export const User = (state: RootState) => state.login.user;
 export const validationErrorList = (state: RootState) =>
   state.login.validation_error_list;
 export const isTyping = (state: RootState) => state.login.is_typing;

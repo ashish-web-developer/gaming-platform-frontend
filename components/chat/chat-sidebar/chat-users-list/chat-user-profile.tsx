@@ -1,7 +1,7 @@
 // type
 import type { FC } from "react";
 import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 // styled components
 import {
   StyledUsersProfile,
@@ -23,7 +23,7 @@ import { useIsMobile } from "@/hooks/common.hook";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
-  active_user,
+  activeUser,
   // actions
   updateShowChat,
   updateActiveUser,
@@ -42,9 +42,9 @@ interface IProps {
 const ChatUserProfile: FC<IProps> = ({ user }) => {
   const dispatch = useAppDispatch();
   const avatar_url = useAvatarUrl(user);
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
-  const _active_user = useAppSelector(active_user);
+  const active_user = useAppSelector(activeUser);
   const is_mobile = useIsMobile();
   const user_status = getUserStatus(user.last_seen);
   return (
@@ -52,7 +52,7 @@ const ChatUserProfile: FC<IProps> = ({ user }) => {
       $time={getTimeDifference(user.latest_conversation?.created_at as string)}
       $not_viewed={user.not_viewed}
       $border_color={
-        _active_user?.id == user.id
+        active_user?.id == user.id
           ? _mode == "light"
             ? theme.palette.primary.light
             : theme.palette.primary.dark

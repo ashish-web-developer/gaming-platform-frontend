@@ -3,8 +3,8 @@ import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
 import type { GetServerSideProps } from "next";
+import type { IUser } from "@/types/store/slice/login";
 import type {
-  IUser_ids,
   IUsersWithConversation,
   IConversation,
 } from "@/types/store/slice/chat";
@@ -27,9 +27,9 @@ import { ThemeProvider } from "styled-components";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 import {
-  active_user,
+  activeUser,
   updateActiveUserConversation,
   updateDefaultUserConversation,
   updateConversationView,
@@ -38,12 +38,7 @@ import {
 } from "@/store/slice/chat.slice";
 
 import {
-  usePrivateChannel,
-  usePresenceChannel,
-  useNotificationChannel,
-} from "@/hooks/pusher.hook";
-import {
-  active_group,
+  activeGroup,
   updateDefaultGroupLatestConversation,
   updateDefaultGroup,
   updateGroupsUsers,
@@ -54,6 +49,11 @@ import { updateCognimatchRoomId } from "@/store/slice/cognimatch.slice";
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
 import { useDefault, useDefaultConversation } from "@/hooks/chat/chat.hook";
+import {
+  usePrivateChannel,
+  usePresenceChannel,
+  useNotificationChannel,
+} from "@/hooks/pusher.hook";
 
 interface IProps {
   is_mobile: boolean;
@@ -62,59 +62,59 @@ interface IProps {
 const ChatPage: FC<IProps> = ({ is_mobile }) => {
   const dispatch = useAppDispatch();
   const client_is_mobile = useIsMobile();
-  const _user = useAppSelector(user);
-  const _active_user = useAppSelector(active_user);
-  const _active_group = useAppSelector(active_group);
+  const user = useAppSelector(User);
+  const active_user = useAppSelector(activeUser);
+  const active_group = useAppSelector(activeGroup);
   const _mode = useAppSelector(mode);
   useDefault();
   useDefaultConversation();
-  useNotificationChannel();
+  useNotificationChannel<IUser | null>({
+    dependency: user,
+    channel_name: `notification.${user?.id}`,
+  });
+
   /**
-   * To handle personal chat
+   * For handling the one to one chats
    */
-  usePrivateChannel({
-    channel: _user.id ? `chat.${_user.id}` : null,
+  usePrivateChannel<IUser | null>({
+    dependency: user,
+    channel_name: `chat.${user?.id}`,
     events: [
       {
-        event: "Chat.ChatEvent",
-        callback: (data: {
-          user: IUsersWithConversation;
-          conversation: IConversation;
-        }) => {
+        event: "chat-event",
+        handler: (data: { user: IUser; conversation: IConversation }) => {
+          console.log("value of data", data);
           dispatch(updateDefaultUserConversation(data));
-          if (data.user.id == _active_user?.id) {
+          if (data.user.id == active_user?.id) {
             dispatch(updateActiveUserConversation(data.conversation));
           }
         },
       },
       {
-        event: "Chat.ChatViewEvent",
-        callback: (data: {
-          user: IUsersWithConversation;
-          conversation: IConversation;
-        }) => {
-          if (data.user.id == _active_user?.id) {
+        event: "chat-view-event",
+        handler: (data: { user: IUser; conversation: IConversation }) => {
+          if (data.user.id == active_user?.id) {
             dispatch(updateConversationView(data.conversation));
           }
         },
       },
       {
-        event: "Group.GroupAccessGiven",
-        callback: (data: { group: IGroup }) => {
+        event: "group-access-given-event",
+        handler: (data: { group: IGroup }) => {
           dispatch(updateDefaultGroup(data.group));
         },
       },
       {
-        event: "Group.GroupJoinedEvent",
-        callback: (data: { group: IGroup }) => {
+        event: "group-joined-event",
+        handler: (data: { group: IGroup }) => {
           dispatch(updateGroupsUsers(data.group));
         },
       },
       {
-        event: "Game.PlayGameInvitationEvent",
-        callback: (data: {
+        event: "game-invitation-event",
+        handler: (data: {
           receiver_id: number;
-          user: IUsersWithConversation;
+          user: IUser;
           game: "cognimatch" | "poker";
           room_id: string;
         }) => {
@@ -133,76 +133,82 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
       },
     ],
   });
+
   /**
-   * To handle group chat
+   * For handling the group related chats
    */
-  usePresenceChannel<undefined, IGroup | null>({
-    channel: _active_group ? `group-chat.${_active_group?.id}` : null,
-    handler: (user_ids, type) => {},
+  usePresenceChannel<IGroup | null, { id: number }>({
+    channel_name: `group-chat.${active_group?.id}`,
     events: [
       {
-        event: "Chat.GroupChatEvent",
-        callback: (data: { conversation: IConversation }) => {
-          if (data.conversation.sender_id !== _user.id) {
+        event: "group-chat-event",
+        handler: (data: { conversation: IConversation }) => {
+          if (data.conversation.sender_id !== user?.id) {
             dispatch(updateActiveUserConversation(data.conversation));
             dispatch(updateDefaultGroupLatestConversation(data.conversation));
           }
         },
       },
     ],
+    dependency: active_group,
+    memberHandler: (member, action_type) => {},
   });
 
   /**
-   * To handle the active user status
+   * For handling the active use status
+   * for one to one chat
    */
-  usePresenceChannel<IUsersWithConversation | null, IUser_ids>({
-    channel: _active_user ? `user-status.${_active_user.id}` : null,
-    handler: (user_ids, type, active_user) => {
-      switch (type) {
+
+  usePresenceChannel<IUsersWithConversation | null, { id: number }>({
+    channel_name: `user-status.${active_user?.id}`,
+    events: [],
+    dependency: active_user,
+    memberHandler: (member, action_type) => {
+      switch (action_type) {
         case "here":
-          dispatch(
-            updateActiveUserStatus(
-              Array.isArray(user_ids)
-                ? user_ids.some((user) => user.id == active_user?.id)
-                : user_ids.id == active_user?.id
-            )
+          console.log(
+            `value of ${action_type} data`,
+            member.id,
+            active_user?.id,
+            member.id == active_user?.id
           );
-          return;
-        case "joining":
-          dispatch(
-            updateActiveUserStatus(
-              Array.isArray(user_ids)
-                ? user_ids.some((user) => user.id == active_user?.id)
-                : user_ids.id == active_user?.id
-            )
+          dispatch(updateActiveUserStatus(member.id == active_user?.id));
+          break;
+        case "added":
+          console.log(
+            `value of ${action_type} data`,
+            member.id,
+            active_user?.id,
+            member.id == active_user?.id
           );
-          return;
-        case "leaving":
-          dispatch(
-            updateActiveUserStatus(
-              !(Array.isArray(user_ids)
-                ? user_ids.some((user) => user.id == active_user?.id)
-                : user_ids.id == active_user?.id)
-            )
+          dispatch(updateActiveUserStatus(member.id == active_user?.id));
+        case "removed":
+          console.log(
+            `value of ${action_type} data`,
+            member.id,
+            active_user?.id,
+            member.id == active_user?.id
           );
-          return;
+          dispatch(updateActiveUserStatus(!(member.id == active_user?.id)));
       }
     },
-    events: [],
-    dependency: _active_user,
   });
 
   /**
-   * To send the user status to active user
+   * For broadcasting the auth user status
+   * for one to one conversation
    */
-  usePresenceChannel({
-    channel: _user ? `user-status.${_user.id}` : null,
-    handler: (user_ids) => {},
+
+  usePresenceChannel<IUser | null, { id: number }>({
+    channel_name: `user-status.${user?.id}`,
     events: [],
+    dependency: user,
+    memberHandler: () => {},
   });
+
   return (
     <ThemeProvider theme={_mode == "light" ? lightTheme : darkTheme}>
-      {is_mobile || client_is_mobile ? (
+      {client_is_mobile || is_mobile ? (
         <MobileChatContainer />
       ) : (
         <ChatContainer />

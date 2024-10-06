@@ -3,11 +3,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type IChatInitialState from "@/types/store/slice/chat";
 import type { IThunkApiConfig } from "@/types/store/slice/common";
+import type { IUser } from "@/types/store/slice/login";
 import type {
   IConversation,
   IUsersWithConversation,
-  IFetchUserResponse,
-  IFetchUserPayload,
+  IFetchUserApiRequest,
+  IFetchUserApiResponse,
   IFetchDefaultUserResponse,
   IFetchMessagesResponse,
   IUpdateViewRequest,
@@ -24,23 +25,21 @@ import type { AxiosResponse } from "axios";
 import { fetchGroupMessagesApi } from "@/store/slice/group.slice";
 
 // helpers
+import axios from "axios";
 import { Axios } from "@/helpers/axios";
 
-/**
- * ========================= API ===========================
- */
 export const fetchUserApi = createAsyncThunk<
-  IFetchUserResponse & {
+  IFetchUserApiResponse & {
     fetch_type: "chat" | "group";
   },
-  IFetchUserPayload,
-  { state: RootState }
+  IFetchUserApiRequest,
+  IThunkApiConfig<string>
 >(
   "api/chat/search-user",
-  async ({ fetch_type, query }, { getState, rejectWithValue }) => {
+  async ({ query, fetch_type }, { getState, rejectWithValue }) => {
     try {
       const state = getState();
-      const response: AxiosResponse<IFetchUserResponse> = await Axios.post(
+      const response: AxiosResponse<IFetchUserApiResponse> = await Axios.post(
         "/chat/search-user",
         null,
         {
@@ -51,12 +50,19 @@ export const fetchUserApi = createAsyncThunk<
           },
         }
       );
-      return { fetch_type, ...response.data };
+      return {
+        fetch_type,
+        ...response.data,
+      };
     } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
+      if (axios.isAxiosError(error)) {
+        return rejectWithValue("Internal server error");
+      }
+      return rejectWithValue("An unexpected error occurred");
     }
   }
 );
+
 /**
  * User to whom conversation have been made
  */
@@ -89,7 +95,7 @@ export const fetchMessages = createAsyncThunk<
     const response: AxiosResponse<IFetchMessagesResponse> = await Axios.post(
       "/chat/get-messages",
       {
-        sender_id: state.user.user.id,
+        sender_id: state.login.user?.id,
         receiver_id: state.chat.active_user?.id,
       }
     );
@@ -142,11 +148,12 @@ export const sendInvitationApi = createAsyncThunk<
             ? [
                 ...state.group.active_group?.user_group
                   .filter(
-                    (_user_group) => _user_group.user_id !== state.user.user.id
+                    (_user_group) =>
+                      _user_group.user_id !== state.login.user?.id
                   )
                   .map((_user_group) => _user_group.user_id),
                 ...(state.group.active_group.admin &&
-                state.user.user.id !== state.group.active_group.admin.id
+                state.login.user?.id !== state.group.active_group.admin.id
                   ? [state.group.active_group.admin.id]
                   : []),
               ]
@@ -233,11 +240,8 @@ const chatSlice = createSlice({
     updateIsRequestPending: (state, action: PayloadAction<boolean>) => {
       state.fetch_user.is_request_pending = action.payload;
     },
-    updateDefaultUser: (
-      state,
-      action: PayloadAction<IUsersWithConversation>
-    ) => {
-      state.default_users.push(action.payload);
+    updateDefaultUser: (state, action: PayloadAction<IUser>) => {
+      state.default_users.push(action.payload as IUsersWithConversation);
     },
     updateActiveUser: (
       state,
@@ -254,7 +258,7 @@ const chatSlice = createSlice({
     updateDefaultUserConversation: (
       state,
       action: PayloadAction<{
-        user: IUsersWithConversation;
+        user: IUser;
         conversation: IConversation;
       }>
     ) => {
@@ -316,6 +320,7 @@ const chatSlice = createSlice({
         action.payload.is_open;
     },
     updateActiveUserStatus: (state, action: PayloadAction<boolean>) => {
+      console.log("inside updater function");
       state.active_user_status = action.payload;
     },
   },
@@ -395,15 +400,14 @@ export default chatSlice.reducer;
 
 // selectors
 export const page = (state: RootState) => state.chat.fetch_user.page;
-export const fetched_user_result = (state: RootState) =>
+export const fetchedUserResult = (state: RootState) =>
   state.chat.fetch_user.fetched_user_result;
-export const fetch_type = (state: RootState) =>
-  state.chat.fetch_user.fetch_type;
-export const is_request_pending = (state: RootState) =>
+export const fetchType = (state: RootState) => state.chat.fetch_user.fetch_type;
+export const isRequestPending = (state: RootState) =>
   state.chat.fetch_user.is_request_pending;
-export const default_users = (state: RootState) => state.chat.default_users;
+export const defaultUsers = (state: RootState) => state.chat.default_users;
 
-export const active_user = (state: RootState) => state.chat.active_user;
+export const activeUser = (state: RootState) => state.chat.active_user;
 
 export const active_conversation = (state: RootState) =>
   state.chat.active_conversation;
@@ -411,15 +415,15 @@ export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
 
 export const is_typing = (state: RootState) => state.chat.is_typing;
-export const show_chat = (state: RootState) => state.chat.mobile.show_chat;
+export const showChat = (state: RootState) => state.chat.mobile.show_chat;
 
-export const show_search_dialog = (state: RootState) =>
+export const showSearchDialog = (state: RootState) =>
   state.chat.mobile.show_search_dialog;
-export const show_cognimatch_invite_dialog = (state: RootState) =>
+export const showCognimatchInviteDialog = (state: RootState) =>
   state.chat.invites_dialog.show_cognimatch_invite_dialog;
-export const show_poker_invite_dialog = (state: RootState) =>
+export const showPokerInviteDialog = (state: RootState) =>
   state.chat.invites_dialog.show_poker_invite_dialog;
-export const active_user_status = (state: RootState) =>
+export const activeUserStatus = (state: RootState) =>
   state.chat.active_user_status;
 
 // action creator

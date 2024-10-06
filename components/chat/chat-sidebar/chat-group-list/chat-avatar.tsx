@@ -1,6 +1,6 @@
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -13,7 +13,7 @@ import {
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
 const ChatAvatar: FC<{
-  user: IUsersWithConversation;
+  user: IUser;
   left_count?: number; // no of avatars left in avatar group
   status?: boolean;
 }> = ({ user, left_count, status }) => {

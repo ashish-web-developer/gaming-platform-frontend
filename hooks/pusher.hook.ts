@@ -1,27 +1,51 @@
-import { useEffect, useRef, useState } from "react";
-//types
-import type { User } from "@/types/user";
+import { useEffect, useState, useRef } from "react";
+
+// types
 import type { INotification } from "@/types/store/slice/notification";
-import { PresenceChannel, Channel } from "laravel-echo";
+
+// redux
+import { useAppDispatch } from "./redux.hook";
+import { updateNotification } from "@/store/slice/notification.slice";
+
 // helpers
 import { PusherAxios } from "@/helpers/axios";
-
-// pusher
-import Echo from "laravel-echo";
 import Pusher from "pusher-js";
-//redux
-import { useAppSelector, useAppDispatch } from "./redux.hook";
-import { user } from "@/store/slice/user.slice";
-import { active_user, updateIsTyping } from "@/store/slice/chat.slice";
-import { updateNotification } from "@/store/slice/notification.slice";
+import Cookies from "universal-cookie";
+import Echo from "laravel-echo";
+
+function usePusher() {
+  const [pusher, setPusher] = useState<Pusher | null>(null);
+  const cookies = new Cookies();
+  useEffect(() => {
+    const token = cookies.get("token");
+    const pusherInstance = new Pusher(
+      process.env.NEXT_PUBLIC_APP_PUSHER_KEY as string,
+      {
+        cluster: process.env.NEXT_PUBLIC_APP_PUSHER_CLUSTER as string,
+        authEndpoint: `${process.env.NEXT_PUBLIC_API_END_POINT}/broadcasting/auth`,
+        forceTLS: true,
+        auth: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      }
+    );
+    setPusher(pusherInstance);
+    return () => {
+      pusherInstance.disconnect();
+      setPusher(null);
+    };
+  }, []);
+  return pusher;
+}
 
 function useEcho(): Echo | null {
   const [echo, setEcho] = useState<null | Echo>(null);
   useEffect(() => {
-    window.pusher = Pusher;
     const echo = new Echo({
       broadcaster: "pusher",
-      key: process.env.NEXT_PUBLIC_APP_PUSHER_KEY,
+      key: process.env.NEXT_PUBLIC_APP_PUSHER_KEY as string,
       cluster: process.env.NEXT_PUBLIC_APP_PUSHER_CLUSTER,
       forceTLS: true,
       authorizer: (channel: any, options: any) => {
@@ -49,10 +73,88 @@ function useEcho(): Echo | null {
   return echo;
 }
 
-function useNotificationChannel() {
+function usePrivateChannel<Type>({
+  dependency,
+  channel_name,
+  events,
+}: {
+  dependency: Type;
+  channel_name: string;
+  events: Array<{
+    event: string;
+    handler: (data: any) => void;
+  }>;
+}) {
+  const pusher = usePusher();
+  useEffect(() => {
+    const channel = dependency && pusher?.subscribe(`private-${channel_name}`);
+    channel?.bind("pusher:subscription_succeeded", () => {
+      console.log(`private-${channel_name} subscription succeeded`);
+    });
+    events.forEach(({ event, handler }) => {
+      channel?.bind(event, handler);
+    });
+    return () => {
+      channel?.unbind_all();
+      channel?.unsubscribe();
+    };
+  }, [pusher, dependency]);
+}
+
+function usePresenceChannel<IDependencyType, IMemberType>({
+  channel_name,
+  events,
+  dependency,
+  memberHandler,
+}: {
+  channel_name: string;
+  dependency: IDependencyType;
+  memberHandler: (
+    member: IMemberType,
+    action_type: "here" | "added" | "removed"
+  ) => void;
+  events: Array<{
+    event: string;
+    handler: (data: any) => void;
+  }>;
+}) {
+  const pusher = usePusher();
+  useEffect(() => {
+    const channel = dependency && pusher?.subscribe(`presence-${channel_name}`);
+    channel?.bind("pusher:subscription_succeeded", () => {
+      console.log(`presence-${channel_name} subscription succeeded`);
+    });
+
+    // @ts-expect-error
+    channel?.members.each((member: IMemberType) => {
+      memberHandler(member, "here");
+    });
+    channel?.bind("pusher:member_added", (member: IMemberType) =>
+      memberHandler(member, "added")
+    );
+    channel?.bind("pusher:member_removed", (member: IMemberType) =>
+      memberHandler(member, "removed")
+    );
+    events.forEach(({ event, handler }) => {
+      channel?.bind(event, handler);
+    });
+    return () => {
+      channel?.unbind_all();
+      channel?.unsubscribe();
+    };
+  }, [pusher, dependency]);
+}
+
+function useNotificationChannel<IDependencyType>({
+  dependency,
+  channel_name,
+}: {
+  dependency: IDependencyType;
+  channel_name: string;
+}) {
   const dispatch = useAppDispatch();
-  const _user = useAppSelector(user);
   const echo = useEcho();
+
   const notification_audio_ref = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
     notification_audio_ref.current = new Audio(
@@ -60,11 +162,12 @@ function useNotificationChannel() {
     );
   }, []);
   useEffect(() => {
-    if (_user && echo) {
-      const subscription = echo
-        .private(`notification.${_user.id}`)
+    const subscription =
+      dependency &&
+      echo
+        ?.private(channel_name)
         .subscribed(() => {
-          console.log("connected to notification channel");
+          console.log("notification channel subscription succeeded");
         })
         .notification((notification: INotification) => {
           if (typeof notification.data == "string") {
@@ -78,112 +181,14 @@ function useNotificationChannel() {
           dispatch(updateNotification(notification));
           notification_audio_ref.current?.play();
         });
-    }
     return () => {
-      if (_user && echo) {
-        echo.leaveChannel(`notification.${_user.id}`);
-      }
+      echo?.leaveChannel(channel_name);
     };
-  }, [echo, _user]);
+  }, [echo, dependency]);
 }
-interface IPrivateChannelParams {
-  channel: string | null;
-  events: {
-    event: string;
-    callback: (data: any) => void;
-  }[];
-}
-const usePrivateChannel = ({ channel, events }: IPrivateChannelParams) => {
-  const dispatch = useAppDispatch();
-  const echo = useEcho();
-  const subscription = useRef<Channel>();
-  const _active_user = useAppSelector(active_user);
-  const timer = useRef<NodeJS.Timeout>();
-  useEffect(() => {
-    const handleTyping = (event: { is_typing: boolean; user: User }) => {
-      if (_active_user?.id == event.user.id) {
-        dispatch(updateIsTyping(true));
-        clearTimeout(timer.current);
-        timer.current = setTimeout(() => {
-          dispatch(updateIsTyping(false));
-        }, 900);
-      }
-    };
-    if (echo && channel) {
-      console.log("value of channel", channel);
-      subscription.current = echo
-        .private(channel)
-        .subscribed(() => {
-          console.log("connected to channel");
-        })
-        .listenForWhisper("typing", handleTyping)
-        .error((error: any) => {
-          console.log("error", error);
-        });
-
-      events.forEach(({ event, callback }) => {
-        subscription.current?.listen(event, callback);
-      });
-    }
-    return () => {
-      if (echo && channel) {
-        subscription.current?.stopListeningForWhisper("typing", handleTyping);
-        events.forEach(({ event, callback }) => {
-          subscription.current?.stopListening(event, callback);
-        });
-        echo?.leaveChannel(channel);
-      }
-      clearTimeout(timer.current);
-    };
-  }, [echo, channel, _active_user]);
-};
-
-interface IPresenceChannelParams<Type, IUserType> {
-  channel: string | null;
-  events: {
-    event: string;
-    callback: (data: any) => void;
-  }[];
-  handler: (
-    user_ids: IUserType,
-    type: "here" | "joining" | "leaving",
-    dependency?: Type
-  ) => void;
-  dependency?: Type;
-}
-
-const usePresenceChannel = <Type, IUserType>({
-  channel,
-  events,
-  handler,
-  dependency,
-}: IPresenceChannelParams<Type, IUserType>) => {
-  const echo = useEcho();
-  const subscription = useRef<PresenceChannel>();
-  useEffect(() => {
-    if (echo && channel) {
-      subscription.current = echo
-        .join(channel)
-        .here((user: IUserType) => handler(user, "here", dependency))
-        .joining((user: IUserType) => handler(user, "joining", dependency))
-        .leaving((user: IUserType) => handler(user, "leaving", dependency));
-      events.forEach(({ event, callback }) => {
-        subscription.current?.listen(event, callback);
-      });
-    }
-    return () => {
-      if (echo && channel) {
-        events.forEach(({ event, callback }) => {
-          subscription.current?.stopListening(event, callback);
-        });
-        echo.leave(channel);
-      }
-    };
-  }, [echo, channel, dependency]);
-};
 
 export {
-  useEcho,
+  usePusher,
   usePrivateChannel,
   usePresenceChannel,
   useNotificationChannel,

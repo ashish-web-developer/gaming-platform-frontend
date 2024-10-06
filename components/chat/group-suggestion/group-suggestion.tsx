@@ -19,10 +19,10 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 import {
   // state
-  recommended_groups,
-  show_group_search,
-  is_fetch_group_request_pending,
-  fetched_group_results,
+  recommendedGroups,
+  showGroupSearch,
+  isFetchGroupRequestPending,
+  fetchedGroupResults,
   // action
   updateShowGroupSearch,
   updatePage,
@@ -38,11 +38,11 @@ const GroupSuggestion: FC = () => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const input_ref = useRef<HTMLInputElement>(null);
-  const _recommended_groups = useAppSelector(recommended_groups);
-  const _show_group_search = useAppSelector(show_group_search);
-  const _fetched_user_result = useAppSelector(fetched_group_results);
-  const _is_fetch_group_request_pending = useAppSelector(
-    is_fetch_group_request_pending
+  const recommended_groups = useAppSelector(recommendedGroups);
+  const show_group_search = useAppSelector(showGroupSearch);
+  const fetched_group_result = useAppSelector(fetchedGroupResults);
+  const is_fetch_group_request_pending = useAppSelector(
+    isFetchGroupRequestPending
   );
   const result_container_ref = useRef<HTMLDivElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
@@ -57,20 +57,20 @@ const GroupSuggestion: FC = () => {
         dispatch(updateFetchedGroupResult([]));
       }
     };
-    if (_show_group_search) {
+    if (show_group_search) {
       input_ref.current?.focus();
       document.addEventListener("click", outsideClickHandler);
     }
     return () => {
-      if (_show_group_search) {
+      if (show_group_search) {
         document.removeEventListener("click", outsideClickHandler);
       }
     };
-  }, [_show_group_search]);
+  }, [show_group_search]);
   return (
     <StyledGroupSuggestionWrapper>
-      <StyledDetailsWrapper $add_padding={!_show_group_search}>
-        {_show_group_search ? (
+      <StyledDetailsWrapper $add_padding={!show_group_search}>
+        {show_group_search ? (
           <StyledGroupSearchInput
             ref={input_ref}
             type="text"
@@ -112,11 +112,11 @@ const GroupSuggestion: FC = () => {
       <StyledGroupList
         ref={result_container_ref}
         onScroll={() => {
-          if (_show_group_search) {
+          if (show_group_search) {
             fetchOnScroll({
               timeout_ref: timeout_ref,
               container_ref: result_container_ref,
-              is_request_pending: _is_fetch_group_request_pending,
+              is_request_pending: is_fetch_group_request_pending,
               handler: () => {
                 timeout_ref.current = setTimeout(() => {
                   if (input_ref.current) {
@@ -132,8 +132,8 @@ const GroupSuggestion: FC = () => {
           }
         }}
       >
-        {_show_group_search || Boolean(_fetched_user_result.length)
-          ? _fetched_user_result.map((group, index) => {
+        {show_group_search || Boolean(fetched_group_result.length)
+          ? fetched_group_result.map((group, index) => {
               return (
                 <ChatGroup
                   show_follow_cta={true}
@@ -142,7 +142,7 @@ const GroupSuggestion: FC = () => {
                 />
               );
             })
-          : _recommended_groups.map((group, index) => {
+          : recommended_groups.map((group, index) => {
               return (
                 <ChatGroup
                   show_follow_cta={true}

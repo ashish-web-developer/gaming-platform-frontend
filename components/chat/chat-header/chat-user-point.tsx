@@ -12,7 +12,7 @@ import {
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 import { mode } from "@/store/slice/common.slice";
 
 const AddSvgIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
@@ -40,7 +40,7 @@ const AddSvgIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   );
 };
 const ChatUserPoint: FC = () => {
-  const _user = useAppSelector(user);
+  const user = useAppSelector(User);
   const _mode = useAppSelector(mode);
   return (
     <StyledUserPointWrapper>
@@ -50,7 +50,7 @@ const ChatUserPoint: FC = () => {
         width={20}
         height={20}
       />
-      <StyledSpan $mode={_mode}>{_user.earned_points?.toFixed(2)}</StyledSpan>
+      <StyledSpan $mode={_mode}>{user?.earned_points?.toFixed(2)}</StyledSpan>
       <StyledDepositCta>
         <AddSvgIcon size={20} color={"#000"} />
         Deposit

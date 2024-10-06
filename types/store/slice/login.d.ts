@@ -8,7 +8,8 @@ type IUser = {
   admin: boolean;
   email_verified_at: string;
   earned_points: number;
-  avatar_url: string;
+  avatar_url: string | null;
+  last_seen: string | null;
 };
 type IValidationErrorType =
   | "username"
@@ -89,6 +90,13 @@ type ILoginUserApiResponse = IRegisterUserApiResponse;
 
 type ILoginUserApiRejectValue = IRegisterUserApiRejectValue;
 
+/**
+ * ===== LOGOUT USER API =======
+ */
+type ILogoutUserApiResponse = IBaseResponse & {
+  message: string;
+};
+
 export {
   IUser,
   IValidationErrorType,
@@ -103,4 +111,5 @@ export {
   ILoginUserApiRequest,
   ILoginUserApiResponse,
   ILoginUserApiRejectValue,
+  ILogoutUserApiResponse,
 };

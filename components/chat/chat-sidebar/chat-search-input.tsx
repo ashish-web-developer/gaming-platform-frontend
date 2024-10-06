@@ -12,7 +12,6 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  // state
   // actions
   updateFetchUserResult,
   updatePage,

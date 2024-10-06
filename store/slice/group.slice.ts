@@ -353,17 +353,17 @@ const groupSlice = createSlice({
 export default groupSlice.reducer;
 
 // selectors
-export const default_groups = (state: RootState) => state.group.default_groups;
-export const recommended_groups = (state: RootState) =>
+export const defaultGroups = (state: RootState) => state.group.default_groups;
+export const recommendedGroups = (state: RootState) =>
   state.group.recommended_groups;
-export const active_group = (state: RootState) => state.group.active_group;
+export const activeGroup = (state: RootState) => state.group.active_group;
 export const is_active_user_exist = (state: RootState) =>
   state.group.is_active_user_exist;
-export const show_group_search = (state: RootState) =>
+export const showGroupSearch = (state: RootState) =>
   state.group.show_group_search;
-export const is_fetch_group_request_pending = (state: RootState) =>
+export const isFetchGroupRequestPending = (state: RootState) =>
   state.group.fetch_group.is_request_pending;
-export const fetched_group_results = (state: RootState) =>
+export const fetchedGroupResults = (state: RootState) =>
   state.group.fetch_group.fetched_group_results;
 
 // action creator

@@ -1,6 +1,7 @@
 // types
 import { IBaseResponse } from "@/types/store/slice/common";
 import type { User } from "@/types/user";
+import { IUser } from "@/types/store/slice/login";
 
 type IUser_ids =
   | {
@@ -22,27 +23,16 @@ type IConversation = {
   created_at: string;
   updated_at: string;
 };
-type IUsersWithConversation = {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  admin: 1 | 0;
-  email_verified_at: string;
-  last_seen: string;
-  created_at: string;
-  updated_at: string;
+type IUsersWithConversation = IUser & {
   latest_conversation?: IConversation;
   not_viewed: number;
-  avatar_url: string;
-  earned_points: number;
 };
 
 type IChatInitialState = {
   is_typing: boolean;
   fetch_user: {
     is_request_pending: boolean;
-    fetched_user_result: IUsersWithConversation[];
+    fetched_user_result: IUser[];
     fetch_type: "chat" | "group" | null;
     page: number;
   };
@@ -60,18 +50,6 @@ type IChatInitialState = {
   invites_dialog: {
     show_cognimatch_invite_dialog: boolean;
     show_poker_invite_dialog: boolean;
-  };
-};
-
-type IFetchUserPayload = {
-  fetch_type: "chat" | "group";
-  query: string;
-};
-
-type IFetchUserResponse = IBaseResponse & {
-  user_data: {
-    current_page: number;
-    data: Array<IUsersWithConversation>;
   };
 };
 
@@ -104,6 +82,19 @@ type ISendInvitationApiResponse = {
 };
 
 /**
+ * ===== FETCH USER API =======
+ */
+type IFetchUserApiRequest = {
+  query: string;
+  fetch_type: "chat" | "group";
+};
+type IFetchUserApiResponse = IBaseResponse & {
+  user_data: {
+    data: IUser[];
+  };
+};
+
+/**
  * ===== GROUP API =======
  */
 
@@ -124,9 +115,9 @@ export {
   IUser_ids,
   IConversation,
   IUsersWithConversation,
-  IFetchUserPayload,
-  IFetchUserResponse,
   IFetchDefaultUserResponse,
+  IFetchUserApiRequest,
+  IFetchUserApiResponse,
   IFetchMessagesResponse,
   IUpdateViewRequest,
   IUpdateViewResponse,

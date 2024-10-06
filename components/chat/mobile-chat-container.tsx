@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { IUser } from "@/types/store/slice/login";
 
 // theme
 import { Theme } from "@/theme/poker.theme";
@@ -83,16 +83,16 @@ const CogniMatchInviteDialog = dynamic(
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import {
-  show_chat,
-  default_users,
-  show_cognimatch_invite_dialog,
-  show_poker_invite_dialog,
+  showChat,
+  defaultUsers,
+  showCognimatchInviteDialog,
+  showPokerInviteDialog,
 } from "@/store/slice/chat.slice";
-import { active_group, default_groups } from "@/store/slice/group.slice";
+import { activeGroup, defaultGroups } from "@/store/slice/group.slice";
 import {
   mode,
-  show_mobile_profile,
-  show_notification_modal,
+  showMobileProfile,
+  showNotificationModal,
 } from "@/store/slice/common.slice";
 
 // hooks
@@ -101,38 +101,38 @@ import { useIsMobile } from "@/hooks/common.hook";
 const MobileChatContainer: FC = () => {
   const _mode = useAppSelector(mode);
   const [active_tab, set_active_tab] = useState<1 | 2>(1);
-  const _default_users = useAppSelector(default_users);
-  const _default_groups = useAppSelector(default_groups);
-  const _active_group = useAppSelector(active_group);
-  const _show_chat = useAppSelector(show_chat);
-  const _show_mobile_profile = useAppSelector(show_mobile_profile);
-  const _show_notification_modal = useAppSelector(show_notification_modal);
-  const _show_cognimatch_invite_dialog = useAppSelector(
-    show_cognimatch_invite_dialog
+  const default_user = useAppSelector(defaultUsers);
+  const default_groups = useAppSelector(defaultGroups);
+  const active_group = useAppSelector(activeGroup);
+  const show_chat = useAppSelector(showChat);
+  const show_mobile_profile = useAppSelector(showMobileProfile);
+  const show_notification_modal = useAppSelector(showNotificationModal);
+  const show_cognimatch_invite_dialog = useAppSelector(
+    showCognimatchInviteDialog
   );
-  const _show_poker_invite_dialog = useAppSelector(show_poker_invite_dialog);
+  const show_poker_invite_dialog = useAppSelector(showPokerInviteDialog);
   const is_mobile = useIsMobile();
 
   return (
     <StyledMobileChatContainer $mode={_mode}>
-      {_show_poker_invite_dialog && (
+      {show_poker_invite_dialog && (
         <ThemeProvider theme={Theme}>
           <PokerInviteDialog />
         </ThemeProvider>
       )}
 
-      {_show_cognimatch_invite_dialog && (
+      {show_cognimatch_invite_dialog && (
         <StyledInviteDialogWrapper>
           <CogniMatchInviteDialog />
         </StyledInviteDialogWrapper>
       )}
 
-      {_show_mobile_profile && <MobileUserProfile />}
-      {_show_notification_modal && <NotificationModal is_mobile={is_mobile} />}
+      {show_mobile_profile && <MobileUserProfile />}
+      {show_notification_modal && <NotificationModal is_mobile={is_mobile} />}
       <div id="chat-search-container"></div>
       <MobileActionNav active_tab={active_tab} />
       <MobileChatHeader />
-      {!_show_chat && (
+      {!show_chat && (
         <>
           <StyledTabWrapper>
             <StyledTabCta
@@ -158,7 +158,7 @@ const MobileChatContainer: FC = () => {
           <StyledMainContent>
             <StyledUserList>
               {active_tab == 1 &&
-                _default_users.map((user) => {
+                default_user.map((user) => {
                   return (
                     <ChatUserProfile
                       key={`default-user-${user.id}`}
@@ -167,7 +167,7 @@ const MobileChatContainer: FC = () => {
                   );
                 })}
               {active_tab == 2 &&
-                _default_groups.map((group, index) => {
+                default_groups.map((group, index) => {
                   return (
                     <ChatGroup
                       is_clickable={true}
@@ -180,24 +180,24 @@ const MobileChatContainer: FC = () => {
           </StyledMainContent>
         </>
       )}
-      {_show_chat && (
+      {show_chat && (
         <>
-          {_active_group && (
+          {active_group && (
             <StyledGroupAvatarWrapper>
               <StyledSpan>Members</StyledSpan>
               <StyledGroupAvatar>
-                {_active_group.user_group
+                {active_group.user_group
                   .slice(0, 4)
                   .map((user_group, index) => {
                     return (
                       <ChatAvatar
                         key={`chat-avatar-${index}`}
                         left_count={
-                          _active_group.user_group.length > 4
-                            ? _active_group.user_group.length - 3
+                          active_group.user_group.length > 4
+                            ? active_group.user_group.length - 3
                             : 0
                         }
-                        user={user_group.user as IUsersWithConversation}
+                        user={user_group.user as IUser}
                       />
                     );
                   })}
@@ -205,7 +205,7 @@ const MobileChatContainer: FC = () => {
             </StyledGroupAvatarWrapper>
           )}
 
-          <StyledMessageWrapper type={_active_group ? "group" : "chat"}>
+          <StyledMessageWrapper type={active_group ? "group" : "chat"}>
             <ChatMessageContainer />
           </StyledMessageWrapper>
           <StyledChatInputWrapper>

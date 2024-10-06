@@ -2,7 +2,6 @@ import { useRef, useId, useState } from "react";
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
 import {
@@ -28,23 +27,23 @@ import EmojiPicker from "@/components/common/emoji-picker";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { mode, show_emoji, updateShowEmoji } from "@/store/slice/common.slice";
-import { user } from "@/store/slice/user.slice";
+import { mode, showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
+import { User } from "@/store/slice/login.slice";
 import {
-  is_request_pending,
+  isRequestPending,
   is_typing,
-  active_user,
+  activeUser,
   // api
   sendMessageApi,
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
-import { active_group } from "@/store/slice/group.slice";
+import { activeGroup } from "@/store/slice/group.slice";
 import { createPokerRoomApi } from "@/store/slice/poker/poker.slice";
 import { createCognimatchRoomApi } from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
-import { useEcho } from "@/hooks/pusher.hook";
+// import { useEcho } from "@/hooks/pusher.hook";
 
 // helpers
 import { v4 as uuidv4 } from "uuid";
@@ -52,15 +51,15 @@ import { v4 as uuidv4 } from "uuid";
 const ChatInput: FC<{}> = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const echo = useEcho();
+  // const echo = useEcho();
   const _mode = useAppSelector(mode);
-  const _show_emoji = useAppSelector(show_emoji);
-  const _is_request_pending = useAppSelector(is_request_pending);
-  const _user = useAppSelector(user);
-  const _active_user = useAppSelector(active_user);
-  const _active_group = useAppSelector(active_group);
+  const show_emoji = useAppSelector(showEmoji);
+  const is_request_pending = useAppSelector(isRequestPending);
+  const user = useAppSelector(User);
+  const active_user = useAppSelector(activeUser);
+  const active_group = useAppSelector(activeGroup);
   const _is_typing = useAppSelector(is_typing);
-  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const user_avatar_url = useAvatarUrl(user);
   const input_ref = useRef<HTMLInputElement>(null);
   const emoji_cta_ref = useRef(null);
   const media_recoder = useRef<MediaRecorder>();
@@ -74,7 +73,7 @@ const ChatInput: FC<{}> = () => {
     }[]
   >([]);
 
-  const handle_form_submission = ({
+  const handleFormSubmission = ({
     message,
     sender_id,
     group_id,
@@ -105,7 +104,7 @@ const ChatInput: FC<{}> = () => {
   };
   return (
     <>
-      {_show_emoji && (
+      {show_emoji && (
         <EmojiPicker ref={input_ref} emoji_cta_ref={emoji_cta_ref} />
       )}
       <StyledChatInputContainer $mode={_mode}>
@@ -114,39 +113,39 @@ const ChatInput: FC<{}> = () => {
             type="text"
             ref={input_ref}
             placeholder={
-              _is_typing ? `${_active_user?.name} is typing` : "Your Message"
+              _is_typing ? `${active_user?.name} is typing` : "Your Message"
             }
-            onKeyDown={(event) => {
-              if (_active_user) {
-                setTimeout(() => {
-                  echo
-                    ?.private(`chat.${_active_user.id}`)
-                    //@ts-ignore
-                    .whisper("typing", {
-                      is_typing: true,
-                      user: _user,
-                    });
-                }, 300);
-              }
-              if (
-                _user.id &&
-                (input_ref.current?.value ||
-                  upload_input_ref.current?.files?.length) &&
-                !_is_request_pending &&
-                (event.metaKey || event.ctrlKey) &&
-                event.key == "Enter"
-              ) {
-                handle_form_submission({
-                  message: input_ref.current ? input_ref.current.value : null,
-                  sender_id: _user.id,
-                  receiver_id: _active_user ? _active_user.id : null,
-                  group_id: _active_group ? _active_group.id : null,
-                });
-                if (input_ref.current) {
-                  input_ref.current.value = "";
-                }
-              }
-            }}
+            // onKeyDown={(event) => {
+            //   if (active_user) {
+            //     setTimeout(() => {
+            //       echo
+            //         ?.private(`chat.${active_user.id}`)
+            //         //@ts-ignore
+            //         .whisper("typing", {
+            //           is_typing: true,
+            //           user: user,
+            //         });
+            //     }, 300);
+            //   }
+            //   if (
+            //     user?.id &&
+            //     (input_ref.current?.value ||
+            //       upload_input_ref.current?.files?.length) &&
+            //     !is_request_pending &&
+            //     (event.metaKey || event.ctrlKey) &&
+            //     event.key == "Enter"
+            //   ) {
+            //     handleFormSubmission({
+            //       message: input_ref.current ? input_ref.current.value : null,
+            //       sender_id: user.id,
+            //       receiver_id: active_user ? active_user.id : null,
+            //       group_id: active_group ? active_group.id : null,
+            //     });
+            //     if (input_ref.current) {
+            //       input_ref.current.value = "";
+            //     }
+            //   }
+            // }}
           />
           <StyledUserProfileWrapper>
             <StyledUserProfileImage
@@ -159,7 +158,7 @@ const ChatInput: FC<{}> = () => {
           <StyledEmojiCta
             ref={emoji_cta_ref}
             onClick={() => {
-              dispatch(updateShowEmoji(!_show_emoji));
+              dispatch(updateShowEmoji(!show_emoji));
             }}
           >
             <StyledEmojiImage
@@ -234,7 +233,7 @@ const ChatInput: FC<{}> = () => {
             <StyledIconCta
               onClick={() => {
                 const room_id = uuidv4();
-                if (_active_group) {
+                if (active_group) {
                   dispatch(
                     createPokerRoomApi({
                       room_id,
@@ -254,8 +253,8 @@ const ChatInput: FC<{}> = () => {
                     createCognimatchRoomApi({
                       room_id,
                       players_id: [
-                        _user.id as number,
-                        _active_user?.id as number,
+                        user?.id as number,
+                        active_user?.id as number,
                       ],
                     })
                   );
@@ -265,7 +264,7 @@ const ChatInput: FC<{}> = () => {
                       room_id,
                     })
                   );
-                  router.push("/cognimatch");
+                  // router.push("/cognimatch");
                 }
               }}
             >
@@ -294,20 +293,20 @@ const ChatInput: FC<{}> = () => {
               if (
                 (input_ref.current?.value ||
                   upload_input_ref.current?.files?.length) &&
-                _user.id
+                user?.id
               ) {
-                handle_form_submission({
+                handleFormSubmission({
                   message: input_ref.current ? input_ref.current.value : null,
-                  sender_id: _user.id,
-                  receiver_id: _active_user ? _active_user.id : null,
-                  group_id: _active_group ? _active_group.id : null,
+                  sender_id: user.id,
+                  receiver_id: active_user ? active_user.id : null,
+                  group_id: active_group ? active_group.id : null,
                 });
                 if (input_ref.current) {
                   input_ref.current.value = "";
                 }
               }
             }}
-            disabled={_is_request_pending}
+            disabled={is_request_pending}
           >
             Send
           </StyledSendCta>

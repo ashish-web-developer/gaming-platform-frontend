@@ -37,14 +37,14 @@ import {
   mode,
   showProfileUploadModal,
   showProfileDropDown,
-  show_create_group_drop_down,
-  show_notification_modal,
+  showCreateGroupDropdown,
+  showNotificationModal,
   // actions
   updateShowProfileDropDown,
   updateShowNotification,
 } from "@/store/slice/common.slice";
 
-import { notifications } from "@/store/slice/notification.slice";
+import { Notifications } from "@/store/slice/notification.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
@@ -53,16 +53,14 @@ import React from "react";
 const ChatHeader: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const _notifications = useAppSelector(notifications);
-  const unread_notifications_count = _notifications.filter(
+  const notifications = useAppSelector(Notifications);
+  const unread_notifications_count = notifications.filter(
     (notification) => notification.read_at == null
   ).length;
   const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
   const show_profile_drop_down = useAppSelector(showProfileDropDown);
-  const _show_create_group_drop_down = useAppSelector(
-    show_create_group_drop_down
-  );
-  const _show_notification_modal = useAppSelector(show_notification_modal);
+  const show_create_group_dropdown = useAppSelector(showCreateGroupDropdown);
+  const show_notification_modal = useAppSelector(showNotificationModal);
   const user = useAppSelector(User);
   const _mode = useAppSelector(mode);
   const user_avatar_url = useAvatarUrl(user);
@@ -99,7 +97,7 @@ const ChatHeader: FC = () => {
           <StyledNotificationCta
             $notification_count={unread_notifications_count}
             onClick={() => {
-              dispatch(updateShowNotification(!_show_notification_modal));
+              dispatch(updateShowNotification(!show_notification_modal));
             }}
             ref={notification_cta_ref}
           >
@@ -120,10 +118,10 @@ const ChatHeader: FC = () => {
                 group_cta_ref={group_cta_ref}
               />
             )}
-            {_show_create_group_drop_down && (
+            {show_create_group_dropdown && (
               <CreateGroupModal ref={group_cta_ref} />
             )}
-            {_show_notification_modal && (
+            {show_notification_modal && (
               <NotificationModal ref={notification_cta_ref} />
             )}
             <StyledUserProfileImage

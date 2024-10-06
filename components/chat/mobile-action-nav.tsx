@@ -2,7 +2,7 @@ import { createPortal } from "react-dom";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 
 // styled theme
 import { useTheme } from "styled-components";
@@ -22,13 +22,13 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode, updateMode } from "@/store/slice/common.slice";
-import { show_search_dialog } from "@/store/slice/chat.slice";
+import { showSearchDialog } from "@/store/slice/chat.slice";
 import { updateShowSearch } from "@/store/slice/chat.slice";
 // hooks
 import { useIsMounted } from "@/hooks/common.hook";
 
 const ContainerVector: FC = () => {
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -56,12 +56,12 @@ const MobileActionNav: FC<IProps> = ({ active_tab }) => {
   const search_cta_ref = useRef<HTMLButtonElement>(null);
   const _mode = useAppSelector(mode);
   const is_mounted = useIsMounted();
-  const _show_search_dialog = useAppSelector(show_search_dialog);
+  const show_search_dialog = useAppSelector(showSearchDialog);
 
   return (
     <StyledMobileActionNav>
       {is_mounted &&
-        _show_search_dialog &&
+        show_search_dialog &&
         createPortal(
           <MobileSearchDialog active_tab={active_tab} />,
           document.getElementById("chat-search-container") as HTMLElement

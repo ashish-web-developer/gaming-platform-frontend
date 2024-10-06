@@ -1,12 +1,13 @@
 // types
 import { IBaseResponse } from "@/types/store/slice/common";
+import { IUser } from "@/types/store/slice/login";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 type IUserGroup = {
   id: number;
   user_id: number;
   group_id: number;
-  user?: IUsersWithConversation;
+  user?: IUser;
   created_at: string;
   updated_at: string;
 };
@@ -14,7 +15,7 @@ type IUserGroup = {
 type IGroup = {
   id: number;
   group_name: string;
-  admin?: IUsersWithConversation;
+  admin?: IUser;
   admin_id: number;
   user_group: IUserGroup[];
   latest_conversation: IConversation | null;

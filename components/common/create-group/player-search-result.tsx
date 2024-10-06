@@ -1,7 +1,7 @@
 import { useRef, forwardRef, useId } from "react";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -22,18 +22,17 @@ import {
   StyledBottomContainer,
   StyledInviteCta,
   StyledGroupAvatar,
-} from "@/styles/components/common/create-group/player-search.style";
+} from "@/styles/components/common/create-group/player-search-result.style";
 
 // local components
 import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
 import {
   // state
-  fetched_user_result,
-  is_request_pending,
+  fetchedUserResult,
+  isRequestPending,
   fetchUserApi,
   // action
   updateFetchUserResult,
@@ -46,11 +45,8 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 import { fetchOnScroll } from "@/helpers/chat.helper";
 
 const UserProfile: FC<{
-  user: IUsersWithConversation;
-  updateGroupUserIds: (
-    player: IUsersWithConversation,
-    action: "remove" | "add"
-  ) => void;
+  user: IUser;
+  updateGroupUserIds: (player: IUser, action: "remove" | "add") => void;
 }> = ({ user, updateGroupUserIds }) => {
   const avatar_url = useAvatarUrl(user);
   const checkbox_input_id = useId();
@@ -95,22 +91,18 @@ const UserProfile: FC<{
   );
 };
 
-const PlayerSearch: ForwardRefRenderFunction<
+const PlayerSearchResult: ForwardRefRenderFunction<
   HTMLInputElement,
   {
-    group_user: Array<IUsersWithConversation>;
-    updateGroupUserIds: (
-      player: IUsersWithConversation,
-      type: "add" | "remove"
-    ) => void;
+    group_user: Array<IUser>;
+    updateGroupUserIds: (player: IUser, type: "add" | "remove") => void;
   }
 > = ({ group_user, updateGroupUserIds }, search_input_ref) => {
   const dispatch = useAppDispatch();
-  const _fetched_user_result = useAppSelector(fetched_user_result);
-  const _user = useAppSelector(user);
+  const _fetched_user_result = useAppSelector(fetchedUserResult);
   const container_ref = useRef<HTMLDivElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
-  const _is_request_pending = useAppSelector(is_request_pending);
+  const _is_request_pending = useAppSelector(isRequestPending);
   return (
     <StyledPlayerSearchWrapper>
       <StyledHeader>
@@ -176,4 +168,4 @@ const PlayerSearch: ForwardRefRenderFunction<
   );
 };
 
-export default forwardRef(PlayerSearch);
+export default forwardRef(PlayerSearchResult);

@@ -48,17 +48,17 @@ export const commonSlice = createSlice({
 export default commonSlice.reducer;
 
 // selector
-export const show_emoji = (state: RootState) => state.common.show_emoji;
+export const showEmoji = (state: RootState) => state.common.show_emoji;
 export const mode = (state: RootState) => state.common.mode;
-export const show_profile_upload_modal = (state: RootState) =>
+export const showProfileUploadModal = (state: RootState) =>
   state.common.show_profile_upload_modal;
-export const show_profile_drop_down = (state: RootState) =>
+export const showProfileDropDown = (state: RootState) =>
   state.common.show_profile_drop_down;
-export const show_create_group_drop_down = (state: RootState) =>
+export const showCreateGroupDropdown = (state: RootState) =>
   state.common.show_create_group_drop_down;
-export const show_notification_modal = (state: RootState) =>
+export const showNotificationModal = (state: RootState) =>
   state.common.show_notification_modal;
-export const show_mobile_profile = (state: RootState) =>
+export const showMobileProfile = (state: RootState) =>
   state.common.mobile.show_profile;
 
 // action creator

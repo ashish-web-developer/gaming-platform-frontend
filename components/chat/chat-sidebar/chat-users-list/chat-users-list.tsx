@@ -13,16 +13,16 @@ import ChatUserProfile from "@/components/chat/chat-sidebar/chat-users-list/chat
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { default_users } from "@/store/slice/chat.slice";
+import { defaultUsers } from "@/store/slice/chat.slice";
 
 const ChatUsersList: FC = () => {
-  const _default_users = useAppSelector(default_users);
+  const default_users = useAppSelector(defaultUsers);
   return (
     <>
       <StyledUsersListWrapper>
         <StyledTag>Recent Chat</StyledTag>
         <StyledUserList>
-          {_default_users.map((user) => {
+          {default_users.map((user) => {
             return (
               <ChatUserProfile key={`default-user-${user.id}`} user={user} />
             );

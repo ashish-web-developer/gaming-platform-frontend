@@ -1,7 +1,7 @@
 import { forwardRef, useRef, useState } from "react";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -25,7 +25,7 @@ import { useTheme } from "styled-components";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { mode, updateShowNotification } from "@/store/slice/common.slice";
-import { notifications } from "@/store/slice/notification.slice";
+import { Notifications } from "@/store/slice/notification.slice";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -52,22 +52,22 @@ const NotificationModal: ForwardRefRenderFunction<
   { is_mobile?: boolean }
 > = ({ is_mobile }, cta_ref) => {
   const dispatch = useAppDispatch();
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
-  const _notifications = useAppSelector(notifications);
-  const info_notifications = _notifications.filter(
+  const notifications = useAppSelector(Notifications);
+  const info_notifications = notifications.filter(
     (notification) => notification.type == "info"
   );
   const unread_info_notifications_count = info_notifications.filter(
     (notification) => !Boolean(notification.read_at)
   ).length;
-  const group_invite = _notifications.filter(
+  const group_invite = notifications.filter(
     (notification) => notification.type == "group-invite"
   );
   const unread_group_invite_count = group_invite.filter(
     (notification) => !Boolean(notification.read_at)
   ).length;
-  const group_join_request = _notifications.filter(
+  const group_join_request = notifications.filter(
     (notification) => notification.type == "group-join-request"
   );
   const unread_group_join_request_count = group_join_request.filter(

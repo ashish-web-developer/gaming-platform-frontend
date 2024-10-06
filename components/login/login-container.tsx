@@ -24,7 +24,7 @@ import ValidationTooltip from "@/components/login/validation-tooltip";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { show_profile_upload_modal } from "@/store/slice/common.slice";
+import { showProfileUploadModal } from "@/store/slice/common.slice";
 import {
   validationErrorList,
   updateProfileApi,
@@ -35,7 +35,7 @@ const LoginContainer: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const page_container_ref = useRef(null);
-  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
+  const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const [file_state, set_file_state] = useState<IFileState>({
     state: 0, // 0 => empty; 1 => loading; 2 => done;
@@ -81,17 +81,19 @@ const LoginContainer: FC = () => {
             file_state={file_state}
             ref={camera_cta_ref}
           />
-          <StyledUploadModalWrapper $is_modal_open={_show_profile_upload_modal}>
-            <UploadProfileModal
-              onClickHandler={(file_state, file) => {
-                set_file_state(file_state);
-                file_ref.current = file;
-              }}
-              ref={camera_cta_ref}
-              secondary_color={theme.palette.info.main}
-              font_family={theme.fontFamily.bangers}
-              show_girl_image={true}
-            />
+          <StyledUploadModalWrapper $is_modal_open={show_profile_upload_modal}>
+            {show_profile_upload_modal && (
+              <UploadProfileModal
+                onClickHandler={(file_state, file) => {
+                  set_file_state(file_state);
+                  file_ref.current = file;
+                }}
+                ref={camera_cta_ref}
+                secondary_color={theme.palette.info.main}
+                font_family={theme.fontFamily.bangers}
+                show_girl_image={true}
+              />
+            )}
           </StyledUploadModalWrapper>
         </>
       </StyledContentContainer>

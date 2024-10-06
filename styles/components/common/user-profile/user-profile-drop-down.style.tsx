@@ -34,6 +34,7 @@ const StyledUserImageWrapper = styled.div<{
 `;
 const StyledUserImage = styled(Image)`
   object-fit: cover;
+  object-position: top;
 `;
 
 const StyledName = styled.h3`
@@ -42,7 +43,6 @@ const StyledName = styled.h3`
   margin-top: 1rem;
   color: ${({ theme }) => theme.palette.primary.dark};
   white-space: nowrap;
-  width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
