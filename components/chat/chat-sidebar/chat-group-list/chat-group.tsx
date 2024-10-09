@@ -33,6 +33,7 @@ import {
   // api
   joinGroupRequestApi,
   fetchGroupMessagesApi,
+  resetTypingUsers,
 } from "@/store/slice/group.slice";
 import { updateActiveUser, updateShowChat } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
@@ -77,6 +78,7 @@ const ChatGroup: FC<
           );
           dispatch(updateActiveUser(null));
           dispatch(fetchGroupMessagesApi());
+          dispatch(resetTypingUsers());
           if (is_mobile) {
             dispatch(updateShowChat(true));
           }

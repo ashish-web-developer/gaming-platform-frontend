@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // types
+import type { IUser } from "@/types/store/slice/login";
 import type { IConversation } from "@/types/store/slice/chat";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/store/rootReducer";
@@ -232,6 +233,7 @@ const initialState: IGroupInitialState = {
     fetched_group_results: [],
     is_request_pending: false,
   },
+  typing_users: [],
 };
 const groupSlice = createSlice({
   name: "group",
@@ -273,6 +275,27 @@ const groupSlice = createSlice({
     },
     updatePage: (state, action: PayloadAction<number>) => {
       state.fetch_group.page = action.payload;
+    },
+    updateTypingUsers: (
+      state,
+      action: PayloadAction<{
+        user: IUser;
+        action_type: "add" | "remove";
+      }>
+    ) => {
+      if (
+        action.payload.action_type == "add" &&
+        !state.typing_users.some((user) => user.id == action.payload.user.id)
+      ) {
+        state.typing_users.push(action.payload.user);
+      } else if (action.payload.action_type == "remove") {
+        state.typing_users = state.typing_users.filter(
+          (user) => user.id !== action.payload.user.id
+        );
+      }
+    },
+    resetTypingUsers: (state) => {
+      state.typing_users = [];
     },
   },
   extraReducers: (builder) => {
@@ -365,6 +388,7 @@ export const isFetchGroupRequestPending = (state: RootState) =>
   state.group.fetch_group.is_request_pending;
 export const fetchedGroupResults = (state: RootState) =>
   state.group.fetch_group.fetched_group_results;
+export const typingUsers = (state: RootState) => state.group.typing_users;
 
 // action creator
 export const {
@@ -375,4 +399,6 @@ export const {
   updateShowGroupSearch,
   updateFetchedGroupResult,
   updatePage,
+  updateTypingUsers,
+  resetTypingUsers,
 } = groupSlice.actions;

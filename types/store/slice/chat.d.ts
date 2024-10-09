@@ -29,7 +29,6 @@ type IUsersWithConversation = IUser & {
 };
 
 type IChatInitialState = {
-  is_typing: boolean;
   fetch_user: {
     is_request_pending: boolean;
     fetched_user_result: IUser[];
@@ -51,6 +50,7 @@ type IChatInitialState = {
     show_cognimatch_invite_dialog: boolean;
     show_poker_invite_dialog: boolean;
   };
+  typing_user: IUser | null;
 };
 
 type IFetchDefaultUserResponse = {

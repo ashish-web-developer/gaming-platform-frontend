@@ -191,7 +191,6 @@ export const sendMessageApi = createAsyncThunk<
 });
 
 const initialState: IChatInitialState = {
-  is_typing: false,
   fetch_user: {
     page: 1,
     fetched_user_result: [],
@@ -213,6 +212,7 @@ const initialState: IChatInitialState = {
     show_cognimatch_invite_dialog: false,
     show_poker_invite_dialog: false,
   },
+  typing_user: null,
 };
 
 const chatSlice = createSlice({
@@ -300,8 +300,13 @@ const chatSlice = createSlice({
         active_conversation: updatedConversations,
       };
     },
-    updateIsTyping: (state, action: PayloadAction<boolean>) => {
-      state.is_typing = action.payload;
+    updateTypingUser: (
+      state,
+      action: PayloadAction<{
+        user: IUser | null;
+      }>
+    ) => {
+      state.typing_user = action.payload.user;
     },
     updateShowChat: (state, action: PayloadAction<boolean>) => {
       state.mobile.show_chat = action.payload;
@@ -414,7 +419,6 @@ export const active_conversation = (state: RootState) =>
 export const send_message_request_pending = (state: RootState) =>
   state.chat.send_message.is_request_pending;
 
-export const is_typing = (state: RootState) => state.chat.is_typing;
 export const showChat = (state: RootState) => state.chat.mobile.show_chat;
 
 export const showSearchDialog = (state: RootState) =>
@@ -425,6 +429,7 @@ export const showPokerInviteDialog = (state: RootState) =>
   state.chat.invites_dialog.show_poker_invite_dialog;
 export const activeUserStatus = (state: RootState) =>
   state.chat.active_user_status;
+export const typingUser = (state: RootState) => state.chat.typing_user;
 
 // action creator
 export const {
@@ -437,7 +442,7 @@ export const {
   updateActiveUserConversation,
   updateDefaultUserConversation,
   updateConversationView,
-  updateIsTyping,
+  updateTypingUser,
   updateShowChat,
   updateShowSearch,
   updateInviteDialog,

@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { useRef } from "react";
 
 // types
 import type { FC } from "react";
@@ -35,6 +36,7 @@ import {
   updateConversationView,
   updateInviteDialog,
   updateActiveUserStatus,
+  updateTypingUser,
 } from "@/store/slice/chat.slice";
 
 import {
@@ -42,6 +44,7 @@ import {
   updateDefaultGroupLatestConversation,
   updateDefaultGroup,
   updateGroupsUsers,
+  updateTypingUsers,
 } from "@/store/slice/group.slice";
 import { updatePokerRoomId } from "@/store/slice/poker/poker.slice";
 import { updateCognimatchRoomId } from "@/store/slice/cognimatch.slice";
@@ -65,6 +68,10 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
   const user = useAppSelector(User);
   const active_user = useAppSelector(activeUser);
   const active_group = useAppSelector(activeGroup);
+  const timer_ref = useRef<NodeJS.Timer>();
+  const group_timer_ref = useRef<{
+    [key: number]: NodeJS.Timer;
+  }>({});
   const _mode = useAppSelector(mode);
   useDefault();
   useDefaultConversation();
@@ -83,7 +90,6 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
       {
         event: "chat-event",
         handler: (data: { user: IUser; conversation: IConversation }) => {
-          console.log("value of data", data);
           dispatch(updateDefaultUserConversation(data));
           if (data.user.id == active_user?.id) {
             dispatch(updateActiveUserConversation(data.conversation));
@@ -131,6 +137,26 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
           }
         },
       },
+      {
+        event: "client-typing",
+        handler: ({ user }: { user: IUser }) => {
+          if (user.id == active_user?.id) {
+            dispatch(
+              updateTypingUser({
+                user,
+              })
+            );
+            timer_ref.current && clearTimeout(timer_ref.current);
+            timer_ref.current = setTimeout(() => {
+              dispatch(
+                updateTypingUser({
+                  user: null,
+                })
+              );
+            }, 1000);
+          }
+        },
+      },
     ],
   });
 
@@ -146,6 +172,31 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
           if (data.conversation.sender_id !== user?.id) {
             dispatch(updateActiveUserConversation(data.conversation));
             dispatch(updateDefaultGroupLatestConversation(data.conversation));
+          }
+        },
+      },
+      {
+        event: "client-typing",
+        handler: ({ user: typing_user }: { user: IUser }) => {
+          if (typing_user.id !== user?.id) {
+            dispatch(
+              updateTypingUsers({
+                user: typing_user,
+                action_type: "add",
+              })
+            );
+            typing_user.id in group_timer_ref.current &&
+              clearTimeout(group_timer_ref.current[typing_user.id]);
+            typing_user.id in group_timer_ref.current &&
+              delete group_timer_ref.current[typing_user.id];
+            group_timer_ref.current[typing_user.id] = setTimeout(() => {
+              dispatch(
+                updateTypingUsers({
+                  user: typing_user,
+                  action_type: "remove",
+                })
+              );
+            }, 1000);
           }
         },
       },

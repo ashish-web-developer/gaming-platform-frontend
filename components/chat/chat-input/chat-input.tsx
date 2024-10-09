@@ -1,7 +1,8 @@
-import { useRef, useId, useState } from "react";
+import { useRef, useId, useState, useEffect } from "react";
 import { useRouter } from "next/router";
 // types
 import type { FC } from "react";
+import type { Channel } from "pusher-js";
 
 // styled components
 import {
@@ -31,18 +32,19 @@ import { mode, showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 import { User } from "@/store/slice/login.slice";
 import {
   isRequestPending,
-  is_typing,
+  typingUser,
   activeUser,
   // api
   sendMessageApi,
   sendInvitationApi,
 } from "@/store/slice/chat.slice";
-import { activeGroup } from "@/store/slice/group.slice";
+import { activeGroup, typingUsers } from "@/store/slice/group.slice";
 import { createPokerRoomApi } from "@/store/slice/poker/poker.slice";
 import { createCognimatchRoomApi } from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
+import { usePusher } from "@/hooks/pusher.hook";
 // import { useEcho } from "@/hooks/pusher.hook";
 
 // helpers
@@ -53,12 +55,14 @@ const ChatInput: FC<{}> = () => {
   const dispatch = useAppDispatch();
   // const echo = useEcho();
   const _mode = useAppSelector(mode);
+  const pusher = usePusher();
   const show_emoji = useAppSelector(showEmoji);
   const is_request_pending = useAppSelector(isRequestPending);
   const user = useAppSelector(User);
   const active_user = useAppSelector(activeUser);
   const active_group = useAppSelector(activeGroup);
-  const _is_typing = useAppSelector(is_typing);
+  const typing_user = useAppSelector(typingUser); // for one to one chat
+  const typing_users = useAppSelector(typingUsers); // for group chat
   const user_avatar_url = useAvatarUrl(user);
   const input_ref = useRef<HTMLInputElement>(null);
   const emoji_cta_ref = useRef(null);
@@ -72,6 +76,13 @@ const ChatInput: FC<{}> = () => {
       file: string | ArrayBuffer | null;
     }[]
   >([]);
+  const channel_ref = useRef<{
+    private_channel: Channel | null | undefined;
+    presence_channel: Channel | null | undefined;
+  }>({
+    private_channel: null,
+    presence_channel: null,
+  });
 
   const handleFormSubmission = ({
     message,
@@ -102,6 +113,32 @@ const ChatInput: FC<{}> = () => {
     );
     set_uploaded_file([]);
   };
+
+  const placeholderTextHandler = () => {
+    if (active_user) {
+      return typing_user?.id == active_user.id
+        ? `${typing_user.name} is typing`
+        : "Your Message";
+    } else if (active_group) {
+      return typing_users.length
+        ? `${typing_users.map(({ name }) => name).join(", ")} ${
+            typing_users.length > 1 ? "are" : "is"
+          } typing`
+        : "Your Message";
+    }
+  };
+
+  useEffect(() => {
+    channel_ref.current.private_channel =
+      active_user && pusher?.subscribe(`private-chat.${active_user.id}`);
+    channel_ref.current.presence_channel =
+      active_group &&
+      pusher?.subscribe(`presence-group-chat.${active_group.id}`);
+    return () => {
+      channel_ref.current.private_channel?.unsubscribe();
+      channel_ref.current.presence_channel?.unsubscribe();
+    };
+  }, [active_user, active_group]);
   return (
     <>
       {show_emoji && (
@@ -112,40 +149,45 @@ const ChatInput: FC<{}> = () => {
           <StyledChatInput
             type="text"
             ref={input_ref}
-            placeholder={
-              _is_typing ? `${active_user?.name} is typing` : "Your Message"
-            }
-            // onKeyDown={(event) => {
-            //   if (active_user) {
-            //     setTimeout(() => {
-            //       echo
-            //         ?.private(`chat.${active_user.id}`)
-            //         //@ts-ignore
-            //         .whisper("typing", {
-            //           is_typing: true,
-            //           user: user,
-            //         });
-            //     }, 300);
-            //   }
-            //   if (
-            //     user?.id &&
-            //     (input_ref.current?.value ||
-            //       upload_input_ref.current?.files?.length) &&
-            //     !is_request_pending &&
-            //     (event.metaKey || event.ctrlKey) &&
-            //     event.key == "Enter"
-            //   ) {
-            //     handleFormSubmission({
-            //       message: input_ref.current ? input_ref.current.value : null,
-            //       sender_id: user.id,
-            //       receiver_id: active_user ? active_user.id : null,
-            //       group_id: active_group ? active_group.id : null,
-            //     });
-            //     if (input_ref.current) {
-            //       input_ref.current.value = "";
-            //     }
-            //   }
-            // }}
+            placeholder={placeholderTextHandler()}
+            onKeyDown={(event) => {
+              active_user &&
+                setTimeout(() => {
+                  channel_ref.current.private_channel?.trigger(
+                    "client-typing",
+                    {
+                      user: user,
+                    }
+                  );
+                }, 600);
+              active_group &&
+                setTimeout(() => {
+                  channel_ref.current.presence_channel?.trigger(
+                    "client-typing",
+                    {
+                      user: user,
+                    }
+                  );
+                });
+              if (
+                user?.id &&
+                (input_ref.current?.value ||
+                  upload_input_ref.current?.files?.length) &&
+                !is_request_pending &&
+                (event.metaKey || event.ctrlKey) &&
+                event.key == "Enter"
+              ) {
+                handleFormSubmission({
+                  message: input_ref.current ? input_ref.current.value : null,
+                  sender_id: user.id,
+                  receiver_id: active_user ? active_user.id : null,
+                  group_id: active_group ? active_group.id : null,
+                });
+                if (input_ref.current) {
+                  input_ref.current.value = "";
+                }
+              }
+            }}
           />
           <StyledUserProfileWrapper>
             <StyledUserProfileImage

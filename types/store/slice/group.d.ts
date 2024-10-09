@@ -35,6 +35,7 @@ type IGroupInitialState = {
     fetched_group_results: IGroup[];
     is_request_pending: boolean;
   };
+  typing_users: IUser[];
 };
 
 type IGroupCreationApiPayload = {
