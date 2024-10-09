@@ -138,7 +138,7 @@ const ChatInput: FC<{}> = () => {
       channel_ref.current.private_channel?.unsubscribe();
       channel_ref.current.presence_channel?.unsubscribe();
     };
-  }, [active_user, active_group]);
+  }, [active_user, active_group, pusher]);
   return (
     <>
       {show_emoji && (
@@ -168,7 +168,7 @@ const ChatInput: FC<{}> = () => {
                       user: user,
                     }
                   );
-                });
+                }, 600);
               if (
                 user?.id &&
                 (input_ref.current?.value ||
