@@ -21,7 +21,7 @@ import {
   StyledBannerGameLogo,
   StyledCta,
   StyledCtaTextWrapper,
-} from "@/styles/components/login/login-welcome-screen.style";
+} from "@/styles/components/login/welcome-login-screen/welcome-login-screen.style";
 
 // theme
 import { ThemeProvider } from "styled-components";
