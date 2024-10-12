@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -14,10 +15,10 @@ const StyledPage = styled.div`
 const StyledBottomContentContainer = styled.div`
   position: absolute;
   bottom: 115px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
 `;
 
 const StyledLogoContainer = styled.div`
@@ -62,6 +63,70 @@ const StyledCtaTextWrapper = styled.span`
   }
 `;
 
+const StyledInfoText = styled.h2`
+  position: absolute;
+  font-size: 2.25rem;
+  font-family: "Lobster", sans-serif;
+  color: #f5d547;
+  top: 60px;
+  right: 48px;
+`;
+
+const StyledCurveArrowVectorWrapper = styled.div`
+  position: absolute;
+  top: 110px;
+  left: 168px;
+`;
+
+const StyledBannerContent = styled.div`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+`;
+
+const StyledCardWrapper = styled.div<{
+  $top?: string;
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+  $rotate: string;
+}>`
+  position: absolute;
+  top: ${(props) => props.$top ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  transform: rotate(${(props) => props.$rotate});
+`;
+
+const StyledImageWrapper = styled.div`
+  position: absolute;
+  width: 154px;
+  height: 184px;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+const StyledImage = styled(Image)`
+  object-fit: contain;
+`;
+
+const StyledPokerLogo = styled.h2`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1.5rem;
+  color: ${({ theme }) => theme.palette.secondary.main};
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+  text-align: center;
+`;
+
 export {
   StyledPage,
   StyledBottomContentContainer,
@@ -70,4 +135,11 @@ export {
   StyledLogoSubtitle,
   StyledCta,
   StyledCtaTextWrapper,
+  StyledInfoText,
+  StyledCurveArrowVectorWrapper,
+  StyledBannerContent,
+  StyledCardWrapper,
+  StyledImageWrapper,
+  StyledImage,
+  StyledPokerLogo,
 };

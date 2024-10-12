@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 // type
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 
 // styled components
 import { StyledGameBannerWrapper } from "@/styles/components/login/game-banner/mobile-game-banner.style";
@@ -13,7 +13,14 @@ const MobileGameBanner: FC<{
   banner_type: "cognimatch" | "poker";
   background_image: string;
   background_opacity: number;
-}> = ({ main_color, banner_type, background_image, background_opacity }) => {
+  children: ReactNode;
+}> = ({
+  main_color,
+  banner_type,
+  background_image,
+  background_opacity,
+  children,
+}) => {
   const container_ref = useRef<HTMLDivElement>(null);
   const gsap_context_ref = useRef<gsap.Context>();
 
@@ -42,7 +49,9 @@ const MobileGameBanner: FC<{
       $border_color={main_color}
       $background_image={background_image}
       $background_opacity={background_opacity}
-    ></StyledGameBannerWrapper>
+    >
+      {children}
+    </StyledGameBannerWrapper>
   );
 };
 export default MobileGameBanner;

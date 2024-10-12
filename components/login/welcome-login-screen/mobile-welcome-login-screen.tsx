@@ -2,8 +2,13 @@ import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
 
+// theme
+import { ThemeProvider } from "styled-components";
+import { Theme as PokerTheme } from "@/theme/poker.theme";
+
 // local components
 import MobileGameBanner from "@/components/login/game-banner/mobile-game-banner";
+import MobilePokerCard from "@/components/poker/poker-card/mobile/mobile-poker-card";
 
 // styled components
 import {
@@ -14,10 +19,18 @@ import {
   StyledLogoSubtitle,
   StyledCta,
   StyledCtaTextWrapper,
+  StyledInfoText,
+  StyledCurveArrowVectorWrapper,
+  StyledBannerContent,
+  StyledCardWrapper,
+  StyledImageWrapper,
+  StyledImage,
+  StyledPokerLogo,
 } from "@/styles/components/login/welcome-login-screen/mobile-welcome-login-screen.style";
 
 // vector
 import CtaVector from "@/components/login/vector/cta-vector";
+import CurveArrowVector from "@/components/login/vector/curve-arrow-vector";
 
 // gsap
 import gsap from "gsap-trial";
@@ -75,18 +88,44 @@ const MobileWelcomeLoginScreen: FC = () => {
   }, []);
   return (
     <StyledPage ref={container_ref}>
+      <StyledInfoText>Win big Prizes</StyledInfoText>
+      <StyledCurveArrowVectorWrapper>
+        <CurveArrowVector />
+      </StyledCurveArrowVectorWrapper>
       <MobileGameBanner
         banner_type="cognimatch"
         main_color={"#F42C04"}
         background_image="url(/memory-game/background/dark-background.png)"
         background_opacity={0.2}
-      />
-      <MobileGameBanner
-        banner_type="poker"
-        main_color={"#F5D547"}
-        background_image="url(/poker/background.jpg)"
-        background_opacity={1}
-      />
+      >
+        Hello world
+      </MobileGameBanner>
+      <ThemeProvider theme={PokerTheme}>
+        <MobileGameBanner
+          banner_type="poker"
+          main_color={"#F5D547"}
+          background_image="url(/poker/background.jpg)"
+          background_opacity={1}
+        >
+          <StyledBannerContent>
+            <StyledCardWrapper $bottom="20px" $left="35px" $rotate="-10deg">
+              <MobilePokerCard rank="A" suit="heart" />
+            </StyledCardWrapper>
+            <StyledCardWrapper $top="18px" $right="35px" $rotate="5deg">
+              <MobilePokerCard rank="A" suit="heart" />
+            </StyledCardWrapper>
+            <StyledImageWrapper>
+              <StyledImage
+                alt="girl-image"
+                src="/chat/invite-dialog/poker-background.png"
+                fill={true}
+              />
+            </StyledImageWrapper>
+            <StyledPokerLogo>TEXAS HOLD&rsquo;EM SHOWDOWN</StyledPokerLogo>
+          </StyledBannerContent>
+        </MobileGameBanner>
+      </ThemeProvider>
+
       <StyledBottomContentContainer>
         <StyledLogoContainer>
           <StyledLogo ref={logo_ref}>Fortune Realm</StyledLogo>
