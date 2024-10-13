@@ -11,7 +11,7 @@ import {
   StyledLogoContainer,
   StyledLogo,
   StyledUploadModalWrapper,
-} from "@/styles/components/login/login-container.style";
+} from "@/styles/components/login/login-container/login-container.style";
 
 // theme
 import { useTheme } from "styled-components";
@@ -34,7 +34,6 @@ import {
 const LoginContainer: FC = () => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const page_container_ref = useRef(null);
   const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const [file_state, set_file_state] = useState<IFileState>({
@@ -63,7 +62,7 @@ const LoginContainer: FC = () => {
   }, [tab_index]);
 
   return (
-    <StyledPage ref={page_container_ref}>
+    <StyledPage>
       <>
         <StyledLogoContainer className="logo-container">
           <StyledLogo>Fortune Realm</StyledLogo>

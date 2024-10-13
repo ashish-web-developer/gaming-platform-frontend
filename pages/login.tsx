@@ -5,7 +5,14 @@ import type { NextPage } from "next";
 
 // local components
 const LoginContainer = dynamic(
-  () => import("@/components/login/login-container"),
+  () => import("@/components/login/login-container/login-container"),
+  {
+    ssr: false,
+  }
+);
+
+const MobileLoginContainer = dynamic(
+  () => import("@/components/login/login-container/mobile-login-container"),
   {
     ssr: false,
   }
@@ -13,7 +20,10 @@ const LoginContainer = dynamic(
 
 import WelcomeLoginScreen from "@/components/login/welcome-login-screen/welcome-login-screen";
 const MobileWelcomeLoginScreen = dynamic(
-  () => import("@/components/login/welcome-login-screen/mobile-welcome-login-screen"),
+  () =>
+    import(
+      "@/components/login/welcome-login-screen/mobile-welcome-login-screen"
+    ),
   {
     ssr: false,
   }
@@ -44,9 +54,15 @@ const Login: NextPage = () => {
       <UttranceContext.Provider value={uttrance_context}>
         <div>
           {show_login ? (
-            <LoginContainer />
+            is_mobile ? (
+              <MobileLoginContainer />
+            ) : (
+              <LoginContainer />
+            )
           ) : is_mobile ? (
-            <MobileWelcomeLoginScreen />
+            <MobileWelcomeLoginScreen
+              updateShowLogin={(show) => setShowLogin(show)}
+            />
           ) : (
             <WelcomeLoginScreen
               updateShowLogin={(show) => setShowLogin(show)}

@@ -38,7 +38,9 @@ import SplitText from "gsap-trial/SplitText";
 
 gsap.registerPlugin(SplitText);
 
-const MobileWelcomeLoginScreen: FC = () => {
+const MobileWelcomeLoginScreen: FC<{
+  updateShowLogin: (show: boolean) => void;
+}> = ({ updateShowLogin }) => {
   const container_ref = useRef<HTMLDivElement>(null);
   const logo_ref = useRef<HTMLHeadingElement>(null);
 
@@ -133,7 +135,7 @@ const MobileWelcomeLoginScreen: FC = () => {
             Your Ultimate destination for thrilling casino games
           </StyledLogoSubtitle>
         </StyledLogoContainer>
-        <StyledCta className="unlock-cta" onClick={() => {}}>
+        <StyledCta className="unlock-cta" onClick={() => updateShowLogin(true)}>
           <CtaVector />
           <StyledCtaTextWrapper>Unlock Fun</StyledCtaTextWrapper>
         </StyledCta>
