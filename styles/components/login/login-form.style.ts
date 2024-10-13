@@ -6,6 +6,9 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 1.125rem;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: calc(100% - 6rem);
+  }
 `;
 
 const StyledWrapper = styled.div`
@@ -13,6 +16,9 @@ const StyledWrapper = styled.div`
   width: 300px;
   border-radius: 8px;
   padding: 8px;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 100%;
+  }
 `;
 
 const StyledTabWrapper = styled.div`
@@ -24,6 +30,9 @@ const StyledTabWrapper = styled.div`
   gap: 10px;
   padding: 8px;
   scale: 1;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 100%;
+  }
 `;
 
 const StyledTab = styled.button`
@@ -124,6 +133,9 @@ const StyledPara = styled.p`
   width: 300px;
   line-height: 1;
   user-select: none;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 100%;
+  }
 `;
 const StyledCta = styled.span<{
   $color: string;
