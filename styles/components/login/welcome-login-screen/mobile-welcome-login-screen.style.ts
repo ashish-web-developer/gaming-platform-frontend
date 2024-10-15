@@ -19,6 +19,9 @@ const StyledBottomContentContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 32px;
+  @media (max-height: 750px) {
+    bottom: 40px;
+  }
 `;
 
 const StyledLogoContainer = styled.div`

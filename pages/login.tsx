@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 // types
 import type { NextPage } from "next";
+import type { GetServerSideProps } from "next";
 
 // local components
 const LoginContainer = dynamic(
@@ -44,22 +45,26 @@ import { UttranceContext } from "context";
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
 
-const Login: NextPage = () => {
+const Login: NextPage<{
+  is_mobile: boolean;
+}> = ({ is_mobile }) => {
   const [show_login, setShowLogin] = useState(false);
   const uttrance_context = useRef<MutableSpeechUtterance | null>(null);
-  const is_mobile = useIsMobile();
+  const is_client_mobile = useIsMobile();
+
+  // handle for width 360 and height 651
 
   return (
     <ThemeProvider theme={Theme}>
       <UttranceContext.Provider value={uttrance_context}>
         <div>
           {show_login ? (
-            is_mobile ? (
+            is_mobile || is_client_mobile ? (
               <MobileLoginContainer />
             ) : (
               <LoginContainer />
             )
-          ) : is_mobile ? (
+          ) : is_mobile || is_client_mobile ? (
             <MobileWelcomeLoginScreen
               updateShowLogin={(show) => setShowLogin(show)}
             />
@@ -72,6 +77,16 @@ const Login: NextPage = () => {
       </UttranceContext.Provider>
     </ThemeProvider>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const user_agent = context.req.headers["user-agent"];
+  const is_mobile = /Mobi|Android/i.test(user_agent as string);
+  return {
+    props: {
+      is_mobile,
+    },
+  };
 };
 
 export default Login;

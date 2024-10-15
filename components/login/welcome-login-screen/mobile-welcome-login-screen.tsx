@@ -52,7 +52,7 @@ const MobileWelcomeLoginScreen: FC<{
         .from(split_text.chars, {
           delay: 1,
           duration: 1,
-          scale: 1.2,
+          scale: 0.8,
           stagger: 0.1,
           ease: "power2.out",
           onComplete: () => {
