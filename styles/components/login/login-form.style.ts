@@ -126,6 +126,13 @@ const StyledSubmitCta = styled.button<{
   }
 `;
 
+const StyledError = styled.p`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1rem;
+  color: ${({ theme }) => theme.palette.error.main};
+  width:100%;
+`;
+
 const StyledPara = styled.p`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1rem;
@@ -156,5 +163,6 @@ export {
   StyledImage,
   StyledSubmitCta,
   StyledPara,
+  StyledError,
   StyledCta,
 };

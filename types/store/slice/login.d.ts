@@ -18,6 +18,7 @@ type IValidationErrorType =
   | "confirm_password"
   | "auth_failed";
 
+type IFieldType = "username" | "password" | "confirm_password" | null;
 type ILoginInitialState = {
   user: IUser | null;
   validation_error_list: Array<{
@@ -99,6 +100,7 @@ type ILogoutUserApiResponse = IBaseResponse & {
 
 export {
   IUser,
+  IFieldType,
   IValidationErrorType,
   ILoginInitialState,
   IVerifyUserNameApiRequest,

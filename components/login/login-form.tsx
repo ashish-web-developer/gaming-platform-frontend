@@ -17,6 +17,7 @@ import {
   StyledImage,
   StyledSubmitCta,
   StyledPara,
+  StyledError,
   StyledCta,
 } from "@/styles/components/login/login-form.style";
 
@@ -56,9 +57,17 @@ const LoginForm: ForwardRefRenderFunction<
       field: "username" | "password" | "confirm_password" | null
     ) => void;
     updateProfile: () => void;
+    error?: string;
   }
 > = (
-  { file_state, tab_index, updateActiveField, updateProfile, updateTabIndex },
+  {
+    file_state,
+    tab_index,
+    updateActiveField,
+    updateProfile,
+    updateTabIndex,
+    error,
+  },
   ref
 ) => {
   const dispatch = useAppDispatch();
@@ -245,6 +254,7 @@ const LoginForm: ForwardRefRenderFunction<
             placeholder="Username"
             name="username"
             value={form_data.username}
+            autoComplete="off"
           />
           {tab_index == 0 && (
             <StyledCta
@@ -386,6 +396,7 @@ const LoginForm: ForwardRefRenderFunction<
       >
         Continue
       </StyledSubmitCta>
+      {error && <StyledError>{error}</StyledError>}
       <StyledPara>
         {tab_index == 0 ? (
           <>
