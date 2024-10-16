@@ -1,21 +1,17 @@
 import styled from "styled-components";
 import Image from "next/image";
 
-type IStyledAvatarWrapper = {
+const StyledAvatarWrapper = styled.span<{
   $show_left_count: boolean;
   $status?: boolean;
-};
-
-const StyledAvatarWrapper = styled.span<IStyledAvatarWrapper>`
+  $border_color: string;
+}>`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 30px;
   height: 30px;
-  border-radius: 50%;
   position: relative;
-  border: 2px solid #000;
-  background: #fff;
   ${(props) =>
     props.$status !== undefined &&
     `
@@ -43,6 +39,8 @@ const StyledAvatarWrapper = styled.span<IStyledAvatarWrapper>`
     `
   &:last-of-type{
     background:#fff;
+    border-radius:50%;
+    border:2px solid ${props.$border_color};
     & > img{
       display:none;
       & + span{
@@ -53,9 +51,16 @@ const StyledAvatarWrapper = styled.span<IStyledAvatarWrapper>`
   `}
 `;
 
-const StyledAvatarImage = styled(Image)`
+const StyledAvatarImage = styled(Image)<{
+  $border_color: string;
+  $image_background_color: string;
+}>`
   object-fit: cover;
+  object-position: top;
   overflow: hidden;
+  border-radius: 50%;
+  border: 2px solid ${(props) => props.$border_color};
+  background-color: ${(props) => props.$image_background_color};
 `;
 
 const StyledLeftCount = styled.span`

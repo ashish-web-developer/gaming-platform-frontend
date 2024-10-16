@@ -31,6 +31,7 @@ const StyledInfoTooltip = styled.div<{
   right: ${(props) => props.$right ?? "auto"};
   bottom: ${(props) => props.$bottom ?? "auto"};
   display: ${(props) => props.$display ?? "block"};
+  z-index: 2;
 `;
 const StyledInfoTooltipText = styled.p<{
   $font_size: string;

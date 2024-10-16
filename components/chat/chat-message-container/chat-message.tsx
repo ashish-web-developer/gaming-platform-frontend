@@ -4,7 +4,7 @@ import type {
   IConversation,
   IUsersWithConversation,
 } from "@/types/store/slice/chat";
-import { User } from "@/types/user";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -35,7 +35,7 @@ const ChatMessage = forwardRef<
   HTMLDivElement,
   {
     conversation: IConversation;
-    user: User;
+    user: IUser;
   }
 >(({ conversation, user }, root_ref) => {
   const dispatch = useAppDispatch();

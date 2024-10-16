@@ -16,6 +16,7 @@ const StyledUserProfile = styled(Image)<{
   border: 2px solid ${(props) => props.$border_color};
   order: ${(props) => props.$order};
   object-fit: cover;
+  object-position: top;
 `;
 
 const StyledMessageWrapper = styled.div<{
@@ -57,8 +58,8 @@ const StyledMessage = styled.div<{
     content: "${(props) => props.$content}";
     position: absolute;
     bottom: -25px;
-    left: ${(props) => props.$left + "px" ?? "auto"};
-    right: ${(props) => props.$right + "px" ?? "auto"};
+    left: ${(props) => (props.$left ? props.$left + "px" : "auto")};
+    right: ${(props) => (props.$right ? props.$right + "px" : "auto")};
     white-space: nowrap;
     font-size: 12px;
   }

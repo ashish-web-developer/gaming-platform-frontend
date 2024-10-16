@@ -2,6 +2,7 @@ import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/chat.theme";
+import type { IUser } from "@/types/store/slice/login";
 // styled components
 import {
   StyledMessageContainer,
@@ -79,14 +80,15 @@ const UserProfileVector: FC<{
 };
 
 const ChatMessageContainer: FC = () => {
+  const theme = useTheme() as ITheme;
   const user = useAppSelector(User);
   const active_user = useAppSelector(activeUser);
-  const _active_group = useAppSelector(activeGroup);
+  const active_group = useAppSelector(activeGroup);
   const _active_conversation = useAppSelector(active_conversation);
   const active_user_status = useAppSelector(activeUserStatus);
   const root_ref = useRef<HTMLDivElement>(null);
   const is_mobile = useIsMobile();
-  if (_active_group) {
+  if (active_group) {
     return (
       <StyledMessageContainer>
         {is_mobile && (
@@ -96,20 +98,22 @@ const ChatMessageContainer: FC = () => {
         )}
         <StyledDetailsWrapper>
           <StyledWrapper $gap="6px">
-            <StyledName>{_active_group.group_name}</StyledName>
+            <StyledName>{active_group.group_name}</StyledName>
             <StyledMessageCount>
               ({_active_conversation.length} messages)
             </StyledMessageCount>
           </StyledWrapper>
           {!is_mobile && (
             <StyledGroupAvatar>
-              {_active_group.user_group.slice(0, 4).map((user_group, index) => {
+              {active_group.user_group.slice(0, 4).map((user_group, index) => {
                 return (
                   <ChatAvatar
+                    image_background_color={theme.palette.primary.main}
+                    border_color={theme.palette.primary.dark}
                     key={`chat-avatar-${index}`}
                     left_count={
-                      _active_group.user_group.length > 4
-                        ? _active_group.user_group.length - 3
+                      active_group.user_group.length > 4
+                        ? active_group.user_group.length - 3
                         : 0
                     }
                     user={user_group.user as IUsersWithConversation}
@@ -124,7 +128,7 @@ const ChatMessageContainer: FC = () => {
             <ChatMessage
               key={conversation.id}
               conversation={conversation}
-              user={user}
+              user={user as IUser}
               ref={root_ref}
             />
           ))}
@@ -146,7 +150,12 @@ const ChatMessageContainer: FC = () => {
             <StyledMessageCount>(24 messages)</StyledMessageCount>
           </StyledWrapper>
           {!is_mobile && (
-            <ChatAvatar status={active_user_status} user={active_user} />
+            <ChatAvatar
+              image_background_color={theme.palette.primary.main}
+              border_color={theme.palette.primary.dark}
+              status={active_user_status}
+              user={active_user}
+            />
           )}
         </StyledDetailsWrapper>
         <StyledChatMessageContentContainer ref={root_ref}>
@@ -154,7 +163,7 @@ const ChatMessageContainer: FC = () => {
             <ChatMessage
               key={conversation.id}
               conversation={conversation}
-              user={user}
+              user={user as IUser}
               ref={root_ref}
             />
           ))}

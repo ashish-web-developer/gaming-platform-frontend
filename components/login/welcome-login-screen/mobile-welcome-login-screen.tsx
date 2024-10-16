@@ -36,8 +36,6 @@ import CurveArrowVector from "@/components/login/vector/curve-arrow-vector";
 import gsap from "gsap-trial";
 import SplitText from "gsap-trial/SplitText";
 
-gsap.registerPlugin(SplitText);
-
 const MobileWelcomeLoginScreen: FC<{
   updateShowLogin: (show: boolean) => void;
 }> = ({ updateShowLogin }) => {
@@ -45,6 +43,7 @@ const MobileWelcomeLoginScreen: FC<{
   const logo_ref = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
+    gsap.registerPlugin(SplitText);
     const split_text = new SplitText(logo_ref.current, { type: "words,chars" });
     const gsap_context = gsap.context(() => {
       gsap

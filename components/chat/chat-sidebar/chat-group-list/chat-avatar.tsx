@@ -16,18 +16,23 @@ const ChatAvatar: FC<{
   user: IUser;
   left_count?: number; // no of avatars left in avatar group
   status?: boolean;
-}> = ({ user, left_count, status }) => {
+  border_color: string;
+  image_background_color: string;
+}> = ({ user, left_count, status, border_color, image_background_color }) => {
   const avatar_url = useAvatarUrl(user);
   return (
     <StyledAvatarWrapper
       $show_left_count={Boolean(left_count)}
       $status={status}
+      $border_color={border_color}
     >
       <StyledAvatarImage
         sizes="(max-width: 1400px) 10vw"
         alt="avatar"
         src={avatar_url}
         fill={true}
+        $border_color={border_color}
+        $image_background_color={image_background_color}
       />
       {Boolean(left_count) && <StyledLeftCount>+{left_count}</StyledLeftCount>}
     </StyledAvatarWrapper>

@@ -122,6 +122,8 @@ const ChatGroup: FC<
             {user_group.slice(0, 4).map((_user_group, index) => {
               return (
                 <ChatAvatar
+                  border_color={"#000"}
+                  image_background_color={"#fff"}
                   key={`chat-avatar-${index}`}
                   left_count={user_group.length > 3 ? user_group.length - 3 : 0}
                   user={_user_group.user as IUser}
