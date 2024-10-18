@@ -24,7 +24,7 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
 import { User } from "@/store/slice/login.slice";
-import { dealer_id, bettor_id } from "@/store/slice/poker/poker.slice";
+import { dealerId, bettorId } from "@/store/slice/poker/poker.slice";
 
 // hooks
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -46,14 +46,14 @@ const PokerPlayerSeat: FC<{
 }) => {
   const { id: user_id } = useAppSelector(User) as IUser;
   const raise_cta_ref = useRef<HTMLDivElement>(null);
-  const _dealer_id = useAppSelector(dealer_id);
-  const _bettor_id = useAppSelector(bettor_id);
-  const is_bettor = poker_player?.player_id == _bettor_id;
+  const dealer_id = useAppSelector(dealerId);
+  const better_id = useAppSelector(bettorId);
+  const is_bettor = poker_player?.player_id == better_id;
   return (
     <>
       <StyledPokerPlayerSeatWrapper
         $seat_number={seat_number}
-        $is_dealer={poker_player?.player_id == _dealer_id}
+        $is_dealer={poker_player?.player_id == dealer_id}
       >
         <StyledPokerPlayerWrapper $seat_number={seat_number}>
           {poker_player?.player_id == user_id && (
@@ -74,7 +74,7 @@ const PokerPlayerSeat: FC<{
             player={poker_player as IPokerPlayer}
             is_bettor={is_bettor}
             is_active={Boolean(poker_player)}
-            is_dealer={poker_player?.player_id == _dealer_id}
+            is_dealer={poker_player?.player_id == dealer_id}
           />
           <StyledPokerPlayerBuyInAmount>
             $ {((poker_player?.total_chips_left ?? 0) * 1000).toFixed(2)}

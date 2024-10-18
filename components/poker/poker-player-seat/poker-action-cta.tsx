@@ -21,7 +21,7 @@ import UpsideDownTriangle from "@/components/common/upside-down-triagnle";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   smallBlind,
-  min_amount_to_be_betted,
+  minAmountToBeBetted,
   updateShowPokerSlider,
   triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
@@ -34,8 +34,8 @@ const PokerActionCta: ForwardRefRenderFunction<
   const dispatch = useAppDispatch();
   const [is_action_triggered, set_is_action_triggered] = useState(false);
   const small_blind = useAppSelector(smallBlind);
-  const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
-  const is_call = (_min_amount_to_be_betted as number) > small_blind * 2;
+  const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted);
+  const is_call = (min_amount_to_be_betted as number) > small_blind * 2;
   return (
     !is_action_triggered && (
       <StyledPokerActionCta>
@@ -110,7 +110,7 @@ const PokerActionCta: ForwardRefRenderFunction<
               dispatch(
                 triggerActionApi({
                   action_type: is_call ? "call" : "check",
-                  current_betted_amount: _min_amount_to_be_betted as number,
+                  current_betted_amount: min_amount_to_be_betted as number,
                 })
               );
               set_is_action_triggered(true);
@@ -119,7 +119,7 @@ const PokerActionCta: ForwardRefRenderFunction<
             {is_call && (
               <StyledTooltip>
                 Call $ $
-                {(_min_amount_to_be_betted as number) - current_betted_amount} K
+                {(min_amount_to_be_betted as number) - current_betted_amount} K
                 <StyledPolygonVectorWrapper>
                   <UpsideDownTriangle
                     size={20}

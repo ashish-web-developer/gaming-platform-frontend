@@ -15,7 +15,7 @@ import { Theme } from "@/theme/poker.theme";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { poker_room_id } from "@/store/slice/poker/poker.slice";
+import { pokerRoomId } from "@/store/slice/poker/poker.slice";
 import {
   showBuyInModal,
   updateActivePokerPlayer,
@@ -30,7 +30,7 @@ import { usePresenceChannel } from "@/hooks/pusher.hook";
 
 const JoinPokerChannel = () => {
   const dispatch = useAppDispatch();
-  const room_id = useAppSelector(poker_room_id);
+  const room_id = useAppSelector(pokerRoomId);
   const user = useAppSelector(User) as IUser;
 
   usePresenceChannel<

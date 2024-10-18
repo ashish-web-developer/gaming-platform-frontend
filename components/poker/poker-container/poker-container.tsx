@@ -41,8 +41,8 @@ const PokerBuyInDrawer = dynamic(
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   showBuyInModal,
-  dealer_id,
-  active_poker_players,
+  dealerId,
+  activePokerPlayers,
   dealHandApi,
 } from "@/store/slice/poker/poker.slice";
 import { User } from "@/store/slice/login.slice";
@@ -56,14 +56,12 @@ const PokerContainer: FC = () => {
   const is_mobile = useIsMobile();
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const { id: user_id } = useAppSelector(User) as IUser;
-  const _dealer_id = useAppSelector(dealer_id);
-  const no_of_players_playing = useAppSelector(active_poker_players).length;
+  const dealer_id = useAppSelector(dealerId);
+  const no_of_players_playing = useAppSelector(activePokerPlayers).length;
   const timeout_ref = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    console.log("inside poker effect");
-    if (no_of_players_playing == 7 && user_id == _dealer_id) {
-      console.log("user id and dealer id are same");
+    if (no_of_players_playing == 7 && user_id == dealer_id) {
       timeout_ref.current = setTimeout(() => {
         dispatch(dealHandApi());
       }, 2000);
@@ -71,7 +69,7 @@ const PokerContainer: FC = () => {
     return () => {
       timeout_ref.current && clearTimeout(timeout_ref.current);
     };
-  }, [no_of_players_playing, user_id, _dealer_id]);
+  }, [no_of_players_playing, user_id, dealer_id]);
   return (
     <StyledPage>
       {is_mobile ? (

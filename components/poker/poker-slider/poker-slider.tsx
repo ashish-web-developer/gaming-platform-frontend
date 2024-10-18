@@ -29,7 +29,7 @@ import "react-rangeslider/lib/index.css";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   smallBlind,
-  min_amount_to_be_betted,
+  minAmountToBeBetted,
   updateShowPokerSlider,
   triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
@@ -43,9 +43,9 @@ const PokerSlider: ForwardRefRenderFunction<
 > = ({ total_chips_count, toggle_action_cta }, raise_cta_ref) => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
+  const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted);
   const [slider_val, set_slider_val] = useState<number>(
-    _min_amount_to_be_betted as number
+    min_amount_to_be_betted as number
   );
   const [thumb_left_position, set_thumb_left_position] = useState(0);
   const small_blind = useAppSelector(smallBlind);
@@ -105,7 +105,7 @@ const PokerSlider: ForwardRefRenderFunction<
             className="slider custom-labels"
           >
             <Slider
-              min={_min_amount_to_be_betted as number}
+              min={min_amount_to_be_betted as number}
               max={total_chips_count}
               value={slider_val}
               step={small_blind * 2}

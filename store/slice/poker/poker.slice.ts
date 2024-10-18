@@ -318,22 +318,21 @@ const pokerSlice = createSlice({
 export default pokerSlice.reducer;
 
 // selector
-export const poker_room_id = (state: RootState) => state.poker.poker_room_id;
-export const show_poker_slider = (state: RootState) =>
+export const pokerRoomId = (state: RootState) => state.poker.poker_room_id;
+export const showPokerSlider = (state: RootState) =>
   state.poker.show_poker_slider;
-export const poker_chips = (state: RootState) => state.poker.poker_chips;
-export const active_poker_players = (state: RootState) =>
+export const pokerChips = (state: RootState) => state.poker.poker_chips;
+export const activePokerPlayers = (state: RootState) =>
   state.poker.active_poker_players;
 export const showBuyInModal = (state: RootState) =>
   state.poker.show_buy_in_modal;
 export const smallBlind = (state: RootState) => state.poker.small_blind;
-export const dealer_id = (state: RootState) => state.poker.dealer_id;
-export const bettor_id = (state: RootState) => state.poker.bettor_id;
-export const chips_in_pot = (state: RootState) => state.poker.chips_in_pot;
-export const min_amount_to_be_betted = (state: RootState) =>
+export const dealerId = (state: RootState) => state.poker.dealer_id;
+export const bettorId = (state: RootState) => state.poker.bettor_id;
+export const chipsInPot = (state: RootState) => state.poker.chips_in_pot;
+export const minAmountToBeBetted = (state: RootState) =>
   state.poker.min_amount_to_be_betted;
-export const community_cards = (state: RootState) =>
-  state.poker.community_cards;
+export const communityCards = (state: RootState) => state.poker.community_cards;
 // action creaters
 export const {
   updatePokerRoomId,
