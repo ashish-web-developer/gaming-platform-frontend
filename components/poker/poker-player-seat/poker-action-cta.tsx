@@ -20,7 +20,7 @@ import UpsideDownTriangle from "@/components/common/upside-down-triagnle";
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
-  small_blind,
+  smallBlind,
   min_amount_to_be_betted,
   updateShowPokerSlider,
   triggerActionApi,
@@ -33,9 +33,9 @@ const PokerActionCta: ForwardRefRenderFunction<
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const [is_action_triggered, set_is_action_triggered] = useState(false);
-  const _small_blind = useAppSelector(small_blind);
+  const small_blind = useAppSelector(smallBlind);
   const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
-  const is_call = (_min_amount_to_be_betted as number) > _small_blind * 2;
+  const is_call = (_min_amount_to_be_betted as number) > small_blind * 2;
   return (
     !is_action_triggered && (
       <StyledPokerActionCta>

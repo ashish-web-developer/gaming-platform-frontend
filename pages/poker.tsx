@@ -1,5 +1,8 @@
+// types
 import type { NextPage } from "next";
 import type { IPokerPlayer, IPokerRoom } from "@/types/store/slice/poker/poker";
+import type { GetServerSideProps } from "next";
+import type { IUser } from "@/types/store/slice/login";
 
 // local components
 import PokerContainer from "@/components/poker/poker-container/poker-container";
@@ -14,13 +17,13 @@ import { Theme } from "@/theme/poker.theme";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { poker_room_id } from "@/store/slice/poker/poker.slice";
 import {
-  show_buy_in_modal,
+  showBuyInModal,
   updateActivePokerPlayer,
   updateDealerId,
   updatePlayerData,
   updateRoomDetails,
 } from "@/store/slice/poker/poker.slice";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
@@ -28,61 +31,87 @@ import { usePresenceChannel } from "@/hooks/pusher.hook";
 const JoinPokerChannel = () => {
   const dispatch = useAppDispatch();
   const room_id = useAppSelector(poker_room_id);
-  const _user = useAppSelector(user);
+  const user = useAppSelector(User) as IUser;
+
   usePresenceChannel<
-    undefined,
-    { poker_player: IPokerPlayer }[] | { poker_player: IPokerPlayer }
+    string | null,
+    {
+      id: number;
+      info: {
+        poker_player: IPokerPlayer;
+      };
+    }
   >({
-    channel: `poker.${room_id}`,
+    channel_name: `poker.${room_id}`,
     events: [
       {
         event: "Game.Poker.UpdateDealerEvent",
-        callback: (data: { poker_room: IPokerRoom }) => {
-          if (_user?.id) {
+        handler: (data: { poker_room: IPokerRoom }) => {
+          if (user.id) {
             dispatch(updateDealerId(data.poker_room.dealer_id));
           }
         },
       },
       {
-        event: "Game.Poker.UpdatePokerRoomDataEvent",
-        callback: (data: { poker_room: IPokerRoom }) => {
+        event: "update-poker-room-data-event",
+        handler: (data: { poker_room: IPokerRoom }) => {
           dispatch(updateRoomDetails(data.poker_room));
         },
       },
       {
-        event: "Game.Poker.UpdatePokerPlayerDataEvent",
-        callback: (data: { player: IPokerPlayer }) => {
+        event: "update-poker-player-data",
+        handler: (data: { player: IPokerPlayer }) => {
           dispatch(updatePlayerData(data.player));
         },
       },
     ],
-    handler: (players, type) => {
-      if (Array.isArray(players)) {
-        const _poker_players = players.map((_player) => _player.poker_player);
-        dispatch(
-          updateActivePokerPlayer({ poker_players: _poker_players, type })
-        );
-      } else {
-        const _poker_player = players.poker_player;
-        dispatch(
-          updateActivePokerPlayer({
-            poker_players: { ..._poker_player },
-            type,
-          })
-        );
-      }
+    handleSubscription: (member) => {
+      dispatch(
+        updateActivePokerPlayer({
+          type: "added",
+          poker_players: member.info.poker_player,
+        })
+      );
     },
+    memberHandler: (member, action_type) => {
+      dispatch(
+        updateActivePokerPlayer({
+          poker_players: member.info.poker_player,
+          type: action_type,
+        })
+      );
+    },
+    dependency: room_id,
   });
   return null;
 };
 
 const PokerPage: NextPage = () => {
-  const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
+  const show_buy_in_modal = useAppSelector(showBuyInModal);
+
   return (
     <ThemeProvider theme={Theme}>
-      {!_show_buy_in_modal && <JoinPokerChannel />}
+      {!show_buy_in_modal && <JoinPokerChannel />}
       <PokerContainer />
     </ThemeProvider>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { req, res } = context;
+  const referer = req.headers.referer;
+  if (referer) {
+    return {
+      props: {},
+    };
+  } else {
+    return {
+      redirect: {
+        destination: "/chat",
+        permanent: false,
+      },
+    };
+  }
+};
+
 export default PokerPage;

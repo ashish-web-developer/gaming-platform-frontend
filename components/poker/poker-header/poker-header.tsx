@@ -15,15 +15,15 @@ import PokerUserPoint from "@/components/poker/poker-header/poker-user-point";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
 const PokerHeader: FC = () => {
-  const _user = useAppSelector(user);
-  const avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const user = useAppSelector(User);
+  const avatar_url = useAvatarUrl(user as IUsersWithConversation);
   return (
     <StyledPokerHeader>
       <StyledLogo>

@@ -203,7 +203,7 @@ const pokerSlice = createSlice({
     updateActivePokerPlayer: (
       state,
       action: PayloadAction<{
-        type: "here" | "joining" | "leaving";
+        type: "here" | "added" | "removed";
         poker_players: IPokerPlayer | IPokerPlayer[];
       }>
     ) => {
@@ -228,7 +228,7 @@ const pokerSlice = createSlice({
             ];
           }
           return;
-        case "joining":
+        case "added":
           if (Array.isArray(action.payload.poker_players)) {
             const poker_players = action.payload.poker_players.filter(
               (poker_player) =>
@@ -256,7 +256,7 @@ const pokerSlice = createSlice({
             }
           }
           return;
-        case "leaving":
+        case "removed":
           if (Array.isArray(action.payload.poker_players)) {
             const { poker_players } = action.payload;
             state.active_poker_players = state.active_poker_players.filter(
@@ -324,9 +324,9 @@ export const show_poker_slider = (state: RootState) =>
 export const poker_chips = (state: RootState) => state.poker.poker_chips;
 export const active_poker_players = (state: RootState) =>
   state.poker.active_poker_players;
-export const show_buy_in_modal = (state: RootState) =>
+export const showBuyInModal = (state: RootState) =>
   state.poker.show_buy_in_modal;
-export const small_blind = (state: RootState) => state.poker.small_blind;
+export const smallBlind = (state: RootState) => state.poker.small_blind;
 export const dealer_id = (state: RootState) => state.poker.dealer_id;
 export const bettor_id = (state: RootState) => state.poker.bettor_id;
 export const chips_in_pot = (state: RootState) => state.poker.chips_in_pot;

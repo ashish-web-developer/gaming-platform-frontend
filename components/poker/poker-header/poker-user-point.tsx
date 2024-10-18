@@ -1,6 +1,7 @@
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/poker.theme";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -16,7 +17,7 @@ import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 import { mode } from "@/store/slice/common.slice";
 
 const AddSvgIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
@@ -45,7 +46,7 @@ const AddSvgIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
 };
 const PokerUserPoint: FC = () => {
   const theme = useTheme() as ITheme;
-  const _user = useAppSelector(user);
+  const user = useAppSelector(User) as IUser;
   const _mode = useAppSelector(mode);
   return (
     <StyledUserPointWrapper>
@@ -55,7 +56,7 @@ const PokerUserPoint: FC = () => {
         width={20}
         height={20}
       />
-      <StyledSpan $mode={_mode}>{_user.earned_points?.toFixed(2)}</StyledSpan>
+      <StyledSpan $mode={_mode}>{user.earned_points?.toFixed(2)}</StyledSpan>
       <StyledDepositCta>
         <AddSvgIcon size={20} color={theme.palette.secondary.main} />
         Deposit

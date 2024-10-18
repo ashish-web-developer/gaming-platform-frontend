@@ -2,6 +2,7 @@ import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -22,7 +23,7 @@ import PokerSlider from "@/components/poker/poker-slider/poker-slider";
 import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 import { dealer_id, bettor_id } from "@/store/slice/poker/poker.slice";
 
 // hooks
@@ -43,7 +44,7 @@ const PokerPlayerSeat: FC<{
   show_current_betted_amount = true,
   toggle_action_cta,
 }) => {
-  const { id: user_id } = useAppSelector(user);
+  const { id: user_id } = useAppSelector(User) as IUser;
   const raise_cta_ref = useRef<HTMLDivElement>(null);
   const _dealer_id = useAppSelector(dealer_id);
   const _bettor_id = useAppSelector(bettor_id);

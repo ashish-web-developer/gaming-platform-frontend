@@ -106,6 +106,7 @@ function usePresenceChannel<IDependencyType, IMemberType>({
   events,
   dependency,
   memberHandler,
+  handleSubscription,
 }: {
   channel_name: string;
   dependency: IDependencyType;
@@ -117,12 +118,15 @@ function usePresenceChannel<IDependencyType, IMemberType>({
     event: string;
     handler: (data: any) => void;
   }>;
+  handleSubscription?: (data: IMemberType) => void;
 }) {
   const pusher = usePusher();
   useEffect(() => {
     const channel = dependency && pusher?.subscribe(`presence-${channel_name}`);
     channel?.bind("pusher:subscription_succeeded", () => {
       console.log(`presence-${channel_name} subscription succeeded`);
+      // @ts-expect-error
+      handleSubscription?.(channel?.members.me as IMemberType);
     });
 
     // @ts-expect-error

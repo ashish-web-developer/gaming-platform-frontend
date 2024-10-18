@@ -21,8 +21,8 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  show_buy_in_modal,
-  small_blind,
+  showBuyInModal,
+  smallBlind,
   updateShowBuyInModal,
   getPokerRoomInfoApi,
 } from "@/store/slice/poker/poker.slice";
@@ -34,8 +34,8 @@ const PokerBuyInDialog: FC = () => {
   const dispatch = useAppDispatch();
   const dialog_ref = useRef<HTMLDialogElement>(null);
   const [poker_buy_in_amount, set_poker_buy_in_amount] = useState<number>(200);
-  const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
-  const _small_blind = useAppSelector(small_blind);
+  const show_buy_in_modal = useAppSelector(showBuyInModal);
+  const small_blind = useAppSelector(smallBlind);
   const gsap_context = useRef<gsap.Context>();
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const PokerBuyInDialog: FC = () => {
   }, []);
   return (
     <>
-      {_show_buy_in_modal && <StyledBackdrop />}
+      {show_buy_in_modal && <StyledBackdrop />}
       <StyledPokerBuyInDialog ref={dialog_ref}>
         <StyledDialogImageWrapper>
           <StyledDialogImage
@@ -75,9 +75,9 @@ const PokerBuyInDialog: FC = () => {
         <StyledBuyInAmount>$ {poker_buy_in_amount * 1000}</StyledBuyInAmount>
         <StyledBuyInSlider
           value={poker_buy_in_amount}
-          min={_small_blind * 2 * 20} // minimum buy_in_amount is 20 times the big blind
-          max={_small_blind * 2 * 50} // maximum buy_in_amount is 50 times the big blind
-          step={_small_blind * 2} // multiple of big blind
+          min={small_blind * 2 * 20} // minimum buy_in_amount is 20 times the big blind
+          max={small_blind * 2 * 50} // maximum buy_in_amount is 50 times the big blind
+          step={small_blind * 2} // multiple of big blind
           onInput={(event) => {
             const range_input_element = event.target as HTMLInputElement;
             set_poker_buy_in_amount(Number(range_input_element.value));
@@ -93,7 +93,7 @@ const PokerBuyInDialog: FC = () => {
               height={20}
             />
             <StyledBlindsAmount>
-              $ {_small_blind}k / $ {_small_blind * 2}k
+              $ {small_blind}k / $ {small_blind * 2}k
             </StyledBlindsAmount>
           </StyledBlindsAmountWrapper>
         </StyledBlindsContainer>

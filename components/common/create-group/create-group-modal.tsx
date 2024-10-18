@@ -132,6 +132,7 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           placeholder="Search Player"
           id={`search-${search_input_id}`}
           ref={search_input_ref}
+          autoComplete="off"
           onChange={(event) => {
             dispatch(updatePage(1));
             dispatch(updateFetchUserResult([]));
@@ -154,7 +155,11 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           return (
             <StyledUserTag key={user.id}>
               <StyledAvatarWrapper>
-                <ChatAvatar user={user} />
+                <ChatAvatar
+                  user={user}
+                  image_background_color={"#fff"}
+                  border_color={theme.palette.primary.dark}
+                />
               </StyledAvatarWrapper>
               <StyledAvatarUsername>{user.name}</StyledAvatarUsername>
               <StyledRemoveCta

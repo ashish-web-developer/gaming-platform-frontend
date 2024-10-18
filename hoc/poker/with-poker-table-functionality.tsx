@@ -3,9 +3,10 @@ import { useState } from "react";
 import type { ComponentType, SetStateAction, Dispatch } from "react";
 import type { ISeatType, IPokerPlayer } from "@/types/store/slice/poker/poker";
 import type { IDeckType } from "@/types/store/slice/poker";
+import type { IUser } from "@/types/store/slice/login";
 
 // redux
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 import { useAppSelector } from "@/hooks/redux.hook";
 import {
   active_poker_players,
@@ -55,7 +56,7 @@ const withPokerTableFunctionality = (
         seat_number: index,
       };
     });
-    const { id: user_id } = useAppSelector(user);
+    const { id: user_id } = useAppSelector(User) as IUser;
 
     const auth_player_index = _active_poker_players.findIndex(
       (player) => player.player_id == user_id

@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -16,12 +17,12 @@ import {
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
 import PokerTable from "@/components/poker/poker-table/poker-table";
-const MobilePokerTable = dynamic(
-  () => import("@/components/poker/poker-table/mobile/mobile-poker-table"),
-  {
-    ssr: false,
-  }
-);
+// const MobilePokerTable = dynamic(
+//   () => import("@/components/poker/poker-table/mobile/mobile-poker-table"),
+//   {
+//     ssr: false,
+//   }
+// );
 const PokerBuyInDialog = dynamic(
   () => import("@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog"),
   {
@@ -39,12 +40,12 @@ const PokerBuyInDrawer = dynamic(
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  show_buy_in_modal,
+  showBuyInModal,
   dealer_id,
   active_poker_players,
   dealHandApi,
 } from "@/store/slice/poker/poker.slice";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -53,14 +54,16 @@ const PokerContainer: FC = () => {
   const dispatch = useAppDispatch();
   const container_ref = useRef<HTMLDivElement>(null);
   const is_mobile = useIsMobile();
-  const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
-  const { id: user_id } = useAppSelector(user);
+  const show_buy_in_modal = useAppSelector(showBuyInModal);
+  const { id: user_id } = useAppSelector(User) as IUser;
   const _dealer_id = useAppSelector(dealer_id);
   const no_of_players_playing = useAppSelector(active_poker_players).length;
   const timeout_ref = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
+    console.log("inside poker effect");
     if (no_of_players_playing == 7 && user_id == _dealer_id) {
+      console.log("user id and dealer id are same");
       timeout_ref.current = setTimeout(() => {
         dispatch(dealHandApi());
       }, 2000);
@@ -73,7 +76,7 @@ const PokerContainer: FC = () => {
     <StyledPage>
       {is_mobile ? (
         <>
-          {_show_buy_in_modal ? (
+          {show_buy_in_modal ? (
             <>
               <PokerBuyInDrawer />
               <StyledMobileLogoWrapper>
@@ -90,14 +93,15 @@ const PokerContainer: FC = () => {
               </StyledGirlImageWrapper>
             </>
           ) : (
-            <MobilePokerTable />
+            <></>
+            // <MobilePokerTable />
           )}
         </>
       ) : (
         <StyledContainer ref={container_ref}>
           <PokerHeader />
           <PokerTable />
-          {_show_buy_in_modal && <PokerBuyInDialog />}
+          {show_buy_in_modal && <PokerBuyInDialog />}
         </StyledContainer>
       )}
     </StyledPage>

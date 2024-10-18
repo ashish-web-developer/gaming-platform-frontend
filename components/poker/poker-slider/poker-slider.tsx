@@ -28,7 +28,7 @@ import "react-rangeslider/lib/index.css";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  small_blind,
+  smallBlind,
   min_amount_to_be_betted,
   updateShowPokerSlider,
   triggerActionApi,
@@ -48,7 +48,7 @@ const PokerSlider: ForwardRefRenderFunction<
     _min_amount_to_be_betted as number
   );
   const [thumb_left_position, set_thumb_left_position] = useState(0);
-  const _small_blind = useAppSelector(small_blind);
+  const small_blind = useAppSelector(smallBlind);
   const slider_container_ref = useRef<HTMLDivElement>(null);
   const slider_wrapper_ref = useRef<HTMLDivElement>(null);
   const slider_ref = useRef<HTMLDivElement>(null);
@@ -108,7 +108,7 @@ const PokerSlider: ForwardRefRenderFunction<
               min={_min_amount_to_be_betted as number}
               max={total_chips_count}
               value={slider_val}
-              step={_small_blind * 2}
+              step={small_blind * 2}
               onChange={(value) => {
                 set_slider_val(value);
                 const slider_thumb_element = document.getElementsByClassName(

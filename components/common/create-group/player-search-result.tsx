@@ -2,6 +2,10 @@ import { useRef, forwardRef, useId } from "react";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
 import type { IUser } from "@/types/store/slice/login";
+import type { ITheme } from "@/theme/chat.theme";
+
+// theme
+import { useTheme } from "styled-components";
 
 // styled components
 import {
@@ -98,18 +102,26 @@ const PlayerSearchResult: ForwardRefRenderFunction<
     updateGroupUserIds: (player: IUser, type: "add" | "remove") => void;
   }
 > = ({ group_user, updateGroupUserIds }, search_input_ref) => {
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const _fetched_user_result = useAppSelector(fetchedUserResult);
+  const fetched_user_result = useAppSelector(fetchedUserResult);
   const container_ref = useRef<HTMLDivElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
-  const _is_request_pending = useAppSelector(isRequestPending);
+  const is_request_pending = useAppSelector(isRequestPending);
   return (
     <StyledPlayerSearchWrapper>
       <StyledHeader>
         Players
         <StyledGroupAvatar>
           {group_user.map((user) => {
-            return <ChatAvatar user={user} />;
+            return (
+              <ChatAvatar
+                key={user.id}
+                user={user}
+                border_color={theme.palette.primary.dark}
+                image_background_color="#fff"
+              />
+            );
           })}
         </StyledGroupAvatar>
       </StyledHeader>
@@ -118,7 +130,7 @@ const PlayerSearchResult: ForwardRefRenderFunction<
           fetchOnScroll({
             timeout_ref: timeout_ref,
             container_ref: container_ref,
-            is_request_pending: _is_request_pending,
+            is_request_pending: is_request_pending,
             handler: () => {
               timeout_ref.current = setTimeout(() => {
                 if (
@@ -138,7 +150,7 @@ const PlayerSearchResult: ForwardRefRenderFunction<
         }
         ref={container_ref}
       >
-        {_fetched_user_result.map((user) => {
+        {fetched_user_result.map((user) => {
           return (
             <UserProfile
               updateGroupUserIds={updateGroupUserIds}
