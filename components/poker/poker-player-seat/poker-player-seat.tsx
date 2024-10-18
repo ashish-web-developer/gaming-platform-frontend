@@ -47,8 +47,8 @@ const PokerPlayerSeat: FC<{
   const { id: user_id } = useAppSelector(User) as IUser;
   const raise_cta_ref = useRef<HTMLDivElement>(null);
   const dealer_id = useAppSelector(dealerId);
-  const better_id = useAppSelector(bettorId);
-  const is_bettor = poker_player?.player_id == better_id;
+  const bettor_Id = useAppSelector(bettorId);
+  const is_bettor = poker_player?.player_id == bettor_Id;
   return (
     <>
       <StyledPokerPlayerSeatWrapper

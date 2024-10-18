@@ -1,5 +1,7 @@
+// types
 import type { FC } from "react";
 import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -15,18 +17,18 @@ import MobilePokerCard from "@/components/poker/poker-card/mobile/mobile-poker-c
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { user } from "@/store/slice/user.slice";
-import { bettor_id, dealer_id } from "@/store/slice/poker/poker.slice";
+import { User } from "@/store/slice/login.slice";
+import { bettorId, dealerId } from "@/store/slice/poker/poker.slice";
 
 type IProps = {
   poker_player: IPokerPlayer;
   is_active: boolean;
 };
 const MobilePokerPlayerSeat: FC<IProps> = ({ poker_player, is_active }) => {
-  const { id: user_id } = useAppSelector(user);
-  const _bettor_id = useAppSelector(bettor_id);
-  const _dealer_id = useAppSelector(dealer_id);
-  const is_bettor = poker_player?.player_id == _bettor_id;
+  const { id: user_id } = useAppSelector(User) as IUser;
+  const bettor_id = useAppSelector(bettorId);
+  const dealer_id = useAppSelector(dealerId);
+  const is_bettor = poker_player?.player_id == bettor_id;
   return (
     <StyledPokerPlayerSeatWrapper
       $seat_number={poker_player.seat_index as ISeatType}
@@ -50,7 +52,7 @@ const MobilePokerPlayerSeat: FC<IProps> = ({ poker_player, is_active }) => {
         player={poker_player}
         is_bettor={is_bettor}
         is_active={Boolean(poker_player)}
-        is_dealer={poker_player?.player_id == _dealer_id}
+        is_dealer={poker_player?.player_id == dealer_id}
       />
       <StyledPokerPlayerBuyInAmount>
         $ {(poker_player?.total_chips_left ?? 0).toFixed(2)} K

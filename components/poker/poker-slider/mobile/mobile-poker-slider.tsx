@@ -25,8 +25,8 @@ import "react-rangeslider/lib/index.css";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  min_amount_to_be_betted,
-  small_blind,
+  minAmountToBeBetted,
+  smallBlind,
   updateShowPokerSlider,
   triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
@@ -42,11 +42,11 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
 ) => {
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const _small_blind = useAppSelector(small_blind);
-  const _min_amount_to_be_betted = useAppSelector(min_amount_to_be_betted);
+  const small_blind = useAppSelector(smallBlind);
+  const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted);
   const [thumb_left_position, set_thumb_left_position] = useState(0);
   const [slider_val, set_slider_val] = useState(
-    _min_amount_to_be_betted as number
+    min_amount_to_be_betted as number
   );
   const [show_confirm_tooltip, set_show_confirm_tooltip] =
     useState<boolean>(false);
@@ -117,10 +117,10 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
           className="slider custom-labels"
         >
           <Slider
-            min={_min_amount_to_be_betted as number}
+            min={min_amount_to_be_betted as number}
             max={total_chips_count}
             value={slider_val}
-            step={_small_blind * 2}
+            step={small_blind * 2}
             handleLabel={`${slider_val}`}
             onChangeStart={() => {
               set_show_confirm_tooltip(false);

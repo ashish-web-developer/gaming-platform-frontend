@@ -29,7 +29,7 @@ import {
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { active_poker_players } from "@/store/slice/poker/poker.slice";
+import { activePokerPlayers } from "@/store/slice/poker/poker.slice";
 
 type IProps = {
   left_poker_players: IPokerPlayer[];
@@ -61,7 +61,7 @@ const MobilePokerTable: FC<IProps> = ({
   user_id,
 }) => {
   const raise_cta_ref = useRef<HTMLButtonElement>(null);
-  const auth_player = useAppSelector(active_poker_players).filter(
+  const auth_player = useAppSelector(activePokerPlayers).filter(
     (player) => player.player_id == user_id
   )[0];
 
@@ -125,8 +125,8 @@ const MobilePokerTable: FC<IProps> = ({
             }
             return (
               <StyledPokerChipsImage
-                style = {{
-                  marginTop:"17px"
+                style={{
+                  marginTop: "17px",
                 }}
                 src={"/poker/poker-player/poker-chip.png"}
                 alt="chip"

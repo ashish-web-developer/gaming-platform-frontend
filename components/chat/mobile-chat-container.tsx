@@ -5,7 +5,9 @@ import type { FC } from "react";
 import type { IUser } from "@/types/store/slice/login";
 
 // theme
-import { Theme } from "@/theme/poker.theme";
+import { Theme as PokerTheme } from "@/theme/poker.theme";
+import { useTheme } from "styled-components";
+import { ITheme } from "@/theme/chat.theme";
 
 // theme provider
 import { ThemeProvider } from "styled-components";
@@ -99,6 +101,7 @@ import {
 import { useIsMobile } from "@/hooks/common.hook";
 
 const MobileChatContainer: FC = () => {
+  const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
   const [active_tab, set_active_tab] = useState<1 | 2>(1);
   const default_user = useAppSelector(defaultUsers);
@@ -116,7 +119,7 @@ const MobileChatContainer: FC = () => {
   return (
     <StyledMobileChatContainer $mode={_mode}>
       {show_poker_invite_dialog && (
-        <ThemeProvider theme={Theme}>
+        <ThemeProvider theme={PokerTheme}>
           <PokerInviteDialog />
         </ThemeProvider>
       )}
@@ -191,6 +194,8 @@ const MobileChatContainer: FC = () => {
                   .map((user_group, index) => {
                     return (
                       <ChatAvatar
+                        border_color={theme.palette.primary.dark}
+                        image_background_color={"#fff"}
                         key={`chat-avatar-${index}`}
                         left_count={
                           active_group.user_group.length > 4

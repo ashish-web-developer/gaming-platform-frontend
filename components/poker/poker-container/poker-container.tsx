@@ -17,12 +17,12 @@ import {
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
 import PokerTable from "@/components/poker/poker-table/poker-table";
-// const MobilePokerTable = dynamic(
-//   () => import("@/components/poker/poker-table/mobile/mobile-poker-table"),
-//   {
-//     ssr: false,
-//   }
-// );
+const MobilePokerTable = dynamic(
+  () => import("@/components/poker/poker-table/mobile/mobile-poker-table"),
+  {
+    ssr: false,
+  }
+);
 const PokerBuyInDialog = dynamic(
   () => import("@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog"),
   {
@@ -91,8 +91,7 @@ const PokerContainer: FC = () => {
               </StyledGirlImageWrapper>
             </>
           ) : (
-            <></>
-            // <MobilePokerTable />
+            <MobilePokerTable />
           )}
         </>
       ) : (
