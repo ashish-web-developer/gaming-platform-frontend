@@ -26,12 +26,6 @@ import { Theme } from "@/theme/poker.theme";
 // theme provider
 import { ThemeProvider } from "styled-components";
 
-const CogniMatchInviteDialog = dynamic(
-  () => import("@/components/chat/invite-dialog/cognimatch-invite-dialog"),
-  {
-    ssr: false,
-  }
-);
 const PokerInviteDialog = dynamic(
   () => import("@/components/chat/invite-dialog/poker-invite-dialog"),
   {
@@ -44,7 +38,6 @@ import { useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
   activeUser,
-  showCognimatchInviteDialog,
   showPokerInviteDialog,
 } from "@/store/slice/chat.slice";
 import { activeGroup } from "@/store/slice/group.slice";
@@ -55,13 +48,9 @@ const ChatContainer: FC = () => {
   const active_user = useAppSelector(activeUser);
   const active_group = useAppSelector(activeGroup);
   const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
-  const show_cognimatch_invite_dialog = useAppSelector(
-    showCognimatchInviteDialog
-  );
   const show_poker_invite_dialog = useAppSelector(showPokerInviteDialog);
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
-      {show_cognimatch_invite_dialog && <CogniMatchInviteDialog />}
       {show_poker_invite_dialog && (
         <ThemeProvider theme={Theme}>
           <PokerInviteDialog />

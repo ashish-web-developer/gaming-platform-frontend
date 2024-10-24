@@ -75,19 +75,11 @@ const NotificationModal = dynamic(
   }
 );
 
-const CogniMatchInviteDialog = dynamic(
-  () => import("@/components/chat/invite-dialog/cognimatch-invite-dialog"),
-  {
-    ssr: false,
-  }
-);
-
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import {
   showChat,
   defaultUsers,
-  showCognimatchInviteDialog,
   showPokerInviteDialog,
 } from "@/store/slice/chat.slice";
 import { activeGroup, defaultGroups } from "@/store/slice/group.slice";
@@ -110,9 +102,6 @@ const MobileChatContainer: FC = () => {
   const show_chat = useAppSelector(showChat);
   const show_mobile_profile = useAppSelector(showMobileProfile);
   const show_notification_modal = useAppSelector(showNotificationModal);
-  const show_cognimatch_invite_dialog = useAppSelector(
-    showCognimatchInviteDialog
-  );
   const show_poker_invite_dialog = useAppSelector(showPokerInviteDialog);
   const is_mobile = useIsMobile();
 
@@ -122,12 +111,6 @@ const MobileChatContainer: FC = () => {
         <ThemeProvider theme={PokerTheme}>
           <PokerInviteDialog />
         </ThemeProvider>
-      )}
-
-      {show_cognimatch_invite_dialog && (
-        <StyledInviteDialogWrapper>
-          <CogniMatchInviteDialog />
-        </StyledInviteDialogWrapper>
       )}
 
       {show_mobile_profile && <MobileUserProfile />}

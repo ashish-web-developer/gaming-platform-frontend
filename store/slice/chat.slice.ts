@@ -209,7 +209,6 @@ const initialState: IChatInitialState = {
     show_search_dialog: false,
   },
   invites_dialog: {
-    show_cognimatch_invite_dialog: false,
     show_poker_invite_dialog: false,
   },
   typing_user: null,
@@ -317,7 +316,7 @@ const chatSlice = createSlice({
     updateInviteDialog: (
       state,
       action: PayloadAction<{
-        modal_type: "cognimatch" | "poker";
+        modal_type: "poker";
         is_open: boolean;
       }>
     ) => {
@@ -423,8 +422,6 @@ export const showChat = (state: RootState) => state.chat.mobile.show_chat;
 
 export const showSearchDialog = (state: RootState) =>
   state.chat.mobile.show_search_dialog;
-export const showCognimatchInviteDialog = (state: RootState) =>
-  state.chat.invites_dialog.show_cognimatch_invite_dialog;
 export const showPokerInviteDialog = (state: RootState) =>
   state.chat.invites_dialog.show_poker_invite_dialog;
 export const activeUserStatus = (state: RootState) =>

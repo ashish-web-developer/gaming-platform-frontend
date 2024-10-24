@@ -47,7 +47,6 @@ import {
   updateTypingUsers,
 } from "@/store/slice/group.slice";
 import { updatePokerRoomId } from "@/store/slice/poker/poker.slice";
-import { updateCognimatchRoomId } from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -121,7 +120,7 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
         handler: (data: {
           receiver_id: number;
           user: IUser;
-          game: "cognimatch" | "poker";
+          game: "poker";
           room_id: string;
         }) => {
           dispatch(
@@ -130,11 +129,8 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
               is_open: true,
             })
           );
-          if (data.game == "cognimatch") {
-            dispatch(updateCognimatchRoomId(data.room_id));
-          } else if (data.game == "poker") {
-            dispatch(updatePokerRoomId(data.room_id));
-          }
+
+          dispatch(updatePokerRoomId(data.room_id));
         },
       },
       {

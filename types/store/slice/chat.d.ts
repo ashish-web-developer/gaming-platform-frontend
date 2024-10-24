@@ -47,7 +47,6 @@ type IChatInitialState = {
     show_search_dialog: boolean;
   };
   invites_dialog: {
-    show_cognimatch_invite_dialog: boolean;
     show_poker_invite_dialog: boolean;
   };
   typing_user: IUser | null;

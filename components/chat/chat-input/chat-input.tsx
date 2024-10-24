@@ -40,7 +40,6 @@ import {
 } from "@/store/slice/chat.slice";
 import { activeGroup, typingUsers } from "@/store/slice/group.slice";
 import { createPokerRoomApi } from "@/store/slice/poker/poker.slice";
-import { createCognimatchRoomApi } from "@/store/slice/cognimatch.slice";
 
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
@@ -290,23 +289,6 @@ const ChatInput: FC<{}> = () => {
                     })
                   );
                   router.push("/poker");
-                } else {
-                  dispatch(
-                    createCognimatchRoomApi({
-                      room_id,
-                      players_id: [
-                        user?.id as number,
-                        active_user?.id as number,
-                      ],
-                    })
-                  );
-                  dispatch(
-                    sendInvitationApi({
-                      game: "cognimatch",
-                      room_id,
-                    })
-                  );
-                  // router.push("/cognimatch");
                 }
               }}
             >
