@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 // types
 import type { FC } from "react";
 import type { IFileState } from "@/components/common/user-profile/upload-profile-modal";
@@ -13,12 +13,14 @@ import withLoginFunctionality from "@/hoc/login/with-login-functionality";
 // local components
 import LoginForm from "@/components/login/login-form";
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
+import OnboardBanner from "@/components/login/onboard-banner";
 
 // styled components
 import {
   StyledPage,
+  StyledImageContainer,
+  StyledImage,
   StyledUploadModalWrapper,
-  StyledLogo,
 } from "@/styles/components/login/login-container/mobile-login-container.style";
 
 type IBaseProps = {
@@ -43,19 +45,72 @@ const MobileLoginContainer: FC<IBaseProps> = ({
   profileOnClickHandler,
 }) => {
   const theme = useTheme();
+  const [show_onboard, setShowOnboard] = useState(false);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   return (
     <StyledPage>
-      <StyledLogo>Fortune Realm</StyledLogo>
-      <LoginForm
-        tab_index={tab_index}
-        updateTabIndex={updateTabIndex}
-        updateProfile={updateProfile}
-        updateActiveField={updateActiveField}
-        file_state={file_state}
-        error={error}
-        ref={camera_cta_ref}
-      />
+      <StyledImageContainer
+        $width="207px"
+        $height="182px"
+        $left="-14px"
+        $top="0px"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/spider-with-web.png"
+          fill={true}
+          alt="spider-web"
+        />
+      </StyledImageContainer>
+      <StyledImageContainer
+        $width="157px"
+        $height="168px"
+        $top="-60px"
+        $right="-60px"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/web-vector.png"
+          fill={true}
+          alt="spider-web"
+        />
+      </StyledImageContainer>
+      <StyledImageContainer
+        $width="90px"
+        $height="76px"
+        $top="60px"
+        $left="50%"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/finger-prints-1.png"
+          fill={true}
+          alt="finger-prints-1"
+        />
+      </StyledImageContainer>
+      <StyledImageContainer
+        $width="38px"
+        $height="38px"
+        $bottom="60px"
+        $left="78px"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/finger-prints-2.png"
+          fill={true}
+          alt="finger-prints-1"
+        />
+      </StyledImageContainer>
+      {show_onboard ? (
+        <OnboardBanner />
+      ) : (
+        <LoginForm
+          tab_index={tab_index}
+          updateTabIndex={updateTabIndex}
+          updateProfile={updateProfile}
+          updateActiveField={updateActiveField}
+          file_state={file_state}
+          error={error}
+          ref={camera_cta_ref}
+          updateShowOnboard={(show_onboard) => setShowOnboard(show_onboard)}
+        />
+      )}
       <StyledUploadModalWrapper $is_modal_open={show_profile_upload_modal}>
         {show_profile_upload_modal && (
           <UploadProfileModal

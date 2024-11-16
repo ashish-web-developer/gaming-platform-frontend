@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -8,6 +8,8 @@ import type { IFieldType } from "@/types/store/slice/login";
 // styled components
 import {
   StyledPage,
+  StyledImageContainer,
+  StyledImage,
   StyledContentContainer,
   StyledLogoContainer,
   StyledLogo,
@@ -25,6 +27,7 @@ import LoginForm from "@/components/login/login-form";
 import UploadProfileModal from "@/components/common/user-profile/upload-profile-modal";
 import IntroductionTooltip from "@/components/login/introduction-tooltip";
 import ValidationTooltip from "@/components/login/validation-tooltip";
+import OnboardBanner from "@/components/login/onboard-banner";
 
 type IProps = {
   show_profile_upload_modal: boolean;
@@ -49,9 +52,22 @@ const LoginContainer: FC<IProps> = ({
 }) => {
   const theme = useTheme() as ITheme;
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
+  const [show_onboard, setShowOnboard] = useState<boolean>(false);
 
   return (
     <StyledPage>
+      <StyledImageContainer
+        $width="311px"
+        $height="308px"
+        $right="0px"
+        $top="0px"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/spider-with-web.png"
+          fill={true}
+          alt="spider-web"
+        />
+      </StyledImageContainer>
       <>
         <StyledLogoContainer className="logo-container">
           <StyledLogo>Fortune Realm</StyledLogo>
@@ -60,7 +76,23 @@ const LoginContainer: FC<IProps> = ({
         <ValidationTooltip error={error} />
       </>
       <StyledContentContainer>
-        <>
+        <StyledImageContainer
+          $width="533px"
+          $height="534px"
+          $top="50%"
+          $left="50%"
+          $translateX="-50%"
+          $translateY="-50%"
+        >
+          <StyledImage
+            src="/login/web-vector.png"
+            fill={true}
+            alt="spider-web"
+          />
+        </StyledImageContainer>
+        {show_onboard ? (
+          <OnboardBanner />
+        ) : (
           <LoginForm
             tab_index={tab_index}
             updateTabIndex={(index) => updateTabIndex(index)}
@@ -68,19 +100,20 @@ const LoginContainer: FC<IProps> = ({
             updateActiveField={(field) => updateActiveField(field)}
             file_state={file_state}
             ref={camera_cta_ref}
+            updateShowOnboard={(show_onboard) => setShowOnboard(show_onboard)}
           />
-          <StyledUploadModalWrapper $is_modal_open={show_profile_upload_modal}>
-            {show_profile_upload_modal && (
-              <UploadProfileModal
-                onClickHandler={profileOnClickHandler}
-                ref={camera_cta_ref}
-                secondary_color={theme.palette.info.main}
-                font_family={theme.fontFamily.bangers}
-                show_girl_image={true}
-              />
-            )}
-          </StyledUploadModalWrapper>
-        </>
+        )}
+        <StyledUploadModalWrapper $is_modal_open={show_profile_upload_modal}>
+          {show_profile_upload_modal && (
+            <UploadProfileModal
+              onClickHandler={profileOnClickHandler}
+              ref={camera_cta_ref}
+              secondary_color={theme.palette.info.main}
+              font_family={theme.fontFamily.bangers}
+              show_girl_image={true}
+            />
+          )}
+        </StyledUploadModalWrapper>
       </StyledContentContainer>
     </StyledPage>
   );

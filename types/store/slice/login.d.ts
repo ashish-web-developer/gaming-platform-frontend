@@ -92,6 +92,18 @@ type ILoginUserApiResponse = IRegisterUserApiResponse;
 type ILoginUserApiRejectValue = IRegisterUserApiRejectValue;
 
 /**
+ * ===== UPDATE NAME API =======
+ */
+
+type IUpdateNameApiRequest = {
+  name: string;
+};
+
+type IUpdateNameApiResponse = IBaseResponse & {
+  message: string;
+};
+
+/**
  * ===== LOGOUT USER API =======
  */
 type ILogoutUserApiResponse = IBaseResponse & {
@@ -110,6 +122,8 @@ export {
   IRegisterUserApiRejectValue,
   IUpdateProfileApiRequest,
   IUpdateProfileApiResponse,
+  IUpdateNameApiRequest,
+  IUpdateNameApiResponse,
   ILoginUserApiRequest,
   ILoginUserApiResponse,
   ILoginUserApiRejectValue,

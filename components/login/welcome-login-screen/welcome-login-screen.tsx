@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 // types
 import type { FC } from "react";
 
@@ -6,21 +5,20 @@ import type { FC } from "react";
 import {
   StyledPage,
   StyledContentContainer,
-  StyledStripeVectorWrapper,
-  StyledStripeText,
+  StyledGridColumnsContent,
+  StyledRightContentContainer,
+  StyledImageContainer,
+  StyledImage,
   StyledLogoContainer,
   StyledLogo,
-  StyledLogoSpan,
   StyledSubTitle,
-  StyledGamesBannerContainer,
-  StyledGamesVectorWrapper,
-  StyledGamesBannerContent,
-  StyledPokerCardWrapper,
-  StyledBannerGirlImageWrapper,
-  StyledBannerGirlImage,
+  StyledGameBannerContainer,
   StyledBannerGameLogo,
-  StyledCta,
-  StyledCtaTextWrapper,
+  StyledCornerVector,
+  StyledPokerCardWrapper,
+  StyledPlayCta,
+  StyledPlayCtaVector,
+  StyledCtaText,
 } from "@/styles/components/login/welcome-login-screen/welcome-login-screen.style";
 
 // theme
@@ -31,123 +29,152 @@ import { Theme as PokerTheme } from "@/theme/poker.theme";
 import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // vector
-import StripeVector from "@/components/login/vector/stripe-vector";
-import CtaVector from "@/components/login/vector/cta-vector";
-import CognimatchVector from "@/components/login/vector/cognimatch-vector";
-import PokerVector from "@/components/login/vector/poker-vector";
-
-// gsap
-import gsap from "gsap-trial";
+import LoginPlayCtaVector from "../vector/login-play-cta-vector";
+import CornerVector from "@/components/login/vector/corner-vector";
 
 const WelcomeLoginScreen: FC<{
   updateShowLogin: (show: boolean) => void;
 }> = ({ updateShowLogin }) => {
-  useEffect(() => {
-    const gsap_context = gsap.context(() => {
-      gsap
-        .timeline()
-        .from(".logo-span", {
-          delay: 1,
-          scale: 1.3,
-          duration: 1,
-          opacity: 0,
-          ease: "power2.inOut",
-          stagger: 0.1,
-        })
-        .to(".logo-container", {
-          rotate: -5,
-          duration: 0.6,
-          ease: "bounce",
-        })
-        .to(
-          "button",
-          {
-            rotate: 0,
-            duration: 0.6,
-            ease: "bounce",
-          },
-          "<"
-        );
-    });
-    return () => {
-      gsap_context.revert();
-    };
-  }, []);
   return (
     <StyledPage>
-      <StyledStripeVectorWrapper>
-        <StripeVector />
-        <StyledStripeText>Win big Prizes!</StyledStripeText>
-      </StyledStripeVectorWrapper>
+      <StyledImageContainer
+        $width="260px"
+        $height="251px"
+        $top="0px"
+        $left="-8px"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/spider-with-web.png"
+          fill={true}
+          alt="spider-web"
+        />
+      </StyledImageContainer>
+      <StyledImageContainer
+        $width="295px"
+        $height="304px"
+        $top="-90px"
+        $right="-90px"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/web-vector.png"
+          fill={true}
+          alt="spider-web"
+        />
+      </StyledImageContainer>
+      <StyledImageContainer
+        $width="589px"
+        $height="442px"
+        $bottom="-50px"
+        $right="-140px"
+      >
+        <StyledImage
+          src="/login/welcome-login-screen/haunted-car.png"
+          fill={true}
+          alt="haunted car"
+        />
+      </StyledImageContainer>
       <StyledContentContainer>
-        <StyledLogoContainer className="logo-container">
-          <StyledLogo>
-            {"Fortune Realm".split("").map((val, index) => {
-              return (
-                <StyledLogoSpan
-                  key={`logo-span-${index}`}
-                  className="logo-span"
-                >
-                  {val === " " ? "\u00A0" : val}
-                </StyledLogoSpan>
-              );
-            })}
-          </StyledLogo>
-          <StyledSubTitle>
-            Your Ultimate Destination for Thrilling Casino Games
-          </StyledSubTitle>
-        </StyledLogoContainer>
-        <StyledGamesBannerContainer>
-          <StyledGamesVectorWrapper $height="309px">
-            <PokerVector />
-            <StyledGamesBannerContent>
-              <ThemeProvider theme={PokerTheme}>
-                <StyledPokerCardWrapper
-                  $bottom="32px"
-                  $left="100px"
-                  $rotate="-10deg"
-                >
-                  <PokerCard rank="K" suit="club" />
-                </StyledPokerCardWrapper>
-                <StyledPokerCardWrapper
-                  $top="32px"
-                  $right="50px"
-                  $rotate="15deg"
-                >
-                  <PokerCard rank="Q" suit="diamond" />
-                </StyledPokerCardWrapper>
-              </ThemeProvider>
-              <StyledBannerGirlImageWrapper>
-                <StyledBannerGirlImage
-                  src="/chat/invite-dialog/poker-background.png"
+        <StyledImageContainer
+          $width="138px"
+          $height="114px"
+          $top="10px"
+          $left="50%"
+        >
+          <StyledImage
+            src="/login/welcome-login-screen/finger-prints-1.png"
+            fill={true}
+            alt="finger-prints-1"
+          />
+        </StyledImageContainer>
+        <StyledImageContainer
+          $width="76px"
+          $height="83px"
+          $bottom="50%"
+          $right="0px"
+        >
+          <StyledImage
+            src="/login/welcome-login-screen/finger-prints-2.png"
+            fill={true}
+            alt="finger-prints-1"
+          />
+        </StyledImageContainer>
+        <StyledGridColumnsContent>
+          <StyledImageContainer
+            $width="660px"
+            $height="840px"
+            $bottom="-90px"
+            $left="-72px"
+          >
+            <StyledImage
+              src="/login/welcome-login-screen/main-image.png"
+              fill={true}
+              alt="main image"
+            />
+          </StyledImageContainer>
+        </StyledGridColumnsContent>
+        <StyledGridColumnsContent>
+          <StyledRightContentContainer>
+            <StyledLogoContainer>
+              <StyledLogo>Fortune Realm</StyledLogo>
+              <StyledSubTitle>
+                Your ultimate destination for thrilling casino games
+              </StyledSubTitle>
+            </StyledLogoContainer>
+            <StyledGameBannerContainer>
+              <StyledCornerVector $rotate="0deg" $left="0px" $top="0px">
+                <CornerVector size={50} />
+              </StyledCornerVector>
+              <StyledCornerVector $rotate="90deg" $right="0px" $top="0px">
+                <CornerVector size={50} />
+              </StyledCornerVector>
+              <StyledCornerVector $rotate="180deg" $right="0px" $bottom="0px">
+                <CornerVector size={50} />
+              </StyledCornerVector>
+              <StyledCornerVector $rotate="270deg" $bottom="0px" $left="0px">
+                <CornerVector size={50} />
+              </StyledCornerVector>
+              <StyledImageContainer
+                $width="215px"
+                $height="299px"
+                $left="50%"
+                $bottom="0px"
+                $translateX="-50%"
+              >
+                <StyledImage
+                  src="/login/welcome-login-screen/poker-banner-girl.png"
+                  alt="poker-girl"
                   fill={true}
-                  alt="banner-image"
-                  sizes="(max-width: 1400px) 20vw"
-                  priority={true}
                 />
-              </StyledBannerGirlImageWrapper>
+              </StyledImageContainer>
               <StyledBannerGameLogo>
-                Texas Hold’em <br />
+                Texas hold'em <br />
                 showdown
               </StyledBannerGameLogo>
-            </StyledGamesBannerContent>
-          </StyledGamesVectorWrapper>
-          <StyledGamesVectorWrapper
-            $height="309px"
-            $margin="60px 0px 0px -70px"
-          >
-            <CognimatchVector />
-            <StyledGamesBannerContent></StyledGamesBannerContent>
-          </StyledGamesVectorWrapper>
-        </StyledGamesBannerContainer>
-        <StyledCta
-          onClick={() => {
-            updateShowLogin(true);
-          }}
-        >
-          <CtaVector />
-          <StyledCtaTextWrapper>Unlock Fun</StyledCtaTextWrapper>
-        </StyledCta>
+              <ThemeProvider theme={PokerTheme}>
+                <StyledPokerCardWrapper
+                  $right="40px"
+                  $top="24px"
+                  $rotate="15deg"
+                >
+                  <PokerCard suit="heart" rank="K" />
+                </StyledPokerCardWrapper>
+                <StyledPokerCardWrapper
+                  $left="32px"
+                  $bottom="40px"
+                  $rotate="-15deg"
+                >
+                  <PokerCard suit="spade" rank="J" />
+                </StyledPokerCardWrapper>
+              </ThemeProvider>
+            </StyledGameBannerContainer>
+            <StyledPlayCta onClick={() => updateShowLogin(true)}>
+              <StyledPlayCtaVector>
+                <LoginPlayCtaVector />
+              </StyledPlayCtaVector>
+              <StyledCtaText>Unlock Fun</StyledCtaText>
+            </StyledPlayCta>
+          </StyledRightContentContainer>
+        </StyledGridColumnsContent>
       </StyledContentContainer>
     </StyledPage>
   );

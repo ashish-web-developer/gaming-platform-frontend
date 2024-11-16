@@ -48,7 +48,7 @@ import { useIsMobile } from "@/hooks/common.hook";
 const Login: NextPage<{
   is_mobile: boolean;
 }> = ({ is_mobile }) => {
-  const [show_login, setShowLogin] = useState(false);
+  const [show_login, setShowLogin] = useState(true);
   const uttrance_context = useRef<MutableSpeechUtterance | null>(null);
   const is_client_mobile = useIsMobile();
 

@@ -158,7 +158,7 @@ const UserProfileDropDown: ForwardRefRenderFunction<
             sizes="(max-width: 1400px) 10vw"
           />
         </StyledUserImageWrapper>
-        <StyledName>Ashish</StyledName>
+        <StyledName>{name}</StyledName>
         <StyledUserName>@{username}</StyledUserName>
         <StyledCtaWrapper>
           <StyledIconCta

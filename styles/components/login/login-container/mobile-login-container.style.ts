@@ -1,25 +1,48 @@
 import styled from "styled-components";
+import Image from "next/image";
 
 const StyledPage = styled.div`
   width: 100%;
   height: 100vh;
   background: red;
-  background: url("login/background.jpg");
+  background: url("login/welcome-login-screen/background.png");
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: right;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 `;
 
-const StyledLogo = styled.h2`
+const StyledImageContainer = styled.div<{
+  $width: string;
+  $height: string;
+  $top?: string;
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+  $translateX?: string;
+  $translateY?: string;
+}>`
   position: absolute;
-  font-family: ${({ theme }) => theme.fontFamily.bangers};
-  font-size: 1.6rem;
-  color: ${({ theme }) => theme.palette.primary.light};
-  transform: rotate(-5deg);
-  top: 3rem;
-  left: 3rem;
+  top: ${(props) => props.$top ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
+  transform: translate(
+    ${(props) => props.$translateX ?? 0},
+    ${(props) => props.$translateY ?? 0}
+  );
+`;
+const StyledImage = styled(Image)<{
+  $object_position?: string;
+}>`
+  object-fit: contain;
+  object-position: ${(props) => props.$object_position ?? "50% 50%"};
 `;
 
 const StyledUploadModalWrapper = styled.div<{
@@ -38,4 +61,9 @@ const StyledUploadModalWrapper = styled.div<{
     overflow:hidden;
   `}
 `;
-export { StyledPage, StyledUploadModalWrapper, StyledLogo };
+export {
+  StyledPage,
+  StyledImageContainer,
+  StyledImage,
+  StyledUploadModalWrapper,
+};

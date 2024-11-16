@@ -1,6 +1,7 @@
 import { useEffect, useContext, useState, useRef } from "react";
 // types
 import type { FC } from "react";
+import type { ITheme } from "@/theme/login.theme";
 
 // styled components
 import {
@@ -10,6 +11,9 @@ import {
   StyledInfoTooltipText,
   StyledSpan,
 } from "@/styles/components/login/introduction-tooltip.style";
+
+// theme
+import { useTheme } from "styled-components";
 
 // vector
 import InfoTooltipVector from "./vector/info-tooltip-vector";
@@ -32,6 +36,24 @@ const tooltip_text_list = [
   "Step into the ultimate casino gaming experience where excitement knows no bounds.",
   "Your journey to fortune and fun starts right here, right now!",
 ];
+
+const TooltipText: FC<{ tooltip_text_index: number }> = ({
+  tooltip_text_index,
+}) => {
+  const theme = useTheme() as ITheme;
+  if (tooltip_text_index == 0) {
+    return (
+      <>
+        <StyledSpan $color={theme.palette.error.main}>
+          {tooltip_text_list[0].split(" ").splice(0, 2).join(" ")}
+        </StyledSpan>{" "}
+        {tooltip_text_list[0].split(" ").slice(2).join(" ")}{" "}
+      </>
+    );
+  }
+  return <>{tooltip_text_list[tooltip_text_index]}</>;
+};
+
 const IntroductionTooltip: FC = () => {
   const is_typing = useAppSelector(isTyping);
   const uttrance_context = useContext(UttranceContext);
@@ -157,11 +179,7 @@ const IntroductionTooltip: FC = () => {
           $left="100px"
           $color="#fff"
         >
-          {/* <StyledSpan $color={theme.palette.secondary.main}>
-                Hey there!
-              </StyledSpan>{" "}
-              Welcome to Fortune Realm! */}
-          {tooltip_text_list[tooltip_text_index]}
+          <TooltipText tooltip_text_index={tooltip_text_index} />
         </StyledInfoTooltipText>
       </StyledInfoTooltip>
     </>

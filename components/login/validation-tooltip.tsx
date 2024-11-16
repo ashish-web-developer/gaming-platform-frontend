@@ -52,7 +52,7 @@ const ValidationTooltip: FC<{
             .to("#error-info-girl-image", {
               display: "block",
               duration: 1,
-              right: -120,
+              right:0,
               ease: "expo",
             })
             .to("#error-info-tooltip", {
@@ -133,9 +133,9 @@ const ValidationTooltip: FC<{
       <div ref={container_ref}>
         <StyledGirlImageWrapper
           id="error-info-girl-image"
-          $width="723px"
-          $height="682px"
-          $right="-300px"
+          $width="329px"
+          $height="618px"
+          $right="-380px"
           $display="none"
         >
           <StyledGirlImage
@@ -146,8 +146,8 @@ const ValidationTooltip: FC<{
           />
         </StyledGirlImageWrapper>
         <StyledInfoTooltip
-          $right="150px"
-          $bottom="440px"
+          $right="180px"
+          $bottom="380px"
           id="error-info-tooltip"
           $display="none"
         >

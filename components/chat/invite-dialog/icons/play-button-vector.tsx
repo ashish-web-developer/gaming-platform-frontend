@@ -1,6 +1,6 @@
 // types
 import type { FC } from "react";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 
 // theme
 import { useTheme } from "styled-components";
@@ -12,7 +12,7 @@ import { mode } from "@/store/slice/common.slice";
 import { useIsMobile } from "@/hooks/common.hook";
 
 const PlayButtonVector: FC<{ stroke_color?: string }> = ({ stroke_color }) => {
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
   const is_mobile = useIsMobile();
   if (is_mobile) {

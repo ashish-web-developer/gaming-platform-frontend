@@ -32,7 +32,7 @@ export const Theme: ITheme = {
       light: "#E4D9FF",
     },
     secondary: {
-      main: "#9747FF",
+      main: "#FF0000",
     },
     info: {
       main: "#D6FFB7",

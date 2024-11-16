@@ -6,6 +6,7 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
   gap: 1.125rem;
+  z-index: 2;
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     width: calc(100% - 6rem);
   }
@@ -130,7 +131,7 @@ const StyledError = styled.p`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1rem;
   color: ${({ theme }) => theme.palette.error.main};
-  width:100%;
+  width: 100%;
 `;
 
 const StyledPara = styled.p`

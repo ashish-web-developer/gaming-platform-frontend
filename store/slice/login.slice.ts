@@ -15,6 +15,8 @@ import {
   IRegisterUserApiRejectValue,
   IUpdateProfileApiRequest,
   IUpdateProfileApiResponse,
+  IUpdateNameApiRequest,
+  IUpdateNameApiResponse,
   ILoginUserApiRequest,
   ILoginUserApiResponse,
   ILoginUserApiRejectValue,
@@ -166,6 +168,23 @@ export const updateProfileApi = createAsyncThunk<
       return rejectWithValue("Internal server error");
     }
     return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+export const updateNameApi = createAsyncThunk<
+  IUpdateNameApiResponse,
+  IUpdateNameApiRequest
+>("api/login/update-name", async ({ name }, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<IUpdateNameApiResponse> = await Axios.post(
+      "user/update-name",
+      {
+        name,
+      }
+    );
+    return res.data;
+  } catch (error: any) {
+    return rejectWithValue("Internal server error");
   }
 });
 

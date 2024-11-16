@@ -58,6 +58,7 @@ const LoginForm: ForwardRefRenderFunction<
     ) => void;
     updateProfile: () => void;
     error?: string;
+    updateShowOnboard: (show_onboard: boolean) => void;
   }
 > = (
   {
@@ -67,6 +68,7 @@ const LoginForm: ForwardRefRenderFunction<
     updateProfile,
     updateTabIndex,
     error,
+    updateShowOnboard,
   },
   ref
 ) => {
@@ -188,7 +190,7 @@ const LoginForm: ForwardRefRenderFunction<
           const response = unwrapResult(result);
           updateProfile();
           if (response.success) {
-            router.push("/chat");
+            updateShowOnboard(true);
           }
         } else {
           const result = await dispatch(
