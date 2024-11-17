@@ -8,6 +8,12 @@ import {
   StyledImageContainer,
   StyledImage,
   StyledPokerCardWrapper,
+  StyledLogoContainer,
+  StyledLogo,
+  StyledSubTitle,
+  StyledBottomShadow,
+  StyledPlayCta,
+  StyledPlayCtaVector,
 } from "@/styles/components/login/welcome-login-screen/mobile-welcome-login-screen.style";
 
 // local components
@@ -16,6 +22,9 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 // theme
 import { ThemeProvider } from "styled-components";
 import { Theme as PokerTheme } from "@/theme/poker.theme";
+
+// vector
+import LoginPlayCtaVector from "@/components/login/vector/login-play-cta-vector";
 
 const MobileWelcomeLoginScreen: FC<{
   updateShowLogin: (show: boolean) => void;
@@ -93,6 +102,19 @@ const MobileWelcomeLoginScreen: FC<{
           alt="main image"
         />
       </StyledImageContainer>
+      <StyledLogoContainer>
+        <StyledLogo>Fortune Realm</StyledLogo>
+        <StyledSubTitle>
+          YOUR ULTIMATE DESTINATION FOR THRLLING CASINO GAMES
+        </StyledSubTitle>
+      </StyledLogoContainer>
+      <StyledBottomShadow>
+        <StyledPlayCta onClick={() => updateShowLogin(true)}>
+          <StyledPlayCtaVector>
+            <LoginPlayCtaVector is_mobile={true} />
+          </StyledPlayCtaVector>
+        </StyledPlayCta>
+      </StyledBottomShadow>
     </StyledPage>
   );
 };

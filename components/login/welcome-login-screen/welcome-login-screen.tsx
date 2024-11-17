@@ -18,7 +18,6 @@ import {
   StyledPokerCardWrapper,
   StyledPlayCta,
   StyledPlayCtaVector,
-  StyledCtaText,
 } from "@/styles/components/login/welcome-login-screen/welcome-login-screen.style";
 
 // theme
@@ -169,9 +168,8 @@ const WelcomeLoginScreen: FC<{
             </StyledGameBannerContainer>
             <StyledPlayCta onClick={() => updateShowLogin(true)}>
               <StyledPlayCtaVector>
-                <LoginPlayCtaVector />
+                <LoginPlayCtaVector is_mobile={false} />
               </StyledPlayCtaVector>
-              <StyledCtaText>Unlock Fun</StyledCtaText>
             </StyledPlayCta>
           </StyledRightContentContainer>
         </StyledGridColumnsContent>

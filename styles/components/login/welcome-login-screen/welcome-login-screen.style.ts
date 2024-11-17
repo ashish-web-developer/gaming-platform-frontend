@@ -168,16 +168,6 @@ const StyledPlayCta = styled.div`
 const StyledPlayCtaVector = styled.div`
   position: absolute;
 `;
-const StyledCtaText = styled.span`
-  position: absolute;
-  left: 50%;
-  transform: translate(-40%, 20%);
-  z-index: 2;
-  font-family: ${({ theme }) => theme.fontFamily.bangers};
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme.palette.info.main};
-  white-space: nowrap;
-`;
 
 export {
   StyledPage,
@@ -194,6 +184,5 @@ export {
   StyledPokerCardWrapper,
   StyledPlayCta,
   StyledPlayCtaVector,
-  StyledCtaText,
   StyledCornerVector,
 };
