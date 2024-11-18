@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 // types
 import type { FC } from "react";
 
@@ -31,11 +32,81 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 import LoginPlayCtaVector from "../vector/login-play-cta-vector";
 import CornerVector from "@/components/login/vector/corner-vector";
 
+// gsap
+import gsap from "gsap";
+
 const WelcomeLoginScreen: FC<{
   updateShowLogin: (show: boolean) => void;
 }> = ({ updateShowLogin }) => {
+  const page_ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const gsap_context = gsap.context(() => {
+      gsap
+        .timeline()
+        .fromTo(
+          "#finger-prints-1",
+          {
+            scale: 0.5,
+            opacity: 0,
+          },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 2,
+            ease: "slow",
+          }
+        )
+        .fromTo(
+          "#finger-prints-2",
+          {
+            scale: 0.3,
+            opacity: 0,
+          },
+          {
+            scale: 1,
+            opacity: 1,
+            duration: 1.5,
+            ease: "steps(6)",
+          },
+          "<25%"
+        )
+        .fromTo(
+          "#spider-web-vector",
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            duration: 0.5,
+          }
+        )
+        .fromTo(
+          "#web-vector",
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            duration: 0.5,
+          },
+          "<50%"
+        )
+        .fromTo(
+          "#haunted-car",
+          {
+            right: -500,
+          },
+          {
+            right: -140,
+            duration: 1,
+          }
+        );
+    }, page_ref);
+  }, []);
+
   return (
-    <StyledPage>
+    <StyledPage ref={page_ref}>
       <StyledImageContainer
         $width="260px"
         $height="251px"
@@ -43,6 +114,7 @@ const WelcomeLoginScreen: FC<{
         $left="-8px"
       >
         <StyledImage
+          id="spider-web-vector"
           src="/login/welcome-login-screen/spider-with-web.png"
           fill={true}
           alt="spider-web"
@@ -55,6 +127,7 @@ const WelcomeLoginScreen: FC<{
         $right="-90px"
       >
         <StyledImage
+          id="web-vector"
           src="/login/welcome-login-screen/web-vector.png"
           fill={true}
           alt="spider-web"
@@ -65,6 +138,7 @@ const WelcomeLoginScreen: FC<{
         $height="442px"
         $bottom="-50px"
         $right="-140px"
+        id="haunted-car"
       >
         <StyledImage
           src="/login/welcome-login-screen/haunted-car.png"
@@ -80,6 +154,7 @@ const WelcomeLoginScreen: FC<{
           $left="50%"
         >
           <StyledImage
+            id="finger-prints-1"
             src="/login/welcome-login-screen/finger-prints-1.png"
             fill={true}
             alt="finger-prints-1"
@@ -92,9 +167,10 @@ const WelcomeLoginScreen: FC<{
           $right="0px"
         >
           <StyledImage
+            id="finger-prints-2"
             src="/login/welcome-login-screen/finger-prints-2.png"
             fill={true}
-            alt="finger-prints-1"
+            alt="finger-prints-2"
           />
         </StyledImageContainer>
         <StyledGridColumnsContent>
@@ -105,6 +181,7 @@ const WelcomeLoginScreen: FC<{
             $left="-72px"
           >
             <StyledImage
+              id="main-image"
               src="/login/welcome-login-screen/main-image.png"
               fill={true}
               alt="main image"
