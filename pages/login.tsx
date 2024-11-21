@@ -19,14 +19,19 @@ const MobileLoginContainer = dynamic(
   }
 );
 
-import WelcomeLoginScreen from "@/components/login/welcome-login-screen/welcome-login-screen";
+const WelcomeLoginScreen = dynamic(
+  () => import("@/components/login/welcome-login-screen/welcome-login-screen"),
+  {
+    ssr: false,
+  }
+);
 const MobileWelcomeLoginScreen = dynamic(
   () =>
     import(
       "@/components/login/welcome-login-screen/mobile-welcome-login-screen"
     ),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 
@@ -51,8 +56,6 @@ const Login: NextPage<{
   const [show_login, setShowLogin] = useState(false);
   const uttrance_context = useRef<MutableSpeechUtterance | null>(null);
   const is_client_mobile = useIsMobile();
-
-  // handle for width 360 and height 651
 
   return (
     <ThemeProvider theme={Theme}>

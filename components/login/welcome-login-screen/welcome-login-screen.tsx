@@ -13,12 +13,14 @@ import {
   StyledLogoContainer,
   StyledLogo,
   StyledSubTitle,
+  StyledSubTitleSpan,
   StyledGameBannerContainer,
   StyledBannerGameLogo,
   StyledCornerVector,
   StyledPokerCardWrapper,
   StyledPlayCta,
   StyledPlayCtaVector,
+  StyledLottiePlayerContainer,
 } from "@/styles/components/login/welcome-login-screen/welcome-login-screen.style";
 
 // theme
@@ -32,8 +34,14 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 import LoginPlayCtaVector from "../vector/login-play-cta-vector";
 import CornerVector from "@/components/login/vector/corner-vector";
 
+// lottie
+import Lottie from "react-lottie-player";
+import JackOLaternJson from "@/public/login/welcome-login-screen/jack-o-latern.json";
+
 // gsap
 import gsap from "gsap";
+import MotionPathPlugin from "gsap/MotionPathPlugin";
+gsap.registerPlugin(MotionPathPlugin);
 
 const WelcomeLoginScreen: FC<{
   updateShowLogin: (show: boolean) => void;
@@ -42,35 +50,45 @@ const WelcomeLoginScreen: FC<{
 
   useEffect(() => {
     const gsap_context = gsap.context(() => {
+      /**
+       * Finger print animation
+       */
+      gsap.fromTo(
+        "#finger-prints-1",
+        {
+          scale: 0.5,
+          opacity: 0,
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 2,
+          yoyo: true,
+          repeat: -1,
+          repeatDelay: 0.5,
+          ease: "slow",
+        }
+      );
+      gsap.fromTo(
+        "#finger-prints-2",
+        {
+          scale: 0.3,
+          opacity: 0,
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 1.5,
+          yoyo: true,
+          repeat: -1,
+          repeatDelay: 0.3,
+          ease: "steps(6)",
+        }
+      );
+
       gsap
         .timeline()
-        .fromTo(
-          "#finger-prints-1",
-          {
-            scale: 0.5,
-            opacity: 0,
-          },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 2,
-            ease: "slow",
-          }
-        )
-        .fromTo(
-          "#finger-prints-2",
-          {
-            scale: 0.3,
-            opacity: 0,
-          },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 1.5,
-            ease: "steps(6)",
-          },
-          "<25%"
-        )
+        .addLabel("start")
         .fromTo(
           "#spider-web-vector",
           {
@@ -101,25 +119,96 @@ const WelcomeLoginScreen: FC<{
             right: -140,
             duration: 1,
           }
+        )
+        .fromTo(
+          "#banner-container",
+          {
+            scale: 0.5,
+            opacity: 0,
+          },
+          {
+            scale: 1,
+            opacity: 1,
+            ease: "elastic.inOut",
+            duration: 1.5,
+          },
+          "start+=1"
         );
     }, page_ref);
+    return () => {
+      gsap_context.revert();
+    };
+  }, []);
+
+  // logo animation
+  useEffect(() => {
+    const gsap_context = gsap.context(() => {
+      gsap
+        .timeline()
+        .fromTo(
+          ".logo-span",
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            duration: 1,
+            stagger: {
+              each: 0.05,
+              from: "random",
+              ease: "steps(6)",
+            },
+          }
+        )
+        .fromTo(
+          ".subtitle-span",
+          {
+            opacity: 0,
+            rotate: -60,
+          },
+          {
+            opacity: 1,
+            rotate: 0,
+            duration: 0.6,
+            stagger: 0.02,
+          }
+        );
+    });
+    return () => {
+      gsap_context.revert();
+    };
+  }, []);
+
+  useEffect(() => {
+    const gsap_context = gsap.context(() => {
+      gsap.to("#jack-o-latern", {
+        motionPath: {
+          path: "M0.5 254C0.5 254 165.841 163.755 261.5 204C364.226 247.218 301.953 412.278 407 449.5C526.439 491.822 601.424 385.891 695.5 301C752.916 249.19 748.857 177.324 820 147C933.454 98.6406 1025.75 187.921 1105.5 282C1149.6 334.026 1177.2 369.745 1185 437.5C1195.13 525.522 1173.02 592.629 1105.5 650C1006.26 734.316 886.99 555.15 773.5 619C720.192 648.991 716.713 701.177 662.5 729.5C539.29 793.87 397.444 752.42 318.5 638C275.442 575.592 263.992 524.897 272 449.5C285.351 323.789 518.3 325.39 483 204C467.162 149.535 385.912 146.277 393 90C399.985 34.5393 452.944 20.5419 505.5 1.49998C609.127 -36.0463 663.336 93.4873 773.5 90C874.078 86.8161 915.34 -8.20043 1015.5 1.49998C1141.77 13.729 1269.5 204 1269.5 204",
+        },
+        repeat: -1,
+        duration: 20,
+        ease: "power1.in",
+        yoyo: true,
+      });
+    });
+    return () => {
+      gsap_context.revert();
+    };
   }, []);
 
   return (
     <StyledPage ref={page_ref}>
-      <StyledImageContainer
-        $width="260px"
-        $height="251px"
-        $top="0px"
-        $left="-8px"
-      >
-        <StyledImage
-          id="spider-web-vector"
-          src="/login/welcome-login-screen/spider-with-web.png"
-          fill={true}
-          alt="spider-web"
+      <StyledLottiePlayerContainer id="jack-o-latern" $top="0px" $left="0px">
+        <Lottie
+          loop
+          play
+          animationData={JackOLaternJson}
+          style={{
+            width: 144,
+            height: 107,
+          }}
         />
-      </StyledImageContainer>
+      </StyledLottiePlayerContainer>
       <StyledImageContainer
         $width="295px"
         $height="304px"
@@ -191,12 +280,27 @@ const WelcomeLoginScreen: FC<{
         <StyledGridColumnsContent>
           <StyledRightContentContainer>
             <StyledLogoContainer>
-              <StyledLogo>Fortune Realm</StyledLogo>
+              <StyledLogo>
+                {"Fortune Realm".split("").map((char) => {
+                  return <span className="logo-span">{char}</span>;
+                })}
+              </StyledLogo>
               <StyledSubTitle>
-                Your ultimate destination for thrilling casino games
+                {"Your ultimate destination for thrilling casino games"
+                  .split("")
+                  .map((char) => {
+                    if (char == " ") {
+                      console.log("teting");
+                    }
+                    return (
+                      <StyledSubTitleSpan className="subtitle-span">
+                        {char == " " ? "\u00A0" : char}
+                      </StyledSubTitleSpan>
+                    );
+                  })}
               </StyledSubTitle>
             </StyledLogoContainer>
-            <StyledGameBannerContainer>
+            <StyledGameBannerContainer id="banner-container">
               <StyledCornerVector $rotate="0deg" $left="0px" $top="0px">
                 <CornerVector size={50} />
               </StyledCornerVector>

@@ -102,6 +102,10 @@ const StyledSubTitle = styled.h4`
   font-size: 1.375rem;
   line-height: 1;
 `;
+const StyledSubTitleSpan = styled.span`
+  position: relative;
+  display: inline-block;
+`;
 
 const StyledGameBannerContainer = styled.div`
   width: 416px;
@@ -169,6 +173,27 @@ const StyledPlayCtaVector = styled.div`
   position: absolute;
 `;
 
+const StyledLottiePlayerContainer = styled.div<{
+  $top?: string;
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+  $translateX?: string;
+  $translateY?: string;
+}>`
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: ${(props) => props.$top ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  transform: translate(
+    ${(props) => props.$translateX ?? 0},
+    ${(props) => props.$translateY ?? 0}
+  );
+`;
+
 export {
   StyledPage,
   StyledContentContainer,
@@ -179,10 +204,12 @@ export {
   StyledLogoContainer,
   StyledLogo,
   StyledSubTitle,
+  StyledSubTitleSpan,
   StyledGameBannerContainer,
   StyledBannerGameLogo,
   StyledPokerCardWrapper,
   StyledPlayCta,
   StyledPlayCtaVector,
   StyledCornerVector,
+  StyledLottiePlayerContainer,
 };
