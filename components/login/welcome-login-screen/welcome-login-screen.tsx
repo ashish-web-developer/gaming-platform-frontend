@@ -96,7 +96,7 @@ const WelcomeLoginScreen: FC<{
           },
           {
             opacity: 1,
-            duration: 0.5,
+            duration: 1,
           }
         )
         .fromTo(
@@ -108,7 +108,18 @@ const WelcomeLoginScreen: FC<{
             opacity: 1,
             duration: 0.5,
           },
-          "<50%"
+          "<"
+        )
+        .fromTo(
+          "#main-image",
+          {
+            filter: "brightness(30%)",
+          },
+          {
+            filter: "brightness(100%)",
+            ease: "expo.in",
+            duration: 1,
+          }
         )
         .fromTo(
           "#haunted-car",
@@ -173,7 +184,7 @@ const WelcomeLoginScreen: FC<{
             stagger: 0.02,
           }
         );
-    });
+    }, page_ref);
     return () => {
       gsap_context.revert();
     };
@@ -190,7 +201,7 @@ const WelcomeLoginScreen: FC<{
         ease: "power1.in",
         yoyo: true,
       });
-    });
+    }, page_ref);
     return () => {
       gsap_context.revert();
     };
@@ -218,6 +229,19 @@ const WelcomeLoginScreen: FC<{
         <StyledImage
           id="web-vector"
           src="/login/welcome-login-screen/web-vector.png"
+          fill={true}
+          alt="spider-web"
+        />
+      </StyledImageContainer>
+      <StyledImageContainer
+        $width="311px"
+        $height="308px"
+        $left="0px"
+        $top="0px"
+      >
+        <StyledImage
+          id="spider-web-vector"
+          src="/login/welcome-login-screen/spider-with-web.png"
           fill={true}
           alt="spider-web"
         />
