@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 // types
 import type { FC, ChangeEvent } from "react";
@@ -22,6 +23,7 @@ import gsap from "gsap";
 
 const OnboardBanner: FC = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const wrapper_ref = useRef<HTMLDivElement>(null);
   const [name, setName] = useState<string | null>(null);
   useEffect(() => {
@@ -85,6 +87,7 @@ const OnboardBanner: FC = () => {
           id="name-form"
           onSubmit={() => {
             dispatch(updateNameApi({ name: name as string }));
+            router.push("/chat");
           }}
         >
           <StyledNameInput

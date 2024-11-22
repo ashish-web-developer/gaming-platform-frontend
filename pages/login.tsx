@@ -31,7 +31,7 @@ const MobileWelcomeLoginScreen = dynamic(
       "@/components/login/welcome-login-screen/mobile-welcome-login-screen"
     ),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 

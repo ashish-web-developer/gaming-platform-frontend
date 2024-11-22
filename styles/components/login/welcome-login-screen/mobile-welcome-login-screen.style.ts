@@ -91,6 +91,11 @@ const StyledSubTitle = styled.h4`
   line-height: 1;
 `;
 
+const StyledSubTitleSpan = styled.span`
+  position: relative;
+  display: inline-block;
+`;
+
 const StyledBottomShadow = styled.div`
   width: 100%;
   height: 160px;
@@ -128,6 +133,7 @@ export {
   StyledLogoContainer,
   StyledLogo,
   StyledSubTitle,
+  StyledSubTitleSpan,
   StyledBottomShadow,
   StyledPlayCta,
   StyledPlayCtaVector,
