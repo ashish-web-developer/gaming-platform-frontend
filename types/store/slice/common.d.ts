@@ -16,7 +16,8 @@ type IBaseResponse = {
   error?: any;
 };
 
-type IThunkApiConfig = {
+interface IThunkApiConfig<ErrorType = any> {
   state: RootState;
-};
+  rejectValue: ErrorType;
+}
 export { InitialState, IBaseResponse, IThunkApiConfig };

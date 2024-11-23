@@ -24,4 +24,12 @@ const PusherAxios = axios.create({
   },
 });
 
+Axios.interceptors.request.use(function (config) {
+  const token = cookies.get("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export { Axios, PusherAxios };

@@ -13,11 +13,11 @@ import ChatGroupList from "@/components/chat/chat-sidebar/chat-group-list/chat-g
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { fetched_user_result, fetch_type } from "@/store/slice/chat.slice";
+import { fetchedUserResult, fetchType } from "@/store/slice/chat.slice";
 
 const ChatSidebar: FC = () => {
-  const _fetched_user_result = useAppSelector(fetched_user_result);
-  const _fetch_type = useAppSelector(fetch_type);
+  const fetched_user_result = useAppSelector(fetchedUserResult);
+  const fetch_type = useAppSelector(fetchType);
   const search_container_ref = useRef<HTMLDivElement>(null);
   const search_input_ref = useRef<HTMLInputElement>(null);
   return (
@@ -26,7 +26,7 @@ const ChatSidebar: FC = () => {
         ref={search_input_ref}
         search_container_ref={search_container_ref}
       />
-      {!!_fetched_user_result.length && _fetch_type == "chat" && (
+      {!!fetched_user_result.length && fetch_type == "chat" && (
         <ChatSearchResult
           type="user_search"
           ref={search_input_ref}

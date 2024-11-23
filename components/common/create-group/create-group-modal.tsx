@@ -1,8 +1,8 @@
 import { useId, useRef, useState, forwardRef } from "react";
 // types
 import type { ForwardRefRenderFunction, FC } from "react";
-import type { Theme } from "@/theme/chat.theme";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { ITheme } from "@/theme/chat.theme";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -25,7 +25,7 @@ import {
 } from "@/styles/components/common/create-group/create-group-modal.style";
 
 // local components
-import PlayerSearch from "@/components/common/create-group/player-search";
+import PlayerSearchResult from "@/components/common/create-group/player-search-result";
 import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avatar";
 
 // theme
@@ -39,8 +39,8 @@ import {
 } from "@/store/slice/common.slice";
 import {
   // state
-  fetched_user_result,
-  fetch_type,
+  fetchedUserResult,
+  fetchType,
   fetchUserApi,
   // action
   updateFetchUserResult,
@@ -73,19 +73,17 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
   group_cta_ref
 ) => {
   const dispatch = useAppDispatch();
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
-  const _fetched_user_result = useAppSelector(fetched_user_result);
-  const _fetch_type = useAppSelector(fetch_type);
+  const fetched_user_result = useAppSelector(fetchedUserResult);
+  const fetch_type = useAppSelector(fetchType);
   const group_input_id = useId();
   const search_input_id = useId();
   const container_ref = useRef<HTMLDivElement>(null);
   const search_input_ref = useRef<HTMLInputElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
   const group_name_input_ref = useRef<HTMLInputElement>(null);
-  const [group_users, setGroupUsers] = useState<Array<IUsersWithConversation>>(
-    []
-  );
+  const [group_users, setGroupUsers] = useState<Array<IUser>>([]);
 
   useOutsideClickHandler({
     modal_ref: container_ref,
@@ -134,6 +132,7 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           placeholder="Search Player"
           id={`search-${search_input_id}`}
           ref={search_input_ref}
+          autoComplete="off"
           onChange={(event) => {
             dispatch(updatePage(1));
             dispatch(updateFetchUserResult([]));
@@ -156,7 +155,11 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           return (
             <StyledUserTag key={user.id}>
               <StyledAvatarWrapper>
-                <ChatAvatar user={user} />
+                <ChatAvatar
+                  user={user}
+                  image_background_color={"#fff"}
+                  border_color={theme.palette.primary.dark}
+                />
               </StyledAvatarWrapper>
               <StyledAvatarUsername>{user.name}</StyledAvatarUsername>
               <StyledRemoveCta
@@ -197,8 +200,8 @@ const CreateGroupModal: ForwardRefRenderFunction<HTMLButtonElement> = (
           Create
         </StyledCreateCta>
       </StyledBottomCtaWrapper>
-      {Boolean(_fetched_user_result.length) && _fetch_type == "group" && (
-        <PlayerSearch
+      {Boolean(fetched_user_result.length) && fetch_type == "group" && (
+        <PlayerSearchResult
           group_user={group_users}
           updateGroupUserIds={(player, action) => {
             if (action == "add") {

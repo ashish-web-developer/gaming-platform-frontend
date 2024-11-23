@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
+import type { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -39,12 +40,12 @@ const PokerBuyInDrawer = dynamic(
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  show_buy_in_modal,
-  dealer_id,
-  active_poker_players,
+  showBuyInModal,
+  dealerId,
+  activePokerPlayers,
   dealHandApi,
 } from "@/store/slice/poker/poker.slice";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -53,14 +54,14 @@ const PokerContainer: FC = () => {
   const dispatch = useAppDispatch();
   const container_ref = useRef<HTMLDivElement>(null);
   const is_mobile = useIsMobile();
-  const _show_buy_in_modal = useAppSelector(show_buy_in_modal);
-  const { id: user_id } = useAppSelector(user);
-  const _dealer_id = useAppSelector(dealer_id);
-  const no_of_players_playing = useAppSelector(active_poker_players).length;
+  const show_buy_in_modal = useAppSelector(showBuyInModal);
+  const { id: user_id } = useAppSelector(User) as IUser;
+  const dealer_id = useAppSelector(dealerId);
+  const no_of_players_playing = useAppSelector(activePokerPlayers).length;
   const timeout_ref = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
-    if (no_of_players_playing == 7 && user_id == _dealer_id) {
+    if (no_of_players_playing == 7 && user_id == dealer_id) {
       timeout_ref.current = setTimeout(() => {
         dispatch(dealHandApi());
       }, 2000);
@@ -68,12 +69,12 @@ const PokerContainer: FC = () => {
     return () => {
       timeout_ref.current && clearTimeout(timeout_ref.current);
     };
-  }, [no_of_players_playing, user_id, _dealer_id]);
+  }, [no_of_players_playing, user_id, dealer_id]);
   return (
     <StyledPage>
       {is_mobile ? (
         <>
-          {_show_buy_in_modal ? (
+          {show_buy_in_modal ? (
             <>
               <PokerBuyInDrawer />
               <StyledMobileLogoWrapper>
@@ -97,7 +98,7 @@ const PokerContainer: FC = () => {
         <StyledContainer ref={container_ref}>
           <PokerHeader />
           <PokerTable />
-          {_show_buy_in_modal && <PokerBuyInDialog />}
+          {show_buy_in_modal && <PokerBuyInDialog />}
         </StyledContainer>
       )}
     </StyledPage>

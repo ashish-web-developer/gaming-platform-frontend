@@ -29,7 +29,7 @@ import PlayButtonVector from "@/components/chat/invite-dialog/icons/play-button-
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  show_poker_invite_dialog,
+  showPokerInviteDialog,
   updateInviteDialog,
 } from "@/store/slice/chat.slice";
 import { updatePokerRoomId } from "@/store/slice/poker/poker.slice";
@@ -58,12 +58,12 @@ const PokerInviteDialog: FC = () => {
   const router = useRouter();
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
-  const _show_poker_invite_dialog = useAppSelector(show_poker_invite_dialog);
+  const show_poker_invite_dialog = useAppSelector(showPokerInviteDialog);
   const dialog_ref = useRef<HTMLDialogElement>(null);
   const is_mobile = useIsMobile();
   return (
     <StyledPokerInviteDialog
-      open={_show_poker_invite_dialog}
+      open={show_poker_invite_dialog}
       $mode="light"
       ref={dialog_ref}
     >

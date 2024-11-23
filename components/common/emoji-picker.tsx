@@ -14,7 +14,7 @@ import {
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { mode, show_emoji, updateShowEmoji } from "@/store/slice/common.slice";
+import { mode, showEmoji, updateShowEmoji } from "@/store/slice/common.slice";
 
 // hooks
 import { useOutsideClickHandler } from "@/hooks/common.hook";
@@ -29,7 +29,7 @@ const EmojiPicker: ForwardRefRenderFunction<HTMLInputElement, Props> = (
 ) => {
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
-  const _show_emoji = useAppSelector(show_emoji);
+  const show_emoji = useAppSelector(showEmoji);
   const emoji_container_ref = useRef<HTMLDivElement>(null);
 
   useOutsideClickHandler({
@@ -41,7 +41,7 @@ const EmojiPicker: ForwardRefRenderFunction<HTMLInputElement, Props> = (
   });
   return (
     <StyledEmojiContainer ref={emoji_container_ref}>
-      {_show_emoji && (
+      {show_emoji && (
         <StyledEmojiWrapper>
           <Picker
             theme={_mode}

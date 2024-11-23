@@ -1,9 +1,9 @@
-import { useRef, forwardRef } from "react";
+import { useRef, forwardRef, useEffect } from "react";
 import { useRouter } from "next/router";
 // types
 import { FC, ForwardRefRenderFunction, RefObject } from "react";
-import { IUsersWithConversation } from "@/types/store/slice/chat";
-import { Theme } from "@/theme/chat.theme";
+import { ITheme } from "@/theme/chat.theme";
+import { IUser } from "@/types/store/slice/login";
 
 // styled components
 import {
@@ -18,7 +18,7 @@ import {
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { user, logoutUserApi, resetUser } from "@/store/slice/user.slice";
+import { User, logoutUserApi } from "@/store/slice/login.slice";
 import { resetChat } from "@/store/slice/chat.slice";
 import {
   mode,
@@ -33,6 +33,9 @@ import { useTheme } from "styled-components";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useOutsideClickHandler } from "@/hooks/common.hook";
+
+// gsap trial
+import gsap from "gsap-trial";
 
 export const CameraIcon: FC<{
   size: number;
@@ -116,12 +119,13 @@ const UserProfileDropDown: ForwardRefRenderFunction<
   HTMLButtonElement,
   IProps
 > = ({ chevron_cta_ref, group_cta_ref }, camera_cta_ref) => {
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
   const router = useRouter();
   const _mode = useAppSelector(mode);
-  const _user = useAppSelector(user);
-  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const user = useAppSelector(User) as IUser;
+  const { name, username } = user;
+  const user_avatar_url = useAvatarUrl(user);
   const container_ref = useRef<HTMLDivElement>(null);
   useOutsideClickHandler({
     modal_ref: container_ref,
@@ -131,10 +135,22 @@ const UserProfileDropDown: ForwardRefRenderFunction<
     },
   });
 
+  useEffect(() => {
+    const gsap_context = gsap.context(() => {
+      gsap.timeline().from(container_ref.current, {
+        top: "calc(100% + 2rem)",
+        duration: 0.6,
+      });
+    }, container_ref);
+    return () => {
+      gsap_context.revert();
+    };
+  }, []);
+
   return (
     <>
       <StyledUserProfileDropDownWrapper ref={container_ref}>
-        <StyledUserImageWrapper $mode={_mode}>
+        <StyledUserImageWrapper id="avatar-wrapper" $mode={_mode}>
           <StyledUserImage
             src={user_avatar_url}
             alt="user-profile"
@@ -142,8 +158,8 @@ const UserProfileDropDown: ForwardRefRenderFunction<
             sizes="(max-width: 1400px) 10vw"
           />
         </StyledUserImageWrapper>
-        <StyledName>{_user.name}</StyledName>
-        <StyledUserName>@{_user.username}</StyledUserName>
+        <StyledName>{name}</StyledName>
+        <StyledUserName>@{username}</StyledUserName>
         <StyledCtaWrapper>
           <StyledIconCta
             onClick={() => {
@@ -183,7 +199,6 @@ const UserProfileDropDown: ForwardRefRenderFunction<
             onClick={() => {
               dispatch(logoutUserApi());
               router.push("/login");
-              dispatch(resetUser());
               dispatch(resetChat());
               dispatch(updateShowProfileDropDown(false));
             }}

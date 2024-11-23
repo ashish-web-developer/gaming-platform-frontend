@@ -26,12 +26,6 @@ import { Theme } from "@/theme/poker.theme";
 // theme provider
 import { ThemeProvider } from "styled-components";
 
-const CogniMatchInviteDialog = dynamic(
-  () => import("@/components/chat/invite-dialog/cognimatch-invite-dialog"),
-  {
-    ssr: false,
-  }
-);
 const PokerInviteDialog = dynamic(
   () => import("@/components/chat/invite-dialog/poker-invite-dialog"),
   {
@@ -43,35 +37,30 @@ const PokerInviteDialog = dynamic(
 import { useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
-  active_user,
-  show_cognimatch_invite_dialog,
-  show_poker_invite_dialog,
+  activeUser,
+  showPokerInviteDialog,
 } from "@/store/slice/chat.slice";
-import { active_group } from "@/store/slice/group.slice";
-import { mode, show_profile_upload_modal } from "@/store/slice/common.slice";
+import { activeGroup } from "@/store/slice/group.slice";
+import { mode, showProfileUploadModal } from "@/store/slice/common.slice";
 
 const ChatContainer: FC = () => {
   const _mode = useAppSelector(mode);
-  const _active_user = useAppSelector(active_user);
-  const _active_group = useAppSelector(active_group);
-  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
-  const _show_cognimatch_invite_dialog = useAppSelector(
-    show_cognimatch_invite_dialog
-  );
-  const _show_poker_invite_dialog = useAppSelector(show_poker_invite_dialog);
+  const active_user = useAppSelector(activeUser);
+  const active_group = useAppSelector(activeGroup);
+  const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
+  const show_poker_invite_dialog = useAppSelector(showPokerInviteDialog);
   return (
     <StyledPage $background_image={_mode == "light" ? true : false}>
-      {_show_cognimatch_invite_dialog && <CogniMatchInviteDialog />}
-      {_show_poker_invite_dialog && (
+      {show_poker_invite_dialog && (
         <ThemeProvider theme={Theme}>
           <PokerInviteDialog />
         </ThemeProvider>
       )}
       <StyledUploadModalWrapper
-        $is_modal_open={_show_profile_upload_modal}
+        $is_modal_open={show_profile_upload_modal}
         id="upload-profile-modal-container"
       >
-        {_show_profile_upload_modal && <StyledBackdrop />}
+        {show_profile_upload_modal && <StyledBackdrop />}
       </StyledUploadModalWrapper>
       <StyledChatContainer>
         <ChatHeader />
@@ -81,7 +70,7 @@ const ChatContainer: FC = () => {
             <StyledMessageWrapper>
               <ChatMessageContainer />
             </StyledMessageWrapper>
-            {(_active_group || _active_user) && (
+            {(active_group || active_user) && (
               <StyledChatInputWrapper>
                 <ChatInput />
               </StyledChatInputWrapper>

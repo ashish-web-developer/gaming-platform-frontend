@@ -1,7 +1,7 @@
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import { IGroup } from "@/types/store/slice/group";
+import type { IGroup } from "@/types/store/slice/group";
+import type { IUser } from "@/types/store/slice/login";
 // styled components
 import {
   StyledChatGroupWrapper,
@@ -27,12 +27,13 @@ import ChatAvatar from "@/components/chat/chat-sidebar/chat-group-list/chat-avat
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
-  active_group,
+  activeGroup,
   // action
   updateActiveGroup,
   // api
   joinGroupRequestApi,
   fetchGroupMessagesApi,
+  resetTypingUsers,
 } from "@/store/slice/group.slice";
 import { updateActiveUser, updateShowChat } from "@/store/slice/chat.slice";
 import { mode } from "@/store/slice/common.slice";
@@ -57,9 +58,9 @@ const ChatGroup: FC<
   const dispatch = useAppDispatch();
   const _mode = useAppSelector(mode);
   const is_mobile = useIsMobile();
-  const _active_group = useAppSelector(active_group);
-  const admin_avatar_url = useAvatarUrl(admin as IUsersWithConversation);
-  const is_active = _active_group?.id == id;
+  const active_group = useAppSelector(activeGroup);
+  const admin_avatar_url = useAvatarUrl(admin as IUser);
+  const is_active = active_group?.id == id;
   return (
     <StyledChatGroupWrapper
       onClick={() => {
@@ -77,6 +78,7 @@ const ChatGroup: FC<
           );
           dispatch(updateActiveUser(null));
           dispatch(fetchGroupMessagesApi());
+          dispatch(resetTypingUsers());
           if (is_mobile) {
             dispatch(updateShowChat(true));
           }
@@ -120,9 +122,11 @@ const ChatGroup: FC<
             {user_group.slice(0, 4).map((_user_group, index) => {
               return (
                 <ChatAvatar
+                  border_color={"#000"}
+                  image_background_color={"#fff"}
                   key={`chat-avatar-${index}`}
                   left_count={user_group.length > 3 ? user_group.length - 3 : 0}
-                  user={_user_group.user as IUsersWithConversation}
+                  user={_user_group.user as IUser}
                 />
               );
             })}

@@ -1,23 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
 import loginReducer from "@/store/slice/login.slice";
-import userReducer from "@/store/slice/user.slice";
 import chatReducer from "@/store/slice/chat.slice";
 import commonReducer from "@/store/slice/common.slice";
 import notificationReducer from "@/store/slice/notification.slice";
 import groupReducer from "@/store/slice/group.slice";
 import pokerReducer from "@/store/slice/poker/poker.slice";
-import cognimatchReducer from "@/store/slice/cognimatch.slice";
 
 const store = configureStore({
   reducer: {
     common: commonReducer,
     login: loginReducer,
-    user: userReducer,
     chat: chatReducer,
     notification: notificationReducer,
     group: groupReducer,
     poker: pokerReducer,
-    cognimatch: cognimatchReducer,
   },
 });
 

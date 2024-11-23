@@ -1,34 +1,95 @@
+import dynamic from "next/dynamic";
+import { useRef, useState } from "react";
+// types
 import type { NextPage } from "next";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import type { GetServerSideProps } from "next";
 
-// Components
-import LoginModal from "../components/login/login-modal";
+// local components
+const LoginContainer = dynamic(
+  () => import("@/components/login/login-container/login-container"),
+  {
+    ssr: false,
+  }
+);
 
-// styles
-import { RootContainer } from "@/styles/pages/login.style";
+const MobileLoginContainer = dynamic(
+  () => import("@/components/login/login-container/mobile-login-container"),
+  {
+    ssr: false,
+  }
+);
 
-// Redux
-import { user } from "@/store/slice/user.slice";
-import { useAppSelector } from "@/hooks/redux.hook";
+const WelcomeLoginScreen = dynamic(
+  () => import("@/components/login/welcome-login-screen/welcome-login-screen"),
+  {
+    ssr: false,
+  }
+);
+const MobileWelcomeLoginScreen = dynamic(
+  () =>
+    import(
+      "@/components/login/welcome-login-screen/mobile-welcome-login-screen"
+    ),
+  {
+    ssr: false,
+  }
+);
 
-const Login: NextPage = () => {
-  const _user = useAppSelector(user);
-  const router = useRouter();
+// theme provider
+import { ThemeProvider } from "styled-components";
 
-  useEffect(() => {
-    if (_user.username) {
-      router.push("/chat");
-    }
-  }, [_user]);
+// theme
+import { Theme } from "@/theme/login.theme";
+
+// helpers
+import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
+
+// context
+import { UttranceContext } from "context";
+
+// hooks
+import { useIsMobile } from "@/hooks/common.hook";
+
+const Login: NextPage<{
+  is_mobile: boolean;
+}> = ({ is_mobile }) => {
+  const [show_login, setShowLogin] = useState(false);
+  const uttrance_context = useRef<MutableSpeechUtterance | null>(null);
+  const is_client_mobile = useIsMobile();
+
   return (
-    <>
-      <RootContainer>
-        <LoginModal keepShowingModal={true} />
-      </RootContainer>
-    </>
+    <ThemeProvider theme={Theme}>
+      <UttranceContext.Provider value={uttrance_context}>
+        <div>
+          {show_login ? (
+            is_mobile || is_client_mobile ? (
+              <MobileLoginContainer />
+            ) : (
+              <LoginContainer />
+            )
+          ) : is_mobile || is_client_mobile ? (
+            <MobileWelcomeLoginScreen
+              updateShowLogin={(show) => setShowLogin(show)}
+            />
+          ) : (
+            <WelcomeLoginScreen
+              updateShowLogin={(show) => setShowLogin(show)}
+            />
+          )}
+        </div>
+      </UttranceContext.Provider>
+    </ThemeProvider>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const user_agent = context.req.headers["user-agent"];
+  const is_mobile = /Mobi|Android/i.test(user_agent as string);
+  return {
+    props: {
+      is_mobile,
+    },
+  };
 };
 
 export default Login;

@@ -20,15 +20,15 @@ import ChatSearchResult from "@/components/chat/chat-sidebar/chat-search-result"
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { mode } from "@/store/slice/common.slice";
 import {
-  show_search_dialog,
-  fetched_user_result,
+  showSearchDialog,
+  fetchedUserResult,
   updatePage as updateUserSearchApiPage,
   updateFetchUserResult,
   updateShowSearch,
   fetchUserApi,
 } from "@/store/slice/chat.slice";
 import {
-  fetched_group_results,
+  fetchedGroupResults,
   // action
   updatePage as updateGroupSearchApiPage,
   updateFetchedGroupResult,
@@ -51,10 +51,10 @@ const MobileSearchDialog: ForwardRefRenderFunction<
   const search_dialog_ref = useRef<HTMLDialogElement>(null);
   const search_container_ref = useRef<HTMLDivElement>(null);
   const search_input_ref = useRef<HTMLInputElement>(null);
-  const _show_search_dialog = useAppSelector(show_search_dialog);
+  const show_search_dialog = useAppSelector(showSearchDialog);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
-  const _fetched_user_result = useAppSelector(fetched_user_result);
-  const _fetched_group_results = useAppSelector(fetched_group_results);
+  const fetched_user_result = useAppSelector(fetchedUserResult);
+  const fetched_group_result = useAppSelector(fetchedGroupResults);
 
   useOutsideClickHandler({
     modal_ref: search_dialog_ref,
@@ -74,8 +74,8 @@ const MobileSearchDialog: ForwardRefRenderFunction<
 
   return (
     <>
-      {_show_search_dialog && <StyledBackDrop />}
-      <StyledSearchDialog ref={search_dialog_ref} open={_show_search_dialog}>
+      {show_search_dialog && <StyledBackDrop />}
+      <StyledSearchDialog ref={search_dialog_ref} open={show_search_dialog}>
         <StyledSearchInputWrapper ref={search_container_ref}>
           <StyledSearchInput
             onChange={(event) => {
@@ -121,8 +121,8 @@ const MobileSearchDialog: ForwardRefRenderFunction<
             />
           </StyledSearchIcon>
         </StyledSearchInputWrapper>
-        {(Boolean(_fetched_user_result.length) ||
-          Boolean(_fetched_group_results.length)) && (
+        {(Boolean(fetched_user_result.length) ||
+          Boolean(fetched_group_result.length)) && (
           <ChatSearchResult
             type={active_tab == 1 ? "user_search" : "group_search"}
             search_container_ref={search_container_ref}

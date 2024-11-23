@@ -54,6 +54,8 @@ const StyledProfileImageWrapper = styled.div`
 const StyledUserImage = styled(Image)`
   border: 2px solid #000;
   border-radius: 8px;
+  object-fit: cover;
+  object-position: top;
 `;
 
 const StyledUserDetails = styled.div`

@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import { useRef } from "react";
 // types
 import type { FC } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
-import type { Theme } from "@/theme/chat.theme";
+import type { IUser } from "@/types/store/slice/login";
+import type { ITheme } from "@/theme/chat.theme";
 
 // styled components
 import {
@@ -40,12 +40,16 @@ import { useTheme } from "styled-components";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
-import { user, logoutUserApi, resetUser } from "@/store/slice/user.slice";
 import { resetChat } from "@/store/slice/chat.slice";
 import {
+  User,
+  logoutUserApi,
+  updateProfileApi,
+} from "@/store/slice/login.slice";
+import {
   mode,
-  show_create_group_drop_down,
-  show_profile_upload_modal,
+  showCreateGroupDropdown,
+  showProfileUploadModal,
   updateShowMobileProfile,
   updateShowProfileUploadModal,
   updateShowCreateGroupDrownDown,
@@ -100,27 +104,38 @@ const UploadIcon: FC<{
 const MobileUserProfile: FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const theme = useTheme() as Theme;
+  const theme = useTheme() as ITheme;
   const _mode = useAppSelector(mode);
-  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
-  const _user = useAppSelector(user);
-  const _show_create_group_drop_down = useAppSelector(
-    show_create_group_drop_down
-  );
-  const user_avatar_url = useAvatarUrl(_user as IUsersWithConversation);
+  const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
+  const user = useAppSelector(User) as IUser;
+  const show_create_group_dropdown = useAppSelector(showCreateGroupDropdown);
+  const user_avatar_url = useAvatarUrl(user);
   const upload_cta_ref = useRef<HTMLButtonElement>(null);
   const group_ref = useRef<HTMLButtonElement>(null);
   return (
     <StyledWrapper>
-      {_show_profile_upload_modal && (
+      {show_profile_upload_modal && (
         <>
           <StyledModalWrapper>
             <StyledBackdrop />
-            <UploadProfileModal ref={upload_cta_ref} />
+            <UploadProfileModal
+              ref={upload_cta_ref}
+              secondary_color={
+                _mode == "dark"
+                  ? theme.palette.info.main
+                  : theme.palette.primary.dark
+              }
+              font_family={theme.fontFamily.lobster}
+              onClickHandler={(file_state, file) => {
+                const form_data = new FormData();
+                form_data.append("avatar", file);
+                dispatch(updateProfileApi({ form_data }));
+              }}
+            />
           </StyledModalWrapper>
         </>
       )}
-      {_show_create_group_drop_down && (
+      {show_create_group_dropdown && (
         <StyledModalWrapper>
           <StyledBackdrop />
           <CreateGroupModal ref={group_ref} />
@@ -170,15 +185,15 @@ const MobileUserProfile: FC = () => {
                 src="/common/user-profile/dollar.png"
               />
               <StyledPointsText $mode={_mode}>
-                {_user.earned_points?.toFixed(2)}
+                {user.earned_points?.toFixed(2)}
               </StyledPointsText>
             </StyledPointsTag>
           </StyledProfileWrappper>
         </StyledChatProfileContent>
         <StyledUserDetailsWrapper>
-          <StyledName>{_user.name}</StyledName>
+          <StyledName>{user.name}</StyledName>
           <StyledUserNameWrapper $mode={_mode}>
-            <StyledUserName>@{_user.username}</StyledUserName>
+            <StyledUserName>@{user.username}</StyledUserName>
           </StyledUserNameWrapper>
         </StyledUserDetailsWrapper>
         <StyledCtaWrapper>
@@ -203,7 +218,6 @@ const MobileUserProfile: FC = () => {
             onClick={() => {
               dispatch(logoutUserApi());
               router.push("/login");
-              dispatch(resetUser());
               dispatch(resetChat());
               dispatch(updateShowMobileProfile(false));
             }}

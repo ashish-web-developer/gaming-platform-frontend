@@ -5,20 +5,20 @@ import type { RefObject } from "react";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import {
   // state
-  active_user,
+  activeUser,
   // action
   // api
   fetchMessages,
   fetchDefaultUser,
 } from "@/store/slice/chat.slice";
 import {
-  active_group,
+  activeGroup,
   getGroupsApi,
   getGroupRecommendationApi,
   fetchGroupMessagesApi,
 } from "@/store/slice/group.slice";
 import { getNotificationApi } from "@/store/slice/notification.slice";
-import { user } from "@/store/slice/user.slice";
+import { User } from "@/store/slice/login.slice";
 
 /**
  * To fetch default user
@@ -38,19 +38,19 @@ const useDefault = () => {
  */
 const useDefaultConversation = () => {
   const dispatch = useAppDispatch();
-  const _user = useAppSelector(user);
-  const _active_user = useAppSelector(active_user);
-  const _active_group = useAppSelector(active_group);
-  const _active_user_defined = !!_active_user;
+  const user = useAppSelector(User);
+  const active_user = useAppSelector(activeUser);
+  const active_group = useAppSelector(activeGroup);
+  const active_user_defined = !!active_user;
 
   useEffect(() => {
-    if (_active_user_defined && _user.id) {
+    if (active_user_defined && user?.id) {
       dispatch(fetchMessages());
     }
-    if (_active_group) {
+    if (active_group) {
       dispatch(fetchGroupMessagesApi());
     }
-  }, [_active_user_defined, _user.id, _active_group]);
+  }, [active_user_defined, user?.id, active_group]);
 };
 
 /**
@@ -72,7 +72,7 @@ const useMessageView = ({
     threshold?: number | number[];
   };
 }) => {
-  const _user = useAppSelector(user);
+  const user = useAppSelector(User);
   useEffect(() => {
     if (target_ref.current) {
       // observer
@@ -84,7 +84,7 @@ const useMessageView = ({
         observer.disconnect();
       };
     }
-  }, [_user, options]);
+  }, [user, options]);
 };
 
 export { useDefault, useMessageView, useDefaultConversation };

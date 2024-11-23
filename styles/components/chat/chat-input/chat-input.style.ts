@@ -63,6 +63,7 @@ const StyledEmojiImage = styled(Image)`
 `;
 const StyledUserProfileImage = styled(Image)`
   object-fit: cover;
+  object-position: top;
 `;
 
 const StyledChatInput = styled.input`

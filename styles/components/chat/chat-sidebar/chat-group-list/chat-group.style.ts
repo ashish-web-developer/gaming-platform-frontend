@@ -62,6 +62,7 @@ const StyledAdminProfile = styled.div`
 
 const StyledAdminProfileImage = styled(Image)`
   object-fit: cover;
+  object-position: top;
 `;
 
 const StyledUserDetails = styled.div`

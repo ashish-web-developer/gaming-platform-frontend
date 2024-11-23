@@ -10,7 +10,7 @@ const StyledLogo = styled.h1`
   color: ${({ theme }) => theme.palette.secondary.main};
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   letter-spacing: 1px;
-  line-height:1.5;
+  line-height: 1.5;
 `;
 const StyledRightContainer = styled.div`
   display: flex;
@@ -27,6 +27,7 @@ const StyledUserProfile = styled.div`
 `;
 const StyledUserProfileImage = styled(Image)`
   object-fit: cover;
+  object-position: top;
 `;
 export {
   StyledPokerHeader,

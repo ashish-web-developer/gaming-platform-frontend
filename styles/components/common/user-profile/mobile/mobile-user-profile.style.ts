@@ -99,6 +99,7 @@ const StyledProfileWrappper = styled.div<{
 const StyledUserProfile = styled(Image)`
   border-radius: 50%;
   object-fit: cover;
+  object-position: top;
 `;
 
 const StyledUploadButton = styled.button`

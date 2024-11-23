@@ -3,7 +3,7 @@ import Breakpoints from "breakpoints";
 // types
 import type { IBreakpoints } from "breakpoints";
 
-export type Theme = {
+export type ITheme = {
   palette: {
     primary: {
       main: string;
@@ -27,7 +27,7 @@ export type Theme = {
     poppins: string;
   };
 };
-export const darkTheme: Theme = {
+export const darkTheme: ITheme = {
   palette: {
     primary: {
       main: "#000000",
@@ -54,7 +54,7 @@ export const darkTheme: Theme = {
   },
 };
 
-export const lightTheme: Theme = {
+export const lightTheme: ITheme = {
   palette: {
     primary: {
       main: "#FFFFFF",

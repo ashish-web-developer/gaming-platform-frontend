@@ -19,14 +19,14 @@ import {
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  small_blind,
+  smallBlind,
   getPokerRoomInfoApi,
   updateShowBuyInModal,
 } from "@/store/slice/poker/poker.slice";
 
 const PokerBuyInDrawer: FC = () => {
   const dispatch = useAppDispatch();
-  const _small_blind = useAppSelector(small_blind);
+  const small_blind = useAppSelector(smallBlind);
   const [poker_buy_in_amount, set_poker_buy_in_amount] = useState<number>(200);
   return (
     <StyledPokerDrawerWrapper>
@@ -38,9 +38,9 @@ const PokerBuyInDrawer: FC = () => {
 
       <StyledBuyInSlider
         value={poker_buy_in_amount}
-        min={_small_blind * 2 * 20} // minimum buy_in_amount is 20 times the big blind
-        max={_small_blind * 2 * 50} // maximum buy_in_amount is 50 times the big blind
-        step={_small_blind * 2} // multiple of big blind
+        min={small_blind * 2 * 20} // minimum buy_in_amount is 20 times the big blind
+        max={small_blind * 2 * 50} // maximum buy_in_amount is 50 times the big blind
+        step={small_blind * 2} // multiple of big blind
         onInput={(event) => {
           const range_input_element = event.target as HTMLInputElement;
           set_poker_buy_in_amount(Number(range_input_element.value));
@@ -56,7 +56,7 @@ const PokerBuyInDrawer: FC = () => {
             height={20}
           />
           <StyledBlindsAmount>
-            $ {_small_blind}k / $ {_small_blind * 2}k
+            $ {small_blind}k / $ {small_blind * 2}k
           </StyledBlindsAmount>
         </StyledBlindsAmountWrapper>
       </StyledBlindsContainer>

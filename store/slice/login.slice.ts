@@ -1,13 +1,31 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { updateUser } from "@/store/slice/user.slice";
-
-// Types
-import type { LoginInitialState } from "@/types/redux";
-import type { User } from "@/types/user";
-import type { RootState } from "../rootReducer";
+// types
+import type { IThunkApiConfig } from "@/types/store/slice/common";
+import type { RootState } from "@/store/rootReducer";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import {
+  IUser,
+  IValidationErrorType,
+  ILoginInitialState,
+  IVerifyUserNameApiRequest,
+  IVerifyUserNameApiResponse,
+  IRegisterUserApiRequest,
+  IRegisterUserApiResponse,
+  IRegisterUserApiRejectValue,
+  IUpdateProfileApiRequest,
+  IUpdateProfileApiResponse,
+  IUpdateNameApiRequest,
+  IUpdateNameApiResponse,
+  ILoginUserApiRequest,
+  ILoginUserApiResponse,
+  ILoginUserApiRejectValue,
+  ILogoutUserApiResponse,
+} from "@/types/store/slice/login";
+import type { AxiosResponse, AxiosError } from "axios";
 
 // Axios
+import axios from "axios";
 import { Axios } from "@/helpers/axios";
 
 // Cookie
@@ -15,91 +33,317 @@ import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
-type LoginResponse = {
-  success: boolean;
-  user: User;
-  token: string;
-};
-type RegisterArgs = {
-  name: string;
-  username: string;
-  email: string;
-  password: string;
-};
-
-type LoginArgs = {
-  username?: string;
-  email?: string;
-  password: string;
-};
-
-export const signUpHandler = createAsyncThunk<LoginResponse, RegisterArgs>(
-  "api/register",
-  async (
-    { name, username, email, password },
-    { rejectWithValue, dispatch }
-  ) => {
-    try {
-      const res = await Axios.post("/register", {
-        name,
+export const registerUserApi = createAsyncThunk<
+  IRegisterUserApiResponse,
+  IRegisterUserApiRequest,
+  IThunkApiConfig<IRegisterUserApiRejectValue>
+>("api/login/register", async ({ username, password }, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<IRegisterUserApiResponse> = await Axios.post(
+      "/register",
+      {
         username,
-        email,
         password,
-      });
-      cookies.set("token", res.data.token);
-      dispatch(updateUser(res.data.user));
-      return res.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
+      }
+    );
+    cookies.set("token", res.data.token, {
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+    });
+    return res.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      const axios_error = error as AxiosError<IRegisterUserApiResponse>;
+      const messages = axios_error.response?.data.message;
+      if (typeof messages == "object") {
+        const error: IRegisterUserApiRejectValue = [];
+        for (const [key, value] of Object.entries(messages)) {
+          error.push({
+            type: key as "password" | "username",
+            error: value[0],
+          });
+        }
+        return rejectWithValue(error);
+      } else {
+        return rejectWithValue(messages as string);
+      }
     }
+    return rejectWithValue("An unexpected error occurred");
   }
-);
+});
 
-export const loginHandler = createAsyncThunk<LoginResponse, LoginArgs>(
-  "api/register",
-  async ({ username, email, password }, { rejectWithValue, dispatch }) => {
+export const loginUserApi = createAsyncThunk<
+  ILoginUserApiResponse,
+  ILoginUserApiRequest,
+  IThunkApiConfig<ILoginUserApiRejectValue>
+>(
+  "api/login/login",
+  async ({ username, email, password }, { rejectWithValue }) => {
     try {
-      const res = await Axios.post("/login", {
-        username,
-        email,
-        password,
-      });
+      const res: AxiosResponse<ILoginUserApiResponse> = await Axios.post(
+        "/login",
+        {
+          username,
+          email,
+          password,
+        }
+      );
       cookies.set("token", res.data.token, {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       });
-      dispatch(updateUser(res.data.user));
       return res.data;
-    } catch (error: any) {
-      return rejectWithValue(error?.response?.data);
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axios_error = error as AxiosError<ILoginUserApiResponse>;
+        const messages = axios_error.response?.data.message;
+        if (typeof messages == "object") {
+          const error: ILoginUserApiRejectValue = [];
+          for (const [key, value] of Object.entries(messages)) {
+            error.push({
+              type: key as "password" | "username" | "auth_failed",
+              error: value[0],
+            });
+          }
+          return rejectWithValue(error);
+        } else {
+          return rejectWithValue(messages as string);
+        }
+      }
+      return rejectWithValue("An unexpected error occurred");
     }
   }
 );
 
-const initialState: LoginInitialState = {
-  showModal: true,
-  showLogin: false,
-  showPassword: false,
+export const logoutUserApi = createAsyncThunk<
+  ILogoutUserApiResponse,
+  undefined,
+  IThunkApiConfig<string>
+>("api/logout", async (_, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<ILogoutUserApiResponse> = await Axios.post(
+      "/logout"
+    );
+    return res.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+export const getUserApi = createAsyncThunk<
+  IUser,
+  undefined,
+  IThunkApiConfig<string>
+>("api/user", async (_, { rejectWithValue }) => {
+  try {
+    const res = await Axios.get("/user");
+    return res.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+export const updateProfileApi = createAsyncThunk<
+  IUpdateProfileApiResponse,
+  IUpdateProfileApiRequest,
+  IThunkApiConfig<string>
+>("api/login/update-profile", async ({ form_data }, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<IUpdateProfileApiResponse> = await Axios.post(
+      "/user/update-profile",
+      form_data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return res.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+export const updateNameApi = createAsyncThunk<
+  IUpdateNameApiResponse,
+  IUpdateNameApiRequest
+>("api/login/update-name", async ({ name }, { rejectWithValue }) => {
+  try {
+    const res: AxiosResponse<IUpdateNameApiResponse> = await Axios.post(
+      "user/update-name",
+      {
+        name,
+      }
+    );
+    return res.data;
+  } catch (error: any) {
+    return rejectWithValue("Internal server error");
+  }
+});
+
+export const verifyUserNameApi = createAsyncThunk<
+  IVerifyUserNameApiResponse,
+  IVerifyUserNameApiRequest,
+  IThunkApiConfig<
+    | {
+        error: string;
+        type: IValidationErrorType;
+      }
+    | string
+  >
+>("api/login/verify-username", async ({ username }, { rejectWithValue }) => {
+  try {
+    const response: AxiosResponse<IVerifyUserNameApiResponse> =
+      await Axios.post("/verify-username", {
+        username,
+      });
+    return response.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      let axios_error = error as AxiosError<IVerifyUserNameApiResponse>;
+      let error_message = axios_error.response?.data.message?.username[0];
+      return rejectWithValue({
+        error: error_message as string,
+        type: "username",
+      });
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+const initialState: ILoginInitialState = {
+  user: null,
+  validation_error_list: [],
+  is_typing: false,
 };
 
 export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    toggleModal: (state, action: PayloadAction<boolean>) => {
-      state.showModal = action.payload;
+    updateIsTyping: (state, action: PayloadAction<boolean>) => {
+      state.is_typing = action.payload;
     },
-    updateShowLogin: (state, action: PayloadAction<boolean>) => {
-      state.showLogin = action.payload;
+    addValidationError: (
+      state,
+      action: PayloadAction<{
+        error: string;
+        type: IValidationErrorType;
+      }>
+    ) => {
+      state.validation_error_list.push(action.payload);
     },
-    updateShowPassword: (state, action: PayloadAction<boolean>) => {
-      state.showPassword = action.payload;
+    removeValidationError: (
+      state,
+      action: PayloadAction<{
+        type: IValidationErrorType;
+      }>
+    ) => {
+      state.validation_error_list = state.validation_error_list.filter(
+        (error) => error.type !== action.payload.type
+      );
     },
+    resetValidationError: (state) => {
+      state.validation_error_list = [];
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(verifyUserNameApi.rejected, (state, action) => {
+      if (action.payload && typeof action.payload == "object") {
+        if (
+          state.validation_error_list.some((error) => error.type == "username")
+        ) {
+          state.validation_error_list.map((error) => {
+            if (error.type == "username") {
+              const payload = action.payload as {
+                error: string;
+                type: IValidationErrorType;
+              };
+              error.error = payload.error;
+            }
+          });
+        } else {
+          state.validation_error_list.push(action.payload);
+        }
+      }
+    });
+    builder.addCase(verifyUserNameApi.fulfilled, (state) => {
+      state.validation_error_list = state.validation_error_list.filter(
+        (error) => {
+          return error.type !== "username";
+        }
+      );
+    });
+    builder.addCase(registerUserApi.rejected, (state, action) => {
+      if (action.payload && Array.isArray(action.payload)) {
+        action.payload.forEach((payload_error) => {
+          if (
+            state.validation_error_list.some(
+              (error) => error.type == payload_error.type
+            )
+          ) {
+            state.validation_error_list.map((error) => {
+              error.error = payload_error.error;
+            });
+          } else {
+            state.validation_error_list.push(payload_error);
+          }
+        });
+      }
+    });
+    builder.addCase(registerUserApi.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+      state.validation_error_list = [];
+    });
+
+    builder.addCase(loginUserApi.rejected, (state, action) => {
+      if (action.payload && Array.isArray(action.payload)) {
+        action.payload.forEach((payload_error) => {
+          if (
+            state.validation_error_list.some(
+              (error) => error.type == payload_error.type
+            )
+          ) {
+            state.validation_error_list.map((error) => {
+              error.error = payload_error.error;
+            });
+          } else {
+            state.validation_error_list.push(payload_error);
+          }
+        });
+      }
+    });
+    builder.addCase(loginUserApi.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+    });
+    builder.addCase(getUserApi.fulfilled, (state, action) => {
+      state.user = action.payload;
+    });
+    builder.addCase(logoutUserApi.fulfilled, (state) => {
+      state.user = null;
+    });
   },
 });
 
-export const { toggleModal, updateShowLogin, updateShowPassword } =
-  loginSlice.actions;
-export const showModal = (state: RootState) => state.login.showModal;
-export const showLogin = (state: RootState) => state.login.showLogin;
-export const showPassword = (state: RootState) => state.login.showPassword;
 export default loginSlice.reducer;
+
+// selectors
+export const User = (state: RootState) => state.login.user;
+export const validationErrorList = (state: RootState) =>
+  state.login.validation_error_list;
+export const isTyping = (state: RootState) => state.login.is_typing;
+
+// action  creator
+export const {
+  updateIsTyping,
+  addValidationError,
+  removeValidationError,
+  resetValidationError,
+} = loginSlice.actions;

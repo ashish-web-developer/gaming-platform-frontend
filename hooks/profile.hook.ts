@@ -1,9 +1,9 @@
 import { createAvatar } from "@dicebear/core";
 import { adventurer } from "@dicebear/collection";
 // types
-import { IUsersWithConversation } from "@/types/store/slice/chat";
+import type { IUser } from "@/types/store/slice/login";
 
-const useAvatarUrl = (user: IUsersWithConversation | null) => {
+const useAvatarUrl = (user: IUser | null) => {
   if (user?.avatar_url) {
     return `${process.env.NEXT_PUBLIC_API_END_POINT}${
       user.avatar_url

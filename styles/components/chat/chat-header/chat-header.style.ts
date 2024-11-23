@@ -47,6 +47,8 @@ const StyledUserProfileImage = styled(Image)<{
         ? props.theme.palette.primary.light
         : props.theme.palette.primary.dark};
   border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
 `;
 
 const StyledIconCta = styled.button`

@@ -2,11 +2,13 @@ import { useRef, useState, forwardRef, useEffect } from "react";
 import Image from "next/image";
 // types
 import type { FC, ForwardRefRenderFunction } from "react";
-import type { Theme } from "@/theme/chat.theme";
+import type { ITheme } from "@/theme/chat.theme";
 
 // styled components
 import {
   StyledChatUserUploadWrapper,
+  StyledGirlImageWrapper,
+  StyledGirlImage,
   StyledHeader,
   StyledHeaderMainText,
   StyledIconButton,
@@ -28,12 +30,11 @@ import { useTheme } from "styled-components";
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
-  show_profile_upload_modal,
+  showProfileUploadModal,
   // actions
   updateShowProfileDropDown,
   updateShowProfileUploadModal,
   // apis
-  updateProfileApi,
 } from "@/store/slice/common.slice";
 
 // helpers package
@@ -41,7 +42,15 @@ import Cropper from "cropperjs";
 import "cropperjs/dist/cropper.css";
 
 // hooks
-import { useOutsideClickHandler, useIsMounted } from "@/hooks/common.hook";
+import { useIsMounted } from "@/hooks/common.hook";
+
+// gsap
+import gsap from "gsap";
+
+export type IFileState = {
+  state: 0 | 1 | 2; // 0 => empty; 1 => loading; 2 => done;
+  file: string | ArrayBuffer | null;
+};
 
 const CloseIcon: FC<{ size: number; color: string }> = ({ size, color }) => {
   return (
@@ -75,18 +84,22 @@ const CropIcon: FC<{ color: string; size: number }> = ({ color, size }) => {
     </svg>
   );
 };
-
-const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
-  {},
+const UploadProfileModal: ForwardRefRenderFunction<
+  HTMLElement,
+  {
+    secondary_color: string;
+    font_family: string;
+    show_girl_image?: boolean;
+    onClickHandler: (file_state: IFileState, file: File) => void;
+  }
+> = (
+  { secondary_color, font_family, show_girl_image = false, onClickHandler },
   camera_cta_ref
 ) => {
   const dispatch = useAppDispatch();
-  const theme = useTheme() as Theme;
-  const _show_profile_upload_modal = useAppSelector(show_profile_upload_modal);
-  const [file_state, setFileState] = useState<{
-    state: 0 | 1 | 2;
-    file: string | ArrayBuffer | null;
-  }>({
+  const theme = useTheme() as ITheme;
+  const show_profile_upload_modal = useAppSelector(showProfileUploadModal);
+  const [file_state, setFileState] = useState<IFileState>({
     state: 0, // 0 => empty; 1 => loading; 2 => done;
     file: "",
   });
@@ -95,14 +108,8 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
   const file_input_ref = useRef<HTMLInputElement>(null);
   const uploaded_image_ref = useRef<HTMLImageElement>(null);
   const cropper_ref = useRef<Cropper | null>(null);
+  const gsap_context_ref = useRef<gsap.Context>();
   const is_mount = useIsMounted();
-  useOutsideClickHandler({
-    modal_ref: modal_ref,
-    cta_ref: camera_cta_ref,
-    handler: () => {
-      dispatch(updateShowProfileUploadModal(false));
-    },
-  });
 
   /**
    * Not adding the cropper to uploaded_image_ref
@@ -138,18 +145,98 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
    * camera_cta_ref
    */
   useEffect(() => {
-    if (is_mount) {
-      dispatch(updateShowProfileDropDown(false));
-    }
+    is_mount && dispatch(updateShowProfileDropDown(false));
   }, [is_mount]);
+
+  /**
+   * initializing gsap_context animation
+   */
+
+  useEffect(() => {
+    gsap_context_ref.current = gsap.context((self) => {
+      self.add("onStart", (show_girl_image_animation: boolean) => {
+        const timeline = gsap.timeline().from(modal_ref.current, {
+          ease: "power3.inOut",
+          scale: 0.5,
+          duration: 0.5,
+        });
+        show_girl_image_animation &&
+          timeline.from("#modal-girl-image-wrraper", {
+            opacity: 0,
+            top: 60,
+            duration: 1,
+            ease: "expo.inOut",
+          });
+      });
+      self.add("onClose", (show_girl_image_animation: boolean) => {
+        return new Promise((resolve) => {
+          const timeline = gsap.timeline({
+            onComplete: resolve,
+          });
+          show_girl_image_animation &&
+            timeline.to("#modal-girl-image-wrraper", {
+              opacity: 0,
+              top: 60,
+              duration: 1,
+              ease: "expo.inOut",
+            });
+          timeline.to(modal_ref.current, {
+            ease: "power3.inOut",
+            scale: 0.5,
+            opacity: 0,
+            duration: 0.5,
+          });
+        });
+      });
+    }, modal_ref);
+    return () => {
+      gsap_context_ref.current?.revert();
+    };
+  }, []);
+
+  /**
+   * running animation and handling on close of the modal
+   */
+  useEffect(() => {
+    gsap_context_ref.current?.onStart(show_girl_image);
+    const handleClose = async (event: MouseEvent) => {
+      if (
+        modal_ref.current?.contains(event.target as Node) ||
+        (typeof camera_cta_ref !== "function" &&
+          camera_cta_ref?.current?.contains(event.target as Node))
+      ) {
+        return;
+      }
+      await gsap_context_ref.current?.onClose(show_girl_image);
+      dispatch(updateShowProfileUploadModal(false));
+    };
+    document.addEventListener("click", handleClose);
+    return () => {
+      document.removeEventListener("click", handleClose);
+    };
+  }, [show_girl_image]);
 
   return (
     <StyledChatUserUploadWrapper
       ref={modal_ref}
-      open={_show_profile_upload_modal}
+      open={show_profile_upload_modal}
+      $secondary_color={secondary_color}
+      $font_family={font_family}
     >
+      {show_girl_image && (
+        <StyledGirlImageWrapper id="modal-girl-image-wrraper">
+          <StyledGirlImage
+            fill={true}
+            alt="girl-image"
+            src="/common/user-profile/girl.png"
+          />
+        </StyledGirlImageWrapper>
+      )}
+
       <StyledHeader>
-        <StyledHeaderMainText>Upload File</StyledHeaderMainText>
+        <StyledHeaderMainText $secondary_color={secondary_color}>
+          Upload File
+        </StyledHeaderMainText>
         <StyledIconButton
           onClick={() => {
             dispatch(updateShowProfileUploadModal(false));
@@ -161,6 +248,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
       <StyledModalContent>
         <StyledUploadInputContainer>
           <StyledUploadLabel
+            $secondary_color={secondary_color}
             as={cropper_active ? "div" : "label"}
             htmlFor="upload-file"
           >
@@ -185,7 +273,7 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             type="file"
             id="upload-file"
             name="profile"
-            multiple = {false}
+            multiple={false}
             accept=".jpg,.png"
             onChange={(event) => {
               if (event.target.files) {
@@ -204,8 +292,12 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
             }}
           />
           <StyledUploadBottomInfoWrapper>
-            <StyledText>Formats: png, jpeg</StyledText>
-            <StyledText>File Size: 3MB</StyledText>
+            <StyledText $secondary_color={secondary_color}>
+              Formats: png, jpeg
+            </StyledText>
+            <StyledText $secondary_color={secondary_color}>
+              File Size: 3MB
+            </StyledText>
           </StyledUploadBottomInfoWrapper>
         </StyledUploadInputContainer>
         <StyledCtaWrapper>
@@ -222,15 +314,16 @@ const UploadProfileModal: ForwardRefRenderFunction<HTMLElement, {}> = (
           </span>
 
           <StyledSaveCta
-            onClick={() => {
+            $font_family={font_family}
+            $secondary_color={secondary_color}
+            onClick={async () => {
               if (
                 file_input_ref.current &&
                 file_input_ref.current.files &&
                 file_input_ref.current.files[0]
               ) {
-                const form_data = new FormData();
-                form_data.append("avatar", file_input_ref.current.files[0]);
-                dispatch(updateProfileApi({ form_data: form_data }));
+                onClickHandler(file_state, file_input_ref.current.files[0]);
+                await gsap_context_ref.current?.onClose();
                 dispatch(updateShowProfileUploadModal(false));
               }
             }}

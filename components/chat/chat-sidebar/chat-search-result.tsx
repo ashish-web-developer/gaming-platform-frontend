@@ -1,98 +1,36 @@
 import { useRef, forwardRef } from "react";
 // types
 import type { ForwardRefRenderFunction, RefObject } from "react";
-import type { IUsersWithConversation } from "@/types/store/slice/chat";
 
 // styled components
-import {
-  StyledChatSearchResult,
-  StyledProfileContainer,
-  StyledProfileImage,
-  StyledProfileDetails,
-  StyledName,
-  StyledUserName,
-  StyledSkeletonLoader,
-} from "@/styles/components/chat/chat-sidebar/chat-search-result.style";
+import { StyledChatSearchResult } from "@/styles/components/chat/chat-sidebar/chat-search-result.style";
 
 // local components
 import ChatGroup from "@/components/chat/chat-sidebar/chat-group-list/chat-group";
-
+import ChatSearchResultProfile from "@/components/chat/chat-sidebar/chat-search-result-profile";
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   // state
-  fetched_user_result,
-  is_request_pending,
+  fetchedUserResult,
+  isRequestPending,
   // action
   updateFetchUserResult,
-  updateDefaultUser,
   // api call
   fetchUserApi,
 } from "@/store/slice/chat.slice";
 import {
-  fetched_group_results,
-  is_fetch_group_request_pending,
+  fetchedGroupResults,
+  isFetchGroupRequestPending,
   updateFetchedGroupResult,
   fetchGroupApi,
 } from "@/store/slice/group.slice";
 
-import { mode } from "@/store/slice/common.slice";
-
 // hooks
-import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useOutsideClickHandler } from "@/hooks/common.hook";
 
 // helpers
 import { fetchOnScroll } from "@/helpers/chat.helper";
-
-type IChatResultProfileProps = {
-  user: IUsersWithConversation;
-  is_request_pending: boolean;
-  handleModalClose?: () => void;
-};
-
-const ChatResultProfile: ForwardRefRenderFunction<
-  HTMLInputElement,
-  IChatResultProfileProps
-> = ({ user, is_request_pending, handleModalClose }, search_input_ref) => {
-  const dispatch = useAppDispatch();
-  const _mode = useAppSelector(mode);
-  const avatar_url = useAvatarUrl(user);
-  return (
-    <>
-      {is_request_pending ? (
-        <StyledSkeletonLoader />
-      ) : (
-        <StyledProfileContainer
-          $mode={_mode}
-          onClick={() => {
-            dispatch(updateDefaultUser(user));
-            dispatch(updateFetchUserResult([]));
-            if (
-              typeof search_input_ref !== "function" &&
-              search_input_ref?.current
-            ) {
-              search_input_ref.current.value = "";
-            }
-            handleModalClose && handleModalClose();
-          }}
-        >
-          <StyledProfileImage
-            width={40}
-            height={40}
-            src={avatar_url}
-            alt="user-avatar"
-          />
-          <StyledProfileDetails>
-            <StyledName>{user.name}</StyledName>
-            <StyledUserName>@{user.username}</StyledUserName>
-          </StyledProfileDetails>
-        </StyledProfileContainer>
-      )}
-    </>
-  );
-};
-const ForwardedChatUserProfile = forwardRef(ChatResultProfile);
 
 const ChatSearchResult: ForwardRefRenderFunction<
   HTMLInputElement,
@@ -104,13 +42,13 @@ const ChatSearchResult: ForwardRefRenderFunction<
 > = ({ handleModalClose, search_container_ref, type }, search_input_ref) => {
   const dispatch = useAppDispatch();
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
-  const _fetched_user_result = useAppSelector(fetched_user_result);
-  const _is_request_pending = useAppSelector(is_request_pending);
+  const fetched_user_result = useAppSelector(fetchedUserResult);
+  const is_request_pending = useAppSelector(isRequestPending);
   const scrollable_content_ref = useRef<HTMLDivElement>(null);
-  const _is_fetch_group_request_pending = useAppSelector(
-    is_fetch_group_request_pending
+  const is_fetch_group_request_pending = useAppSelector(
+    isFetchGroupRequestPending
   );
-  const _fetched_group_results = useAppSelector(fetched_group_results);
+  const fetched_group_resuls = useAppSelector(fetchedGroupResults);
 
   useOutsideClickHandler({
     modal_ref: scrollable_content_ref,
@@ -135,8 +73,8 @@ const ChatSearchResult: ForwardRefRenderFunction<
           container_ref: scrollable_content_ref,
           is_request_pending:
             type == "user_search"
-              ? _is_request_pending
-              : _is_fetch_group_request_pending,
+              ? is_request_pending
+              : is_fetch_group_request_pending,
           handler: () => {
             timeout_ref.current = setTimeout(() => {
               if (
@@ -165,12 +103,12 @@ const ChatSearchResult: ForwardRefRenderFunction<
       ref={scrollable_content_ref}
     >
       {type == "user_search" &&
-        _fetched_user_result.map((user) => {
+        fetched_user_result.map((user) => {
           return (
-            <ForwardedChatUserProfile
+            <ChatSearchResultProfile
               key={`result-${user.id}`}
               user={user}
-              is_request_pending={_is_request_pending}
+              is_request_pending={is_request_pending}
               handleModalClose={handleModalClose}
               ref={search_input_ref}
             />
@@ -178,7 +116,7 @@ const ChatSearchResult: ForwardRefRenderFunction<
         })}
 
       {type == "group_search" &&
-        _fetched_group_results.map((group, index) => {
+        fetched_group_resuls.map((group, index) => {
           return (
             <ChatGroup
               show_follow_cta={true}
