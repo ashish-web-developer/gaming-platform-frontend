@@ -25,7 +25,11 @@ const Slider: FC = () => {
         id="slider-input"
         type="checkbox"
       />
-      <StyledLabel $mode={_mode} htmlFor="slider-input"></StyledLabel>
+      <StyledLabel
+        className="animation"
+        $mode={_mode}
+        htmlFor="slider-input"
+      ></StyledLabel>
     </>
   );
 };

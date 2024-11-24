@@ -43,7 +43,7 @@ const ChatUserPoint: FC = () => {
   const user = useAppSelector(User);
   const _mode = useAppSelector(mode);
   return (
-    <StyledUserPointWrapper>
+    <StyledUserPointWrapper className="animation">
       <StyledDollarIcon
         src={"/chat/chat-header/chat-user-point/dollar.png"}
         alt="dollar-icon"

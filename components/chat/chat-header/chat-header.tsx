@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 // types
 import { type FC } from "react";
 import type { ITheme } from "@/theme/chat.theme";
@@ -48,7 +48,8 @@ import { Notifications } from "@/store/slice/notification.slice";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
-import React from "react";
+// gsap
+import gsap from "gsap";
 
 const ChatHeader: FC = () => {
   const theme = useTheme() as ITheme;
@@ -68,6 +69,28 @@ const ChatHeader: FC = () => {
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const group_cta_ref = useRef<HTMLButtonElement>(null);
   const notification_cta_ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const gsap_context = gsap.context(() => {
+      gsap.fromTo(
+        ".animation",
+        {
+          opacity: 0,
+          scale: 2,
+        },
+        {
+          opacity: 1,
+          duration: 1,
+          ease: "elastic.out",
+          scale: 1,
+          stagger: 0.1,
+        }
+      );
+    });
+    return () => {
+      gsap_context.revert();
+    };
+  }, []);
 
   return (
     <>
@@ -95,6 +118,7 @@ const ChatHeader: FC = () => {
         </StyledWelcomeText>
         <StyledRightContainer>
           <StyledNotificationCta
+            className="animation"
             $notification_count={unread_notifications_count}
             onClick={() => {
               dispatch(updateShowNotification(!show_notification_modal));
@@ -110,7 +134,7 @@ const ChatHeader: FC = () => {
           </StyledNotificationCta>
           <ChatUserPoint />
           <Slider />
-          <StyledUserProfileImageWrapper>
+          <StyledUserProfileImageWrapper id="user-profile-wrapper">
             {show_profile_drop_down && (
               <UserProfileDropDown
                 ref={camera_cta_ref}
@@ -125,6 +149,7 @@ const ChatHeader: FC = () => {
               <NotificationModal ref={notification_cta_ref} />
             )}
             <StyledUserProfileImage
+              className="animation"
               $mode={_mode}
               src={user_avatar_url}
               width={30}

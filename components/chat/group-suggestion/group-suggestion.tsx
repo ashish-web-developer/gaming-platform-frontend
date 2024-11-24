@@ -34,8 +34,12 @@ import {
 // helpers
 import { fetchOnScroll } from "@/helpers/chat.helper";
 
+// gsap
+import gsap from "gsap";
+
 const GroupSuggestion: FC = () => {
   const dispatch = useAppDispatch();
+  const suggestion_wrapper = useRef<HTMLDivElement>(null);
   const _mode = useAppSelector(mode);
   const input_ref = useRef<HTMLInputElement>(null);
   const recommended_groups = useAppSelector(recommendedGroups);
@@ -46,6 +50,37 @@ const GroupSuggestion: FC = () => {
   );
   const result_container_ref = useRef<HTMLDivElement>(null);
   const timeout_ref = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    let gsap_context: gsap.Context;
+    if (
+      show_group_search ||
+      fetched_group_result.length ||
+      recommended_groups.length
+    ) {
+      gsap_context = gsap.context(() => {
+        gsap.timeline().fromTo(
+          "#chat-group-wrapper",
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+            stagger: 0.08,
+            duration: 1,
+            ease: "expo",
+          }
+        );
+      }, suggestion_wrapper);
+    }
+    return () => {
+      gsap_context && gsap_context.revert();
+    };
+  }, [
+    show_group_search,
+    fetched_group_result.length,
+    recommended_groups.length,
+  ]);
 
   useEffect(() => {
     const outsideClickHandler = (event: Event) => {
@@ -67,8 +102,9 @@ const GroupSuggestion: FC = () => {
       }
     };
   }, [show_group_search]);
+
   return (
-    <StyledGroupSuggestionWrapper>
+    <StyledGroupSuggestionWrapper ref={suggestion_wrapper}>
       <StyledDetailsWrapper $add_padding={!show_group_search}>
         {show_group_search ? (
           <StyledGroupSearchInput
