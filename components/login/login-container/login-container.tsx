@@ -29,6 +29,10 @@ import IntroductionTooltip from "@/components/login/introduction-tooltip";
 import ValidationTooltip from "@/components/login/validation-tooltip";
 import OnboardBanner from "@/components/login/onboard-banner";
 
+// gsap
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
 type IProps = {
   show_profile_upload_modal: boolean;
   file_state: IFileState;
@@ -54,6 +58,16 @@ const LoginContainer: FC<IProps> = ({
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const [show_onboard, setShowOnboard] = useState<boolean>(false);
 
+  const { contextSafe } = useGSAP(() => {});
+
+  const logoAnimationHandler = contextSafe((event_type: "enter" | "leave") => {
+    gsap.to(".logo-container", {
+      scale: event_type == "enter" ? 1.2 : 1,
+      duration: 0.5,
+      ease: "back.in",
+    });
+  });
+
   return (
     <StyledPage>
       <StyledImageContainer
@@ -70,7 +84,12 @@ const LoginContainer: FC<IProps> = ({
       </StyledImageContainer>
       <>
         <StyledLogoContainer className="logo-container">
-          <StyledLogo>Fortune Realm</StyledLogo>
+          <StyledLogo
+            onMouseEnter={() => logoAnimationHandler("enter")}
+            onMouseLeave={() => logoAnimationHandler("leave")}
+          >
+            Fortune Realm
+          </StyledLogo>
         </StyledLogoContainer>
         <IntroductionTooltip />
         <ValidationTooltip error={error} />

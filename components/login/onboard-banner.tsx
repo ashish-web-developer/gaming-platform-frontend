@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 // types
 import type { FC, ChangeEvent } from "react";
 
@@ -20,14 +20,15 @@ import { updateNameApi } from "@/store/slice/login.slice";
 
 // gsap
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const OnboardBanner: FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const wrapper_ref = useRef<HTMLDivElement>(null);
   const [name, setName] = useState<string | null>(null);
-  useEffect(() => {
-    const gsap_context = gsap.context(() => {
+  useGSAP(
+    () => {
       gsap
         .timeline()
         .fromTo(
@@ -39,7 +40,7 @@ const OnboardBanner: FC = () => {
           {
             y: 0,
             opacity: 1,
-            duration: 2,
+            duration: 1.3,
             ease: "bounce.out",
           }
         )
@@ -67,11 +68,9 @@ const OnboardBanner: FC = () => {
             ease: "expo",
           }
         );
-    }, wrapper_ref);
-    return () => {
-      gsap_context.revert();
-    };
-  }, []);
+    },
+    { scope: wrapper_ref }
+  );
   return (
     <div ref={wrapper_ref}>
       <StyledContainer id="styled-container">

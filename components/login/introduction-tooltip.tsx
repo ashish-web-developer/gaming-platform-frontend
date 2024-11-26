@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState, useRef } from "react";
+import { useEffect, useContext, useState } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/login.theme";
@@ -26,6 +26,7 @@ import { UttranceContext } from "context";
 
 // gsap
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -58,90 +59,82 @@ const IntroductionTooltip: FC = () => {
   const is_typing = useAppSelector(isTyping);
   const uttrance_context = useContext(UttranceContext);
   const [tooltip_text_index, set_tooltip_text_index] = useState(0);
-  const gsap_context_ref = useRef<gsap.Context>();
 
-  /**
-   * Handling tooltip animation
-   */
-  useEffect(() => {
-    gsap_context_ref.current = gsap.context((self) => {
-      self.add("startTooltipAnimation", () => {
-        gsap
-          .timeline({
-            onComplete: () => {
-              if (uttrance_context.current) {
-                uttrance_context.current.text =
-                  tooltip_text_list[tooltip_text_index];
-                speechSynthesis.speak(uttrance_context.current?.uttrance);
-              }
-            },
-          })
-          .from("#girl-image-wrapper", {
-            display: "none",
-            delay: 1,
-            translateX: -250,
-            duration: 1,
-            ease: "expo",
-          })
-          .from("#info-tooltip", {
-            display: "none",
-            scale: 1.5,
-            duration: 1,
-            ease: "elastic.inOut",
-          });
+  const { contextSafe } = useGSAP(() => {});
+
+  const startTooltipAnimation = contextSafe(() => {
+    gsap
+      .timeline({
+        onComplete: () => {
+          if (uttrance_context.current) {
+            uttrance_context.current.text =
+              tooltip_text_list[tooltip_text_index];
+            speechSynthesis.speak(uttrance_context.current?.uttrance);
+          }
+        },
+      })
+      .from("#girl-image-wrapper", {
+        display: "none",
+        delay: 1,
+        translateX: -250,
+        duration: 1,
+        ease: "expo",
+      })
+      .from("#info-tooltip", {
+        display: "none",
+        scale: 1.5,
+        duration: 1,
+        ease: "elastic.inOut",
       });
-      self.add("tooltipAnimation", (current_tooltip_index: number) => {
-        gsap.from("#info-tooltip", {
-          opacity: 0,
-          duration: 0.6,
-          ease: "power1.inOut",
-          onComplete: () => {
-            if (uttrance_context.current) {
-              uttrance_context.current.text =
-                tooltip_text_list[current_tooltip_index];
-              speechSynthesis.speak(uttrance_context.current?.uttrance);
-            }
-          },
-        });
-      });
-      self.add("closeTooltipAnimation", () => {
-        return new Promise((resolve) => {
-          gsap
-            .timeline({
-              onComplete: resolve,
-            })
-            .to("#info-tooltip", {
-              display: "none",
-              scale: 0,
-              duration: 1,
-              ease: "elastic.inOut",
-            })
-            .to("#girl-image-wrapper", {
-              display: "none",
-              translateX: -300,
-              duration: 1,
-              ease: "back",
-            });
-        });
-      });
+  });
+
+  const tooltipAnimation = contextSafe((current_tooltip_index: number) => {
+    gsap.from("#info-tooltip", {
+      opacity: 0,
+      duration: 0.6,
+      ease: "power1.inOut",
+      onComplete: () => {
+        if (uttrance_context.current) {
+          uttrance_context.current.text =
+            tooltip_text_list[current_tooltip_index];
+          speechSynthesis.speak(uttrance_context.current?.uttrance);
+        }
+      },
     });
-    return () => {
-      gsap_context_ref.current?.revert();
-      speechSynthesis.cancel();
-    };
-  }, []);
+  });
+
+  const closeTooltipAnimation = () => {
+    return new Promise((resolve) => {
+      gsap
+        .timeline({
+          onComplete: resolve,
+        })
+        .to("#info-tooltip", {
+          display: "none",
+          scale: 0,
+          duration: 1,
+          ease: "elastic.inOut",
+        })
+        .to("#girl-image-wrapper", {
+          display: "none",
+          translateX: -300,
+          duration: 1,
+          ease: "back",
+        });
+    });
+  };
 
   useEffect(() => {
     (async function () {
       if (tooltip_text_index == 0 && !is_typing) {
-        gsap_context_ref.current?.startTooltipAnimation();
+        startTooltipAnimation();
       } else if (
         (tooltip_text_index == 1 || tooltip_text_index == 2) &&
         !is_typing
       ) {
-        gsap_context_ref.current?.tooltipAnimation(tooltip_text_index);
+        tooltipAnimation(tooltip_text_index);
       } else {
-        await gsap_context_ref.current?.closeTooltipAnimation();
+        await closeTooltipAnimation();
         speechSynthesis.cancel();
       }
     })();
