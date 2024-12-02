@@ -165,6 +165,7 @@ const MobileWelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/spider-with-web.png"
           fill={true}
           alt="spider-web"
+          sizes="(max-width:600px) 30vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -178,6 +179,7 @@ const MobileWelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/web-vector.png"
           fill={true}
           alt="spider-web"
+          sizes="(max-width:600px) 30vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -191,6 +193,7 @@ const MobileWelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/finger-prints-1.png"
           fill={true}
           alt="finger-prints-1"
+          sizes="(max-width:600px) 20vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -204,6 +207,7 @@ const MobileWelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/finger-prints-2.png"
           fill={true}
           alt="finger-prints-2"
+          sizes="(max-width:600px) 20vw"
         />
       </StyledImageContainer>
       <ThemeProvider theme={PokerTheme}>
@@ -225,23 +229,30 @@ const MobileWelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/main-image.png"
           fill={true}
           alt="main image"
+          priority={true}
+          id="main-image"
+          sizes="(max-width:600px) 60vw"
         />
       </StyledImageContainer>
       <StyledLogoContainer>
         <StyledLogo>
-          {"Fortune Realm".split("").map((char) => {
-            return <span className="logo-span">{char}</span>;
+          {"Fortune Realm".split("").map((char, index) => {
+            return (
+              <span key={`logo-${index}`} className="logo-span">
+                {char}
+              </span>
+            );
           })}
         </StyledLogo>
         <StyledSubTitle>
           {"Your ultimate destination for thrilling casino games"
             .split("")
-            .map((char) => {
-              if (char == " ") {
-                console.log("teting");
-              }
+            .map((char, index) => {
               return (
-                <StyledSubTitleSpan className="subtitle-span">
+                <StyledSubTitleSpan
+                  key={`subtitle-${index}`}
+                  className="subtitle-span"
+                >
                   {char == " " ? "\u00A0" : char}
                 </StyledSubTitleSpan>
               );

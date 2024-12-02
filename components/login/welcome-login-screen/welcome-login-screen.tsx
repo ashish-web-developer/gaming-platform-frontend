@@ -141,7 +141,8 @@ const WelcomeLoginScreen: FC<{
             opacity: 1,
             duration: 1,
             ease: "expo",
-          },"<"
+          },
+          "<"
         )
         .fromTo(
           "#haunted-car",
@@ -237,6 +238,7 @@ const WelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/web-vector.png"
           fill={true}
           alt="spider-web"
+          sizes="(max-width: 1400px) 15vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -250,6 +252,7 @@ const WelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/spider-with-web.png"
           fill={true}
           alt="spider-web"
+          sizes="(max-width: 1400px) 15vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -263,6 +266,7 @@ const WelcomeLoginScreen: FC<{
           src="/login/welcome-login-screen/haunted-car.png"
           fill={true}
           alt="haunted car"
+          sizes="(max-width: 1400px) 30vw"
         />
       </StyledImageContainer>
       <StyledContentContainer>
@@ -277,6 +281,7 @@ const WelcomeLoginScreen: FC<{
             src="/login/welcome-login-screen/finger-prints-1.png"
             fill={true}
             alt="finger-prints-1"
+            sizes="(max-width: 1400px) 15vw"
           />
         </StyledImageContainer>
         <StyledImageContainer
@@ -290,6 +295,7 @@ const WelcomeLoginScreen: FC<{
             src="/login/welcome-login-screen/finger-prints-2.png"
             fill={true}
             alt="finger-prints-2"
+            sizes="(max-width: 1400px) 10vw"
           />
         </StyledImageContainer>
         <StyledGridColumnsContent>
@@ -304,6 +310,8 @@ const WelcomeLoginScreen: FC<{
               src="/login/welcome-login-screen/main-image.png"
               fill={true}
               alt="main image"
+              sizes="(max-width: 1400px) 60vw"
+              priority={true}
             />
           </StyledImageContainer>
         </StyledGridColumnsContent>
@@ -358,6 +366,7 @@ const WelcomeLoginScreen: FC<{
                   src="/login/welcome-login-screen/poker-banner-girl.png"
                   alt="poker-girl"
                   fill={true}
+                  sizes="(max-width: 1400px) 20vw"
                 />
               </StyledImageContainer>
               <StyledBannerGameLogo>
