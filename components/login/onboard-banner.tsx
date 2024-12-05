@@ -75,7 +75,12 @@ const OnboardBanner: FC = () => {
     <div ref={wrapper_ref}>
       <StyledContainer id="styled-container">
         <StyledMainImageContainer id="witch-image">
-          <StyledImage src="/login/onboard-girl.png" fill={true} alt="witch" />
+          <StyledImage
+            src="/login/onboard-girl.png"
+            fill={true}
+            alt="witch"
+            sizes="(max-width: 1400px) 10vw"
+          />
         </StyledMainImageContainer>
         <StyledMainText>
           Your Adventure to

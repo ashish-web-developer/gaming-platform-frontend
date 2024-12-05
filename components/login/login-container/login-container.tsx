@@ -80,6 +80,7 @@ const LoginContainer: FC<IProps> = ({
           src="/login/welcome-login-screen/spider-with-web.png"
           fill={true}
           alt="spider-web"
+          sizes="(max-width: 1400px) 15vw"
         />
       </StyledImageContainer>
       <>
@@ -107,6 +108,7 @@ const LoginContainer: FC<IProps> = ({
             src="/login/web-vector.png"
             fill={true}
             alt="spider-web"
+            sizes="(max-width: 1400px) 30vw"
           />
         </StyledImageContainer>
         {show_onboard ? (
