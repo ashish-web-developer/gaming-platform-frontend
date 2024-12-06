@@ -59,6 +59,7 @@ const MobileLoginContainer: FC<IBaseProps> = ({
           src="/login/welcome-login-screen/spider-with-web.png"
           fill={true}
           alt="spider-web"
+          sizes="(max-width:600px) 30vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -71,6 +72,7 @@ const MobileLoginContainer: FC<IBaseProps> = ({
           src="/login/welcome-login-screen/web-vector.png"
           fill={true}
           alt="spider-web"
+          sizes="(max-width:600px) 30vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -83,6 +85,7 @@ const MobileLoginContainer: FC<IBaseProps> = ({
           src="/login/welcome-login-screen/finger-prints-1.png"
           fill={true}
           alt="finger-prints-1"
+          sizes="(max-width:600px) 20vw"
         />
       </StyledImageContainer>
       <StyledImageContainer
@@ -95,6 +98,7 @@ const MobileLoginContainer: FC<IBaseProps> = ({
           src="/login/welcome-login-screen/finger-prints-2.png"
           fill={true}
           alt="finger-prints-1"
+          sizes="(max-width:600px) 20vw"
         />
       </StyledImageContainer>
       {show_onboard ? (
