@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
-import { useState, forwardRef, useRef, useEffect } from "react";
+import { useState, forwardRef, useRef } from "react";
 // types
-import type { ForwardRefRenderFunction, ChangeEvent } from "react";
+import type { ForwardRefRenderFunction, ChangeEvent, FocusEvent } from "react";
 import type { ITheme } from "@/theme/login.theme";
 import type { IFileState } from "@/components/common/user-profile/upload-profile-modal";
 
@@ -46,6 +46,7 @@ import {
 
 // gsap
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const LoginForm: ForwardRefRenderFunction<
   HTMLButtonElement,
@@ -75,7 +76,6 @@ const LoginForm: ForwardRefRenderFunction<
   const dispatch = useAppDispatch();
   const theme = useTheme() as ITheme;
   const router = useRouter();
-  const gsap_context_ref = useRef<gsap.Context>();
   const validation_error_list = useAppSelector(validationErrorList);
   const [show_password, set_show_password] = useState<boolean>(false);
   const form_container_ref = useRef<HTMLFormElement>(null);
@@ -136,8 +136,9 @@ const LoginForm: ForwardRefRenderFunction<
       );
     }
   };
-  useEffect(() => {
-    gsap_context_ref.current = gsap.context((self) => {
+
+  const { contextSafe } = useGSAP(
+    () => {
       gsap
         .timeline({
           onComplete: () => {
@@ -154,20 +155,40 @@ const LoginForm: ForwardRefRenderFunction<
           ease: "bounce",
           stagger: 0.1,
         });
-    }, form_container_ref);
-    return () => {
-      gsap_context_ref.current?.revert();
-    };
-  }, []);
+    },
+    {
+      scope: form_container_ref,
+      dependencies: [tab_index],
+      revertOnUpdate: true,
+    }
+  );
+
+  const fieldAnimationHandler = contextSafe(
+    (
+      event: FocusEvent<HTMLFormElement, Element>,
+      event_type: "focus" | "blur"
+    ) => {
+      let target = event.target.parentElement?.parentElement;
+      target &&
+        gsap.to(target, {
+          scale: event_type == "focus" ? 1.05 : 1,
+          duration: 0.5,
+          ease: "bounce",
+        });
+    }
+  );
+
   return (
     <StyledForm
       onFocus={(event) => {
+        fieldAnimationHandler(event, "focus");
         dispatch(updateIsTyping(true));
         updateActiveField(
           event.target.name as "username" | "password" | "confirm_password"
         );
       }}
-      onBlur={() => {
+      onBlur={(event) => {
+        fieldAnimationHandler(event, "blur");
         updateActiveField(null);
       }}
       onChange={() => {
