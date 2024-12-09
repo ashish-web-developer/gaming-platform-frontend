@@ -63,6 +63,7 @@ const ChatGroup: FC<
   const is_active = active_group?.id == id;
   return (
     <StyledChatGroupWrapper
+      id="chat-group-wrapper"
       onClick={() => {
         if (is_clickable) {
           dispatch(

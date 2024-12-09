@@ -35,7 +35,8 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useOutsideClickHandler } from "@/hooks/common.hook";
 
 // gsap trial
-import gsap from "gsap-trial";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export const CameraIcon: FC<{
   size: number;
@@ -135,17 +136,12 @@ const UserProfileDropDown: ForwardRefRenderFunction<
     },
   });
 
-  useEffect(() => {
-    const gsap_context = gsap.context(() => {
-      gsap.timeline().from(container_ref.current, {
-        top: "calc(100% + 2rem)",
-        duration: 0.6,
-      });
-    }, container_ref);
-    return () => {
-      gsap_context.revert();
-    };
-  }, []);
+  useGSAP(() => {
+    gsap.timeline().from(container_ref.current, {
+      top: "calc(100% + 2rem)",
+      duration: 0.6,
+    });
+  });
 
   return (
     <>

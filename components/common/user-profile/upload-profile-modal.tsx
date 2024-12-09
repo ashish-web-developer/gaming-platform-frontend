@@ -46,6 +46,7 @@ import { useIsMounted } from "@/hooks/common.hook";
 
 // gsap
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 export type IFileState = {
   state: 0 | 1 | 2; // 0 => empty; 1 => loading; 2 => done;
@@ -108,8 +109,8 @@ const UploadProfileModal: ForwardRefRenderFunction<
   const file_input_ref = useRef<HTMLInputElement>(null);
   const uploaded_image_ref = useRef<HTMLImageElement>(null);
   const cropper_ref = useRef<Cropper | null>(null);
-  const gsap_context_ref = useRef<gsap.Context>();
   const is_mount = useIsMounted();
+  const { contextSafe } = useGSAP(() => {}, { scope: modal_ref });
 
   /**
    * Not adding the cropper to uploaded_image_ref
@@ -148,57 +149,51 @@ const UploadProfileModal: ForwardRefRenderFunction<
     is_mount && dispatch(updateShowProfileDropDown(false));
   }, [is_mount]);
 
-  /**
-   * initializing gsap_context animation
-   */
+  const onModalOpenAnimation = contextSafe(
+    (show_girl_image_animation: boolean) => {
+      const timeline = gsap.timeline().from(modal_ref.current, {
+        ease: "power3.inOut",
+        scale: 0.5,
+        duration: 0.5,
+      });
+      show_girl_image_animation &&
+        timeline.from("#modal-girl-image-wrraper", {
+          opacity: 0,
+          top: 60,
+          duration: 1,
+          ease: "expo.inOut",
+        });
+    }
+  );
 
-  useEffect(() => {
-    gsap_context_ref.current = gsap.context((self) => {
-      self.add("onStart", (show_girl_image_animation: boolean) => {
-        const timeline = gsap.timeline().from(modal_ref.current, {
-          ease: "power3.inOut",
-          scale: 0.5,
-          duration: 0.5,
+  const onModalCloseAnimation = contextSafe(
+    (show_girl_image_animation: boolean) => {
+      return new Promise((resolve) => {
+        const timeline = gsap.timeline({
+          onComplete: resolve,
         });
         show_girl_image_animation &&
-          timeline.from("#modal-girl-image-wrraper", {
+          timeline.to("#modal-girl-image-wrraper", {
             opacity: 0,
             top: 60,
             duration: 1,
             ease: "expo.inOut",
           });
-      });
-      self.add("onClose", (show_girl_image_animation: boolean) => {
-        return new Promise((resolve) => {
-          const timeline = gsap.timeline({
-            onComplete: resolve,
-          });
-          show_girl_image_animation &&
-            timeline.to("#modal-girl-image-wrraper", {
-              opacity: 0,
-              top: 60,
-              duration: 1,
-              ease: "expo.inOut",
-            });
-          timeline.to(modal_ref.current, {
-            ease: "power3.inOut",
-            scale: 0.5,
-            opacity: 0,
-            duration: 0.5,
-          });
+        timeline.to(modal_ref.current, {
+          ease: "power3.inOut",
+          scale: 0.5,
+          opacity: 0,
+          duration: 0.5,
         });
       });
-    }, modal_ref);
-    return () => {
-      gsap_context_ref.current?.revert();
-    };
-  }, []);
+    }
+  );
 
   /**
    * running animation and handling on close of the modal
    */
   useEffect(() => {
-    gsap_context_ref.current?.onStart(show_girl_image);
+    onModalOpenAnimation(show_girl_image);
     const handleClose = async (event: MouseEvent) => {
       if (
         modal_ref.current?.contains(event.target as Node) ||
@@ -207,7 +202,7 @@ const UploadProfileModal: ForwardRefRenderFunction<
       ) {
         return;
       }
-      await gsap_context_ref.current?.onClose(show_girl_image);
+      await onModalCloseAnimation(show_girl_image);
       dispatch(updateShowProfileUploadModal(false));
     };
     document.addEventListener("click", handleClose);
@@ -238,7 +233,8 @@ const UploadProfileModal: ForwardRefRenderFunction<
           Upload File
         </StyledHeaderMainText>
         <StyledIconButton
-          onClick={() => {
+          onClick={async () => {
+            await onModalCloseAnimation(show_girl_image);
             dispatch(updateShowProfileUploadModal(false));
           }}
         >
@@ -323,7 +319,7 @@ const UploadProfileModal: ForwardRefRenderFunction<
                 file_input_ref.current.files[0]
               ) {
                 onClickHandler(file_state, file_input_ref.current.files[0]);
-                await gsap_context_ref.current?.onClose();
+                await onModalCloseAnimation(show_girl_image);
                 dispatch(updateShowProfileUploadModal(false));
               }
             }}
