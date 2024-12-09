@@ -1,5 +1,5 @@
 import { createPortal } from "react-dom";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 // types
 import { type FC } from "react";
 import type { ITheme } from "@/theme/chat.theme";
@@ -50,6 +50,7 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 
 // gsap
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 const ChatHeader: FC = () => {
   const theme = useTheme() as ITheme;
@@ -64,14 +65,15 @@ const ChatHeader: FC = () => {
   const show_notification_modal = useAppSelector(showNotificationModal);
   const user = useAppSelector(User);
   const _mode = useAppSelector(mode);
+  const header_container_ref = useRef<HTMLDivElement>(null);
   const user_avatar_url = useAvatarUrl(user);
   const chevron_cta_ref = useRef<HTMLButtonElement>(null);
   const camera_cta_ref = useRef<HTMLButtonElement>(null);
   const group_cta_ref = useRef<HTMLButtonElement>(null);
   const notification_cta_ref = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    const gsap_context = gsap.context(() => {
+  useGSAP(
+    () => {
       gsap.fromTo(
         ".animation",
         {
@@ -86,11 +88,9 @@ const ChatHeader: FC = () => {
           stagger: 0.1,
         }
       );
-    });
-    return () => {
-      gsap_context.revert();
-    };
-  }, []);
+    },
+    { scope: header_container_ref }
+  );
 
   return (
     <>
@@ -112,7 +112,7 @@ const ChatHeader: FC = () => {
           />,
           document.getElementById("upload-profile-modal-container") as Element
         )}
-      <StyledChatHeader>
+      <StyledChatHeader ref={header_container_ref}>
         <StyledWelcomeText>
           Welcome Gaming, <StyledSpan>Buddy</StyledSpan>
         </StyledWelcomeText>
