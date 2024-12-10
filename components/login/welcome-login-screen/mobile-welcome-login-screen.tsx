@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 
@@ -15,6 +15,7 @@ import {
   StyledBottomShadow,
   StyledPlayCta,
   StyledPlayCtaVector,
+  StyledLottiePlayerContainer,
 } from "@/styles/components/login/welcome-login-screen/mobile-welcome-login-screen.style";
 
 // local components
@@ -27,16 +28,24 @@ import { Theme as PokerTheme } from "@/theme/poker.theme";
 // vector
 import LoginPlayCtaVector from "@/components/login/vector/login-play-cta-vector";
 
+// lottie
+import Lottie from "react-lottie-player";
+import JackOLaternJson from "@/public/login/welcome-login-screen/jack-o-latern.json";
+
 // gsap
 import gsap from "gsap";
+import MotionPathPlugin from "gsap/MotionPathPlugin";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(MotionPathPlugin);
 
 const MobileWelcomeLoginScreen: FC<{
   updateShowLogin: (show: boolean) => void;
 }> = ({ updateShowLogin }) => {
   const container_ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const gsap_context = gsap.context(() => {
+  useGSAP(
+    () => {
       /**
        * Finger print animation
        */
@@ -108,15 +117,19 @@ const MobileWelcomeLoginScreen: FC<{
             duration: 1,
           }
         );
-    }, container_ref);
-    return () => {
-      gsap_context.revert();
-    };
-  }, []);
 
-  // logo animation
-  useEffect(() => {
-    const gsap_context = gsap.context(() => {
+      // jack o latern animation
+      gsap.to("#jack-o-latern", {
+        motionPath: {
+          path: "M39.5 25.5C84.1667 13.6666 171.3 15.9 162.5 119.5C151.5 249 427.5 163 327.5 397.5C227.5 632 163.5 660 101.5 644.5C39.5 629 -48 552 34 436C116 320 214.5 449 225.5 276.5C236.5 104 211.5 1.99998 280 0.999985C348.5 -1.51433e-05 388 40 346 119.5C304 199 20 209.5 52.5 356.5C85 503.5 199.5 329.5 254.5 471.5C309.5 613.5 307 698.5 187 748.5",
+        },
+        repeat: -1,
+        duration: 20,
+        ease: "power1.in",
+        yoyo: true,
+      });
+
+      // logo animation
       gsap
         .timeline()
         .fromTo(
@@ -147,13 +160,23 @@ const MobileWelcomeLoginScreen: FC<{
             stagger: 0.02,
           }
         );
-    }, container_ref);
-    return () => {
-      gsap_context.revert();
-    };
-  }, []);
+    },
+    { scope: container_ref }
+  );
+
   return (
     <StyledPage ref={container_ref}>
+      <StyledLottiePlayerContainer id="jack-o-latern" $top="0px" $left="0px">
+        <Lottie
+          loop
+          play
+          animationData={JackOLaternJson}
+          style={{
+            width: 144,
+            height: 107,
+          }}
+        />
+      </StyledLottiePlayerContainer>
       <StyledImageContainer
         $width="207px"
         $height="182px"
@@ -260,7 +283,7 @@ const MobileWelcomeLoginScreen: FC<{
         </StyledSubTitle>
       </StyledLogoContainer>
       <StyledBottomShadow>
-        <StyledPlayCta onClick={() => updateShowLogin(true)}>
+        <StyledPlayCta onClick={() => updateShowLogin(true)} id="main-cta">
           <StyledPlayCtaVector>
             <LoginPlayCtaVector is_mobile={true} />
           </StyledPlayCtaVector>
