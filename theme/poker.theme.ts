@@ -7,7 +7,6 @@ export type ITheme = {
   palette: {
     primary: {
       main: string;
-      light: string;
     };
     secondary: {
       main: string;
@@ -16,9 +15,6 @@ export type ITheme = {
       main: string;
     };
     success: {
-      main: string;
-    };
-    warning: {
       main: string;
     };
   };
@@ -32,20 +28,16 @@ export type ITheme = {
 export const Theme: ITheme = {
   palette: {
     primary: {
-      main: "#000",
-      light: "#1E1E1E",
+      main: "#000000",
     },
     secondary: {
-      main: "#F5D547",
+      main: "#EF233C",
     },
     info: {
-      main: "#fff",
+      main: "#ffffff",
     },
     success: {
       main: "#90E39A",
-    },
-    warning: {
-      main: "#ff1b1c",
     },
   },
   breakpoints: { ...Breakpoints },
