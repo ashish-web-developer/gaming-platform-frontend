@@ -154,10 +154,21 @@ function CountDown({
   is_finished,
   updateShowWelcomeScreen,
 }: ICountDownProps) {
+  const counter_ref = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     is_finished && updateShowWelcomeScreen(false);
   }, [is_finished]);
-  return <StyledCountDown>{count}</StyledCountDown>;
+  useGSAP(
+    () => {
+      gsap.from(counter_ref.current, {
+        scale: 2,
+        duration: 0.3,
+        ease: "bounce",
+      });
+    },
+    { revertOnUpdate: true, dependencies: [count] }
+  );
+  return <StyledCountDown ref={counter_ref}>{count}</StyledCountDown>;
 }
 const WithCountDown = withCountDownFunctionality<{
   updateShowWelcomeScreen: (show: boolean) => void;
