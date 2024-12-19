@@ -1,202 +1,175 @@
+import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 // types
-import type { FC, Dispatch, SetStateAction } from "react";
-import type { IDeckType } from "@/types/store/slice/poker";
-import type { IPokerPlayer, ISeatType } from "@/types/store/slice/poker/poker";
+import type { FC } from "react";
+
 // styled components
 import {
-  StyledPokerTableWrapper,
-  StyledPokerVectorWrapper,
-  StyledLeftPlayerWrapper,
-  StyledRightPlayerWrapper,
-  StyledBottomPlayerWrapper,
-  StyledTableDealerProfile,
-  StyledTableDealerProfileImage,
-  StyledTableCardWrapper,
-  StyledChipsInPotWrapper,
-  StyledPokerChipsImage,
-  StyledBorderedCard,
+  StyledImageContainer,
+  StyledImage,
+  StyledSvgWrapper,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
-// hoc
-import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
-
 // local components
-import PokerTableVector from "@/components/poker/poker-table/poker-table-vector";
-import PokerPlayerSeat from "@/components/poker/poker-player-seat/poker-player-seat";
-import PokerCard from "@/components/poker/poker-card/poker-card";
+import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
+import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
 
-// hooks
-import { usePokerTableHeight } from "@/hooks/poker/poker.hook";
+// redux
+import { useAppSelector } from "@/hooks/redux.hook";
+import { showBuyInModal } from "@/store/slice/poker/poker.slice";
 
-type IProps = {
-  left_poker_players: IPokerPlayer[];
-  right_poker_players: IPokerPlayer[];
-  bottom_poker_players: IPokerPlayer[];
-  community_cards: IDeckType | null;
-  chips_in_pot: number;
-  total_chips_betted: number;
-  show_poker_slider: boolean;
-  bettor_id: number | null;
-  show_action_cta: boolean;
-  set_show_action_cta: Dispatch<SetStateAction<boolean>>;
-  no_of_community_cards: number;
-  user_id: number | null;
-};
-const PokerTable: FC<IProps> = ({
-  left_poker_players,
-  right_poker_players,
-  bottom_poker_players,
-  community_cards,
-  chips_in_pot,
-  total_chips_betted,
-  show_poker_slider,
-  bettor_id,
-  show_action_cta,
-  set_show_action_cta,
-  no_of_community_cards,
-  user_id,
-}) => {
-  const height = usePokerTableHeight();
-  return (
-    <StyledPokerTableWrapper>
-      <StyledTableDealerProfile>
-        <StyledTableDealerProfileImage
-          alt="dealer"
-          src={"/poker/poker-table/dealer.png"}
-          fill={true}
-        />
-      </StyledTableDealerProfile>
-      <StyledPokerVectorWrapper>
-        <StyledLeftPlayerWrapper>
-          {left_poker_players.map((player) => {
-            if (player.player_id) {
-              return (
-                <PokerPlayerSeat
-                  seat_number={player.seat_index as ISeatType}
-                  poker_player={player}
-                  show_poker_slider={false}
-                  show_action_cta={false}
-                  toggle_action_cta={(show: boolean) =>
-                    set_show_action_cta(show)
-                  }
-                  key={`player-${player.player_id}`}
-                />
-              );
-            }
-            return (
-              <StyledPokerChipsImage
-                src={"/poker/poker-player/poker-chip.png"}
-                alt="chips-image"
-                width={50}
-                height={50}
-                key={`seat-${player.seat_index}`}
-              />
-            );
-          })}
-        </StyledLeftPlayerWrapper>
-        <StyledBottomPlayerWrapper>
-          {bottom_poker_players.map((player) => {
-            if (player.player_id) {
-              return (
-                <PokerPlayerSeat
-                  seat_number={player.seat_index as ISeatType}
-                  poker_player={player}
-                  show_action_cta={
-                    show_action_cta &&
-                    bettor_id == user_id &&
-                    bettor_id == player.player_id
-                      ? true
-                      : false
-                  }
-                  show_poker_slider={
-                    show_poker_slider &&
-                    bettor_id == user_id &&
-                    bettor_id == player.player_id
-                      ? true
-                      : false
-                  }
-                  toggle_action_cta={(show: boolean) =>
-                    set_show_action_cta(show)
-                  }
-                  show_current_betted_amount={!show_poker_slider}
-                  key={`player-${player.player_id}`}
-                />
-              );
-            }
-            return (
-              <StyledPokerChipsImage
-                src={"/poker/poker-player/poker-chip.png"}
-                alt="chips-image"
-                width={50}
-                height={50}
-                key={`seat-${player.seat_index}`}
-              />
-            );
-          })}
-        </StyledBottomPlayerWrapper>
-        <StyledRightPlayerWrapper>
-          {right_poker_players.map((player) => {
-            if (player.player_id) {
-              return (
-                <PokerPlayerSeat
-                  seat_number={player.seat_index as ISeatType}
-                  poker_player={player}
-                  show_poker_slider={false}
-                  show_action_cta={false}
-                  toggle_action_cta={(show: boolean) =>
-                    set_show_action_cta(show)
-                  }
-                  key={`player-${player.player_id}`}
-                />
-              );
-            }
-            return (
-              <StyledPokerChipsImage
-                src={"/poker/poker-player/poker-chip.png"}
-                alt="chips-image"
-                width={50}
-                height={50}
-                key={`seat-${player.seat_index}`}
-              />
-            );
-          })}
-        </StyledRightPlayerWrapper>
-        <PokerTableVector width={900} height={height} />
-      </StyledPokerVectorWrapper>
+// gsap
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import MotionPathPlugin from "gsap/MotionPathPlugin";
 
-      {(Boolean(chips_in_pot) || Boolean(total_chips_betted)) && (
-        <StyledChipsInPotWrapper>
-          <StyledPokerChipsImage
-            src={"/poker/poker-player/poker-chip.png"}
-            alt="chip"
-            width={25}
-            height={25}
-          />
-          ${" "}
-          {(
-            (chips_in_pot == 0 ? total_chips_betted : chips_in_pot) * 1000
-          ).toFixed(2)}
-        </StyledChipsInPotWrapper>
-      )}
-      <StyledTableCardWrapper>
-        {[
-          ...(community_cards ? [...community_cards] : []),
-          ...new Array(5 - no_of_community_cards).fill(null),
-        ]?.map((card, index) => {
-          if (card) {
-            return (
-              <PokerCard
-                key={`card-${index}`}
-                suit={card.suit}
-                rank={card.rank}
-              />
-            );
+gsap.registerPlugin(MotionPathPlugin);
+
+const PokerTable: FC = () => {
+  const container_ref = useRef<HTMLDivElement>(null);
+  const player_containers_ref = useRef<Set<HTMLDivElement | null>>(new Set());
+  const show_buy_in_modal = useAppSelector(showBuyInModal);
+  const { contextSafe } = useGSAP(
+    () => {
+      const players_position = [
+        0.09, 0.19, 0.29, 0.396, 0.495, 0.591, 0.693, 0.797, 0.897,
+      ];
+      const players_containers = Array.from(
+        player_containers_ref.current.values()
+      );
+      gsap.set(players_containers, {
+        scale: 1.3,
+      });
+      players_containers.forEach((container, index) => {
+        gsap.fromTo(
+          container,
+          {
+            opacity: 0,
+          },
+          {
+            motionPath: {
+              path: "#path",
+              align: "#path",
+              alignOrigin: [0.5, 0.5],
+              end: players_position[index],
+            },
+            opacity: 1,
+            duration: 3,
+            delay: 0.1,
           }
-          return <StyledBorderedCard key={`bordered-card-${index}`} />;
+        );
+      });
+    },
+    { scope: container_ref }
+  );
+
+  /**
+   * This animation will get
+   * run on the close of buy in modal
+   */
+  const profileAnimation = contextSafe(() => {
+    const animation = new Promise((resolve, reject) => {
+      gsap
+        .timeline({
+          onComplete: resolve,
+        })
+        .to(Array.from(player_containers_ref.current.values()), {
+          scale: 1,
+          duration: 0.6,
+        })
+
+        .fromTo(
+          Array.from(player_containers_ref.current.values()).map(
+            (container) => container?.firstChild
+          ),
+          {
+            scale: 1.3,
+          },
+          {
+            opacity: 1,
+            scale: 1,
+            stagger: {
+              from: "center",
+              amount: 1,
+            },
+            duration: 1,
+            ease: "elastic.out",
+          },
+          "-=0.3"
+        );
+    });
+    return animation;
+  });
+
+  return (
+    <div ref={container_ref}>
+      {show_buy_in_modal &&
+        createPortal(
+          <PokerBuyInDialog onModalCloseAnimation={profileAnimation} />,
+          document.getElementById(
+            "poker-buy-in-dialog-container"
+          ) as HTMLElement
+        )}
+      <StyledImageContainer // Table Wrapper
+        $width="970px"
+        $height="530px"
+        $top="50%"
+        $left="50%"
+        $translateX="-50%"
+        $translateY="-50%"
+      >
+        {new Array(9).fill(0).map((val, index) => {
+          return (
+            <PokerPlayer
+              key={`players-${index}`}
+              ref={(node) => {
+                player_containers_ref.current.add(node);
+                return () => {
+                  player_containers_ref.current.delete(node);
+                };
+              }}
+            />
+          );
         })}
-      </StyledTableCardWrapper>
-    </StyledPokerTableWrapper>
+        <StyledSvgWrapper>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="913"
+            height="448"
+            fill="none"
+            viewBox="0 0 913 448"
+          >
+            <path
+              id="path"
+              stroke="#fff"
+              strokeWidth={0}
+              d="M228.496 2.532c-52.667-.5-168.9 28.1-212.5 146.5s18.167 208 54.5 238c23.667 19.833 79.7 59.5 114.5 59.5h531c49-5 154.5-41.2 184.5-146s-5.5-174.667-27-196.5c-25.333-39.334-104.2-114.7-217-101.5"
+            ></path>
+          </svg>
+        </StyledSvgWrapper>
+
+        <StyledImageContainer
+          $width="312px"
+          $height="216px"
+          $left="50%"
+          $translateX="-50%"
+          $top="-80px"
+          $zIndex={1}
+        >
+          <StyledImage
+            fill={true}
+            src="/poker/poker-table/dealer.png"
+            alt="dealer"
+          />
+        </StyledImageContainer>
+        <StyledImage
+          src="/poker/poker-table/table.png"
+          fill={true}
+          alt="poker-table"
+        />
+      </StyledImageContainer>
+    </div>
   );
 };
 
-export default withPokerTableFunctionality(PokerTable, false);
+export default PokerTable;

@@ -31,11 +31,12 @@ import {
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
-const PokerBuyInDialog: FC = () => {
+const PokerBuyInDialog: FC<{
+  onModalCloseAnimation: () => Promise<unknown>;
+}> = ({ onModalCloseAnimation }) => {
   const dispatch = useAppDispatch();
-  const dialog_ref = useRef<HTMLDialogElement>(null);
+  const dialog_ref = useRef<HTMLDivElement>(null);
   const [poker_buy_in_amount, setPokerBuyInAmount] = useState<number>(200);
-  const show_buy_in_modal = useAppSelector(showBuyInModal);
   const small_blind = useAppSelector(smallBlind);
 
   useGSAP(() => {
@@ -56,7 +57,7 @@ const PokerBuyInDialog: FC = () => {
 
   return (
     <>
-      {show_buy_in_modal && <StyledBackdrop />}
+      <StyledBackdrop />
       <StyledPokerBuyInDialog ref={dialog_ref}>
         <StyledDialogImageWrapper>
           <StyledDialogImage
@@ -95,11 +96,13 @@ const PokerBuyInDialog: FC = () => {
         </StyledBlindsContainer>
         <StyledBuyInCta
           onClick={() => {
-            dispatch(
-              getPokerRoomInfoApi({
-                poker_buy_in_amount,
-              })
-            );
+            // dispatch(
+            //   getPokerRoomInfoApi({
+            //     poker_buy_in_amount,
+            //   })
+            // );
+            // dispatch(updateShowBuyInModal(false));
+            onModalCloseAnimation();
             dispatch(updateShowBuyInModal(false));
           }}
         >

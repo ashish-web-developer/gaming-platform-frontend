@@ -1,39 +1,27 @@
+import { forwardRef } from "react";
+
 // types
-import type { FC } from "react";
-import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { FC, ForwardRefRenderFunction } from "react";
 
 // styled components
 import {
   StyledPokerPlayerWrapper,
-  StyledPokerPlayer,
-  StyledUserProfileImage,
+  StyledPokerPlayerDetails,
+  StyledPlayerName,
+  StyledPlayerAmount,
 } from "@/styles/components/poker/poker-player-seat/poker-player.style";
 
-// hook
-import { useAvatarUrl } from "@/hooks/profile.hook";
-
-const PokerPlayer: FC<{
-  player: IPokerPlayer;
-  is_bettor: boolean;
-  is_active: boolean;
-  is_dealer: boolean;
-}> = ({ player, is_bettor, is_active, is_dealer }) => {
-  const avatar_url = useAvatarUrl(player.user ?? null);
+const PokerPlayer: ForwardRefRenderFunction<HTMLDivElement> = (
+  {},
+  container_ref
+) => {
   return (
-    <StyledPokerPlayerWrapper
-      $is_dealer={is_dealer}
-      $is_bettor={is_bettor}
-      $is_active={is_active}
-    >
-      <StyledPokerPlayer $is_bettor={is_bettor}>
-        <StyledUserProfileImage
-          fill={true}
-          alt="user-profile"
-          src={avatar_url}
-        />
-      </StyledPokerPlayer>
+    <StyledPokerPlayerWrapper id="player" ref={container_ref}>
+      <StyledPokerPlayerDetails>
+        <StyledPlayerName>Stafani Gwen</StyledPlayerName>
+        <StyledPlayerName>$ 143.7 M</StyledPlayerName>
+      </StyledPokerPlayerDetails>
     </StyledPokerPlayerWrapper>
   );
 };
-
-export default PokerPlayer;
+export default forwardRef(PokerPlayer);

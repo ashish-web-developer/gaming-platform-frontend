@@ -37,6 +37,22 @@ const WelcomePokerScreen: FC<{
 
   useGSAP(
     () => {
+      // background animation
+      gsap.set("#poker-background", {
+        zIndex: 0,
+      });
+      gsap.timeline().fromTo(
+        "#poker-background",
+        {
+          scale: 1,
+        },
+        {
+          scale: 1.5,
+          duration: 8,
+        }
+      );
+
+      // logo and main image animation
       gsap
         .timeline()
         .fromTo(
@@ -68,8 +84,16 @@ const WelcomePokerScreen: FC<{
     },
     { scope: page_ref }
   );
+
   return (
     <StyledPage ref={page_ref}>
+      <StyledImage
+        id="poker-background"
+        $objectFit="cover"
+        src="/poker/diamond-background.png"
+        fill={true}
+        alt="poker-background"
+      />
       <StyledContentContainer>
         <StyledSuitWrapper $bottom="270px" $left="100px">
           <Suit

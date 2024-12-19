@@ -22,7 +22,7 @@ const StyledDialogImage = styled(Image)`
   object-fit: cover;
 `;
 
-const StyledPokerBuyInDialog = styled.dialog`
+const StyledPokerBuyInDialog = styled.div`
   width: 500px;
   background: ${({ theme }) => theme.palette.primary.main};
   background: url("/poker/poker-buy-in-dialog/background.png");

@@ -11,17 +11,7 @@ const StyledPage = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    background: url("/poker/welcome-poker-screen/diamond-background.png");
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
+  overflow:hidden;
 `;
 
 const StyledContentContainer = styled.div`
@@ -58,8 +48,9 @@ const StyledImageContainer = styled.div<{
 `;
 const StyledImage = styled(Image)<{
   $object_position?: string;
+  $objectFit?: string;
 }>`
-  object-fit: contain;
+  object-fit: ${(props) => props.$objectFit ?? "contain"};
   object-position: ${(props) => props.$object_position ?? "50% 50%"};
 `;
 
