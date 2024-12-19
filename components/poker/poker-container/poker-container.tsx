@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import type { FC } from "react";
 
 // local components
+import PokerHeader from "@/components/poker/poker-header/poker-header";
 const PokerTable = dynamic(
   () => import("@/components/poker/poker-table/poker-table"),
   {
@@ -20,6 +21,7 @@ const PokerContainer: FC = () => {
   return (
     <StyledPage>
       <StyledContainer>
+        <PokerHeader />
         <PokerTable />
       </StyledContainer>
       <div id="poker-buy-in-dialog-container"></div>

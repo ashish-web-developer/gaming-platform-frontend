@@ -18,13 +18,9 @@ const StyledPage = styled.div`
 const StyledContainer = styled.div`
   width: 75rem;
   height: 100%;
-  padding: 40px 0px;
   display: flex;
+  padding: 4rem 0px;
   flex-direction: column;
 `;
 
-
-export {
-  StyledPage,
-  StyledContainer,
-};
+export { StyledPage, StyledContainer };

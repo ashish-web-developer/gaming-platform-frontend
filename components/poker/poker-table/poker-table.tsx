@@ -38,7 +38,8 @@ const PokerTable: FC = () => {
         player_containers_ref.current.values()
       );
       gsap.set(players_containers, {
-        scale: 1.3,
+        scale: 1.5,
+        borderWidth:10,
       });
       players_containers.forEach((container, index) => {
         gsap.fromTo(
@@ -51,6 +52,7 @@ const PokerTable: FC = () => {
               path: "#path",
               align: "#path",
               alignOrigin: [0.5, 0.5],
+              start:gsap.utils.random(0,1),
               end: players_position[index],
             },
             opacity: 1,
@@ -76,6 +78,7 @@ const PokerTable: FC = () => {
         .to(Array.from(player_containers_ref.current.values()), {
           scale: 1,
           duration: 0.6,
+          borderWidth:6
         })
 
         .fromTo(
