@@ -97,29 +97,33 @@ const WelcomePokerScreen: FC<{
       <StyledContentContainer>
         <StyledSuitWrapper $bottom="270px" $left="100px">
           <Suit
+            size={60}
             stroke={theme.palette.secondary.main}
-            stroke_width={3}
+            stroke_width={0.5}
             suit_type="heart"
           />
         </StyledSuitWrapper>
         <StyledSuitWrapper $top="85px" $left="240px">
           <Suit
+            size={60}
             stroke={theme.palette.secondary.main}
-            stroke_width={3}
+            stroke_width={0.5}
             suit_type="club"
           />
         </StyledSuitWrapper>
         <StyledSuitWrapper $bottom="300px" $right="100px">
           <Suit
+            size={60}
             stroke={theme.palette.secondary.main}
-            stroke_width={3}
+            stroke_width={0.5}
             suit_type="diamond"
           />
         </StyledSuitWrapper>
         <StyledSuitWrapper $bottom="160px" $right="360px">
           <Suit
+            size={60}
             stroke={theme.palette.secondary.main}
-            stroke_width={3}
+            stroke_width={0.5}
             suit_type="spade"
           />
         </StyledSuitWrapper>

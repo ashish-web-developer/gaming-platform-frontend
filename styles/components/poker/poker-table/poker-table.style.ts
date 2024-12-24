@@ -33,15 +33,26 @@ const StyledImage = styled(Image)<{
 `;
 
 const StyledSvgWrapper = styled.div`
-  position:absolute;
-  z-index:3;
-  top:44px;
-  left:24px;
+  position: absolute;
+  z-index: 3;
+  top: 44px;
+  left: 24px;
+`;
 
+const StyledCommunityCardsWrapper = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 95px;
+  transform: translateX(-60%);
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(5, 50px);
+  gap: 8px;
 `;
 
 export {
   StyledImageContainer,
   StyledImage,
-  StyledSvgWrapper
-}
+  StyledSvgWrapper,
+  StyledCommunityCardsWrapper,
+};

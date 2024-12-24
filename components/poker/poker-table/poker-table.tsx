@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { createPortal } from "react-dom";
 // types
 import type { FC } from "react";
@@ -8,11 +8,13 @@ import {
   StyledImageContainer,
   StyledImage,
   StyledSvgWrapper,
+  StyledCommunityCardsWrapper,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
 // local components
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
+import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -39,7 +41,7 @@ const PokerTable: FC = () => {
       );
       gsap.set(players_containers, {
         scale: 1.5,
-        borderWidth:10,
+        borderWidth: 10,
       });
       players_containers.forEach((container, index) => {
         gsap.fromTo(
@@ -52,7 +54,7 @@ const PokerTable: FC = () => {
               path: "#path",
               align: "#path",
               alignOrigin: [0.5, 0.5],
-              start:gsap.utils.random(0,1),
+              start: gsap.utils.random(0, 1),
               end: players_position[index],
             },
             opacity: 1,
@@ -78,7 +80,7 @@ const PokerTable: FC = () => {
         .to(Array.from(player_containers_ref.current.values()), {
           scale: 1,
           duration: 0.6,
-          borderWidth:6
+          borderWidth: 6,
         })
 
         .fromTo(
@@ -165,6 +167,11 @@ const PokerTable: FC = () => {
             alt="dealer"
           />
         </StyledImageContainer>
+        <StyledCommunityCardsWrapper>
+          {new Array(5).fill(0).map(() => {
+            return <PokerCard scale={0.5} />;
+          })}
+        </StyledCommunityCardsWrapper>
         <StyledImage
           src="/poker/poker-table/table.png"
           fill={true}

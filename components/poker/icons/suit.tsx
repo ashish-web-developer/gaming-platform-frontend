@@ -1,3 +1,4 @@
+import { useId } from "react";
 // types
 import type { FC } from "react";
 import type { ICardSuit } from "@/types/store/slice/poker";
@@ -6,61 +7,77 @@ const SvgPath: FC<{
   suit_type: ICardSuit;
   stroke: string;
   stroke_width: number;
-}> = ({ suit_type, stroke, stroke_width }) => {
+  fill: string;
+}> = ({ suit_type, ...props }) => {
   switch (suit_type) {
     case "diamond":
       return (
         <path
-          stroke={stroke}
-          strokeWidth={stroke_width}
-          d="m31.264 8.086 20.35 20.35a2 2 0 0 1 0 2.829l-20.35 20.35 1.061 1.06-1.06-1.06a2 2 0 0 1-2.83 0l-20.35-20.35a2 2 0 0 1 0-2.83l20.35-20.35a2 2 0 0 1 2.83 0Z"
+          {...props}
+          d="M9.302 2.519a.917.917 0 0 1 1.296 0l.163-.164-.163.164 6.783 6.783a.917.917 0 0 1 0 1.296l-6.783 6.783a.917.917 0 0 1-1.296 0l-6.783-6.783-.177.177.177-.177a.917.917 0 0 1 0-1.296l-.177-.176.177.176z"
         ></path>
       );
     case "spade":
       return (
         <path
-          stroke={stroke}
-          strokeWidth={stroke_width}
-          d="M30.932 7.793a1 1 0 0 1 1.415 0L46.28 21.738l.02.02.022.02c2.107 1.952 3.458 4.867 3.458 8.14 0 5.978-4.467 10.687-9.813 10.687a9 9 0 0 1-2.529-.358l-1.984-.575.068 2.065.193 5.81a1 1 0 0 1-1 1.033h-6.149a1 1 0 0 1-1-1.033l.193-5.81.068-2.065-1.985.575a9 9 0 0 1-2.528.358c-5.347 0-9.814-4.709-9.814-10.686 0-3.264 1.342-6.17 3.438-8.123l.02-.018.02-.02z"
+          {...props}
+          d="M10.134 2.421a.584.584 0 0 1 .825 0l4.645 4.648.007.007c.753.698 1.232 1.736 1.232 2.897 0 2.112-1.582 3.812-3.52 3.812q-.475-.001-.913-.13l-.33-.095.01.344.065 1.937a.583.583 0 0 1-.583.602h-2.05a.583.583 0 0 1-.583-.602l.064-1.937.011-.344-.33.096q-.438.128-.913.129c-1.938 0-3.521-1.7-3.521-3.812 0-1.157.476-2.192 1.226-2.89l.006-.007z"
         ></path>
       );
     case "heart":
       return (
         <path
-          stroke={stroke}
-          strokeWidth={stroke_width}
-          d="M29.52 51.859 10.882 33.217A11.55 11.55 0 0 1 7.5 25.05c0-6.38 5.17-11.55 11.547-11.55 3.063 0 6 1.217 8.166 3.383l1.246 1.247 1.06 1.06 1.062-1.06 1.247-1.247a11.55 11.55 0 0 1 8.165-3.383c6.377 0 11.547 5.171 11.547 11.55 0 3.063-1.217 6.001-3.382 8.167z"
+          {...props}
+          d="m16.23 11.25-6.39 6.39-6.39-6.39a4.1 4.1 0 0 1 5.798-5.8l.415.416.177.177.177-.177.415-.415a4.099 4.099 0 1 1 5.797 5.798Z"
         ></path>
       );
     case "club":
       return (
         <path
-          stroke={stroke}
-          strokeWidth={stroke_width}
-          d="m22.697 21.847 2.088-.022-.688-1.972a9.3 9.3 0 0 1-.515-3.06c0-5.131 4.162-9.293 9.298-9.293s9.299 4.162 9.299 9.294a9.3 9.3 0 0 1-.516 3.06l-.687 1.97 2.088.023c5.089.054 9.196 4.195 9.196 9.293 0 5.132-4.162 9.294-9.298 9.294a9.26 9.26 0 0 1-4.055-.928l-2.236-1.084.082 2.484.202 6.081a1 1 0 0 1-1 1.033h-6.15a1 1 0 0 1-1-1.033l.201-6.081.083-2.484-2.236 1.085a9.3 9.3 0 0 1-4.055.927c-5.136 0-9.298-4.162-9.298-9.294 0-5.098 4.108-9.239 9.197-9.293Z"
+          {...props}
+          d="m7.563 7.032.348-.003-.115-.329a3.349 3.349 0 1 1 6.328 0l-.115.329.348.003a3.349 3.349 0 1 1-1.497 6.362l-.373-.181.014.414.067 2.027a.583.583 0 0 1-.583.603h-2.05a.583.583 0 0 1-.583-.603l.067-2.027.014-.414-.373.18a3.349 3.349 0 1 1-1.497-6.362Z"
         ></path>
       );
   }
 };
 
 const Suit: FC<{
+  size: number;
   stroke: string;
   stroke_width: number;
   suit_type: ICardSuit;
-}> = ({ stroke, stroke_width, suit_type }) => {
+  show_image?: boolean;
+}> = ({ size, show_image = false, ...props }) => {
+  const pattern_id = useId();
+  const image_id = useId();
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="60"
-      height="60"
+      width={size}
+      height={size}
       fill="none"
-      viewBox="0 0 60 60"
+      viewBox="0 0 20 20"
     >
-      <SvgPath
-        stroke={stroke}
-        stroke_width={stroke_width}
-        suit_type={suit_type}
-      />
+      <SvgPath {...props} fill={show_image ? `url(#${pattern_id})` : "none"} />
+      <defs>
+        <pattern
+          id={pattern_id}
+          width="1"
+          height="1"
+          patternContentUnits="objectBoundingBox"
+        >
+          <use
+            xlinkHref={`#${image_id}`}
+            transform="matrix(.00117 0 0 .00105 0 -.165)"
+          ></use>
+        </pattern>
+        <image
+          id={image_id}
+          width="852"
+          height="1272"
+          xlinkHref="/poker/icons/svg/background.png"
+        ></image>
+      </defs>
     </svg>
   );
 };

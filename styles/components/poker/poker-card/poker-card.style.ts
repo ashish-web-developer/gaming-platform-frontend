@@ -1,90 +1,70 @@
 import styled from "styled-components";
-// types
-import type { ICardRank } from "@/types/store/slice/poker";
 
-const StyledPokerCardWrapper = styled.div`
-  width: 64px;
-  height: 96px;
-  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-  border-radius: 6px;
-  background: #000;
-  overflow: hidden;
-`;
-
-const StyledPokerContentContainer = styled.div<{
-  $rank: ICardRank;
+const StyledContainer = styled.div<{
+  $is_flipped: boolean;
+  $scale?: number;
 }>`
-  width: 100%;
-  height: 100%;
+  width: 100px;
+  height: 150px;
+  background-color: white;
+  border-radius: 6px;
   position: relative;
-  ${(props) => {
-    switch (props.$rank) {
-      case "K":
-        return `
-          background:url("/poker/poker-card/king.png");
-          background-size:90%;
-          background-repeat:no-repeat;
-          background-position:center;
-        `;
-      case "Q":
-        return `
-          background:url("/poker/poker-card/queen.png");
-          background-size:90%;
-          background-repeat:no-repeat;
-          background-position:center;
-        `;
-      case "J":
-        return `
-          background:url("/poker/poker-card/jack.png");
-          background-size:90%;
-          background-repeat:no-repeat;
-          background-position:center;
-        `;
-      default:
-        return `
-          background:transparent;
-        `;
-    }
-  }}
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scale: ${(props) => props.$scale ?? 1};
 `;
 
-const StyledCardTypeWrapper = styled.div<{
-  $left?: string;
-  $right?: string;
+const StyledDesignPattern = styled.div`
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  background: url("/poker/poker-card/background.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 6px;
+`;
+
+const StyledVectorWrappper = styled.div<{
   $top?: string;
   $bottom?: string;
-  $flex_direction: "column" | "column-reverse";
+  $left?: string;
+  $right?: string;
+  $translateX?: string;
+  $translateY?: string;
+  $rotate?: string;
 }>`
   position: absolute;
-  left: ${(props) => props.$left ?? "auto"};
-  right: ${(props) => props.$right ?? "auto"};
   top: ${(props) => props.$top ?? "auto"};
   bottom: ${(props) => props.$bottom ?? "auto"};
-  display: flex;
-  flex-direction: ${(props) => props.$flex_direction};
-  align-items: center;
-  gap: 0px;
-`;
-const StyledCard = styled.span`
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 0.75rem;
-  color: ${({ theme }) => theme.palette.secondary.main};
-`;
-const StyledCardName = styled.span`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(-20deg);
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 0.625rem;
-  color: ${({ theme }) => theme.palette.secondary.main};
-  text-align: center;
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  rotate: ${(props) => props.$rotate ?? "0deg"};
 `;
 
+const StyledCardDetailsWrapper = styled.div<{
+  $position: "top" | "bottom";
+}>`
+  position: absolute;
+  top: ${(props) => (props.$position == "top" ? "6px" : "auto")};
+  left: ${(props) => (props.$position == "top" ? "6px" : "auto")};
+  bottom: ${(props) => (props.$position == "bottom" ? "6px" : "auto")};
+  right: ${(props) => (props.$position == "bottom" ? "6px" : "auto")};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: ${(props) => (props.$position == "top" ? "4px" : "0px")};
+`;
+
+const StyledRank = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1.25rem;
+  color: ${({ theme }) => theme.palette.primary.main};
+  line-height: 1;
+`;
 export {
-  StyledPokerCardWrapper,
-  StyledPokerContentContainer,
-  StyledCardTypeWrapper,
-  StyledCard,
-  StyledCardName,
+  StyledContainer,
+  StyledDesignPattern,
+  StyledVectorWrappper,
+  StyledCardDetailsWrapper,
+  StyledRank,
 };
