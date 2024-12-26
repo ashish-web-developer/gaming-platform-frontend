@@ -9,6 +9,9 @@ import {
   StyledImage,
   StyledSvgWrapper,
   StyledCommunityCardsWrapper,
+  StyledActionCtaWrapper,
+  StyledActionCta,
+  StyledActionCtaIcons,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
 // local components
@@ -167,16 +170,46 @@ const PokerTable: FC = () => {
             alt="dealer"
           />
         </StyledImageContainer>
-        <StyledCommunityCardsWrapper>
-          {new Array(5).fill(0).map(() => {
-            return <PokerCard scale={0.5} />;
-          })}
-        </StyledCommunityCardsWrapper>
+
         <StyledImage
           src="/poker/poker-table/table.png"
           fill={true}
           alt="poker-table"
         />
+        <StyledCommunityCardsWrapper>
+          {new Array(5).fill(0).map(() => {
+            return <PokerCard scale={0.5} />;
+          })}
+        </StyledCommunityCardsWrapper>
+        <StyledActionCtaWrapper>
+          <StyledActionCta>
+            <StyledActionCtaIcons
+              src="/poker/poker-table/action-cta-icons/fold.png"
+              alt="fold-icon"
+              width={20}
+              height={20}
+            />
+            Fold
+          </StyledActionCta>
+          <StyledActionCta>
+            <StyledActionCtaIcons
+              src="/poker/poker-table/action-cta-icons/check.png"
+              alt="check-icon"
+              width={20}
+              height={20}
+            />
+            Check
+          </StyledActionCta>
+          <StyledActionCta>
+            <StyledActionCtaIcons
+              src="/poker/poker-table/action-cta-icons/raise.png"
+              alt="raise-icon"
+              width={20}
+              height={20}
+            />
+            Raise
+          </StyledActionCta>
+        </StyledActionCtaWrapper>
       </StyledImageContainer>
     </div>
   );
