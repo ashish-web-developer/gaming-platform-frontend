@@ -12,12 +12,14 @@ import {
   StyledActionCtaWrapper,
   StyledActionCta,
   StyledActionCtaIcons,
+  StyledPokerSliderWrapper,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
 // local components
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
 import PokerCard from "@/components/poker/poker-card/poker-card";
+import PokerSlider from "@/components/poker/poker-slider/poker-slider";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -181,7 +183,7 @@ const PokerTable: FC = () => {
             return <PokerCard scale={0.5} />;
           })}
         </StyledCommunityCardsWrapper>
-        <StyledActionCtaWrapper>
+        {/* <StyledActionCtaWrapper>
           <StyledActionCta>
             <StyledActionCtaIcons
               src="/poker/poker-table/action-cta-icons/fold.png"
@@ -209,7 +211,10 @@ const PokerTable: FC = () => {
             />
             Raise
           </StyledActionCta>
-        </StyledActionCtaWrapper>
+        </StyledActionCtaWrapper> */}
+        <StyledPokerSliderWrapper>
+          <PokerSlider />
+        </StyledPokerSliderWrapper>
       </StyledImageContainer>
     </div>
   );

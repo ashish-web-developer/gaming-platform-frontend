@@ -79,6 +79,14 @@ const StyledActionCtaIcons = styled(Image)`
   object-fit: cover;
 `;
 
+const StyledPokerSliderWrapper = styled.div`
+  position: absolute;
+  left:50%;
+  transform:translateX(-50%);
+  z-index: 3;
+  top:375px;
+`;
+
 export {
   StyledImageContainer,
   StyledImage,
@@ -87,4 +95,5 @@ export {
   StyledActionCtaWrapper,
   StyledActionCta,
   StyledActionCtaIcons,
+  StyledPokerSliderWrapper,
 };
