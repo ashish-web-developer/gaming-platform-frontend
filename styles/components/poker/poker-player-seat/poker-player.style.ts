@@ -10,6 +10,19 @@ const StyledPokerPlayerWrapper = styled.div`
   z-index: 1;
   background: #000;
 `;
+const StyledHoleCardWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 40px);
+  position: relative;
+  transform: rotate(16deg);
+  & > :first-child {
+    rotate: -6deg;
+  }
+  & > :last-child {
+    left: -20px;
+    rotate: 6deg;
+  }
+`;
 
 const StyledPokerPlayerDetails = styled.div`
   position: absolute;
@@ -23,7 +36,8 @@ const StyledPokerPlayerDetails = styled.div`
   gap: 6px;
   padding: 8px 12px;
   background: ${({ theme }) => theme.palette.primary.main};
-  opacity:0;
+  opacity: 0;
+  z-index: 2;
 `;
 
 const StyledPlayerName = styled.h4`
@@ -43,6 +57,7 @@ const StyledPlayerAmount = styled.h6`
 
 export {
   StyledPokerPlayerWrapper,
+  StyledHoleCardWrapper,
   StyledPokerPlayerDetails,
   StyledPlayerName,
   StyledPlayerAmount,

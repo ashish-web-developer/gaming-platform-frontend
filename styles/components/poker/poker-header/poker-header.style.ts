@@ -5,6 +5,27 @@ const StyledPokerHeader = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+const StyledLogoWrapper = styled.div`
+  & > :first-child {
+    position: relative;
+    z-index: 2;
+  }
+`;
+const StyledCardWrapper = styled.div`
+  position: absolute;
+  top: 0px;
+  display: grid;
+  grid-template-columns: repeat(2, 30px);
+  & > :first-child {
+    rotate: -8deg;
+  }
+  & > :last-child {
+    rotate: 8deg;
+    left: -20px;
+  }
+`;
+
 const StyledUserProfile = styled.div`
   position: relative;
   width: 60px;
@@ -19,6 +40,8 @@ const StyledUserProfileImage = styled(Image)`
 `;
 export {
   StyledPokerHeader,
+  StyledLogoWrapper,
+  StyledCardWrapper,
   StyledUserProfile,
   StyledUserProfileImage,
 };

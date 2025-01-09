@@ -1,3 +1,4 @@
+import { useState } from "react";
 // types
 import type { NextPage } from "next";
 import type { IPokerPlayer, IPokerRoom } from "@/types/store/slice/poker/poker";
@@ -6,6 +7,7 @@ import type { IUser } from "@/types/store/slice/login";
 
 // local components
 import PokerContainer from "@/components/poker/poker-container/poker-container";
+import WelcomePokerScreen from "@/components/poker/welcome-poker-screen/welcome-poker-screen";
 
 // theme provider
 import { ThemeProvider } from "styled-components";
@@ -87,31 +89,39 @@ const JoinPokerChannel = () => {
 };
 
 const PokerPage: NextPage = () => {
+  const [show_welcome_screen, setShowWelcomeScreen] = useState(true);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
 
   return (
     <ThemeProvider theme={Theme}>
-      {!show_buy_in_modal && <JoinPokerChannel />}
-      <PokerContainer />
+      {show_welcome_screen ? (
+        <WelcomePokerScreen
+          updateShowWelcomeScreen={(show: boolean) =>
+            setShowWelcomeScreen(show)
+          }
+        />
+      ) : (
+        <PokerContainer />
+      )}
     </ThemeProvider>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { req, res } = context;
-  const referer = req.headers.referer;
-  if (referer) {
-    return {
-      props: {},
-    };
-  } else {
-    return {
-      redirect: {
-        destination: "/chat",
-        permanent: false,
-      },
-    };
-  }
-};
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const { req, res } = context;
+//   const referer = req.headers.referer;
+//   if (referer) {
+//     return {
+//       props: {},
+//     };
+//   } else {
+//     return {
+//       redirect: {
+//         destination: "/chat",
+//         permanent: false,
+//       },
+//     };
+//   }
+// };
 
 export default PokerPage;
