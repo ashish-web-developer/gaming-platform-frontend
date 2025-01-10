@@ -4,6 +4,8 @@ import type { FC } from "react";
 
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
+import PokerTimer from "@/components/poker/poker-timer/poker-timer";
+
 const PokerTable = dynamic(
   () => import("@/components/poker/poker-table/poker-table"),
   {
@@ -23,6 +25,7 @@ const PokerContainer: FC = () => {
       <StyledContainer>
         <PokerHeader />
         <PokerTable />
+        <PokerTimer />
       </StyledContainer>
       <div id="poker-buy-in-dialog-container"></div>
     </StyledPage>

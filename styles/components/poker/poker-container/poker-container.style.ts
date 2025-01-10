@@ -21,6 +21,7 @@ const StyledContainer = styled.div`
   display: flex;
   padding: 4rem 0px;
   flex-direction: column;
+  position: relative;
 `;
 
 export { StyledPage, StyledContainer };
