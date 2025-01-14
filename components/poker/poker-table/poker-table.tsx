@@ -21,6 +21,9 @@ import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-i
 import PokerCard from "@/components/poker/poker-card/poker-card";
 import PokerSlider from "@/components/poker/poker-slider/poker-slider";
 
+// hoc
+import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
+
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { showBuyInModal } from "@/store/slice/poker/poker.slice";
@@ -179,8 +182,8 @@ const PokerTable: FC = () => {
           alt="poker-table"
         />
         <StyledCommunityCardsWrapper>
-          {new Array(5).fill(0).map(() => {
-            return <PokerCard scale={0.5} />;
+          {new Array(5).fill(0).map((_, index) => {
+            return <PokerCard key={`poker-${index}`} scale={0.5} />;
           })}
         </StyledCommunityCardsWrapper>
         {/* <StyledActionCtaWrapper>
@@ -220,4 +223,4 @@ const PokerTable: FC = () => {
   );
 };
 
-export default PokerTable;
+export default withPokerTableFunctionality(PokerTable);

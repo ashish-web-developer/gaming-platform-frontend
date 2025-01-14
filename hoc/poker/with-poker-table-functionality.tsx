@@ -36,6 +36,7 @@ const withPokerTableFunctionality = (
 ) => {
   const EnhancedComponent = () => {
     let active_poker_players = useAppSelector(activePokerPlayers);
+    console.log("value of active poker players",active_poker_players);
 
     /**
      * Sorting array in descending order on the

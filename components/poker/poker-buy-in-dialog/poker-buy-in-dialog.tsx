@@ -96,12 +96,11 @@ const PokerBuyInDialog: FC<{
         </StyledBlindsContainer>
         <StyledBuyInCta
           onClick={() => {
-            // dispatch(
-            //   getPokerRoomInfoApi({
-            //     poker_buy_in_amount,
-            //   })
-            // );
-            // dispatch(updateShowBuyInModal(false));
+            dispatch(
+              getPokerRoomInfoApi({
+                poker_buy_in_amount,
+              })
+            );
             onModalCloseAnimation();
             dispatch(updateShowBuyInModal(false));
           }}
