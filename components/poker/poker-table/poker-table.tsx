@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { createPortal } from "react-dom";
 // types
 import type { FC } from "react";
+import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 
 // styled components
 import {
@@ -35,14 +36,18 @@ import MotionPathPlugin from "gsap/MotionPathPlugin";
 
 gsap.registerPlugin(MotionPathPlugin);
 
-const PokerTable: FC = () => {
+type IProps = {
+  poker_players: Array<IPokerPlayer | null>;
+  dealer_id: number | null;
+};
+const PokerTable: FC<IProps> = ({ poker_players, dealer_id }) => {
   const container_ref = useRef<HTMLDivElement>(null);
   const player_containers_ref = useRef<Set<HTMLDivElement | null>>(new Set());
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const { contextSafe } = useGSAP(
     () => {
       const players_position = [
-        0.09, 0.19, 0.29, 0.396, 0.495, 0.591, 0.693, 0.797, 0.897,
+        0.897, 0.797, 0.693, 0.591, 0.495, 0.396, 0.29, 0.19, 0.09,
       ];
       const players_containers = Array.from(
         player_containers_ref.current.values()
@@ -89,27 +94,7 @@ const PokerTable: FC = () => {
           scale: 1,
           duration: 0.6,
           borderWidth: 6,
-        })
-
-        .fromTo(
-          Array.from(player_containers_ref.current.values()).map(
-            (container) => container?.firstChild
-          ),
-          {
-            scale: 1.3,
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            stagger: {
-              from: "center",
-              amount: 1,
-            },
-            duration: 1,
-            ease: "elastic.out",
-          },
-          "-=0.3"
-        );
+        });
     });
     return animation;
   });
@@ -131,9 +116,12 @@ const PokerTable: FC = () => {
         $translateX="-50%"
         $translateY="-50%"
       >
-        {new Array(9).fill(0).map((val, index) => {
+        {poker_players.map((player, index) => {
           return (
             <PokerPlayer
+              dealer_id={dealer_id}
+              player={player}
+              seat_index={index}
               key={`players-${index}`}
               ref={(node) => {
                 player_containers_ref.current.add(node);

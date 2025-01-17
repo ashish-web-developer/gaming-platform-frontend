@@ -131,7 +131,7 @@ export const getPokerRoomInfoApi = createAsyncThunk<
           })
         );
         let seat_available = ((response.data.poker_room.seat_available + 1) %
-          7) as ISeatType | null;
+          9) as ISeatType | null;
         seat_available = seat_available == 0 ? null : seat_available;
         dispatch(
           updateSeatAvailableApi({

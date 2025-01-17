@@ -32,7 +32,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 const PokerBuyInDialog: FC<{
-  onModalCloseAnimation: () => Promise<unknown>;
+  onModalCloseAnimation: () => void;
 }> = ({ onModalCloseAnimation }) => {
   const dispatch = useAppDispatch();
   const dialog_ref = useRef<HTMLDivElement>(null);
@@ -96,13 +96,13 @@ const PokerBuyInDialog: FC<{
         </StyledBlindsContainer>
         <StyledBuyInCta
           onClick={() => {
-            dispatch(
+            const response = dispatch(
               getPokerRoomInfoApi({
                 poker_buy_in_amount,
               })
             );
-            onModalCloseAnimation();
             dispatch(updateShowBuyInModal(false));
+            onModalCloseAnimation();
           }}
         >
           Buy In

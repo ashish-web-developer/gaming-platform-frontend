@@ -13,18 +13,21 @@ import {
   communityCards,
   chipsInPot,
   bettorId,
+  dealerId,
   showPokerSlider,
 } from "@/store/slice/poker/poker.slice";
 
+// helpers
+import { rotateArray } from "@/helpers/common.helper";
+
 type IProps = {
-  left_poker_players: IPokerPlayer[];
-  right_poker_players: IPokerPlayer[];
-  bottom_poker_players: IPokerPlayer[];
+  poker_players: Array<IPokerPlayer | null>;
   community_cards: IDeckType | null;
   chips_in_pot: number;
   total_chips_betted: number;
   show_poker_slider: boolean;
   bettor_id: number | null;
+  dealer_id: number | null;
   show_action_cta: boolean;
   set_show_action_cta: Dispatch<SetStateAction<boolean>>;
   no_of_community_cards: number;
@@ -35,66 +38,44 @@ const withPokerTableFunctionality = (
   is_mobile: boolean = false
 ) => {
   const EnhancedComponent = () => {
-    let active_poker_players = useAppSelector(activePokerPlayers);
-    console.log("value of active poker players",active_poker_players);
-
-    /**
-     * Sorting array in descending order on the
-     * on the basis of seat number
-     */
-    active_poker_players = [...active_poker_players].sort(
-      (a, b) => b.seat_number - a.seat_number
-    );
-
-    active_poker_players = [
-      ...active_poker_players,
-      ...new Array(7 - active_poker_players.length).fill(null),
-    ].map((player, index) => {
-      if (player) {
-        return player;
-      }
-      return {
-        seat_number: index,
-      };
-    });
     const { id: user_id } = useAppSelector(User) as IUser;
-
-    const auth_player_index = active_poker_players.findIndex(
-      (player) => player.player_id == user_id
+    /**
+     * Sorting the active poker player with respect
+     * to the their seat number
+     */
+    let active_poker_players = [...useAppSelector(activePokerPlayers)].sort(
+      (a, b) => {
+        return a.seat_number - b.seat_number;
+      }
     );
+    /**
+     * As we have 9 seats availble for the player
+     * so making the player list such that all the seats
+     * which have not been taken by the player is set to null
+     * this would be useful to center the position of the
+     * auth player in the poker table in user interface
+     */
+    let poker_players = [
+      ...active_poker_players,
+      ...new Array(9 - active_poker_players.length).fill(null),
+    ];
+    const { seat_number: auth_player_seat_number } =
+      active_poker_players.find(
+        (poker_player) => poker_player.player_id == user_id
+      ) ?? {};
 
     /**
-     * rotating array such that
-     * seat index of auth player
-     * be at 3 index
+     * Rotating the array in such a way so that
+     * auth player stays in the middle of the table
+     * in bottom
      */
-    active_poker_players = active_poker_players
-      .slice(-(3 - auth_player_index))
-      .concat(active_poker_players.slice(0, -(3 - auth_player_index)))
-      .map((player, index) => {
-        return {
-          ...player,
-          seat_index: index as ISeatType,
-        };
-      });
+    auth_player_seat_number !== undefined &&
+      rotateArray(
+        poker_players,
+        Math.abs(4 - auth_player_seat_number),
+        4 - auth_player_seat_number > 0 ? "right" : "left"
+      );
 
-    /**
-     * Deciding what to be kept on left, right and bottom
-     * of the table on the basis of seat_index
-     */
-    const left_poker_players = active_poker_players.filter((player) =>
-      [...(is_mobile ? [0, 1, 2] : [0, 1])].includes(
-        player.seat_index as number
-      )
-    );
-    const bottom_poker_players = active_poker_players.filter((player) =>
-      [...(is_mobile ? [3] : [2, 3, 4])].includes(player.seat_index as number)
-    );
-    const right_poker_players = active_poker_players.filter((player) =>
-      [...(is_mobile ? [4, 5, 6] : [5, 6])].includes(
-        player.seat_index as number
-      )
-    );
     const community_cards = useAppSelector(communityCards);
     const no_of_community_cards = community_cards?.length ?? 0;
     const chips_in_pot = useAppSelector(chipsInPot);
@@ -108,18 +89,18 @@ const withPokerTableFunctionality = (
       0
     );
     const bettor_id = useAppSelector(bettorId);
+    const dealer_id = useAppSelector(dealerId);
     const show_poker_slider = useAppSelector(showPokerSlider);
     const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
     return (
       <BaseComponent
-        left_poker_players={left_poker_players}
-        right_poker_players={right_poker_players}
-        bottom_poker_players={bottom_poker_players}
+        poker_players={poker_players}
         community_cards={community_cards}
         chips_in_pot={chips_in_pot}
         total_chips_betted={total_chips_betted}
         show_poker_slider={show_poker_slider}
         bettor_id={bettor_id}
+        dealer_id={dealer_id}
         show_action_cta={show_action_cta}
         set_show_action_cta={set_show_action_cta}
         no_of_community_cards={no_of_community_cards}

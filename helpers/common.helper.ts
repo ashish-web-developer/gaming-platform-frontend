@@ -58,4 +58,28 @@ function getTimeDifference(dateTimeString: string) {
   }
 }
 
-export { readableFormatDate, shuffleArray, getTimeDifference };
+function reverse(arr: Array<unknown>, start: number, end: number) {
+  while (start < end) {
+    [arr[start], arr[end]] = [arr[end], arr[start]];
+    start++;
+    end--;
+  }
+}
+
+function rotateArray<ArrayElementType>(
+  arr: Array<ArrayElementType>,
+  places: number,
+  direction: "left" | "right"
+) {
+  if (direction == "left") {
+    reverse(arr, 0, places - 1);
+    reverse(arr, places, arr.length - 1);
+    reverse(arr, 0, arr.length - 1);
+  } else {
+    reverse(arr, 0, arr.length - places - 1);
+    reverse(arr, arr.length - places, arr.length - 1);
+    reverse(arr, 0, arr.length - 1);
+  }
+}
+
+export { readableFormatDate, shuffleArray, getTimeDifference, rotateArray };
