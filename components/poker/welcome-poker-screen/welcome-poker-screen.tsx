@@ -127,7 +127,10 @@ const WelcomePokerScreen: FC<{
             suit_type="spade"
           />
         </StyledSuitWrapper>
-        <WithCountDown updateShowWelcomeScreen={updateShowWelcomeScreen} />
+        <WithCountDown
+          updateShowWelcomeScreen={updateShowWelcomeScreen}
+          initial_count={5}
+        />
         <StyledImageContainer
           $width="602px"
           $height="834px"
@@ -200,6 +203,7 @@ function CountDown({
 }
 const WithCountDown = withCountDownFunctionality<{
   updateShowWelcomeScreen: (show: boolean) => void;
-}>(CountDown, 5);
+  initial_count: number;
+}>(CountDown);
 
 export default WelcomePokerScreen;

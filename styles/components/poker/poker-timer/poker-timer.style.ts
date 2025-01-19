@@ -1,9 +1,6 @@
 import styled from "styled-components";
 
-const StyledPokerTimerContainer = styled.div`
-  position: absolute;
-  right: 0px;
-  bottom: 4rem;
+const StyledPokerTimerWrapper = styled.div`
   display: flex;
   gap: 16px;
 `;
@@ -30,7 +27,7 @@ const StyledTimerUnit = styled.span`
 `;
 
 export {
-  StyledPokerTimerContainer,
+  StyledPokerTimerWrapper,
   StyledTimer,
   StyledTimerCount,
   StyledTimerUnit,

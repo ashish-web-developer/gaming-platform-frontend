@@ -5,6 +5,7 @@ import type { MutableRefObject } from "react";
 
 // helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
+import { current } from "@reduxjs/toolkit";
 
 // theme mode context
 
@@ -15,4 +16,9 @@ const UttranceContext = createContext<
   current: null,
 });
 
-export { UttranceContext };
+// poker
+const PokerInviteDialogTimeOutContext = createContext<
+  MutableRefObject<ReturnType<typeof setTimeout> | undefined>
+>({ current: undefined });
+
+export { UttranceContext, PokerInviteDialogTimeOutContext };

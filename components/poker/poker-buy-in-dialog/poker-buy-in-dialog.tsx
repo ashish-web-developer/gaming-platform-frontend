@@ -32,8 +32,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
 const PokerBuyInDialog: FC<{
-  onModalCloseAnimation: () => void;
-}> = ({ onModalCloseAnimation }) => {
+  onModalCloseHandler: () => void;
+}> = ({ onModalCloseHandler }) => {
   const dispatch = useAppDispatch();
   const dialog_ref = useRef<HTMLDivElement>(null);
   const [poker_buy_in_amount, setPokerBuyInAmount] = useState<number>(200);
@@ -102,7 +102,7 @@ const PokerBuyInDialog: FC<{
               })
             );
             dispatch(updateShowBuyInModal(false));
-            onModalCloseAnimation();
+            onModalCloseHandler();
           }}
         >
           Buy In

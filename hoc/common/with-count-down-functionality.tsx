@@ -9,11 +9,14 @@ interface IComponentProps {
 
 type IExtendedComponentProps<ExtraProps> = ExtraProps & IComponentProps;
 
-const withCountDownFunctionality = <ExtraProps extends { [key: string]: any }>(
-  BaseComponent: ComponentType<IExtendedComponentProps<ExtraProps>>,
-  initial_count: number
+const withCountDownFunctionality = <
+  ExtraProps extends { [key: string]: any } & { initial_count: number }
+>(
+  BaseComponent: ComponentType<
+    IExtendedComponentProps<Omit<ExtraProps, "initial_count">>
+  >
 ) => {
-  const EnhancedComponent = (props: ExtraProps) => {
+  const EnhancedComponent = ({ initial_count, ...props }: ExtraProps) => {
     const [{ count_down, count_down_finished }, setCountDownObj] = useState({
       count_down: initial_count,
       count_down_finished: false,

@@ -77,6 +77,7 @@ type ISendInvitationApiRequest = {
 
 type ISendInvitationApiResponse = {
   success: boolean;
+  room_created_at: string;
   message: string;
 };
 

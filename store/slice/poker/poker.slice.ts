@@ -175,6 +175,7 @@ export const triggerActionApi = createAsyncThunk<
 
 const initialState: IPokerInitialState = {
   poker_room_id: null,
+  room_created_at: null,
   show_poker_slider: false,
   dealer_id: null,
   bettor_id: null,
@@ -296,6 +297,9 @@ const pokerSlice = createSlice({
       state.min_amount_to_be_betted = action.payload.min_amount_to_be_betted;
       state.community_cards = action.payload.community_cards;
     },
+    updateRoomCreatedAt: (state, action: PayloadAction<string | null>) => {
+      state.room_created_at = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getPokerRoomInfoApi.fulfilled, (state, action) => {
@@ -333,6 +337,7 @@ export const chipsInPot = (state: RootState) => state.poker.chips_in_pot;
 export const minAmountToBeBetted = (state: RootState) =>
   state.poker.min_amount_to_be_betted;
 export const communityCards = (state: RootState) => state.poker.community_cards;
+export const roomCreatedAt = (state: RootState) => state.poker.room_created_at;
 // action creaters
 export const {
   updatePokerRoomId,
@@ -343,4 +348,5 @@ export const {
   updateDealerId,
   updatePlayerData,
   updateRoomDetails,
+  updateRoomCreatedAt,
 } = pokerSlice.actions;

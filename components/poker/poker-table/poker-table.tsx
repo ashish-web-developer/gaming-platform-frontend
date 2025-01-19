@@ -39,8 +39,15 @@ gsap.registerPlugin(MotionPathPlugin);
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
   dealer_id: number | null;
+  time_left: number;
+  updateShowWaitingBanner: (val: boolean) => void;
 };
-const PokerTable: FC<IProps> = ({ poker_players, dealer_id }) => {
+const PokerTable: FC<IProps> = ({
+  poker_players,
+  dealer_id,
+  time_left,
+  updateShowWaitingBanner,
+}) => {
   const container_ref = useRef<HTMLDivElement>(null);
   const player_containers_ref = useRef<Set<HTMLDivElement | null>>(new Set());
   const show_buy_in_modal = useAppSelector(showBuyInModal);
@@ -56,6 +63,10 @@ const PokerTable: FC<IProps> = ({ poker_players, dealer_id }) => {
         scale: 1.5,
         borderWidth: 10,
       });
+      /**
+       * Animation will rotate the seat around the table in
+       * random direction according the svg path
+       */
       players_containers.forEach((container, index) => {
         gsap.fromTo(
           container,
@@ -103,7 +114,14 @@ const PokerTable: FC<IProps> = ({ poker_players, dealer_id }) => {
     <div ref={container_ref}>
       {show_buy_in_modal &&
         createPortal(
-          <PokerBuyInDialog onModalCloseAnimation={profileAnimation} />,
+          <PokerBuyInDialog
+            onModalCloseHandler={() => {
+              profileAnimation();
+              if (time_left > 0) {
+                updateShowWaitingBanner(true);
+              }
+            }}
+          />,
           document.getElementById(
             "poker-buy-in-dialog-container"
           ) as HTMLElement
@@ -211,4 +229,7 @@ const PokerTable: FC<IProps> = ({ poker_players, dealer_id }) => {
   );
 };
 
-export default withPokerTableFunctionality(PokerTable);
+export default withPokerTableFunctionality<{
+  time_left: number;
+  updateShowWaitingBanner: (val: boolean) => void;
+}>(PokerTable);

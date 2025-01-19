@@ -1,26 +1,49 @@
+import { useEffect } from "react";
 // types
 import type { FC } from "react";
 
+// hoc
+import withCountDownFunctionality from "@/hoc/common/with-count-down-functionality";
+
 // styled components
 import {
-  StyledPokerTimerContainer,
+  StyledPokerTimerWrapper,
   StyledTimer,
   StyledTimerCount,
   StyledTimerUnit,
 } from "@/styles/components/poker/poker-timer/poker-timer.style";
 
-const PokerTimer: FC = () => {
+const PokerTimer: FC<{
+  count: number;
+  is_finished: boolean;
+  handleOnFinish: () => void;
+}> = ({ count, is_finished, handleOnFinish }) => {
+  let minutes = Math.floor(count / 60);
+  let seconds = count % 60;
+
+  useEffect(() => {
+    if (is_finished) {
+      handleOnFinish();
+    }
+  }, [is_finished]);
   return (
-    <StyledPokerTimerContainer>
+    <StyledPokerTimerWrapper>
       <StyledTimer>
-        <StyledTimerCount>00</StyledTimerCount>
+        <StyledTimerCount>
+          {minutes.toString().padStart(2, "0")}
+        </StyledTimerCount>
         <StyledTimerUnit>MIN</StyledTimerUnit>
       </StyledTimer>
       <StyledTimer>
-        <StyledTimerCount>00</StyledTimerCount>
+        <StyledTimerCount>
+          {seconds.toString().padStart(2, "0")}
+        </StyledTimerCount>
         <StyledTimerUnit>SEC</StyledTimerUnit>
       </StyledTimer>
-    </StyledPokerTimerContainer>
+    </StyledPokerTimerWrapper>
   );
 };
-export default PokerTimer;
+export default withCountDownFunctionality<{
+  initial_count: number;
+  handleOnFinish: () => void;
+}>(PokerTimer);

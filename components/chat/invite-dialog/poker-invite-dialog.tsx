@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useContext } from "react";
 import { useRouter } from "next/router";
 
 // type
@@ -32,7 +32,13 @@ import {
   showPokerInviteDialog,
   updateInviteDialog,
 } from "@/store/slice/chat.slice";
-import { updatePokerRoomId } from "@/store/slice/poker/poker.slice";
+import {
+  updatePokerRoomId,
+  updateRoomCreatedAt,
+} from "@/store/slice/poker/poker.slice";
+
+// context
+import { PokerInviteDialogTimeOutContext } from "context";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -58,6 +64,7 @@ const PokerInviteDialog: FC = () => {
   const router = useRouter();
   const theme = useTheme() as ITheme;
   const dispatch = useAppDispatch();
+  const poker_invite_dialog_timer = useContext(PokerInviteDialogTimeOutContext);
   const show_poker_invite_dialog = useAppSelector(showPokerInviteDialog);
   const dialog_ref = useRef<HTMLDialogElement>(null);
   const is_mobile = useIsMobile();
@@ -77,6 +84,7 @@ const PokerInviteDialog: FC = () => {
         </StyledPokerCardWrapper>
         <StyledPlayButton
           onClick={() => {
+            clearTimeout(poker_invite_dialog_timer.current);
             router.push("/poker");
           }}
         >
@@ -91,6 +99,8 @@ const PokerInviteDialog: FC = () => {
               })
             );
             dispatch(updatePokerRoomId(null));
+            dispatch(updateRoomCreatedAt(null));
+            clearTimeout(poker_invite_dialog_timer.current);
           }}
         >
           <CloseIcon size={is_mobile ? 20 : 16} color={"#fff"} />

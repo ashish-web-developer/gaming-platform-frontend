@@ -33,11 +33,11 @@ type IProps = {
   no_of_community_cards: number;
   user_id: number | null;
 };
-const withPokerTableFunctionality = (
-  BaseComponent: ComponentType<IProps>,
+const withPokerTableFunctionality = <ExtraProps extends { [key: string]: any }>(
+  BaseComponent: ComponentType<IProps & ExtraProps>,
   is_mobile: boolean = false
 ) => {
-  const EnhancedComponent = () => {
+  const EnhancedComponent = (props: ExtraProps) => {
     const { id: user_id } = useAppSelector(User) as IUser;
     /**
      * Sorting the active poker player with respect
@@ -105,6 +105,7 @@ const withPokerTableFunctionality = (
         set_show_action_cta={set_show_action_cta}
         no_of_community_cards={no_of_community_cards}
         user_id={user_id}
+        {...props}
       />
     );
   };

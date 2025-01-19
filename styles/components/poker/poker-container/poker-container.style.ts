@@ -15,13 +15,22 @@ const StyledPage = styled.div`
     background-size: cover;
   }
 `;
-const StyledContainer = styled.div`
+const StyledContainer = styled.div<{
+  $opacity: number;
+}>`
   width: 75rem;
   height: 100%;
   display: flex;
   padding: 4rem 0px;
   flex-direction: column;
   position: relative;
+  opacity: ${(props) => props.$opacity};
 `;
 
-export { StyledPage, StyledContainer };
+const StyledPokerTimerContainer = styled.div`
+  position: absolute;
+  right: 0px;
+  bottom: 4rem;
+`;
+
+export { StyledPage, StyledContainer, StyledPokerTimerContainer };
