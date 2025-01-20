@@ -2,7 +2,6 @@ import { useState } from "react";
 // types
 import type { NextPage } from "next";
 import type { IPokerPlayer, IPokerRoom } from "@/types/store/slice/poker/poker";
-import type { GetServerSideProps } from "next";
 import type { IUser } from "@/types/store/slice/login";
 
 // local components

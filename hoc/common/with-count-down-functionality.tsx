@@ -26,7 +26,7 @@ const withCountDownFunctionality = <
     useEffect(() => {
       timer_ref.current = setInterval(() => {
         setCountDownObj((prev) => {
-          if (prev.count_down == 0) {
+          if (prev.count_down <= 0) {
             return {
               ...prev,
               count_down_finished: true,

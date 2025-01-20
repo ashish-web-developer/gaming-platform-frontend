@@ -49,20 +49,20 @@ const StyledPokerPlayerWrapper = styled.div<IStyledPokerPlayerWrapperProps>`
         switch (props.$seat_index) {
           case 0:
             return `
-          transform:translate(100%, -118%) rotate(-25deg)
+          transform:translate(20%, 100%) rotate(-125deg);
           `;
 
           case 1:
             return `
-          transform:translate(5%, -240%) rotate(-80deg);
+          transform:translate(-115%, 120%) rotate(-70deg);
           `;
           case 2:
             return `
-          transform:translate(-130%, -220%) rotate(-125deg);
+          transform:translate(-215%, -15%) rotate(-20deg);
           `;
           case 3:
             return `
-          transform:translate(-230%, -105%) rotate(5deg);
+          transform:translate(-230%, -95%) rotate(0deg);
           `;
           case 4:
             return `
@@ -70,19 +70,19 @@ const StyledPokerPlayerWrapper = styled.div<IStyledPokerPlayerWrapperProps>`
           `;
           case 5:
             return `
-          transform:translate(-230%, -95%) rotate(0deg);
+          transform:translate(-230%, -105%) rotate(5deg);
           `;
           case 6:
             return `
-          transform:translate(-215%, -15%) rotate(-20deg);
+          transform:translate(-130%, -220%) rotate(-125deg);
           `;
           case 7:
             return `
-          transform:translate(-115%, 120%) rotate(-70deg);
+          transform:translate(5%, -240%) rotate(-80deg);
           `;
           case 8:
             return `
-          transform:translate(20%, 100%) rotate(-125deg);
+          transform:translate(100%, -118%) rotate(-25deg)
           `;
         }
       }
