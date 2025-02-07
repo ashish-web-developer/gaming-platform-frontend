@@ -11,10 +11,18 @@ import {
   StyledInfoText,
 } from "@/styles/components/poker/poker-waiting-banner/poker-waiting-banner.style";
 
+// redux
+import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
+import { User } from "@/store/slice/login.slice";
+import { startRoundApi, dealerId } from "@/store/slice/poker/poker.slice";
+
 const PokerWaitingBanner: FC<{
   initial_count: number;
   updateShowWaitigBanner: (val: boolean) => void;
 }> = ({ initial_count, updateShowWaitigBanner }) => {
+  const dispatch = useAppDispatch();
+  const { id: user_id } = useAppSelector(User) ?? {};
+  const dealer_id = useAppSelector(dealerId);
   return (
     <StyledWaitingBannerWrapper>
       <StyledWaitingBannerContent>
@@ -22,6 +30,7 @@ const PokerWaitingBanner: FC<{
           initial_count={initial_count}
           handleOnFinish={() => {
             updateShowWaitigBanner(false);
+            user_id == dealer_id && dispatch(startRoundApi());
           }}
         />
         <StyledInfoText>

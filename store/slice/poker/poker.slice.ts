@@ -22,6 +22,7 @@ import type {
 } from "@/types/store/slice/poker/poker";
 
 // helpers
+import axios from "axios";
 import { Axios } from "@/helpers/axios";
 
 /**
@@ -48,25 +49,6 @@ export const createPokerRoomApi = createAsyncThunk<
     }
   }
 );
-
-export const dealHandApi = createAsyncThunk<
-  IBaseResponse,
-  undefined,
-  IThunkApiConfig
->("api/deal-hand", async (_, { rejectWithValue, getState }) => {
-  try {
-    const state = getState();
-    const response: AxiosResponse<IBaseResponse> = await Axios.post(
-      "poker/deal-hand",
-      {
-        room_id: state.poker.poker_room_id,
-      }
-    );
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
-  }
-});
 
 export const joinPokerRoomApi = createAsyncThunk<
   IJoinPokerRoomApiResponse,
@@ -145,6 +127,47 @@ export const getPokerRoomInfoApi = createAsyncThunk<
     }
   }
 );
+
+export const startRoundApi = createAsyncThunk<
+  IBaseResponse,
+  undefined,
+  IThunkApiConfig<string>
+>("api/start-round", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IBaseResponse> = await Axios.post(
+      "/poker/start-round",
+      {
+        room_id: state.poker.poker_room_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+export const dealHandApi = createAsyncThunk<
+  IBaseResponse,
+  undefined,
+  IThunkApiConfig
+>("api/deal-hand", async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IBaseResponse> = await Axios.post(
+      "poker/deal-hand",
+      {
+        room_id: state.poker.poker_room_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
 
 export const triggerActionApi = createAsyncThunk<
   IBaseResponse,

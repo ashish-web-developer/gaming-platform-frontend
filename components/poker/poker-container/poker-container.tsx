@@ -2,7 +2,7 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
-import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { IPokerPlayer, IPokerRoom } from "@/types/store/slice/poker/poker";
 
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
@@ -16,7 +16,11 @@ import {
   roomCreatedAt,
   showBuyInModal,
 } from "@/store/slice/poker/poker.slice";
-import { updateActivePokerPlayer } from "@/store/slice/poker/poker.slice";
+import {
+  updateActivePokerPlayer,
+  updateRoomDetails,
+  updatePlayerData,
+} from "@/store/slice/poker/poker.slice";
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
 
@@ -46,7 +50,7 @@ const JoinPokerChannel = () => {
       };
     }
   >({
-    channel_name: `poker-${poker_room_id}`,
+    channel_name: `poker.${poker_room_id}`,
     dependency: poker_room_id,
     memberHandler: (data, action_type) => {
       dispatch(
@@ -56,7 +60,22 @@ const JoinPokerChannel = () => {
         })
       );
     },
-    events: [],
+    events: [
+      {
+        event: "update-poker-room-data-event",
+        handler: (data: { poker_room: IPokerRoom }) => {
+          dispatch(updateRoomDetails(data.poker_room));
+        },
+      },
+
+      {
+        event: "update-poker-player-data",
+        handler: (data: { player: IPokerPlayer }) => {
+          console.log("data", data);
+          dispatch(updatePlayerData(data.player));
+        },
+      },
+    ],
     handleSubscription: (data) => {
       dispatch(
         updateActivePokerPlayer({
