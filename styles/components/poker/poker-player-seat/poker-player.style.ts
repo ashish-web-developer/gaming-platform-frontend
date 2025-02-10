@@ -11,6 +11,7 @@ type IStyledPokerPlayerWrapperProps = {
       $is_dealer: false;
     }
 );
+
 const StyledPokerPlayerWrapper = styled.div<IStyledPokerPlayerWrapperProps>`
   width: 80px;
   height: 80px;
@@ -134,6 +135,94 @@ const StyledPlayerAmount = styled.h6`
   white-space: nowrap;
   line-height: 1;
 `;
+const StyledAmountBettedWrapper = styled.div<{
+  $seat_index: number;
+}>`
+  position: absolute;
+  background: ${({ theme }) => theme.palette.primary.main};
+  border: 2px solid ${({ theme }) => theme.palette.info.main};
+  border-radius: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px 6px 8px;
+  gap: 6px;
+  z-index: 2;
+  ${(props) => {
+    console.log("value of seat index", props.$seat_index);
+    switch (props.$seat_index) {
+      case 0:
+        return `
+          top:20px;
+          left:-60px;
+        `;
+      case 1:
+        return `
+          top:20px;
+          left:-90px;
+        `;
+      case 2:
+        return `
+        top:15px;
+        left:-60px;
+        `;
+      case 3:
+      case 4:
+      case 5:
+        return `
+          top:-80px;
+        `;
+      case 6:
+        return `
+          top:15px;
+          left:130px;
+        `;
+      case 7:
+        return `
+          top:15px;
+          left:160px;
+        `;
+      case 8:
+        return `
+          top:20px;
+          left:130px;
+        `;
+    }
+  }}
+`;
+
+const StyledAmountBetted = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1rem;
+  color: ${({ theme }) => theme.palette.info.main};
+  white-space: nowrap;
+  line-height: 1;
+`;
+
+const StyledSpinner = styled.span`
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 6px solid ${({ theme }) => theme.palette.success.main};
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  @keyframes rotation {
+  0% {
+      transform:translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+      transform:translate(-50%, -50%) rotate(360deg);
+  }
+
+`;
 
 export {
   StyledPokerPlayerWrapper,
@@ -141,4 +230,7 @@ export {
   StyledPokerPlayerDetails,
   StyledPlayerName,
   StyledPlayerAmount,
+  StyledAmountBettedWrapper,
+  StyledAmountBetted,
+  StyledSpinner,
 };

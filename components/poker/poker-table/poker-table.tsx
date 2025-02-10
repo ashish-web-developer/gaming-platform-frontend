@@ -27,7 +27,7 @@ import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functional
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
-import { showBuyInModal } from "@/store/slice/poker/poker.slice";
+import { bettorId, showBuyInModal } from "@/store/slice/poker/poker.slice";
 
 // gsap
 import gsap from "gsap";
@@ -50,6 +50,7 @@ const PokerTable: FC<IProps> = ({
 }) => {
   const container_ref = useRef<HTMLDivElement>(null);
   const player_containers_ref = useRef<Set<HTMLDivElement | null>>(new Set());
+  const bettor_id = useAppSelector(bettorId);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const { contextSafe } = useGSAP(
     () => {
@@ -141,6 +142,7 @@ const PokerTable: FC<IProps> = ({
               player={player}
               seat_index={index}
               key={`players-${index}`}
+              bettor_id={bettor_id}
               ref={(node) => {
                 player_containers_ref.current.add(node);
                 return () => {
@@ -221,9 +223,9 @@ const PokerTable: FC<IProps> = ({
             Raise
           </StyledActionCta>
         </StyledActionCtaWrapper> */}
-        <StyledPokerSliderWrapper>
+        {/* <StyledPokerSliderWrapper>
           <PokerSlider />
-        </StyledPokerSliderWrapper>
+        </StyledPokerSliderWrapper> */}
       </StyledImageContainer>
     </div>
   );

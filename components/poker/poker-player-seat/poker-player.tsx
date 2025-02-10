@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { forwardRef, useRef } from "react";
 
 // types
@@ -14,6 +15,9 @@ import {
   StyledHoleCardWrapper,
   StyledPlayerName,
   StyledPlayerAmount,
+  StyledAmountBettedWrapper,
+  StyledAmountBetted,
+  StyledSpinner,
 } from "@/styles/components/poker/poker-player-seat/poker-player.style";
 
 // hooks
@@ -29,8 +33,9 @@ const PokerPlayer: ForwardRefRenderFunction<
     player: IPokerPlayer | null;
     seat_index: number;
     dealer_id: number | null;
+    bettor_id: number | null;
   }
-> = ({ player, seat_index, dealer_id }, container_ref) => {
+> = ({ player, seat_index, dealer_id, bettor_id }, container_ref) => {
   const players_details_ref = useRef<HTMLDivElement>(null);
   const avatar_url = useAvatarUrl(player?.user ?? null);
   useGSAP(
@@ -66,15 +71,29 @@ const PokerPlayer: ForwardRefRenderFunction<
           <StyledPokerPlayerDetails ref={players_details_ref}>
             <StyledPlayerName>{player.user.name}</StyledPlayerName>
             <StyledPlayerAmount>
-              $ {player.total_chips_left} M
+              $ {player.total_chips_left} K
             </StyledPlayerAmount>
           </StyledPokerPlayerDetails>
           <StyledHoleCardWrapper>
             <PokerCard scale={0.4} />
             <PokerCard scale={0.4} />
           </StyledHoleCardWrapper>
+          {player.current_betted_amount && (
+            <StyledAmountBettedWrapper $seat_index={seat_index}>
+              <Image
+                src="/poker/poker-player/poker-chips.png"
+                width={16}
+                height={16}
+                alt="poker-chips"
+              />
+              <StyledAmountBetted>
+                $ {player.current_betted_amount} K{" "}
+              </StyledAmountBetted>
+            </StyledAmountBettedWrapper>
+          )}
         </>
       )}
+      {bettor_id && bettor_id == player?.player_id && <StyledSpinner />}
     </StyledPokerPlayerWrapper>
   );
 };
