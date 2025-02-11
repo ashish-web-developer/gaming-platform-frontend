@@ -96,6 +96,7 @@ const StyledHoleCardWrapper = styled.div`
   grid-template-columns: repeat(2, 40px);
   position: relative;
   transform: rotate(16deg);
+  z-index: 2;
   & > :first-child {
     rotate: -6deg;
   }
@@ -118,7 +119,7 @@ const StyledPokerPlayerDetails = styled.div`
   padding: 8px 12px;
   background: ${({ theme }) => theme.palette.primary.main};
   opacity: 0;
-  z-index: 2;
+  z-index: 3;
 `;
 
 const StyledPlayerName = styled.h4`

@@ -75,8 +75,9 @@ const PokerPlayer: ForwardRefRenderFunction<
             </StyledPlayerAmount>
           </StyledPokerPlayerDetails>
           <StyledHoleCardWrapper>
-            <PokerCard scale={0.4} />
-            <PokerCard scale={0.4} />
+            {player.hole_cards?.map((card) => {
+              return <PokerCard scale={0.4} {...card} />;
+            })}
           </StyledHoleCardWrapper>
           {player.current_betted_amount && (
             <StyledAmountBettedWrapper $seat_index={seat_index}>

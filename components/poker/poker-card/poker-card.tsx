@@ -1,6 +1,7 @@
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/poker.theme";
+import type { ICardRank, ICardSuit } from "@/types/store/slice/poker";
 
 // theme
 import { useTheme } from "styled-components";
@@ -35,7 +36,9 @@ const CornerDesignVector = () => (
 const PokerCard: FC<{
   is_flipped?: boolean;
   scale?: number;
-}> = ({ is_flipped = true, scale }) => {
+  suit: ICardSuit;
+  rank: ICardRank;
+}> = ({ is_flipped = true, scale, suit, rank }) => {
   const theme = useTheme() as ITheme;
 
   return (
@@ -49,13 +52,13 @@ const PokerCard: FC<{
             <CornerDesignVector />
           </StyledVectorWrappper>
           <StyledCardDetailsWrapper $position="top">
-            <StyledRank>A</StyledRank>
+            <StyledRank>{rank}</StyledRank>
             <Suit
               show_image={true}
               stroke_width={1}
               stroke={theme.palette.primary.main}
               size={20}
-              suit_type="spade"
+              suit_type={suit}
             />
           </StyledCardDetailsWrapper>
           <StyledCardDetailsWrapper $position="bottom">
@@ -64,16 +67,16 @@ const PokerCard: FC<{
               stroke_width={1}
               stroke={theme.palette.primary.main}
               size={20}
-              suit_type="spade"
+              suit_type={suit}
             />
-            <StyledRank>A</StyledRank>
+            <StyledRank>{rank}</StyledRank>
           </StyledCardDetailsWrapper>
           <Suit
             show_image={true}
             stroke_width={0.5}
             stroke={theme.palette.primary.main}
             size={60}
-            suit_type="spade"
+            suit_type={suit}
           />
         </>
       ) : (

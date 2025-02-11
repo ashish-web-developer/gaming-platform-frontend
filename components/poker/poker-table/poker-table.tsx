@@ -20,22 +20,26 @@ import {
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
 import PokerCard from "@/components/poker/poker-card/poker-card";
-import PokerSlider from "@/components/poker/poker-slider/poker-slider";
 
 // hoc
 import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
 
 // redux
-import { useAppSelector } from "@/hooks/redux.hook";
-import { bettorId, showBuyInModal } from "@/store/slice/poker/poker.slice";
+import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { User } from "@/store/slice/login.slice";
+import {
+  bettorId,
+  showBuyInModal,
+  triggerActionApi,
+} from "@/store/slice/poker/poker.slice";
 
 // gsap
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import MotionPathPlugin from "gsap/MotionPathPlugin";
+import PokerSlider from "../poker-slider/poker-slider";
 
 gsap.registerPlugin(MotionPathPlugin);
-
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
   dealer_id: number | null;
@@ -48,8 +52,10 @@ const PokerTable: FC<IProps> = ({
   time_left,
   updateShowWaitingBanner,
 }) => {
+  const dispatch = useAppDispatch();
   const container_ref = useRef<HTMLDivElement>(null);
   const player_containers_ref = useRef<Set<HTMLDivElement | null>>(new Set());
+  const { id: user_id } = useAppSelector(User) || {};
   const bettor_id = useAppSelector(bettorId);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const { contextSafe } = useGSAP(
@@ -190,42 +196,65 @@ const PokerTable: FC<IProps> = ({
           alt="poker-table"
         />
         <StyledCommunityCardsWrapper>
-          {new Array(5).fill(0).map((_, index) => {
+          {/* {new Array(5).fill(0).map((_, index) => {
             return <PokerCard key={`poker-${index}`} scale={0.5} />;
-          })}
+          })} */}
         </StyledCommunityCardsWrapper>
-        {/* <StyledActionCtaWrapper>
-          <StyledActionCta>
-            <StyledActionCtaIcons
-              src="/poker/poker-table/action-cta-icons/fold.png"
-              alt="fold-icon"
-              width={20}
-              height={20}
-            />
-            Fold
-          </StyledActionCta>
-          <StyledActionCta>
-            <StyledActionCtaIcons
-              src="/poker/poker-table/action-cta-icons/check.png"
-              alt="check-icon"
-              width={20}
-              height={20}
-            />
-            Check
-          </StyledActionCta>
-          <StyledActionCta>
-            <StyledActionCtaIcons
-              src="/poker/poker-table/action-cta-icons/raise.png"
-              alt="raise-icon"
-              width={20}
-              height={20}
-            />
-            Raise
-          </StyledActionCta>
-        </StyledActionCtaWrapper> */}
-        {/* <StyledPokerSliderWrapper>
-          <PokerSlider />
-        </StyledPokerSliderWrapper> */}
+        {user_id == bettor_id && (
+          <StyledActionCtaWrapper>
+            <StyledActionCta
+              onClick={() => {
+                dispatch(
+                  triggerActionApi({
+                    action_type: "fold",
+                    current_betted_amount: null,
+                  })
+                );
+              }}
+            >
+              <StyledActionCtaIcons
+                src="/poker/poker-table/action-cta-icons/fold.png"
+                alt="fold-icon"
+                width={20}
+                height={20}
+              />
+              Fold
+            </StyledActionCta>
+            <StyledActionCta
+              onClick={() => {
+                dispatch(
+                  triggerActionApi({
+                    action_type: "check",
+                    current_betted_amount: null,
+                  })
+                );
+              }}
+            >
+              <StyledActionCtaIcons
+                src="/poker/poker-table/action-cta-icons/check.png"
+                alt="check-icon"
+                width={20}
+                height={20}
+              />
+              Check
+            </StyledActionCta>
+            <StyledActionCta>
+              <StyledActionCtaIcons
+                src="/poker/poker-table/action-cta-icons/raise.png"
+                alt="raise-icon"
+                width={20}
+                height={20}
+              />
+              Raise
+            </StyledActionCta>
+          </StyledActionCtaWrapper>
+        )}
+
+        {/* {user_id == bettor_id && (
+          <StyledPokerSliderWrapper>
+            <PokerSlider />
+          </StyledPokerSliderWrapper>
+        )} */}
       </StyledImageContainer>
     </div>
   );

@@ -14,7 +14,7 @@ import {
 // redux
 import { useAppDispatch, useAppSelector } from "@/hooks/redux.hook";
 import { User } from "@/store/slice/login.slice";
-import { startRoundApi, dealerId } from "@/store/slice/poker/poker.slice";
+import { dealHandApi, dealerId } from "@/store/slice/poker/poker.slice";
 
 const PokerWaitingBanner: FC<{
   initial_count: number;
@@ -30,7 +30,7 @@ const PokerWaitingBanner: FC<{
           initial_count={initial_count}
           handleOnFinish={() => {
             updateShowWaitigBanner(false);
-            user_id == dealer_id && dispatch(startRoundApi());
+            user_id == dealer_id && dispatch(dealHandApi());
           }}
         />
         <StyledInfoText>
