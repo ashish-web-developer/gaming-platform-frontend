@@ -38,11 +38,12 @@ const PokerCard: FC<{
   scale?: number;
   suit: ICardSuit;
   rank: ICardRank;
-}> = ({ is_flipped = true, scale, suit, rank }) => {
+  ref_callback?: (node: HTMLDivElement) => void;
+}> = ({ is_flipped = true, scale, suit, rank, ref_callback }) => {
   const theme = useTheme() as ITheme;
 
   return (
-    <StyledContainer $is_flipped={is_flipped} $scale={scale}>
+    <StyledContainer ref={ref_callback} $is_flipped={is_flipped} $scale={scale}>
       {is_flipped ? (
         <>
           <StyledVectorWrappper $right="4px" $top="4px">

@@ -1,8 +1,9 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 // types
 import type { FC } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { IDeckNodeType } from "context";
 
 // styled components
 import {
@@ -14,6 +15,7 @@ import {
   StyledActionCta,
   StyledActionCtaIcons,
   StyledPokerSliderWrapper,
+  StyledDeckContainer,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
 // local components
@@ -28,6 +30,7 @@ import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functional
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { User } from "@/store/slice/login.slice";
 import {
+  Deck,
   bettorId,
   showBuyInModal,
   triggerActionApi,
@@ -37,9 +40,13 @@ import {
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import MotionPathPlugin from "gsap/MotionPathPlugin";
+import Flip from "gsap/Flip";
 import PokerSlider from "../poker-slider/poker-slider";
 
-gsap.registerPlugin(MotionPathPlugin);
+// context
+import { DeckNodeContext, FlipBatchContext } from "context";
+
+gsap.registerPlugin(MotionPathPlugin, Flip);
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
   dealer_id: number | null;
@@ -55,9 +62,14 @@ const PokerTable: FC<IProps> = ({
   const dispatch = useAppDispatch();
   const container_ref = useRef<HTMLDivElement>(null);
   const player_containers_ref = useRef<Set<HTMLDivElement | null>>(new Set());
+  const deck_node_ref = useRef<IDeckNodeType>(new Map());
+  const deck = useAppSelector(Deck);
   const { id: user_id } = useAppSelector(User) || {};
   const bettor_id = useAppSelector(bettorId);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
+  const batch_ref = useRef<ReturnType<typeof Flip.batch> | null>();
+  const [play_card_dealing_animation, setPlayCardDealingAnimation] =
+    useState(false);
   const { contextSafe } = useGSAP(
     () => {
       const players_position = [
@@ -117,6 +129,16 @@ const PokerTable: FC<IProps> = ({
     return animation;
   });
 
+  useEffect(() => {
+    batch_ref.current = Flip.batch("card-animation");
+  }, []);
+
+  useEffect(() => {
+    if (play_card_dealing_animation) {
+      batch_ref.current?.run();
+    }
+  }, [play_card_dealing_animation]);
+
   return (
     <div ref={container_ref}>
       {show_buy_in_modal &&
@@ -141,23 +163,31 @@ const PokerTable: FC<IProps> = ({
         $translateX="-50%"
         $translateY="-50%"
       >
-        {poker_players.map((player, index) => {
-          return (
-            <PokerPlayer
-              dealer_id={dealer_id}
-              player={player}
-              seat_index={index}
-              key={`players-${index}`}
-              bettor_id={bettor_id}
-              ref={(node) => {
-                player_containers_ref.current.add(node);
-                return () => {
-                  player_containers_ref.current.delete(node);
-                };
-              }}
-            />
-          );
-        })}
+        <FlipBatchContext.Provider value={batch_ref}>
+          <DeckNodeContext.Provider value={deck_node_ref}>
+            {poker_players.map((player, index) => {
+              return (
+                <PokerPlayer
+                  dealer_id={dealer_id}
+                  player={player}
+                  seat_index={index}
+                  key={`players-${index}`}
+                  bettor_id={bettor_id}
+                  ref={(node) => {
+                    player_containers_ref.current.add(node);
+                    return () => {
+                      player_containers_ref.current.delete(node);
+                    };
+                  }}
+                  updatePlayCardAnimation={(val) => {
+                    setPlayCardDealingAnimation(val);
+                  }}
+                />
+              );
+            })}
+          </DeckNodeContext.Provider>
+        </FlipBatchContext.Provider>
+
         <StyledSvgWrapper>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -195,6 +225,23 @@ const PokerTable: FC<IProps> = ({
           fill={true}
           alt="poker-table"
         />
+        <StyledDeckContainer>
+          {deck.map(({ card_id, ...card }) => {
+            return (
+              <PokerCard
+                ref_callback={(node) => {
+                  deck_node_ref.current?.set(card_id, node);
+                  return () => {
+                    deck_node_ref.current?.delete(card_id);
+                  };
+                }}
+                scale={0.4}
+                {...card}
+                key={`poker-card-${card_id}`}
+              />
+            );
+          })}
+        </StyledDeckContainer>
         <StyledCommunityCardsWrapper>
           {/* {new Array(5).fill(0).map((_, index) => {
             return <PokerCard key={`poker-${index}`} scale={0.5} />;

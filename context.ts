@@ -2,12 +2,14 @@ import { createContext } from "react";
 
 // types
 import type { MutableRefObject } from "react";
+export type IDeckNodeType = Map<string, HTMLDivElement>;
 
 // helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 import { current } from "@reduxjs/toolkit";
 
-// theme mode context
+// gsap
+import Flip from "gsap/Flip";
 
 // speech uttrance
 const UttranceContext = createContext<
@@ -21,4 +23,16 @@ const PokerInviteDialogTimeOutContext = createContext<
   MutableRefObject<ReturnType<typeof setTimeout> | undefined>
 >({ current: undefined });
 
-export { UttranceContext, PokerInviteDialogTimeOutContext };
+const DeckNodeContext = createContext<MutableRefObject<IDeckNodeType | null>>({
+  current: null,
+});
+
+const FlipBatchContext = createContext<
+  MutableRefObject<ReturnType<typeof Flip.batch> | null | undefined>
+>({ current: null });
+export {
+  UttranceContext,
+  PokerInviteDialogTimeOutContext,
+  DeckNodeContext,
+  FlipBatchContext,
+};

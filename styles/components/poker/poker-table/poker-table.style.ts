@@ -81,10 +81,20 @@ const StyledActionCtaIcons = styled(Image)`
 
 const StyledPokerSliderWrapper = styled.div`
   position: absolute;
-  left:50%;
-  transform:translateX(-50%);
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3;
-  top:375px;
+  top: 375px;
+`;
+
+const StyledDeckContainer = styled.div`
+  position: absolute;
+  left: 45%;
+  top: 95px;
+  visibility: hidden;
+  & > div {
+    position: absolute;
+  }
 `;
 
 export {
@@ -96,4 +106,5 @@ export {
   StyledActionCta,
   StyledActionCtaIcons,
   StyledPokerSliderWrapper,
+  StyledDeckContainer,
 };

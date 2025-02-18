@@ -35,6 +35,7 @@ type IPokerInitialState = {
   min_amount_to_be_betted: number | null; // It will stored in k
   chips_in_pot: number; // It will bee stored in k
   bettor_id: number | null;
+  deck: IDeckType;
 };
 
 type IPokerRoom = {
@@ -48,6 +49,7 @@ type IPokerRoom = {
   dealer_id: number;
   bettor_id: number | null;
   poker_player: IPokerPlayer[];
+  deck: IDeckType;
   created_at: string;
   updated_at: string;
 };
@@ -90,6 +92,14 @@ type IJoinPokerRoomApiResponse = IBaseResponse & {
 };
 
 /**
+ * ==== CREATE DECK =====
+ */
+
+type ICreateDeckApi = IBaseResponse & {
+  deck: IDeckType;
+};
+
+/**
  * ==== UPDATE SEAT AVAILABLE API =====
  */
 type IUpdateSeatAvailableRequest = {
@@ -117,6 +127,7 @@ export {
   IGetPokerResponseInfoRequest,
   IJoinPokerRoomApiRequest,
   IJoinPokerRoomApiResponse,
+  ICreateDeckApi,
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
   ITriggerActionApiRequest,

@@ -15,6 +15,7 @@ import type {
   IGetPokerRoomInfoResponse,
   IJoinPokerRoomApiRequest,
   IJoinPokerRoomApiResponse,
+  ICreateDeckApi,
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
   IPokerRoom,
@@ -150,6 +151,28 @@ export const startRoundApi = createAsyncThunk<
   }
 });
 
+export const createDeckApi = createAsyncThunk<
+  ICreateDeckApi,
+  undefined,
+  IThunkApiConfig
+>("api/create-deck", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<ICreateDeckApi> = await Axios.post(
+      "/poker/create-deck",
+      {
+        room_id: state.poker.poker_room_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
 export const dealHandApi = createAsyncThunk<
   IBaseResponse,
   undefined,
@@ -163,6 +186,7 @@ export const dealHandApi = createAsyncThunk<
         room_id: state.poker.poker_room_id,
       }
     );
+    console.log("api getting called");
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error?.response?.data);
@@ -209,6 +233,7 @@ const initialState: IPokerInitialState = {
   min_amount_to_be_betted: null,
   small_blind: 5,
   chips_in_pot: 0,
+  deck: [],
 };
 
 const pokerSlice = createSlice({
@@ -319,6 +344,7 @@ const pokerSlice = createSlice({
       state.chips_in_pot = action.payload.chips_in_pot;
       state.min_amount_to_be_betted = action.payload.min_amount_to_be_betted;
       state.community_cards = action.payload.community_cards;
+      state.deck = action.payload.deck;
     },
     updateRoomCreatedAt: (state, action: PayloadAction<string | null>) => {
       state.room_created_at = action.payload;
@@ -337,6 +363,9 @@ const pokerSlice = createSlice({
     builder.addCase(createPokerRoomApi.fulfilled, (state, action) => {
       state.poker_room_id = action.payload.poker_room.room_id;
       state.dealer_id = action.payload.poker_room.dealer_id;
+    });
+    builder.addCase(createDeckApi.fulfilled, (state, action) => {
+      state.deck = action.payload.deck;
     });
   },
 });
@@ -359,6 +388,7 @@ export const bettorId = (state: RootState) => state.poker.bettor_id;
 export const chipsInPot = (state: RootState) => state.poker.chips_in_pot;
 export const minAmountToBeBetted = (state: RootState) =>
   state.poker.min_amount_to_be_betted;
+export const Deck = (state: RootState) => state.poker.deck;
 export const communityCards = (state: RootState) => state.poker.community_cards;
 export const roomCreatedAt = (state: RootState) => state.poker.room_created_at;
 // action creaters
