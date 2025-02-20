@@ -133,10 +133,11 @@ const PokerDeck: ForwardRefRenderFunction<
         return (
           <PokerCard
             ref_callback={(node) => {
-              deck_node_ref.current?.set(card_id, node);
-              return () => {
+              if (node) {
+                deck_node_ref.current?.set(card_id, node);
+              } else {
                 deck_node_ref.current?.delete(card_id);
-              };
+              }
             }}
             scale={0.4}
             {...card}

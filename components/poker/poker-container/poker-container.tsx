@@ -7,8 +7,25 @@ import type { IDeckType } from "@/types/store/slice/poker";
 
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
-import PokerTimer from "@/components/poker/poker-timer/poker-timer";
-import PokerWaitingBanner from "@/components/poker/poker-waiting-banner/poker-waiting-banner";
+const PokerWaitingBanner = dynamic(
+  () => import("@/components/poker/poker-waiting-banner/poker-waiting-banner"),
+  {
+    ssr: false,
+  }
+);
+const PokerTimer = dynamic(
+  () => import("@/components/poker/poker-timer/poker-timer"),
+  {
+    ssr: false,
+  }
+);
+
+const PokerTable = dynamic(
+  () => import("@/components/poker/poker-table/poker-table"),
+  {
+    ssr: false,
+  }
+);
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
@@ -25,13 +42,7 @@ import {
 } from "@/store/slice/poker/poker.slice";
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
-
-const PokerTable = dynamic(
-  () => import("@/components/poker/poker-table/poker-table"),
-  {
-    ssr: false,
-  }
-);
+import { useIsMounted } from "@/hooks/common.hook";
 
 // styled components
 import {
@@ -73,7 +84,6 @@ const JoinPokerChannel = () => {
       {
         event: "update-poker-player-data",
         handler: (data: { player: IPokerPlayer }) => {
-          console.log("data", data);
           dispatch(updatePlayerData(data.player));
         },
       },
@@ -100,22 +110,26 @@ const PokerContainer: FC = () => {
   const [show_waiting_banner, setShowWaitingBanner] = useState(false);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const room_created_at = useAppSelector(roomCreatedAt);
+  console.log("value of room_created_at", room_created_at);
   const seconds = Math.floor(
     new Date(room_created_at as string).getTime() / 1000 +
       60 -
-      new Date().getTime() / 1000
+      Date.now() / 1000
   );
+  const is_mounted = useIsMounted();
   return (
     <StyledPage>
       {!show_buy_in_modal && <JoinPokerChannel />}
       <StyledContainer $opacity={show_waiting_banner ? 0.2 : 1}>
         <PokerHeader />
-        <PokerTable
-          time_left={seconds}
-          updateShowWaitingBanner={(val: boolean) => {
-            setShowWaitingBanner(val);
-          }}
-        />
+        {is_mounted && (
+          <PokerTable
+            time_left={seconds}
+            updateShowWaitingBanner={(val: boolean) => {
+              setShowWaitingBanner(val);
+            }}
+          />
+        )}
         {!show_buy_in_modal && !show_waiting_banner && (
           <StyledPokerTimerContainer>
             <PokerTimer initial_count={30} handleOnFinish={() => {}} />

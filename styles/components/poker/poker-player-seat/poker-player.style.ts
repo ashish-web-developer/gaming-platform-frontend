@@ -152,7 +152,6 @@ const StyledAmountBettedWrapper = styled.div<{
   gap: 6px;
   z-index: 2;
   ${(props) => {
-    console.log("value of seat index", props.$seat_index);
     switch (props.$seat_index) {
       case 0:
         return `

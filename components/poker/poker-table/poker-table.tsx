@@ -158,19 +158,20 @@ const PokerTable: FC<IProps> = ({
               key={`players-${index}`}
               bettor_id={bettor_id}
               ref={(node) => {
-                player_containers_ref.current.add(node);
-                if (player) {
-                  players_with_node_ref.current.set(
-                    player,
-                    node as HTMLDivElement
-                  );
-                }
-                return () => {
+                if (node) {
+                  player_containers_ref.current.add(node);
+                  if (player) {
+                    players_with_node_ref.current.set(
+                      player,
+                      node as HTMLDivElement
+                    );
+                  }
+                } else {
                   player_containers_ref.current.delete(node);
                   if (player) {
                     players_with_node_ref.current.delete(player);
                   }
-                };
+                }
               }}
             />
           );
@@ -205,6 +206,7 @@ const PokerTable: FC<IProps> = ({
             fill={true}
             src="/poker/poker-table/dealer.png"
             alt="dealer"
+            sizes="(max-width: 1400px) 15vw"
           />
         </StyledImageContainer>
 

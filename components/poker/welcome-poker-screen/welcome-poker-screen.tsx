@@ -143,6 +143,7 @@ const WelcomePokerScreen: FC<{
             alt="main-image"
             fill={true}
             id="main-image"
+            sizes="(max-width: 1400px) 50vw"
           />
         </StyledImageContainer>
         <StyledImageContainer
@@ -155,6 +156,7 @@ const WelcomePokerScreen: FC<{
             src="/poker/welcome-poker-screen/trophy.png"
             alt="trophy"
             fill={true}
+            sizes="(max-width: 1400px) 15vw"
           />
         </StyledImageContainer>
         <StyledLogoContainer>

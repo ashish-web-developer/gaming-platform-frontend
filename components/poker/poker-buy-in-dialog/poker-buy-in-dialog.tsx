@@ -62,8 +62,9 @@ const PokerBuyInDialog: FC<{
         <StyledDialogImageWrapper>
           <StyledDialogImage
             src={"/poker/poker-buy-in-dialog/main-image.png"}
-            alt="michael"
+            alt="dialog-image"
             fill={true}
+            sizes="(max-width: 1400px) 20vw"
           />
         </StyledDialogImageWrapper>
         <StyledLogo>
