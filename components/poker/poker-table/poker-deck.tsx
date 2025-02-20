@@ -23,7 +23,7 @@ const StyledDeckContainer = styled.div`
   position: absolute;
   left: 45%;
   top: 95px;
-  // visibility: hidden;
+  visibility: hidden;
   & > div {
     position: absolute;
   }
@@ -37,6 +37,7 @@ const PokerDeck: ForwardRefRenderFunction<
 > = ({ deck }, player_with_node_ref) => {
   const deck_node_ref = useRef<Map<string, HTMLDivElement>>(new Map());
   const active_poker_players = useAppSelector(activePokerPlayers);
+  const is_dealing_animation_completed_ref = useRef(false);
   const { id: user_id } = useAppSelector(User) || {};
   const [card1, card2] =
     active_poker_players.find((player) => {
@@ -48,7 +49,10 @@ const PokerDeck: ForwardRefRenderFunction<
    */
   useEffect(() => {
     let batch: FlipBatch;
-    if (active_poker_players.length) {
+    if (
+      active_poker_players.length &&
+      !is_dealing_animation_completed_ref.current
+    ) {
       batch = Flip.batch("card-animation");
       batch.add({
         /**
@@ -118,6 +122,9 @@ const PokerDeck: ForwardRefRenderFunction<
               each: 0.2,
             },
           });
+        },
+        onComplete() {
+          is_dealing_animation_completed_ref.current = true;
         },
       });
       batch.run();

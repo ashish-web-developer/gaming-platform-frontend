@@ -57,15 +57,6 @@ const PokerPlayer: ForwardRefRenderFunction<
     { dependencies: [player] }
   );
 
-  useEffect(() => {
-    return () => {
-      while (hole_cards_container.current?.firstChild) {
-        hole_cards_container.current.removeChild(
-          hole_cards_container.current.firstChild
-        );
-      }
-    };
-  }, [player]);
 
   return (
     <StyledPokerPlayerWrapper

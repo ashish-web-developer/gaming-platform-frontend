@@ -155,7 +155,7 @@ const PokerTable: FC<IProps> = ({
               dealer_id={dealer_id}
               player={player}
               seat_index={index}
-              key={`players-${index}`}
+              key={`player-${index}`}
               bettor_id={bettor_id}
               ref={(node) => {
                 if (node) {
