@@ -85,7 +85,7 @@ const PokerBuyInDialog: FC<{
           <StyledBlindsHeader>Blinds</StyledBlindsHeader>
           <StyledBlindsAmountWrapper>
             <StyledChipsImage
-              src="/poker/poker-player/poker-chip.png"
+              src="/poker/poker-player/poker-chips.png"
               alt="chip"
               width={20}
               height={20}
