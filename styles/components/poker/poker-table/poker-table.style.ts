@@ -87,16 +87,6 @@ const StyledPokerSliderWrapper = styled.div`
   top: 375px;
 `;
 
-const StyledDeckContainer = styled.div`
-  position: absolute;
-  left: 45%;
-  top: 95px;
-  visibility: hidden;
-  & > div {
-    position: absolute;
-  }
-`;
-
 export {
   StyledImageContainer,
   StyledImage,
@@ -106,5 +96,4 @@ export {
   StyledActionCta,
   StyledActionCtaIcons,
   StyledPokerSliderWrapper,
-  StyledDeckContainer,
 };

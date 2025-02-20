@@ -92,14 +92,6 @@ type IJoinPokerRoomApiResponse = IBaseResponse & {
 };
 
 /**
- * ==== CREATE DECK =====
- */
-
-type ICreateDeckApi = IBaseResponse & {
-  deck: IDeckType;
-};
-
-/**
  * ==== UPDATE SEAT AVAILABLE API =====
  */
 type IUpdateSeatAvailableRequest = {
@@ -127,7 +119,6 @@ export {
   IGetPokerResponseInfoRequest,
   IJoinPokerRoomApiRequest,
   IJoinPokerRoomApiResponse,
-  ICreateDeckApi,
   IUpdateSeatAvailableRequest,
   IUpdateSeatAvailableResponse,
   ITriggerActionApiRequest,

@@ -1,4 +1,6 @@
-import { RootState } from "@/store/rootReducer";
+import type { RootState } from "@/store/rootReducer";
+import type { IDeckType } from "@/types/store/slice/poker";
+
 type InitialState = {
   show_emoji: boolean;
   mode: "dark" | "light";
@@ -13,6 +15,7 @@ type InitialState = {
 
 type IBaseResponse = {
   success: boolean;
+  whole_deck: IDeckType;
   error?: any;
 };
 

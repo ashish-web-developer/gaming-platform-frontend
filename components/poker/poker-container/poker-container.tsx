@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
 import type { IPokerPlayer, IPokerRoom } from "@/types/store/slice/poker/poker";
+import type { IDeckType } from "@/types/store/slice/poker";
 
 // local components
 import PokerHeader from "@/components/poker/poker-header/poker-header";
@@ -20,6 +21,7 @@ import {
   updateActivePokerPlayer,
   updateRoomDetails,
   updatePlayerData,
+  updateDeck,
 } from "@/store/slice/poker/poker.slice";
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
@@ -73,6 +75,12 @@ const JoinPokerChannel = () => {
         handler: (data: { player: IPokerPlayer }) => {
           console.log("data", data);
           dispatch(updatePlayerData(data.player));
+        },
+      },
+      {
+        event: "deck-data-event",
+        handler: (data: { deck: IDeckType }) => {
+          dispatch(updateDeck(data.deck));
         },
       },
     ],
