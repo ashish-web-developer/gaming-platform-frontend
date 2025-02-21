@@ -1,3 +1,4 @@
+import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 // types
@@ -10,9 +11,6 @@ import {
   StyledImage,
   StyledSvgWrapper,
   StyledCommunityCardsWrapper,
-  StyledActionCtaWrapper,
-  StyledActionCta,
-  StyledActionCtaIcons,
   StyledPokerSliderWrapper,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
@@ -20,6 +18,12 @@ import {
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
 import PokerDeck from "@/components/poker/poker-table/poker-deck";
+const PokerActionCta = dynamic(
+  () => import("@/components/poker/poker-table/poker-action-cta"),
+  {
+    ssr: false,
+  }
+);
 
 // hoc
 import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
@@ -28,7 +32,6 @@ import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functional
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import { User } from "@/store/slice/login.slice";
 import {
-  activePokerPlayers,
   Deck,
   bettorId,
   showBuyInModal,
@@ -73,6 +76,7 @@ const PokerTable: FC<IProps> = ({
     is_card_dealing_animation_completed,
     setIsCardDealingAnimationCompleted,
   ] = useState(false);
+
   const { contextSafe } = useGSAP(
     () => {
       const players_position = [
@@ -270,55 +274,7 @@ const PokerTable: FC<IProps> = ({
             return <PokerCard key={`poker-${index}`} scale={0.5} />;
           })} */}
           </StyledCommunityCardsWrapper>
-          {user_id == bettor_id && (
-            <StyledActionCtaWrapper>
-              <StyledActionCta
-                onClick={() => {
-                  dispatch(
-                    triggerActionApi({
-                      action_type: "fold",
-                      current_betted_amount: null,
-                    })
-                  );
-                }}
-              >
-                <StyledActionCtaIcons
-                  src="/poker/poker-table/action-cta-icons/fold.png"
-                  alt="fold-icon"
-                  width={20}
-                  height={20}
-                />
-                Fold
-              </StyledActionCta>
-              <StyledActionCta
-                onClick={() => {
-                  dispatch(
-                    triggerActionApi({
-                      action_type: "check",
-                      current_betted_amount: null,
-                    })
-                  );
-                }}
-              >
-                <StyledActionCtaIcons
-                  src="/poker/poker-table/action-cta-icons/check.png"
-                  alt="check-icon"
-                  width={20}
-                  height={20}
-                />
-                Check
-              </StyledActionCta>
-              <StyledActionCta>
-                <StyledActionCtaIcons
-                  src="/poker/poker-table/action-cta-icons/raise.png"
-                  alt="raise-icon"
-                  width={20}
-                  height={20}
-                />
-                Raise
-              </StyledActionCta>
-            </StyledActionCtaWrapper>
-          )}
+          {user_id == bettor_id && <PokerActionCta />}
 
           {/* {user_id == bettor_id && (
           <StyledPokerSliderWrapper>

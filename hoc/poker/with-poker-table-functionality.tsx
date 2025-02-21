@@ -59,10 +59,10 @@ const withPokerTableFunctionality = <ExtraProps extends { [key: string]: any }>(
       ...active_poker_players,
       ...new Array(9 - active_poker_players.length).fill(null),
     ];
-    const { seat_number: auth_player_seat_number } =
-      active_poker_players.find(
-        (poker_player) => poker_player.player_id == user_id
-      ) ?? {};
+
+    const auth_player_seat_number = active_poker_players.findIndex(
+      (player) => player.player_id == user_id
+    );
 
     /**
      * Rotating the array in such a way so that
