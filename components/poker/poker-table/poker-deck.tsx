@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { forwardRef, useRef, useEffect, useContext } from "react";
+import { forwardRef, useRef } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
@@ -13,14 +13,8 @@ import { useAppSelector } from "@/hooks/redux.hook";
 import { activePokerPlayers } from "@/store/slice/poker/poker.slice";
 import { User } from "@/store/slice/login.slice";
 
-// gsap
-import gsap from "gsap";
-import Flip from "gsap/Flip";
-
-// context
-import { CardDealingAnimationContext } from "context";
-
-gsap.registerPlugin(Flip);
+// hooks
+import { useCardDealingAnimation } from "@/hooks/poker/poker.hook";
 
 const StyledDeckContainer = styled.div`
   position: absolute;
@@ -40,8 +34,6 @@ const PokerDeck: ForwardRefRenderFunction<
 > = ({ deck }, player_with_node_ref) => {
   const deck_node_ref = useRef<Map<string, HTMLDivElement>>(new Map());
   const active_poker_players = useAppSelector(activePokerPlayers);
-  const { is_card_dealing_animation_completed, updateCardDealingAnimation } =
-    useContext(CardDealingAnimationContext);
   const { id: user_id } = useAppSelector(User) || {};
   const [card1, card2] =
     active_poker_players.find((player) => {
@@ -51,100 +43,7 @@ const PokerDeck: ForwardRefRenderFunction<
   /**
    * handling card dealing animation
    */
-  useEffect(() => {
-    let batch: FlipBatch;
-    if (active_poker_players.length && !is_card_dealing_animation_completed) {
-      batch = Flip.batch("card-animation");
-      batch.add({
-        /**
-         * this will return the previous
-         * state of the cards_node
-         *
-         */
-        getState() {
-          /**
-           * reducing hole cards of all the player to an array
-           * then getting the node of those hole cards inside the
-           * deck container,then based on those cards_node we are
-           * getting the flip state
-           */
-          const hole_cards_of_all_player =
-            active_poker_players.reduce<IDeckType>((hole_cards, player) => {
-              if (player.hole_cards) {
-                return [...hole_cards, ...player.hole_cards];
-              }
-              return hole_cards;
-            }, []);
-
-          // converting hole_cards to card node
-          const card_node = hole_cards_of_all_player.map((card) => {
-            return deck_node_ref.current?.get(card.card_id) as HTMLDivElement;
-          });
-          return Flip.getState(card_node);
-        },
-
-        /**
-         * Here we are doing all the dom related manipulation
-         */
-        setState() {
-          active_poker_players.forEach((player) => {
-            if (
-              typeof player_with_node_ref !== "function" &&
-              player_with_node_ref?.current
-            ) {
-              const player_container_node =
-                player_with_node_ref.current.get(player);
-              const hole_cards_container_node =
-                player_container_node?.getElementsByClassName(
-                  "hole-cards-container"
-                );
-              if (hole_cards_container_node) {
-                player.hole_cards?.forEach((card, index) => {
-                  let card_node = deck_node_ref.current.get(
-                    card.card_id
-                  ) as HTMLDivElement;
-                  card_node.setAttribute("is-animated", "true");
-                  if (index == 0) {
-                    card_node.style.rotate = "-6deg";
-                  } else {
-                    card_node.style.rotate = "6deg";
-                    card_node.style.left = "-16px";
-                  }
-                  hole_cards_container_node[0].appendChild(card_node);
-                });
-              }
-            }
-          });
-        },
-        animate(self) {
-          Flip.from(self.state, {
-            ease: "expo.inOut",
-            stagger: {
-              each: 0.2,
-            },
-          });
-        },
-        onComplete(self) {
-          setTimeout(() => {
-            Array.from(
-              document.getElementsByClassName("hole-cards-container")
-            ).forEach((container) => {
-              Array.from(container.children).forEach((node) => {
-                if (node.getAttribute("is-animated") == "true") {
-                  container.removeChild(node);
-                }
-              });
-            });
-            updateCardDealingAnimation?.(true);
-          }, 0.6 * active_poker_players.length * 1000);
-        },
-      });
-      batch.run();
-    }
-    return () => {
-      batch?.clear();
-    };
-  }, [active_poker_players.length, is_card_dealing_animation_completed]);
+  useCardDealingAnimation({ player_with_node_ref, deck_node_ref });
 
   return (
     <StyledDeckContainer>
