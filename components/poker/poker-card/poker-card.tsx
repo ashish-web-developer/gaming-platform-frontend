@@ -1,3 +1,4 @@
+import { useRef } from "react";
 // types
 import type { FC } from "react";
 import type { ITheme } from "@/theme/poker.theme";
@@ -38,12 +39,39 @@ const PokerCard: FC<{
   scale?: number;
   suit: ICardSuit;
   rank: ICardRank;
-  ref_callback?: (node: HTMLDivElement) => void;
-}> = ({ is_flipped = true, scale, suit, rank, ref_callback }) => {
+  ref_callback?: (node: HTMLDivElement | null) => void;
+  cardHoverHandler?: (
+    node: HTMLDivElement,
+    event_type: "enter" | "leave"
+  ) => void;
+}> = ({
+  is_flipped = true,
+  scale,
+  suit,
+  rank,
+  ref_callback,
+  cardHoverHandler,
+}) => {
   const theme = useTheme() as ITheme;
+  const container_ref = useRef<HTMLDivElement | null>(null);
 
   return (
-    <StyledContainer ref={ref_callback} $is_flipped={is_flipped} $scale={scale}>
+    <StyledContainer
+      ref={(node) => {
+        container_ref.current = node;
+        ref_callback?.(node);
+      }}
+      $is_flipped={is_flipped}
+      $scale={scale}
+      onMouseEnter={(event) =>
+        container_ref.current &&
+        cardHoverHandler?.(container_ref.current, "enter")
+      }
+      onMouseLeave={(event) =>
+        container_ref.current &&
+        cardHoverHandler?.(container_ref.current, "leave")
+      }
+    >
       {is_flipped ? (
         <>
           <StyledVectorWrappper $right="4px" $top="4px">

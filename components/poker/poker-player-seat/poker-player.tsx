@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { forwardRef, useRef, useContext } from "react";
+import { forwardRef, useRef, useContext, useEffect } from "react";
 
 // types
 import type { ForwardRefRenderFunction } from "react";
@@ -23,10 +23,6 @@ import PokerCard from "@/components/poker/poker-card/poker-card";
 // hooks
 import { useAvatarUrl } from "@/hooks/profile.hook";
 
-// gsap
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
 import { User } from "@/store/slice/login.slice";
@@ -41,8 +37,23 @@ const PokerPlayer: ForwardRefRenderFunction<
     seat_index: number;
     dealer_id: number | null;
     bettor_id: number | null;
+    profileAnimationHandler: (detail_container: HTMLDivElement) => void;
+    cardHoverHandler?: (
+      node: HTMLDivElement,
+      event_type: "enter" | "leave"
+    ) => void;
   }
-> = ({ player, seat_index, dealer_id, bettor_id }, container_ref) => {
+> = (
+  {
+    player,
+    seat_index,
+    dealer_id,
+    bettor_id,
+    profileAnimationHandler,
+    cardHoverHandler,
+  },
+  container_ref
+) => {
   const players_details_ref = useRef<HTMLDivElement>(null);
   const avatar_url = useAvatarUrl(player?.user ?? null);
   const { id: user_id } = useAppSelector(User) || {};
@@ -51,26 +62,12 @@ const PokerPlayer: ForwardRefRenderFunction<
   const { is_card_dealing_animation_completed } = useContext(
     CardDealingAnimationContext
   );
-  useGSAP(
-    () => {
-      if (player) {
-        gsap.fromTo(
-          players_details_ref.current,
-          {
-            scale: 1.3,
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            duration: 1,
-            ease: "elastic.out",
-            delay: 0.5,
-          }
-        );
-      }
-    },
-    { dependencies: [player] }
-  );
+
+  useEffect(() => {
+    if (players_details_ref.current) {
+      profileAnimationHandler(players_details_ref.current);
+    }
+  }, [!!player]);
 
   return (
     <StyledPokerPlayerWrapper
@@ -100,6 +97,7 @@ const PokerPlayer: ForwardRefRenderFunction<
                     scale={0.4}
                     {...card}
                     is_flipped={is_auth ? true : false}
+                    cardHoverHandler={cardHoverHandler}
                   />
                 );
               })}

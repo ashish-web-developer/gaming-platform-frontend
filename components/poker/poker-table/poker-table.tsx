@@ -131,6 +131,33 @@ const PokerTable: FC<IProps> = ({
     });
     return animation;
   });
+  const profileDetailsAnimation = contextSafe(
+    (detail_container: HTMLDivElement) => {
+      gsap.fromTo(
+        detail_container,
+        {
+          scale: 1.3,
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: "elastic.out",
+          delay: 0.5,
+        }
+      );
+    }
+  );
+
+  const cardOnHoverAnimation = contextSafe(
+    (node: HTMLDivElement, event_type: "enter" | "leave") => {
+      gsap.to(node, {
+        scale: event_type == "enter" ? 0.8 : 0.4,
+        duration: 0.6,
+        ease: "expo.inOut",
+      });
+    }
+  );
 
   return (
     <CardDealingAnimationContext.Provider
@@ -188,6 +215,12 @@ const PokerTable: FC<IProps> = ({
                     }
                   }
                 }}
+                profileAnimationHandler={profileDetailsAnimation}
+                cardHoverHandler={
+                  player?.player_id == user_id
+                    ? cardOnHoverAnimation
+                    : undefined
+                }
               />
             );
           })}

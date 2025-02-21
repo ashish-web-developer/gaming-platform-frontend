@@ -136,7 +136,7 @@ const PokerDeck: ForwardRefRenderFunction<
               });
             });
             updateCardDealingAnimation?.(true);
-          }, 0.8 * active_poker_players.length * 1000);
+          }, 0.6 * active_poker_players.length * 1000);
         },
       });
       batch.run();
