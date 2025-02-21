@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { forwardRef, useRef, useEffect } from "react";
+import { forwardRef, useRef, useEffect, useContext } from "react";
 // types
 import type { ForwardRefRenderFunction } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
@@ -16,6 +16,9 @@ import { User } from "@/store/slice/login.slice";
 // gsap
 import gsap from "gsap";
 import Flip from "gsap/Flip";
+
+// context
+import { CardDealingAnimationContext } from "context";
 
 gsap.registerPlugin(Flip);
 
@@ -37,7 +40,8 @@ const PokerDeck: ForwardRefRenderFunction<
 > = ({ deck }, player_with_node_ref) => {
   const deck_node_ref = useRef<Map<string, HTMLDivElement>>(new Map());
   const active_poker_players = useAppSelector(activePokerPlayers);
-  const is_dealing_animation_completed_ref = useRef(false);
+  const { is_card_dealing_animation_completed, updateCardDealingAnimation } =
+    useContext(CardDealingAnimationContext);
   const { id: user_id } = useAppSelector(User) || {};
   const [card1, card2] =
     active_poker_players.find((player) => {
@@ -49,10 +53,7 @@ const PokerDeck: ForwardRefRenderFunction<
    */
   useEffect(() => {
     let batch: FlipBatch;
-    if (
-      active_poker_players.length &&
-      !is_dealing_animation_completed_ref.current
-    ) {
+    if (active_poker_players.length && !is_card_dealing_animation_completed) {
       batch = Flip.batch("card-animation");
       batch.add({
         /**
@@ -102,6 +103,7 @@ const PokerDeck: ForwardRefRenderFunction<
                   let card_node = deck_node_ref.current.get(
                     card.card_id
                   ) as HTMLDivElement;
+                  card_node.setAttribute("is-animated", "true");
                   if (index == 0) {
                     card_node.style.rotate = "-6deg";
                   } else {
@@ -116,15 +118,25 @@ const PokerDeck: ForwardRefRenderFunction<
         },
         animate(self) {
           Flip.from(self.state, {
-            duration: 0.2 * active_poker_players.length,
             ease: "expo.inOut",
             stagger: {
               each: 0.2,
             },
           });
         },
-        onComplete() {
-          is_dealing_animation_completed_ref.current = true;
+        onComplete(self) {
+          setTimeout(() => {
+            Array.from(
+              document.getElementsByClassName("hole-cards-container")
+            ).forEach((container) => {
+              Array.from(container.children).forEach((node) => {
+                if (node.getAttribute("is-animated") == "true") {
+                  container.removeChild(node);
+                }
+              });
+            });
+            updateCardDealingAnimation?.(true);
+          }, 0.8 * active_poker_players.length * 1000);
         },
       });
       batch.run();
@@ -132,7 +144,7 @@ const PokerDeck: ForwardRefRenderFunction<
     return () => {
       batch?.clear();
     };
-  }, [active_poker_players.length]);
+  }, [active_poker_players.length, is_card_dealing_animation_completed]);
 
   return (
     <StyledDeckContainer>
