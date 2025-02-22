@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef } from "react";
 // types
 import type { MutableRefObject, RefObject } from "react";
 import type { ContextSafeFunc } from "@gsap/react";
@@ -80,6 +80,7 @@ function useCardDealingAnimation({
 }) {
   const active_poker_players = useAppSelector(activePokerPlayers);
   const hole_card_nodes_ref = useContext(HoleCardNodesMapContext);
+  const card_dealing_audio = useRef<HTMLAudioElement>();
   useEffect(() => {
     const batch = Flip.batch("card-dealing-animation");
     batch.add({
@@ -131,6 +132,37 @@ function useCardDealingAnimation({
           targets: target_element,
           ease: "expo.inOut",
           spin: true,
+          /**
+           * Here we are handling card dealing
+           * sound effect
+           */
+          onStart() {
+            if (!card_dealing_audio.current) {
+              card_dealing_audio.current = new Audio(
+                "/poker/media/card-dealing-sound.mp3"
+              );
+            }
+            card_dealing_audio.current.playbackRate = 1.5; 
+            function handleCardDealingEffect() {
+              const card_dealing_audio_promise = new Promise(function (
+                resolve,
+                reject
+              ) {
+                if (!card_dealing_audio.current) {
+                  reject(new Error("audio file is not set"));
+                } else {
+                  card_dealing_audio.current.onended = resolve;
+                }
+              });
+              card_dealing_audio.current?.play();
+              return card_dealing_audio_promise;
+            }
+            (async function () {
+              for (let i = 0; i <= active_poker_players.length - 1; i++) {
+                await handleCardDealingEffect();
+              }
+            })();
+          },
           stagger: {
             each: 0.2,
           },
