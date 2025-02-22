@@ -43,6 +43,7 @@ import {
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
 import { useIsMounted } from "@/hooks/common.hook";
+import { useLoadMedia } from "@/hooks/poker/poker.hook";
 
 // styled components
 import {
@@ -50,6 +51,9 @@ import {
   StyledContainer,
   StyledPokerTimerContainer,
 } from "@/styles/components/poker/poker-container/poker-container.style";
+
+// context
+import { MediaContext } from "context";
 
 const JoinPokerChannel = () => {
   const dispatch = useAppDispatch();
@@ -116,35 +120,39 @@ const PokerContainer: FC = () => {
       Date.now() / 1000
   );
   const is_mounted = useIsMounted();
+  const media_ref = useLoadMedia();
+
   return (
-    <StyledPage>
-      {!show_buy_in_modal && <JoinPokerChannel />}
-      <StyledContainer $opacity={show_waiting_banner ? 0.2 : 1}>
-        <PokerHeader />
-        {is_mounted && (
-          <PokerTable
-            time_left={seconds}
-            updateShowWaitingBanner={(val: boolean) => {
+    <MediaContext.Provider value={media_ref}>
+      <StyledPage>
+        {!show_buy_in_modal && <JoinPokerChannel />}
+        <StyledContainer $opacity={show_waiting_banner ? 0.2 : 1}>
+          <PokerHeader />
+          {is_mounted && (
+            <PokerTable
+              time_left={seconds}
+              updateShowWaitingBanner={(val: boolean) => {
+                setShowWaitingBanner(val);
+              }}
+            />
+          )}
+          {!show_buy_in_modal && !show_waiting_banner && (
+            <StyledPokerTimerContainer>
+              <PokerTimer initial_count={30} handleOnFinish={() => {}} />
+            </StyledPokerTimerContainer>
+          )}
+        </StyledContainer>
+        {show_waiting_banner && (
+          <PokerWaitingBanner
+            initial_count={seconds}
+            updateShowWaitigBanner={(val: boolean) => {
               setShowWaitingBanner(val);
             }}
           />
         )}
-        {!show_buy_in_modal && !show_waiting_banner && (
-          <StyledPokerTimerContainer>
-            <PokerTimer initial_count={30} handleOnFinish={() => {}} />
-          </StyledPokerTimerContainer>
-        )}
-      </StyledContainer>
-      {show_waiting_banner && (
-        <PokerWaitingBanner
-          initial_count={seconds}
-          updateShowWaitigBanner={(val: boolean) => {
-            setShowWaitingBanner(val);
-          }}
-        />
-      )}
-      <div id="poker-buy-in-dialog-container"></div>
-    </StyledPage>
+        <div id="poker-buy-in-dialog-container"></div>
+      </StyledPage>
+    </MediaContext.Provider>
   );
 };
 

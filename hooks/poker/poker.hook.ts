@@ -17,7 +17,23 @@ import Flip from "gsap/Flip";
 gsap.registerPlugin(Flip, MotionPathPlugin);
 
 // context
-import { HoleCardNodesMapContext } from "context";
+import { HoleCardNodesMapContext, MediaContext } from "context";
+
+function useLoadMedia() {
+  const media_ref = useRef<{
+    player_turn_sound?: HTMLAudioElement;
+    card_dealing_sound?: HTMLAudioElement;
+  }>({});
+  useEffect(() => {
+    media_ref.current.player_turn_sound = new Audio(
+      "/poker/media/player-turn-sound.mp3"
+    );
+    media_ref.current.card_dealing_sound = new Audio(
+      "/poker/media/card-dealing-sound.mp3"
+    );
+  }, []);
+  return media_ref;
+}
 
 /**
  * Rotating the player seat in random direction
@@ -80,7 +96,7 @@ function useCardDealingAnimation({
 }) {
   const active_poker_players = useAppSelector(activePokerPlayers);
   const hole_card_nodes_ref = useContext(HoleCardNodesMapContext);
-  const card_dealing_audio = useRef<HTMLAudioElement>();
+  const media_ref = useContext(MediaContext);
   useEffect(() => {
     const batch = Flip.batch("card-dealing-animation");
     batch.add({
@@ -137,31 +153,25 @@ function useCardDealingAnimation({
            * sound effect
            */
           onStart() {
-            if (!card_dealing_audio.current) {
-              card_dealing_audio.current = new Audio(
-                "/poker/media/card-dealing-sound.mp3"
-              );
-            }
-            card_dealing_audio.current.playbackRate = 1.5; 
             function handleCardDealingEffect() {
-              const card_dealing_audio_promise = new Promise(function (
-                resolve,
-                reject
+              const card_dealing_sound_promise = new Promise(function (
+                resolve
               ) {
-                if (!card_dealing_audio.current) {
-                  reject(new Error("audio file is not set"));
-                } else {
-                  card_dealing_audio.current.onended = resolve;
-                }
+                // @ts-ignore
+                media_ref.current.card_dealing_sound.onended = resolve;
               });
-              card_dealing_audio.current?.play();
-              return card_dealing_audio_promise;
+              // @ts-ignore
+              media_ref.current?.card_dealing_sound.play();
+              return card_dealing_sound_promise;
             }
-            (async function () {
-              for (let i = 0; i <= active_poker_players.length - 1; i++) {
-                await handleCardDealingEffect();
-              }
-            })();
+            if (media_ref.current.card_dealing_sound) {
+              media_ref.current.card_dealing_sound.playbackRate = 1.5;
+              (async function () {
+                for (let i = 0; i <= active_poker_players.length - 1; i++) {
+                  await handleCardDealingEffect();
+                }
+              })();
+            }
           },
           stagger: {
             each: 0.2,
@@ -176,4 +186,4 @@ function useCardDealingAnimation({
   }, [active_poker_players.length]);
 }
 
-export { useSeatRotatingAnimation, useCardDealingAnimation };
+export { useLoadMedia, useSeatRotatingAnimation, useCardDealingAnimation };

@@ -23,9 +23,18 @@ const HoleCardNodesMapContext = createContext<
 >({
   current: null,
 });
+const MediaContext = createContext<
+  MutableRefObject<{
+    player_turn_sound?: HTMLAudioElement;
+    card_dealing_sound?: HTMLAudioElement;
+  }>
+>({
+  current: {},
+});
 
 export {
   UttranceContext,
   PokerInviteDialogTimeOutContext,
   HoleCardNodesMapContext,
+  MediaContext,
 };

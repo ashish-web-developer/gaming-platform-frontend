@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { createPortal } from "react-dom";
 // types
 import type { FC } from "react";
@@ -45,7 +45,7 @@ import gsap from "gsap";
 import { useSeatRotatingAnimation } from "@/hooks/poker/poker.hook";
 
 // context
-import { HoleCardNodesMapContext } from "context";
+import { HoleCardNodesMapContext, MediaContext } from "context";
 
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
@@ -60,6 +60,7 @@ const PokerTable: FC<IProps> = ({
   updateShowWaitingBanner,
 }) => {
   const container_ref = useRef<HTMLDivElement>(null);
+  const media_ref = useContext(MediaContext);
   const hole_card_nodes_ref = useRef<Map<string, HTMLDivElement> | null>(null);
   const deck = useAppSelector(Deck);
   const { id: user_id } = useAppSelector(User) || {};
@@ -112,6 +113,12 @@ const PokerTable: FC<IProps> = ({
       });
     }
   );
+
+  useEffect(() => {
+    if (bettor_id == user_id && media_ref.current.player_turn_sound) {
+      media_ref.current.player_turn_sound.play();
+    }
+  }, [bettor_id, user_id]);
 
   return (
     <HoleCardNodesMapContext.Provider value={hole_card_nodes_ref}>
