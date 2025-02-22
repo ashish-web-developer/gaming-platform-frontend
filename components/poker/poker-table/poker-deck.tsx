@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import { forwardRef, useRef } from "react";
+import { useRef } from "react";
 // types
-import type { ForwardRefRenderFunction } from "react";
-import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { FC } from "react";
 import type { IDeckType } from "@/types/store/slice/poker";
 
 // local components
@@ -20,19 +19,16 @@ const StyledDeckContainer = styled.div`
   position: absolute;
   left: 45%;
   top: 95px;
-  visibility: hidden;
   & > div {
     position: absolute;
   }
 `;
 
-const PokerDeck: ForwardRefRenderFunction<
-  WeakMap<IPokerPlayer, HTMLDivElement>,
-  {
-    deck: IDeckType;
-  }
-> = ({ deck }, player_with_node_ref) => {
-  const deck_node_ref = useRef<Map<string, HTMLDivElement>>(new Map());
+const PokerDeck: FC<{
+  deck: IDeckType;
+  updateShowHoleCards: (val: boolean) => void;
+}> = ({ deck, updateShowHoleCards }) => {
+  const deck_node_ref = useRef<Map<string, HTMLDivElement>>();
   const active_poker_players = useAppSelector(activePokerPlayers);
   const { id: user_id } = useAppSelector(User) || {};
   const [card1, card2] =
@@ -40,10 +36,10 @@ const PokerDeck: ForwardRefRenderFunction<
       return player.player_id == user_id;
     })?.hole_cards || [];
 
-  /**
-   * handling card dealing animation
-   */
-  useCardDealingAnimation({ player_with_node_ref, deck_node_ref });
+  useCardDealingAnimation({
+    deck_node_ref,
+    updateShowHoleCards,
+  });
 
   return (
     <StyledDeckContainer>
@@ -52,6 +48,9 @@ const PokerDeck: ForwardRefRenderFunction<
           <PokerCard
             ref_callback={(node) => {
               if (node) {
+                if (!deck_node_ref.current) {
+                  deck_node_ref.current = new Map<string, HTMLDivElement>();
+                }
                 deck_node_ref.current?.set(card_id, node);
               } else {
                 deck_node_ref.current?.delete(card_id);
@@ -59,7 +58,9 @@ const PokerDeck: ForwardRefRenderFunction<
             }}
             scale={0.4}
             {...card}
+            card_id={card_id}
             key={`poker-card-${card_id}`}
+            show_card={false}
             is_flipped={
               card_id == card1?.card_id || card_id == card2?.card_id
                 ? true
@@ -71,4 +72,4 @@ const PokerDeck: ForwardRefRenderFunction<
     </StyledDeckContainer>
   );
 };
-export default forwardRef(PokerDeck);
+export default PokerDeck;

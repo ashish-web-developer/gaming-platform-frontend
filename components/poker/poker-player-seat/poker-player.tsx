@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { forwardRef, useRef, useContext, useEffect } from "react";
+import { useRef, useEffect, useContext } from "react";
 
 // types
-import type { ForwardRefRenderFunction } from "react";
+import type { FC } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 
 // styled components
@@ -28,40 +28,33 @@ import { useAppSelector } from "@/hooks/redux.hook";
 import { User } from "@/store/slice/login.slice";
 
 // context
-import { CardDealingAnimationContext } from "context";
+import { HoleCardNodesMapContext } from "context";
 
-const PokerPlayer: ForwardRefRenderFunction<
-  HTMLDivElement,
-  {
-    player: IPokerPlayer | null;
-    seat_index: number;
-    dealer_id: number | null;
-    bettor_id: number | null;
-    profileAnimationHandler: (detail_container: HTMLDivElement) => void;
-    cardHoverHandler?: (
-      node: HTMLDivElement,
-      event_type: "enter" | "leave"
-    ) => void;
-  }
-> = (
-  {
-    player,
-    seat_index,
-    dealer_id,
-    bettor_id,
-    profileAnimationHandler,
-    cardHoverHandler,
-  },
-  container_ref
-) => {
+const PokerPlayer: FC<{
+  player: IPokerPlayer | null;
+  seat_index: number;
+  dealer_id: number | null;
+  bettor_id: number | null;
+  show_hole_cards: boolean;
+  profileAnimationHandler: (detail_container: HTMLDivElement) => void;
+  cardHoverHandler?: (
+    node: HTMLDivElement,
+    event_type: "enter" | "leave"
+  ) => void;
+}> = ({
+  player,
+  seat_index,
+  dealer_id,
+  bettor_id,
+  show_hole_cards,
+  profileAnimationHandler,
+  cardHoverHandler,
+}) => {
   const players_details_ref = useRef<HTMLDivElement>(null);
   const avatar_url = useAvatarUrl(player?.user ?? null);
   const { id: user_id } = useAppSelector(User) || {};
   const is_auth = player?.player_id == user_id;
-  const hole_cards_container = useRef<HTMLDivElement>(null);
-  const { is_card_dealing_animation_completed } = useContext(
-    CardDealingAnimationContext
-  );
+  const hole_card_nodes_ref = useContext(HoleCardNodesMapContext);
 
   useEffect(() => {
     if (players_details_ref.current) {
@@ -72,10 +65,9 @@ const PokerPlayer: ForwardRefRenderFunction<
   return (
     <StyledPokerPlayerWrapper
       $is_dealer={!!dealer_id && !!player && player?.player_id == dealer_id}
-      id="player"
-      ref={container_ref}
       $background_url={player ? avatar_url : null}
       $seat_index={seat_index}
+      className="poker-player-container"
     >
       {player && (
         <>
@@ -85,22 +77,33 @@ const PokerPlayer: ForwardRefRenderFunction<
               $ {player.total_chips_left} K
             </StyledPlayerAmount>
           </StyledPokerPlayerDetails>
-          <StyledHoleCardWrapper
-            className="hole-cards-container"
-            ref={hole_cards_container}
-          >
-            {is_card_dealing_animation_completed &&
-              player.hole_cards?.map(({ card_id, ...card }) => {
-                return (
-                  <PokerCard
-                    key={`card-${card_id}`}
-                    scale={0.4}
-                    {...card}
-                    is_flipped={is_auth ? true : false}
-                    cardHoverHandler={cardHoverHandler}
-                  />
-                );
-              })}
+          <StyledHoleCardWrapper>
+            {player.hole_cards?.map(({ card_id, ...card }) => {
+              return (
+                <PokerCard
+                  key={`card-${card_id}`}
+                  scale={0.4}
+                  {...card}
+                  card_id={card_id}
+                  show_card={show_hole_cards}
+                  is_flipped={is_auth ? true : false}
+                  cardHoverHandler={cardHoverHandler}
+                  ref_callback={(node) => {
+                    if (node) {
+                      if (!hole_card_nodes_ref.current) {
+                        hole_card_nodes_ref.current = new Map<
+                          string,
+                          HTMLDivElement
+                        >();
+                      }
+                      hole_card_nodes_ref.current.set(card_id, node);
+                    } else {
+                      hole_card_nodes_ref.current?.delete(card_id);
+                    }
+                  }}
+                />
+              );
+            })}
           </StyledHoleCardWrapper>
           {player.current_betted_amount && (
             <StyledAmountBettedWrapper $seat_index={seat_index}>
@@ -121,4 +124,4 @@ const PokerPlayer: ForwardRefRenderFunction<
     </StyledPokerPlayerWrapper>
   );
 };
-export default forwardRef(PokerPlayer);
+export default PokerPlayer;

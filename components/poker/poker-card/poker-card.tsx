@@ -39,6 +39,8 @@ const PokerCard: FC<{
   scale?: number;
   suit: ICardSuit;
   rank: ICardRank;
+  card_id: string;
+  show_card?: boolean;
   ref_callback?: (node: HTMLDivElement | null) => void;
   cardHoverHandler?: (
     node: HTMLDivElement,
@@ -49,6 +51,8 @@ const PokerCard: FC<{
   scale,
   suit,
   rank,
+  card_id,
+  show_card = true,
   ref_callback,
   cardHoverHandler,
 }) => {
@@ -57,6 +61,8 @@ const PokerCard: FC<{
 
   return (
     <StyledContainer
+      $hide={!show_card}
+      data-flip-id={card_id}
       ref={(node) => {
         container_ref.current = node;
         ref_callback?.(node);

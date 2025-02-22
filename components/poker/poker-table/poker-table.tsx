@@ -18,6 +18,7 @@ import {
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
 import PokerDeck from "@/components/poker/poker-table/poker-deck";
+import PokerSlider from "../poker-slider/poker-slider";
 const PokerActionCta = dynamic(
   () => import("@/components/poker/poker-table/poker-action-cta"),
   {
@@ -29,26 +30,22 @@ const PokerActionCta = dynamic(
 import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
 
 // redux
-import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { useAppSelector } from "@/hooks/redux.hook";
 import { User } from "@/store/slice/login.slice";
 import {
   Deck,
   bettorId,
   showBuyInModal,
-  triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
 
 // gsap
 import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
-import MotionPathPlugin from "gsap/MotionPathPlugin";
-import Flip from "gsap/Flip";
-import PokerSlider from "../poker-slider/poker-slider";
+
+// hooks
+import { useSeatRotatingAnimation } from "@/hooks/poker/poker.hook";
 
 // context
-import { CardDealingAnimationContext } from "context";
-
-gsap.registerPlugin(MotionPathPlugin, Flip);
+import { HoleCardNodesMapContext } from "context";
 
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
@@ -62,79 +59,32 @@ const PokerTable: FC<IProps> = ({
   time_left,
   updateShowWaitingBanner,
 }) => {
-  const dispatch = useAppDispatch();
   const container_ref = useRef<HTMLDivElement>(null);
-  const player_containers_ref = useRef<Set<HTMLDivElement | null>>(new Set());
-  const players_with_node_ref = useRef<WeakMap<IPokerPlayer, HTMLDivElement>>(
-    new WeakMap()
-  );
+  const hole_card_nodes_ref = useRef<Map<string, HTMLDivElement> | null>(null);
   const deck = useAppSelector(Deck);
   const { id: user_id } = useAppSelector(User) || {};
   const bettor_id = useAppSelector(bettorId);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
-  const [
-    is_card_dealing_animation_completed,
-    setIsCardDealingAnimationCompleted,
-  ] = useState(false);
-
-  const { contextSafe } = useGSAP(
-    () => {
-      const players_position = [
-        0.897, 0.797, 0.693, 0.591, 0.495, 0.396, 0.29, 0.19, 0.09,
-      ];
-      const players_containers = Array.from(
-        player_containers_ref.current.values()
-      );
-      gsap.set(players_containers, {
-        scale: 1.5,
-        borderWidth: 10,
-      });
-      /**
-       * Animation will rotate the seat around the table in
-       * random direction according the svg path
-       */
-      players_containers.forEach((container, index) => {
-        gsap.fromTo(
-          container,
-          {
-            opacity: 0,
-          },
-          {
-            motionPath: {
-              path: "#path",
-              align: "#path",
-              alignOrigin: [0.5, 0.5],
-              start: gsap.utils.random(0, 1),
-              end: players_position[index],
-            },
-            opacity: 1,
-            duration: 3,
-            delay: 0.1,
-          }
-        );
-      });
-    },
-    { scope: container_ref }
-  );
+  const [show_hole_cards, setShowHoleCards] = useState(false);
+  const contextSafe = useSeatRotatingAnimation({
+    scope: container_ref,
+  });
 
   /**
    * This animation will get
    * run on the close of buy in modal
    */
   const profileAnimation = contextSafe(() => {
-    const animation = new Promise((resolve, reject) => {
-      gsap
-        .timeline({
-          onComplete: resolve,
-        })
-        .to(Array.from(player_containers_ref.current.values()), {
-          scale: 1,
-          duration: 0.6,
-          borderWidth: 6,
-        });
+    const player_containers = Array.from(
+      document.getElementsByClassName("poker-player-container")
+    );
+    gsap.to(player_containers, {
+      scale: 1,
+      duration: 0.6,
+      borderWidth: 6,
     });
-    return animation;
   });
+
   const profileDetailsAnimation = contextSafe(
     (detail_container: HTMLDivElement) => {
       gsap.fromTo(
@@ -164,14 +114,7 @@ const PokerTable: FC<IProps> = ({
   );
 
   return (
-    <CardDealingAnimationContext.Provider
-      value={{
-        is_card_dealing_animation_completed,
-        updateCardDealingAnimation(val) {
-          setIsCardDealingAnimationCompleted(val);
-        },
-      }}
-    >
+    <HoleCardNodesMapContext.Provider value={hole_card_nodes_ref}>
       <div ref={container_ref}>
         {show_buy_in_modal &&
           createPortal(
@@ -203,22 +146,7 @@ const PokerTable: FC<IProps> = ({
                 seat_index={index}
                 key={`player-${index}`}
                 bettor_id={bettor_id}
-                ref={(node) => {
-                  if (node) {
-                    player_containers_ref.current.add(node);
-                    if (player) {
-                      players_with_node_ref.current.set(
-                        player,
-                        node as HTMLDivElement
-                      );
-                    }
-                  } else {
-                    player_containers_ref.current.delete(node);
-                    if (player) {
-                      players_with_node_ref.current.delete(player);
-                    }
-                  }
-                }}
+                show_hole_cards={show_hole_cards}
                 profileAnimationHandler={profileDetailsAnimation}
                 cardHoverHandler={
                   player?.player_id == user_id
@@ -267,7 +195,14 @@ const PokerTable: FC<IProps> = ({
             fill={true}
             alt="poker-table"
           />
-          {deck.length && <PokerDeck deck={deck} ref={players_with_node_ref} />}
+          {deck.length && (
+            <PokerDeck
+              deck={deck}
+              updateShowHoleCards={(val) => {
+                setShowHoleCards(val);
+              }}
+            />
+          )}
 
           <StyledCommunityCardsWrapper>
             {/* {new Array(5).fill(0).map((_, index) => {
@@ -283,7 +218,7 @@ const PokerTable: FC<IProps> = ({
         )} */}
         </StyledImageContainer>
       </div>
-    </CardDealingAnimationContext.Provider>
+    </HoleCardNodesMapContext.Provider>
   );
 };
 

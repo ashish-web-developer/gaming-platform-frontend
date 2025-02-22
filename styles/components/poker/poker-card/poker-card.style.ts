@@ -3,6 +3,7 @@ import styled from "styled-components";
 const StyledContainer = styled.div<{
   $is_flipped: boolean;
   $scale?: number;
+  $hide: boolean;
 }>`
   width: 100px;
   height: 150px;
@@ -13,6 +14,7 @@ const StyledContainer = styled.div<{
   justify-content: center;
   align-items: center;
   scale: ${(props) => props.$scale ?? 1};
+  visibility: ${(props) => (props.$hide ? "hidden" : "visible")};
 `;
 
 const StyledDesignPattern = styled.div`

@@ -1,9 +1,8 @@
-import { useEffect, useContext } from "react";
-
+import { useContext, useEffect } from "react";
 // types
-import type { ForwardedRef, MutableRefObject } from "react";
+import type { MutableRefObject, RefObject } from "react";
+import type { ContextSafeFunc } from "@gsap/react";
 import type { IDeckType } from "@/types/store/slice/poker";
-import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 
 // redux
 import { useAppSelector } from "../redux.hook";
@@ -11,133 +10,138 @@ import { activePokerPlayers } from "@/store/slice/poker/poker.slice";
 
 // gsap
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import MotionPathPlugin from "gsap/MotionPathPlugin";
 import Flip from "gsap/Flip";
 
+gsap.registerPlugin(Flip, MotionPathPlugin);
+
 // context
-import { CardDealingAnimationContext } from "context";
+import { HoleCardNodesMapContext } from "context";
 
-gsap.registerPlugin(Flip);
+/**
+ * Rotating the player seat in random direction
+ * for the first time, when user joins the room
+ */
 
-function useCardDealingAnimation({
-  player_with_node_ref,
-  deck_node_ref,
+function useSeatRotatingAnimation({
+  scope,
 }: {
-  player_with_node_ref: ForwardedRef<WeakMap<IPokerPlayer, HTMLDivElement>>;
-  deck_node_ref: MutableRefObject<Map<string, HTMLDivElement>>;
-}) {
-  const active_poker_players = useAppSelector(activePokerPlayers);
-  const { is_card_dealing_animation_completed, updateCardDealingAnimation } =
-    useContext(CardDealingAnimationContext);
-  useEffect(() => {
-    let batch: FlipBatch;
-    if (active_poker_players.length && !is_card_dealing_animation_completed) {
-      batch = Flip.batch("card-animation");
-      batch.add({
-        /**
-         * this will return the previous
-         * state of the cards_node
-         *
-         */
-        getState() {
-          /**
-           * reducing hole cards of all the player to an array
-           * then getting the node of those hole cards inside the
-           * deck container,then based on those cards_node we are
-           * getting the flip state
-           */
-          const hole_cards_of_all_player =
-            active_poker_players.reduce<IDeckType>((hole_cards, player) => {
-              if (player.hole_cards) {
-                return [...hole_cards, ...player.hole_cards];
-              }
-              return hole_cards;
-            }, []);
-
-          // converting hole_cards to card node
-          const card_node = hole_cards_of_all_player.map((card) => {
-            return deck_node_ref.current?.get(card.card_id) as HTMLDivElement;
-          });
-          return Flip.getState(card_node);
-        },
-
-        /**
-         * Here we are doing all the dom related manipulation
-         */
-        setState() {
-          /**
-           * getting hole cards of all the player from the
-           * deck and appending those hole cards in their respective
-           * poker player position inside hole cards container
-           * with some styling
-           */
-          active_poker_players.forEach((player) => {
-            if (
-              typeof player_with_node_ref !== "function" &&
-              player_with_node_ref?.current
-            ) {
-              const player_container_node =
-                player_with_node_ref.current.get(player);
-              const hole_cards_container_node =
-                player_container_node?.getElementsByClassName(
-                  "hole-cards-container"
-                );
-              if (hole_cards_container_node) {
-                player.hole_cards?.forEach((card, index) => {
-                  let card_node = deck_node_ref.current.get(
-                    card.card_id
-                  ) as HTMLDivElement;
-                  card_node.setAttribute("is-animated", "true");
-                  if (index == 0) {
-                    card_node.style.rotate = "-6deg";
-                  } else {
-                    card_node.style.rotate = "6deg";
-                    card_node.style.left = "-16px";
-                  }
-                  hole_cards_container_node[0].appendChild(card_node);
-                });
-              }
-            }
-          });
-        },
-        animate(self) {
-          Flip.from(self.state, {
-            ease: "expo.inOut",
-            stagger: {
-              each: 0.2,
-            },
-          });
-        },
-        onComplete(self) {
-          /**
-           * though we are inside oncomplete method and we should
-           * remove those card which we appended directly without
-           * use of settimeout but this method is a bit misleading
-           * it get run before animation get completed because
-           * of which if we directly remove the cards from the hole cards
-           * container then animation is breaking, therefore we are just
-           * waiting for some time bofore animation finish and then remove
-           * the cards from the hole cards container
-           */
-          setTimeout(() => {
-            Array.from(
-              document.getElementsByClassName("hole-cards-container")
-            ).forEach((container) => {
-              Array.from(container.children).forEach((node) => {
-                if (node.getAttribute("is-animated") == "true") {
-                  container.removeChild(node);
-                }
-              });
-            });
-            updateCardDealingAnimation?.(true);
-          }, 0.6 * active_poker_players.length * 1000);
-        },
+  scope: RefObject<HTMLDivElement>;
+}): ContextSafeFunc {
+  const { contextSafe } = useGSAP(
+    () => {
+      const players_position = [
+        0.897, 0.797, 0.693, 0.591, 0.495, 0.396, 0.29, 0.19, 0.09,
+      ];
+      const player_containers = Array.from(
+        document.getElementsByClassName("poker-player-container")
+      );
+      gsap.set(player_containers, {
+        scale: 1.5,
+        borderWidth: 10,
       });
-      batch.run();
-    }
-    return () => {
-      batch?.clear();
-    };
-  }, [active_poker_players.length, is_card_dealing_animation_completed]);
+      /**
+       * Animation will rotate the seat around the table in
+       * random direction according the svg path
+       */
+      player_containers.forEach((container, index) => {
+        gsap.fromTo(
+          container,
+          {
+            opacity: 0,
+          },
+          {
+            motionPath: {
+              path: "#path",
+              align: "#path",
+              alignOrigin: [0.5, 0.5],
+              start: gsap.utils.random(0, 1),
+              end: players_position[index],
+            },
+            opacity: 1,
+            duration: 3,
+            delay: 0.1,
+          }
+        );
+      });
+    },
+    { scope }
+  );
+  return contextSafe;
 }
 
-export { useCardDealingAnimation };
+function useCardDealingAnimation({
+  deck_node_ref,
+  updateShowHoleCards,
+}: {
+  deck_node_ref: MutableRefObject<Map<string, HTMLDivElement> | undefined>;
+  updateShowHoleCards: (val: boolean) => void;
+}) {
+  const active_poker_players = useAppSelector(activePokerPlayers);
+  const hole_card_nodes_ref = useContext(HoleCardNodesMapContext);
+  useEffect(() => {
+    const batch = Flip.batch("card-dealing-animation");
+    batch.add({
+      getState() {
+        /**
+         * reducing hole cards of all the player to an array
+         * then getting the node of those hole cards inside the
+         * deck container,then based on those cards_node we are
+         * getting the flip state
+         */
+        const hole_cards_of_all_player = active_poker_players.reduce<IDeckType>(
+          (hole_cards, player) => {
+            if (player.hole_cards) {
+              return [...hole_cards, ...player.hole_cards];
+            }
+            return hole_cards;
+          },
+          []
+        );
+
+        // converting hole_cards to card node
+        const card_node = hole_cards_of_all_player.map((card) => {
+          return deck_node_ref.current?.get(card.card_id) as HTMLDivElement;
+        });
+        return Flip.getState(card_node);
+      },
+      setState() {
+        updateShowHoleCards(true);
+      },
+      animate(self) {
+        // we are reducing array to the node of hole cards of each player
+        const target_element = active_poker_players.reduce<HTMLDivElement[]>(
+          (prev, player) => {
+            if (player.hole_cards) {
+              const hole_card_node = player.hole_cards?.map(
+                (card) =>
+                  hole_card_nodes_ref.current?.get(
+                    card.card_id
+                  ) as HTMLDivElement
+              );
+
+              return [...prev, ...hole_card_node];
+            }
+            return prev;
+          },
+          []
+        );
+        Flip.from(self.state, {
+          targets: target_element,
+          ease: "expo.inOut",
+          spin: true,
+          stagger: {
+            each: 0.2,
+          },
+        });
+      },
+    });
+    batch.run();
+    return () => {
+      batch.clear();
+    };
+  }, [active_poker_players.length]);
+}
+
+export { useSeatRotatingAnimation, useCardDealingAnimation };

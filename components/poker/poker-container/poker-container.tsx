@@ -110,7 +110,6 @@ const PokerContainer: FC = () => {
   const [show_waiting_banner, setShowWaitingBanner] = useState(false);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const room_created_at = useAppSelector(roomCreatedAt);
-  console.log("value of room_created_at", room_created_at);
   const seconds = Math.floor(
     new Date(room_created_at as string).getTime() / 1000 +
       60 -

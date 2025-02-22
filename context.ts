@@ -18,15 +18,14 @@ const PokerInviteDialogTimeOutContext = createContext<
   MutableRefObject<ReturnType<typeof setTimeout> | undefined>
 >({ current: undefined });
 
-const CardDealingAnimationContext = createContext<{
-  is_card_dealing_animation_completed: boolean;
-  updateCardDealingAnimation?: (val: boolean) => void;
-}>({
-  is_card_dealing_animation_completed: false,
+const HoleCardNodesMapContext = createContext<
+  MutableRefObject<Map<string, HTMLDivElement> | null>
+>({
+  current: null,
 });
 
 export {
   UttranceContext,
   PokerInviteDialogTimeOutContext,
-  CardDealingAnimationContext,
+  HoleCardNodesMapContext,
 };
