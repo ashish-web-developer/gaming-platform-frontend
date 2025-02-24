@@ -209,6 +209,7 @@ const initialState: IPokerInitialState = {
   community_cards: [],
   show_buy_in_modal: true,
   min_amount_to_be_betted: null,
+  min_amount_to_be_raised: null,
   small_blind: 5,
   chips_in_pot: 0,
   deck: [],
@@ -321,6 +322,7 @@ const pokerSlice = createSlice({
       state.dealer_id = action.payload.dealer_id;
       state.chips_in_pot = action.payload.chips_in_pot;
       state.min_amount_to_be_betted = action.payload.min_amount_to_be_betted;
+      state.min_amount_to_be_raised = action.payload.min_amount_to_be_raised;
       state.community_cards = action.payload.community_cards;
     },
     updateRoomCreatedAt: (state, action: PayloadAction<string | null>) => {
@@ -365,6 +367,9 @@ export const bettorId = (state: RootState) => state.poker.bettor_id;
 export const chipsInPot = (state: RootState) => state.poker.chips_in_pot;
 export const minAmountToBeBetted = (state: RootState) =>
   state.poker.min_amount_to_be_betted;
+
+export const minAmountToBeRaised = (state: RootState) =>
+  state.poker.min_amount_to_be_raised;
 export const Deck = (state: RootState) => state.poker.deck;
 export const communityCards = (state: RootState) => state.poker.community_cards;
 export const roomCreatedAt = (state: RootState) => state.poker.room_created_at;

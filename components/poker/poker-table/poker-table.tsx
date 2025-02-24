@@ -17,8 +17,20 @@ import {
 // local components
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
-import PokerDeck from "@/components/poker/poker-table/poker-deck";
-import PokerSlider from "../poker-slider/poker-slider";
+const PokerDeck = dynamic(
+  () => import("@/components/poker/poker-table/poker-deck"),
+  {
+    ssr: false,
+  }
+);
+
+const PokerSlider = dynamic(
+  () => import("@/components/poker/poker-slider/poker-slider"),
+  {
+    ssr: false,
+  }
+);
+
 const PokerActionCta = dynamic(
   () => import("@/components/poker/poker-table/poker-action-cta"),
   {
@@ -36,6 +48,7 @@ import {
   Deck,
   bettorId,
   showBuyInModal,
+  showPokerSlider,
 } from "@/store/slice/poker/poker.slice";
 
 // gsap
@@ -66,10 +79,14 @@ const PokerTable: FC<IProps> = ({
   const { id: user_id } = useAppSelector(User) || {};
   const bettor_id = useAppSelector(bettorId);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
+  const show_poker_slider = useAppSelector(showPokerSlider);
   const [show_hole_cards, setShowHoleCards] = useState(false);
   const contextSafe = useSeatRotatingAnimation({
     scope: container_ref,
   });
+  const auth_player = poker_players.find(
+    (player) => player?.player_id == user_id
+  );
 
   /**
    * This animation will get
@@ -216,13 +233,15 @@ const PokerTable: FC<IProps> = ({
             return <PokerCard key={`poker-${index}`} scale={0.5} />;
           })} */}
           </StyledCommunityCardsWrapper>
-          {user_id == bettor_id && <PokerActionCta />}
+          {!show_poker_slider && user_id == bettor_id && (
+            <PokerActionCta auth_player={auth_player as IPokerPlayer} />
+          )}
 
-          {/* {user_id == bettor_id && (
-          <StyledPokerSliderWrapper>
-            <PokerSlider />
-          </StyledPokerSliderWrapper>
-        )} */}
+          {show_poker_slider && user_id == bettor_id && (
+            <StyledPokerSliderWrapper>
+              <PokerSlider auth_player={auth_player as IPokerPlayer} />
+            </StyledPokerSliderWrapper>
+          )}
         </StyledImageContainer>
       </div>
     </HoleCardNodesMapContext.Provider>

@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import Image from "next/image";
 
+// local components
+import PokerButton from "@/components/poker/poker-common/poker-button";
+
 const StyledBackdrop = styled.div`
   position: fixed;
   top: 0;
@@ -134,7 +137,7 @@ const StyledBlindsAmount = styled.span`
   color: #fff;
 `;
 
-const StyledBuyInCta = styled.button`
+const StyledBuyInCta = styled(PokerButton)`
   font-family: ${({ theme }) => theme.fontFamily.lobster};
   font-size: 1rem;
   color: #fff;

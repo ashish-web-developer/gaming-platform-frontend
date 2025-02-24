@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import Image from "next/image";
 
+// local components
+import PokerButton from "@/components/poker/poker-common/poker-button";
+
 const StyledActionCtaWrapper = styled.div`
   position: absolute;
   left: 50%;
@@ -11,7 +14,7 @@ const StyledActionCtaWrapper = styled.div`
   gap: 12px;
 `;
 
-const StyledActionCta = styled.button`
+const StyledActionCta = styled(PokerButton)`
   font-size: 1rem;
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   line-height: 1;

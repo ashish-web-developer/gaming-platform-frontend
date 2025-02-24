@@ -3,6 +3,9 @@ import styled from "styled-components";
 // slider
 import Slider from "react-rangeslider";
 
+// local components
+import PokerButton from "@/components/poker/poker-common/poker-button";
+
 const StyledSliderContainer = styled.div`
   display: flex;
   align-items: center;
@@ -38,7 +41,7 @@ const StyledSlider = styled(Slider)`
     & .rangeslider__handle-tooltip {
       width: auto;
       height: auto;
-      margin-top:-10px;
+      margin-top: -10px;
       padding: 6px 1rem;
       background: rgba(239, 35, 60, 0.1);
       border: 2px solid ${({ theme }) => theme.palette.info.main};
@@ -56,7 +59,7 @@ const StyledSlider = styled(Slider)`
   }
 `;
 
-const StyledConfirmCta = styled.button`
+const StyledConfirmCta = styled(PokerButton)`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 1rem;
   height: 40px;
@@ -65,8 +68,8 @@ const StyledConfirmCta = styled.button`
   border: 2px solid ${({ theme }) => theme.palette.info.main};
   border-radius: 0px 30px 30px 0px;
   color: ${({ theme }) => theme.palette.info.main};
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
 `;
 
 export {

@@ -32,7 +32,8 @@ type IPokerInitialState = {
   community_cards: IDeckType | null;
   show_buy_in_modal: boolean;
   small_blind: number; // It will be stored in k
-  min_amount_to_be_betted: number | null; // It will stored in k
+  min_amount_to_be_betted: number | null; // It will be stored in k
+  min_amount_to_be_raised: number | null; // It will be stored in k
   chips_in_pot: number; // It will bee stored in k
   bettor_id: number | null;
   deck: IDeckType;
@@ -45,6 +46,7 @@ type IPokerRoom = {
   seat_available: ISeatType | null;
   no_of_players_betted: number;
   min_amount_to_be_betted: number;
+  min_amount_to_be_raised: number; // It will be stored in k
   community_cards: IDeckType;
   dealer_id: number;
   bettor_id: number | null;

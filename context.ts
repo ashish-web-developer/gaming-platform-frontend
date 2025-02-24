@@ -27,6 +27,7 @@ const MediaContext = createContext<
   MutableRefObject<{
     player_turn_sound?: HTMLAudioElement;
     card_dealing_sound?: HTMLAudioElement;
+    button_click_sound?: HTMLAudioElement;
   }>
 >({
   current: {},

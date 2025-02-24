@@ -23,6 +23,7 @@ function useLoadMedia() {
   const media_ref = useRef<{
     player_turn_sound?: HTMLAudioElement;
     card_dealing_sound?: HTMLAudioElement;
+    button_click_sound?: HTMLAudioElement;
   }>({});
   useEffect(() => {
     media_ref.current.player_turn_sound = new Audio(
@@ -30,6 +31,9 @@ function useLoadMedia() {
     );
     media_ref.current.card_dealing_sound = new Audio(
       "/poker/media/card-dealing-sound.mp3"
+    );
+    media_ref.current.button_click_sound = new Audio(
+      "/poker/media/button-click-sound.mp3"
     );
   }, []);
   return media_ref;
