@@ -1,3 +1,4 @@
+import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRef, useState, useEffect, useContext } from "react";
 import { createPortal } from "react-dom";
@@ -12,11 +13,20 @@ import {
   StyledSvgWrapper,
   StyledCommunityCardsWrapper,
   StyledPokerSliderWrapper,
+  StyledChipsInPotWrapper,
+  StyledChipsInPot,
 } from "@/styles/components/poker/poker-table/poker-table.style";
 
 // local components
 import PokerPlayer from "@/components/poker/poker-player-seat/poker-player";
 import PokerBuyInDialog from "@/components/poker/poker-buy-in-dialog/poker-buy-in-dialog";
+const PokerCard = dynamic(
+  () => import("@/components/poker/poker-card/poker-card"),
+  {
+    ssr: false,
+  }
+);
+
 const PokerDeck = dynamic(
   () => import("@/components/poker/poker-table/poker-deck"),
   {
@@ -47,6 +57,8 @@ import { User } from "@/store/slice/login.slice";
 import {
   Deck,
   bettorId,
+  communityCards,
+  chipsInPot,
   showBuyInModal,
   showPokerSlider,
 } from "@/store/slice/poker/poker.slice";
@@ -76,6 +88,8 @@ const PokerTable: FC<IProps> = ({
   const media_ref = useContext(MediaContext);
   const hole_card_nodes_ref = useRef<Map<string, HTMLDivElement> | null>(null);
   const deck = useAppSelector(Deck);
+  const community_cards = useAppSelector(communityCards);
+  const chips_in_pot = useAppSelector(chipsInPot);
   const { id: user_id } = useAppSelector(User) || {};
   const bettor_id = useAppSelector(bettorId);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
@@ -229,10 +243,30 @@ const PokerTable: FC<IProps> = ({
           )}
 
           <StyledCommunityCardsWrapper>
-            {/* {new Array(5).fill(0).map((_, index) => {
-            return <PokerCard key={`poker-${index}`} scale={0.5} />;
-          })} */}
+            {community_cards?.map(({ card_id, ...card }) => {
+              return (
+                <PokerCard
+                  scale={0.4}
+                  key={`card-${card_id}`}
+                  {...card}
+                  card_id={card_id}
+                  cardHoverHandler={cardOnHoverAnimation}
+                />
+              );
+            })}
           </StyledCommunityCardsWrapper>
+          {!!chips_in_pot && (
+            <StyledChipsInPotWrapper>
+              <Image
+                src="/poker/poker-player/poker-chips.png"
+                width={16}
+                height={16}
+                alt="poker-chips"
+              />
+
+              <StyledChipsInPot>$ {chips_in_pot} K</StyledChipsInPot>
+            </StyledChipsInPotWrapper>
+          )}
           {!show_poker_slider && user_id == bettor_id && (
             <PokerActionCta auth_player={auth_player as IPokerPlayer} />
           )}

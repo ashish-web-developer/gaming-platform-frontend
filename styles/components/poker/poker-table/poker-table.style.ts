@@ -44,7 +44,7 @@ const StyledCommunityCardsWrapper = styled.div`
   left: 50%;
   top: 95px;
   transform: translateX(-60%);
-  z-index: 2;
+  z-index: 3;
   display: grid;
   grid-template-columns: repeat(5, 50px);
   gap: 8px;
@@ -58,10 +58,37 @@ const StyledPokerSliderWrapper = styled.div`
   top: 375px;
 `;
 
+const StyledChipsInPotWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  top: 330px;
+  background: red;
+  padding: 6px 24px 6px 12px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: flex-start;
+  background: ${({ theme }) => theme.palette.primary.main};
+  border: 2px dashed ${({ theme }) => theme.palette.info.main};
+  border-radius:16px;
+`;
+
+const StyledChipsInPot = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1.125rem;
+  line-height: 1;
+  color: ${({ theme }) => theme.palette.info.main};
+`;
+
 export {
   StyledImageContainer,
   StyledImage,
   StyledSvgWrapper,
   StyledCommunityCardsWrapper,
   StyledPokerSliderWrapper,
+  StyledChipsInPotWrapper,
+  StyledChipsInPot,
 };

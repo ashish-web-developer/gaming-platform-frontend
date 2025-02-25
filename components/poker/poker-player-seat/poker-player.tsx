@@ -55,6 +55,7 @@ const PokerPlayer: FC<{
   const { id: user_id } = useAppSelector(User) || {};
   const is_auth = player?.player_id == user_id;
   const hole_card_nodes_ref = useContext(HoleCardNodesMapContext);
+  const { action_type } = player ?? {};
 
   useEffect(() => {
     if (players_details_ref.current) {
@@ -77,7 +78,7 @@ const PokerPlayer: FC<{
               $ {player.total_chips_left} K
             </StyledPlayerAmount>
           </StyledPokerPlayerDetails>
-          <StyledHoleCardWrapper>
+          <StyledHoleCardWrapper $is_folded={action_type == "fold"}>
             {player.hole_cards?.map(({ card_id, ...card }) => {
               return (
                 <PokerCard

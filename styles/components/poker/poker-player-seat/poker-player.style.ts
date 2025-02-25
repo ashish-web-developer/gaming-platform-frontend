@@ -91,12 +91,15 @@ const StyledPokerPlayerWrapper = styled.div<IStyledPokerPlayerWrapperProps>`
   }
 `;
 
-const StyledHoleCardWrapper = styled.div`
+const StyledHoleCardWrapper = styled.div<{
+  $is_folded: boolean;
+}>`
   display: grid;
   grid-template-columns: repeat(2, 40px);
   position: relative;
   transform: rotate(16deg);
   z-index: 2;
+  opacity: ${(props) => (props.$is_folded ? "0.4" : "1")};
   & > :first-child {
     rotate: -6deg;
   }

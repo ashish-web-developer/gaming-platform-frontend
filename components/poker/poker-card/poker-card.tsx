@@ -67,7 +67,6 @@ const PokerCard: FC<{
         container_ref.current = node;
         ref_callback?.(node);
       }}
-      $is_flipped={is_flipped}
       $scale={scale}
       onMouseEnter={(event) =>
         container_ref.current &&

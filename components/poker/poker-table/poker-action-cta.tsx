@@ -21,11 +21,13 @@ const PokerActionCta: FC<{
   auth_player: IPokerPlayer;
 }> = ({ auth_player }) => {
   const dispatch = useAppDispatch();
-  const min_amount_to_betted = useAppSelector(minAmountToBeBetted) as number;
+  const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted) as number;
   const { current_betted_amount = 0 } = auth_player;
 
   const action_type =
-    (current_betted_amount as number) < min_amount_to_betted ? "call" : "check";
+    (current_betted_amount as number) < min_amount_to_be_betted
+      ? "call"
+      : "check";
   return (
     <StyledActionCtaWrapper>
       <StyledActionCta
@@ -52,7 +54,7 @@ const PokerActionCta: FC<{
             triggerActionApi({
               action_type,
               current_betted_amount:
-                action_type == "call" ? min_amount_to_betted : null,
+                action_type == "call" ? min_amount_to_be_betted : null,
             })
           );
         }}
@@ -63,7 +65,11 @@ const PokerActionCta: FC<{
           width={20}
           height={20}
         />
-        {action_type == "call" ? `Call ${min_amount_to_betted}K` : "Check"}
+        {action_type == "call"
+          ? `Call ${
+              min_amount_to_be_betted - (current_betted_amount as number)
+            }K`
+          : "Check"}
       </StyledActionCta>
       <StyledActionCta
         id="poker-raise-cta"

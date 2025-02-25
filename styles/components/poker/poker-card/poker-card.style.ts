@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 const StyledContainer = styled.div<{
-  $is_flipped: boolean;
   $scale?: number;
   $hide: boolean;
 }>`
