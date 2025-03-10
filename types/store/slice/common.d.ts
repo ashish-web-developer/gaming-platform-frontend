@@ -15,7 +15,6 @@ type InitialState = {
 
 type IBaseResponse = {
   success: boolean;
-  whole_deck: IDeckType;
   error?: any;
 };
 

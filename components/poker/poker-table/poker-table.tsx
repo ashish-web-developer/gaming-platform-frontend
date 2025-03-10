@@ -268,12 +268,22 @@ const PokerTable: FC<IProps> = ({
             </StyledChipsInPotWrapper>
           )}
           {!show_poker_slider && user_id == bettor_id && (
-            <PokerActionCta auth_player={auth_player as IPokerPlayer} />
+            <PokerActionCta
+              auth_player={auth_player as IPokerPlayer}
+              updateShowHoleCards={(val) => {
+                setShowHoleCards(val);
+              }}
+            />
           )}
 
           {show_poker_slider && user_id == bettor_id && (
             <StyledPokerSliderWrapper>
-              <PokerSlider auth_player={auth_player as IPokerPlayer} />
+              <PokerSlider
+                auth_player={auth_player as IPokerPlayer}
+                updateShowHoleCards={(val) => {
+                  setShowHoleCards(val);
+                }}
+              />
             </StyledPokerSliderWrapper>
           )}
         </StyledImageContainer>

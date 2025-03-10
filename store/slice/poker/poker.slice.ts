@@ -164,7 +164,6 @@ export const dealHandApi = createAsyncThunk<
         room_id: state.poker.poker_room_id,
       }
     );
-    console.log("api getting called");
     return response.data;
   } catch (error: any) {
     return rejectWithValue(error?.response?.data);
@@ -172,25 +171,34 @@ export const dealHandApi = createAsyncThunk<
 });
 
 export const triggerActionApi = createAsyncThunk<
-  IBaseResponse,
+  IBaseResponse & {
+    start_next_round: boolean;
+  },
   ITriggerActionApiRequest,
   IThunkApiConfig
 >(
   "api/poker/trigger-action",
   async (
     { action_type, current_betted_amount },
-    { getState, rejectWithValue }
+    { getState, rejectWithValue, dispatch }
   ) => {
     try {
       const state = getState();
-      const response: AxiosResponse<IBaseResponse> = await Axios.post(
-        "/poker/trigger-action",
-        {
-          room_id: state.poker.poker_room_id,
-          action_type,
-          current_betted_amount,
+      const response: AxiosResponse<
+        IBaseResponse & {
+          start_next_round: boolean;
         }
-      );
+      > = await Axios.post("/poker/trigger-action", {
+        room_id: state.poker.poker_room_id,
+        action_type,
+        current_betted_amount,
+      });
+      if (response.data.start_next_round) {
+        dispatch(updateDeck([]));
+        setTimeout(() => {
+          dispatch(dealHandApi());
+        }, 3000);
+      }
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data);

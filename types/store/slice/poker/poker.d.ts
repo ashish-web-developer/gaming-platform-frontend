@@ -7,11 +7,13 @@ type IActiveGamingUser = IUsersWithConversation & {
 };
 type ISeatType = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
+type IActionType = "check" | "call" | "raise" | "fold" | null;
+
 type IPokerPlayer = {
   id: number;
   player_id: number;
   room_id: string;
-  action_type: "check" | "call" | "raise" | "fold" | null;
+  action_type: IActionType;
   is_active: boolean;
   seat_number: ISeatType;
   hole_cards: IDeckType | null;
@@ -107,12 +109,13 @@ type IUpdateSeatAvailableResponse = IBaseResponse & {
  * ==== TRIGGER ACTION API =====
  */
 type ITriggerActionApiRequest = {
-  action_type: "fold" | "check" | "call" | "raise";
+  action_type: IActionType;
   current_betted_amount: number | null;
 };
 
 export {
   ISeatType,
+  IActionType,
   IPokerPlayer,
   IPokerRoom,
   ICreatePokerRoomApiResponse,
