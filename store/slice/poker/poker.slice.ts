@@ -194,10 +194,7 @@ export const triggerActionApi = createAsyncThunk<
         current_betted_amount,
       });
       if (response.data.start_next_round) {
-        dispatch(updateDeck([]));
-        setTimeout(() => {
-          dispatch(dealHandApi());
-        }, 3000);
+        dispatch(dealHandApi());
       }
       return response.data;
     } catch (error: any) {

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useEffect, useContext } from "react";
 import { createPortal } from "react-dom";
 // types
 import type { FC } from "react";
@@ -76,12 +76,16 @@ type IProps = {
   poker_players: Array<IPokerPlayer | null>;
   dealer_id: number | null;
   time_left: number;
+  show_hole_cards: boolean;
+  updateShowHoleCards: (val: boolean) => void;
   updateShowWaitingBanner: (val: boolean) => void;
 };
 const PokerTable: FC<IProps> = ({
   poker_players,
   dealer_id,
   time_left,
+  show_hole_cards,
+  updateShowHoleCards,
   updateShowWaitingBanner,
 }) => {
   const container_ref = useRef<HTMLDivElement>(null);
@@ -94,7 +98,6 @@ const PokerTable: FC<IProps> = ({
   const bettor_id = useAppSelector(bettorId);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const show_poker_slider = useAppSelector(showPokerSlider);
-  const [show_hole_cards, setShowHoleCards] = useState(false);
   const contextSafe = useSeatRotatingAnimation({
     scope: container_ref,
   });
@@ -234,12 +237,7 @@ const PokerTable: FC<IProps> = ({
             alt="poker-table"
           />
           {deck.length && (
-            <PokerDeck
-              deck={deck}
-              updateShowHoleCards={(val) => {
-                setShowHoleCards(val);
-              }}
-            />
+            <PokerDeck deck={deck} updateShowHoleCards={updateShowHoleCards} />
           )}
 
           <StyledCommunityCardsWrapper>
@@ -268,22 +266,12 @@ const PokerTable: FC<IProps> = ({
             </StyledChipsInPotWrapper>
           )}
           {!show_poker_slider && user_id == bettor_id && (
-            <PokerActionCta
-              auth_player={auth_player as IPokerPlayer}
-              updateShowHoleCards={(val) => {
-                setShowHoleCards(val);
-              }}
-            />
+            <PokerActionCta auth_player={auth_player as IPokerPlayer} />
           )}
 
           {show_poker_slider && user_id == bettor_id && (
             <StyledPokerSliderWrapper>
-              <PokerSlider
-                auth_player={auth_player as IPokerPlayer}
-                updateShowHoleCards={(val) => {
-                  setShowHoleCards(val);
-                }}
-              />
+              <PokerSlider auth_player={auth_player as IPokerPlayer} />
             </StyledPokerSliderWrapper>
           )}
         </StyledImageContainer>
@@ -294,5 +282,7 @@ const PokerTable: FC<IProps> = ({
 
 export default withPokerTableFunctionality<{
   time_left: number;
+  show_hole_cards: boolean;
+  updateShowHoleCards: (val: boolean) => void;
   updateShowWaitingBanner: (val: boolean) => void;
 }>(PokerTable);

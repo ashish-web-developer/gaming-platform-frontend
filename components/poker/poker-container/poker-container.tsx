@@ -55,7 +55,9 @@ import {
 // context
 import { MediaContext } from "context";
 
-const JoinPokerChannel = () => {
+const JoinPokerChannel: FC<{
+  updateShowHoleCards: (val: boolean) => void;
+}> = ({ updateShowHoleCards }) => {
   const dispatch = useAppDispatch();
   const poker_room_id = useAppSelector(pokerRoomId);
   usePresenceChannel<
@@ -94,7 +96,11 @@ const JoinPokerChannel = () => {
       {
         event: "deck-data-event",
         handler: (data: { deck: IDeckType }) => {
-          dispatch(updateDeck(data.deck));
+          updateShowHoleCards(false);
+          dispatch(updateDeck([]));
+          setTimeout(() => {
+            dispatch(updateDeck(data.deck));
+          }, 3000);
         },
       },
     ],
@@ -112,6 +118,7 @@ const JoinPokerChannel = () => {
 
 const PokerContainer: FC = () => {
   const [show_waiting_banner, setShowWaitingBanner] = useState(false);
+  const [show_hole_cards, setShowHoleCards] = useState(false);
   const show_buy_in_modal = useAppSelector(showBuyInModal);
   const room_created_at = useAppSelector(roomCreatedAt);
   const seconds = Math.floor(
@@ -125,11 +132,21 @@ const PokerContainer: FC = () => {
   return (
     <MediaContext.Provider value={media_ref}>
       <StyledPage>
-        {!show_buy_in_modal && <JoinPokerChannel />}
+        {!show_buy_in_modal && (
+          <JoinPokerChannel
+            updateShowHoleCards={(val) => {
+              setShowHoleCards(val);
+            }}
+          />
+        )}
         <StyledContainer $opacity={show_waiting_banner ? 0.2 : 1}>
           <PokerHeader />
           {is_mounted && (
             <PokerTable
+              show_hole_cards={show_hole_cards}
+              updateShowHoleCards={(val) => {
+                setShowHoleCards(val);
+              }}
               time_left={seconds}
               updateShowWaitingBanner={(val: boolean) => {
                 setShowWaitingBanner(val);

@@ -1,7 +1,6 @@
 // types
 import type { FC } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
-import type { IActionType } from "@/types/store/slice/poker/poker";
 
 // styled components
 import {
@@ -20,8 +19,7 @@ import {
 
 const PokerActionCta: FC<{
   auth_player: IPokerPlayer;
-  updateShowHoleCards: (val: boolean) => void;
-}> = ({ auth_player, updateShowHoleCards }) => {
+}> = ({ auth_player }) => {
   const dispatch = useAppDispatch();
   const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted) as number;
   const { current_betted_amount = 0 } = auth_player;
@@ -31,24 +29,16 @@ const PokerActionCta: FC<{
       ? "call"
       : "check";
 
-  const handleActionEvent = (data: {
-    action_type: IActionType;
-    current_betted_amount: number | null;
-  }) => {
-    dispatch(triggerActionApi(data)).then((response) => {
-      if (response.payload.start_next_round) {
-        updateShowHoleCards(false);
-      }
-    });
-  };
   return (
     <StyledActionCtaWrapper>
       <StyledActionCta
         onClick={() => {
-          handleActionEvent({
-            action_type: "fold",
-            current_betted_amount: null,
-          });
+          dispatch(
+            triggerActionApi({
+              action_type: "fold",
+              current_betted_amount: null,
+            })
+          );
         }}
       >
         <StyledActionCtaIcons
@@ -61,11 +51,13 @@ const PokerActionCta: FC<{
       </StyledActionCta>
       <StyledActionCta
         onClick={() => {
-          handleActionEvent({
-            action_type,
-            current_betted_amount:
-              action_type == "call" ? min_amount_to_be_betted : null,
-          });
+          dispatch(
+            triggerActionApi({
+              action_type,
+              current_betted_amount:
+                action_type == "call" ? min_amount_to_be_betted : null,
+            })
+          );
         }}
       >
         <StyledActionCtaIcons

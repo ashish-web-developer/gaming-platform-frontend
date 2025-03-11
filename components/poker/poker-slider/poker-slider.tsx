@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 // types
 import type { FC } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
@@ -25,8 +25,7 @@ import {
 
 const PokerSlider: FC<{
   auth_player: IPokerPlayer;
-  updateShowHoleCards: (val: boolean) => void;
-}> = ({ auth_player, updateShowHoleCards }) => {
+}> = ({ auth_player }) => {
   const dispatch = useAppDispatch();
   const slider_ref = useRef<HTMLDivElement>(null);
   const { current_betted_amount = 0 } = auth_player;
@@ -61,11 +60,7 @@ const PokerSlider: FC<{
               current_betted_amount:
                 (current_betted_amount as number) + slider_val,
             })
-          ).then((response) => {
-            if (response.payload.start_next_round) {
-              updateShowHoleCards(false);
-            }
-          });
+          );
           dispatch(updateShowPokerSlider(false));
         }}
       >
