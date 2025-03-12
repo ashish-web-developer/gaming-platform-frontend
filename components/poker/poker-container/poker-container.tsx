@@ -119,25 +119,19 @@ const JoinPokerChannel: FC<{
           const batch = Flip.batch(`chips-winning-animation`);
           function handleChipsWinningAnimation(player_id: number) {
             return new Promise(function (resolve, reject) {
+              let target = document.getElementById(`player-chips-${player_id}`);
               batch.add({
                 getState() {
                   const element = document.getElementById("chips-in-pot");
-                  const flip_state = Flip.getState(element);
-                  return flip_state;
+                  return Flip.getState(element);
                 },
                 setState() {
-                  let target = document.getElementById(
-                    `player-chips-${player_id}`
-                  );
                   target?.setAttribute(
                     "data-flip-id",
                     "chips-winning-flip-animation"
                   );
                 },
                 animate(self) {
-                  let target = document.getElementById(
-                    `player-chips-${player_id}`
-                  );
                   Flip.from(self.state, {
                     targets: target,
                     ease: "expo.inOut",
@@ -149,9 +143,6 @@ const JoinPokerChannel: FC<{
                   media_ref.current.chips_winning_sound?.play();
                 },
                 onComplete() {
-                  let target = document.getElementById(
-                    `player-chips-${player_id}`
-                  );
                   target?.removeAttribute("data-flip-id");
                   resolve("animation got resolved");
                 },
