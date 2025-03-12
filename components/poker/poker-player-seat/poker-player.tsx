@@ -75,7 +75,14 @@ const PokerPlayer: FC<{
           <StyledPokerPlayerDetails ref={players_details_ref}>
             <StyledPlayerName>{player.user.name}</StyledPlayerName>
             <StyledPlayerAmount>
-              $ {player.total_chips_left} K
+              <Image
+                id={`player-chips-${player.player_id}`}
+                src="/poker/poker-player/poker-chips.png"
+                width={16}
+                height={16}
+                alt="poker-chips"
+              />
+              <span>$ {player.total_chips_left} K</span>
             </StyledPlayerAmount>
           </StyledPokerPlayerDetails>
           <StyledHoleCardWrapper $is_folded={action_type == "fold"}>

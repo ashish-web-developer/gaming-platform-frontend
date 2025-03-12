@@ -138,6 +138,9 @@ const StyledPlayerAmount = styled.h6`
   color: ${({ theme }) => theme.palette.info.main};
   white-space: nowrap;
   line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 const StyledAmountBettedWrapper = styled.div<{
   $seat_index: number;

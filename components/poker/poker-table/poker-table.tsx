@@ -256,6 +256,8 @@ const PokerTable: FC<IProps> = ({
           {!!chips_in_pot && (
             <StyledChipsInPotWrapper>
               <Image
+                id="chips-in-pot"
+                data-flip-id="chips-winning-flip-animation"
                 src="/poker/poker-player/poker-chips.png"
                 width={16}
                 height={16}

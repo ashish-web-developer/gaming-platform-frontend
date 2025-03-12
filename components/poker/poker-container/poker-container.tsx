@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
@@ -55,11 +55,21 @@ import {
 // context
 import { MediaContext } from "context";
 
+// packages
+
+// gsap
+import gsap from "gsap";
+import Flip from "gsap/Flip";
+
+gsap.registerPlugin(Flip);
+
 const JoinPokerChannel: FC<{
   updateShowHoleCards: (val: boolean) => void;
 }> = ({ updateShowHoleCards }) => {
   const dispatch = useAppDispatch();
   const poker_room_id = useAppSelector(pokerRoomId);
+  const media_ref = useContext(MediaContext);
+
   usePresenceChannel<
     string | null,
     {
@@ -103,6 +113,60 @@ const JoinPokerChannel: FC<{
           }, 3000);
         },
       },
+      {
+        event: "winner-data-event",
+        handler: (data: { players_id: Array<number> }) => {
+          const batch = Flip.batch(`chips-winning-animation`);
+          function handleChipsWinningAnimation(player_id: number) {
+            return new Promise(function (resolve, reject) {
+              batch.add({
+                getState() {
+                  const element = document.getElementById("chips-in-pot");
+                  const flip_state = Flip.getState(element);
+                  return flip_state;
+                },
+                setState() {
+                  let target = document.getElementById(
+                    `player-chips-${player_id}`
+                  );
+                  target?.setAttribute(
+                    "data-flip-id",
+                    "chips-winning-flip-animation"
+                  );
+                },
+                animate(self) {
+                  let target = document.getElementById(
+                    `player-chips-${player_id}`
+                  );
+                  Flip.from(self.state, {
+                    targets: target,
+                    ease: "expo.inOut",
+                    repeat: 10,
+                    duration: 0.2,
+                  });
+                },
+                onStart() {
+                  media_ref.current.chips_winning_sound?.play();
+                },
+                onComplete() {
+                  let target = document.getElementById(
+                    `player-chips-${player_id}`
+                  );
+                  target?.removeAttribute("data-flip-id");
+                  resolve("animation got resolved");
+                },
+              });
+              batch.run();
+            });
+          }
+
+          (async function () {
+            for (let player_id of data.players_id) {
+              await handleChipsWinningAnimation(player_id);
+            }
+          })();
+        },
+      },
     ],
     handleSubscription: (data) => {
       dispatch(
@@ -113,9 +177,9 @@ const JoinPokerChannel: FC<{
       );
     },
   });
+
   return null;
 };
-
 const PokerContainer: FC = () => {
   const [show_waiting_banner, setShowWaitingBanner] = useState(false);
   const [show_hole_cards, setShowHoleCards] = useState(false);

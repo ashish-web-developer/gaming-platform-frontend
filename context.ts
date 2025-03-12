@@ -28,6 +28,7 @@ const MediaContext = createContext<
     player_turn_sound?: HTMLAudioElement;
     card_dealing_sound?: HTMLAudioElement;
     button_click_sound?: HTMLAudioElement;
+    chips_winning_sound?: HTMLAudioElement;
   }>
 >({
   current: {},
