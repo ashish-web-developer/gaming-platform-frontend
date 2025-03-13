@@ -107,10 +107,7 @@ const JoinPokerChannel: FC<{
         event: "deck-data-event",
         handler: (data: { deck: IDeckType }) => {
           updateShowHoleCards(false);
-          dispatch(updateDeck([]));
-          setTimeout(() => {
-            dispatch(updateDeck(data.deck));
-          }, 3000);
+          dispatch(updateDeck(data.deck));
         },
       },
       {
@@ -152,8 +149,12 @@ const JoinPokerChannel: FC<{
           }
 
           (async function () {
-            for (let player_id of data.players_id) {
-              await handleChipsWinningAnimation(player_id);
+            try {
+              for (let player_id of data.players_id) {
+                await handleChipsWinningAnimation(player_id);
+              }
+            } finally {
+              batch.kill();
             }
           })();
         },
