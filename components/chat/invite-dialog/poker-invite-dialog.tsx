@@ -77,10 +77,10 @@ const PokerInviteDialog: FC = () => {
       <StyledPokerInviteDialogContent>
         <StyledProposalSenderName>by @ashish_classic</StyledProposalSenderName>
         <StyledPokerCardWrapper $left="18px" $bottom="68px" $rotate="-5deg">
-          <PokerCard suit="club" rank="K" />
+          <PokerCard card_id="1" suit="club" rank="K" />
         </StyledPokerCardWrapper>
         <StyledPokerCardWrapper $right="14px" $bottom="15px" $rotate="5deg">
-          <PokerCard suit="spade" rank="Q" />
+          <PokerCard card_id="2" suit="spade" rank="Q" />
         </StyledPokerCardWrapper>
         <StyledPlayButton
           onClick={() => {

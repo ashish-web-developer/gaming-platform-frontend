@@ -379,14 +379,14 @@ const WelcomeLoginScreen: FC<{
                   $top="24px"
                   $rotate="15deg"
                 >
-                  <PokerCard suit="heart" rank="K" />
+                  <PokerCard card_id="1" suit="heart" rank="K" />
                 </StyledPokerCardWrapper>
                 <StyledPokerCardWrapper
                   $left="32px"
                   $bottom="40px"
                   $rotate="-15deg"
                 >
-                  <PokerCard suit="spade" rank="J" />
+                  <PokerCard card_id="2" suit="spade" rank="J" />
                 </StyledPokerCardWrapper>
               </ThemeProvider>
             </StyledGameBannerContainer>

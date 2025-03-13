@@ -34,8 +34,14 @@ const PokerHeader: FC = () => {
           <Logo />
         </div>
         <StyledCardWrapper>
-          <PokerCard scale={0.3} rank="A" suit="club" />
-          <PokerCard scale={0.3} rank="K" suit="diamond" is_flipped={false} />
+          <PokerCard card_id="1" scale={0.3} rank="A" suit="club" />
+          <PokerCard
+            card_id="2"
+            scale={0.3}
+            rank="K"
+            suit="diamond"
+            is_flipped={false}
+          />
         </StyledCardWrapper>
       </StyledLogoWrapper>
       <StyledUserProfile>
