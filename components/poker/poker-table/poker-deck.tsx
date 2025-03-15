@@ -38,6 +38,7 @@ const PokerDeck: FC<{
 
   useCardDealingAnimation({
     deck_node_ref,
+    deck,
     updateShowHoleCards,
   });
 

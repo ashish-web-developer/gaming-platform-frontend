@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef } from "react";
+
 // types
 import type { MutableRefObject, RefObject } from "react";
 import type { ContextSafeFunc } from "@gsap/react";
@@ -96,9 +97,11 @@ function useSeatRotatingAnimation({
 }
 
 function useCardDealingAnimation({
+  deck,
   deck_node_ref,
   updateShowHoleCards,
 }: {
+  deck: IDeckType;
   deck_node_ref: MutableRefObject<Map<string, HTMLDivElement> | undefined>;
   updateShowHoleCards: (val: boolean) => void;
 }) {
@@ -107,91 +110,89 @@ function useCardDealingAnimation({
   const media_ref = useContext(MediaContext);
   useEffect(() => {
     const batch = Flip.batch("card-dealing-animation");
-    batch.add({
-      getState() {
-        /**
-         * reducing hole cards of all the player to an array
-         * then getting the node of those hole cards inside the
-         * deck container,then based on those cards_node we are
-         * getting the flip state
-         */
-        const hole_cards_of_all_player = active_poker_players.reduce<IDeckType>(
-          (hole_cards, player) => {
-            if (player.hole_cards) {
-              return [...hole_cards, ...player.hole_cards];
-            }
-            return hole_cards;
-          },
-          []
-        );
-
-        // converting hole_cards to card node
-        const card_node = hole_cards_of_all_player.map((card) => {
-          return deck_node_ref.current?.get(card.card_id) as HTMLDivElement;
-        });
-        return Flip.getState(card_node);
-      },
-      setState() {
-        updateShowHoleCards(true);
-      },
-      animate(self) {
-        // we are reducing array to the node of hole cards of each player
-        const target_element = active_poker_players.reduce<HTMLDivElement[]>(
-          (prev, player) => {
-            if (player.hole_cards) {
-              const hole_card_node = player.hole_cards?.map(
-                (card) =>
-                  hole_card_nodes_ref.current?.get(
-                    card.card_id
-                  ) as HTMLDivElement
-              );
-
-              return [...prev, ...hole_card_node];
-            }
-            return prev;
-          },
-          []
-        );
-        Flip.from(self.state, {
-          targets: target_element,
-          ease: "expo.inOut",
-          spin: true,
+    if (deck.length) {
+      batch.add({
+        getState() {
           /**
-           * Here we are handling card dealing
-           * sound effect
+           * reducing hole cards of all the player to an array
+           * then getting the node of those hole cards inside the
+           * deck container,then based on those cards_node we are
+           * getting the flip state
            */
-          onStart() {
-            function handleCardDealingEffect() {
-              const card_dealing_sound_promise = new Promise(function (
-                resolve
-              ) {
+          const hole_cards_of_all_player =
+            active_poker_players.reduce<IDeckType>((hole_cards, player) => {
+              if (player.hole_cards) {
+                return [...hole_cards, ...player.hole_cards];
+              }
+              return hole_cards;
+            }, []);
+
+          // converting hole_cards to card node
+          const card_node = hole_cards_of_all_player.map((card) => {
+            return deck_node_ref.current?.get(card.card_id) as HTMLDivElement;
+          });
+          return Flip.getState(card_node);
+        },
+        setState() {
+          updateShowHoleCards(true);
+        },
+        animate(self) {
+          // we are reducing array to the node of hole cards of each player
+          const target_element = active_poker_players.reduce<HTMLDivElement[]>(
+            (prev, player) => {
+              if (player.hole_cards) {
+                const hole_card_node = player.hole_cards?.map(
+                  (card) =>
+                    hole_card_nodes_ref.current?.get(
+                      card.card_id
+                    ) as HTMLDivElement
+                );
+
+                return [...prev, ...hole_card_node];
+              }
+              return prev;
+            },
+            []
+          );
+          Flip.from(self.state, {
+            targets: target_element,
+            ease: "expo.inOut",
+            spin: true,
+            /**
+             * Here we are handling card dealing
+             * sound effect
+             */
+            onStart() {
+              function handleCardDealingEffect() {
+                const card_dealing_sound_promise = new Promise(function (
+                  resolve
+                ) {
+                  // @ts-ignore
+                  media_ref.current.card_dealing_sound.onended = resolve;
+                });
                 // @ts-ignore
-                media_ref.current.card_dealing_sound.onended = resolve;
-              });
-              // @ts-ignore
-              media_ref.current?.card_dealing_sound.play();
-              return card_dealing_sound_promise;
-            }
-            if (media_ref.current.card_dealing_sound) {
-              media_ref.current.card_dealing_sound.playbackRate = 1.5;
-              (async function () {
-                for (let i = 0; i <= active_poker_players.length - 1; i++) {
-                  await handleCardDealingEffect();
-                }
-              })();
-            }
-          },
-          stagger: {
-            each: 0.2,
-          },
-        });
-      },
-    });
-    batch.run();
-    return () => {
-      batch.clear();
-    };
-  }, [active_poker_players.length]);
+                media_ref.current?.card_dealing_sound.play();
+                return card_dealing_sound_promise;
+              }
+              if (media_ref.current.card_dealing_sound) {
+                media_ref.current.card_dealing_sound.playbackRate = 1.5;
+                (async function () {
+                  for (let i = 0; i <= active_poker_players.length - 1; i++) {
+                    await handleCardDealingEffect();
+                  }
+                })();
+              }
+            },
+            stagger: {
+              each: 0.2,
+            },
+          });
+        },
+        once:true
+      });
+      batch.run();
+    }
+  }, [active_poker_players.length, deck]);
 }
 
 export { useLoadMedia, useSeatRotatingAnimation, useCardDealingAnimation };

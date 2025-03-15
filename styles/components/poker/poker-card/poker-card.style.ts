@@ -58,7 +58,7 @@ const StyledCardDetailsWrapper = styled.div<{
 
 const StyledRank = styled.span`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   color: ${({ theme }) => theme.palette.primary.main};
   line-height: 1;
 `;
