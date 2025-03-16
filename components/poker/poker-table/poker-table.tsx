@@ -70,7 +70,7 @@ import gsap from "gsap";
 import { useSeatRotatingAnimation } from "@/hooks/poker/poker.hook";
 
 // context
-import { HoleCardNodesMapContext, MediaContext } from "context";
+import { MediaContext } from "context";
 
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
@@ -90,7 +90,6 @@ const PokerTable: FC<IProps> = ({
 }) => {
   const container_ref = useRef<HTMLDivElement>(null);
   const media_ref = useContext(MediaContext);
-  const hole_card_nodes_ref = useRef<Map<string, HTMLDivElement> | null>(null);
   const deck = useAppSelector(Deck);
   const community_cards = useAppSelector(communityCards);
   const chips_in_pot = useAppSelector(chipsInPot);
@@ -155,130 +154,126 @@ const PokerTable: FC<IProps> = ({
   }, [bettor_id, user_id]);
 
   return (
-    <HoleCardNodesMapContext.Provider value={hole_card_nodes_ref}>
-      <div ref={container_ref}>
-        {show_buy_in_modal &&
-          createPortal(
-            <PokerBuyInDialog
-              onModalCloseHandler={() => {
-                profileAnimation();
-                if (time_left > 0) {
-                  updateShowWaitingBanner(true);
-                }
-              }}
-            />,
-            document.getElementById(
-              "poker-buy-in-dialog-container"
-            ) as HTMLElement
-          )}
-        <StyledImageContainer // Table Wrapper
-          $width="970px"
-          $height="530px"
-          $top="50%"
+    <div ref={container_ref}>
+      {show_buy_in_modal &&
+        createPortal(
+          <PokerBuyInDialog
+            onModalCloseHandler={() => {
+              profileAnimation();
+              if (time_left > 0) {
+                updateShowWaitingBanner(true);
+              }
+            }}
+          />,
+          document.getElementById(
+            "poker-buy-in-dialog-container"
+          ) as HTMLElement
+        )}
+      <StyledImageContainer // Table Wrapper
+        $width="970px"
+        $height="530px"
+        $top="50%"
+        $left="50%"
+        $translateX="-50%"
+        $translateY="-50%"
+      >
+        {poker_players.map((player, index) => {
+          return (
+            <PokerPlayer
+              dealer_id={dealer_id}
+              player={player}
+              seat_index={index}
+              key={`player-${index}`}
+              bettor_id={bettor_id}
+              show_hole_cards={show_hole_cards}
+              profileAnimationHandler={profileDetailsAnimation}
+              cardHoverHandler={
+                player?.player_id == user_id ? cardOnHoverAnimation : undefined
+              }
+            />
+          );
+        })}
+
+        <StyledSvgWrapper>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="913"
+            height="448"
+            fill="none"
+            viewBox="0 0 913 448"
+          >
+            <path
+              id="path"
+              stroke="#fff"
+              strokeWidth={0}
+              d="M228.496 2.532c-52.667-.5-168.9 28.1-212.5 146.5s18.167 208 54.5 238c23.667 19.833 79.7 59.5 114.5 59.5h531c49-5 154.5-41.2 184.5-146s-5.5-174.667-27-196.5c-25.333-39.334-104.2-114.7-217-101.5"
+            ></path>
+          </svg>
+        </StyledSvgWrapper>
+
+        <StyledImageContainer
+          $width="312px"
+          $height="216px"
           $left="50%"
           $translateX="-50%"
-          $translateY="-50%"
+          $top="-80px"
+          $zIndex={1}
         >
-          {poker_players.map((player, index) => {
+          <StyledImage
+            fill={true}
+            src="/poker/poker-table/dealer.png"
+            alt="dealer"
+            sizes="(max-width: 1400px) 15vw"
+          />
+        </StyledImageContainer>
+
+        <StyledImage
+          src="/poker/poker-table/table.png"
+          fill={true}
+          alt="poker-table"
+        />
+        {deck.length && (
+          <PokerDeck deck={deck} updateShowHoleCards={updateShowHoleCards} />
+        )}
+
+        <StyledCommunityCardsWrapper>
+          {community_cards?.map(({ card_id, ...card }) => {
             return (
-              <PokerPlayer
-                dealer_id={dealer_id}
-                player={player}
-                seat_index={index}
-                key={`player-${index}`}
-                bettor_id={bettor_id}
-                show_hole_cards={show_hole_cards}
-                profileAnimationHandler={profileDetailsAnimation}
-                cardHoverHandler={
-                  player?.player_id == user_id
-                    ? cardOnHoverAnimation
-                    : undefined
-                }
+              <PokerCard
+                scale={0.4}
+                key={`card-${card_id}`}
+                {...card}
+                card_id={card_id}
+                cardHoverHandler={cardOnHoverAnimation}
               />
             );
           })}
-
-          <StyledSvgWrapper>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="913"
-              height="448"
-              fill="none"
-              viewBox="0 0 913 448"
-            >
-              <path
-                id="path"
-                stroke="#fff"
-                strokeWidth={0}
-                d="M228.496 2.532c-52.667-.5-168.9 28.1-212.5 146.5s18.167 208 54.5 238c23.667 19.833 79.7 59.5 114.5 59.5h531c49-5 154.5-41.2 184.5-146s-5.5-174.667-27-196.5c-25.333-39.334-104.2-114.7-217-101.5"
-              ></path>
-            </svg>
-          </StyledSvgWrapper>
-
-          <StyledImageContainer
-            $width="312px"
-            $height="216px"
-            $left="50%"
-            $translateX="-50%"
-            $top="-80px"
-            $zIndex={1}
-          >
-            <StyledImage
-              fill={true}
-              src="/poker/poker-table/dealer.png"
-              alt="dealer"
-              sizes="(max-width: 1400px) 15vw"
+        </StyledCommunityCardsWrapper>
+        {!!chips_in_pot && (
+          <StyledChipsInPotWrapper>
+            <Image
+              id="chips-in-pot"
+              data-flip-id="chips-winning-flip-animation"
+              src="/poker/poker-player/poker-chips.png"
+              width={16}
+              height={16}
+              alt="poker-chips"
             />
-          </StyledImageContainer>
 
-          <StyledImage
-            src="/poker/poker-table/table.png"
-            fill={true}
-            alt="poker-table"
-          />
-          {deck.length && (
-            <PokerDeck deck={deck} updateShowHoleCards={updateShowHoleCards} />
-          )}
+            <StyledChipsInPot>$ {chips_in_pot} K</StyledChipsInPot>
+          </StyledChipsInPotWrapper>
+        )}
+        {!show_poker_slider && user_id == bettor_id && (
+          <PokerActionCta auth_player={auth_player as IPokerPlayer} />
+        )}
 
-          <StyledCommunityCardsWrapper>
-            {community_cards?.map(({ card_id, ...card }) => {
-              return (
-                <PokerCard
-                  scale={0.4}
-                  key={`card-${card_id}`}
-                  {...card}
-                  card_id={card_id}
-                  cardHoverHandler={cardOnHoverAnimation}
-                />
-              );
-            })}
-          </StyledCommunityCardsWrapper>
-          {!!chips_in_pot && (
-            <StyledChipsInPotWrapper>
-              <Image
-                id="chips-in-pot"
-                data-flip-id="chips-winning-flip-animation"
-                src="/poker/poker-player/poker-chips.png"
-                width={16}
-                height={16}
-                alt="poker-chips"
-              />
-
-              <StyledChipsInPot>$ {chips_in_pot} K</StyledChipsInPot>
-            </StyledChipsInPotWrapper>
-          )}
-          {!show_poker_slider && user_id == bettor_id && (
-            <PokerActionCta auth_player={auth_player as IPokerPlayer} />
-          )}
-
-          {show_poker_slider && user_id == bettor_id && (
-            <StyledPokerSliderWrapper>
-              <PokerSlider auth_player={auth_player as IPokerPlayer} />
-            </StyledPokerSliderWrapper>
-          )}
-        </StyledImageContainer>
-      </div>
-    </HoleCardNodesMapContext.Provider>
+        {show_poker_slider && user_id == bettor_id && (
+          <StyledPokerSliderWrapper>
+            <PokerSlider auth_player={auth_player as IPokerPlayer} />
+          </StyledPokerSliderWrapper>
+        )}
+      </StyledImageContainer>
+    </div>
   );
 };
 

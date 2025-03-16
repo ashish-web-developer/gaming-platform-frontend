@@ -18,11 +18,6 @@ const PokerInviteDialogTimeOutContext = createContext<
   MutableRefObject<ReturnType<typeof setTimeout> | undefined>
 >({ current: undefined });
 
-const HoleCardNodesMapContext = createContext<
-  MutableRefObject<Map<string, HTMLDivElement> | null>
->({
-  current: null,
-});
 const MediaContext = createContext<
   MutableRefObject<{
     player_turn_sound?: HTMLAudioElement;
@@ -37,6 +32,5 @@ const MediaContext = createContext<
 export {
   UttranceContext,
   PokerInviteDialogTimeOutContext,
-  HoleCardNodesMapContext,
   MediaContext,
 };

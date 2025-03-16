@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 // types
 import type { FC } from "react";
@@ -29,16 +29,20 @@ const PokerTable = dynamic(
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
+import { User } from "@/store/slice/login.slice";
 import {
+  dealerId,
   pokerRoomId,
   roomCreatedAt,
   showBuyInModal,
+  resetHoleCards,
 } from "@/store/slice/poker/poker.slice";
 import {
   updateActivePokerPlayer,
   updateRoomDetails,
   updatePlayerData,
   updateDeck,
+  dealHandApi,
 } from "@/store/slice/poker/poker.slice";
 // hooks
 import { usePresenceChannel } from "@/hooks/pusher.hook";
@@ -69,6 +73,11 @@ const JoinPokerChannel: FC<{
   const dispatch = useAppDispatch();
   const poker_room_id = useAppSelector(pokerRoomId);
   const media_ref = useContext(MediaContext);
+  const animation_promise_ref = useRef<Promise<void>>();
+  const [start_next_round, setStartNextRound] = useState(false);
+  const { id: user_id } = useAppSelector(User) ?? {};
+  const dealer_id = useAppSelector(dealerId);
+  const is_dealer = dealer_id == user_id;
 
   usePresenceChannel<
     string | null,
@@ -93,26 +102,44 @@ const JoinPokerChannel: FC<{
       {
         event: "update-poker-room-data-event",
         handler: (data: { poker_room: IPokerRoom }) => {
-          dispatch(updateRoomDetails(data.poker_room));
+          if (animation_promise_ref.current) {
+            animation_promise_ref.current.then(() => {
+              dispatch(updateRoomDetails(data.poker_room));
+            });
+          } else {
+            dispatch(updateRoomDetails(data.poker_room));
+          }
         },
       },
 
       {
         event: "update-poker-player-data",
         handler: (data: { player: IPokerPlayer }) => {
-          dispatch(updatePlayerData(data.player));
+          if (animation_promise_ref.current) {
+            animation_promise_ref.current.then(() => {
+              dispatch(updatePlayerData(data.player));
+            });
+          } else {
+            dispatch(updatePlayerData(data.player));
+          }
         },
       },
       {
         event: "deck-data-event",
         handler: (data: { deck: IDeckType }) => {
-          updateShowHoleCards(false);
-          dispatch(updateDeck(data.deck));
+          if (animation_promise_ref.current) {
+            animation_promise_ref.current?.then(() => {
+              dispatch(updateDeck(data.deck));
+            });
+          } else {
+            dispatch(updateDeck(data.deck));
+          }
         },
       },
       {
         event: "winner-data-event",
         handler: (data: { players_id: Array<number> }) => {
+          dispatch(updateDeck([]));
           const batch = Flip.batch(`chips-winning-animation`);
           function handleChipsWinningAnimation(player_id: number) {
             return new Promise(function (resolve, reject) {
@@ -148,15 +175,18 @@ const JoinPokerChannel: FC<{
             });
           }
 
-          (async function () {
-            try {
-              for (let player_id of data.players_id) {
-                await handleChipsWinningAnimation(player_id);
-              }
-            } finally {
-              batch.kill();
+          async function executeAnimation() {
+            for (let player_id of data.players_id) {
+              await handleChipsWinningAnimation(player_id);
             }
-          })();
+          }
+          animation_promise_ref.current = executeAnimation();
+          animation_promise_ref.current.then(() => {
+            batch.kill();
+            dispatch(resetHoleCards());
+            updateShowHoleCards(false);
+            setStartNextRound(true);
+          });
         },
       },
     ],
@@ -169,6 +199,13 @@ const JoinPokerChannel: FC<{
       );
     },
   });
+
+  useEffect(() => {
+    if (start_next_round) {
+      is_dealer && dispatch(dealHandApi());
+      setStartNextRound(false);
+    }
+  }, [is_dealer, start_next_round]);
 
   return null;
 };

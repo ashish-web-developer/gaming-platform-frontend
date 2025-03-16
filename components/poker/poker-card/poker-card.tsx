@@ -35,6 +35,7 @@ const CornerDesignVector = () => (
 );
 
 const PokerCard: FC<{
+  is_hole_card?: boolean;
   is_flipped?: boolean;
   scale?: number;
   suit: ICardSuit;
@@ -47,6 +48,7 @@ const PokerCard: FC<{
     event_type: "enter" | "leave"
   ) => void;
 }> = ({
+  is_hole_card = false,
   is_flipped = true,
   scale,
   suit,
@@ -61,6 +63,7 @@ const PokerCard: FC<{
 
   return (
     <StyledContainer
+      className={is_hole_card ? "player-hole-card" : "poker-card"}
       $hide={!show_card}
       data-flip-id={card_id}
       ref={(node) => {

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useRef, useEffect, useContext } from "react";
+import { useRef, useEffect } from "react";
 
 // types
 import type { FC } from "react";
@@ -27,9 +27,6 @@ import { useAvatarUrl } from "@/hooks/profile.hook";
 import { useAppSelector } from "@/hooks/redux.hook";
 import { User } from "@/store/slice/login.slice";
 
-// context
-import { HoleCardNodesMapContext } from "context";
-
 const PokerPlayer: FC<{
   player: IPokerPlayer | null;
   seat_index: number;
@@ -54,7 +51,6 @@ const PokerPlayer: FC<{
   const avatar_url = useAvatarUrl(player?.user ?? null);
   const { id: user_id } = useAppSelector(User) || {};
   const is_auth = player?.player_id == user_id;
-  const hole_card_nodes_ref = useContext(HoleCardNodesMapContext);
   const { action_type } = player ?? {};
 
   useEffect(() => {
@@ -89,6 +85,7 @@ const PokerPlayer: FC<{
             {player.hole_cards?.map(({ card_id, ...card }) => {
               return (
                 <PokerCard
+                  is_hole_card={true}
                   key={`card-${card_id}`}
                   scale={0.4}
                   {...card}
@@ -96,19 +93,6 @@ const PokerPlayer: FC<{
                   show_card={show_hole_cards}
                   is_flipped={is_auth ? true : false}
                   cardHoverHandler={cardHoverHandler}
-                  ref_callback={(node) => {
-                    if (node) {
-                      if (!hole_card_nodes_ref.current) {
-                        hole_card_nodes_ref.current = new Map<
-                          string,
-                          HTMLDivElement
-                        >();
-                      }
-                      hole_card_nodes_ref.current.set(card_id, node);
-                    } else {
-                      hole_card_nodes_ref.current?.delete(card_id);
-                    }
-                  }}
                 />
               );
             })}

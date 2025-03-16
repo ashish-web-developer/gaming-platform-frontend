@@ -193,9 +193,6 @@ export const triggerActionApi = createAsyncThunk<
         action_type,
         current_betted_amount,
       });
-      if (response.data.start_next_round) {
-        dispatch(dealHandApi());
-      }
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data);
@@ -322,6 +319,12 @@ const pokerSlice = createSlice({
         return player;
       });
     },
+    resetHoleCards: (state) => {
+      state.active_poker_players = state.active_poker_players.map((player) => {
+        player.hole_cards = null;
+        return player;
+      });
+    },
     updateRoomDetails: (state, action: PayloadAction<IPokerRoom>) => {
       state.bettor_id = action.payload.bettor_id;
       state.dealer_id = action.payload.dealer_id;
@@ -387,6 +390,7 @@ export const {
   updateActivePokerPlayer,
   updateDealerId,
   updatePlayerData,
+  resetHoleCards,
   updateRoomDetails,
   updateRoomCreatedAt,
   updateDeck,
