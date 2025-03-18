@@ -29,6 +29,8 @@ const StyledActionCta = styled(PokerButton)`
   cursor: pointer;
   &:disabled {
     cursor: not-allowed;
+    border:2px solid rgba(144, 227, 154, 0.8);
+    color:rgba(255,255,255,0.8);
   }
 `;
 
