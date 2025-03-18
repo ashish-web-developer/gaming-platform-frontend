@@ -171,28 +171,25 @@ export const dealHandApi = createAsyncThunk<
 });
 
 export const triggerActionApi = createAsyncThunk<
-  IBaseResponse & {
-    start_next_round: boolean;
-  },
+  IBaseResponse,
   ITriggerActionApiRequest,
   IThunkApiConfig
 >(
   "api/poker/trigger-action",
   async (
     { action_type, current_betted_amount },
-    { getState, rejectWithValue, dispatch }
+    { getState, rejectWithValue }
   ) => {
     try {
       const state = getState();
-      const response: AxiosResponse<
-        IBaseResponse & {
-          start_next_round: boolean;
+      const response: AxiosResponse<IBaseResponse> = await Axios.post(
+        "/poker/trigger-action",
+        {
+          room_id: state.poker.poker_room_id,
+          action_type,
+          current_betted_amount,
         }
-      > = await Axios.post("/poker/trigger-action", {
-        room_id: state.poker.poker_room_id,
-        action_type,
-        current_betted_amount,
-      });
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data);

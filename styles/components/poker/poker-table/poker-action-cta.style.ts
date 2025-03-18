@@ -27,6 +27,9 @@ const StyledActionCta = styled(PokerButton)`
   align-items: center;
   gap: 12px;
   cursor: pointer;
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const StyledActionCtaIcons = styled(Image)`

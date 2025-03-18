@@ -263,15 +263,21 @@ const PokerTable: FC<IProps> = ({
             <StyledChipsInPot>$ {chips_in_pot} K</StyledChipsInPot>
           </StyledChipsInPotWrapper>
         )}
-        {!show_poker_slider && user_id == bettor_id && (
-          <PokerActionCta auth_player={auth_player as IPokerPlayer} />
+        {user_id == bettor_id && (
+          <PokerActionCta
+            auth_player={auth_player as IPokerPlayer}
+            key={community_cards?.length ?? 0}
+            /**
+             * so the key prop is being used here to reset
+             * the state because if bettor id remains the
+             * same in next round of betting then state
+             * won't gonna reset and disabled will be true
+             * and player won't be able to perform action
+             */
+          />
         )}
 
-        {show_poker_slider && user_id == bettor_id && (
-          <StyledPokerSliderWrapper>
-            <PokerSlider auth_player={auth_player as IPokerPlayer} />
-          </StyledPokerSliderWrapper>
-        )}
+        <StyledPokerSliderWrapper id="poker-slider-container"></StyledPokerSliderWrapper>
       </StyledImageContainer>
     </div>
   );
