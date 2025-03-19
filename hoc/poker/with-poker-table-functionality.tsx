@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useContext, useEffect } from "react";
 // types
-import type { ComponentType, SetStateAction, Dispatch } from "react";
-import type { ISeatType, IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { ComponentType } from "react";
+import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 import type { IDeckType } from "@/types/store/slice/poker";
 import type { IUser } from "@/types/store/slice/login";
 
@@ -14,22 +14,25 @@ import {
   chipsInPot,
   bettorId,
   dealerId,
-  showPokerSlider,
+  Deck,
+  showBuyInModal,
 } from "@/store/slice/poker/poker.slice";
 
 // helpers
 import { rotateArray } from "@/helpers/common.helper";
 
+// context
+import { MediaContext } from "context";
+
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
   community_cards: IDeckType | null;
+  deck: IDeckType;
+  show_buy_in_modal: boolean;
   chips_in_pot: number;
-  total_chips_betted: number;
-  show_poker_slider: boolean;
   bettor_id: number | null;
+  auth_player?: IPokerPlayer;
   dealer_id: number | null;
-  show_action_cta: boolean;
-  set_show_action_cta: Dispatch<SetStateAction<boolean>>;
   no_of_community_cards: number;
   user_id: number | null;
 };
@@ -77,32 +80,33 @@ const withPokerTableFunctionality = <ExtraProps extends { [key: string]: any }>(
       );
 
     const community_cards = useAppSelector(communityCards);
+    const deck = useAppSelector(Deck);
+    const show_buy_in_modal = useAppSelector(showBuyInModal);
     const no_of_community_cards = community_cards?.length ?? 0;
     const chips_in_pot = useAppSelector(chipsInPot);
-    const total_chips_betted = active_poker_players.reduce(
-      (accumulator, player) => {
-        if (player.current_betted_amount) {
-          return accumulator + player.current_betted_amount;
-        }
-        return accumulator;
-      },
-      0
-    );
     const bettor_id = useAppSelector(bettorId);
     const dealer_id = useAppSelector(dealerId);
-    const show_poker_slider = useAppSelector(showPokerSlider);
-    const [show_action_cta, set_show_action_cta] = useState<boolean>(true);
+    const auth_player = poker_players.find(
+      (player) => player?.player_id == user_id
+    );
+    const media_ref = useContext(MediaContext);
+
+    useEffect(() => {
+      if (bettor_id == user_id && media_ref.current.player_turn_sound) {
+        media_ref.current.player_turn_sound.play();
+      }
+    }, [bettor_id, user_id]);
+
     return (
       <BaseComponent
         poker_players={poker_players}
         community_cards={community_cards}
+        deck={deck}
+        show_buy_in_modal={show_buy_in_modal}
         chips_in_pot={chips_in_pot}
-        total_chips_betted={total_chips_betted}
-        show_poker_slider={show_poker_slider}
         bettor_id={bettor_id}
+        auth_player={auth_player}
         dealer_id={dealer_id}
-        show_action_cta={show_action_cta}
-        set_show_action_cta={set_show_action_cta}
         no_of_community_cards={no_of_community_cards}
         user_id={user_id}
         {...props}

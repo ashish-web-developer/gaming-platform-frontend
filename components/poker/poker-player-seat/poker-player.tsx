@@ -98,7 +98,10 @@ const PokerPlayer: FC<{
             })}
           </StyledHoleCardWrapper>
           {player.current_betted_amount && (
-            <StyledAmountBettedWrapper $seat_index={seat_index}>
+            <StyledAmountBettedWrapper
+              id={`player-seat-${seat_index}`}
+              $seat_index={seat_index}
+            >
               <Image
                 src="/poker/poker-player/poker-chips.png"
                 width={16}

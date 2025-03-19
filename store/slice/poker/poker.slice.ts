@@ -200,7 +200,6 @@ export const triggerActionApi = createAsyncThunk<
 const initialState: IPokerInitialState = {
   poker_room_id: null,
   room_created_at: null,
-  show_poker_slider: false,
   dealer_id: null,
   bettor_id: null,
   poker_chips: 0,
@@ -220,9 +219,6 @@ const pokerSlice = createSlice({
   reducers: {
     updatePokerRoomId: (state, action: PayloadAction<string | null>) => {
       state.poker_room_id = action.payload;
-    },
-    updateShowPokerSlider: (state, action: PayloadAction<boolean>) => {
-      state.show_poker_slider = action.payload;
     },
     updatePokerChips: (state, action: PayloadAction<number>) => {
       state.poker_chips = action.payload;
@@ -359,8 +355,6 @@ export default pokerSlice.reducer;
 
 // selector
 export const pokerRoomId = (state: RootState) => state.poker.poker_room_id;
-export const showPokerSlider = (state: RootState) =>
-  state.poker.show_poker_slider;
 export const pokerChips = (state: RootState) => state.poker.poker_chips;
 export const activePokerPlayers = (state: RootState) =>
   state.poker.active_poker_players;
@@ -382,7 +376,6 @@ export const roomCreatedAt = (state: RootState) => state.poker.room_created_at;
 export const {
   updatePokerRoomId,
   updatePokerChips,
-  updateShowPokerSlider,
   updateShowBuyInModal,
   updateActivePokerPlayer,
   updateDealerId,

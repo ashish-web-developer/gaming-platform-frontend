@@ -20,7 +20,6 @@ import {
   minAmountToBeRaised,
   minAmountToBeBetted,
   triggerActionApi,
-  updateShowPokerSlider,
 } from "@/store/slice/poker/poker.slice";
 
 // hooks
@@ -29,7 +28,8 @@ import { useIsMounted } from "@/hooks/common.hook";
 const PokerSlider: FC<{
   auth_player: IPokerPlayer;
   updateDisabled: (val: boolean) => void;
-}> = ({ auth_player, updateDisabled }) => {
+  updateShowPokerSlider: (val: boolean) => void;
+}> = ({ auth_player, updateDisabled, updateShowPokerSlider }) => {
   const dispatch = useAppDispatch();
   const slider_container_ref = useRef<HTMLDivElement>(null);
   const slider_ref = useRef<HTMLDivElement>(null);
@@ -40,11 +40,27 @@ const PokerSlider: FC<{
   const [slider_val, setSliderVal] = useState(min_amount_to_be_raised);
   const { total_chips_left } = auth_player;
 
+  function handleRemoveSlider() {
+    updateShowPokerSlider(false);
+    /**
+     * because of poker slider transparency  player betted amount on the
+     * left and right of bettor is visible and causing some style related
+     * issue, therefore we are hiding and showing those amount
+     */
+    ["player-seat-3", "player-seat-4", "player-seat-5"].forEach(
+      (element_id) => {
+        let element = document.getElementById(element_id);
+        if (element) {
+          element.style.visibility = "visible";
+        }
+      }
+    );
+  }
   useEffect(() => {
     function handleClick(event: MouseEvent) {
       if (slider_container_ref.current?.contains(event.target as Element))
         return;
-      dispatch(updateShowPokerSlider(false));
+      handleRemoveSlider();
     }
     is_mounted && document.addEventListener("click", handleClick);
     return () => {
@@ -79,7 +95,7 @@ const PokerSlider: FC<{
                 (current_betted_amount as number) + slider_val,
             })
           );
-          dispatch(updateShowPokerSlider(false));
+          handleRemoveSlider();
           updateDisabled(true);
         }}
       >

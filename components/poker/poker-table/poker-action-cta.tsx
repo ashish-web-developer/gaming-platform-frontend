@@ -23,19 +23,17 @@ const PokerSlider = dynamic(
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  showPokerSlider,
   minAmountToBeBetted,
   triggerActionApi,
-  updateShowPokerSlider,
 } from "@/store/slice/poker/poker.slice";
 
 const PokerActionCta: FC<{
   auth_player: IPokerPlayer;
 }> = ({ auth_player }) => {
   const dispatch = useAppDispatch();
-  const show_poker_slider = useAppSelector(showPokerSlider);
   const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted) as number;
   const { current_betted_amount = 0 } = auth_player;
+  const [show_poker_slider, setShowPokerSlider] = useState(false);
   const [is_disabled, setIsDisabled] = useState(false);
 
   const action_type =
@@ -49,6 +47,7 @@ const PokerActionCta: FC<{
         updateDisabled={(val) => {
           setIsDisabled(val);
         }}
+        updateShowPokerSlider={(val) => setShowPokerSlider(val)}
       />,
       document.getElementById("poker-slider-container") as Element
     );
@@ -105,7 +104,21 @@ const PokerActionCta: FC<{
         disabled={is_disabled}
         id="poker-raise-cta"
         onClick={() => {
-          dispatch(updateShowPokerSlider(true));
+          setShowPokerSlider(true);
+
+          /**
+           * because of poker slider transparency  player betted amount on the
+           * left and right of bettor is visible and causing some style related
+           * issue, therefore we are hiding and showing those amount
+           */
+          ["player-seat-3", "player-seat-4", "player-seat-5"].forEach(
+            (element_id) => {
+              let element = document.getElementById(element_id);
+              if (element) {
+                element.style.visibility = "hidden";
+              }
+            }
+          );
         }}
       >
         <StyledActionCtaIcons

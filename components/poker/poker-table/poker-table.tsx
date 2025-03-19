@@ -1,10 +1,11 @@
 import Image from "next/image";
 import dynamic from "next/dynamic";
-import { useRef, useEffect, useContext } from "react";
+import { useRef } from "react";
 import { createPortal } from "react-dom";
 // types
 import type { FC } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
+import type { IDeckType } from "@/types/store/slice/poker";
 
 // styled components
 import {
@@ -34,13 +35,6 @@ const PokerDeck = dynamic(
   }
 );
 
-const PokerSlider = dynamic(
-  () => import("@/components/poker/poker-slider/poker-slider"),
-  {
-    ssr: false,
-  }
-);
-
 const PokerActionCta = dynamic(
   () => import("@/components/poker/poker-table/poker-action-cta"),
   {
@@ -51,30 +45,23 @@ const PokerActionCta = dynamic(
 // hoc
 import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
 
-// redux
-import { useAppSelector } from "@/hooks/redux.hook";
-import { User } from "@/store/slice/login.slice";
-import {
-  Deck,
-  bettorId,
-  communityCards,
-  chipsInPot,
-  showBuyInModal,
-  showPokerSlider,
-} from "@/store/slice/poker/poker.slice";
-
 // gsap
 import gsap from "gsap";
 
 // hooks
 import { useSeatRotatingAnimation } from "@/hooks/poker/poker.hook";
 
-// context
-import { MediaContext } from "context";
-
 type IProps = {
   poker_players: Array<IPokerPlayer | null>;
+  community_cards: IDeckType | null;
+  deck: IDeckType;
+  show_buy_in_modal: boolean;
+  chips_in_pot: number;
   dealer_id: number | null;
+  bettor_id: number | null;
+  auth_player?: IPokerPlayer;
+  no_of_community_cards: number;
+  user_id: number | null;
   time_left: number;
   show_hole_cards: boolean;
   updateShowHoleCards: (val: boolean) => void;
@@ -82,27 +69,24 @@ type IProps = {
 };
 const PokerTable: FC<IProps> = ({
   poker_players,
+  community_cards,
+  deck,
+  show_buy_in_modal,
+  chips_in_pot,
+  bettor_id,
+  auth_player,
   dealer_id,
+  no_of_community_cards,
+  user_id,
   time_left,
   show_hole_cards,
   updateShowHoleCards,
   updateShowWaitingBanner,
 }) => {
   const container_ref = useRef<HTMLDivElement>(null);
-  const media_ref = useContext(MediaContext);
-  const deck = useAppSelector(Deck);
-  const community_cards = useAppSelector(communityCards);
-  const chips_in_pot = useAppSelector(chipsInPot);
-  const { id: user_id } = useAppSelector(User) || {};
-  const bettor_id = useAppSelector(bettorId);
-  const show_buy_in_modal = useAppSelector(showBuyInModal);
-  const show_poker_slider = useAppSelector(showPokerSlider);
   const contextSafe = useSeatRotatingAnimation({
     scope: container_ref,
   });
-  const auth_player = poker_players.find(
-    (player) => player?.player_id == user_id
-  );
 
   /**
    * This animation will get
@@ -146,12 +130,6 @@ const PokerTable: FC<IProps> = ({
       });
     }
   );
-
-  useEffect(() => {
-    if (bettor_id == user_id && media_ref.current.player_turn_sound) {
-      media_ref.current.player_turn_sound.play();
-    }
-  }, [bettor_id, user_id]);
 
   return (
     <div ref={container_ref}>
@@ -266,7 +244,7 @@ const PokerTable: FC<IProps> = ({
         {user_id == bettor_id && (
           <PokerActionCta
             auth_player={auth_player as IPokerPlayer}
-            key={community_cards?.length ?? 0}
+            key={no_of_community_cards}
             /**
              * so the key prop is being used here to reset
              * the state because if bettor id remains the
