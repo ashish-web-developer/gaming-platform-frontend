@@ -1,5 +1,29 @@
 import styled from "styled-components";
 
+const StyledAnimationContainer = styled.div`
+  width: 528px;
+  height: 328px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+`;
+
+const StyledVectorPosition = styled.div<{
+  $top?: string;
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+  $rotate:string;
+}>`
+  position: absolute;
+  top: ${(prop) => prop.$top ?? "auto"};
+  bottom: ${(prop) => prop.$bottom ?? "auto"};
+  left: ${(prop) => prop.$left ?? "auto"};
+  right: ${(prop) => prop.$right ?? "auto"};
+  rotate:${(prop)=>prop.$rotate};
+`;
+
 const StyledWaitingBannerWrapper = styled.div`
   width: 500px;
   height: 300px;
@@ -33,6 +57,8 @@ const StyledInfoText = styled.h4`
 `;
 
 export {
+  StyledAnimationContainer,
+  StyledVectorPosition,
   StyledWaitingBannerWrapper,
   StyledWaitingBannerContent,
   StyledInfoText,
