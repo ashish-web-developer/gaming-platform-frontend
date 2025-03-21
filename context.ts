@@ -24,13 +24,10 @@ const MediaContext = createContext<
     card_dealing_sound?: HTMLAudioElement;
     button_click_sound?: HTMLAudioElement;
     chips_winning_sound?: HTMLAudioElement;
+    clock_ticking_sound?: HTMLAudioElement;
   }>
 >({
   current: {},
 });
 
-export {
-  UttranceContext,
-  PokerInviteDialogTimeOutContext,
-  MediaContext,
-};
+export { UttranceContext, PokerInviteDialogTimeOutContext, MediaContext };

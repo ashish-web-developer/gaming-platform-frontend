@@ -13,12 +13,6 @@ const PokerWaitingBanner = dynamic(
     ssr: false,
   }
 );
-const PokerTimer = dynamic(
-  () => import("@/components/poker/poker-timer/poker-timer"),
-  {
-    ssr: false,
-  }
-);
 
 const PokerTable = dynamic(
   () => import("@/components/poker/poker-table/poker-table"),
@@ -247,8 +241,7 @@ const PokerContainer: FC = () => {
             />
           )}
           {!show_buy_in_modal && !show_waiting_banner && (
-            <StyledPokerTimerContainer>
-              <PokerTimer initial_count={30} handleOnFinish={() => {}} />
+            <StyledPokerTimerContainer id = "poker-timer-container">
             </StyledPokerTimerContainer>
           )}
         </StyledContainer>

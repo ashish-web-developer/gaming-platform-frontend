@@ -245,10 +245,18 @@ const pokerSlice = createSlice({
               ...poker_players,
             ];
           } else {
-            state.active_poker_players = [
-              ...state.active_poker_players,
-              action.payload.poker_players,
-            ];
+            const poker_player = action.payload.poker_players;
+            if (
+              !state.active_poker_players.some(
+                (active_poker_player) =>
+                  active_poker_player.id == poker_player.id
+              )
+            ) {
+              state.active_poker_players = [
+                ...state.active_poker_players,
+                poker_player,
+              ];
+            }
           }
           return;
         case "added":

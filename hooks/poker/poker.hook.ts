@@ -19,6 +19,7 @@ function useLoadMedia() {
     card_dealing_sound?: HTMLAudioElement;
     button_click_sound?: HTMLAudioElement;
     chips_winning_sound?: HTMLAudioElement;
+    clock_ticking_sound?: HTMLAudioElement;
   }>({});
   useEffect(() => {
     media_ref.current.player_turn_sound = new Audio(
@@ -32,6 +33,9 @@ function useLoadMedia() {
     );
     media_ref.current.chips_winning_sound = new Audio(
       "/poker/media/chips-winning-sound.mp3"
+    );
+    media_ref.current.clock_ticking_sound = new Audio(
+      "/poker/media/clock-ticking-sound.mp3"
     );
   }, []);
   return media_ref;

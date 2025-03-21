@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 // types
 import type { FC } from "react";
 import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
@@ -25,6 +25,9 @@ import {
 // hooks
 import { useIsMounted } from "@/hooks/common.hook";
 
+// context
+import { MediaContext } from "context";
+
 const PokerSlider: FC<{
   auth_player: IPokerPlayer;
   updateDisabled: (val: boolean) => void;
@@ -33,6 +36,9 @@ const PokerSlider: FC<{
   const dispatch = useAppDispatch();
   const slider_container_ref = useRef<HTMLDivElement>(null);
   const slider_ref = useRef<HTMLDivElement>(null);
+  const {
+    current: { clock_ticking_sound },
+  } = useContext(MediaContext);
   const is_mounted = useIsMounted();
   const { current_betted_amount = 0 } = auth_player;
   const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted) as number;
@@ -88,6 +94,7 @@ const PokerSlider: FC<{
       </StyledSliderWrapper>
       <StyledConfirmCta
         onClick={() => {
+          updateDisabled(true);
           dispatch(
             triggerActionApi({
               action_type: "raise",
@@ -96,7 +103,10 @@ const PokerSlider: FC<{
             })
           );
           handleRemoveSlider();
-          updateDisabled(true);
+          if (clock_ticking_sound) {
+            clock_ticking_sound.pause();
+            clock_ticking_sound.currentTime = 0;
+          }
         }}
       >
         Confirm

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 // types
 import type { FC } from "react";
 
@@ -13,11 +13,18 @@ import {
   StyledTimerUnit,
 } from "@/styles/components/poker/poker-timer/poker-timer.style";
 
+// context
+import { MediaContext } from "context";
+
 const PokerTimer: FC<{
   count: number;
   is_finished: boolean;
+  play_ticker_media: boolean;
   handleOnFinish: () => void;
-}> = ({ count, is_finished, handleOnFinish }) => {
+}> = ({ count, is_finished, play_ticker_media, handleOnFinish }) => {
+  const {
+    current: { clock_ticking_sound },
+  } = useContext(MediaContext);
   let minutes = Math.floor(count / 60);
   let seconds = count % 60;
 
@@ -26,6 +33,13 @@ const PokerTimer: FC<{
       handleOnFinish();
     }
   }, [is_finished]);
+
+  useEffect(() => {
+    if (play_ticker_media && clock_ticking_sound && count == 8) {
+      clock_ticking_sound.play();
+    }
+  }, [count, play_ticker_media]);
+
   return (
     <StyledPokerTimerWrapper>
       <StyledTimer>
@@ -46,4 +60,5 @@ const PokerTimer: FC<{
 export default withCountDownFunctionality<{
   initial_count: number;
   handleOnFinish: () => void;
+  play_ticker_media: boolean;
 }>(PokerTimer);

@@ -42,6 +42,7 @@ const PokerActionCta = dynamic(
   }
 );
 
+
 // hoc
 import withPokerTableFunctionality from "@/hoc/poker/with-poker-table-functionality";
 
@@ -254,7 +255,6 @@ const PokerTable: FC<IProps> = ({
              */
           />
         )}
-
         <StyledPokerSliderWrapper id="poker-slider-container"></StyledPokerSliderWrapper>
       </StyledImageContainer>
     </div>
