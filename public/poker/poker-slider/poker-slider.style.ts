@@ -1,80 +1,80 @@
 import styled from "styled-components";
 
-const StyledContainer = styled.div`
-  position: absolute;
-  top: -60px;
-  display: flex;
-`;
+// slider
+import Slider from "react-rangeslider";
 
-const StyledRangeSliderWrapper = styled.div`
-  width: 500px;
-  height: 50px;
-  border-radius: 30px 0px 0px 30px;
-  border: 3px solid ${({ theme }) => theme.palette.secondary.main};
-  border-right-width: 0px;
-  background: rgba(245, 213, 71, 0.2);
+// local components
+import PokerButton from "@/components/poker/poker-common/poker-button";
+
+const StyledSliderContainer = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
 `;
+const StyledSliderWrapper = styled.div`
+  width: 300px;
+  height: 40px;
+  border: 2px solid red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid ${({ theme }) => theme.palette.info.main};
+  border-radius: 30px 0px 0px 30px;
+  background: rgba(239, 35, 60, 0.1);
+`;
 
-const StyledRangeSlider = styled.div`
-  width: 450px;
-  & > .slider > .rangeslider {
-    & > .rangeslider__fill {
-      background: ${({ theme }) => theme.palette.secondary.main};
+const StyledSlider = styled(Slider)`
+  width: 260px;
+  & .rangeslider-horizontal {
+    height: 8px;
+  }
+  & .rangeslider__fill {
+    background-color: #90e39a;
+  }
+  & .rangeslider__handle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid ${({ theme }) => theme.palette.primary.main};
+    background: ${({ theme }) => theme.palette.info.main};
+    &:after {
+      display: none;
     }
-    & > .rangeslider__handle {
-      width: 25px;
-      height: 25px;
-      border: 2px solid ${({ theme }) => theme.palette.primary.main};
-      background: #fff;
-      &::after {
+    & .rangeslider__handle-tooltip {
+      width: auto;
+      height: auto;
+      margin-top: -10px;
+      padding: 6px 1rem;
+      background: rgba(239, 35, 60, 0.1);
+      border: 2px solid ${({ theme }) => theme.palette.info.main};
+      border-radius: 30px;
+      font-family: ${({ theme }) => theme.fontFamily.bangers};
+      & span {
+        margin-top: 0;
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+      &:after {
         display: none;
       }
     }
   }
 `;
 
-const StyledSliderConfirmCta = styled.button`
-  height: 50px;
-  border: 3px solid ${({ theme }) => theme.palette.secondary.main};
+const StyledConfirmCta = styled(PokerButton)`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1rem;
+  height: 40px;
+  padding: 0px 16px;
+  background: rgba(239, 35, 60, 0.1);
+  border: 2px solid ${({ theme }) => theme.palette.info.main};
   border-radius: 0px 30px 30px 0px;
-  background: ${({ theme }) => theme.palette.primary.light};
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  color: #fff;
-  font-size: 1.125rem;
-  padding: 0px 1rem;
-  cursor: pointer;
+  color: ${({ theme }) => theme.palette.info.main};
+  display: flex;
+  align-items: center;
 `;
 
-const StyledRangeSliderValue = styled.span<{
-  $left: number;
-}>`
-  position: absolute;
-  left: ${(props) => props.$left}px;
-  top: -58px;
-  display: inline-block;
-  padding: 6px 16px;
-  border-radius: 25px;
-  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-  background: rgba(245, 213, 71, 0.2);
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  color: #fff;
-  white-space: nowrap;
-`;
-
-const StyledPolygonVectorWrapper = styled.span`
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -29px;
-`;
 export {
-  StyledContainer,
-  StyledRangeSliderWrapper,
-  StyledRangeSlider,
-  StyledSliderConfirmCta,
-  StyledRangeSliderValue,
-  StyledPolygonVectorWrapper,
+  StyledSliderContainer,
+  StyledSliderWrapper,
+  StyledSlider,
+  StyledConfirmCta,
 };

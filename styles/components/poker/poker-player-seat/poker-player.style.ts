@@ -1,85 +1,242 @@
 import styled from "styled-components";
-import Image from "next/image";
 
-const StyledPokerPlayerWrapper = styled.div<{
-  $is_bettor: boolean;
-  $is_active: boolean;
-  $is_dealer: boolean;
-}>`
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  background: ${(props) =>
-    props.$is_bettor ? "linear-gradient(#FFED65 25%, #59FFA0 100%)" : "#fff"};
-  &::after {
-    content: "";
-    position: absolute;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: ${(props) =>
-      props.$is_active
-        ? props.theme.palette.success.main
-        : props.theme.palette.warning.main};
-    border: 2px solid #000;
-    right: 6px;
-    top: 6px;
-  }
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 60px;
-    height: 60px;
-    &::after {
-      width: 10px;
-      height: 10px;
-      top: 3px;
-      right: 3px;
+type IStyledPokerPlayerWrapperProps = {
+  $background_url: string | null;
+} & (
+  | {
+      $is_dealer: true;
+      $seat_index: number;
     }
+  | {
+      $is_dealer: false;
+    }
+);
+
+const StyledPokerPlayerWrapper = styled.div<IStyledPokerPlayerWrapperProps>`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 6px solid ${({ theme }) => theme.palette.info.main};
+  position: absolute;
+  z-index: 1;
+  background: #000;
+  ${(props) =>
+    props.$background_url &&
+    `
+    background: url(${props.$background_url});
+    background-position: top;
+    background-size: cover;
+    background-repeat: no-repeat;
+  `}
+  &::after {
     ${(props) =>
       props.$is_dealer &&
       `
-    &::before {
-      content: "D";
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      width: 16px;
-      height: 16px;
-      background: ${props.theme.palette.primary.main};
-      border: 2px solid #fff;
-      position: absolute;
-      left: -5px;
-      bottom: 5px;
-      z-index: 2;
-      border-radius: 50%;
-      font-family: ${props.theme.fontFamily.lobster};
-      color: ${props.theme.palette.success.main};
-      font-size: 0.75rem;
-    }
-      `}
+        content: "D";
+        font-family: ${props.theme.fontFamily.bangers};
+        line-height: 1;
+        color: ${props.theme.palette.info.main};
+        padding: 6px 14px 8px 14px;
+        position: absolute;
+        border: 3px solid ${props.theme.palette.success.main};
+        border-radius: 30px;
+        background: ${props.theme.palette.primary.main};
+        transform-origin: center;
+        top: 50%;
+        left: 50%;
+    `}
+    ${(props) => {
+      if (props.$is_dealer) {
+        switch (props.$seat_index) {
+          case 0:
+            return `
+          transform:translate(20%, 100%) rotate(-125deg);
+          `;
+
+          case 1:
+            return `
+          transform:translate(-115%, 120%) rotate(-70deg);
+          `;
+          case 2:
+            return `
+          transform:translate(-215%, -15%) rotate(-20deg);
+          `;
+          case 3:
+            return `
+          transform:translate(-230%, -95%) rotate(0deg);
+          `;
+          case 4:
+            return `
+          transform:translate(-220%, -95%);
+          `;
+          case 5:
+            return `
+          transform:translate(-230%, -105%) rotate(5deg);
+          `;
+          case 6:
+            return `
+          transform:translate(-130%, -220%) rotate(-125deg);
+          `;
+          case 7:
+            return `
+          transform:translate(5%, -240%) rotate(-80deg);
+          `;
+          case 8:
+            return `
+          transform:translate(100%, -118%) rotate(-25deg)
+          `;
+        }
+      }
+    }}
   }
 `;
-const StyledPokerPlayer = styled.div<{
-  $is_bettor: boolean;
+
+const StyledHoleCardWrapper = styled.div<{
+  $is_folded: boolean;
 }>`
+  display: grid;
+  grid-template-columns: repeat(2, 40px);
   position: relative;
-  width: ${(props) => (props.$is_bettor ? "85px" : "90px")};
-  height: ${(props) => (props.$is_bettor ? "85px" : "90px")};
-  height: 90px;
-  background: ${({ theme }) => theme.palette.primary.main};
-  border-radius: 50%;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: ${(props) => (props.$is_bettor ? "50px" : "52px")};
-    height: ${(props) => (props.$is_bettor ? "50px" : "52px")};
+  transform: rotate(16deg);
+  z-index: 2;
+  opacity: ${(props) => (props.$is_folded ? "0.4" : "1")};
+  & > :first-child {
+    rotate: -6deg;
+  }
+  & > :last-child {
+    left: -20px;
+    rotate: 6deg;
   }
 `;
 
-const StyledUserProfileImage = styled(Image)`
-  object-fit: cover;
+const StyledPokerPlayerDetails = styled.div`
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 2px solid ${({ theme }) => theme.palette.info.main};
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px;
+  background: ${({ theme }) => theme.palette.primary.main};
+  opacity: 0;
+  z-index: 3;
 `;
 
-export { StyledPokerPlayerWrapper, StyledPokerPlayer, StyledUserProfileImage };
+const StyledPlayerName = styled.h4`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1.125rem;
+  color: ${({ theme }) => theme.palette.info.main};
+  white-space: nowrap;
+  line-height: 1;
+`;
+const StyledPlayerAmount = styled.h6`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1rem;
+  color: ${({ theme }) => theme.palette.info.main};
+  white-space: nowrap;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+const StyledAmountBettedWrapper = styled.div<{
+  $seat_index: number;
+}>`
+  position: absolute;
+  background: ${({ theme }) => theme.palette.primary.main};
+  border: 2px solid ${({ theme }) => theme.palette.info.main};
+  border-radius: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 16px 6px 8px;
+  gap: 6px;
+  z-index: 2;
+  ${(props) => {
+    switch (props.$seat_index) {
+      case 0:
+        return `
+          top:20px;
+          left:-60px;
+        `;
+      case 1:
+        return `
+          top:20px;
+          left:-90px;
+        `;
+      case 2:
+        return `
+        top:15px;
+        left:-60px;
+        `;
+      case 3:
+      case 4:
+      case 5:
+        return `
+          top:-80px;
+        `;
+      case 6:
+        return `
+          top:15px;
+          left:130px;
+        `;
+      case 7:
+        return `
+          top:15px;
+          left:160px;
+        `;
+      case 8:
+        return `
+          top:20px;
+          left:130px;
+        `;
+    }
+  }}
+`;
+
+const StyledAmountBetted = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1rem;
+  color: ${({ theme }) => theme.palette.info.main};
+  white-space: nowrap;
+  line-height: 1;
+`;
+
+const StyledSpinner = styled.span`
+  width: 90px;
+  height: 90px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 6px solid ${({ theme }) => theme.palette.success.main};
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  @keyframes rotation {
+  0% {
+      transform:translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+      transform:translate(-50%, -50%) rotate(360deg);
+  }
+
+`;
+
+export {
+  StyledPokerPlayerWrapper,
+  StyledHoleCardWrapper,
+  StyledPokerPlayerDetails,
+  StyledPlayerName,
+  StyledPlayerAmount,
+  StyledAmountBettedWrapper,
+  StyledAmountBetted,
+  StyledSpinner,
+};

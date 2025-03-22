@@ -28,6 +28,9 @@ import { fetchGroupMessagesApi } from "@/store/slice/group.slice";
 import axios from "axios";
 import { Axios } from "@/helpers/axios";
 
+// action creatoer
+import { updateRoomCreatedAt } from "@/store/slice/poker/poker.slice";
+
 export const fetchUserApi = createAsyncThunk<
   IFetchUserApiResponse & {
     fetch_type: "chat" | "group";
@@ -129,7 +132,7 @@ export const sendInvitationApi = createAsyncThunk<
   { state: RootState }
 >(
   "api/game/invitation",
-  async ({ game, room_id }, { getState, rejectWithValue }) => {
+  async ({ game, room_id }, { getState, rejectWithValue, dispatch }) => {
     try {
       const state = getState();
       if (state.chat.active_user) {
@@ -162,6 +165,7 @@ export const sendInvitationApi = createAsyncThunk<
           room_id,
         });
 
+      dispatch(updateRoomCreatedAt(response.data.room_created_at));
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error?.response?.data);

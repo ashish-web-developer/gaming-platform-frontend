@@ -1,149 +1,117 @@
-import { useState, useRef, forwardRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 // types
-import type { ForwardRefRenderFunction } from "react";
-import type { ITheme } from "@/theme/poker.theme";
+import type { FC } from "react";
+import type { IPokerPlayer } from "@/types/store/slice/poker/poker";
 
 // styled components
 import {
-  StyledContainer,
-  StyledRangeSliderWrapper,
-  StyledRangeSlider,
-  StyledSliderConfirmCta,
-  StyledRangeSliderValue,
-  StyledPolygonVectorWrapper,
+  StyledSliderContainer,
+  StyledSliderWrapper,
+  StyledSlider,
+  StyledConfirmCta,
 } from "@/public/poker/poker-slider/poker-slider.style";
 
-// theme
-import { useTheme } from "styled-components";
-
-// local components
-import UpsideDownTriangle from "@/components/common/upside-down-triagnle";
-
-// external components
-import Slider from "react-rangeslider";
-
-// external css
+// To include the default styles
 import "react-rangeslider/lib/index.css";
 
 // redux
 import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
-  smallBlind,
+  minAmountToBeRaised,
   minAmountToBeBetted,
-  updateShowPokerSlider,
   triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
 
-const PokerSlider: ForwardRefRenderFunction<
-  HTMLDivElement,
-  {
-    total_chips_count: number;
-    toggle_action_cta: (show: boolean) => void;
-  }
-> = ({ total_chips_count, toggle_action_cta }, raise_cta_ref) => {
-  const theme = useTheme() as ITheme;
-  const dispatch = useAppDispatch();
-  const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted);
-  const [slider_val, set_slider_val] = useState<number>(
-    min_amount_to_be_betted as number
-  );
-  const [thumb_left_position, set_thumb_left_position] = useState(0);
-  const small_blind = useAppSelector(smallBlind);
-  const slider_container_ref = useRef<HTMLDivElement>(null);
-  const slider_wrapper_ref = useRef<HTMLDivElement>(null);
-  const slider_ref = useRef<HTMLDivElement>(null);
+// hooks
+import { useIsMounted } from "@/hooks/common.hook";
 
-  useEffect(() => {
-    toggle_action_cta(false);
-    const handle_outside_click = (event: MouseEvent) => {
-      if (
-        raise_cta_ref &&
-        typeof raise_cta_ref !== "function" &&
-        !raise_cta_ref.current?.contains(event.target as Node) &&
-        !slider_container_ref.current?.contains(event.target as Node)
-      ) {
-        dispatch(updateShowPokerSlider(false));
-        toggle_action_cta(true);
+// context
+import { MediaContext } from "context";
+
+const PokerSlider: FC<{
+  auth_player: IPokerPlayer;
+  updateDisabled: (val: boolean) => void;
+  updateShowPokerSlider: (val: boolean) => void;
+}> = ({ auth_player, updateDisabled, updateShowPokerSlider }) => {
+  const dispatch = useAppDispatch();
+  const slider_container_ref = useRef<HTMLDivElement>(null);
+  const slider_ref = useRef<HTMLDivElement>(null);
+  const {
+    current: { clock_ticking_sound },
+  } = useContext(MediaContext);
+  const is_mounted = useIsMounted();
+  const { current_betted_amount = 0 } = auth_player;
+  const min_amount_to_be_betted = useAppSelector(minAmountToBeBetted) as number;
+  const min_amount_to_be_raised = useAppSelector(minAmountToBeRaised) as number;
+  const [slider_val, setSliderVal] = useState(min_amount_to_be_raised);
+  const { total_chips_left } = auth_player;
+
+  function handleRemoveSlider() {
+    updateShowPokerSlider(false);
+    /**
+     * because of poker slider transparency  player betted amount on the
+     * left and right of bettor is visible and causing some style related
+     * issue, therefore we are hiding and showing those amount
+     */
+    ["player-seat-3", "player-seat-4", "player-seat-5"].forEach(
+      (element_id) => {
+        let element = document.getElementById(element_id);
+        if (element) {
+          element.style.visibility = "visible";
+        }
       }
-    };
-    document.addEventListener("click", handle_outside_click);
+    );
+  }
+  useEffect(() => {
+    function handleClick(event: MouseEvent) {
+      if (slider_container_ref.current?.contains(event.target as Element))
+        return;
+      handleRemoveSlider();
+    }
+    is_mounted && document.addEventListener("click", handleClick);
     return () => {
-      document.removeEventListener("click", handle_outside_click);
+      is_mounted && document.removeEventListener("click", handleClick);
     };
-  }, []);
+  }, [is_mounted]);
 
   return (
-    <StyledContainer ref={slider_container_ref}>
-      <StyledRangeSliderValue $left={thumb_left_position}>
-        $ {slider_val}K
-        <StyledPolygonVectorWrapper>
-          <UpsideDownTriangle
-            size={20}
-            color={"rgba(245, 213, 71, 0.2)"}
-            stroke={theme.palette.secondary.main}
-          />
-        </StyledPolygonVectorWrapper>
-      </StyledRangeSliderValue>
-      <StyledRangeSliderWrapper ref={slider_wrapper_ref}>
-        <StyledRangeSlider>
-          <div
-            onClick={() => {
-              const slider_thumb_element = document.getElementsByClassName(
-                "rangeslider__handle"
-              )[0];
-              const { left: slider_left } =
-                slider_thumb_element.getBoundingClientRect();
-              if (slider_wrapper_ref.current) {
-                const { left: slider_wrapper_left } =
-                  slider_wrapper_ref.current?.getBoundingClientRect();
-                set_thumb_left_position(
-                  slider_left - (slider_wrapper_left + 30)
-                );
-              }
-            }}
-            ref={slider_ref}
-            className="slider custom-labels"
-          >
-            <Slider
-              min={min_amount_to_be_betted as number}
-              max={total_chips_count}
-              value={slider_val}
-              step={small_blind * 2}
-              onChange={(value) => {
-                set_slider_val(value);
-                const slider_thumb_element = document.getElementsByClassName(
-                  "rangeslider__handle"
-                )[0];
-                const { left: slider_left } =
-                  slider_thumb_element.getBoundingClientRect();
-                if (slider_wrapper_ref.current) {
-                  const { left: slider_wrapper_left } =
-                    slider_wrapper_ref.current?.getBoundingClientRect();
-                  set_thumb_left_position(
-                    slider_left - (slider_wrapper_left + 30)
-                  );
-                }
-              }}
-              tooltip={false}
-            />
-          </div>
-        </StyledRangeSlider>
-      </StyledRangeSliderWrapper>
-      <StyledSliderConfirmCta
+    <StyledSliderContainer ref={slider_container_ref}>
+      <StyledSliderWrapper ref={slider_ref}>
+        <StyledSlider
+          min={
+            min_amount_to_be_betted +
+            min_amount_to_be_raised -
+            (current_betted_amount as number)
+          }
+          max={total_chips_left}
+          value={slider_val}
+          step={5}
+          onChange={(val) => {
+            setSliderVal(val);
+          }}
+          format={(value) => `$ ${value} K`}
+        />
+      </StyledSliderWrapper>
+      <StyledConfirmCta
         onClick={() => {
-          dispatch(updateShowPokerSlider(false));
-          toggle_action_cta(true);
+          updateDisabled(true);
           dispatch(
             triggerActionApi({
               action_type: "raise",
-              current_betted_amount: slider_val,
+              current_betted_amount:
+                (current_betted_amount as number) + slider_val,
             })
           );
+          handleRemoveSlider();
+          if (clock_ticking_sound) {
+            clock_ticking_sound.pause();
+            clock_ticking_sound.currentTime = 0;
+          }
         }}
       >
         Confirm
-      </StyledSliderConfirmCta>
-    </StyledContainer>
+      </StyledConfirmCta>
+    </StyledSliderContainer>
   );
 };
-export default forwardRef(PokerSlider);
+export default PokerSlider;

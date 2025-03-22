@@ -6,8 +6,6 @@ import type { MutableRefObject } from "react";
 // helpers
 import MutableSpeechUtterance from "@/helpers/mutable-speech-uttrance";
 
-// theme mode context
-
 // speech uttrance
 const UttranceContext = createContext<
   MutableRefObject<MutableSpeechUtterance | null>
@@ -15,4 +13,17 @@ const UttranceContext = createContext<
   current: null,
 });
 
-export { UttranceContext };
+// poker
+const MediaContext = createContext<
+  MutableRefObject<{
+    player_turn_sound?: HTMLAudioElement;
+    card_dealing_sound?: HTMLAudioElement;
+    button_click_sound?: HTMLAudioElement;
+    chips_winning_sound?: HTMLAudioElement;
+    clock_ticking_sound?: HTMLAudioElement;
+  }>
+>({
+  current: {},
+});
+
+export { UttranceContext, MediaContext };

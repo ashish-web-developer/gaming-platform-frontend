@@ -363,7 +363,7 @@ const WelcomeLoginScreen: FC<{
                 $translateX="-50%"
               >
                 <StyledImage
-                  src="/login/welcome-login-screen/poker-banner-girl.png"
+                  src="/chat/invite-dialog/poker-girl-image.png"
                   alt="poker-girl"
                   fill={true}
                   sizes="(max-width: 1400px) 20vw"
@@ -375,18 +375,18 @@ const WelcomeLoginScreen: FC<{
               </StyledBannerGameLogo>
               <ThemeProvider theme={PokerTheme}>
                 <StyledPokerCardWrapper
-                  $right="40px"
-                  $top="24px"
+                  $right="32px"
+                  $top="-24px"
                   $rotate="15deg"
                 >
-                  <PokerCard suit="heart" rank="K" />
+                  <PokerCard card_id="1" suit="club" rank="K" scale={0.4} />
                 </StyledPokerCardWrapper>
                 <StyledPokerCardWrapper
-                  $left="32px"
-                  $bottom="40px"
+                  $left="40px"
+                  $bottom="-12px"
                   $rotate="-15deg"
                 >
-                  <PokerCard suit="spade" rank="J" />
+                  <PokerCard card_id="2" suit="spade" rank="Q" scale={0.4} />
                 </StyledPokerCardWrapper>
               </ThemeProvider>
             </StyledGameBannerContainer>

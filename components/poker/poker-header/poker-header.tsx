@@ -4,14 +4,14 @@ import type { FC } from "react";
 // styled components
 import {
   StyledPokerHeader,
-  StyledLogo,
-  StyledRightContainer,
+  StyledLogoWrapper,
+  StyledCardWrapper,
   StyledUserProfile,
   StyledUserProfileImage,
 } from "@/styles/components/poker/poker-header/poker-header.style";
 
 // local components
-import PokerUserPoint from "@/components/poker/poker-header/poker-user-point";
+import PokerCard from "@/components/poker/poker-card/poker-card";
 
 // redux
 import { useAppSelector } from "@/hooks/redux.hook";
@@ -21,25 +21,32 @@ import { User } from "@/store/slice/login.slice";
 import { useAvatarUrl } from "@/hooks/profile.hook";
 import { IUsersWithConversation } from "@/types/store/slice/chat";
 
+// icons
+import Logo from "@/components/poker/icons/logo";
+
 const PokerHeader: FC = () => {
   const user = useAppSelector(User);
   const avatar_url = useAvatarUrl(user as IUsersWithConversation);
   return (
     <StyledPokerHeader>
-      <StyledLogo>
-        Texas Hold'em <br />
-        Showdown
-      </StyledLogo>
-      <StyledRightContainer>
-        <PokerUserPoint />
-        <StyledUserProfile>
-          <StyledUserProfileImage
-            alt="user-image"
-            src={avatar_url}
-            fill={true}
+      <StyledLogoWrapper>
+        <div>
+          <Logo />
+        </div>
+        <StyledCardWrapper>
+          <PokerCard card_id="1" scale={0.3} rank="A" suit="club" />
+          <PokerCard
+            card_id="2"
+            scale={0.3}
+            rank="K"
+            suit="diamond"
+            is_flipped={false}
           />
-        </StyledUserProfile>
-      </StyledRightContainer>
+        </StyledCardWrapper>
+      </StyledLogoWrapper>
+      <StyledUserProfile>
+        <StyledUserProfileImage alt="user-image" src={avatar_url} fill={true} />
+      </StyledUserProfile>
     </StyledPokerHeader>
   );
 };

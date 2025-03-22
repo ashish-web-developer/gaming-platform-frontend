@@ -1,106 +1,94 @@
 import styled from "styled-components";
 import Image from "next/image";
 
-const StyledPokerTableWrapper = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  margin-top: 2.5rem;
-  position: relative;
-`;
-const StyledPokerVectorWrapper = styled.div`
+const StyledImageContainer = styled.div<{
+  $width: string;
+  $height: string;
+  $top?: string;
+  $bottom?: string;
+  $left?: string;
+  $right?: string;
+  $translateX?: string;
+  $translateY?: string;
+  $zIndex?: number;
+}>`
   position: absolute;
-  top: 0px;
+  top: ${(props) => props.$top ?? "auto"};
+  bottom: ${(props) => props.$bottom ?? "auto"};
+  left: ${(props) => props.$left ?? "auto"};
+  right: ${(props) => props.$right ?? "auto"};
+  width: ${(props) => props.$width};
+  height: ${(props) => props.$height};
+  transform: translate(
+    ${(props) => props.$translateX ?? 0},
+    ${(props) => props.$translateY ?? 0}
+  );
+  z-index: ${(props) => props.$zIndex ?? "auto"};
 `;
-const StyledLeftPlayerWrapper = styled.div`
-  width: 200px;
-  height: 100%;
-  position: absolute;
-  transform: translateX(-46%);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-const StyledRightPlayerWrapper = styled.div`
-  width: 200px;
-  height: 100%;
-  position: absolute;
-  right: 0px;
-  transform: translateX(46%);
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-
-const StyledBottomPlayerWrapper = styled.div`
-  width: 100%;
-  height: 200px;
-  position: absolute;
-  bottom: 0px;
-  transform: translateY(45%);
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-`;
-
-const StyledTableDealerProfile = styled.div`
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 4px solid ${({ theme }) => theme.palette.secondary.main};
-  position: absolute;
-  top: -80px;
-  overflow: hidden;
-`;
-const StyledTableDealerProfileImage = styled(Image)`
+const StyledImage = styled(Image)<{
+  $object_position?: string;
+}>`
   object-fit: contain;
+  object-position: ${(props) => props.$object_position ?? "50% 50%"};
 `;
 
-const StyledTableCardWrapper = styled.div`
+const StyledSvgWrapper = styled.div`
   position: absolute;
-  top: 220px;
-  display: flex;
-  gap: 14px;
+  z-index: 3;
+  top: 44px;
+  left: 24px;
 `;
 
-const StyledBorderedCard = styled.div`
-  width: 62px;
-  height: 94px;
-  border: 2px dashed ${({ theme }) => theme.palette.secondary.main};
-  border-radius: 6px;
-  background: transparent;
+const StyledCommunityCardsWrapper = styled.div`
+  position: absolute;
+  left: 50%;
+  top: 95px;
+  transform: translateX(-60%);
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(5, 50px);
+  gap: 8px;
+`;
+
+const StyledPokerSliderWrapper = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  top: 375px;
 `;
 
 const StyledChipsInPotWrapper = styled.div`
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  top: 330px;
+  background: red;
+  padding: 6px 24px 6px 12px;
   display: flex;
+  gap: 6px;
   align-items: center;
-  gap: 8px;
-  font-family: ${({ theme }) => theme.fontFamily.lobster};
-  font-size: 1.125rem;
-  color: #fff;
-  padding: 8px 20px;
-  border-radius: 25px;
-  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
-  background: rgba(245, 213, 71, 0.2);
-  top: 140px;
+  justify-content: flex-start;
+  background: ${({ theme }) => theme.palette.primary.main};
+  border: 2px dashed ${({ theme }) => theme.palette.info.main};
+  border-radius:16px;
 `;
 
-const StyledPokerChipsImage = styled(Image)``;
+const StyledChipsInPot = styled.span`
+  font-family: ${({ theme }) => theme.fontFamily.bangers};
+  font-size: 1.125rem;
+  line-height: 1;
+  color: ${({ theme }) => theme.palette.info.main};
+`;
 
 export {
-  StyledPokerTableWrapper,
-  StyledPokerVectorWrapper,
-  StyledLeftPlayerWrapper,
-  StyledRightPlayerWrapper,
-  StyledBottomPlayerWrapper,
-  StyledTableDealerProfile,
-  StyledTableDealerProfileImage,
-  StyledTableCardWrapper,
-  StyledBorderedCard,
+  StyledImageContainer,
+  StyledImage,
+  StyledSvgWrapper,
+  StyledCommunityCardsWrapper,
+  StyledPokerSliderWrapper,
   StyledChipsInPotWrapper,
-  StyledPokerChipsImage,
+  StyledChipsInPot,
 };

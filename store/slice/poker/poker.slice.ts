@@ -6,6 +6,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import type IPokerInitialState from "@/types/store/slice/poker/poker";
 import type { RootState } from "@/store/rootReducer";
 import type { AxiosResponse } from "axios";
+import type { IDeckType } from "@/types/store/slice/poker";
 import type {
   ISeatType,
   IPokerPlayer,
@@ -22,6 +23,7 @@ import type {
 } from "@/types/store/slice/poker/poker";
 
 // helpers
+import axios from "axios";
 import { Axios } from "@/helpers/axios";
 
 /**
@@ -48,25 +50,6 @@ export const createPokerRoomApi = createAsyncThunk<
     }
   }
 );
-
-export const dealHandApi = createAsyncThunk<
-  IBaseResponse,
-  undefined,
-  IThunkApiConfig
->("api/deal-hand", async (_, { rejectWithValue, getState }) => {
-  try {
-    const state = getState();
-    const response: AxiosResponse<IBaseResponse> = await Axios.post(
-      "poker/deal-hand",
-      {
-        room_id: state.poker.poker_room_id,
-      }
-    );
-    return response.data;
-  } catch (error: any) {
-    return rejectWithValue(error?.response?.data);
-  }
-});
 
 export const joinPokerRoomApi = createAsyncThunk<
   IJoinPokerRoomApiResponse,
@@ -131,7 +114,7 @@ export const getPokerRoomInfoApi = createAsyncThunk<
           })
         );
         let seat_available = ((response.data.poker_room.seat_available + 1) %
-          7) as ISeatType | null;
+          9) as ISeatType | null;
         seat_available = seat_available == 0 ? null : seat_available;
         dispatch(
           updateSeatAvailableApi({
@@ -145,6 +128,47 @@ export const getPokerRoomInfoApi = createAsyncThunk<
     }
   }
 );
+
+export const startRoundApi = createAsyncThunk<
+  IBaseResponse,
+  undefined,
+  IThunkApiConfig<string>
+>("api/start-round", async (_, { getState, rejectWithValue }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IBaseResponse> = await Axios.post(
+      "/poker/start-round",
+      {
+        room_id: state.poker.poker_room_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    if (axios.isAxiosError(error)) {
+      return rejectWithValue("Internal server error");
+    }
+    return rejectWithValue("An unexpected error occurred");
+  }
+});
+
+export const dealHandApi = createAsyncThunk<
+  IBaseResponse,
+  undefined,
+  IThunkApiConfig
+>("api/deal-hand", async (_, { rejectWithValue, getState }) => {
+  try {
+    const state = getState();
+    const response: AxiosResponse<IBaseResponse> = await Axios.post(
+      "poker/deal-hand",
+      {
+        room_id: state.poker.poker_room_id,
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return rejectWithValue(error?.response?.data);
+  }
+});
 
 export const triggerActionApi = createAsyncThunk<
   IBaseResponse,
@@ -175,7 +199,7 @@ export const triggerActionApi = createAsyncThunk<
 
 const initialState: IPokerInitialState = {
   poker_room_id: null,
-  show_poker_slider: false,
+  room_created_at: null,
   dealer_id: null,
   bettor_id: null,
   poker_chips: 0,
@@ -183,8 +207,10 @@ const initialState: IPokerInitialState = {
   community_cards: [],
   show_buy_in_modal: true,
   min_amount_to_be_betted: null,
+  min_amount_to_be_raised: null,
   small_blind: 5,
   chips_in_pot: 0,
+  deck: [],
 };
 
 const pokerSlice = createSlice({
@@ -193,9 +219,6 @@ const pokerSlice = createSlice({
   reducers: {
     updatePokerRoomId: (state, action: PayloadAction<string | null>) => {
       state.poker_room_id = action.payload;
-    },
-    updateShowPokerSlider: (state, action: PayloadAction<boolean>) => {
-      state.show_poker_slider = action.payload;
     },
     updatePokerChips: (state, action: PayloadAction<number>) => {
       state.poker_chips = action.payload;
@@ -222,10 +245,18 @@ const pokerSlice = createSlice({
               ...poker_players,
             ];
           } else {
-            state.active_poker_players = [
-              ...state.active_poker_players,
-              action.payload.poker_players,
-            ];
+            const poker_player = action.payload.poker_players;
+            if (
+              !state.active_poker_players.some(
+                (active_poker_player) =>
+                  active_poker_player.id == poker_player.id
+              )
+            ) {
+              state.active_poker_players = [
+                ...state.active_poker_players,
+                poker_player,
+              ];
+            }
           }
           return;
         case "added":
@@ -289,12 +320,25 @@ const pokerSlice = createSlice({
         return player;
       });
     },
+    resetHoleCards: (state) => {
+      state.active_poker_players = state.active_poker_players.map((player) => {
+        player.hole_cards = null;
+        return player;
+      });
+    },
     updateRoomDetails: (state, action: PayloadAction<IPokerRoom>) => {
       state.bettor_id = action.payload.bettor_id;
       state.dealer_id = action.payload.dealer_id;
       state.chips_in_pot = action.payload.chips_in_pot;
       state.min_amount_to_be_betted = action.payload.min_amount_to_be_betted;
+      state.min_amount_to_be_raised = action.payload.min_amount_to_be_raised;
       state.community_cards = action.payload.community_cards;
+    },
+    updateRoomCreatedAt: (state, action: PayloadAction<string | null>) => {
+      state.room_created_at = action.payload;
+    },
+    updateDeck: (state, action: PayloadAction<IDeckType>) => {
+      state.deck = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -319,8 +363,6 @@ export default pokerSlice.reducer;
 
 // selector
 export const pokerRoomId = (state: RootState) => state.poker.poker_room_id;
-export const showPokerSlider = (state: RootState) =>
-  state.poker.show_poker_slider;
 export const pokerChips = (state: RootState) => state.poker.poker_chips;
 export const activePokerPlayers = (state: RootState) =>
   state.poker.active_poker_players;
@@ -332,15 +374,22 @@ export const bettorId = (state: RootState) => state.poker.bettor_id;
 export const chipsInPot = (state: RootState) => state.poker.chips_in_pot;
 export const minAmountToBeBetted = (state: RootState) =>
   state.poker.min_amount_to_be_betted;
+
+export const minAmountToBeRaised = (state: RootState) =>
+  state.poker.min_amount_to_be_raised;
+export const Deck = (state: RootState) => state.poker.deck;
 export const communityCards = (state: RootState) => state.poker.community_cards;
+export const roomCreatedAt = (state: RootState) => state.poker.room_created_at;
 // action creaters
 export const {
   updatePokerRoomId,
   updatePokerChips,
-  updateShowPokerSlider,
   updateShowBuyInModal,
   updateActivePokerPlayer,
   updateDealerId,
   updatePlayerData,
+  resetHoleCards,
   updateRoomDetails,
+  updateRoomCreatedAt,
+  updateDeck,
 } = pokerSlice.actions;

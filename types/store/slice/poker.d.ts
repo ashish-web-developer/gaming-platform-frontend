@@ -14,5 +14,5 @@ type ICardRank =
   | "2"
   | "A";
 
-type IDeckType = Array<{ suit: ICardSuit; rank: ICardRank }>;
+type IDeckType = Array<{ suit: ICardSuit; rank: ICardRank; card_id: string }>;
 export { ICardSuit, ICardRank, IDeckType };

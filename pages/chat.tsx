@@ -46,7 +46,10 @@ import {
   updateGroupsUsers,
   updateTypingUsers,
 } from "@/store/slice/group.slice";
-import { updatePokerRoomId } from "@/store/slice/poker/poker.slice";
+import {
+  updatePokerRoomId,
+  updateRoomCreatedAt,
+} from "@/store/slice/poker/poker.slice";
 
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
@@ -122,6 +125,7 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
           user: IUser;
           game: "poker";
           room_id: string;
+          room_created_at: string;
         }) => {
           dispatch(
             updateInviteDialog({
@@ -131,6 +135,7 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
           );
 
           dispatch(updatePokerRoomId(data.room_id));
+          dispatch(updateRoomCreatedAt(data.room_created_at));
         },
       },
       {

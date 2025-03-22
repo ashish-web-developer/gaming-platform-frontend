@@ -5,24 +5,33 @@ const StyledPokerHeader = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-const StyledLogo = styled.h1`
-  font-size: 1.5rem;
-  color: ${({ theme }) => theme.palette.secondary.main};
-  font-family: ${({ theme }) => theme.fontFamily.bangers};
-  letter-spacing: 1px;
-  line-height: 1.5;
+
+const StyledLogoWrapper = styled.div`
+  & > :first-child {
+    position: relative;
+    z-index: 2;
+  }
 `;
-const StyledRightContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1.625rem;
+const StyledCardWrapper = styled.div`
+  position: absolute;
+  top: 0px;
+  display: grid;
+  grid-template-columns: repeat(2, 30px);
+  & > :first-child {
+    rotate: -8deg;
+  }
+  & > :last-child {
+    rotate: 8deg;
+    left: -20px;
+  }
 `;
+
 const StyledUserProfile = styled.div`
   position: relative;
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 2px solid ${({ theme }) => theme.palette.secondary.main};
+  border: 4px solid ${({ theme }) => theme.palette.info.main};
   overflow: hidden;
 `;
 const StyledUserProfileImage = styled(Image)`
@@ -31,8 +40,8 @@ const StyledUserProfileImage = styled(Image)`
 `;
 export {
   StyledPokerHeader,
-  StyledLogo,
-  StyledRightContainer,
+  StyledLogoWrapper,
+  StyledCardWrapper,
   StyledUserProfile,
   StyledUserProfileImage,
 };

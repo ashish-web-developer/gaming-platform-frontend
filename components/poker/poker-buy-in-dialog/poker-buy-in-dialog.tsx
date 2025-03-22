@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 // types
 import type { FC } from "react";
 // styled components
@@ -7,7 +7,7 @@ import {
   StyledPokerBuyInDialog,
   StyledDialogImageWrapper,
   StyledDialogImage,
-  StyledMainText,
+  StyledLogo,
   StyledBuyInAmount,
   StyledBuyInSlider,
   StyledBlindsContainer,
@@ -29,49 +29,47 @@ import {
 
 // gsap
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
-const PokerBuyInDialog: FC = () => {
+const PokerBuyInDialog: FC<{
+  onModalCloseHandler: () => void;
+}> = ({ onModalCloseHandler }) => {
   const dispatch = useAppDispatch();
-  const dialog_ref = useRef<HTMLDialogElement>(null);
-  const [poker_buy_in_amount, set_poker_buy_in_amount] = useState<number>(200);
-  const show_buy_in_modal = useAppSelector(showBuyInModal);
+  const dialog_ref = useRef<HTMLDivElement>(null);
+  const [poker_buy_in_amount, setPokerBuyInAmount] = useState<number>(200);
   const small_blind = useAppSelector(smallBlind);
-  const gsap_context = useRef<gsap.Context>();
 
-  useEffect(() => {
-    gsap_context.current = gsap.context(() => {
-      gsap.fromTo(
-        dialog_ref.current,
-        {
-          opacity: 0,
-          scale: 0.5,
-        },
-        {
-          opacity: 1,
-          scale: 1,
-          ease: "bounce",
-          duration: 1,
-        }
-      );
-    });
-    return () => {
-      gsap_context.current?.revert();
-    };
-  }, []);
+  useGSAP(() => {
+    gsap.fromTo(
+      dialog_ref.current,
+      {
+        opacity: 0,
+        scale: 0.5,
+      },
+      {
+        opacity: 1,
+        scale: 1,
+        ease: "bounce",
+        duration: 1,
+      }
+    );
+  });
+
   return (
     <>
-      {show_buy_in_modal && <StyledBackdrop />}
+      <StyledBackdrop />
       <StyledPokerBuyInDialog ref={dialog_ref}>
         <StyledDialogImageWrapper>
           <StyledDialogImage
-            src={"/poker/poker-buy-in-dialog/michael.png"}
-            alt="michael"
+            src={"/poker/poker-buy-in-dialog/main-image.png"}
+            alt="dialog-image"
             fill={true}
+            sizes="(max-width: 1400px) 20vw"
           />
         </StyledDialogImageWrapper>
-        <StyledMainText>
+        <StyledLogo>
           Texas Hold’em <br /> Showdown
-        </StyledMainText>
+        </StyledLogo>
         <StyledBuyInAmount>$ {poker_buy_in_amount * 1000}</StyledBuyInAmount>
         <StyledBuyInSlider
           value={poker_buy_in_amount}
@@ -80,14 +78,14 @@ const PokerBuyInDialog: FC = () => {
           step={small_blind * 2} // multiple of big blind
           onInput={(event) => {
             const range_input_element = event.target as HTMLInputElement;
-            set_poker_buy_in_amount(Number(range_input_element.value));
+            setPokerBuyInAmount(Number(range_input_element.value));
           }}
         />
         <StyledBlindsContainer>
           <StyledBlindsHeader>Blinds</StyledBlindsHeader>
           <StyledBlindsAmountWrapper>
             <StyledChipsImage
-              src="/poker/poker-player/poker-chip.png"
+              src="/poker/poker-player/poker-chips.png"
               alt="chip"
               width={20}
               height={20}
@@ -99,12 +97,13 @@ const PokerBuyInDialog: FC = () => {
         </StyledBlindsContainer>
         <StyledBuyInCta
           onClick={() => {
-            dispatch(
+            const response = dispatch(
               getPokerRoomInfoApi({
                 poker_buy_in_amount,
               })
             );
             dispatch(updateShowBuyInModal(false));
+            onModalCloseHandler();
           }}
         >
           Buy In
