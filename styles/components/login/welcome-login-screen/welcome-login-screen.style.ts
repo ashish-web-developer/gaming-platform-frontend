@@ -138,12 +138,14 @@ const StyledCornerVector = styled.span<{
 const StyledBannerGameLogo = styled.h3`
   font-family: ${({ theme }) => theme.fontFamily.bangers};
   font-size: 2rem;
-  color: #f5d547;
   position: absolute;
   transform: translateY(-50%) rotate(-5deg);
   text-align: center;
   line-height: 1.1;
   margin-top: 4rem;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #ffffff;
+  color: transparent;
 `;
 
 const StyledPokerCardWrapper = styled.div<{
