@@ -45,6 +45,10 @@ import {
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
 
+// gsap
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
 // icons
 import Suit from "@/components/poker/icons/suit";
 
@@ -108,6 +112,24 @@ const PokerInviteDialog: FC = () => {
   );
   const is_mobile = useIsMobile();
 
+  const { contextSafe } = useGSAP(() => {
+    gsap.from(dialog_ref.current, {
+      scale: 1.5,
+      duration: 1,
+      ease: "elastic.inOut",
+    });
+  });
+
+  const ctaHoverHandler = contextSafe(
+    (node: HTMLButtonElement, event_type: "enter" | "leave") => {
+      gsap.to(node, {
+        scale: event_type == "enter" ? 1.2 : 1,
+        duration: 0.3,
+        ease: "expo.inOut",
+      });
+    }
+  );
+
   return (
     <StyledPokerInviteDialog
       open={show_poker_invite_dialog}
@@ -160,6 +182,16 @@ const PokerInviteDialog: FC = () => {
           <PokerCard card_id="2" suit="spade" rank="Q" scale={0.4} />
         </StyledPokerCardWrapper>
         <StyledPlayButton
+          onMouseEnter={(event) => {
+            const target_element = event.target as HTMLElement;
+            const button_element = target_element.closest("button");
+            ctaHoverHandler(button_element as HTMLButtonElement, "enter");
+          }}
+          onMouseLeave={(event) => {
+            const target_element = event.target as HTMLElement;
+            const button_element = target_element.closest("button");
+            ctaHoverHandler(button_element as HTMLButtonElement, "leave");
+          }}
           onClick={() => {
             router.push("/poker");
           }}
@@ -167,6 +199,16 @@ const PokerInviteDialog: FC = () => {
           <PlayButtonVector stroke_color={theme.palette.success.main} />
         </StyledPlayButton>
         <StyledCloseCta
+          onMouseEnter={(event) => {
+            const target_element = event.target as HTMLElement;
+            const button_element = target_element.closest("button");
+            ctaHoverHandler(button_element as HTMLButtonElement, "enter");
+          }}
+          onMouseLeave={(event) => {
+            const target_element = event.target as HTMLElement;
+            const button_element = target_element.closest("button");
+            ctaHoverHandler(button_element as HTMLButtonElement, "leave");
+          }}
           onClick={() => {
             dispatch(
               updateInviteDialog({
