@@ -51,9 +51,6 @@ import {
   updateRoomCreatedAt,
 } from "@/store/slice/poker/poker.slice";
 
-// context
-import { PokerInviteDialogTimeOutContext } from "context";
-
 // hooks
 import { useIsMobile } from "@/hooks/common.hook";
 import { useDefault, useDefaultConversation } from "@/hooks/chat/chat.hook";
@@ -77,7 +74,6 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
   const group_timer_ref = useRef<{
     [key: number]: NodeJS.Timer;
   }>({});
-  const poker_invite_dialog_timer = useRef<ReturnType<typeof setTimeout>>();
   const _mode = useAppSelector(mode);
   useDefault();
   useDefaultConversation();
@@ -140,23 +136,6 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
 
           dispatch(updatePokerRoomId(data.room_id));
           dispatch(updateRoomCreatedAt(data.room_created_at));
-
-          const seconds = Math.floor(
-            new Date(data.room_created_at as string).getTime() / 1000 +
-              60 -
-              new Date().getTime() / 1000
-          );
-          poker_invite_dialog_timer.current = setTimeout(() => {
-            dispatch(
-              updateInviteDialog({
-                modal_type: data.game,
-                is_open: false,
-              })
-            );
-
-            dispatch(updatePokerRoomId(null));
-            dispatch(updateRoomCreatedAt(null));
-          }, seconds * 1000);
         },
       },
       {
@@ -281,15 +260,11 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
 
   return (
     <ThemeProvider theme={_mode == "light" ? lightTheme : darkTheme}>
-      <PokerInviteDialogTimeOutContext.Provider
-        value={poker_invite_dialog_timer}
-      >
-        {client_is_mobile || is_mobile ? (
-          <MobileChatContainer />
-        ) : (
-          <ChatContainer />
-        )}
-      </PokerInviteDialogTimeOutContext.Provider>
+      {client_is_mobile || is_mobile ? (
+        <MobileChatContainer />
+      ) : (
+        <ChatContainer />
+      )}
     </ThemeProvider>
   );
 };

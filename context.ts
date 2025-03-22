@@ -14,10 +14,6 @@ const UttranceContext = createContext<
 });
 
 // poker
-const PokerInviteDialogTimeOutContext = createContext<
-  MutableRefObject<ReturnType<typeof setTimeout> | undefined>
->({ current: undefined });
-
 const MediaContext = createContext<
   MutableRefObject<{
     player_turn_sound?: HTMLAudioElement;
@@ -30,4 +26,4 @@ const MediaContext = createContext<
   current: {},
 });
 
-export { UttranceContext, PokerInviteDialogTimeOutContext, MediaContext };
+export { UttranceContext, MediaContext };
