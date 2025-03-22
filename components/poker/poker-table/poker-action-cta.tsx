@@ -83,7 +83,7 @@ const PokerActionCta: FC<{
           createPortal(
             <PokerTimer
               initial_count={30}
-              play_ticker_media={true}
+              add_ticker_animation={true}
               handleOnFinish={() => {
                 handleActionEvent({
                   action_type: "fold",
@@ -113,7 +113,7 @@ const PokerActionCta: FC<{
         createPortal(
           <PokerTimer
             initial_count={30}
-            play_ticker_media={true}
+            add_ticker_animation={true}
             handleOnFinish={() => {
               handleActionEvent({
                 action_type: "fold",

@@ -101,7 +101,7 @@ const PokerWaitingBanner: FC<{
         <StyledWaitingBannerContent>
           <PokerTimer
             initial_count={initial_count}
-            play_ticker_media={false}
+            add_ticker_animation={false}
             handleOnFinish={() => {
               updateShowWaitigBanner(false);
               user_id == dealer_id && dispatch(dealHandApi());
