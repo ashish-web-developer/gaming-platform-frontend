@@ -7,7 +7,7 @@ const useAvatarUrl = (user: IUser | null) => {
   if (user?.avatar_url) {
     return `${process.env.NEXT_PUBLIC_API_END_POINT}${
       user.avatar_url
-    }?timestamp=${new Date().getTime()}`;
+    }?timestamp=${new Date(user.updated_at).getTime()}`;
   }
   const avatar = createAvatar(adventurer, {
     seed: user?.username ?? "",

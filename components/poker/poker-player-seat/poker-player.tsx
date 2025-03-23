@@ -62,7 +62,7 @@ const PokerPlayer: FC<{
   return (
     <StyledPokerPlayerWrapper
       $is_dealer={!!dealer_id && !!player && player?.player_id == dealer_id}
-      $background_url={player ? avatar_url : null}
+      $background_url={!!player ? avatar_url : null}
       $seat_index={seat_index}
       className="poker-player-container"
     >
