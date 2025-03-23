@@ -27,7 +27,7 @@ import { useAppSelector, useAppDispatch } from "@/hooks/redux.hook";
 import {
   minAmountToBeBetted,
   smallBlind,
-  updateShowPokerSlider,
+  // updateShowPokerSlider,
   triggerActionApi,
 } from "@/store/slice/poker/poker.slice";
 
@@ -61,7 +61,7 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
         !raise_cta_ref.current?.contains(event.target as Node) &&
         !slider_ref.current?.contains(event.target as Node)
       ) {
-        dispatch(updateShowPokerSlider(false));
+        // dispatch(updateShowPokerSlider(false));
         toggle_action_cta(true);
       }
     };
@@ -76,7 +76,7 @@ const MobilePokerSlider: ForwardRefRenderFunction<HTMLButtonElement, IProps> = (
         {show_confirm_tooltip && (
           <StyledConfirmCta
             onClick={() => {
-              dispatch(updateShowPokerSlider(false));
+              // dispatch(updateShowPokerSlider(false));
               toggle_action_cta(true);
               dispatch(
                 triggerActionApi({
