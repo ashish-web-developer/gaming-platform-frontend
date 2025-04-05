@@ -10,6 +10,8 @@ type IUser = {
   earned_points: number;
   avatar_url: string | null;
   last_seen: string | null;
+  created_at: string;
+  updated_at: string;
 };
 type IValidationErrorType =
   | "username"

@@ -235,10 +235,10 @@ const MobileWelcomeLoginScreen: FC<{
       </StyledImageContainer>
       <ThemeProvider theme={PokerTheme}>
         <StyledPokerCardWrapper $left="32px" $top="180px" $rotate="-17deg">
-          <PokerCard card_id="1" rank="K" suit="club" />
+          <PokerCard card_id="1" rank="K" suit="club" scale={0.4} />
         </StyledPokerCardWrapper>
         <StyledPokerCardWrapper $right="36px" $top="130px" $rotate="11deg">
-          <PokerCard card_id="2" rank="J" suit="diamond" />
+          <PokerCard card_id="2" rank="J" suit="diamond" scale={0.4} />
         </StyledPokerCardWrapper>
       </ThemeProvider>
       <StyledImageContainer
