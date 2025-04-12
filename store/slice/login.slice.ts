@@ -329,6 +329,9 @@ export const loginSlice = createSlice({
     builder.addCase(logoutUserApi.fulfilled, (state) => {
       state.user = null;
     });
+    builder.addCase(updateProfileApi.fulfilled, (state, action) => {
+      state.user = action.payload.user;
+    });
   },
 });
 
