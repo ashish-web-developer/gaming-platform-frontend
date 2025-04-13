@@ -49,7 +49,10 @@ export const fetchUserApi = createAsyncThunk<
           params: {
             query,
             page: state.chat.fetch_user.page,
-            skip_id: state.chat.default_users.map(({ id }) => id),
+            skip_id:
+              fetch_type == "group"
+                ? []
+                : state.chat.default_users.map(({ id }) => id),
           },
         }
       );

@@ -85,13 +85,15 @@ const ChatPage: FC<IProps> = ({ is_mobile }) => {
   /**
    * For handling the one to one chats
    */
-  usePrivateChannel<IUser | null>({
-    dependency: user,
+  usePrivateChannel({
+    user,
+    dependency: [active_user],
     channel_name: `chat.${user?.id}`,
     events: [
       {
         event: "chat-event",
         handler: (data: { user: IUser; conversation: IConversation }) => {
+          console.log("value of data", data, active_user);
           dispatch(updateDefaultUserConversation(data));
           if (data.user.id == active_user?.id) {
             dispatch(updateActiveUserConversation(data.conversation));
