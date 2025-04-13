@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 
 // types
 import type { INotification } from "@/types/store/slice/notification";
+import type { IUser } from "@/types/store/slice/login";
 
 // redux
 import { useAppDispatch } from "./redux.hook";
@@ -73,12 +74,14 @@ function useEcho(): Echo | null {
   return echo;
 }
 
-function usePrivateChannel<Type>({
+function usePrivateChannel({
+  user,
   dependency,
   channel_name,
   events,
 }: {
-  dependency: Type;
+  user: IUser | null;
+  dependency: Array<any>;
   channel_name: string;
   events: Array<{
     event: string;
@@ -87,7 +90,7 @@ function usePrivateChannel<Type>({
 }) {
   const pusher = usePusher();
   useEffect(() => {
-    const channel = dependency && pusher?.subscribe(`private-${channel_name}`);
+    const channel = user && pusher?.subscribe(`private-${channel_name}`);
     channel?.bind("pusher:subscription_succeeded", () => {
       console.log(`private-${channel_name} subscription succeeded`);
     });
@@ -98,7 +101,7 @@ function usePrivateChannel<Type>({
       channel?.unbind_all();
       channel?.unsubscribe();
     };
-  }, [pusher, dependency]);
+  }, [pusher, user, ...dependency]);
 }
 
 function usePresenceChannel<IDependencyType, IMemberType>({
