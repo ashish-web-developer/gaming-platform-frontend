@@ -21,11 +21,11 @@ const ChatGroupList: FC = () => {
     <StyledChatGroupListWrapper>
       <StyledGroupTag>Groups Chat</StyledGroupTag>
       <StyledGroupListWrapper>
-        {default_groups.map((group, index) => {
+        {default_groups.map((group) => {
           return (
             <ChatGroup
               is_clickable={true}
-              key={`chat-group-${index}`}
+              key={`chat-group-${group.id}`}
               {...group}
             />
           );

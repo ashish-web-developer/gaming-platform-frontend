@@ -111,6 +111,9 @@ const ChatInput: FC<{}> = () => {
       })
     );
     set_uploaded_file([]);
+    if (upload_input_ref.current) {
+      upload_input_ref.current.value = "";
+    }
   };
 
   const placeholderTextHandler = () => {
@@ -299,10 +302,11 @@ const ChatInput: FC<{}> = () => {
                 sizes="(max-width: 1400px) 5vw"
               />
             </StyledIconCta>
-            {uploaded_file.map((file) => {
+            {uploaded_file.map((file, index) => {
               if (file.state == 2) {
                 return (
                   <StyledUploadedImage
+                    key={index}
                     src={file.file as string}
                     width={30}
                     height={30}
