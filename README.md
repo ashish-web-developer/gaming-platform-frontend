@@ -6,36 +6,6 @@ Fortune Realm is a dynamic card gaming platform offering a feature-rich and enga
 Players can seamlessly sign up, upload profile images, and receive guided error feedback through a themed interface. Beyond the login, the platform features a clean and modern UI with:
 
 
-## Acknowledgments
-
-This project was fully designed and developed by me from scratch.  
-However, I’d like to acknowledge the following open-source tools and libraries that made development faster and smoother:
-
-- [Next.js](https://nextjs.org/) – React framework used for building the app
-- [React](https://reactjs.org/) – Core library for building the UI
-- [Redux Toolkit](https://redux-toolkit.js.org/) & [React Redux](https://react-redux.js.org/) – For state management
-- [styled-components](https://styled-components.com/) – For component-level styling
-- [GSAP](https://greensock.com/gsap/) – For creating high-performance animations
-- [DiceBear Avatars](https://www.dicebear.com/) – For generating avatars
-- [Emoji Mart](https://emoji-mart.dev/) – Emoji picker used in the chat system
-- [CropperJS](https://github.com/fengyuanchen/cropperjs) – For profile image cropping
-- [Pusher](https://pusher.com/) & [Laravel Echo](https://laravel.com/docs/10.x/broadcasting) – For real-time communication
-- [Yup](https://github.com/jquense/yup) – For schema validation
-- [Axios](https://axios-http.com/) – For API calls
-- [React Lottie Player](https://github.com/mifi/react-lottie-player) & [dotLottie](https://www.lottiefiles.com/dotlottie) – For animations
-- [Universal Cookie](https://github.com/reactivestack/cookies/tree/main/packages/universal-cookie) – For managing cookies
-- [uuid](https://github.com/uuidjs/uuid) – For generating unique IDs
-
-Special thanks to the creators of these tools and libraries for enabling developers like me to build rich, interactive applications efficiently.
-
-## Features
-
-- **Texas Hold’em Showdown** – A full poker experience from buy-in to gameplay
-- **Real-time Chat System** – Group and one-on-one chat, user status, and game invites
-- **Notification & Group Management** – Streamlined invites, join requests, and alerts
-- **Mobile-Optimized Experience** – Consistent features across devices
-- **Theme Support** – Switch between dark and light modes for user comfort
-
 
 ## Demo
 
@@ -84,3 +54,91 @@ Get ready to bluff, bet, and win big at the Fortune Realm poker table! ♠️♦
 
 ![Poker Screenshot](https://raw.githubusercontent.com/ashish-web-developer/ashish-web-developer/refs/heads/main/assets/poker.jpg)
 
+
+## Tech Stack
+
+**Client:** Next, React, Redux, Styled-Components, GSAP, Dicebear, Pusher
+
+**Server:** Laravel
+
+
+## Features
+
+- **Texas Hold’em Showdown** – A full poker experience from buy-in to gameplay
+- **Real-time Chat System** – Group and one-on-one chat, user status, and game invites
+- **Notification & Group Management** – Streamlined invites, join requests, and alerts
+- **Mobile-Optimized Experience** – Consistent features across devices
+- **Theme Support** – Switch between dark and light modes for user comfort
+
+
+## 📘 Lessons Learned
+
+Building this project helped me grow significantly as a frontend developer. Here are a few key takeaways:
+
+- Gained deep hands-on experience with **React.js**, including component design, state management, and performance optimization.
+- Learned how to manage **real-time features** using **Pusher**, especially handling edge cases like user reconnection and message syncing.
+- Improved my ability to **structure large projects**, break down features, and maintain scalable and readable code.
+- Got comfortable using **styled-components** and building responsive UI layouts with accessibility in mind.
+- Understood the importance of **code modularity**, reusability, and separating concerns between UI and logic.
+- Faced challenges while integrating chat with the game flow and learned how to handle **asynchronous logic and user state** effectively.
+- Improved my project planning, Git workflow, and documentation habits while working solo over several months.
+
+This project also strengthened my confidence in taking ideas from concept to deployment, and in communicating project value through code and design.
+
+
+
+## Authors
+
+Ashish Prajapati
+
+Frontend Developer | JavaScript & React.js Enthusiast
+
+* 🛠️ 1.8+ years of experience building scalable and interactive web applications
+
+* 🎮 Creator of Fortune Realm, a multiplayer gaming platform
+
+* 💼 LinkedIn: [Linkedin](https://www.linkedin.com/in/ashish-classic/)
+
+* 🐙 GitHub: [Github](https://github.com/ashish-web-developer)
+
+* 📧 Email: ashish_classic@proton.me
+## License
+
+Copyright © 2025 Ashish Prajapati
+
+All Rights Reserved.
+
+This source code and all associated files are the intellectual property of Ashish Prajapati.  
+The code is provided solely for personal viewing, evaluation, and educational purposes.
+
+You may not:
+- Copy, reproduce, modify, or distribute this code
+- Use this code or any part of it in any software or product
+- Host or deploy this project publicly or commercially
+- Claim ownership or authorship of any part of this code
+
+Use of this code for any other purpose is strictly prohibited without the express written permission of the author.
+
+For inquiries or permission requests, contact: ashish_classic@proton.me
+
+## Acknowledgments
+
+This project was fully designed and developed by me from scratch.  
+However, I’d like to acknowledge the following open-source tools and libraries that made development faster and smoother:
+
+- [Next.js](https://nextjs.org/) – React framework used for building the app
+- [React](https://reactjs.org/) – Core library for building the UI
+- [Redux Toolkit](https://redux-toolkit.js.org/) & [React Redux](https://react-redux.js.org/) – For state management
+- [styled-components](https://styled-components.com/) – For component-level styling
+- [GSAP](https://greensock.com/gsap/) – For creating high-performance animations
+- [DiceBear Avatars](https://www.dicebear.com/) – For generating avatars
+- [Emoji Mart](https://emoji-mart.dev/) – Emoji picker used in the chat system
+- [CropperJS](https://github.com/fengyuanchen/cropperjs) – For profile image cropping
+- [Pusher](https://pusher.com/) & [Laravel Echo](https://laravel.com/docs/10.x/broadcasting) – For real-time communication
+- [Yup](https://github.com/jquense/yup) – For schema validation
+- [Axios](https://axios-http.com/) – For API calls
+- [React Lottie Player](https://github.com/mifi/react-lottie-player) & [dotLottie](https://www.lottiefiles.com/dotlottie) – For animations
+- [Universal Cookie](https://github.com/reactivestack/cookies/tree/main/packages/universal-cookie) – For managing cookies
+- [uuid](https://github.com/uuidjs/uuid) – For generating unique IDs
+
+Special thanks to the creators of these tools and libraries for enabling developers like me to build rich, interactive applications efficiently.
